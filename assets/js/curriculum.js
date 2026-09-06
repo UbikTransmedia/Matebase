@@ -12,6 +12,29 @@
    =================================================================== */
 window.CURRICULUM = [
 
+  /* ================= 0. LOGICA Y DEMOSTRACION ================= */
+  {
+    id: 'lg', n: 0, title: 'Lógica, conjuntos y demostración',
+    desc: 'La base de verdad no son los números: es qué significa que algo sea cierto y cómo se comprueba.',
+    temas: [
+      {
+        id: 'lg-proposiciones', t: 'Proposiciones y cuantificadores',
+        r: 'El lenguaje con el que se escriben las matemáticas.',
+        o: ['Conectivas y tablas de verdad', 'Implicación, recíproco y contrarrecíproco', 'Cuantificadores y su negación']
+      },
+      {
+        id: 'lg-conjuntos', t: 'Conjuntos y aplicaciones',
+        r: 'Agrupar objetos y relacionar unos conjuntos con otros.',
+        o: ['Operaciones y diagramas de Venn', 'Producto cartesiano', 'Aplicaciones inyectivas, sobreyectivas y biyectivas']
+      },
+      {
+        id: 'lg-demostracion', t: 'Métodos de demostración e inducción',
+        r: 'Por qué una comprobación no es una demostración.',
+        o: ['Demostración directa, por contrarrecíproco y por reducción al absurdo', 'Contraejemplos', 'El principio de inducción']
+      }
+    ]
+  },
+
   /* ================= 1. ARITMETICA ================= */
   {
     id: 'ar', n: 1, title: 'Aritmética y fundamentos',
@@ -56,6 +79,11 @@ window.CURRICULUM = [
         id: 'ar-proporcionalidad', t: 'Proporcionalidad y porcentajes',
         r: 'Razones, reglas de tres, aumentos y descuentos.',
         o: ['Magnitudes directa e inversamente proporcionales', 'Porcentajes encadenados', 'Interés simple y compuesto']
+      },
+      {
+        id: 'ar-magnitudes', t: 'Magnitudes, unidades y análisis dimensional',
+        r: 'Medir el mundo y comprobar que una fórmula puede ser cierta.',
+        o: ['Sistema Internacional y cambios de unidad', 'Cifras significativas', 'Análisis dimensional como red de seguridad']
       },
       {
         id: 'ar-conjuntos', t: 'Conjuntos numéricos y la recta real',
@@ -240,6 +268,11 @@ window.CURRICULUM = [
         o: ['Interpretar la pendiente', 'Recta que pasa por dos puntos', 'Modelos lineales']
       },
       {
+        id: 'fn-prog-lineal', t: 'Programación lineal',
+        r: 'Optimizar cuando hay restricciones: el problema de todas las empresas.',
+        o: ['Región factible a partir de inecuaciones', 'Función objetivo y rectas de nivel', 'El óptimo está siempre en un vértice']
+      },
+      {
         id: 'fn-cuadraticas', t: 'Funciones cuadráticas',
         r: 'La parábola y sus elementos.',
         o: ['Vértice y eje de simetría', 'Cortes con los ejes', 'Problemas de máximos y mínimos']
@@ -341,6 +374,21 @@ window.CURRICULUM = [
     desc: 'Más allá del Bachillerato: las matemáticas con las que se describe el mundo real.',
     temas: [
       {
+        id: 'av-espacios', t: 'Espacios vectoriales y aplicaciones lineales',
+        r: 'Qué es de verdad una matriz: una transformación, no una tabla.',
+        o: ['Espacio vectorial, base y dimensión', 'Aplicaciones lineales y su matriz', 'Núcleo, imagen y el teorema del rango']
+      },
+      {
+        id: 'av-lineal', t: 'Álgebra lineal: autovalores',
+        r: 'Las direcciones que una transformación no tuerce.',
+        o: ['Autovalores y autovectores', 'Ecuación característica', 'Diagonalización y potencias']
+      },
+      {
+        id: 'av-markov', t: 'Cadenas de Markov y procesos estocásticos',
+        r: 'Azar con memoria de un solo paso: del tiempo al PageRank.',
+        o: ['Matriz de transición', 'Evolución del estado y distribución estacionaria', 'Estados absorbentes']
+      },
+      {
         id: 'av-edo', t: 'Ecuaciones diferenciales ordinarias',
         r: 'Ecuaciones cuya incógnita es una función entera.',
         o: ['Campo de pendientes', 'Variables separables y lineales de primer orden', 'Modelos: enfriamiento, población']
@@ -361,19 +409,39 @@ window.CURRICULUM = [
         o: ['Derivadas parciales y gradiente', 'Divergencia y rotacional', 'Integrales de línea y teoremas integrales']
       },
       {
+        id: 'av-optimizacion', t: 'Optimización y descenso de gradiente',
+        r: 'Cómo aprende una máquina: bajando la ladera a pasitos.',
+        o: ['Extremos con varias variables', 'El algoritmo del descenso de gradiente', 'Tasa de aprendizaje y mínimos locales']
+      },
+      {
+        id: 'av-edp', t: 'Ecuaciones en derivadas parciales',
+        r: 'Las ecuaciones del calor, la onda y el potencial.',
+        o: ['De la EDO a la EDP', 'Separación de variables', 'Ecuación del calor y de ondas']
+      },
+      {
         id: 'av-fourier', t: 'Series y transformada de Fourier',
         r: 'Toda señal es una suma de ondas puras.',
         o: ['Serie de Fourier', 'Espectro', 'Idea de la transformada']
       },
       {
-        id: 'av-lineal', t: 'Álgebra lineal: autovalores',
-        r: 'Las direcciones que una transformación no tuerce.',
-        o: ['Espacios vectoriales y bases', 'Autovalores y autovectores', 'Diagonalización']
+        id: 'av-geodif', t: 'Geometría diferencial: curvatura',
+        r: 'Medir cuánto se dobla una curva o una superficie.',
+        o: ['Curvatura de una curva plana', 'Curvatura de Gauss', 'Geodésicas y el teorema egregio']
+      },
+      {
+        id: 'av-infinito', t: 'El infinito: cardinalidad y Cantor',
+        r: 'Hay infinitos más grandes que otros, y se puede demostrar.',
+        o: ['Biyecciones y conjuntos numerables', 'La diagonal de Cantor', 'Hipótesis del continuo']
       },
       {
         id: 'av-topologia', t: 'Topología',
         r: 'Geometría sin distancias: lo que sobrevive al estirar.',
         o: ['Espacios topológicos y continuidad', 'Homeomorfismo y género', 'Característica de Euler']
+      },
+      {
+        id: 'av-grupos', t: 'Teoría de grupos y simetría',
+        r: 'La estructura matemática de la simetría.',
+        o: ['Definición de grupo y ejemplos', 'Grupos de simetría y teselados', 'Por qué no hay fórmula para el grado 5']
       },
       {
         id: 'av-grafos', t: 'Teoría de grafos',
@@ -389,6 +457,16 @@ window.CURRICULUM = [
         id: 'av-numeros', t: 'Teoría de números',
         r: 'La reina de las matemáticas: los enteros y sus misterios.',
         o: ['Aritmética modular', 'Teorema fundamental de la aritmética', 'Criptografía RSA']
+      },
+      {
+        id: 'av-juegos', t: 'Teoría de juegos',
+        r: 'Matemáticas para decidir cuando el otro también decide.',
+        o: ['Matriz de pagos y estrategias dominantes', 'Equilibrio de Nash', 'El dilema del prisionero']
+      },
+      {
+        id: 'av-informacion', t: 'Teoría de la información y entropía',
+        r: 'Cuánta información cabe en un mensaje, medida en bits.',
+        o: ['Cantidad de información y entropía de Shannon', 'Codificación óptima', 'Redundancia y compresión']
       }
     ]
   }
