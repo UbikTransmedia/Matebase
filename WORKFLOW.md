@@ -24,7 +24,7 @@ Se abre haciendo doble clic en `index.html`. **Sin servidor local, sin internet,
 
 ## Fase 1 — Temario (cerrada) → `assets/js/curriculum.js`
 
-7 bloques, 63 temas, en progresión estricta. El orden es el contrato pedagógico:
+7 bloques, 65 temas, en progresión estricta. El orden es el contrato pedagógico:
 ningún tema usa una herramienta que no se haya explicado antes.
 
 1. **Aritmética y fundamentos** (9) — de los naturales a la recta real.

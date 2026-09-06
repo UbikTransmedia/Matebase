@@ -32,6 +32,9 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
 <div id="sum"></div>
 <div id="out" class="res"></div>
 
+<div class="grp">Temas del curso</div>
+<div id="temas" class="res">comprobando…</div>
+
 <div class="grp">Muestrario del renderizador</div>
 <div id="gal" class="gallery"></div>
 
@@ -42,6 +45,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
 <script src="assets/js/core/progress.js"></script>
 <script src="assets/js/core/exercise.js"></script>
 <script src="assets/js/core/page.js"></script>
+<script src="assets/js/curriculum.js"></script>
 <script>
 (function () {
   var pass = 0, fail = 0, out = document.getElementById('out'), grp = '';
@@ -219,6 +223,57 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   s.className = 'sum ' + (fail ? 'fail' : 'pass');
   s.textContent = fail ? (fail + ' fallo(s) de ' + (pass + fail) + ' comprobaciones')
     : ('Todo correcto: ' + pass + ' comprobaciones');
+
+  /* ---------------- cada tema del temario se construye sin romperse ----------------
+     Se cargan todos los archivos de topics/ que existan y se monta cada
+     pagina en un contenedor oculto. Asi un fallo en un tema sale aqui y
+     no cuando el alumno lo abre.                                          */
+  (function () {
+    var box = document.getElementById('temas');
+    var ids = [];
+    (window.CURRICULUM || []).forEach(function (b) {
+      b.temas.forEach(function (t) { ids.push(t); });
+    });
+    var reg = {}, pend = ids.length, escritos = 0;
+    window.Course = { topic: function (id, fn) { reg[id] = fn; } };
+    if (!pend) { box.textContent = 'sin temario'; return; }
+
+    ids.forEach(function (t) {
+      var s = document.createElement('script');
+      s.src = 'topics/' + t.id + '.js';
+      s.onload = s.onerror = function () { if (--pend === 0) build(); };
+      document.head.appendChild(s);
+    });
+
+    function build() {
+      var html = '', malos = 0;
+      var host = document.createElement('div');
+      host.style.cssText = 'position:absolute;left:-9999px;top:0;width:760px';
+      document.body.appendChild(host);
+      ids.forEach(function (t) {
+        if (!reg[t.id]) return;                       // aun no escrito: no es un fallo
+        escritos++;
+        var h = document.createElement('div');
+        host.appendChild(h);
+        try {
+          var pg = new Page(h, t);
+          reg[t.id](pg);
+          html += '<div class="ok">✓ ' + t.id + ' — ' +
+            h.querySelectorAll('.card--demo').length + ' ejemplos, ' +
+            h.querySelectorAll('.card--ex').length + ' ejercicios, ' +
+            h.querySelectorAll('canvas').length + ' gráficas</div>';
+        } catch (e) {
+          malos++;
+          html += '<div class="ko">✗ ' + t.id + ' — ' + e.message + '</div>';
+        }
+      });
+      host.remove();
+      box.innerHTML = '<div style="margin-bottom:6px;color:var(--ink-soft)">' + escritos +
+        ' temas escritos de ' + ids.length + ' previstos' +
+        (malos ? ' · <b style="color:var(--bad)">' + malos + ' con errores</b>' : ' · todos se construyen bien') +
+        '</div>' + html;
+    }
+  })();
 
   /* ---------------- muestrario visual ---------------- */
   var gal = document.getElementById('gal');
