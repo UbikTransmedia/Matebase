@@ -48,7 +48,9 @@
     Rightarrow: '⇒', Leftarrow: '⇐', Leftrightarrow: '⇔', leftrightarrow: '↔',
     iff: '⟺', implies: '⟹', mapsto: '↦', nearrow: '↗', searrow: '↘',
     in: '∈', notin: '∉', ni: '∋', subset: '⊂', subseteq: '⊆', supset: '⊃',
-    supseteq: '⊇', nsubseteq: '⊄', colon: ':'
+    supseteq: '⊇', nsubseteq: '⊄', colon: ':',
+    mid: '∣', nmid: '∤', doteq: '≐', asymp: '≍', prec: '≺', succ: '≻',
+    Longrightarrow: '⟹', Longleftrightarrow: '⟺', longmapsto: '⟼', uparrow: '↑', downarrow: '↓'
   };
 
   var BB = { R: 'ℝ', N: 'ℕ', Z: 'ℤ', Q: 'ℚ', C: 'ℂ', P: 'ℙ', E: '𝔼', H: 'ℍ' };
@@ -144,6 +146,19 @@
       }
       case 'overline': case 'bar':
         return { h: '<span class="mx-ovl">' + render(group(p)) + '</span>' };
+      case 'underbrace':
+        return { h: '<span style="border-bottom:1.6px solid currentColor;padding-bottom:.1em">' + render(group(p)) + '</span>' };
+      case 'overbrace':
+        return { h: '<span style="border-top:1.6px solid currentColor;padding-top:.1em">' + render(group(p)) + '</span>' };
+      case 'xrightarrow': case 'xleftarrow': {
+        var etq = render(group(p));
+        return {
+          h: '<span class="mx-lim" style="padding:0 .3em"><span class="l" style="font-size:.6em">' + etq +
+            '</span><span class="g" style="font-size:1.05em">' + (name === 'xrightarrow' ? '⟶' : '⟵') + '</span></span>'
+        };
+      }
+      case 'hline': case 'hdashline': case 'noalign':
+        return { h: '' };
       case 'underline':
         return { h: '<span style="border-bottom:1.3px solid currentColor">' + render(group(p)) + '</span>' };
       case 'vec':

@@ -1,0 +1,302 @@
+/* Tema: Matrices y determinantes */
+Course.topic('al-matrices', function (p) {
+
+  p.text('Una <strong>matriz</strong> es una tabla rectangular de números. Suena a poco y es una de ' +
+    'las herramientas más potentes que existen: sirve para resolver sistemas enormes, para describir ' +
+    'transformaciones geométricas, para el buscador de Google y para casi toda la inteligencia artificial.');
+
+  p.formula('A = \\begin{pmatrix} 2 & -1 & 0 \\\\ 3 & 5 & 4 \\end{pmatrix}',
+    'matriz de dimensión 2×3 (filas × columnas)');
+
+  p.text('Se nombra $a_{ij}$ al elemento de la fila $i$ y la columna $j$. Siempre en ese orden: ' +
+    'primero fila, después columna.');
+
+  p.section('Suma y producto por un número');
+
+  p.text('Fáciles: se hacen elemento a elemento. Para sumar, las dos matrices tienen que tener ' +
+    'exactamente la misma dimensión.');
+
+  p.section('El producto de matrices');
+
+  p.text('Aquí está la sorpresa. No se multiplica elemento a elemento: el elemento $c_{ij}$ del ' +
+    'producto se obtiene combinando <strong>la fila $i$ de la primera con la columna $j$ de la ' +
+    'segunda</strong>, multiplicando término a término y sumando.');
+
+  p.formula('c_{ij} = \\sum_k a_{ik}\\,b_{kj}', 'fila por columna');
+
+  p.note('Para poder multiplicar, el número de <strong>columnas</strong> de la primera tiene que ' +
+    'coincidir con el número de <strong>filas</strong> de la segunda. Y el producto ' +
+    '<strong>no es conmutativo</strong>: en general $A\\cdot B \\ne B\\cdot A$. A veces uno de los dos ' +
+    'productos ni siquiera se puede hacer.', 'warn', 'Dos cosas que rompen la intuición');
+
+  p.demo({
+    title: 'Fila por columna, paso a paso',
+    intro: 'Pulsa una casilla del resultado y verás qué fila y qué columna se han combinado para obtenerla.',
+    build: function (host, d) {
+      var A = [[2, -1], [3, 5]], B = [[1, 4], [-2, 0]];
+      var sel = [0, 0];
+      var caja = U.el('div');
+      host.appendChild(caja);
+      var out = W.readout(host, '');
+      function prod() {
+        var C = [[0, 0], [0, 0]];
+        for (var i = 0; i < 2; i++) for (var j = 0; j < 2; j++) {
+          C[i][j] = A[i][0] * B[0][j] + A[i][1] * B[1][j];
+        }
+        return C;
+      }
+      function tabla(M, nombre, resaltarFila, resaltarCol) {
+        var h = '<div style="display:inline-block;margin:0 10px;text-align:center">' +
+          '<div style="font-family:var(--serif);font-style:italic;font-size:15px;margin-bottom:4px">' + nombre + '</div>' +
+          '<table style="border-collapse:collapse;font-family:var(--mono);font-size:15px">';
+        for (var i = 0; i < 2; i++) {
+          h += '<tr>';
+          for (var j = 0; j < 2; j++) {
+            var on = (resaltarFila === i) || (resaltarCol === j);
+            h += '<td style="padding:6px 12px;border:1px solid var(--line);' +
+              (on ? 'background:var(--accent-soft);color:var(--accent-ink);font-weight:700' : '') + '">' +
+              M[i][j] + '</td>';
+          }
+          h += '</tr>';
+        }
+        return h + '</table></div>';
+      }
+      function pinta() {
+        var C = prod();
+        var h = '<div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap">' +
+          tabla(A, 'A', sel[0], null) +
+          '<span style="font-size:20px">·</span>' +
+          tabla(B, 'B', null, sel[1]) +
+          '<span style="font-size:20px">=</span>' +
+          '<div style="display:inline-block;margin:0 10px;text-align:center">' +
+          '<div style="font-family:var(--serif);font-style:italic;font-size:15px;margin-bottom:4px">A·B</div>' +
+          '<table style="border-collapse:collapse;font-family:var(--mono);font-size:15px">';
+        for (var i = 0; i < 2; i++) {
+          h += '<tr>';
+          for (var j = 0; j < 2; j++) {
+            var on = (sel[0] === i && sel[1] === j);
+            h += '<td data-i="' + i + '" data-j="' + j + '" style="padding:6px 12px;cursor:pointer;' +
+              'border:1px solid var(--line);' +
+              (on ? 'background:var(--ok);color:#fff;font-weight:700' : '') + '">' + C[i][j] + '</td>';
+          }
+          h += '</tr>';
+        }
+        h += '</table></div></div>';
+        caja.innerHTML = h;
+        U.$$('td[data-i]', caja).forEach(function (td) {
+          td.addEventListener('click', function () {
+            sel = [Number(td.getAttribute('data-i')), Number(td.getAttribute('data-j'))];
+            pinta();
+          });
+        });
+        var i0 = sel[0], j0 = sel[1];
+        out.set('$c_{' + (i0 + 1) + (j0 + 1) + '} = ' +
+          A[i0][0] + '\\cdot' + (B[0][j0] < 0 ? '(' + B[0][j0] + ')' : B[0][j0]) + ' + ' +
+          A[i0][1] + '\\cdot' + (B[1][j0] < 0 ? '(' + B[1][j0] + ')' : B[1][j0]) + ' = ' + C[i0][j0] + '$' +
+          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Fila ' + (i0 + 1) + ' de A por columna ' +
+          (j0 + 1) + ' de B.</span>');
+      }
+      W.buttons(host, [{
+        t: '↻ Otras matrices', cls: 'btn--main', on: function () {
+          var r = U.rng();
+          A = [[r.pm(0, 5), r.pm(0, 5)], [r.pm(0, 5), r.pm(0, 5)]];
+          B = [[r.pm(0, 5), r.pm(0, 5)], [r.pm(0, 5), r.pm(0, 5)]];
+          pinta();
+        }
+      }]);
+      W.hint(host, 'Haz clic en cualquier casilla verde del resultado.');
+      pinta();
+    }
+  });
+
+  /* ---------------------------------------------------------------- */
+  p.section('El determinante');
+
+  p.text('El <strong>determinante</strong> es un número que se asocia a toda matriz cuadrada y que ' +
+    'concentra muchísima información sobre ella.');
+
+  p.formulas([
+    '\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix} = ad - bc',
+    '\\begin{vmatrix} a & b & c \\\\ d & e & f \\\\ g & h & i \\end{vmatrix} = aei + bfg + cdh - ceg - bdi - afh'
+  ], 'orden 2 y regla de Sarrus para orden 3');
+
+  p.text('Su significado geométrico es precioso: en el plano, $|\\det A|$ es el <strong>área</strong> ' +
+    'del paralelogramo que forman los vectores fila de $A$. En el espacio, el volumen del ' +
+    'paralelepípedo. Y el signo indica si la transformación conserva la orientación o la invierte.');
+
+  p.demo({
+    title: 'El determinante es un área',
+    intro: 'Arrastra los dos vectores. El área del paralelogramo que forman es exactamente el valor absoluto del determinante.',
+    build: function (host, d) {
+      var out = W.readout(host, '');
+      W.board(host, {
+        xmin: -7, xmax: 7, ymin: -5, ymax: 5, height: 330,
+        handles: {
+          U: { x: 3, y: 1, label: 'u', color: 0, constrain: snap },
+          V: { x: 1, y: 3, label: 'v', color: 1, constrain: snap }
+        },
+        draw: function (g) {
+          var u = g.h('U'), v = g.h('V');
+          g.poly([[0, 0], [u.x, u.y], [u.x + v.x, u.y + v.y], [v.x, v.y]],
+            { color: 2, fill: 2, fillAlpha: .22, w: 1.6 });
+          g.vec(0, 0, u.x, u.y, { color: 0, w: 3 });
+          g.vec(0, 0, v.x, v.y, { color: 1, w: 3 });
+          var det = u.x * v.y - u.y * v.x;
+          out.set('$\\det\\begin{pmatrix}' + u.x + ' & ' + u.y + ' \\\\ ' + v.x + ' & ' + v.y +
+            '\\end{pmatrix} = ' + u.x + '\\cdot' + v.y + ' - ' + u.y + '\\cdot' + v.x + ' = ' + det + '$<br>' +
+            'Área del paralelogramo: $|' + det + '| = ' + Math.abs(det) + '$' +
+            (det === 0 ? '<br><strong style="color:var(--bad)">Determinante cero: los vectores están alineados ' +
+              'y el paralelogramo se ha aplastado. La matriz no tiene inversa.</strong>' : ''));
+        }
+      });
+      function snap(h) { h.x = Math.round(h.x); h.y = Math.round(h.y); }
+      W.hint(host, 'Prueba a poner los dos vectores en la misma dirección: el determinante se anula.');
+    }
+  });
+
+  p.section('Matriz inversa');
+
+  p.text('La <strong>inversa</strong> $A^{-1}$ es la matriz que deshace lo que hace $A$:');
+
+  p.formula('A\\cdot A^{-1} = A^{-1}\\cdot A = I', 'I es la matriz identidad');
+
+  p.text('Y no todas las matrices tienen inversa. La condición es exactamente esta:');
+
+  p.formula('\\exists A^{-1} \\iff \\det A \\ne 0', 'matriz regular (o inversible)');
+
+  p.text('Tiene todo el sentido con la interpretación del área: si el determinante es cero, la ' +
+    'transformación aplasta el plano sobre una recta, y una vez aplastado no hay forma de volver atrás.');
+
+  p.formula('\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}^{-1} = \\frac{1}{ad-bc}\\begin{pmatrix} d & -b \\\\ -c & a \\end{pmatrix}',
+    'inversa de una matriz 2×2');
+
+  /* ================= EJERCICIOS ================= */
+  p.section('Practica');
+
+  p.exercise({
+    title: 'Un elemento del producto',
+    level: 'medio',
+    gen: function (r) {
+      var A = [[r.pm(0, 6), r.pm(0, 6)], [r.pm(0, 6), r.pm(0, 6)]];
+      var B = [[r.pm(0, 6), r.pm(0, 6)], [r.pm(0, 6), r.pm(0, 6)]];
+      var i = r.int(0, 1), j = r.int(0, 1);
+      return { A: A, B: B, i: i, j: j, val: A[i][0] * B[0][j] + A[i][1] * B[1][j] };
+    },
+    ask: function (d) {
+      return 'Sean $A = ' + ML.matTex(d.A) + '$ y $B = ' + ML.matTex(d.B) + '$. ' +
+        'Calcula el elemento $c_{' + (d.i + 1) + (d.j + 1) + '}$ de $A\\cdot B$.';
+    },
+    fields: [{ name: 'v', label: 'Valor', w: 'tiny' }],
+    sol: function (d) { return { v: d.val }; },
+    hint: function (d) { return 'Fila ' + (d.i + 1) + ' de $A$ por columna ' + (d.j + 1) + ' de $B$: multiplica término a término y suma.'; },
+    steps: function (d) {
+      return ['Fila ' + (d.i + 1) + ' de $A$: $(' + d.A[d.i].join(', ') + ')$.',
+        'Columna ' + (d.j + 1) + ' de $B$: $(' + d.B[0][d.j] + ', ' + d.B[1][d.j] + ')$.',
+        '$c_{' + (d.i + 1) + (d.j + 1) + '} = ' + d.A[d.i][0] + '\\cdot(' + d.B[0][d.j] + ') + ' +
+        d.A[d.i][1] + '\\cdot(' + d.B[1][d.j] + ') = ' + d.val + '$'];
+    },
+    answer: function (d) { return String(d.val); }
+  });
+
+  p.exercise({
+    title: 'Determinante de orden 2',
+    level: 'basico',
+    gen: function (r) {
+      var m = [[r.pm(0, 9), r.pm(0, 9)], [r.pm(0, 9), r.pm(0, 9)]];
+      return { m: m, det: ML.det2(m) };
+    },
+    ask: function (d) { return 'Calcula $\\det ' + ML.matTex(d.m) + '$'; },
+    fields: [{ name: 'v', label: 'Determinante', w: 'tiny' }],
+    sol: function (d) { return { v: d.det }; },
+    hint: function () { return 'Producto de la diagonal principal menos producto de la secundaria.'; },
+    steps: function (d) {
+      return ['$\\det = ad - bc$',
+        '$= ' + d.m[0][0] + '\\cdot(' + d.m[1][1] + ') - (' + d.m[0][1] + ')\\cdot(' + d.m[1][0] + ')$',
+        '$= ' + (d.m[0][0] * d.m[1][1]) + ' - (' + (d.m[0][1] * d.m[1][0]) + ') = ' + d.det + '$',
+        d.det === 0 ? 'Es cero: la matriz <strong>no tiene inversa</strong>.'
+          : 'No es cero, así que la matriz sí tiene inversa.'];
+    },
+    answer: function (d) { return String(d.det); }
+  });
+
+  p.exercise({
+    title: 'Determinante de orden 3 (Sarrus)',
+    level: 'medio',
+    gen: function (r) {
+      var m = [];
+      for (var i = 0; i < 3; i++) m.push([r.pm(0, 5), r.pm(0, 5), r.pm(0, 5)]);
+      return { m: m, det: ML.det3(m) };
+    },
+    ask: function (d) { return 'Calcula $\\det ' + ML.matTex(d.m) + '$ por la regla de Sarrus.'; },
+    fields: [{ name: 'v', label: 'Determinante', w: 'tiny' }],
+    sol: function (d) { return { v: d.det }; },
+    hint: function () { return 'Tres productos «hacia abajo a la derecha» que suman, y tres «hacia abajo a la izquierda» que restan.'; },
+    steps: function (d) {
+      var m = d.m;
+      var pos = m[0][0] * m[1][1] * m[2][2] + m[0][1] * m[1][2] * m[2][0] + m[0][2] * m[1][0] * m[2][1];
+      var neg = m[0][2] * m[1][1] * m[2][0] + m[0][1] * m[1][0] * m[2][2] + m[0][0] * m[1][2] * m[2][1];
+      return ['Diagonales que <strong>suman</strong>: $' +
+        m[0][0] + '\\cdot' + m[1][1] + '\\cdot' + m[2][2] + ' + ' +
+        m[0][1] + '\\cdot' + m[1][2] + '\\cdot' + m[2][0] + ' + ' +
+        m[0][2] + '\\cdot' + m[1][0] + '\\cdot' + m[2][1] + ' = ' + pos + '$',
+        'Diagonales que <strong>restan</strong>: $' +
+        m[0][2] + '\\cdot' + m[1][1] + '\\cdot' + m[2][0] + ' + ' +
+        m[0][1] + '\\cdot' + m[1][0] + '\\cdot' + m[2][2] + ' + ' +
+        m[0][0] + '\\cdot' + m[1][2] + '\\cdot' + m[2][1] + ' = ' + neg + '$',
+        '$\\det = ' + pos + ' - (' + neg + ') = ' + d.det + '$'];
+    },
+    answer: function (d) { return String(d.det); }
+  });
+
+  p.exercise({
+    title: 'Matriz inversa 2×2',
+    level: 'avanzado',
+    gen: function (r) {
+      var m;
+      var guard = 0;
+      do {
+        m = [[r.pm(1, 5), r.pm(0, 5)], [r.pm(0, 5), r.pm(1, 5)]];
+      } while (ML.det2(m) === 0 && ++guard < 30);
+      var det = ML.det2(m);
+      if (det === 0) return null;
+      return { m: m, det: det, inv: [[m[1][1] / det, -m[0][1] / det], [-m[1][0] / det, m[0][0] / det]] };
+    },
+    ask: function (d) {
+      return 'Calcula la inversa de $A = ' + ML.matTex(d.m) + '$ y da sus cuatro elementos ' +
+        '(cuatro decimales).';
+    },
+    fields: [
+      { name: 'a', label: '$a_{11}$', w: 'tiny' }, { name: 'b', label: '$a_{12}$', w: 'tiny' },
+      { name: 'c', label: '$a_{21}$', w: 'tiny' }, { name: 'd', label: '$a_{22}$', w: 'tiny' }
+    ],
+    sol: function (d) {
+      return {
+        a: U.round(d.inv[0][0], 6), b: U.round(d.inv[0][1], 6),
+        c: U.round(d.inv[1][0], 6), d: U.round(d.inv[1][1], 6)
+      };
+    },
+    tol: 3e-4,
+    hint: function (d) { return 'Intercambia la diagonal principal, cambia el signo de la otra y divide todo entre $\\det A = ' + d.det + '$.'; },
+    steps: function (d) {
+      return ['Determinante: $\\det A = ' + d.det + '$. Como no es cero, la inversa existe.',
+        'Se intercambian $a$ y $d$, y se cambian de signo $b$ y $c$: $\\begin{pmatrix}' +
+        d.m[1][1] + ' & ' + (-d.m[0][1]) + ' \\\\ ' + (-d.m[1][0]) + ' & ' + d.m[0][0] + '\\end{pmatrix}$',
+        'Se divide todo entre el determinante: $A^{-1} = \\dfrac{1}{' + d.det + '}\\begin{pmatrix}' +
+        d.m[1][1] + ' & ' + (-d.m[0][1]) + ' \\\\ ' + (-d.m[1][0]) + ' & ' + d.m[0][0] + '\\end{pmatrix}$',
+        'Comprobación: al multiplicar $A\\cdot A^{-1}$ tiene que salir la identidad.'];
+    },
+    answer: function (d) {
+      return '$A^{-1} = ' + ML.matTex([[U.fmt(d.inv[0][0], 4), U.fmt(d.inv[0][1], 4)],
+        [U.fmt(d.inv[1][0], 4), U.fmt(d.inv[1][1], 4)]]) + '$';
+    }
+  });
+
+  p.keys([
+    'Matriz = tabla de números. $a_{ij}$: primero fila, después columna.',
+    'El producto es fila por columna, y exige que las columnas de la primera igualen las filas de la segunda.',
+    'El producto de matrices <strong>no es conmutativo</strong>.',
+    'El determinante de orden 2 es $ad-bc$; el de orden 3, por Sarrus.',
+    'Geométricamente, $|\\det|$ es el área (o el volumen) que generan los vectores de la matriz.',
+    'Existe inversa ⟺ el determinante no es cero.'
+  ]);
+});

@@ -38,14 +38,18 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
 <div class="grp">Muestrario del renderizador</div>
 <div id="gal" class="gallery"></div>
 
-<script src="assets/js/core/util.js"></script>
-<script src="assets/js/core/mathx.js"></script>
-<script src="assets/js/core/mathlib.js"></script>
-<script src="assets/js/core/widgets.js"></script>
-<script src="assets/js/core/progress.js"></script>
-<script src="assets/js/core/exercise.js"></script>
-<script src="assets/js/core/page.js"></script>
-<script src="assets/js/curriculum.js"></script>
+<!-- El núcleo se carga con antichaché: al probar interesa siempre la última
+     versión de cada archivo, nunca la que tenga guardada el navegador.
+     document.write mantiene el orden de ejecución, que aquí es obligatorio. -->
+<script>
+  (function () {
+    var t = '?t=' + Date.now();
+    ['core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
+     'core/exercise', 'core/page', 'curriculum'].forEach(function (f) {
+      document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
+    });
+  })();
+</script>
 <script>
 (function () {
   var pass = 0, fail = 0, out = document.getElementById('out'), grp = '';
@@ -170,7 +174,13 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     '\\left|\\frac{x}{2}\\right|', '\\left\\{x\\in\\mathbb{R}: x>0\\right\\}',
     '\\hat{y}=ax+b', '\\dot{x}=\\lambda x', '\\nabla\\cdot\\vec{F}',
     'x\\pmod 7', '\\left.\\frac{x^2}{2}\\right|_0^1', '\\Delta = b^2-4ac',
-    '\\frac{dy}{dx}+P(x)y=Q(x)'
+    '\\frac{dy}{dx}+P(x)y=Q(x)',
+    '3 \\mid 12 \\Longleftrightarrow 12 = 3k',
+    '\\underbrace{a+a+a}_{3 \\text{ veces}}',
+    '3^{2x}-4\\cdot3^x+3=0 \\xrightarrow{t=3^x} t^2-4t+3=0',
+    'f:\\mathbb{R}\\longmapsto\\mathbb{R}',
+    '\\left(\\begin{array}{ccc|c} 1 & 2 & -1 & 3 \\\\ 0 & 1 & 2 & 4 \\end{array}\\right)',
+    '\\begin{aligned} 2x+y &= 7 \\\\ x-y &= 2 \\\\ \\hline 3x &= 9\\end{aligned}'
   ];
   var errores = 0;
   TEX.forEach(function (t) { if (MathX.render(t).indexOf('mx-err') >= 0) { errores++; ko('comando desconocido', t, '—'); } });
@@ -310,6 +320,15 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           var pg = new Page(h, t);
           reg[t.id](pg);
           var aud = auditar(pg.specs);
+          // fórmulas de la explicación (las que no pasan por los ejercicios)
+          var malas = h.querySelectorAll('.mx-err');
+          if (malas.length) {
+            var vistos = [];
+            [].forEach.call(malas, function (e) {
+              if (vistos.indexOf(e.textContent) < 0) vistos.push(e.textContent);
+            });
+            aud.push('comandos LaTeX desconocidos en el texto: ' + vistos.join(' '));
+          }
           if (aud.length) {
             malos++;
             html += '<div class="ko">✗ ' + t.id + ' — ' + aud.join(' · ') + '</div>';
