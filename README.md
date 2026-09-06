@@ -39,12 +39,13 @@ El botón «Reiniciar» de abajo a la izquierda lo borra.
 | 6. Probabilidad y estadística | 8 | de la media a la inferencia |
 | 7. Escalada avanzada | 10 | EDO, sistemas dinámicos, caos, cálculo vectorial, Fourier, topología, grafos… |
 
-**65 temas** en total, en progresión estricta: ninguno usa una herramienta que no
-se haya explicado antes.
+**65 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
+se haya explicado antes. En total, **118 ejemplos interactivos**, **256 ejercicios
+procedimentales** y **120 gráficas**.
 
-El temario completo está en `assets/js/curriculum.js`. Los temas que todavía no
-se han escrito aparecen en el índice marcados como «en preparación» y muestran
-sus objetivos: el recorrido está reservado de principio a fin.
+El temario vive en `assets/js/curriculum.js`. Si en el futuro se añade un tema
+nuevo al índice sin su archivo, aparece marcado como «en preparación» con sus
+objetivos, sin romper nada.
 
 ---
 
@@ -95,9 +96,11 @@ Los detalles están en **`GUIA-AUTOR.md`**.
 - No se usa `fetch` ni módulos ES porque el navegador los bloquea en `file://`;
   los temas se cargan inyectando etiquetas `<script>` clásicas bajo demanda.
 - Tema claro y oscuro, y diseño adaptado a móvil.
-- `tests.html` comprueba el núcleo (98 verificaciones) y **audita todos los
-  ejercicios**: los genera 40 veces cada uno y comprueba que la solución
-  declarada pasa su propio corrector.
+- `tests.html` comprueba el núcleo (98 verificaciones) y **audita los 256
+  ejercicios**: genera cada uno 40 veces y verifica que la solución declarada
+  pasa su propio corrector, que nada lanza excepciones, que no queda ninguna
+  fórmula con comandos LaTeX inexistentes y que todos los temas del temario
+  se construyen sin errores.
 
 ---
 

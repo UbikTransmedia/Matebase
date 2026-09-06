@@ -61,7 +61,7 @@
     'ker', 'gcd', 'mcd', 'mcm', 'arg', 'deg', 'rot', 'div'];
 
   var BIGSTACK = { sum: '∑', prod: '∏', coprod: '∐', bigcup: '⋃', bigcap: '⋂', bigoplus: '⨁' };
-  var BIGSIDE = { int: '∫', iint: '∬', iiint: '∭', oint: '∮' };
+  var BIGSIDE = { int: '∫', iint: '∬', iiint: '∭', oint: '∮', oiint: '∯', oiiint: '∰' };
 
   var MATDELIM = {
     pmatrix: ['(', ')'], bmatrix: ['[', ']'], Bmatrix: ['{', '}'],

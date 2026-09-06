@@ -111,7 +111,7 @@ Course.topic('ge-conicas', function (p) {
             '<span style="color:var(--c5)">$d(P,F_2) = ' + U.fmt(d2, 3) + '$</span> &nbsp;=&nbsp; ' +
             '<strong>' + U.fmt(d1 + d2, 3) + '</strong> $= 2a$<br>' +
             'Excentricidad: $e = \\dfrac{c}{a} = ' + U.fmt(c / a, 4) + '$ — ' +
-            (c / a < 0.15 ? 'casi una circunferencia' : (c / a > 0.8 ? 'muy achatada' : 'elipse normal'));
+            (c / a < 0.15 ? 'casi una circunferencia' : (c / a > 0.8 ? 'muy achatada' : 'elipse normal')));
         }
       });
       var row = W.row(host);

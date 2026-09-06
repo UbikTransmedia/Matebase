@@ -62,14 +62,25 @@ Ocho módulos, cero duplicación. El orden es el de carga:
   RNG: botón «Otro ejercicio» que rebaraja los números tantas veces como haga falta,
   corrección automática, pistas y solución paso a paso.
 
-## Fase 3 — Contenido, bloque a bloque (en curso)
+## Fase 3 — Contenido, bloque a bloque (cerrada)
 
-Por cada tema: explicación → ejemplo interactivo → 2-4 ejercicios procedimentales → ideas clave.
-Entregado por tandas; cada tanda deja el proyecto funcionando.
+Por cada tema: explicación → apunte histórico → ejemplo interactivo → 3-5
+ejercicios procedimentales → ideas clave.
 
-## Fase 4 — Repaso y ampliación
+**Los 65 temas están escritos**: 118 ejemplos interactivos, 256 ejercicios
+procedimentales y 120 gráficas. Cada tanda se entregó dejando el proyecto
+funcionando y pasando `tests.html`.
 
-Revisión de huecos, temas intercalados a petición, exámenes mezclados por bloque.
+## Fase 4 — Repaso y ampliación (pendiente, a petición)
+
+Lo que queda por hacer si el curso se quiere llevar más lejos:
+
+- **Profundizar** en los temas que se hayan quedado cortos.
+- **Intercalar** temas nuevos donde se detecte un salto (basta con insertar un
+  objeto en `curriculum.js` y crear su archivo).
+- **Exámenes mezclados** por bloque, reutilizando los generadores que ya existen:
+  el motor permite juntar ejercicios de varios temas en una sola página.
+- **Seguimiento del progreso** más fino (rachas, temas flojos, repaso espaciado).
 
 ---
 

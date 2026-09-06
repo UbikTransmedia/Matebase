@@ -146,7 +146,7 @@ Course.topic('fn-aplicaciones', function (p) {
           '\\Rightarrow r = \\sqrt[3]{\\dfrac{V}{2\\pi}} = ' + U.fmt(ropt, 3) + '$<br>' +
           (Math.abs(r0 - ropt) < 0.12
             ? '<strong style="color:var(--ok)">Es el óptimo: la altura sale igual al diámetro ($h = 2r$).</strong>'
-            : 'El mínimo está en $r = ' + U.fmt(ropt, 3) + '$ cm, con $' + U.fmt(sup(ropt), 2) + '$ cm².');
+            : 'El mínimo está en $r = ' + U.fmt(ropt, 3) + '$ cm, con $' + U.fmt(sup(ropt), 2) + '$ cm².'));
         plot.render();
       }
       W.slider(W.row(host), { label: 'radio (cm)', min: 1.5, max: 7, step: 0.1, value: 3, dec: 2, on: function (v) { r0 = v; paint(); } });

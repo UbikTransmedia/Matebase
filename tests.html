@@ -245,6 +245,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       b.temas.forEach(function (t) { ids.push(t); });
     });
     var reg = {}, pend = ids.length, escritos = 0;
+    var existe = {};        // el archivo se descargó (aunque luego no se registre)
     window.Course = { topic: function (id, fn) { reg[id] = fn; } };
     if (!pend) { box.textContent = 'sin temario'; return; }
 
@@ -252,7 +253,12 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       var s = document.createElement('script');
       // antichaché: al probar interesa siempre la última versión del archivo
       s.src = 'topics/' + t.id + '.js?t=' + Date.now();
-      s.onload = s.onerror = function () { if (--pend === 0) build(); };
+      // onload significa «el archivo existe»: si además tiene un error de
+      // sintaxis, el navegador lo carga igual y simplemente no llega a
+      // registrarse. Distinguir los dos casos evita que un tema roto pase
+      // por «todavía sin escribir».
+      s.onload = function () { existe[t.id] = true; if (--pend === 0) build(); };
+      s.onerror = function () { if (--pend === 0) build(); };
       document.head.appendChild(s);
     });
 
@@ -312,7 +318,14 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       host.style.cssText = 'position:absolute;left:-9999px;top:0;width:760px';
       document.body.appendChild(host);
       ids.forEach(function (t) {
-        if (!reg[t.id]) return;                       // aun no escrito: no es un fallo
+        if (!reg[t.id]) {
+          if (existe[t.id]) {
+            malos++;
+            html += '<div class="ko">✗ ' + t.id + ' — el archivo existe pero no llega a registrarse: ' +
+              'seguramente tiene un error de sintaxis. Ábrelo en el navegador y mira la consola.</div>';
+          }
+          return;                                     // si no existe, es que aún no está escrito
+        }
         escritos++;
         var h = document.createElement('div');
         host.appendChild(h);
