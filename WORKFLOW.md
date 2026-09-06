@@ -24,17 +24,23 @@ Se abre haciendo doble clic en `index.html`. **Sin servidor local, sin internet,
 
 ## Fase 1 — Temario (cerrada) → `assets/js/curriculum.js`
 
-7 bloques, 65 temas, en progresión estricta. El orden es el contrato pedagógico:
+8 bloques, 79 temas, en progresión estricta. El orden es el contrato pedagógico:
 ningún tema usa una herramienta que no se haya explicado antes.
 
-1. **Aritmética y fundamentos** (9) — de los naturales a la recta real.
+0. **Lógica, conjuntos y demostración** (3) — proposiciones, conjuntos e inducción.
+1. **Aritmética y fundamentos** (10) — de los naturales a la recta real, con
+   magnitudes y análisis dimensional.
 2. **Álgebra** (12) — del lenguaje algebraico a los complejos.
 3. **Geometría** (10) — de los ángulos a la geometría del espacio.
 4. **Trigonometría** (5) — del triángulo rectángulo a las ondas.
-5. **Funciones y análisis** (11) — del concepto de función a la integral definida.
+5. **Funciones y análisis** (12) — del concepto de función a la integral definida,
+   pasando por programación lineal.
 6. **Probabilidad y estadística** (8) — de la media a la inferencia.
-7. **Escalada avanzada** (10) — EDO, sistemas dinámicos, caos, cálculo vectorial,
-   Fourier, autovalores, topología, grafos, análisis numérico, teoría de números.
+7. **Escalada avanzada** (19) — espacios vectoriales y autovalores, cadenas de
+   Markov, EDO y EDP, sistemas dinámicos, caos, cálculo vectorial y descenso de
+   gradiente, Fourier, geometría diferencial, el infinito de Cantor, topología,
+   grupos y simetría, grafos, análisis numérico, teoría de números, juegos e
+   información.
 
 Cada tema declara: `id`, `titulo`, `resumen`, `objetivos[]` y `requisitos[]`.
 Se pueden **intercalar temas nuevos** en cualquier punto insertando un objeto en el array.
@@ -67,8 +73,8 @@ Ocho módulos, cero duplicación. El orden es el de carga:
 Por cada tema: explicación → apunte histórico → ejemplo interactivo → 3-5
 ejercicios procedimentales → ideas clave.
 
-**Los 65 temas están escritos**: 118 ejemplos interactivos, 256 ejercicios
-procedimentales y 120 gráficas. Cada tanda se entregó dejando el proyecto
+**Los 79 temas están escritos**: 147 ejemplos interactivos, 312 ejercicios
+procedimentales y 139 gráficas. Cada tanda se entregó dejando el proyecto
 funcionando y pasando `tests.html`.
 
 ## Fase 4 — Repaso y ampliación (pendiente, a petición)

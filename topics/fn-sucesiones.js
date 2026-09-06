@@ -24,6 +24,12 @@ Course.topic('fn-sucesiones', function (p) {
     '1+100, 2+99, 3+98… salen 50 parejas que suman 101 cada una. De ahí sale exactamente la fórmula ' +
     'de arriba.');
 
+  p.note('Ese emparejamiento convence, pero no es una demostración: solo enseña que funciona en un ' +
+    'caso. La herramienta para demostrar de verdad una fórmula que afirma algo sobre <em>todos</em> ' +
+    'los naturales es la <strong>inducción</strong>, que viste en el bloque 0. Todas las fórmulas de ' +
+    'este tema se demuestran así, y merece la pena volver allí y rehacer el ejemplo de la suma de los ' +
+    '$n$ primeros naturales con lo que ya sabes de progresiones.', null, 'Cómo se demuestran estas fórmulas');
+
   p.section('Progresiones geométricas');
 
   p.text('Cada término se obtiene <strong>multiplicando</strong> siempre por la misma cantidad $r$ ' +

@@ -10,7 +10,7 @@ abrirla en cualquier ordenador con un navegador.
 
 ## Qué hay dentro
 
-A la izquierda, un índice desplegable con los siete bloques del curso. A la
+A la izquierda, un índice desplegable con los ocho bloques del curso. A la
 derecha, el tema abierto. Cada tema tiene explicación, historia, ejemplos que se
 tocan y ejercicios que se pueden repetir infinitas veces.
 
@@ -31,17 +31,18 @@ El botón «Reiniciar» de abajo a la izquierda lo borra.
 
 | Bloque | Temas | De qué va |
 |---|---|---|
-| 1. Aritmética y fundamentos | 9 | de contar a la recta real |
+| 0. Lógica, conjuntos y demostración | 3 | qué significa que algo sea cierto, y la inducción |
+| 1. Aritmética y fundamentos | 10 | de contar a la recta real, con unidades y análisis dimensional |
 | 2. Álgebra | 12 | del lenguaje algebraico a los complejos |
 | 3. Geometría | 10 | de los ángulos a la geometría del espacio |
 | 4. Trigonometría | 5 | del triángulo rectángulo a las ondas |
-| 5. Funciones y análisis | 11 | del concepto de función a la integral definida |
+| 5. Funciones y análisis | 12 | del concepto de función a la integral definida, con programación lineal |
 | 6. Probabilidad y estadística | 8 | de la media a la inferencia |
-| 7. Escalada avanzada | 10 | EDO, sistemas dinámicos, caos, cálculo vectorial, Fourier, topología, grafos… |
+| 7. Escalada avanzada | 19 | espacios vectoriales, Markov, EDO y EDP, caos, Fourier, grupos, topología, el infinito de Cantor, juegos, información… |
 
-**65 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
-se haya explicado antes. En total, **118 ejemplos interactivos**, **256 ejercicios
-procedimentales** y **120 gráficas**.
+**79 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
+se haya explicado antes. En total, **147 ejemplos interactivos**, **312 ejercicios
+procedimentales** y **139 gráficas**.
 
 El temario vive en `assets/js/curriculum.js`. Si en el futuro se añade un tema
 nuevo al índice sin su archivo, aparece marcado como «en preparación» con sus
@@ -96,7 +97,7 @@ Los detalles están en **`GUIA-AUTOR.md`**.
 - No se usa `fetch` ni módulos ES porque el navegador los bloquea en `file://`;
   los temas se cargan inyectando etiquetas `<script>` clásicas bajo demanda.
 - Tema claro y oscuro, y diseño adaptado a móvil.
-- `tests.html` comprueba el núcleo (98 verificaciones) y **audita los 256
+- `tests.html` comprueba el núcleo (98 verificaciones) y **audita los 312
   ejercicios**: genera cada uno 40 veces y verifica que la solución declarada
   pasa su propio corrector, que nada lanza excepciones, que no queda ninguna
   fórmula con comandos LaTeX inexistentes y que todos los temas del temario
