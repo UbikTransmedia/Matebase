@@ -245,6 +245,56 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       document.head.appendChild(s);
     });
 
+    /* Auditoría de un ejercicio procedimental:
+       se genera 40 veces y se comprueba que la solución que el propio
+       ejercicio declara pasa su propio corrector, que nada revienta y
+       que no queda ninguna fórmula con comandos LaTeX inexistentes. */
+    function auditar(specs) {
+      var fallos = [];
+      (specs || []).forEach(function (s, idx) {
+        var etiqueta = 'ej.' + (idx + 1) + ' («' + (s.title || '') + '»)';
+        var malCheck = 0, malTex = 0, excep = '';
+        for (var i = 0; i < 40; i++) {
+          var d = null, guard = 0;
+          try {
+            do { d = s.gen ? s.gen(U.rng()) : {}; } while (d === null && ++guard < 60);
+            if (d === null) { excep = excep || 'gen() nunca devuelve datos'; break; }
+
+            var textos = [];
+            textos.push(s.ask ? s.ask(d) : '');
+            if (s.hint) textos.push(s.hint(d));
+            if (s.answer) textos.push(s.answer(d));
+            if (s.steps) textos = textos.concat(s.steps(d));
+            var flds = (typeof s.fields === 'function' ? s.fields(d) : s.fields) || [];
+            flds.forEach(function (f) { textos.push(String(f.label || '')); });
+            textos.forEach(function (t) {
+              if (MathX.inline(String(t)).indexOf('mx-err') >= 0) malTex++;
+            });
+
+            if (s.sol) {
+              var want = s.sol(d), v = { raw: {} };
+              for (var k in want) {
+                v[k] = (typeof want[k] === 'number') ? want[k] : ML.tryEval(String(want[k]));
+                v.raw[k] = String(want[k]).replace('.', ',');
+              }
+              var res = s.check ? s.check(v, d) : (function () {
+                for (var n in want) {
+                  if (!Ex.same(typeof want[n] === 'string' ? v.raw[n] : v[n], want[n], s.tol)) return false;
+                }
+                return true;
+              })();
+              if (typeof res === 'object') res = res.ok;
+              if (!res) malCheck++;
+            }
+          } catch (e) { excep = e.message; break; }
+        }
+        if (excep) fallos.push(etiqueta + ': ' + excep);
+        else if (malCheck) fallos.push(etiqueta + ': la solución no pasa su corrector ' + malCheck + '/40 veces');
+        else if (malTex) fallos.push(etiqueta + ': ' + malTex + ' fórmulas con comandos LaTeX desconocidos');
+      });
+      return fallos;
+    }
+
     function build() {
       var html = '', malos = 0;
       var host = document.createElement('div');
@@ -258,10 +308,16 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
         try {
           var pg = new Page(h, t);
           reg[t.id](pg);
-          html += '<div class="ok">✓ ' + t.id + ' — ' +
-            h.querySelectorAll('.card--demo').length + ' ejemplos, ' +
-            h.querySelectorAll('.card--ex').length + ' ejercicios, ' +
-            h.querySelectorAll('canvas').length + ' gráficas</div>';
+          var aud = auditar(pg.specs);
+          if (aud.length) {
+            malos++;
+            html += '<div class="ko">✗ ' + t.id + ' — ' + aud.join(' · ') + '</div>';
+          } else {
+            html += '<div class="ok">✓ ' + t.id + ' — ' +
+              h.querySelectorAll('.card--demo').length + ' ejemplos, ' +
+              h.querySelectorAll('.card--ex').length + ' ejercicios (auditados), ' +
+              h.querySelectorAll('canvas').length + ' gráficas</div>';
+          }
         } catch (e) {
           malos++;
           html += '<div class="ko">✗ ' + t.id + ' — ' + e.message + '</div>';

@@ -168,6 +168,7 @@ Course.topic('ar-fracciones', function (p) {
     },
     ask: function (d) { return 'Simplifica $\\dfrac{' + d.n + '}{' + d.d + '}$ todo lo que se pueda.'; },
     fields: [{ name: 'n', label: 'Numerador', w: 'tiny' }, { name: 'd', label: 'Denominador', w: 'tiny' }],
+    sol: function (d) { return { n: d.rn, d: d.rd }; },
     check: checkFrac(function (d) { return ML.F(d.rn, d.rd); }),
     hint: function (d) { return 'Calcula $\\operatorname{mcd}(' + d.n + ', ' + d.d + ')$ y divide arriba y abajo por él.'; },
     steps: function (d) {
@@ -195,6 +196,7 @@ Course.topic('ar-fracciones', function (p) {
         ' \\dfrac{' + d.c + '}{' + d.e + '}$';
     },
     fields: [{ name: 'n', label: 'Numerador', w: 'tiny' }, { name: 'd', label: 'Denominador', w: 'tiny' }],
+    sol: function (d) { return { n: d.res.n, d: d.res.d }; },
     check: checkFrac(function (d) { return d.res; }),
     hint: function (d) { return 'Denominador común: $\\operatorname{mcm}(' + d.b + ',' + d.e + ') = ' + ML.lcm(d.b, d.e) + '$.'; },
     steps: function (d) {
@@ -223,6 +225,7 @@ Course.topic('ar-fracciones', function (p) {
         ' \\dfrac{' + d.c + '}{' + d.e + '}$';
     },
     fields: [{ name: 'n', label: 'Numerador', w: 'tiny' }, { name: 'd', label: 'Denominador', w: 'tiny' }],
+    sol: function (d) { return { n: d.res.n, d: d.res.d }; },
     check: checkFrac(function (d) { return d.res; }),
     hint: function (d) {
       return d.op === ':' ? 'Dividir es multiplicar por la inversa: dale la vuelta a la segunda fracción.'

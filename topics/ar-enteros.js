@@ -198,6 +198,7 @@ Course.topic('ar-enteros', function (p) {
         '<span style="font-size:14px;color:var(--ink-faint)">Escríbelos separados por punto y coma.</span>';
     },
     fields: [{ name: 'o', label: 'Ordenados', w: 'wide', ph: '-3; -1; 0; 5' }],
+    sol: function (d) { return { o: d.orden.join('; ') }; },
     check: function (v, d) {
       var got = v.raw.o.split(';').map(function (s) { return ML.tryEval(s); });
       if (got.length !== 4 || got.some(isNaN)) {

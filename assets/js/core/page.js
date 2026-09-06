@@ -17,6 +17,9 @@
     this.id = this.node.id || 'sin-id';
     this._ex = 0;
     this._demo = 0;
+    /** Los enunciados quedan guardados aqui para que tests.html
+        pueda auditarlos (que la solucion pase su propio corrector). */
+    this.specs = [];
   }
 
   Page.prototype._add = function (el) { this.root.appendChild(el); return el; };
@@ -141,6 +144,7 @@
 
   Page.prototype.exercise = function (spec) {
     this._ex++;
+    this.specs.push(spec);
     return Ex.card(this.root, spec, this.id, this._ex);
   };
 

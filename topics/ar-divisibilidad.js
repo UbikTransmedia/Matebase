@@ -200,6 +200,7 @@ Course.topic('ar-divisibilidad', function (p) {
       return '¿Es $' + U.miles(d.n) + '$ divisible entre $' + d.div + '$? Responde <code>si</code> o <code>no</code>.';
     },
     fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
+    sol: function (d) { return { r: d.si ? 'si' : 'no' }; },
     check: function (v, d) {
       var t = v.raw.r.toLowerCase().replace(/[íÍ]/g, 'i');
       if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe exactamente <code>si</code> o <code>no</code>.' };
