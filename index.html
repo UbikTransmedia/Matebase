@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matebase · curso interactivo de matemáticas</title>
+<meta name="description" content="Curso interactivo de matemáticas desde la aritmética básica hasta los sistemas dinámicos. Funciona sin conexión y sin servidor.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%233f5bd9'/%3E%3Ctext x='32' y='45' font-size='38' font-family='Georgia,serif' font-style='italic' fill='white' text-anchor='middle'%3E%E2%88%AB%3C/text%3E%3C/svg%3E">
+
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/math.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ================= ÍNDICE ================= -->
+  <aside class="side">
+    <div class="side__head">
+      <a class="brand" href="#" id="homeLink" style="text-decoration:none;color:inherit">
+        <span class="brand__logo">∫</span>
+        <span class="brand__name">Matebase</span>
+        <span class="brand__tag">curso<br>interactivo</span>
+      </a>
+      <div class="search">
+        <span class="search__icon">⌕</span>
+        <input id="search" type="search" placeholder="Buscar un tema…" autocomplete="off" spellcheck="false">
+        <button class="search__clear" id="searchClear" type="button" title="Limpiar">×</button>
+      </div>
+    </div>
+
+    <nav class="side__scroll" id="sideScroll"></nav>
+
+    <div class="side__foot">
+      <button class="mini" id="themeBtn" type="button">☾ Oscuro</button>
+      <span class="grow"></span>
+      <button class="mini" id="resetBtn" type="button" title="Borrar el progreso guardado">Reiniciar</button>
+    </div>
+  </aside>
+
+  <div class="scrim"></div>
+
+  <!-- ================= CONTENIDO ================= -->
+  <main class="main" id="main">
+    <div class="topbar">
+      <button class="burger" id="burger" type="button" aria-label="Índice">☰</button>
+      <div class="topbar__crumb" id="crumb"></div>
+    </div>
+    <div class="wrap" id="wrap"></div>
+  </main>
+
+</div>
+
+<!-- ============ núcleo (orden obligatorio) ============ -->
+<script src="assets/js/core/util.js"></script>
+<script src="assets/js/core/mathx.js"></script>
+<script src="assets/js/core/mathlib.js"></script>
+<script src="assets/js/core/widgets.js"></script>
+<script src="assets/js/core/progress.js"></script>
+<script src="assets/js/core/exercise.js"></script>
+<script src="assets/js/core/page.js"></script>
+<!-- ============ temario ============ -->
+<script src="assets/js/curriculum.js"></script>
+<!-- ============ arranque (los temas se cargan solos al abrirlos) ============ -->
+<script src="assets/js/core/app.js"></script>
+
+</body>
+</html>

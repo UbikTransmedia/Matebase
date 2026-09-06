@@ -1,0 +1,55 @@
+/* ============ Matebase · renderizador matematico (MathX) ============ */
+.mx{font-family:var(--serif); font-size:1.09em; line-height:1; white-space:nowrap;
+  display:inline-block; vertical-align:middle}
+.mx-display{display:block; text-align:center; font-size:1.3em; margin:0 auto;
+  white-space:normal; line-height:1.4}
+.mx-var{font-style:italic; padding-right:.035em}
+.mx-num{font-style:normal}
+.mx-op{font-style:normal; padding:0 .16em}
+.mx-rel{font-style:normal; padding:0 .28em}
+.mx-fn{font-style:normal; padding-right:.14em; font-family:var(--sans); font-size:.9em}
+.mx-txt{font-family:var(--sans); font-size:.85em; font-style:normal; padding:0 .18em}
+.mx sup,.mx sub{font-size:.68em; line-height:0; position:relative}
+.mx sup{top:-.55em}
+.mx sub{bottom:-.22em}
+.mx-sup2{display:inline-flex; flex-direction:column; vertical-align:middle; line-height:1;
+  font-size:.66em; padding-left:.06em}
+
+.mx-frac{display:inline-block; vertical-align:-.52em; text-align:center; padding:0 .17em; line-height:1.18}
+.mx-frac>.n{display:block; font-size:.95em; padding:0 .22em}
+.mx-frac>.d{display:block; font-size:.95em; padding:0 .22em; border-top:1.3px solid currentColor}
+
+.mx-sqrt{display:inline-block; position:relative; padding:0 .08em}
+.mx-sqrt>.r{display:inline-block; font-size:.6em; vertical-align:.78em; margin-right:-.45em; position:relative; z-index:2}
+.mx-sqrt>.s{display:inline-block; transform:scaleY(1.18) translateY(-.02em); transform-origin:bottom}
+.mx-sqrt>.c{display:inline-block; border-top:1.2px solid currentColor; padding:.13em .16em 0 .1em; margin-left:-.07em}
+
+.mx-par{display:inline-block; transform-origin:center; padding:0 .02em}
+.mx-ovl{display:inline-block; border-top:1.3px solid currentColor; padding-top:.06em}
+.mx-vec{display:inline-block; position:relative; padding-top:.2em}
+.mx-vec>.a{position:absolute; top:-.3em; left:0; right:0; text-align:center; font-size:.7em; line-height:1}
+.mx-hat{display:inline-block; position:relative}
+.mx-hat>.a{position:absolute; top:-.58em; left:0; right:0; text-align:center; font-size:.8em; line-height:1}
+
+.mx-big{display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle;
+  padding:0 .18em; line-height:1}
+.mx-big>.g{font-size:1.6em; line-height:.95}
+.mx-big>.u,.mx-big>.l{font-size:.52em; line-height:1.25}
+.mx-int{display:inline-block; font-size:1.6em; line-height:.7; vertical-align:-.24em;
+  transform:scaleX(.9); padding:0 .03em; font-family:var(--serif)}
+.mx-lim{display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; padding:0 .22em}
+.mx-lim>.g{font-family:var(--sans); font-size:.85em; font-style:normal}
+.mx-lim>.l{font-size:.58em; line-height:1.35}
+
+.mx-mat{display:inline-flex; align-items:center; vertical-align:middle; padding:0 .06em}
+.mx-mat>.b{display:inline-block; padding:0 .05em; transform:scaleY(var(--sy,1.7)); font-weight:300}
+.mx-mat table{border-collapse:collapse; display:inline-table; vertical-align:middle}
+.mx-mat td{padding:.14em .42em; text-align:center; line-height:1.3}
+.mx-cases>.b{font-size:1.4em}
+.mx-cases td{text-align:left; padding-left:.25em}
+.mx-al{display:inline-table; border-collapse:collapse; text-align:left}
+.mx-al td{padding:.16em 0; vertical-align:baseline}
+.mx-al td.l{text-align:right; padding-right:.15em}
+.mx-al td.r{text-align:left}
+.mx-err{color:var(--bad); font-family:var(--mono); font-size:.8em; background:var(--bad-soft);
+  padding:0 3px; border-radius:3px}

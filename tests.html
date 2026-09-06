@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matebase · pruebas del núcleo</title>
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/math.css">
+<style>
+  body{padding:28px; max-width:900px; margin:0 auto}
+  h1{font-size:26px; margin-bottom:4px}
+  .lead{color:var(--ink-soft); margin-bottom:22px}
+  .res{font-family:var(--mono); font-size:13.5px; line-height:1.9}
+  .ok{color:var(--ok)} .ko{color:var(--bad)}
+  .sum{font-size:19px; font-weight:650; padding:14px 18px; border-radius:12px; margin:18px 0}
+  .sum.pass{background:var(--ok-soft); color:var(--ok)}
+  .sum.fail{background:var(--bad-soft); color:var(--bad)}
+  .grp{margin:18px 0 6px; font-weight:650; font-size:15px}
+  .gallery{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px}
+  .gallery div{border:1px solid var(--line); border-radius:9px; padding:10px 12px; background:var(--panel)}
+  .gallery code{display:block; font-size:10.5px; color:var(--ink-faint); margin-bottom:6px;
+    background:none; border:0; padding:0; word-break:break-all}
+</style>
+</head>
+<body>
+
+<h1>Pruebas del núcleo</h1>
+<p class="lead">Ábrelo con doble clic después de tocar <code>mathx.js</code>, <code>mathlib.js</code>
+o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
+
+<div id="sum"></div>
+<div id="out" class="res"></div>
+
+<div class="grp">Muestrario del renderizador</div>
+<div id="gal" class="gallery"></div>
+
+<script src="assets/js/core/util.js"></script>
+<script src="assets/js/core/mathx.js"></script>
+<script src="assets/js/core/mathlib.js"></script>
+<script src="assets/js/core/widgets.js"></script>
+<script src="assets/js/core/progress.js"></script>
+<script src="assets/js/core/exercise.js"></script>
+<script src="assets/js/core/page.js"></script>
+<script>
+(function () {
+  var pass = 0, fail = 0, out = document.getElementById('out'), grp = '';
+
+  function group(g) { grp = g; out.innerHTML += '<div class="grp">' + g + '</div>'; }
+  function ok(name) { pass++; out.innerHTML += '<div class="ok">✓ ' + name + '</div>'; }
+  function ko(name, got, want) {
+    fail++;
+    out.innerHTML += '<div class="ko">✗ ' + name + ' → obtuve <b>' + got + '</b>, esperaba <b>' + want + '</b></div>';
+  }
+  function eq(name, got, want, tol) {
+    var good = (typeof want === 'number' && typeof got === 'number')
+      ? Math.abs(got - want) <= (tol === undefined ? 1e-9 : tol)
+      : String(got) === String(want);
+    good ? ok(name) : ko(name, got, want);
+  }
+  function truthy(name, v) { v ? ok(name) : ko(name, v, 'algo verdadero'); }
+
+  /* ---------------- mathlib: enteros ---------------- */
+  group('mathlib · aritmética entera');
+  eq('gcd(84,36)', ML.gcd(84, 36), 12);
+  eq('lcm(4,6)', ML.lcm(4, 6), 12);
+  eq('mcd de lista', ML.gcdList([12, 18, 30]), 6);
+  eq('mcm de lista', ML.lcmList([4, 6, 10]), 60);
+  truthy('97 es primo', ML.isPrime(97));
+  truthy('91 no es primo', !ML.isPrime(91));
+  truthy('1 no es primo', !ML.isPrime(1));
+  eq('factorización de 360', ML.factorTex(360), '2^{3} \\cdot 3^{2} \\cdot 5');
+  eq('divisores de 28', ML.divisors(28).join(','), '1,2,4,7,14,28');
+  eq('criba hasta 20', ML.primesUpTo(20).join(','), '2,3,5,7,11,13,17,19');
+  eq('C(10,3)', ML.comb(10, 3), 120);
+  eq('V(5,2)', ML.perm(5, 2), 20);
+  eq('6!', ML.factorial(6), 720);
+
+  /* ---------------- mathlib: fracciones ---------------- */
+  group('mathlib · fracciones exactas');
+  var a = ML.F(3, 4), b = ML.F(5, 6);
+  eq('3/4 + 5/6', a.add(b).toString(), '19/12');
+  eq('3/4 − 5/6', a.sub(b).toString(), '-1/12');
+  eq('3/4 · 5/6', a.mul(b).toString(), '5/8');
+  eq('3/4 : 5/6', a.div(b).toString(), '9/10');
+  eq('se simplifica sola', ML.F(6, 8).toString(), '3/4');
+  eq('el signo sube al numerador', ML.F(3, -4).toString(), '-3/4');
+  eq('LaTeX de −3/4', ML.F(-3, 4).tex(), '-\\frac{3}{4}');
+  eq('(2/3)^-2', ML.F(2, 3).pow(-2).toString(), '9/4');
+  eq('decimal 0,5 → fracción', ML.F(0.5).toString(), '1/2');
+  eq('decimal 0,125 → fracción', ML.F(0.125).toString(), '1/8');
+  eq('decimal 1,6 → fracción', ML.F(1.6).toString(), '8/5');
+  eq('decimal −0,2 → fracción', ML.F(-0.2).toString(), '-1/5');
+  eq('entero 3', ML.F(3).toString(), '3');
+
+  /* ---------------- mathlib: polinomios ---------------- */
+  group('mathlib · polinomios');
+  eq('x²−3x+2', ML.polyTex([1, -3, 2]), 'x^{2}-3x+2');
+  eq('coeficiente nulo se salta', ML.polyTex([2, 0, -5]), '2x^{2}-5');
+  eq('valor numérico', ML.polyEval([1, -3, 2], 5), 12);
+  eq('producto', ML.polyMul([1, 2], [1, -2]).join(','), '1,0,-4');
+  eq('suma de distinto grado', ML.polyAdd([1, 2, 3], [4, 5]).join(','), '1,6,8');
+  var ruf = ML.ruffini([1, -6, 11, -6], 1);
+  eq('Ruffini · cociente', ruf.q.join(','), '1,-5,6');
+  eq('Ruffini · resto', ruf.rest, 0);
+  eq('raíces enteras', ML.intRoots([1, -6, 11, -6]).join(','), '1,2,3');
+  eq('raíz x=0 incluida', ML.intRoots([1, -3, 2, 0]).join(','), '0,1,2');
+  var q = ML.quadratic(1, -5, 6);
+  eq('2.º grado · nº de raíces', q.n, 2);
+  eq('2.º grado · raíz mayor', Math.max(q.x1, q.x2), 3);
+  eq('discriminante nulo', ML.quadratic(1, -4, 4).n, 1);
+  eq('sin solución real', ML.quadratic(1, 0, 4).n, 0);
+  eq('√12 simplificada', ML.sqrtTex(12), '2\\sqrt{3}');
+  eq('√49 = 7', ML.sqrtTex(49), '7');
+  eq('√7 no simplifica', ML.sqrtTex(7), '\\sqrt{7}');
+
+  /* ---------------- mathlib: matrices y sistemas ---------------- */
+  group('mathlib · matrices y sistemas');
+  eq('determinante 2×2', ML.det2([[1, 2], [3, 4]]), -2);
+  eq('determinante 3×3', ML.det3([[1, 2, 3], [4, 5, 6], [7, 8, 10]]), -3);
+  var s2 = ML.solve2(1, 1, 5, 1, -1, 1);
+  eq('sistema compatible · x', s2.x, 3);
+  eq('sistema compatible · y', s2.y, 2);
+  eq('sistema incompatible', ML.solve2(1, 1, 5, 2, 2, 3).type, 'ninguna');
+  eq('sistema indeterminado', ML.solve2(1, 1, 5, 2, 2, 10).type, 'infinitas');
+
+  /* ---------------- mathlib: estadística ---------------- */
+  group('mathlib · estadística');
+  var D = [2, 4, 4, 4, 5, 5, 7, 9];
+  eq('media', ML.mean(D), 5);
+  eq('desviación típica', ML.sd(D), 2);
+  eq('mediana', ML.median(D), 4.5);
+  eq('moda', ML.mode(D).join(','), '4');
+  eq('N(0,1) en 0', ML.normalCdf(0), 0.5, 1e-3);
+  eq('N(0,1) en 1,96', ML.normalCdf(1.96), 0.975, 1e-3);
+  eq('correlación perfecta', ML.corr([1, 2, 3, 4], [2, 4, 6, 8]), 1, 1e-9);
+
+  /* ---------------- mathlib: evaluador de respuestas ---------------- */
+  group('mathlib · evaluador de lo que teclea el alumno');
+  [['3/4', 0.75], ['-2,5', -2.5], ['2^10', 1024], ['sqrt(2)', Math.SQRT2],
+   ['sqrt9', 3], ['log2(8)', 3], ['log(100)', 2], ['ln(e)', 1],
+   ['pi/6', Math.PI / 6], ['2(3+4)', 14], ['(1+2)(3+4)', 21], ['-2^2', -4],
+   ['2^3^2', 512], ['|-5|', 5], ['25%', 0.25], ['5!', 120], ['6:2', 3],
+   ['3·4', 12], ['2π', 2 * Math.PI], ['3²', 9], ['abs(-3)+2', 5]
+  ].forEach(function (t) { eq('«' + t[0] + '»', ML.tryEval(t[0], {}), t[1], 1e-9); });
+  eq('con variable', ML.tryEval('2x+1', { x: 3 }), 7);
+  eq('producto implícito', ML.tryEval('(x-3)(x+3)', { x: 5 }), 16);
+  truthy('reconoce (x−3)(x+3) = x²−9', ML.equivalent('(x-3)(x+3)', 'x^2-9'));
+  truthy('rechaza (x−3)(x+3) = x²+9', !ML.equivalent('(x-3)(x+3)', 'x^2+9'));
+  truthy('equivalencia con dos letras', ML.equivalent('a^2-b^2', '(a-b)(a+b)', ['a', 'b']));
+  truthy('basura → NaN', isNaN(ML.tryEval('hola')));
+
+  /* ---------------- mathx ---------------- */
+  group('mathx · renderizador');
+  var TEX = [
+    'x^2+3x-4=0', '\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}', '\\sqrt[3]{27}=3',
+    '\\int_0^1 x^2\\,dx=\\frac{1}{3}', '\\sum_{i=1}^{n} i=\\frac{n(n+1)}{2}',
+    '\\lim_{x\\to 0}\\frac{\\operatorname{sen} x}{x}=1', '\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}',
+    '\\begin{cases}2x+y=5\\\\x-y=1\\end{cases}', '\\vec{v}=(3,-4),\\ |\\vec{v}|=5',
+    '\\mathbb{R}\\setminus\\{0\\}', "f'(x)=2x", '\\log_2 8 = 3',
+    '\\frac{\\partial f}{\\partial x}', '\\overline{x}=\\frac{\\sum x_i}{n}',
+    '\\left(\\frac{1}{2}\\right)^{3}', '30^\\circ = \\frac{\\pi}{6}\\ \\text{rad}',
+    'P(A|B)=\\frac{P(A\\cap B)}{P(B)}', '\\binom{n}{k}', 'e^{i\\pi}+1=0',
+    '\\begin{aligned}2x+y&=5\\\\x-y&=1\\end{aligned}',
+    '\\begin{array}{cc}1&2\\\\3&4\\end{array}',
+    '\\left|\\frac{x}{2}\\right|', '\\left\\{x\\in\\mathbb{R}: x>0\\right\\}',
+    '\\hat{y}=ax+b', '\\dot{x}=\\lambda x', '\\nabla\\cdot\\vec{F}',
+    'x\\pmod 7', '\\left.\\frac{x^2}{2}\\right|_0^1', '\\Delta = b^2-4ac',
+    '\\frac{dy}{dx}+P(x)y=Q(x)'
+  ];
+  var errores = 0;
+  TEX.forEach(function (t) { if (MathX.render(t).indexOf('mx-err') >= 0) { errores++; ko('comando desconocido', t, '—'); } });
+  if (!errores) ok(TEX.length + ' fórmulas sin comandos desconocidos');
+  truthy('los paréntesis crecen con una fracción dentro',
+    MathX.render('\\left(\\frac{1}{2}\\right)').indexOf('scaleY(1.95)') >= 0);
+  truthy('los paréntesis normales no se estiran',
+    MathX.render('\\left(x+1\\right)').indexOf('scaleY(1.2)') >= 0);
+  truthy('$...$ en línea', MathX.inline('vale $x^2$ aquí').indexOf('mx-var') >= 0);
+  truthy('texto sin $ se deja intacto', MathX.inline('nada de mates') === 'nada de mates');
+
+  /* ---------------- widgets y ejercicios ---------------- */
+  group('widgets y motor de ejercicios');
+  var host = document.createElement('div');
+  document.body.appendChild(host);
+  host.style.display = 'none';
+  var plot = W.plot(host, { xmin: -5, xmax: 5, ymin: -5, ymax: 5, height: 200, draw: function (g) { g.fn(Math.sin); } });
+  truthy('Plot2D crea un canvas', !!host.querySelector('canvas'));
+  eq('transformación de coordenadas', plot.iX(plot.X(2.5)), 2.5, 1e-6);
+  var hh = W.plot(host, { handles: { A: { x: 1, y: 2 } }, draw: function (g) { g.point(g.h('A').x, g.h('A').y); } });
+  truthy('los puntos arrastrables existen en el primer pintado', hh.h('A').x === 1);
+  var nl = W.numberLine(host, { min: 0, max: 10, handles: { P: { x: 3, y: 0 } }, draw: function () { } });
+  truthy('la recta real hereda los puntos', !!nl.h('P'));
+  W.barChart(host, { labels: ['a', 'b'], values: [3, 5] });
+  truthy('el diagrama de barras se construye', host.querySelectorAll('canvas').length >= 3);
+
+  var card = Ex.card(host, {
+    title: 'prueba', gen: function (r) { return { a: r.int(2, 9) }; },
+    ask: function (d) { return 'doble de ' + d.a; },
+    fields: [{ name: 'v', label: 'v' }],
+    sol: function (d) { return { v: 2 * d.a }; }
+  }, '__test', 1);
+  var q1 = card.data.a;
+  card.regen();
+  truthy('«Otro ejercicio» genera datos nuevos', typeof card.data.a === 'number');
+  card.inputs.v.input.value = String(2 * card.data.a);
+  card.check();
+  truthy('corrige bien una respuesta correcta', card.verdict.className.indexOf('verdict--ok') >= 0);
+  card.regen();
+  card.inputs.v.input.value = 'disparate';
+  card.check();
+  truthy('corrige bien una respuesta incorrecta', card.verdict.className.indexOf('verdict--bad') >= 0);
+  truthy('acepta fracciones como respuesta', Ex.same(ML.tryEval('3/4'), 0.75));
+  truthy('acepta conjuntos en cualquier orden', Ex.sameSet('-1; 3', [3, -1]));
+  truthy('rechaza un conjunto incompleto', !Ex.sameSet('3', [3, -1]));
+  host.remove();
+
+  /* ---------------- resumen ---------------- */
+  var s = document.getElementById('sum');
+  s.className = 'sum ' + (fail ? 'fail' : 'pass');
+  s.textContent = fail ? (fail + ' fallo(s) de ' + (pass + fail) + ' comprobaciones')
+    : ('Todo correcto: ' + pass + ' comprobaciones');
+
+  /* ---------------- muestrario visual ---------------- */
+  var gal = document.getElementById('gal');
+  TEX.forEach(function (t) {
+    var d = document.createElement('div');
+    d.innerHTML = '<code>' + t.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</code>' + MathX.display(t);
+    gal.appendChild(d);
+  });
+})();
+</script>
+</body>
+</html>
