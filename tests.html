@@ -240,7 +240,8 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
 
     ids.forEach(function (t) {
       var s = document.createElement('script');
-      s.src = 'topics/' + t.id + '.js';
+      // antichaché: al probar interesa siempre la última versión del archivo
+      s.src = 'topics/' + t.id + '.js?t=' + Date.now();
       s.onload = s.onerror = function () { if (--pend === 0) build(); };
       document.head.appendChild(s);
     });

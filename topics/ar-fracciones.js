@@ -160,9 +160,10 @@ Course.topic('ar-fracciones', function (p) {
     level: 'basico',
     gen: function (r) {
       var n = r.int(2, 12), d0 = r.int(2, 12);
+      if (d0 === 1) return null;
       var g = ML.gcd(n, d0);
       n /= g; d0 /= g;
-      if (d0 === 1) d0 = r.int(2, 9);
+      if (d0 === 1) return null;          // saldría un entero, no una fracción
       var k = r.int(2, 9);
       return { n: n * k, d: d0 * k, rn: n, rd: d0, k: k };
     },
