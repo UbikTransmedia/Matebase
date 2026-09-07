@@ -147,9 +147,14 @@ El curso trae tres: **claro** (el de por defecto), **oscuro** y **monokai**
 añadir una entrada a `TEMAS` en `app.js` y su bloque de tokens en `base.css`:
 los botones se construyen solos a partir de esa lista. No
 escribas nunca un color literal en un tema: usa las variables CSS (`var(--c1)`,
-`var(--ink)`, `var(--bad)`…) o los nombres que entiende `Plot2D` (`0`-`5`,
+`var(--ink)`, `var(--bad)`, `var(--use)`…) o los nombres que entiende `Plot2D` (`0`-`5`,
 `'ink'`, `'axis'`, `'ok'`, `'bad'`, `'bg'`). Así el dibujo se adapta solo, y las
 gráficas se repintan al cambiar de tema sin que tengas que hacer nada.
+
+Un aviso sobre el acento: en el tema claro `--accent` es **oscuro** y en los
+otros dos es **claro**. Si pones algo con fondo `var(--accent)`, el texto de
+encima tiene que ser `var(--on-accent)`, que cambia con el tema; poner blanco
+a secas deja el texto ilegible en oscuro y en monokai.
 
 ---
 
