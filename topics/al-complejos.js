@@ -110,7 +110,27 @@ Course.topic('al-complejos', function (p) {
     'z = r_{\\alpha} = r(\\cos\\alpha + i\\operatorname{sen}\\alpha)',
     'r_{\\alpha}\\cdot s_{\\beta} = (r\\cdot s)_{\\alpha+\\beta}',
     '\\left(r_{\\alpha}\\right)^n = \\left(r^n\\right)_{n\\alpha}'
-  ], 'multiplicar = multiplicar módulos y sumar argumentos');
+  ], 'multiplicar = multiplicar módulos y sumar argumentos',
+    'La notación $r_{\\alpha}$ es solo una <strong>abreviatura</strong>, no una potencia ni un ' +
+    'subíndice de posición: se lee «erre sub alfa» y significa «el complejo que está a distancia erre ' +
+    'del origen, en la dirección alfa». Es como dar una posición diciendo «a 300 metros, hacia el ' +
+    'noreste» en vez de «tres calles al este y dos al norte».<br><br>Las tres líneas se dicen: ' +
+    '<em>«zeta es erre sub alfa, que es erre por, coseno de alfa más i seno de alfa»</em> · ' +
+    '<em>«erre sub alfa por ese sub beta es erre por ese, sub alfa más beta»</em> · <em>«erre sub ' +
+    'alfa, elevado a ene, es erre elevado a ene, sub ene alfa»</em>.');
+
+  p.text('Antes de seguir conviene entender por qué al multiplicar se <em>suman</em> los ángulos, ' +
+    'porque parece una regla arbitraria y es lo contrario. Ya sabes que multiplicar por un complejo ' +
+    'es girar y escalar; pues bien, encadenar dos giros de 30° y 40° deja el objeto girado 70°: los ' +
+    'giros se suman, igual que las vueltas de una llave. Y encadenar un doble y un triple deja algo ' +
+    'seis veces mayor: las escalas se multiplican. Cada número complejo lleva dentro esas dos ' +
+    'instrucciones —cuánto girar y cuánto estirar— y al multiplicarlos, cada una se combina a su manera.');
+
+  p.note('La comprobación algebraica de esto es exactamente la fórmula de adición del seno y del ' +
+    'coseno que viste en trigonometría: si desarrollas el producto $r(\\cos\\alpha+i\\operatorname{sen}' +
+    '\\alpha)\\cdot s(\\cos\\beta+i\\operatorname{sen}\\beta)$ y agrupas, aparecen ' +
+    '$\\cos(\\alpha+\\beta)$ y $\\operatorname{sen}(\\alpha+\\beta)$ solos. Aquellas fórmulas que ' +
+    'parecían gratuitas estaban preparando esto.', 'ok', 'De dónde sale, si quieres verlo');
 
   p.text('Esa última es la <strong>fórmula de De Moivre</strong>. Y la lectura geométrica es preciosa: ' +
     '<em>multiplicar por un complejo es girar y escalar</em>. Multiplicar por $i$, que tiene módulo 1 ' +

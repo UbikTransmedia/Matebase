@@ -98,6 +98,28 @@ Course.topic('fn-limites', function (p) {
      ['$\\frac{\\infty}{\\infty}$ en una racional', 'comparar los grados del numerador y el denominador'],
      ['$\\infty - \\infty$', 'operar hasta convertirlo en un cociente']]);
 
+  p.sub('¿Y esto no es hacer trampa?');
+
+  p.text('Aquí conviene pararse, porque a casi todo el mundo le chirría lo mismo. Si al sustituir sale ' +
+    '$\\frac{0}{0}$, simplifico un factor y vuelvo a sustituir, ahora sí sale un número. <em>¿Por qué ' +
+    'vale el segundo intento y no el primero? ¿No me estoy inventando el resultado?</em>');
+
+  p.text('No, y la razón está en algo que dijimos al empezar: <strong>el límite no mira lo que pasa ' +
+    '<em>en</em> el punto, sino a dónde se dirige la función al acercarse</strong>. Míralo con ' +
+    '$\\frac{x^2-1}{x-1}$ en $x=1$. Al factorizar queda $\\frac{(x-1)(x+1)}{x-1}$, y para ' +
+    '<em>cualquier</em> $x$ distinto de 1 se puede tachar el factor: esa fracción y el polinomio ' +
+    '$x+1$ dan exactamente el mismo valor en todos los puntos del mundo menos en uno.');
+
+  p.text('Y ese único punto donde se diferencian es justo el que al límite no le importa. Las dos ' +
+    'funciones se acercan a lo mismo, así que tienen el mismo límite; lo que ocurre es que una está ' +
+    'definida allí y la otra tiene un agujero. Simplificar no cambia el límite: <strong>quita el ' +
+    'agujero que impedía verlo</strong>.');
+
+  p.note('Fíjate en que la simplificación es legal precisamente <em>porque</em> $x\\ne 1$, y en el ' +
+    'límite $x$ nunca llega a valer 1: se acerca. Si en el ejercicio te preguntaran cuánto vale la ' +
+    'función <em>en</em> $x=1$, la respuesta seguiría siendo «no existe». Son dos preguntas distintas ' +
+    'y conviene no mezclarlas.', 'ok', 'Por qué es legal tachar');
+
   p.sub('3. Límites en el infinito');
 
   p.text('Para una función racional, todo depende de los grados. Es una regla que conviene ' +
@@ -105,9 +127,19 @@ Course.topic('fn-limites', function (p) {
 
   p.formulas([
     '\\text{grado arriba} < \\text{grado abajo} \\ \\Rightarrow\\ \\lim = 0',
-    '\\text{grado arriba} = \\text{grado abajo} \\ \\Rightarrow\\ \\lim = \\frac{\\text{coef. principales}}{\\ }',
+    '\\text{grado arriba} = \\text{grado abajo} \\ \\Rightarrow\\ \\lim = \\frac{\\text{coeficiente principal de arriba}}{\\text{coeficiente principal de abajo}}',
     '\\text{grado arriba} > \\text{grado abajo} \\ \\Rightarrow\\ \\lim = \\pm\\infty'
-  ]);
+  ], 'los tres casos, según quién gana',
+    'El <strong>coeficiente principal</strong> es el que acompaña a la potencia más alta: en ' +
+    '$3x^2-7x+1$ es el 3, no el 1.<br><br>Con un ejemplo de cada caso: ' +
+    '$\\lim\\frac{2x+1}{x^2}=0$ porque abajo crece más deprisa · ' +
+    '$\\lim\\frac{6x^2+x}{3x^2-5}=\\frac{6}{3}=2$, los grados empatan y deciden los coeficientes · ' +
+    '$\\lim\\frac{x^3}{4x}=+\\infty$ porque arriba se dispara.');
+
+  p.text('La razón de que solo importen los grados es que, cuando $x$ se hace enorme, los términos ' +
+    'pequeños dejan de contar. Con $x = 1000$, el polinomio $3x^2-7x+1$ vale 2 993 001, y de esa cifra ' +
+    'el $3x^2$ aporta 3 000 000: todo lo demás es ruido. Por eso, en el infinito, cada polinomio se ' +
+    'comporta como su término de mayor grado y basta con comparar esos dos.');
 
   p.demo({
     title: 'Comportamiento en el infinito',

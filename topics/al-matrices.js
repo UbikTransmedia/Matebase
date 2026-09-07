@@ -18,11 +18,36 @@ Course.topic('al-matrices', function (p) {
 
   p.section('El producto de matrices');
 
-  p.text('Aquí está la sorpresa. No se multiplica elemento a elemento: el elemento $c_{ij}$ del ' +
-    'producto se obtiene combinando <strong>la fila $i$ de la primera con la columna $j$ de la ' +
-    'segunda</strong>, multiplicando término a término y sumando.');
+  p.text('Aquí está la sorpresa. No se multiplica elemento a elemento, como cabría esperar: el elemento ' +
+    'que ocupa la fila $i$ y la columna $j$ del producto se obtiene combinando <strong>la fila $i$ de ' +
+    'la primera matriz con la columna $j$ de la segunda</strong>, multiplicando término a término y ' +
+    'sumando todo.');
 
-  p.formula('c_{ij} = \\sum_k a_{ik}\\,b_{kj}', 'fila por columna');
+  p.text('Antes de ver la fórmula conviene tener claro el gesto, porque la fórmula solo es ese gesto ' +
+    'escrito. Para calcular el elemento de la <em>fila 2, columna 3</em> del resultado: tapa todo ' +
+    'menos la segunda fila de la primera matriz y la tercera columna de la segunda; ponlas una encima ' +
+    'de otra, multiplica el primero con el primero, el segundo con el segundo, y suma. Ese número va ' +
+    'en la fila 2, columna 3. Repite para cada casilla.');
+
+  p.formula('c_{ij} = \\sum_k a_{ik}\\,b_{kj}', 'fila por columna',
+    'Se dice: <em>«ce sub i jota es igual al sumatorio, en ka, de a sub i ka por be sub ka jota»</em>.' +
+    '<br><br>Qué es cada letra, que es lo que de verdad atasca aquí: <strong>$i$ y $j$ están ' +
+    'quietas</strong> —dicen en qué casilla del resultado estás trabajando— y <strong>$k$ es la que ' +
+    'se mueve</strong>, recorriendo la fila y la columna a la vez. Por eso $k$ aparece dos veces en el ' +
+    'producto: como segundo índice de $a$ (avanza por la fila) y como primero de $b$ (baja por la ' +
+    'columna).<br><br>El sumatorio no dice hasta dónde llega porque va implícito: hasta que se acabe ' +
+    'la fila, que mide lo mismo que la columna. Justamente por eso las dimensiones tienen que encajar.');
+
+  p.text('Y queda la pregunta buena: <em>¿por qué demonios se define así?</em> Multiplicar casilla a ' +
+    'casilla sería más fácil de escribir, pero no serviría para nada. Una matriz no es una tabla de ' +
+    'números cualquiera: es una <strong>transformación</strong> —un giro, un estiramiento, una ' +
+    'proyección—, y multiplicar dos matrices significa <strong>aplicar una transformación después de ' +
+    'la otra</strong>. Si haces las cuentas de encadenar dos transformaciones, lo que sale es ' +
+    'exactamente esta regla de fila por columna. No la eligió nadie: salió.');
+
+  p.text('Esa idea explica de paso lo que viene ahora. Encadenar un giro y luego un estiramiento no da ' +
+    'lo mismo que estirar y luego girar, y por eso el producto de matrices <em>no</em> es conmutativo. ' +
+    'Con números eso no pasa nunca; con transformaciones, casi siempre.');
 
   p.note('Para poder multiplicar, el número de <strong>columnas</strong> de la primera tiene que ' +
     'coincidir con el número de <strong>filas</strong> de la segunda. Y el producto ' +
@@ -124,7 +149,24 @@ Course.topic('al-matrices', function (p) {
   p.formulas([
     '\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix} = ad - bc',
     '\\begin{vmatrix} a & b & c \\\\ d & e & f \\\\ g & h & i \\end{vmatrix} = aei + bfg + cdh - ceg - bdi - afh'
-  ], 'orden 2 y regla de Sarrus para orden 3');
+  ], 'orden 2 y regla de Sarrus para orden 3',
+    'Las barras verticales rectas se leen «determinante de», y no son lo mismo que los paréntesis: ' +
+    'con paréntesis es una matriz, con barras es un número.<br><br>El de orden 2 se dice: <em>«a por ' +
+    'de, menos be por ce»</em>, y es la diagonal principal menos la otra.<br><br>Los seis términos del ' +
+    'de orden 3 <strong>no hay que memorizarlos</strong>: salen de un dibujo. Ese dibujo, y la razón ' +
+    'de que los signos vayan así, está en el párrafo siguiente.');
+
+  p.text('Los seis sumandos del determinante de orden 3 asustan hasta que se ve de dónde salen. La ' +
+    'regla de Sarrus consiste en <strong>copiar las dos primeras columnas a la derecha</strong> de la ' +
+    'tabla, dejando una parrilla de tres por cinco. Entonces se trazan las tres diagonales que bajan ' +
+    'hacia la derecha y se suman sus productos, y luego las tres que bajan hacia la izquierda y se ' +
+    'restan. Nada más. Los seis términos son esas seis diagonales, y los signos dependen solo de hacia ' +
+    'dónde baja cada una.');
+
+  p.note('La regla de Sarrus sirve <strong>únicamente</strong> para matrices de tres por tres. Con ' +
+    'cuatro por cuatro no funciona, por mucho que la parrilla parezca prometer lo mismo: ahí hacen ' +
+    'falta 24 términos y hay que recurrir al desarrollo por adjuntos. Es uno de los errores más ' +
+    'castigados en un examen.', 'warn', 'Solo para 3×3');
 
   p.text('Su significado geométrico es precioso: en el plano, $|\\det A|$ es el <strong>área</strong> ' +
     'del paralelogramo que forman los vectores fila de $A$. En el espacio, el volumen del ' +

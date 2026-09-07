@@ -66,7 +66,23 @@ Course.topic('pe-condicionada', function (p) {
   p.formulas([
     'P(A|B) = P(A)',
     'P(A \\cap B) = P(A)\\cdot P(B)'
-  ], 'las dos condiciones equivalen');
+  ], 'las dos condiciones equivalen',
+    'La barra $|$ se lee «sabiendo que» o «condicionado a»: $P(A|B)$ es <em>«probabilidad de A ' +
+    'sabiendo que ha ocurrido B»</em>.<br><br>La primera línea dice: <em>«la probabilidad de A ' +
+    'sabiendo B es la misma que la de A a secas»</em>, o sea, enterarme de B no me ha cambiado nada.' +
+    '<br><br>La segunda: <em>«la probabilidad de que ocurran los dos es el producto de sus ' +
+    'probabilidades»</em>. Es la que se usa para calcular, y la primera la que explica qué significa.');
+
+  p.text('Que esas dos líneas digan lo mismo no es evidente a simple vista, y merece una línea de ' +
+    'cuentas. Parte de la definición de probabilidad condicionada, $P(A|B)=\\frac{P(A\\cap B)}{P(B)}$, ' +
+    'y sustituye en la primera condición: si $P(A|B)$ es igual a $P(A)$, entonces ' +
+    '$\\frac{P(A\\cap B)}{P(B)} = P(A)$. Ahora pasa $P(B)$ multiplicando al otro lado y aparece la ' +
+    'segunda línea. Es la misma frase despejada de otra manera.');
+
+  p.note('En la práctica se usan para cosas distintas, y conviene saber cuál toca. La segunda es la ' +
+    'que <strong>calcula</strong>: si sabes que dos sucesos son independientes, multiplicas y ya está. ' +
+    'La primera es la que <strong>comprueba</strong>: para decidir si de verdad lo son, mira si ' +
+    'enterarte de uno cambia la probabilidad del otro.', null, 'Cuál usar');
 
   p.note('No confundas <strong>independientes</strong> con <strong>incompatibles</strong>. ' +
     'Incompatibles significa que no pueden ocurrir a la vez ($P(A\\cap B)=0$), y eso los hace ' +

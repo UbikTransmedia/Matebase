@@ -79,7 +79,35 @@ Course.topic('fn-integral-indef', function (p) {
 
   p.formula('\\int f(g(x))\\,g\'(x)\\,dx = \\int f(t)\\,dt \\quad \\text{con } t = g(x)');
 
-  p.formula('\\int 2x\\,e^{x^2}dx \\ \\xrightarrow{t=x^2,\\ dt=2x\\,dx} \\ \\int e^t dt = e^t + C = e^{x^2}+C');
+  p.sub('El paso que nadie explica: de dónde sale $dt = 2x\\,dx$');
+
+  p.text('Aquí es donde casi todo el mundo se pierde, porque de pronto el $dx$ —que hasta ahora era un ' +
+    'adorno al final de la integral— se pone a multiplicar y a moverse de sitio como si fuera un ' +
+    'número. Conviene decir qué está pasando, porque no es magia y tampoco es del todo lo que parece.');
+
+  p.text('Si llamamos $t = x^2$, la derivada de $t$ respecto de $x$ es $\\frac{dt}{dx} = 2x$. Leibniz ' +
+    'escribió la derivada como una fracción precisamente porque, en el fondo, es un cociente entre dos ' +
+    'incrementos diminutos. Y si es un cociente, se puede pasar el de abajo multiplicando: ' +
+    '$dt = 2x\\,dx$. Ese es todo el truco.');
+
+  p.note('En rigor, $dx$ no es un número y esa manipulación es una <em>notación cómoda</em>, no una ' +
+    'división de verdad. Está perfectamente justificada —hay teoría detrás que la respalda—, pero es ' +
+    'honesto decir que en Bachillerato se usa como una regla que funciona. Si en algún momento te ha ' +
+    'parecido que ahí faltaba una explicación, tenías razón: faltaba.', null, 'Por qué chirría');
+
+  p.text('Con eso, el cambio de variable consiste en tres movimientos mecánicos: <strong>elegir</strong> ' +
+    'qué llamas $t$, <strong>derivar</strong> para obtener la relación entre $dt$ y $dx$, y ' +
+    '<strong>sustituir</strong> hasta que en la integral no quede ni rastro de la $x$. Si queda alguna ' +
+    '$x$ suelta, el cambio elegido no era el bueno.');
+
+  p.formula('\\int 2x\\,e^{x^2}dx \\ \\xrightarrow{t=x^2,\\ dt=2x\\,dx} \\ \\int e^t dt = e^t + C = e^{x^2}+C',
+    'el cambio, paso a paso',
+    'La flecha con letras encima se lee «haciendo el cambio».<br><br>Seguimiento del ejemplo: llamamos ' +
+    '$t=x^2$; derivando, $dt = 2x\\,dx$. En la integral original hay un $2x\\,dx$ <em>entero</em>, así ' +
+    'que se sustituye por $dt$ de golpe, y el $e^{x^2}$ se convierte en $e^t$. Queda $\\int e^t dt$, ' +
+    'que es inmediata.<br><br><strong>Y no te olvides del último paso</strong>: deshacer el cambio. La ' +
+    'respuesta tiene que estar en la variable de la pregunta, así que donde ponga $t$ se vuelve a ' +
+    'escribir $x^2$.');
 
   p.section('Integración por partes');
 
