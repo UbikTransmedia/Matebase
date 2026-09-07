@@ -7,11 +7,26 @@ Course.topic('fn-aplicaciones', function (p) {
 
   p.section('La primera derivada: crecimiento y extremos');
 
+  p.text('Todo lo que viene ahora sale de una sola frase que ya conoces: <strong>la derivada es la ' +
+    'pendiente de la tangente</strong>. Si en un punto la pendiente es positiva, la tangente apunta ' +
+    'hacia arriba y la función va subiendo por allí; si es negativa, apunta hacia abajo y la función ' +
+    'baja. No hay nada más que memorizar, porque es lo mismo que sabes de las cuestas.');
+
+  p.text('Piensa en un paseo por una montaña. Mientras subes, la pendiente bajo tus pies es positiva; ' +
+    'mientras bajas, negativa. ¿Y en la cumbre? Justo en lo más alto el suelo está <em>llano</em> ' +
+    'durante un instante: la pendiente vale cero. Lo mismo pasa en el fondo de un valle. Por eso los ' +
+    'puntos donde la derivada se anula son los candidatos a máximo y mínimo.');
+
   p.formulas([
     'f\'(x) > 0 \\Rightarrow f \\text{ crece}',
     'f\'(x) < 0 \\Rightarrow f \\text{ decrece}',
     'f\'(x) = 0 \\Rightarrow \\text{punto crítico (posible máximo o mínimo)}'
-  ]);
+  ], null,
+    'La flecha doble $\\Rightarrow$ se lee «implica» o, más llanamente, «entonces».<br><br>' +
+    'Las tres líneas se dicen: <em>«si efe prima de equis es mayor que cero, entonces efe crece»</em> · ' +
+    '<em>«si es menor que cero, efe decrece»</em> · <em>«si es igual a cero, hay un punto crítico»</em>.' +
+    '<br><br>Y en la cabeza conviene guardarlas así: <em>pendiente hacia arriba, subo; pendiente hacia ' +
+    'abajo, bajo; suelo llano, puede que haya llegado a una cumbre o a un valle</em>.');
 
   p.note('Ojo con el «posible». Que la derivada se anule no garantiza que haya un extremo: en ' +
     '$f(x)=x^3$ se cumple $f\'(0)=0$ y sin embargo la función sigue subiendo. Lo que decide es si la ' +
@@ -19,15 +34,41 @@ Course.topic('fn-aplicaciones', function (p) {
 
   p.section('La segunda derivada: curvatura');
 
+  p.text('La segunda derivada es, simplemente, la derivada de la derivada: no mide la pendiente, sino ' +
+    '<strong>cómo va cambiando la pendiente</strong>. Suena rebuscado y es una idea muy física. Sigue ' +
+    'en la carretera: la primera derivada es la inclinación de la cuesta; la segunda dice si esa ' +
+    'cuesta se está poniendo cada vez más empinada o cada vez más suave.');
+
+  p.text('Cuando la pendiente no para de aumentar, la curva se va doblando hacia arriba y toma forma ' +
+    'de cuenco: es lo que en clase se llama <em>cóncava hacia arriba</em>. Cuando la pendiente ' +
+    'disminuye, se dobla hacia abajo y toma forma de campana. Y el punto donde deja de doblarse hacia ' +
+    'un lado y empieza a doblarse hacia el otro es el <strong>punto de inflexión</strong>: el ' +
+    'instante en que el volante pasa de girar a la izquierda a girar a la derecha.');
+
   p.formulas([
     'f\'\'(x) > 0 \\Rightarrow \\text{cóncava hacia arriba (convexa)}',
     'f\'\'(x) < 0 \\Rightarrow \\text{cóncava hacia abajo}',
     'f\'\'(x) = 0 \\text{ y cambia de signo} \\Rightarrow \\text{punto de inflexión}'
-  ]);
+  ], null,
+    'Las dos comillas se leen «segunda»: $f\'\'(x)$ es «efe segunda de equis».<br><br>' +
+    'Truco visual que no falla: <strong>si la segunda derivada es positiva, la curva sonríe</strong> ' +
+    '(forma de $\\smile$, como un cuenco que recoge agua); si es negativa, pone cara triste (forma de ' +
+    '$\\frown$). Positivo arriba, negativo abajo.');
 
-  p.text('Y de ahí sale el <strong>criterio rápido</strong> para clasificar un punto crítico: si en él ' +
-    'la segunda derivada es positiva, la curva está «sonriendo» y es un mínimo; si es negativa, es un ' +
-    'máximo.');
+  p.note('Cuidado con el vocabulario, porque los libros no se ponen de acuerdo: lo que aquí llamamos ' +
+    '«cóncava hacia arriba» algunos lo llaman <em>convexa</em> y otros, directamente, <em>cóncava</em>. ' +
+    'Para no depender de la palabra, quédate con el dibujo y con el signo: si $f\'\'>0$, la curva ' +
+    'sonríe. Eso no admite discusión.', null, 'Un lío de nombres');
+
+  p.text('Y de aquí sale el <strong>criterio rápido</strong> para clasificar un punto crítico, que te ' +
+    'ahorra estudiar el signo de la primera derivada a los dos lados. Si en un punto la pendiente vale ' +
+    'cero y además la curva sonríe, ese punto llano es el fondo del cuenco: un <strong>mínimo</strong>. ' +
+    'Si la pendiente vale cero y la curva pone cara triste, es la cima: un <strong>máximo</strong>.');
+
+  p.note('El criterio rápido tiene una letra pequeña: si en el punto crítico la segunda derivada ' +
+    'también vale cero, <em>no decide nada</em> y hay que volver al método largo de mirar cómo cambia ' +
+    'el signo de $f\'$. Es justo lo que pasa en $f(x)=x^3$ en el origen, donde las dos derivadas se ' +
+    'anulan y no hay ni máximo ni mínimo.', 'warn', 'Cuando el atajo no sirve');
 
   p.demo({
     title: 'La función, su derivada y su segunda derivada',

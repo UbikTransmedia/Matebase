@@ -50,6 +50,7 @@
     in: '∈', notin: '∉', ni: '∋', subset: '⊂', subseteq: '⊆', supset: '⊃',
     supseteq: '⊇', nsubseteq: '⊄', colon: ':',
     mid: '∣', nmid: '∤', doteq: '≐', asymp: '≍', prec: '≺', succ: '≻',
+    smile: '⌣', frown: '⌢',
     Longrightarrow: '⟹', Longleftrightarrow: '⟺', longmapsto: '⟼', uparrow: '↑', downarrow: '↓'
   };
 

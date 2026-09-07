@@ -49,18 +49,46 @@ Course.topic('ar-potencias', function (p) {
   /* ---------------------------------------------------------------- */
   p.section('Propiedades de las potencias');
 
-  p.text('Todas salen de contar factores. No hay que aprendérselas de memoria: hay que entender de ' +
-    'dónde vienen y entonces no se olvidan.');
+  p.text('Aquí llega la lista que todo el mundo intenta memorizar y casi nadie retiene. Vamos a hacer ' +
+    'lo contrario: como una potencia no es más que una multiplicación repetida, cada propiedad se ' +
+    'puede <strong>ver</strong> desplegando los factores. Si las entiendes una vez, no vuelves a ' +
+    'necesitar la lista.');
+
+  p.text('<strong>Multiplicar potencias de la misma base.</strong> Escribe $a^3\\cdot a^2$ a lo bruto: ' +
+    '$(a\\,a\\,a)(a\\,a)$. Al quitar el paréntesis quedan cinco aes seguidas, o sea $a^5$. No has hecho ' +
+    'ninguna cuenta: solo has juntado tres factores con dos. Por eso los exponentes <em>se suman</em>.');
+
+  p.text('<strong>Dividir.</strong> Con $\\frac{a^5}{a^2}$ pasa lo simétrico: arriba hay cinco aes y ' +
+    'abajo dos, y cada a de abajo tacha una de arriba. Sobreviven tres. Por eso los exponentes ' +
+    '<em>se restan</em>: estás cancelando, no dividiendo.');
+
+  p.text('<strong>Potencia de una potencia.</strong> $(a^2)^3$ significa «$a^2$ tres veces»: ' +
+    '$(a\\,a)(a\\,a)(a\\,a)$. Son tres grupos de dos, es decir, seis aes. Tres grupos de dos son seis, ' +
+    'y por eso aquí los exponentes <em>se multiplican</em>. Es la diferencia entre juntar montones y ' +
+    'contar montones de montones.');
+
+  p.text('<strong>Y las dos últimas</strong> dicen que el exponente se reparte entre lo que hay dentro ' +
+    'del paréntesis, siempre que dentro solo haya multiplicaciones o divisiones: $(a\\,b)^3 = ' +
+    '(ab)(ab)(ab)$, y como el orden de los factores da igual, se pueden agrupar las aes por un lado y ' +
+    'las bes por otro.');
 
   p.formulas([
     'a^m \\cdot a^n = a^{m+n}',
     '\\frac{a^m}{a^n} = a^{m-n}',
     '(a^m)^n = a^{m\\cdot n}',
     '(a\\cdot b)^n = a^n\\cdot b^n \\qquad \\left(\\frac{a}{b}\\right)^n = \\frac{a^n}{b^n}'
-  ], 'las cinco que hay que saber');
+  ], 'las cinco que hay que saber',
+    'Se leen, por orden: <em>«a elevado a eme, por a elevado a ene, es a elevado a eme más ene»</em> · ' +
+    '<em>«a elevado a eme partido por a elevado a ene es a elevado a eme menos ene»</em> · ' +
+    '<em>«a elevado a eme, todo elevado a ene, es a elevado a eme por ene»</em> · ' +
+    '<em>«a por b, todo elevado a ene, es a elevado a ene por b elevado a ene»</em>.<br><br>' +
+    'La regla de oro para no confundirlas: <strong>si multiplicas potencias, sumas; si elevas una ' +
+    'potencia, multiplicas</strong>.');
 
-  p.text('Por ejemplo, $a^3\\cdot a^2 = (aaa)(aa) = aaaaa = a^5$: los exponentes se suman porque ' +
-    'simplemente estás juntando factores.');
+  p.note('La trampa más repetida es inventarse una sexta propiedad que no existe: ' +
+    '$(a+b)^n$ <strong>no</strong> es $a^n+b^n$. Compruébalo con números pequeños: $(2+3)^2 = 25$, ' +
+    'mientras que $2^2+3^2 = 13$. El exponente se reparte entre factores, nunca entre sumandos.',
+    'warn', 'La que no existe');
 
   p.sub('Los dos casos raros');
 
@@ -87,10 +115,28 @@ Course.topic('ar-potencias', function (p) {
 
   p.formula('\\sqrt[3]{125} = 5 \\quad \\text{porque} \\quad 5^3 = 125');
 
-  p.text('Toda raíz se puede escribir como potencia de exponente fraccionario, y esto unifica los dos ' +
-    'mundos: a partir de aquí, raíces y potencias son lo mismo y comparten propiedades.');
+  p.text('Y ahora un giro que parece un truco y no lo es: <strong>toda raíz se puede escribir como una ' +
+    'potencia</strong>, con el exponente en forma de fracción. Merece la pena ver por qué, porque no ' +
+    'es un convenio inventado sino la única posibilidad que no rompe nada.');
 
-  p.formula('\\sqrt[n]{a^m} = a^{\\frac{m}{n}}', 'la traducción clave');
+  p.text('Pregúntate qué debería valer $a^{1/2}$ para que las propiedades de antes sigan funcionando. ' +
+    'Si elevamos esa cosa al cuadrado, la regla de la potencia de una potencia manda multiplicar los ' +
+    'exponentes: $\\left(a^{1/2}\\right)^2 = a^{\\frac{1}{2}\\cdot 2} = a^1 = a$. Es decir, ' +
+    '$a^{1/2}$ es un número que al cuadrado da $a$. Eso es exactamente la definición de raíz ' +
+    'cuadrada, así que <em>no hay elección</em>: si queremos que las reglas sigan valiendo, ' +
+    '$a^{1/2}$ tiene que ser $\\sqrt{a}$.');
+
+  p.text('Repitiendo el razonamiento con cualquier índice sale la traducción general. A partir de ' +
+    'aquí, raíces y potencias dejan de ser dos mundos: son lo mismo escrito de dos maneras, y todas ' +
+    'las propiedades anteriores valen también para las raíces sin aprender ninguna nueva.');
+
+  p.formula('\\sqrt[n]{a^m} = a^{\\frac{m}{n}}', 'la traducción clave',
+    'Se lee: <em>«la raíz enésima de a elevado a eme es igual a a elevado a eme partido por ene»</em>.' +
+    '<br><br>El número pequeño de fuera del signo radical, $n$, se llama <strong>índice</strong> y es ' +
+    'el que va al denominador; el exponente de dentro, $m$, va al numerador. Regla para no ' +
+    'equivocarse: <em>el de dentro arriba, el de fuera abajo</em>.<br><br>' +
+    'Ejemplo: $\\sqrt[3]{a^2} = a^{2/3}$, y $\\sqrt{a} = a^{1/2}$ porque un radical sin número ' +
+    'escrito lleva un 2 sobreentendido.');
 
   p.text('Para simplificar una raíz cuadrada se descompone el radicando y se sacan los factores que ' +
     'estén repetidos dos veces:');

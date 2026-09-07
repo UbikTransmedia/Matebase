@@ -82,12 +82,13 @@ Course.topic('ar-magnitudes', function (p) {
     'las unidades.', 'warn', 'Por qué esto importa de verdad');
 
   /* ---------------------------------------------------------------- */
-  p.util('En 1999 la NASA perdió la sonda <em>Mars Climate Orbiter</em>, de 327 millones de dólares, ' +
-    'porque un equipo entregó los datos de empuje en libras-fuerza y el otro los leyó como newtons: ' +
-    'la nave entró demasiado bajo en la atmósfera de Marte y se desintegró. En 1983 un Boeing 767 de ' +
-    'Air Canada se quedó sin combustible en pleno vuelo por confundir libras con kilos y tuvo que ' +
-    'aterrizar planeando. Poner las unidades en cada paso no es pedantería: es lo que evita estas ' +
-    'cosas.');
+  p.util('Y no hace falta ir a Marte. En 1983, un Boeing 767 de Air Canada se quedó sin combustible a ' +
+    '12 000 metros porque el repostaje se calculó en libras cuando el avión trabajaba en kilos: ' +
+    'cargaron menos de la mitad de lo necesario y la tripulación tuvo que aterrizar planeando, sin ' +
+    'motores, en una pista abandonada. Nadie murió, y el aparato pasó a la historia como el ' +
+    '<em>Gimli Glider</em>. En el día a día la misma cuenta decide una dosis de medicamento por peso, ' +
+    'la potencia contratada de una casa o el hormigón de una obra: escribir la unidad al lado de cada ' +
+    'número es la costumbre más barata que existe para no equivocarse.');
 
   p.section('Cifras significativas');
 

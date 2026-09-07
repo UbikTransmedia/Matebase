@@ -62,14 +62,33 @@ Course.topic('ge-semejanza', function (p) {
   /* ---------------------------------------------------------------- */
   p.section('Áreas y volúmenes: el error clásico');
 
-  p.text('Si duplicas todas las longitudes de una figura, el área <strong>no</strong> se duplica: se ' +
-    'multiplica por cuatro. Y el volumen, por ocho.');
+  p.text('Aquí está el error más repetido de toda la geometría, y conviene cometerlo una vez con ' +
+    'conciencia para no volver a cometerlo nunca. Si duplicas todas las longitudes de una figura, el ' +
+    'área <strong>no</strong> se duplica: se multiplica por cuatro. Y el volumen, por ocho.');
+
+  p.text('Compruébalo con la figura más tonta que existe. Coge un cuadrado de 1 cm de lado: su área es ' +
+    '1 cm². Duplica el lado a 2 cm: el área pasa a ser $2\\times 2 = 4$ cm². No has hecho ninguna ' +
+    'trampa, y el área se ha multiplicado por cuatro. La razón es visible si lo dibujas: en el cuadrado ' +
+    'grande caben <em>cuatro</em> cuadraditos del pequeño, dos de ancho por dos de alto.');
+
+  p.text('Con el volumen ocurre lo mismo una dimensión más arriba: en un cubo de lado doble caben dos ' +
+    'a lo ancho, dos a lo largo y dos a lo alto, o sea ocho cubitos. Y como toda figura se puede ' +
+    'imaginar rellena de cuadraditos o de cubitos, lo que vale para el cuadrado vale para cualquier ' +
+    'forma, por rara que sea.');
+
+  p.text('La regla general se recuerda por el <strong>exponente, que coincide con el número de ' +
+    'dimensiones</strong> de lo que estás midiendo: una longitud tiene una dimensión y va con $k$, un ' +
+    'área tiene dos y va con $k^2$, un volumen tiene tres y va con $k^3$.');
 
   p.formulas([
     '\\text{longitudes} \\times k',
     '\\text{áreas} \\times k^2',
     '\\text{volúmenes} \\times k^3'
-  ]);
+  ], null,
+    'Se lee: <em>«las longitudes se multiplican por ka, las áreas por ka al cuadrado y los volúmenes ' +
+    'por ka al cubo»</em>.<br><br>Con $k=3$, por ejemplo: los lados se hacen 3 veces mayores, las ' +
+    'superficies 9 veces y las capacidades 27 veces. Por eso una maqueta a escala 1:3 no necesita el ' +
+    'triple de material, sino veintisiete veces menos.');
 
   p.note('Esto tiene consecuencias que van mucho más allá de la geometría. Un animal el doble de alto ' +
     'pesa ocho veces más, pero la sección de sus huesos solo es cuatro veces mayor: por eso los ' +
@@ -77,12 +96,19 @@ Course.topic('ge-semejanza', function (p) {
     'formuló Galileo en 1638.', null, 'Por qué no existen gigantes');
 
   /* ---------------------------------------------------------------- */
-  p.util('Que el área crezca al cuadrado y el volumen al cubo explica por qué no existen hormigas ' +
-    'gigantes. Si duplicas todas las medidas de un animal, su peso se multiplica por 8 pero la ' +
-    'sección de sus patas solo por 4: la carga por unidad de hueso se duplica. Por eso un elefante ' +
-    'tiene patas como columnas y una gacela no. Lo mismo decide el tamaño de las gotas, por qué los ' +
-    'animales pequeños pierden calor tan rápido y por qué un edificio no se puede escalar sin ' +
-    'rediseñarlo.');
+  p.util('Esa misma ley decide cosas muy alejadas de los animales. Un cuerpo pequeño tiene mucha ' +
+    'superficie para poco volumen, y por eso el hielo picado enfría la bebida mucho más rápido que un ' +
+    'cubito grande, la leña fina prende antes que un tronco y un colibrí tiene que comer casi sin ' +
+    'parar: pierde calor por una superficie enorme en relación con lo que pesa. En cocina es la razón ' +
+    'de que la patata cortada pequeña se dore y la grande se quede cruda por dentro.');
+
+  p.util('En ingeniería el cuadrado-cubo es una restricción de diseño. Duplicar el tamaño de un dron ' +
+    'multiplica su peso por ocho y la superficie de sus hélices solo por cuatro, así que hace falta ' +
+    'rediseñar el sistema entero y no simplemente «hacerlo más grande». Lo mismo limita la altura de ' +
+    'los edificios y el tamaño de los barcos, y explica por qué los reactores químicos que funcionan ' +
+    'en el laboratorio a veces fracasan al escalarlos a fábrica: el calor se genera con el volumen y ' +
+    'se evacúa por la superficie, y al crecer la pieza esa cuenta deja de salir.',
+    'Utilidad: por qué no se puede «hacer más grande» sin más');
 
   p.section('El teorema de Tales');
 

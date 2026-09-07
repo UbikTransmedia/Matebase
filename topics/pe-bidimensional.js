@@ -85,11 +85,17 @@ Course.topic('pe-bidimensional', function (p) {
     'una parábola perfecta tienen $r \\approx 0$ y sin embargo están perfectamente relacionados. ' +
     'Por eso hay que dibujar siempre la nube antes de fiarse de $r$.', 'warn');
 
-  p.util('Aquí vive la advertencia más importante de toda la estadística: <strong>correlación no es ' +
-    'causalidad</strong>. El consumo de helados y los ahogamientos suben juntos, y no es que el ' +
-    'helado ahogue: es que ambos suben en verano. Antes de creer que una cosa causa la otra hay que ' +
-    'descartar que haya una tercera detrás moviendo las dos. Media prensa científica mal contada y ' +
-    'buena parte de la publicidad viven de saltarse este párrafo.');
+  p.util('El coeficiente de correlación se usa a diario para decidir dónde poner el dinero. Un fondo de ' +
+    'inversión no busca los activos que más suben, sino activos <strong>poco correlacionados entre ' +
+    'sí</strong>: si todo lo que tienes sube y baja a la vez, no has diversificado nada, solo has ' +
+    'comprado lo mismo con nombres distintos. El susto de 2008 vino en buena parte de que ' +
+    'correlaciones que se creían pequeñas se dispararon a la vez.');
+
+  p.util('En medicina y en industria sirve para otra cosa: descartar mediciones que sobran. Si dos ' +
+    'sensores de una máquina dan lecturas con correlación 0,99, uno de los dos es prescindible; si un ' +
+    'análisis clínico correlaciona casi perfectamente con otro más barato, se pide el barato. Buscar ' +
+    'qué variables aportan información nueva y cuáles solo repiten lo que ya sabes es el primer paso ' +
+    'de cualquier trabajo con datos.', 'Utilidad: qué medir y qué no');
 
   p.section('La recta de regresión');
 
