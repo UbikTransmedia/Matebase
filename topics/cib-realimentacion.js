@@ -304,12 +304,12 @@ Course.topic('cib-realimentacion', function (p) {
     fields: [{ name: 'tipo', label: 'El bucle es', w: 'wide' }],
     sol: function (d) { return { tipo: d.neg ? 'negativa' : 'positiva' }; },
     check: function (v, d) {
-      var s = String(v.raw.tipo || '').toLowerCase().trim();
-      var dijoNeg = /negativ|estabiliz|corrig|compens/.test(s);
-      var dijoPos = /positiv|amplific|refuerz|dispara|crece/.test(s);
-      if (!dijoNeg && !dijoPos) return { ok: false, msg: 'Responde «negativa» o «positiva».' };
-      var acierta = d.neg ? (dijoNeg && !dijoPos) : (dijoPos && !dijoNeg);
-      return { ok: acierta };
+      var q = U.eligeOpcion(v.raw.tipo, {
+        negativa: /negativ|estabiliz|corrig|compens|amortigu|frena/,
+        positiva: /positiv|amplific|refuerz|dispara|crece|a favor/
+      });
+      if (!q) return { ok: false, msg: 'Responde «negativa» o «positiva».' };
+      return { ok: q === (d.neg ? 'negativa' : 'positiva') };
     },
     hint: function () {
       return 'Pregúntate: cuando la cosa se desvía, ¿lo que ocurre después la trae de vuelta o la ' +
@@ -387,9 +387,13 @@ Course.topic('cib-realimentacion', function (p) {
     check: function (v, d) {
       var f = 1 - d.K, a = Math.abs(f);
       var okF = Math.abs(v.f - f) < 1e-6;
-      var s = String(v.raw.q || '').toLowerCase();
-      var okQ = a < 1 ? /converg|estabil|se apaga|se calma/.test(s)
-        : (a > 1 ? /crec|dispara|descontrol|diverg/.test(s) : /sosten|constante|se mantiene|ni.*ni/.test(s));
+      var q = U.eligeOpcion(v.raw.q, {
+        converge: /converg|estabil|se apaga|calm|tiende a|se acerca|desaparece|encoge/,
+        crece: /crec|dispara|descontrol|diverg|se va de|explota/,
+        sostenida: /sosten|constante|se mantiene|siempre igual|misma amplitud|ni se calma/
+      });
+      var esperada = a < 1 ? 'converge' : (a > 1 ? 'crece' : 'sostenida');
+      var okQ = q === esperada;
       return { ok: okF && okQ, fields: { f: okF, q: okQ } };
     },
     hint: function () {

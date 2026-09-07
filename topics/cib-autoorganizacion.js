@@ -303,10 +303,15 @@ Course.topic('cib-autoorganizacion', function (p) {
     },
     check: function (v, d) {
       var r = d.viva ? (d.vecinas === 2 || d.vecinas === 3) : (d.vecinas === 3);
-      var s = String(v.raw.q || '').toLowerCase();
-      var vi = /viv|encend|1/.test(s), mu = /muert|apag|0/.test(s);
-      if (vi === mu) return { ok: false, msg: 'Responde «viva» o «muerta».' };
-      return { ok: r ? vi : mu };
+      var bruto = U.llano(v.raw.q).trim();
+      if (bruto === '1') return { ok: r };          // notacion binaria, respuesta entera
+      if (bruto === '0') return { ok: !r };
+      var q = U.eligeOpcion(bruto, {
+        viva: /viva|vive|nace|encend|sobreviv|revive/,
+        muerta: /muert|muere|apag|desaparec/
+      });
+      if (!q) return { ok: false, msg: 'Responde «viva» o «muerta».' };
+      return { ok: r ? q === 'viva' : q === 'muerta' };
     },
     hint: function () { return 'Con 0 o 1 vecinas siempre se muere; con 4 o más también. La franja buena es estrecha.'; },
     steps: function (d) {

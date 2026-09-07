@@ -268,11 +268,19 @@ Course.topic('cib-segundo-orden', function (p) {
     fields: [{ name: 'q', label: '¿Goodhart?', w: 'tiny' }],
     sol: function (d) { return { q: d.goodhart ? 'sí' : 'no' }; },
     check: function (v, d) {
-      var s = String(v.raw.q || '').toLowerCase().trim();
-      var si = /^s[ií]|^yes|^y$|se produce|goodhart/.test(s);
-      var no = /^no|^n$|no se produce|no altera/.test(s);
-      if (si === no) return { ok: false, msg: 'Responde «sí» o «no».' };
-      return { ok: d.goodhart ? si : no };
+      var s = U.llano(v.raw.q).trim();
+      // «no lo sé» empieza por «no» y no es una respuesta: no puede acertar.
+      if (/^(no lo se|no se|ni idea|no sabria|no estoy seguro)/.test(s)) {
+        return { ok: false, msg: 'Decide: ¿se produce el efecto o no?' };
+      }
+      if (/^(no|n)\b/.test(s)) return { ok: !d.goodhart };   // «no», «no se produce»…
+      if (/^(si|s|yes)\b/.test(s)) return { ok: d.goodhart };
+      var q = U.eligeOpcion(s, {
+        si: /se produce|hay goodhart|es goodhart|goodhart/,
+        no: /no se produce|no altera|medicion normal|no hay/
+      });
+      if (!q) return { ok: false, msg: 'Responde «sí» o «no».' };
+      return { ok: d.goodhart ? q === 'si' : q === 'no' };
     },
     hint: function () {
       return '¿Hay alguien con un incentivo para cambiar su conducta <em>a causa</em> de que le midan? Un termómetro no tiene incentivos.';

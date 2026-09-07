@@ -330,7 +330,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       var fallos = [];
       (specs || []).forEach(function (s, idx) {
         var etiqueta = 'ej.' + (idx + 1) + ' («' + (s.title || '') + '»)';
-        var malCheck = 0, malTex = 0, excep = '';
+        var malCheck = 0, malTex = 0, tragaTodo = 0, excep = '';
         for (var i = 0; i < 40; i++) {
           var d = null, guard = 0;
           try {
@@ -362,12 +362,37 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
               })();
               if (typeof res === 'object') res = res.ok;
               if (!res) malCheck++;
+
+              /* Un corrector de texto libre que acepta cualquier cosa es peor
+                 que no tener corrector: el alumno cree que ha acertado. Se le
+                 dan dos respuestas sin contenido y ninguna debe pasar. */
+              if (s.check && /v\.raw/.test(String(s.check))) {
+                ['', 'no lo sé'].forEach(function (basura) {
+                  var w = { raw: {} }, tocado = 0;
+                  for (var k2 in want) {
+                    w[k2] = (typeof want[k2] === 'number') ? want[k2] : ML.tryEval(String(want[k2]));
+                    w.raw[k2] = String(want[k2]).replace('.', ',');
+                  }
+                  flds.forEach(function (f) {
+                    if (typeof want[f.name] === 'string') {
+                      w.raw[f.name] = basura; w[f.name] = NaN; tocado++;
+                    }
+                  });
+                  // Si el ejercicio no tiene ningún campo de texto que estropear,
+                  // esta prueba no dice nada: saltarla en vez de dar un falso aviso.
+                  if (!tocado) return;
+                  var r2 = s.check(w, d);
+                  if (typeof r2 === 'object') r2 = r2.ok;
+                  if (r2) tragaTodo++;
+                });
+              }
             }
           } catch (e) { excep = e.message; break; }
         }
         if (excep) fallos.push(etiqueta + ': ' + excep);
         else if (malCheck) fallos.push(etiqueta + ': la solución no pasa su corrector ' + malCheck + '/40 veces');
         else if (malTex) fallos.push(etiqueta + ': ' + malTex + ' fórmulas con comandos LaTeX desconocidos');
+        else if (tragaTodo) fallos.push(etiqueta + ': el corrector acepta respuestas vacías o sin contenido');
       });
       return fallos;
     }

@@ -248,11 +248,12 @@ Course.topic('cib-homeostasis', function (p) {
     fields: [{ name: 'q', label: 'es una variable', w: 'wide' }],
     sol: function (d) { return { q: d.esencial ? 'esencial' : 'instrumental' }; },
     check: function (v, d) {
-      var s = String(v.raw.q || '').toLowerCase();
-      var es = /esencial|cr[ií]tic|vital|imprescind/.test(s);
-      var ins = /instrument|medio|palanca|no esencial|auxiliar|secundar/.test(s);
-      if (es === ins) return { ok: false, msg: 'Responde «esencial» o «instrumental».' };
-      return { ok: d.esencial ? es : ins };
+      var q = U.eligeOpcion(v.raw.q, {
+        esencial: /esencial|critic|vital|imprescind/,
+        instrumental: /instrument|medio|palanca|auxiliar|secundar|prescind/
+      });
+      if (!q) return { ok: false, msg: 'Responde «esencial» o «instrumental».' };
+      return { ok: q === (d.esencial ? 'esencial' : 'instrumental') };
     },
     hint: function () { return 'Pregúntate si el sistema puede permitirse que esa variable se dispare durante un rato. Si puede, es instrumental.'; },
     steps: function (d) {

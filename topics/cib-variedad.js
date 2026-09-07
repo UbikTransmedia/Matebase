@@ -370,11 +370,12 @@ Course.topic('cib-variedad', function (p) {
     fields: [{ name: 'q', label: 'está…', w: 'wide' }],
     sol: function (d) { return { q: d.at ? 'atenuando' : 'amplificando' }; },
     check: function (v, d) {
-      var s = String(v.raw.q || '').toLowerCase();
-      var at = /aten|reduc|limit|restring|recort|simplific|baj/.test(s);
-      var am = /amplific|aument|ampli|sub|a.ad|m[aá]s variedad|refuerz/.test(s);
-      if (!at && !am) return { ok: false, msg: 'Responde «atenuar» o «amplificar».' };
-      return { ok: d.at ? (at && !am) : (am && !at) };
+      var q = U.eligeOpcion(v.raw.q, {
+        atenuar: /aten[uú]|reduc|limit|restring|recort|simplific|menos variedad|menos opciones/,
+        amplificar: /amplific|amplia|ampli[eé]|aument|a[nñ]ad|mas variedad|mas respuestas|repertorio|refuerz/
+      });
+      if (!q) return { ok: false, msg: 'Responde «atenuar» o «amplificar».' };
+      return { ok: q === (d.at ? 'atenuar' : 'amplificar') };
     },
     hint: function () { return '¿Se están recortando las situaciones que pueden presentarse, o se están añadiendo respuestas posibles?'; },
     steps: function (d) {

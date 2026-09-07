@@ -216,14 +216,13 @@ Course.topic('cib-retardos', function (p) {
     fields: [{ name: 'q', label: 'domina…', w: 'wide' }],
     sol: function (d) { return { q: d.q }; },
     check: function (v, d) {
-      var s = String(v.raw.q || '').toLowerCase();
-      var ret = /retard|demora|tard|desfas|retras/.test(s);
-      var pos = /positiv|amplific|refuerz/.test(s);
-      var neg = /negativ|estabiliz|corrig/.test(s);
-      if (ret) return { ok: d.q === 'retardo' };
-      if (pos && !neg) return { ok: d.q === 'positiva' };
-      if (neg && !pos) return { ok: d.q === 'negativa' };
-      return { ok: false, msg: 'Responde con una de las tres: negativa, positiva o retardo.' };
+      var q = U.eligeOpcion(v.raw.q, {
+        retardo: /retard|demora|tarda|desfas|retras|llega tarde/,
+        positiva: /positiv|amplific|refuerz/,
+        negativa: /negativ|estabiliz|corrig|compens/
+      });
+      if (!q) return { ok: false, msg: 'Responde con una de las tres: negativa, positiva o retardo.' };
+      return { ok: q === d.q };
     },
     hint: function () { return '¿Hay oscilación o vaivén en el tiempo? Entonces sospecha del retardo, aunque el bucle sea estabilizador.'; },
     steps: function (d) {

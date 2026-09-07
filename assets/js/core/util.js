@@ -173,5 +173,51 @@
     }
   };
 
+  /* ---------- corregir respuestas escritas con palabras ----------
+     Los ejercicios de opcion («negativa o positiva», «esencial o
+     instrumental») no se pueden corregir buscando una palabra suelta: el
+     alumno escribe frases, con tildes, y a menudo NIEGA una opcion para
+     elegir la otra («no esencial», «el integral, no el proporcional»).
+     Esto lo resuelve una vez para todos. */
+
+  /** Quita tildes y pasa a minusculas, para comparar sin sorpresas. */
+  U.llano = function (s) {
+    s = String(s == null ? '' : s).toLowerCase();
+    return s.normalize ? s.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : s;
+  };
+
+  /**
+   * Decide cual de varias opciones ha elegido el alumno.
+   *   clases: { nombre: /expresion/ , ... }  (sin tildes, en minusculas)
+   * Devuelve el nombre elegido, o null si no se entiende o es ambiguo.
+   *
+   * Reglas:
+   *   - Una opcion precedida de «no», «ni», «sin» o «tampoco» cuenta como
+   *     NEGADA, no como elegida.
+   *   - Si solo hay dos opciones y el alumno niega una, elige la otra.
+   */
+  U.eligeOpcion = function (texto, clases) {
+    var s = U.llano(texto);
+    if (!s.trim()) return null;
+    var nombres = Object.keys(clases);
+    var elegidas = [], negadas = [];
+    nombres.forEach(function (k) {
+      var re = clases[k];
+      re.lastIndex = 0;
+      var m = re.exec(s);
+      if (!m) return;
+      // ¿hay una negacion justo antes, en las pocas palabras anteriores?
+      var antes = s.slice(Math.max(0, m.index - 24), m.index);
+      if (/\b(no|ni|sin|tampoco)\b[^,.;]*$/.test(antes)) negadas.push(k);
+      else elegidas.push(k);
+    });
+    if (elegidas.length === 1) return elegidas[0];
+    if (elegidas.length > 1) return null;                  // ha dicho dos cosas
+    if (nombres.length === 2 && negadas.length === 1) {    // negar una es elegir la otra
+      return nombres[0] === negadas[0] ? nombres[1] : nombres[0];
+    }
+    return null;
+  };
+
   global.U = U;
 })(window);

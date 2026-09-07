@@ -309,11 +309,12 @@ Course.topic('cib-filtrado', function (p) {
     fields: [{ name: 'q', label: 'ventana', w: 'tiny' }],
     sol: function (d) { return { q: d.grande ? 'grande' : 'pequeña' }; },
     check: function (v, d) {
-      var s = String(v.raw.q || '').toLowerCase();
-      var gr = /grand|larg|amplia|much/.test(s);
-      var pq = /peque|cort|estrech|min/.test(s);
-      if (gr === pq) return { ok: false, msg: 'Responde «grande» o «pequeña».' };
-      return { ok: d.grande ? gr : pq };
+      var q = U.eligeOpcion(v.raw.q, {
+        grande: /grand|larg|amplia|much|alta/,
+        pequena: /peque|cort|estrech|minim|baja|breve/
+      });
+      if (!q) return { ok: false, msg: 'Responde «grande» o «pequeña».' };
+      return { ok: q === (d.grande ? 'grande' : 'pequena') };
     },
     hint: function () { return 'La pregunta clave es: ¿qué cuesta más caro aquí, equivocarse por ruido o llegar tarde?'; },
     steps: function (d) {

@@ -303,13 +303,13 @@ Course.topic('cib-control', function (p) {
     fields: [{ name: 'q', label: 'reforzar el término', w: 'wide' }],
     sol: function (d) { return { q: d.q }; },
     check: function (v, d) {
-      var s = String(v.raw.q || '').toLowerCase();
-      var esP = /proporcion|\bkp\b|\bp\b/.test(s);
-      var esI = /integr|\bki\b|acumul/.test(s);
-      var esD = /deriv|\bkd\b|amortig/.test(s);
-      var n = (esP ? 1 : 0) + (esI ? 1 : 0) + (esD ? 1 : 0);
-      if (n !== 1) return { ok: false, msg: 'Responde con uno solo de los tres términos.' };
-      return { ok: (d.q === 'proporcional' && esP) || (d.q === 'integral' && esI) || (d.q === 'derivativo' && esD) };
+      var q = U.eligeOpcion(v.raw.q, {
+        proporcional: /proporcion|\bkp\b/,
+        integral: /integr|\bki\b|acumul/,
+        derivativo: /deriv|\bkd\b|amortigu/
+      });
+      if (!q) return { ok: false, msg: 'Responde con uno solo de los tres términos.' };
+      return { ok: q === d.q };
     },
     hint: function () {
       return 'Error que no se cierra nunca → integral. Sobrepaso y vaivenes → derivativo. Todo demasiado lento → proporcional.';

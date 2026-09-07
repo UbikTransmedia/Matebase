@@ -136,6 +136,26 @@ p.exercise({
   acepta `3/4`, `2^10`, `pi/6`, `sqrt(2)`, `-2,5`, `5!`…).
 - `v.raw[nombre]` es la cadena tal cual, para respuestas de texto.
 - `check` devuelve `true`/`false` o `{ ok, msg, fields }`.
+
+> **Si corriges respuestas escritas con palabras, usa `U.eligeOpcion`.**
+> Buscar una palabra suelta con una expresión regular falla de dos maneras, y
+> las dos se han visto en este proyecto: rechaza respuestas correctas con tilde
+> («se amplía» no contiene «ampli») y acepta respuestas negadas («no esencial»
+> contiene «esencial»). El ayudante quita tildes, entiende que «no», «ni»,
+> «sin» y «tampoco» niegan lo que viene detrás, y cuando solo hay dos opciones
+> deduce que negar una es elegir la otra:
+>
+> ```js
+> var q = U.eligeOpcion(v.raw.q, {
+>   esencial:     /esencial|critic|vital/,
+>   instrumental: /instrument|medio|palanca/
+> });
+> if (!q) return { ok: false, msg: 'Responde «esencial» o «instrumental».' };
+> return { ok: q === (d.esencial ? 'esencial' : 'instrumental') };
+> ```
+>
+> Las expresiones van **sin tildes y en minúsculas**, porque el texto llega ya
+> normalizado.
 - `w` del campo: `'tiny'`, `'wide'` o nada.
 
 > **Declara siempre `sol`, incluso si usas `check`.** No estorba (gana `check`)
