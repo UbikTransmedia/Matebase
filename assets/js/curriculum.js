@@ -502,5 +502,58 @@ window.CURRICULUM = [
         o: ['Matriz de pagos y estrategias dominantes', 'Equilibrio de Nash', 'El dilema del prisionero']
       }
     ]
+  },
+
+  /* ================= 12. CIBERNÉTICA ================= */
+  {
+    id: 'cib', n: 12, title: 'Cibernética',
+    desc: 'El broche del curso: la disciplina que junta la derivada, la entropía y los sistemas dinámicos para responder a una sola pregunta —cómo se mantiene algo en su sitio en un mundo que lo empuja.',
+    temas: [
+      {
+        id: 'cib-realimentacion', t: 'Realimentación: el bucle que se corrige solo',
+        r: 'La idea madre: un sistema que mide su propio resultado y lo usa para corregirse.',
+        o: ['Realimentación negativa y positiva', 'Ganancia y estabilidad', 'Del regulador de Watt al termostato']
+      },
+      {
+        id: 'cib-caja-negra', t: 'La caja negra: sistemas, estados y transiciones',
+        r: 'Cómo estudiar un aparato sin abrirlo: perturbarlo y anotar qué hace.',
+        o: ['Estado y transformación', 'Sistemas determinados por su estado', 'Deducir el interior desde fuera']
+      },
+      {
+        id: 'cib-variedad', t: 'Variedad y la ley de la variedad requerida',
+        r: 'Solo la variedad puede absorber variedad: por qué un regulador con pocas jugadas pierde siempre.',
+        o: ['Medir la variedad', 'La ley de Ashby', 'El teorema del buen regulador']
+      },
+      {
+        id: 'cib-control', t: 'Control por error: proporcional, integral y derivativo',
+        r: 'Pilotar con tres términos: el error de ahora, el acumulado y el que viene.',
+        o: ['La señal de error', 'Los tres términos del PID', 'Sobrepaso, oscilación y error residual']
+      },
+      {
+        id: 'cib-homeostasis', t: 'Homeostasis y ultraestabilidad',
+        r: 'Variables que deben permanecer dentro de unos límites, y qué hace un sistema cuando se salen.',
+        o: ['Variables esenciales', 'El homeostato de Ashby', 'Adaptación por reconfiguración']
+      },
+      {
+        id: 'cib-retardos', t: 'Retardos y oscilación',
+        r: 'Por qué la ducha de un hotel es imposible de regular: la información llega tarde.',
+        o: ['El retardo en el bucle', 'Sobrecorrección y oscilación', 'El efecto látigo']
+      },
+      {
+        id: 'cib-filtrado', t: 'Predicción y filtrado: separar la señal del ruido',
+        r: 'El problema con el que Wiener llegó a todo esto: adivinar dónde estará algo que se mide mal.',
+        o: ['Señal y ruido', 'Suavizado y media móvil', 'El compromiso entre suavidad y retraso']
+      },
+      {
+        id: 'cib-autoorganizacion', t: 'Autoorganización: autómatas celulares',
+        r: 'Reglas locales simplísimas que producen orden global sin que nadie dirija.',
+        o: ['Autómatas de una dimensión', 'El Juego de la Vida', 'Emergencia y autoorganización']
+      },
+      {
+        id: 'cib-segundo-orden', t: 'Cibernética de segundo orden',
+        r: 'Cuando quien estudia el sistema forma parte de él.',
+        o: ['El teorema del buen regulador', 'Autorreferencia y observador', 'Del control a la conversación']
+      }
+    ]
   }
 ];
