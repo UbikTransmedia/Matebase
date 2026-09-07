@@ -113,7 +113,13 @@ Course.topic('al-gauss', function (p) {
     '\\operatorname{rg}(A) \\ne \\operatorname{rg}(A^*) \\Rightarrow \\text{incompatible}',
     '\\operatorname{rg}(A) = \\operatorname{rg}(A^*) = n \\Rightarrow \\text{compatible determinado}',
     '\\operatorname{rg}(A) = \\operatorname{rg}(A^*) < n \\Rightarrow \\text{compatible indeterminado}'
-  ], 'n es el número de incógnitas');
+  ], 'n es el número de incógnitas',
+    '$\\operatorname{rg}(A)$ se dice «rango de A»: el número de filas que quedan sin anularse al ' +
+      'escalonar. $A^*$ se dice «A ampliada» y es la matriz con la columna de los términos ' +
+      'independientes pegada.<br><br>Se lee: <em>«si el rango de A es distinto del rango de A ' +
+      'ampliada, el sistema es incompatible»</em>.<br><br>En cristiano: si al escalonar aparece una ' +
+      'fila que dice «cero igual a algo distinto de cero», el sistema se contradice a sí mismo y no ' +
+      'hay solución posible.');
 
   /* ================= EJERCICIOS ================= */
   p.util('El método de Gauss es probablemente el algoritmo más ejecutado de la ingeniería. Calcular las ' +

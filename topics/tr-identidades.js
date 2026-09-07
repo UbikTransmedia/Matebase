@@ -84,7 +84,13 @@ Course.topic('tr-identidades', function (p) {
     '\\operatorname{sen} 2\\alpha = 2\\operatorname{sen}\\alpha\\cos\\alpha',
     '\\cos 2\\alpha = \\cos^2\\alpha - \\operatorname{sen}^2\\alpha = 1 - 2\\operatorname{sen}^2\\alpha = 2\\cos^2\\alpha - 1',
     '\\operatorname{sen}\\frac{\\alpha}{2} = \\pm\\sqrt{\\frac{1-\\cos\\alpha}{2}} \\qquad \\cos\\frac{\\alpha}{2} = \\pm\\sqrt{\\frac{1+\\cos\\alpha}{2}}'
-  ]);
+  ], 'ángulo doble',
+    'Se leen: <em>«seno de dos alfa es dos por seno de alfa por coseno de alfa»</em> y <em>«coseno ' +
+      'de dos alfa es coseno cuadrado de alfa menos seno cuadrado de alfa»</em>.<br><br>Ojo con la ' +
+      'notación: $\\cos^2\\alpha$ se dice «coseno cuadrado de alfa» y significa $(\\cos\\alpha)^2$, ' +
+      'elevar al cuadrado el resultado. <strong>No</strong> es el coseno de alfa al ' +
+      'cuadrado.<br><br>No hay que memorizarlas aparte: salen de las fórmulas de adición haciendo ' +
+      '$b=a$.');
 
   p.text('Las tres versiones del coseno del ángulo doble se obtienen sustituyendo la relación ' +
     'fundamental. Cada una es útil en un contexto distinto: la segunda y la tercera son las que ' +
@@ -102,7 +108,12 @@ Course.topic('tr-identidades', function (p) {
     'Se añade la periodicidad: $+360^\\circ k$ (y para la tangente, $+180^\\circ k$).'
   ], true);
 
-  p.formula('\\operatorname{sen} x = \\tfrac{1}{2} \\Rightarrow x = 30^\\circ + 360^\\circ k \\ \\text{ o } \\ x = 150^\\circ + 360^\\circ k');
+  p.formula('\\operatorname{sen} x = \\tfrac{1}{2} \\Rightarrow x = 30^\\circ + 360^\\circ k \\ \\text{ o } \\ x = 150^\\circ + 360^\\circ k', 'todas las soluciones',
+    'La $k$ representa cualquier número entero, y $2k\\pi$ significa «más las vueltas completas que ' +
+      'quieras».<br><br>Se lee: <em>«seno de equis igual a un medio implica equis igual a pi sextos ' +
+      'más dos ka pi, o bien cinco pi sextos más dos ka pi, con ka entero»</em>.<br><br>En cristiano: ' +
+      'hay <strong>dos</strong> ángulos en una vuelta cuyo seno vale $1/2$, y como la función se ' +
+      'repite cada vuelta, cada uno de ellos genera infinitas soluciones sumando vueltas.');
 
   p.text('Cuando la ecuación mezcla senos y cosenos, la estrategia es <strong>dejar una sola razón</strong>: ' +
     'se usa la relación fundamental o las fórmulas del ángulo doble hasta que todo esté en función de ' +

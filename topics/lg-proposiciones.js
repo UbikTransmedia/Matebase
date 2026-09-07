@@ -181,7 +181,12 @@ Course.topic('lg-proposiciones', function (p) {
   p.formulas([
     '\\forall x \\in A : P(x) \\quad \\text{para todo } x \\text{ de } A \\text{ se cumple } P',
     '\\exists x \\in A : P(x) \\quad \\text{existe algún } x \\text{ de } A \\text{ que cumple } P'
-  ]);
+  ], 'los dos cuantificadores',
+    'La A del revés, $\\forall$, se dice «para todo»; la E del revés, $\\exists$, se dice «existe». ' +
+      'Vienen del inglés <em>All</em> y <em>Exists</em>, y por eso están giradas.<br><br>Se leen: ' +
+      '<em>«para todo equis perteneciente a A se cumple pe de equis»</em> y <em>«existe algún equis de ' +
+      'A tal que pe de equis»</em>.<br><br>$P(x)$ es simplemente «la propiedad que se afirma de ' +
+      'equis»: puede ser «es par», «aprueba» o lo que haga falta.');
 
   p.sub('Negar un cuantificador');
   p.text('Con los cuantificadores pasa lo mismo y es igual de práctico. Para tumbar la afirmación «todos ' +
@@ -194,7 +199,13 @@ Course.topic('lg-proposiciones', function (p) {
   p.formulas([
     '\\neg\\left(\\forall x : P(x)\\right) \\equiv \\exists x : \\neg P(x)',
     '\\neg\\left(\\exists x : P(x)\\right) \\equiv \\forall x : \\neg P(x)'
-  ], 'la negación intercambia los cuantificadores');
+  ], 'la negación intercambia los cuantificadores',
+    'El símbolo $\\neg$ se lee «no» y $\\equiv$ se lee «es equivalente a», es decir, «significa ' +
+      'exactamente lo mismo».<br><br>Se dice: <em>«no, para todo equis, pe de equis, es equivalente a: ' +
+      'existe un equis tal que no pe de equis»</em>.<br><br>Con un ejemplo: negar <em>«todos han ' +
+      'aprobado»</em> no es <em>«todos han suspendido»</em>, sino <em>«hay alguien que ha ' +
+      'suspendido»</em>. Al negar, el «para todo» se convierte en «existe» y la propiedad de dentro se ' +
+      'niega.');
 
   p.text('Para negar «<em>todos los cisnes son blancos</em>» no hace falta decir que ninguno lo es: ' +
     'basta con <strong>un solo cisne negro</strong>. Esa asimetría es enorme y estructura toda la ' +

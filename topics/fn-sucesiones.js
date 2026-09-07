@@ -143,7 +143,12 @@ Course.topic('fn-sucesiones', function (p) {
     '\\lim_{n\\to\\infty}\\frac{1}{n} = 0',
     '\\lim_{n\\to\\infty}\\frac{3n+1}{2n-5} = \\frac{3}{2}',
     '\\lim_{n\\to\\infty}\\left(1+\\frac{1}{n}\\right)^n = e'
-  ]);
+  ], 'la sucesión 1/n tiende a cero',
+    'Se dice: <em>«el límite, cuando ene tiende a infinito, de uno partido por ene, es ' +
+      'cero»</em>.<br><br>En cristiano: <em>«al repartir una tarta entre cada vez más gente, a cada ' +
+      'uno le toca cada vez menos, y se puede acercar a cero tanto como se quiera»</em>. Ojo: nunca ' +
+      'llega a valer cero, por grande que sea ene. El límite es a lo que se acerca, no un valor que ' +
+      'alcance.');
 
   p.text('Se calculan igual que los límites en el infinito de las funciones: comparando grados.');
 

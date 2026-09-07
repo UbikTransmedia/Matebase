@@ -90,7 +90,12 @@ Course.topic('av-markov', function (p) {
   p.text('Lo que acabas de ver no es casualidad. En una cadena razonable, la distribución converge a un ' +
     'vector $\\vec{\\pi}$ que ya no cambia al aplicar otro paso:');
 
-  p.formula('\\vec{\\pi} \\cdot P = \\vec{\\pi}, \\qquad \\sum \\pi_i = 1', 'distribución estacionaria');
+  p.formula('\\vec{\\pi} \\cdot P = \\vec{\\pi}, \\qquad \\sum \\pi_i = 1', 'distribución estacionaria',
+    '$\\vec{\\pi}$ se dice «vector pi» y es la distribución estacionaria; $P$ es la matriz de ' +
+      'transición.<br><br>Se lee: <em>«vector pi por pe es igual a vector pi»</em>.<br><br>Lo que ' +
+      'significa esa igualdad es lo importante: es la distribución que, al aplicarle un paso más del ' +
+      'proceso, <strong>se queda igual</strong>. El sistema ha llegado a su régimen de largo plazo: ' +
+      'sigue habiendo movimiento entre estados, pero las proporciones ya no cambian.');
 
   p.note('Mira esa ecuación con los ojos del tema anterior: $\\vec{\\pi}$ es un <strong>autovector de ' +
     '$P$ con autovalor 1</strong>. Toda cadena de Markov tiene ese autovalor, y el resto tienen módulo ' +

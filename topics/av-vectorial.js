@@ -28,7 +28,13 @@ Course.topic('av-vectorial', function (p) {
   p.text('Juntando las dos en un vector sale el <strong>gradiente</strong>, que es probablemente el ' +
     'objeto más útil de todo este tema:');
 
-  p.formula('\\nabla f = \\left(\\frac{\\partial f}{\\partial x},\\ \\frac{\\partial f}{\\partial y}\\right)');
+  p.formula('\\nabla f = \\left(\\frac{\\partial f}{\\partial x},\\ \\frac{\\partial f}{\\partial y}\\right)', 'el gradiente',
+    'El triángulo invertido $\\nabla$ se llama «nabla» —por un arpa antigua con esa forma— y aquí se ' +
+      'lee «gradiente de».<br><br>La $\\partial$ es una de redondeada y se dice «derivada parcial»: ' +
+      '$\\frac{\\partial f}{\\partial x}$ es «derivada parcial de efe respecto de equis», y significa ' +
+      'derivar tratando a las demás variables como si fueran números fijos.<br><br>Entera: <em>«el ' +
+      'gradiente de efe es el vector formado por la derivada parcial de efe respecto de equis y la ' +
+      'derivada parcial de efe respecto de i griega»</em>.');
 
   p.note('El gradiente apunta siempre en la dirección de <strong>máxima pendiente hacia arriba</strong>, ' +
     'y su módulo es esa pendiente. Si estás en una ladera con niebla y quieres subir lo más rápido ' +
@@ -126,7 +132,12 @@ Course.topic('av-vectorial', function (p) {
   p.formulas([
     '\\operatorname{div}\\vec{F} = \\nabla\\cdot\\vec{F} = \\frac{\\partial F_1}{\\partial x} + \\frac{\\partial F_2}{\\partial y}',
     '\\operatorname{rot}\\vec{F} = \\nabla\\times\\vec{F}'
-  ]);
+  ], 'divergencia',
+    'Se lee: <em>«divergencia de efe es igual a nabla escalar efe»</em>, y el resultado es un número ' +
+      'en cada punto, no un vector.<br><br>Qué mide, en una imagen: si pusieras una cajita en ese ' +
+      'punto, la divergencia dice cuánto sale menos cuánto entra. Positiva significa que ahí hay una ' +
+      '<em>fuente</em> —un grifo, un foco de calor—; negativa, un <em>sumidero</em>, un desagüe. Cero ' +
+      'significa que todo lo que entra vuelve a salir.');
 
   p.list([
     'La <strong>divergencia</strong> es un número: mide cuánto «mana» el campo de cada punto. Positiva = fuente; negativa = sumidero; cero = incompresible.',
@@ -188,7 +199,13 @@ Course.topic('av-vectorial', function (p) {
     '\\int_a^b F\'(x)\\,dx = F(b) - F(a) \\quad \\text{(Barrow)}',
     '\\oint_C \\vec{F}\\cdot d\\vec{r} = \\iint_D \\operatorname{rot}\\vec{F}\\;dA \\quad \\text{(Green / Stokes)}',
     '\\oiint_S \\vec{F}\\cdot d\\vec{S} = \\iiint_V \\operatorname{div}\\vec{F}\\;dV \\quad \\text{(Gauss)}'
-  ]);
+  ], 'el patrón común de los grandes teoremas',
+    'Todos los teoremas integrales dicen lo mismo con distinto disfraz, y esta línea es la versión ' +
+      'más sencilla: la regla de Barrow.<br><br>Se lee: <em>«la integral entre a y be de efe prima de ' +
+      'equis, diferencial de equis, es igual a efe de be menos efe de a»</em>.<br><br>El patrón: ' +
+      '<strong>lo que ocurre dentro de una región queda determinado por lo que pasa en su ' +
+      'frontera</strong>. Aquí el interior es el intervalo y la frontera son sus dos extremos; en ' +
+      'Green y Stokes el interior es una superficie y la frontera, la curva que la rodea.');
 
   p.text('Barrow relaciona un intervalo con sus dos extremos; Stokes, una superficie con su borde; ' +
     'Gauss, un volumen con su superficie. Los tres son casos particulares de un único teorema general ' +

@@ -49,7 +49,13 @@ Course.topic('fn-integral-def', function (p) {
   });
 
   p.formula('\\int_a^b f(x)\\,dx = \\lim_{n\\to\\infty} \\sum_{i=1}^{n} f(x_i)\\,\\Delta x',
-    'definición como suma de Riemann');
+    'definición como suma de Riemann',
+    'Se dice: <em>«la integral, entre a y b, de efe de equis, diferencial de equis, es el límite ' +
+      'cuando ene tiende a infinito del sumatorio»</em>.<br><br>El signo $\\int$ es una ese alargada, ' +
+      'de «suma», y lo eligió Leibniz por eso. El $\\sum$ es la sigma griega y también significa ' +
+      '«suma», pero de una cantidad finita de términos.<br><br>La idea entera: <em>«parto el intervalo ' +
+      'en ene rectangulitos, sumo sus áreas, y miro a qué se acerca esa suma cuando los hago ' +
+      'infinitamente finos»</em>.');
 
   p.text('El símbolo $\\int$ es una «S» alargada de <em>summa</em>, y el $dx$ es la anchura ' +
     'infinitesimal de cada rectángulo. La notación, de Leibniz, describe literalmente lo que se está ' +

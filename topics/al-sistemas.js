@@ -83,7 +83,13 @@ Course.topic('al-sistemas', function (p) {
   p.sub('3. Reducción — casi siempre el más rápido');
   p.text('Multiplica las ecuaciones por números adecuados para que una incógnita tenga coeficientes ' +
     'opuestos, y súmalas: esa incógnita desaparece.');
-  p.formula('\\begin{aligned} 2x + y &= 7 \\\\ x - y &= 2 \\\\ \\hline 3x\\ \\ \\ \\ &= 9 \\ \\Rightarrow\\ x = 3 \\end{aligned}');
+  p.formula('\\begin{aligned} 2x + y &= 7 \\\\ x - y &= 2 \\\\ \\hline 3x\\ \\ \\ \\ &= 9 \\ \\Rightarrow\\ x = 3 \\end{aligned}', 'método de reducción',
+    'Las dos ecuaciones van una debajo de otra porque forman un sistema: hay que resolverlas a la vez, ' +
+    'no por separado. ' +
+      'la llave que las agrupa se sobreentiende.<br><br>La idea del método: multiplicar las ecuaciones ' +
+      'por lo que haga falta para que una incógnita tenga coeficientes opuestos, y entonces sumarlas ' +
+      'para que desaparezca. Es la balanza otra vez: si sumas dos igualdades verdaderas, obtienes otra ' +
+      'igualdad verdadera.');
 
   p.note('Aquí la $y$ se ha ido sola porque los coeficientes ya eran $+1$ y $-1$. Cuando no lo son, ' +
     'multiplica cada ecuación por lo que haga falta. Si no hay nada evidente, reducción sigue siendo ' +

@@ -24,7 +24,12 @@ Course.topic('pe-descriptiva', function (p) {
     '\\overline{x} = \\frac{\\sum x_i}{N} = \\frac{\\sum f_i\\,x_i}{N}',
     '\\text{mediana} = \\text{el valor que deja la mitad a cada lado}',
     '\\text{moda} = \\text{el valor que más se repite}'
-  ], 'media, mediana y moda');
+  ], 'media, mediana y moda',
+    'El símbolo $\\overline{x}$ se dice «equis barra» o «media de equis». El $\\sum$ es la sigma ' +
+      'griega mayúscula y se lee «sumatorio de» o, más llanamente, «suma de todos los».<br><br>Entera: ' +
+      '<em>«equis barra es igual a la suma de todos los equis sub i, partido por ene»</em>.<br><br>La ' +
+      '$i$ de $x_i$ es solo un contador: $x_1$ es el primer dato, $x_2$ el segundo, y así hasta el ' +
+      'último. No es una incógnita ni un número que haya que averiguar.');
 
   p.note('La media es sensible a los valores extremos y la mediana no. Si en una empresa de diez ' +
     'personas nueve cobran 1500 € y el jefe 50 000, la media dice 6350 € y la mediana dice 1500 €. ' +
@@ -46,7 +51,14 @@ Course.topic('pe-descriptiva', function (p) {
     '\\sigma^2 = \\frac{\\sum (x_i - \\overline{x})^2}{N} \\quad\\text{(varianza)}',
     '\\sigma = \\sqrt{\\sigma^2} \\quad\\text{(desviación típica)}',
     'CV = \\frac{\\sigma}{\\overline{x}} \\quad\\text{(coeficiente de variación)}'
-  ]);
+  ], 'varianza y desviación típica',
+    '$\\sigma$ es la letra griega sigma minúscula; $\\sigma^2$ se dice «sigma al cuadrado» y es la ' +
+      'varianza, y $\\sigma$ a secas es la desviación típica.<br><br>Se lee: <em>«sigma al cuadrado es ' +
+      'igual a la suma de los equis sub i menos equis barra, al cuadrado, partido por ' +
+      'ene»</em>.<br><br>Lo que hace, paso a paso: mide cuánto se aleja cada dato de la media, eleva ' +
+      'al cuadrado esas distancias para que las de un lado no cancelen a las del otro, y hace el ' +
+      'promedio. Como al elevar al cuadrado las unidades quedan raras —euros al cuadrado—, al final se ' +
+      'saca la raíz y se vuelve a euros: eso es la desviación típica.');
 
   p.text('La desviación típica se interpreta como «lo que se aleja un dato típico de la media». ' +
     'Está en las mismas unidades que los datos, y por eso es más legible que la varianza.');

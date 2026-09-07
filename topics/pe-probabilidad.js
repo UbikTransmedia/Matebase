@@ -99,7 +99,12 @@ Course.topic('pe-probabilidad', function (p) {
     '0 \\le P(A) \\le 1, \\qquad P(E) = 1, \\qquad P(\\emptyset) = 0',
     'P(\\overline{A}) = 1 - P(A)',
     'P(A \\cup B) = P(A) + P(B) - P(A\\cap B)'
-  ]);
+  ], 'las tres propiedades básicas',
+    'El símbolo $\\le$ se lee «menor o igual que», y $\\overline{A}$ se dice «A barra» o «contrario ' +
+      'de A».<br><br>Las tres dicen: <em>«toda probabilidad está entre cero y uno»</em> · <em>«la ' +
+      'probabilidad del suceso seguro es uno»</em> · <em>«la probabilidad del contrario de A es uno ' +
+      'menos la de A»</em>.<br><br>La tercera es la más rentable: si te cuesta calcular algo, calcula ' +
+      'lo contrario y réstalo de 1.');
 
   p.note('En la fórmula de la unión se resta la intersección porque, si no, los casos que están en ' +
     'los dos sucesos se contarían <strong>dos veces</strong>. Si los sucesos son incompatibles, esa ' +

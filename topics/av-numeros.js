@@ -11,7 +11,12 @@ Course.topic('av-numeros', function (p) {
     'exactamente lo que hace un reloj: si son las 10 y pasan 5 horas, no son las 15, son las 3. Estamos ' +
     'calculando módulo 12.');
 
-  p.formula('a \\equiv b \\pmod{n} \\iff n \\mid (a - b)', 'a y b dejan el mismo resto');
+  p.formula('a \\equiv b \\pmod{n} \\iff n \\mid (a - b)', 'a y b dejan el mismo resto',
+    'El signo $\\equiv$ con tres rayas se lee «es congruente con», y $\\pmod{n}$ se dice «módulo ' +
+      'ene». La barra $\\mid$ se lee «divide a».<br><br>Entera: <em>«a es congruente con b módulo ene ' +
+      'si y solo si ene divide a la diferencia a menos b»</em>.<br><br>En cristiano: <em>«a y b dejan ' +
+      'el mismo resto al dividir entre ene»</em>. Como en el reloj: las 15 y las 3 son congruentes ' +
+      'módulo 12, porque su diferencia, 12, es múltiplo de 12.');
 
   p.text('Lo asombroso es que las operaciones <strong>sobreviven</strong>: se puede sumar, restar y ' +
     'multiplicar en el mundo modular con toda libertad. El resto del resultado solo depende de los ' +
@@ -148,7 +153,12 @@ Course.topic('av-numeros', function (p) {
     'si un número enorme es primo, y explica por qué el sistema RSA descifra bien lo que ha cifrado.');
 
 
-  p.formula('a^{p-1} \\equiv 1 \\pmod{p} \\qquad (p \\text{ primo},\\ p \\nmid a)');
+  p.formula('a^{p-1} \\equiv 1 \\pmod{p} \\qquad (p \\text{ primo},\\ p \\nmid a)', 'pequeño teorema de Fermat',
+    'Se lee: <em>«a elevado a pe menos uno es congruente con uno módulo pe, siendo pe primo y a no ' +
+      'divisible por pe»</em>.<br><br>En cristiano: <em>«si elevas cualquier número a la potencia ' +
+      'primo menos uno y divides entre ese primo, el resto es siempre 1»</em>. Pruébalo con $p=7$ y ' +
+      '$a=2$: $2^6=64$, y 64 dividido entre 7 da 9 con resto 1.<br><br>Lo llamativo es que funciona ' +
+      'sea cual sea el $a$, y eso lo convierte en un test de primalidad.');
 
   p.text('Un resultado con aspecto inofensivo y consecuencias enormes: permite calcular potencias ' +
     'gigantescas módulo $p$ sin calcularlas, y es la base de los tests de primalidad rápidos que usan ' +

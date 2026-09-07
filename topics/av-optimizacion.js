@@ -12,7 +12,13 @@ Course.topic('av-optimizacion', function (p) {
     'Es decir, el gradiente se anula.');
 
   p.formula('\\nabla f(a,b) = \\vec{0} \\iff \\frac{\\partial f}{\\partial x} = 0 \\ \\text{ y } \\ \\frac{\\partial f}{\\partial y} = 0',
-    'condición necesaria: punto crítico');
+    'condición necesaria: punto crítico',
+    'El $\\iff$ es «si y solo si» y $\\vec{0}$ es «el vector cero», el que tiene todas sus ' +
+      'componentes nulas.<br><br>Se lee: <em>«el gradiente de efe en el punto a, be es el vector cero ' +
+      'si y solo si la derivada parcial respecto de equis y la derivada parcial respecto de i griega ' +
+      'valen las dos cero»</em>.<br><br>Es la versión con dos variables de «la derivada se anula»: en ' +
+      'un máximo o un mínimo el terreno está llano <strong>en todas las direcciones a la vez</strong>, ' +
+      'no solo en una.');
 
   p.text('Pero, igual que en una variable, que el gradiente se anule no basta. Aquí hay ' +
     '<strong>tres</strong> posibilidades en vez de dos, y la nueva es la interesante:');
@@ -33,7 +39,12 @@ Course.topic('av-optimizacion', function (p) {
     'cualquiera y se <strong>baja</strong>. ¿Hacia dónde? Hacia donde más se baja, que es justo la ' +
     'dirección contraria al gradiente.');
 
-  p.formula('\\vec{x}_{n+1} = \\vec{x}_n - \\eta\\,\\nabla f(\\vec{x}_n)', 'descenso de gradiente');
+  p.formula('\\vec{x}_{n+1} = \\vec{x}_n - \\eta\\,\\nabla f(\\vec{x}_n)', 'descenso de gradiente',
+    'La letra $\\eta$ es la eta griega y aquí se lee «tasa de aprendizaje»: es lo largo que das cada ' +
+      'paso.<br><br>Se dice: <em>«equis sub ene más uno es igual a equis sub ene menos eta por el ' +
+      'gradiente de efe evaluado en equis sub ene»</em>.<br><br>Traducido: <em>«mi próxima posición es ' +
+      'la actual, dando un paso de tamaño eta en sentido contrario al gradiente»</em>. En sentido ' +
+      'contrario porque el gradiente apunta hacia donde <em>sube</em>, y aquí queremos bajar.');
 
   p.text('El número $\\eta$ es la <strong>tasa de aprendizaje</strong>: el tamaño del paso. Y elegirla ' +
     'bien es todo el arte del método.');

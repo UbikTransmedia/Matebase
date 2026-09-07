@@ -5,7 +5,11 @@ Course.topic('fn-limites', function (p) {
     'que describe el cambio. Todo se apoya en una sola idea: qué le pasa a una función cuando su ' +
     'entrada <em>se acerca</em> a un valor, sin llegar nunca a él.');
 
-  p.formula('\\lim_{x \\to a} f(x) = L', 'se lee: el límite de f(x) cuando x tiende a a es L');
+  p.formula('\\lim_{x \\to a} f(x) = L', 'se lee: el límite de f(x) cuando x tiende a a es L',
+    'Se dice: <em>«el límite, cuando equis tiende a a, de efe de equis, es ele»</em>.<br><br>La ' +
+      'flecha $\\to$ se lee «tiende a», que no es lo mismo que «es igual a»: significa «se acerca todo ' +
+      'lo que quieras sin necesidad de llegar». Y esa es justo la gracia del límite: puede existir ' +
+      'aunque la función ni siquiera esté definida en ese punto.');
 
   p.text('Significa: <em>puedo conseguir que $f(x)$ esté tan cerca de $L$ como quiera, sin más que ' +
     'coger $x$ suficientemente cerca de $a$</em>. Fíjate en que no se dice nada de $f(a)$. El límite ' +
@@ -64,7 +68,13 @@ Course.topic('fn-limites', function (p) {
   p.text('Uno se puede acercar a $a$ por la izquierda ($x \\to a^-$) o por la derecha ($x \\to a^+$). ' +
     'El límite existe <strong>solo si los dos coinciden</strong>.');
 
-  p.formula('\\lim_{x\\to a} f(x) = L \\iff \\lim_{x\\to a^-} f(x) = \\lim_{x\\to a^+} f(x) = L');
+  p.formula('\\lim_{x\\to a} f(x) = L \\iff \\lim_{x\\to a^-} f(x) = \\lim_{x\\to a^+} f(x) = L', 'el límite existe si coinciden los dos laterales',
+    'El signo $\\iff$ se lee «si y solo si», es decir, «una cosa ocurre exactamente cuando ocurre la ' +
+      'otra».<br><br>Los signos pequeñitos junto a la $a$ marcan por dónde te acercas: $a^-$ se dice ' +
+      '«a por la izquierda» y $a^+$, «a por la derecha».<br><br>Entera: <em>«el límite de efe cuando ' +
+      'equis tiende a a es ele si y solo si el límite por la izquierda y el límite por la derecha ' +
+      'valen los dos ele»</em>. En cristiano: <em>«llegando por los dos lados hay que aterrizar en el ' +
+      'mismo sitio»</em>.');
 
   p.text('Si no coinciden, la función pega un salto y el límite no existe. Es lo que pasa, por ' +
     'ejemplo, con las tarifas por tramos o con la función parte entera.');
@@ -143,7 +153,13 @@ Course.topic('fn-limites', function (p) {
 
   p.text('Una función es <strong>continua</strong> en $a$ cuando se cumplen tres cosas a la vez:');
 
-  p.formula('\\lim_{x\\to a} f(x) = f(a)', 'definición de continuidad en un punto');
+  p.formula('\\lim_{x\\to a} f(x) = f(a)', 'definición de continuidad en un punto',
+    'Se lee: <em>«el límite, cuando equis tiende a a, de efe de equis, es igual a efe de ' +
+      'a»</em>.<br><br>Y es más profunda de lo que parece, porque exige tres cosas a la vez: que la ' +
+      'función <em>exista</em> en el punto, que el límite <em>exista</em>, y que además ' +
+      '<strong>coincidan</strong>. Si falla cualquiera de las tres, hay discontinuidad.<br><br>En ' +
+      'cristiano: <em>«a dónde se dirige la función y dónde está realmente son el mismo sitio»</em>. ' +
+      'Es decir, se puede dibujar sin levantar el lápiz.');
 
   p.list([
     '$f(a)$ existe (el punto está en el dominio),',

@@ -25,7 +25,12 @@ Course.topic('av-grafos', function (p) {
     '<strong>Árbol</strong>: grafo conexo sin ciclos. Siempre tiene exactamente $V-1$ aristas.'
   ]);
 
-  p.formula('\\sum_{v} \\operatorname{grado}(v) = 2A', 'lema del apretón de manos');
+  p.formula('\\sum_{v} \\operatorname{grado}(v) = 2A', 'lema del apretón de manos',
+    'Se lee: <em>«el sumatorio, extendido a todos los vértices uve, del grado de uve, es igual a dos ' +
+      'por el número de aristas»</em>.<br><br>La razón es la que le da nombre: cada arista une dos ' +
+      'vértices, así que al ir sumando los grados de todos, cada arista se cuenta exactamente dos ' +
+      'veces. Igual que en una reunión, si todos cuentan cuántas manos han estrechado, el total es el ' +
+      'doble de apretones que hubo.');
 
   p.note('Esa fórmula tiene una lectura graciosa: si en una fiesta se cuentan todos los apretones de ' +
     'manos que ha dado cada persona, el total es el doble del número de apretones, porque en cada uno ' +

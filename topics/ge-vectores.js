@@ -8,7 +8,12 @@ Course.topic('ge-vectores', function (p) {
   p.text('Un vector tiene tres cosas: <strong>módulo</strong> (su longitud), <strong>dirección</strong> ' +
     '(la recta sobre la que va) y <strong>sentido</strong> (hacia dónde apunta de los dos posibles).');
 
-  p.formula('\\vec{v} = (v_1, v_2) \\qquad |\\vec{v}| = \\sqrt{v_1^2 + v_2^2}', 'componentes y módulo');
+  p.formula('\\vec{v} = (v_1, v_2) \\qquad |\\vec{v}| = \\sqrt{v_1^2 + v_2^2}', 'componentes y módulo',
+    'La flechita de encima se lee «vector»: $\\vec{v}$ es «vector uve». Las dos barras verticales, ' +
+      '$|\\vec{v}|$, se dicen «módulo de uve», que es su longitud.<br><br>Se lee: <em>«vector uve es ' +
+      'igual al par uve sub uno, uve sub dos; y el módulo de uve es la raíz cuadrada de uve sub uno al ' +
+      'cuadrado más uve sub dos al cuadrado»</em>.<br><br>La fórmula del módulo no es nueva: es el ' +
+      'teorema de Pitágoras, con las componentes del vector haciendo de catetos.');
 
   p.note('El módulo es Pitágoras otra vez: las componentes son los catetos y el vector, la hipotenusa.',
     'ok');

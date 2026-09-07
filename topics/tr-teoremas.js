@@ -114,7 +114,11 @@ Course.topic('tr-teoremas', function (p) {
   p.formulas([
     'S = \\frac{1}{2}\\,b\\,c\\,\\operatorname{sen} A',
     's = \\frac{a+b+c}{2}, \\qquad S = \\sqrt{s(s-a)(s-b)(s-c)}'
-  ], 'con dos lados y el ángulo · fórmula de Herón, solo con los lados');
+  ], 'con dos lados y el ángulo · fórmula de Herón, solo con los lados',
+    'Se lee: <em>«ese es igual a un medio por be por ce por seno de alfa»</em>, donde $\\alpha$ es ' +
+      'el ángulo que forman los lados $b$ y $c$.<br><br>De dónde sale: en la fórmula de siempre, base ' +
+      'por altura entre dos, la altura vale $c\\operatorname{sen}\\alpha$. Sustituyendo, aparece esta. ' +
+      'No hay que aprenderla aparte: es la de siempre con la altura despejada.');
 
   p.text('La primera es la de siempre ($\\frac{base \\times altura}{2}$) con la altura escrita como ' +
     '$c\\operatorname{sen}A$. La segunda, de Herón de Alejandría (siglo I), es asombrosa: da el área ' +

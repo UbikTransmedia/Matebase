@@ -62,7 +62,12 @@ Course.topic('fn-exp-log', function (p) {
   p.text('Entre todas las bases posibles hay una especial. Aparece al preguntarse qué pasa si un ' +
     'interés del 100 % anual se reparte en infinitos plazos infinitamente pequeños:');
 
-  p.formula('e = \\lim_{n\\to\\infty}\\left(1 + \\frac{1}{n}\\right)^n \\approx 2{,}718281828\\dots');
+  p.formula('e = \\lim_{n\\to\\infty}\\left(1 + \\frac{1}{n}\\right)^n \\approx 2{,}718281828\\dots', 'el número e',
+    'Se dice: <em>«e es igual al límite, cuando ene tiende a infinito, de uno más uno partido por ' +
+      'ene, todo elevado a ene»</em>.<br><br>El símbolo $\\infty$ se llama «infinito» y aquí significa ' +
+      '«según ene se hace tan grande como quieras».<br><br>Lo que describe es el problema de ' +
+      'Bernoulli: repartir el interés en ene plazos cada vez más cortos. Con $n=1$ sale 2; con $n=12$, ' +
+      'unos 2,61; con $n=1\\,000\\,000$, 2,71828… y ahí se queda.');
 
   p.text('El resultado no se dispara al infinito: converge a $e$. Esta base es la «natural» porque ' +
     'la función $e^x$ tiene una propiedad única que verás en derivadas: <strong>es su propia ' +
@@ -114,7 +119,12 @@ Course.topic('fn-exp-log', function (p) {
   p.text('Es la <strong>inversa</strong> de la exponencial: deshace lo que aquella hace. Su gráfica es ' +
     'la de la exponencial reflejada en la recta $y = x$.');
 
-  p.formula('f(x) = \\log_a x \\qquad \\operatorname{Dom} f = (0, +\\infty)');
+  p.formula('f(x) = \\log_a x \\qquad \\operatorname{Dom} f = (0, +\\infty)', 'la función logarítmica',
+    '$\\log_a x$ se dice «logaritmo en base a de equis», y $\\operatorname{Dom}$ es ' +
+      '«dominio».<br><br>Lo que hay que retener del dominio: <strong>solo se puede tomar logaritmo de ' +
+      'números positivos</strong>. La razón es que el logaritmo pregunta «¿a qué exponente elevo la ' +
+      'base para obtener esto?», y una base positiva elevada a lo que sea nunca da cero ni un número ' +
+      'negativo. Por eso $\\log 0$ y $\\log(-5)$ no existen.');
 
   p.list([
     'Solo existe para $x > 0$: no hay logaritmo de números negativos ni de cero.',

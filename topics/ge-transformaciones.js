@@ -79,7 +79,12 @@ Course.topic('ge-transformaciones', function (p) {
     '\\text{simetría respecto al eje } X:\\quad (x,y)\\mapsto(x,\\ -y)',
     '\\text{simetría central en el origen:}\\quad (x,y)\\mapsto(-x,\\ -y)',
     '\\text{giro de ángulo }\\alpha\\text{ en el origen:}\\quad (x,y)\\mapsto(x\\cos\\alpha - y\\operatorname{sen}\\alpha,\\ x\\operatorname{sen}\\alpha + y\\cos\\alpha)'
-  ]);
+  ], 'las tres transformaciones en coordenadas',
+    'Todas responden a la misma pregunta: si el punto estaba en $(x,y)$, ¿dónde acaba?<br><br>La ' +
+      'traslación se lee <em>«equis prima igual a equis más a, i griega prima igual a i griega más ' +
+      'be»</em>: sumar el vector desplaza sin más. El apóstrofo se dice «prima» y solo sirve para ' +
+      'distinguir el punto nuevo del viejo.<br><br>El giro mezcla senos y cosenos porque rotar es ' +
+      'exactamente lo que hace la trigonometría en la circunferencia.');
 
   p.note('Esa última fórmula del giro es exactamente lo que hace la matriz $\\begin{pmatrix}\\cos\\alpha & -\\operatorname{sen}\\alpha \\\\ \\operatorname{sen}\\alpha & \\cos\\alpha\\end{pmatrix}$ ' +
     'al multiplicar por el vector $(x,y)$. Toda transformación lineal del plano <em>es</em> una matriz: ' +

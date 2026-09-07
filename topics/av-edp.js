@@ -128,7 +128,13 @@ Course.topic('av-edp', function (p) {
     'que basta con escribir el perfil inicial como <strong>suma de senos</strong>, y dejar que cada uno ' +
     'evolucione por su cuenta:');
 
-  p.formula('u(x,t) = \\sum_{n=1}^{\\infty} b_n \\operatorname{sen}\\left(\\frac{n\\pi x}{L}\\right) e^{-k(n\\pi/L)^2 t}');
+  p.formula('u(x,t) = \\sum_{n=1}^{\\infty} b_n \\operatorname{sen}\\left(\\frac{n\\pi x}{L}\\right) e^{-k(n\\pi/L)^2 t}', 'solución de la ecuación del calor',
+    'Se lee: <em>«u de equis, te es igual al sumatorio, desde ene igual a uno hasta infinito, de be ' +
+      'sub ene por seno de ene pi equis partido por ele, por e elevado a menos lambda sub ene por ka ' +
+      'por te»</em>.<br><br>Lo que hay que ver, sin pelearse con los símbolos: cada término tiene una ' +
+      'parte que dibuja una <em>forma</em> —el seno— y una parte que la va <em>apagando</em> con el ' +
+      'tiempo —la exponencial negativa—. Y como las ondulaciones más rápidas se apagan antes, ' +
+      'cualquier distribución de calor acaba pareciéndose a la más suave. Por eso el calor iguala.');
 
   p.note('<strong>Ese es exactamente el problema que llevó a Fourier a inventar sus series en 1807.</strong> ' +
     'No se preguntó por capricho si toda función es suma de senos: lo <em>necesitaba</em> para resolver ' +

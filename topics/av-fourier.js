@@ -10,12 +10,24 @@ Course.topic('av-fourier', function (p) {
     'pero solo senos y cosenos.', 'ok', 'El teorema de Fourier');
 
   p.formula('f(x) = \\frac{a_0}{2} + \\sum_{n=1}^{\\infty}\\left[a_n\\cos(nx) + b_n\\operatorname{sen}(nx)\\right]',
-    'serie de Fourier');
+    'serie de Fourier',
+    'El $\\sum_{n=1}^{\\infty}$ se lee «sumatorio, desde ene igual a uno hasta infinito»: significa ' +
+      'sumar infinitos términos, uno por cada valor de ene.<br><br>Entera: <em>«efe de equis es igual ' +
+      'a a cero partido por dos, más el sumatorio de a sub ene por coseno de ene equis, más be sub ene ' +
+      'por seno de ene equis»</em>.<br><br>Lo que dice, en una frase: <strong>cualquier función ' +
+      'periódica se puede construir sumando senos y cosenos</strong>. El $a_0/2$ es la altura media, y ' +
+      'cada término añade una ondulación más rápida que la anterior.');
 
   p.formulas([
     'a_n = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} f(x)\\cos(nx)\\,dx',
     'b_n = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} f(x)\\operatorname{sen}(nx)\\,dx'
-  ], 'los coeficientes');
+  ], 'los coeficientes',
+    'Se lee: <em>«a sub ene es uno partido por pi, por la integral entre menos pi y pi, de efe de ' +
+      'equis por coseno de ene equis, diferencial de equis»</em>.<br><br>Qué está haciendo esa ' +
+      'integral, en una imagen: es un <strong>detector de sintonía</strong>. Multiplica la señal por ' +
+      'el coseno de la frecuencia que buscas y suma; si esa frecuencia está presente, los productos se ' +
+      'refuerzan y la suma sale grande; si no está, se cancelan y sale casi cero. Es exactamente lo ' +
+      'que hace el dial de una radio.');
 
   p.text('Esas integrales tienen una interpretación preciosa: miden <strong>cuánto se parece</strong> ' +
     '$f$ a cada onda pura. Es como preguntarle a la señal «¿cuánto hay de esta frecuencia dentro de ' +

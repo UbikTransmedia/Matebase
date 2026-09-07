@@ -9,7 +9,12 @@ Course.topic('ge-rectas', function (p) {
     '<strong>vector director</strong> $\\vec{v}=(v_1,v_2)$ que marca su dirección. Con eso, cualquier ' +
     'punto de la recta se alcanza avanzando desde $P$ un múltiplo de $\\vec{v}$.');
 
-  p.formula('(x,y) = (p_1,p_2) + t\\,(v_1,v_2), \\quad t \\in \\mathbb{R}', 'ecuación vectorial');
+  p.formula('(x,y) = (p_1,p_2) + t\\,(v_1,v_2), \\quad t \\in \\mathbb{R}', 'ecuación vectorial',
+    'Se lee: <em>«el punto equis, i griega es igual al punto pe uno, pe dos más te por el vector uve ' +
+      'uno, uve dos, con te perteneciente a los reales»</em>.<br><br>Cómo pensarla: $(p_1,p_2)$ es ' +
+      'dónde empiezas y $\\vec{v}$ es hacia dónde vas. La $t$ es cuánto avanzas: con $t=0$ estás en el ' +
+      'punto de partida, con $t=1$ has recorrido el vector entero, y con $t$ negativa vas hacia atrás. ' +
+      'Por eso es la forma que usa un robot: dice dónde está en cada instante.');
 
   p.demo({
     title: 'Recorrer una recta con el parámetro',

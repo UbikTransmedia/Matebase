@@ -5,7 +5,12 @@ Course.topic('al-inecuaciones', function (p) {
     'signo igual. Y eso cambia la naturaleza de la respuesta: ya no es un número, es un ' +
     '<strong>tramo entero de la recta</strong>.');
 
-  p.formula('2x - 6 > 0 \\quad\\longrightarrow\\quad x > 3 \\quad\\longrightarrow\\quad x \\in (3, +\\infty)');
+  p.formula('2x - 6 > 0 \\quad\\longrightarrow\\quad x > 3 \\quad\\longrightarrow\\quad x \\in (3, +\\infty)', 'resolver una inecuación de primer grado',
+    'Se lee: <em>«dos equis menos seis mayor que cero, luego equis mayor que tres»</em>.<br><br>Los ' +
+      'signos: $>$ «mayor que», $<$ «menor que», $\\ge$ «mayor o igual», $\\le$ «menor o ' +
+      'igual».<br><br>La regla que hay que tener siempre presente: se opera igual que en una ecuación, ' +
+      '<strong>salvo que al multiplicar o dividir por un número negativo hay que dar la vuelta al ' +
+      'signo</strong>. Compruébalo: $2<3$ es cierto, pero al multiplicar por $-1$ queda $-2>-3$.');
 
   p.text('Se resuelven casi igual que las ecuaciones: se transponen términos hasta dejar la ' +
     'incógnita sola. Con <em>una</em> excepción, y es la única cosa importante de este tema.');

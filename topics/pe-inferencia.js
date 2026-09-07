@@ -41,7 +41,12 @@ Course.topic('pe-inferencia', function (p) {
     'población de partida (teorema central del límite).');
 
   p.formula('\\overline{X} \\sim N\\left(\\mu,\\ \\frac{\\sigma}{\\sqrt{n}}\\right)',
-    'distribución de la media muestral');
+    'distribución de la media muestral',
+    'El símbolo $\\sim$ se lee «sigue una distribución» o «se distribuye como». La $\\mu$ es la mu ' +
+      'griega, la media de la población, y $\\sigma$ la sigma, su desviación típica.<br><br>Se dice: ' +
+      '<em>«equis barra sigue una normal de media mu y desviación típica sigma partido por raíz de ' +
+      'ene»</em>.<br><br>La consecuencia práctica está en esa raíz: para reducir el error a la mitad ' +
+      'hay que cuadruplicar la muestra, no duplicarla.');
 
   p.note('El $\\sqrt{n}$ del denominador es la clave de toda la estadística aplicada. Dice que para ' +
     '<strong>reducir el error a la mitad hay que cuadruplicar la muestra</strong>. Por eso las ' +
@@ -110,7 +115,13 @@ Course.topic('pe-inferencia', function (p) {
     'un <strong>intervalo</strong> y un <strong>nivel de confianza</strong>.');
 
   p.formula('IC = \\left(\\overline{x} - z_{\\alpha/2}\\frac{\\sigma}{\\sqrt{n}},\\ \\ \\overline{x} + z_{\\alpha/2}\\frac{\\sigma}{\\sqrt{n}}\\right)',
-    'intervalo de confianza para la media');
+    'intervalo de confianza para la media',
+    '$IC$ es «intervalo de confianza». El $z_{\\alpha/2}$ se dice «zeta sub alfa medios» y es el ' +
+      'número que sale de la tabla según la confianza que pidas: 1,96 para el 95 %, que es el valor ' +
+      'que verás mil veces.<br><br>Se lee: <em>«intervalo de confianza igual a: equis barra menos zeta ' +
+      'sub alfa medios por sigma partido por raíz de ene, coma, equis barra más lo ' +
+      'mismo»</em>.<br><br>Es decir: <strong>el centro es la media de la muestra y a los lados se abre ' +
+      'un margen</strong>. Ese margen es el «±3 puntos» que dan las encuestas.');
 
   p.table(['Nivel de confianza', '$\\alpha$', '$z_{\\alpha/2}$'],
     [['90 %', '0,10', '1,645'],

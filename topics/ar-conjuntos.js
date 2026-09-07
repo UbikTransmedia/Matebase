@@ -13,7 +13,14 @@ Course.topic('ar-conjuntos', function (p) {
      ['Reales', '$\\mathbb{R}$', 'para llenar la recta sin huecos', 'todos los anteriores']]);
 
   p.formula('\\mathbb{N} \\subset \\mathbb{Z} \\subset \\mathbb{Q} \\subset \\mathbb{R}',
-    'cada uno contiene al anterior');
+    'cada uno contiene al anterior',
+    'Las letras huecas son los nombres de los conjuntos de números y se dicen por su letra: ' +
+      '$\\mathbb{N}$ «ene», los naturales · $\\mathbb{Z}$ «zeta», los enteros, de <em>Zahl</em>, ' +
+      'número en alemán · $\\mathbb{Q}$ «cu», los racionales, de <em>quotient</em> · $\\mathbb{R}$ ' +
+      '«erre», los reales.<br><br>El símbolo $\\subset$ se lee «está contenido en» o «es subconjunto ' +
+      'de».<br><br>Entera: <em>«los naturales están contenidos en los enteros, que están contenidos en ' +
+      'los racionales, que están contenidos en los reales»</em>. Es decir, cada conjunto amplía al ' +
+      'anterior sin perder nada.');
 
   p.note('Un número es <strong>racional</strong> si se puede escribir como fracción de enteros. ' +
     'Equivale a decir que su expresión decimal es exacta o periódica. Es <strong>irracional</strong> ' +

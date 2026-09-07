@@ -61,7 +61,12 @@ Course.topic('lg-demostracion', function (p) {
   p.text('Se supone $p$ y se razona hasta llegar a $q$. Es el camino natural.');
 
   p.formula('\\begin{aligned} &n \\text{ par} \\Rightarrow n = 2k \\\\ &n^2 = 4k^2 = 2(2k^2) \\\\ &\\Rightarrow n^2 \\text{ es par} \\end{aligned}',
-    'si n es par, n² es par');
+    'si n es par, n² es par',
+    'La flecha $\\Rightarrow$ se lee «implica» o «entonces». Cada línea es un paso, y cada paso ' +
+      'tiene que seguirse del anterior sin hacer trampa.<br><br>Se lee, encadenando: <em>«ene par ' +
+      'implica que ene es dos ka, implica que ene al cuadrado es cuatro ka al cuadrado, implica que ' +
+      'ene al cuadrado es par»</em>.<br><br>Eso es una demostración directa: partir de la hipótesis y ' +
+      'llegar a la conclusión por una cadena de implicaciones, sin saltos.');
 
   p.sub('2. Por contrarrecíproco');
 

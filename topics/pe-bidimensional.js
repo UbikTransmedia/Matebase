@@ -74,7 +74,14 @@ Course.topic('pe-bidimensional', function (p) {
   p.formulas([
     '\\sigma_{xy} = \\frac{\\sum (x_i - \\overline{x})(y_i - \\overline{y})}{N}',
     'r = \\frac{\\sigma_{xy}}{\\sigma_x\\,\\sigma_y}'
-  ], 'covarianza y coeficiente de correlación de Pearson');
+  ], 'covarianza y coeficiente de correlación de Pearson',
+    '$\\sigma_{xy}$ se dice «sigma sub equis i griega» y es la covarianza; $r$ a secas es el ' +
+      'coeficiente de correlación.<br><br>Se leen: <em>«sigma equis i griega es la suma de los ' +
+      'productos de equis sub i menos equis barra por i griega sub i menos i griega barra, partido por ' +
+      'ene»</em> y <em>«erre es sigma equis i griega partido por sigma de equis por sigma de i ' +
+      'griega»</em>.<br><br>Lo que hace el numerador: multiplica lo que se desvía cada dato en una ' +
+      'variable por lo que se desvía en la otra. Si suelen desviarse hacia el mismo lado, los ' +
+      'productos salen positivos y la suma es grande.');
 
   p.table(['Valor de r', 'Significa'],
     [['$r = 1$', 'todos los puntos en una recta creciente'],

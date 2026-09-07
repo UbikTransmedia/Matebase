@@ -5,7 +5,11 @@ Course.topic('ge-espacio', function (p) {
     '$(x,y,z)$, un vector tiene tres componentes y el módulo sigue siendo Pitágoras, ahora aplicado ' +
     'dos veces.');
 
-  p.formula('|\\vec{v}| = \\sqrt{v_1^2 + v_2^2 + v_3^2}');
+  p.formula('|\\vec{v}| = \\sqrt{v_1^2 + v_2^2 + v_3^2}', 'módulo de un vector en el espacio',
+    'Se lee: <em>«el módulo del vector uve es la raíz cuadrada de uve uno al cuadrado más uve dos al ' +
+      'cuadrado más uve tres al cuadrado»</em>.<br><br>Es la misma fórmula del plano con un sumando ' +
+      'más. Y es otra vez Pitágoras: aplicado dos veces seguidas, primero en la base y luego en ' +
+      'altura.');
 
   p.text('El producto escalar también funciona igual, sumando un término más, y sigue valiendo cero ' +
     'exactamente cuando los vectores son perpendiculares.');
@@ -19,7 +23,13 @@ Course.topic('ge-espacio', function (p) {
     'vectores y devuelve <strong>otro vector</strong>, perpendicular a los dos.');
 
   p.formula('\\vec{u}\\times\\vec{v} = \\begin{vmatrix} \\vec{i} & \\vec{j} & \\vec{k} \\\\ u_1 & u_2 & u_3 \\\\ v_1 & v_2 & v_3 \\end{vmatrix}',
-    'se calcula como un determinante');
+    'se calcula como un determinante',
+    'El aspa $\\times$ entre dos vectores no es una multiplicación normal: se lee «producto ' +
+      'vectorial», y a diferencia del escalar, el resultado <strong>es un vector</strong>.<br><br>Las ' +
+      'barras verticales grandes con la tabla dentro se leen «determinante de».<br><br>Los símbolos ' +
+      '$\\vec{\\imath}$, $\\vec{\\jmath}$, $\\vec{k}$ se dicen «i, jota, ka» y son los vectores que ' +
+      'apuntan en las tres direcciones de los ejes. Poner el determinante con ellos en la primera fila ' +
+      'es solo una regla nemotécnica para no olvidar ningún término.');
 
   p.formula('\\vec{u}\\times\\vec{v} = (u_2v_3 - u_3v_2,\\ u_3v_1 - u_1v_3,\\ u_1v_2 - u_2v_1)', 'desarrollado');
 
@@ -40,7 +50,13 @@ Course.topic('ge-espacio', function (p) {
     'Merece la pena fijarse en lo que ocurre cuando esa caja se aplasta del todo.');
 
 
-  p.formula('[\\vec{u},\\vec{v},\\vec{w}] = \\vec{u}\\cdot(\\vec{v}\\times\\vec{w}) = \\begin{vmatrix} u_1 & u_2 & u_3 \\\\ v_1 & v_2 & v_3 \\\\ w_1 & w_2 & w_3\\end{vmatrix}');
+  p.formula('[\\vec{u},\\vec{v},\\vec{w}] = \\vec{u}\\cdot(\\vec{v}\\times\\vec{w}) = \\begin{vmatrix} u_1 & u_2 & u_3 \\\\ v_1 & v_2 & v_3 \\\\ w_1 & w_2 & w_3\\end{vmatrix}', 'producto mixto',
+    'Los corchetes $[\\vec{u},\\vec{v},\\vec{w}]$ se leen «producto mixto de u, v y w».<br><br>Se ' +
+      'dice: <em>«producto mixto de u, v, w es igual a u escalar v vectorial w»</em>: primero el ' +
+      'producto vectorial de los dos últimos, y el resultado se multiplica escalarmente por el ' +
+      'primero.<br><br>El resultado es un número, no un vector, y ese número es el volumen de la caja ' +
+      'que forman los tres. Si sale cero, la caja no tiene grosor: los tres vectores caben en un ' +
+      'plano.');
 
   p.text('Su valor absoluto es el <strong>volumen</strong> del paralelepípedo que forman los tres ' +
     'vectores. Y si vale cero, los tres son coplanarios: están en el mismo plano.');
