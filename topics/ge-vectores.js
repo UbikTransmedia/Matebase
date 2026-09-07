@@ -121,6 +121,7 @@ Course.topic('ge-vectores', function (p) {
     '<strong>negativo</strong> si apuntan en sentidos opuestos. Solo con el signo ya sabes en qué ' +
     'situación estás, sin calcular ningún ángulo.');
 
+  p.sub('Las dos fórmulas');
   p.text('Y ahora las fórmulas, que son dos y dan lo mismo. La primera es la que se usa para calcular, ' +
     'porque solo pide las coordenadas; la segunda es la que se usa para <em>entender</em>, porque ' +
     'enseña el ángulo. Igualarlas es lo que permite despejar ese ángulo, y de ahí sale la tercera línea.');
