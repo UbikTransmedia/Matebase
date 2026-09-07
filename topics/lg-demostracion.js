@@ -93,6 +93,12 @@ Course.topic('lg-demostracion', function (p) {
     'lo primero que hay que hacer ante una conjetura es intentar romperla.', 'ok');
 
   /* ---------------------------------------------------------------- */
+  p.util('La reducción al absurdo es cómo se depura un programa o se localiza una avería: <em>«supongamos ' +
+    'que el fallo está en la red»</em>; si de ahí se sigue algo que no cuadra con lo que ves, el ' +
+    'fallo no está en la red. Y la contrarrecíproca es el arte del que prueba: en lugar de comprobar ' +
+    'que todo lo bueno pasa, busca que ningún caso malo se cuele, que es la misma afirmación mirada ' +
+    'del revés.');
+
   p.section('El principio de inducción');
 
   p.text('¿Cómo se demuestra algo para <em>infinitos</em> casos? No comprobándolos uno a uno, ' +
@@ -197,6 +203,13 @@ Course.topic('lg-demostracion', function (p) {
     'Dónde se falla');
 
   /* ================= EJERCICIOS ================= */
+  p.util('La inducción es la recursión de los programadores puesta por escrito: un caso base y una regla ' +
+    'que reduce el problema al anterior. Y es lo que permite fiarse de un programa que nadie puede ' +
+    'probar entero: el metro automático de la línea 14 de París o el software de vuelo de Airbus no ' +
+    'se validan probando todos los casos —son infinitos—, sino <strong>demostrando</strong> que la ' +
+    'propiedad se conserva paso a paso. Un test encuentra errores; una demostración por inducción ' +
+    'garantiza que no los hay.');
+
   p.section('Practica');
 
   p.exercise({

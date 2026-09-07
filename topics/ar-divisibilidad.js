@@ -30,6 +30,11 @@ Course.topic('ar-divisibilidad', function (p) {
     null, 'Por qué funciona');
 
   /* ---------------------------------------------------------------- */
+  p.util('Los dígitos de control funcionan así. La letra de tu DNI es el resto de dividir el número entre ' +
+    '23; el código de una cuenta IBAN se valida con un resto entre 97; el último dígito del código ' +
+    'de barras de cualquier producto y el de un ISBN son la misma idea. Sirven para que un número ' +
+    'mal tecleado se detecte <em>antes</em> de hacer la transferencia, en lugar de después.');
+
   p.section('Números primos');
 
   p.text('Un número es <strong>primo</strong> si tiene exactamente dos divisores: $1$ y él mismo. ' +
@@ -121,6 +126,13 @@ Course.topic('ar-divisibilidad', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('La seguridad de internet se apoya en un desequilibrio de estos números: multiplicar dos primos ' +
+    'enormes es instantáneo, y deshacer esa multiplicación —factorizar el resultado— no lo sabe ' +
+    'hacer nadie en un tiempo razonable. Cada vez que aparece el candado en el navegador, hay primos ' +
+    'de cientos de cifras trabajando. Que no se conozca un método rápido de factorizar no está ' +
+    'demostrado que sea imposible: es, literalmente, el supuesto sobre el que descansa el comercio ' +
+    'electrónico.');
+
   p.section('Descomposición en factores primos');
 
   p.text('Todo número mayor que 1 se puede escribir como producto de primos <strong>de una única ' +
@@ -184,6 +196,12 @@ Course.topic('ar-divisibilidad', function (p) {
     'volver a encontrarse</em>, es m.c.m.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('El mínimo común múltiplo es la respuesta a «¿cuándo volverá a coincidir?»: dos autobuses que ' +
+    'salen cada 12 y cada 18 minutos vuelven a coincidir a los 36; dos engranajes de 8 y 12 dientes ' +
+    'repiten posición cada 24 dientes, y los relojeros eligen números primos entre sí para que un ' +
+    'mismo par de dientes no se encuentre siempre y el desgaste se reparta. El máximo común divisor ' +
+    'es la otra cara: el trozo más grande con el que se puede embaldosar sin cortar.');
+
   p.section('Practica');
 
   p.exercise({

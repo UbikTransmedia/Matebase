@@ -43,6 +43,12 @@ Course.topic('ar-conjuntos', function (p) {
   ], true);
 
   /* ---------------------------------------------------------------- */
+  p.util('Tienes un número irracional en el bolsillo: el folio A4. Sus lados están en razón $\\sqrt{2}$ a ' +
+    '1, y no es casualidad. Es la <strong>única</strong> proporción que se conserva al doblar la ' +
+    'hoja por la mitad, y por eso un A4 doblado da un A5 con la misma forma y una fotocopia de A4 a ' +
+    'A3 no deforma nada. El botón del 71 % de las fotocopiadoras es $1/\\sqrt{2}$. Toda la serie de ' +
+    'tamaños de papel del mundo está construida sobre este número que no es fracción.');
+
   p.section('La recta real');
 
   p.text('A cada punto de una recta le corresponde exactamente un número real, y al revés. Los ' +
@@ -146,6 +152,12 @@ Course.topic('ar-conjuntos', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Fuera del aula, casi nada se especifica con un número exacto: se especifica con un intervalo. ' +
+    'Una pieza vale si su diámetro cae en $[39{,}95;\\ 40{,}05]$; un análisis es normal si está en ' +
+    'su rango de referencia; un termostato mantiene la temperatura dentro de una banda. Cuando ' +
+    'llegues a estadística verás que hasta las encuestas se publican así, como un intervalo de ' +
+    'confianza, porque dar un solo número sería fingir una precisión que no existe.');
+
   p.section('Practica');
 
   p.exercise({

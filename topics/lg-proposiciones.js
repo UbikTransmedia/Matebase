@@ -97,6 +97,13 @@ Course.topic('lg-proposiciones', function (p) {
     'que existen, y volverá a aparecer en conjuntos y en probabilidad.');
 
   /* ---------------------------------------------------------------- */
+  p.util('Una tabla de verdad no es un ejercicio de clase: es el plano de un circuito. Dentro de ' +
+    'cualquier procesador hay miles de millones de puertas <strong>Y</strong>, <strong>O</strong> y ' +
+    '<strong>NO</strong> hechas de transistores, y lo que hacen es exactamente lo que acabas de ' +
+    'rellenar en esas tablas. Lo mismo ocurre cada vez que filtras: al buscar <em>«piso Y (Madrid O ' +
+    'Barcelona) Y NO planta baja»</em> estás escribiendo una proposición compuesta, y el buscador la ' +
+    'evalúa igual que tú.');
+
   p.section('La implicación y sus parientes');
 
   p.text('$p \\to q$ es la conectiva más importante y la que peor se entiende. Solo es <strong>falsa ' +
@@ -152,6 +159,13 @@ Course.topic('lg-proposiciones', function (p) {
     'ok', 'Confundir una implicación con su recíproca es el error lógico más común');
 
   /* ---------------------------------------------------------------- */
+  p.util('Confundir una implicación con su recíproca es el error que más caro sale fuera del aula. Una ' +
+    'prueba médica cumple <em>«si estás enfermo, da positivo»</em>; eso <strong>no</strong> ' +
+    'significa <em>«si da positivo, estás enfermo»</em>. Con una enfermedad rara, la mayoría de los ' +
+    'positivos pueden ser falsos aunque la prueba sea buenísima. Lo que sí es siempre válido es la ' +
+    'contrarrecíproca: <em>«si da negativo, no estás enfermo»</em>. Volverás a esto, con números, en ' +
+    'probabilidad condicionada.');
+
   p.section('Cuantificadores');
 
   p.text('«$x + 1 = 3$» no es una proposición: depende de $x$. Se llama <em>predicado</em>, y se ' +
@@ -181,6 +195,12 @@ Course.topic('lg-proposiciones', function (p) {
     'muy distintas.', 'warn', 'Cuantificadores anidados');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Los cuantificadores son la letra pequeña de los contratos y de los programas. <em>«Todos los ' +
+    'pedidos se entregan en 24 h»</em> se rompe con <strong>un</strong> contraejemplo; <em>«existe ' +
+    'algún envío gratuito»</em> se cumple con <strong>uno</strong>. Por eso negar bien un ' +
+    'cuantificador es la herramienta diaria de quien prueba software: para tumbar un «para todo» no ' +
+    'hace falta demostrar nada, basta con encontrar el caso que falla.');
+
   p.section('Practica');
 
   p.exercise({

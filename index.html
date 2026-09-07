@@ -19,11 +19,13 @@
   <!-- ================= ÍNDICE ================= -->
   <aside class="side">
     <div class="side__head">
-      <a class="brand" href="#" id="homeLink" style="text-decoration:none;color:inherit">
-        <span class="brand__logo">∫</span>
-        <span class="brand__name">Matebase</span>
-        <span class="brand__tag">curso<br>interactivo</span>
-      </a>
+      <div class="brand">
+        <a class="brand__mark" href="#" id="homeLink">
+          <span class="brand__logo">∫</span>
+          <span class="brand__name">Matebase</span>
+        </a>
+        <a class="brand__home" id="homeBtn" href="#" title="Volver al índice del curso">⌂ <span>Inicio</span></a>
+      </div>
       <div class="search">
         <span class="search__icon">⌕</span>
         <input id="search" type="search" placeholder="Buscar un tema…" autocomplete="off" spellcheck="false">
@@ -46,7 +48,6 @@
     <div class="topbar">
       <button class="burger" id="burger" type="button" aria-label="Índice">☰</button>
       <div class="topbar__crumb" id="crumb"></div>
-      <a class="topbar__home" id="homeBtn" href="#" title="Volver al índice del curso">⌂ <span>Inicio</span></a>
     </div>
     <div class="wrap" id="wrap"></div>
   </main>

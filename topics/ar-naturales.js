@@ -68,6 +68,13 @@ Course.topic('ar-naturales', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('El valor posicional es lo que hace que un ordenador funcione. La máquina solo distingue dos ' +
+    'estados, así que cuenta en base 2: con 8 posiciones (un byte) llega hasta $2^8 = 256$ valores ' +
+    'distintos, y de ahí salen los números del 0 al 255 de una dirección IP, los 256 tonos de cada ' +
+    'color en una pantalla y el famoso límite de 255 caracteres de tantos formularios. Cambia la ' +
+    'base, pero la idea —cada posición vale una potencia— es la misma que estás usando con las ' +
+    'unidades, decenas y centenas.');
+
   p.section('Ordenar: la recta numérica');
 
   p.text('Los naturales están <strong>ordenados</strong>: dados dos, siempre se puede decir cuál es mayor. ' +
@@ -116,6 +123,12 @@ Course.topic('ar-naturales', function (p) {
      ['2 950', '2 950', '3 000', '3 000']], { num: [0, 1, 2, 3] });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Redondear no es «hacer trampa»: es una decisión con consecuencias. Un supermercado que redondea ' +
+    'cada línea del ticket y otro que redondea solo el total pueden cobrarte céntimos distintos por ' +
+    'la misma compra, y por eso la normativa fija cuándo se redondea. En una nómina o en un reparto ' +
+    'de dividendos, el céntimo que sobra al redondear tiene que ir a alguna parte, y decidir a dónde ' +
+    'es parte del diseño del sistema.');
+
   p.section('Practica');
 
   p.exercise({

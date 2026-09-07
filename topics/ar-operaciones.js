@@ -54,6 +54,13 @@ Course.topic('ar-operaciones', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Que sumar se pueda hacer en cualquier orden es lo que permite repartir un cálculo enorme entre ' +
+    'muchos procesadores: cada uno suma su trozo y luego se juntan. Ahora la letra pequeña, que ' +
+    'sorprende a mucho ingeniero: con decimales guardados en un ordenador la asociativa <strong>deja ' +
+    'de cumplirse exactamente</strong>. Sumar un millón de datos en distinto orden puede dar ' +
+    'resultados distintos en las últimas cifras, y en simulaciones de clima o de estructuras eso ' +
+    'obliga a fijar el orden para que los resultados sean reproducibles.');
+
   p.section('La jerarquía: en qué orden se opera');
 
   p.text('Una expresión como $12 + 3\\cdot 4$ no significa lo mismo si se lee de izquierda a derecha ' +
@@ -109,6 +116,12 @@ Course.topic('ar-operaciones', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Esta prioridad no es un capricho escolar: es exactamente la que aplican la hoja de cálculo, la ' +
+    'calculadora y cualquier lenguaje de programación al leer una fórmula. Por eso una celda mal ' +
+    'escrita da un resultado plausible pero equivocado, sin avisar. Y las peleas que circulan por ' +
+    'redes con expresiones tipo $8 \\div 2(2+2)$ no son un problema de matemáticas sino de notación ' +
+    'ambigua: con un paréntesis más, la discusión desaparece.');
+
   p.section('Practica');
 
   p.exercise({

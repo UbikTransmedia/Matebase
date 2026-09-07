@@ -66,6 +66,12 @@ Course.topic('ar-proporcionalidad', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('El precio por kilo del supermercado es proporcionalidad hecha ley: la etiqueta está obligada a ' +
+    'mostrarlo justamente para que puedas comparar envases distintos sin echar cuentas. La escala de ' +
+    'un mapa, la dosis de un medicamento según el peso, el cambio de divisa y las recetas al doble ' +
+    'son el mismo cálculo. La inversa aparece cuando algo se reparte: al doble de trabajadores, la ' +
+    'mitad de tiempo; al doble de velocidad, la mitad de duración del viaje.');
+
   p.section('Porcentajes');
 
   p.text('Un porcentaje es una fracción de denominador 100. $\\;35\\% = \\frac{35}{100} = 0{,}35$. ' +
@@ -123,6 +129,13 @@ Course.topic('ar-proporcionalidad', function (p) {
     }
   });
 
+  p.util('Aquí vive una trampa que aparece en rebajas y en nóminas: <strong>subir un 10 % y luego bajar ' +
+    'un 10 % no devuelve al punto de partida</strong>. Cien euros suben a 110 y bajan a 99, porque ' +
+    'cada porcentaje se aplica sobre una cantidad distinta. Por eso una acción que cae un 50 % ' +
+    'necesita subir un 100 % para recuperarse. Y ojo con las noticias: pasar del 4 % al 6 % de paro ' +
+    'es subir <em>dos puntos</em>, pero un 50 % en términos relativos; ambas cifras son ciertas y ' +
+    'cuentan historias muy distintas.');
+
   p.section('Interés');
 
   p.text('El dinero en un banco crece aplicando un porcentaje cada periodo. Si los intereses se ' +
@@ -135,6 +148,12 @@ Course.topic('ar-proporcionalidad', function (p) {
   ], 'r en tantos por uno, t en periodos');
 
   /* ================= EJERCICIOS ================= */
+  p.util('El interés compuesto es la razón de que una hipoteca a 30 años cueste mucho más que el dinero ' +
+    'prestado, y de que una tarjeta de crédito aplazada sea tan cara: un 20 % anual no significa ' +
+    'pagar un 20 % más, porque los intereses generan intereses. La misma fórmula, mirada al revés, ' +
+    'es la que explica por qué empezar a ahorrar diez años antes cambia el resultado más que ahorrar ' +
+    'el doble. Cuando llegues a exponenciales verás que es la misma curva.');
+
   p.section('Practica');
 
   p.exercise({

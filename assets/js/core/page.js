@@ -79,6 +79,10 @@
   Page.prototype.hist = function (html, title) {
     return this.note(html, 'hist', title || 'De dónde viene esto');
   };
+  /** Para que sirve esto de verdad: una aplicacion concreta, fuera del aula. */
+  Page.prototype.util = function (html, title) {
+    return this.note(html, 'util', title || 'Utilidad');
+  };
 
   Page.prototype.table = function (head, rows, o) {
     o = o || {};

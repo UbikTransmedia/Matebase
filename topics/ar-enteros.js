@@ -56,6 +56,12 @@ Course.topic('ar-enteros', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Los negativos aparecen en cuanto hay un cero convenido: temperaturas bajo cero, plantas de ' +
+    'sótano, saldo en descubierto, altitudes bajo el nivel del mar, el desfase horario respecto a ' +
+    'Greenwich. El valor absoluto es lo que responde a «¿cuánto me he desviado?» sin importar el ' +
+    'sentido: un termostato que debe mantener 21 °C no actúa según la diferencia, sino según su ' +
+    'valor absoluto, porque tres grados de más y tres de menos son la misma desviación.');
+
   p.section('Sumar y restar');
 
   p.text('La forma más segura de no equivocarse es pensar en <em>dinero</em>: los positivos son ingresos ' +

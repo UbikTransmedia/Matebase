@@ -87,6 +87,12 @@ Course.topic('ar-decimales', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Que $1/3$ sea periódico en base 10 depende de la base, y esto tiene una consecuencia diaria: en ' +
+    'base 2, que es la del ordenador, <strong>$0{,}1$ es periódico</strong>. Por eso en casi ' +
+    'cualquier lenguaje de programación $0{,}1 + 0{,}2$ no da exactamente $0{,}3$. No es un fallo ' +
+    'del ordenador: es el mismo fenómeno que impide escribir $1/3$ con decimales exactos. La ' +
+    'solución que usa la banca es no guardar euros con decimales, sino contar en céntimos enteros.');
+
   p.section('De decimal a fracción: la fracción generatriz');
 
   p.text('Todo decimal exacto o periódico se puede convertir en fracción. El truco es siempre el ' +
@@ -122,6 +128,12 @@ Course.topic('ar-decimales', function (p) {
     'es el que informa de verdad, y se suele dar en porcentaje.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('El error relativo es lo que decide si una medida sirve. Equivocarse en un centímetro midiendo ' +
+    'una habitación es irrelevante; el mismo centímetro en la pieza de un motor la convierte en ' +
+    'chatarra. Por eso los planos industriales no dan una medida sino una <em>tolerancia</em> ' +
+    '—$40{,}00 \\pm 0{,}05$ mm—, y por eso una analítica clínica se acompaña siempre de su margen: ' +
+    'un valor sin su error no es un dato, es una impresión.');
+
   p.section('Practica');
 
   p.exercise({

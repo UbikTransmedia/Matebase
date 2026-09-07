@@ -75,6 +75,11 @@ Course.topic('ar-fracciones', function (p) {
     '$\\frac{a}{b}=\\frac{c}{d} \\iff a\\cdot d = b\\cdot c$. Es la forma más rápida de comprobarlo.', null, 'Atajo');
 
   /* ---------------------------------------------------------------- */
+  p.util('Una pantalla 16:9 y otra de 1920×1080 tienen la misma forma porque $\\frac{1920}{1080}$ ' +
+    'simplifica a $\\frac{16}{9}$. Toda la maquetación de páginas web, el recorte de fotos y el ' +
+    'formato de cine se hablan en fracciones equivalentes, y las bandas negras de una película en ' +
+    'televisión son justamente el precio de mezclar dos fracciones que no lo son.');
+
   p.section('Operar con fracciones');
 
   p.sub('Suma y resta');
@@ -137,6 +142,12 @@ Course.topic('ar-fracciones', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('La música occidental es aritmética de fracciones. Dos notas suenan bien juntas cuando sus ' +
+    'frecuencias están en razón sencilla: $2/1$ es la octava, $3/2$ la quinta, $4/3$ la cuarta. ' +
+    'Pitágoras construyó una escala entera encadenando quintas, y se topó con que doce quintas no ' +
+    'caen exactamente en siete octavas —$(3/2)^{12}$ no es $2^7$—; ese desajuste, la coma ' +
+    'pitagórica, es la razón de que los pianos se afinen con un pequeño apaño en cada nota.');
+
   p.section('Practica');
 
   /* corrector reutilizable: exige la fraccion irreducible */

@@ -82,6 +82,13 @@ Course.topic('ar-magnitudes', function (p) {
     'las unidades.', 'warn', 'Por qué esto importa de verdad');
 
   /* ---------------------------------------------------------------- */
+  p.util('En 1999 la NASA perdió la sonda <em>Mars Climate Orbiter</em>, de 327 millones de dólares, ' +
+    'porque un equipo entregó los datos de empuje en libras-fuerza y el otro los leyó como newtons: ' +
+    'la nave entró demasiado bajo en la atmósfera de Marte y se desintegró. En 1983 un Boeing 767 de ' +
+    'Air Canada se quedó sin combustible en pleno vuelo por confundir libras con kilos y tuvo que ' +
+    'aterrizar planeando. Poner las unidades en cada paso no es pedantería: es lo que evita estas ' +
+    'cosas.');
+
   p.section('Cifras significativas');
 
   p.text('Si mides una mesa con una cinta métrica y dices que mide $1{,}2473859$ m, estás mintiendo: ' +
@@ -101,6 +108,12 @@ Course.topic('ar-magnitudes', function (p) {
     'warn');
 
   /* ---------------------------------------------------------------- */
+  p.util('Escribir más cifras de las que se han medido es afirmar algo que no se sabe. Un GPS de móvil ' +
+    'acierta en unos metros, así que dar una coordenada con precisión de milímetros es inventarse ' +
+    'los últimos dígitos. En un laboratorio, en un informe pericial o en una obra, el número de ' +
+    'cifras que escribes comunica cuánta confianza merece la medida, y por eso las normas de calidad ' +
+    'lo regulan.');
+
   p.section('Análisis dimensional');
 
   p.text('Y aquí llega la herramienta más útil de todo el tema, la que sirve de red de seguridad: ' +
@@ -145,6 +158,12 @@ Course.topic('ar-magnitudes', function (p) {
     'ok');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Esto es un detector de errores gratuito. Si al despejar una fórmula te queda una velocidad ' +
+    'igualada a una aceleración, no hace falta revisar las cuentas: <strong>ya sabes que está ' +
+    'mal</strong>. Los físicos lo usan además para adivinar fórmulas: se puede deducir cómo depende ' +
+    'el periodo de un péndulo de su longitud sin resolver nada, solo exigiendo que las unidades ' +
+    'cuadren. Cuesta diez segundos y ahorra tardes enteras.');
+
   p.section('Practica');
 
   p.exercise({

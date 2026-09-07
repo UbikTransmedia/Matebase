@@ -74,6 +74,13 @@ Course.topic('ar-potencias', function (p) {
     'elevado). Y $(-2)^3 = -8$ (impar: negativo).', 'warn', 'Bases negativas');
 
   /* ---------------------------------------------------------------- */
+  p.util('Cuando una magnitud abarca rangos gigantescos se mide con exponentes, y las propiedades que ' +
+    'acabas de ver se convierten en las reglas de esas escalas: el decibelio, la magnitud de un ' +
+    'terremoto y el pH funcionan así. Que la escala Richter sea de potencias significa que un ' +
+    'terremoto de 7 no es «un poco peor» que uno de 6, sino que libera unas 30 veces más energía. Y ' +
+    'la fuerza de una contraseña es lo mismo: con 8 caracteres de un alfabeto de 94 símbolos hay ' +
+    '$94^8$ combinaciones, y añadir un solo carácter las multiplica por 94.');
+
   p.section('Raíces');
 
   p.text('La <strong>raíz</strong> deshace la potencia: $\\sqrt[n]{a}$ es el número que elevado a $n$ da $a$.');
@@ -129,6 +136,12 @@ Course.topic('ar-potencias', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Sin notación científica no se puede trabajar en ciencia: el radio de un átomo es $10^{-10}$ m y ' +
+    'la distancia a la galaxia de Andrómeda $10^{22}$ m, y son cifras que ninguna calculadora ' +
+    'escribiría entera. Su verdadero uso no es ahorrar ceros, sino permitir comparaciones de un ' +
+    'vistazo: basta mirar el exponente para saber que algo es mil veces mayor que otra cosa, que es ' +
+    'la manera en que un ingeniero decide si un efecto le importa o puede despreciarlo.');
+
   p.section('Practica');
 
   p.exercise({

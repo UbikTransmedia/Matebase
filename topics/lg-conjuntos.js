@@ -1,20 +1,63 @@
 /* Tema: Conjuntos y aplicaciones */
 Course.topic('lg-conjuntos', function (p) {
 
-  p.text('Un <strong>conjunto</strong> es una colección de objetos bien determinada: dado cualquier ' +
-    'objeto, tiene que estar claro si pertenece o no. Nada más. Y con esa idea tan pobre se puede ' +
-    'construir literalmente toda la matemática.');
+  p.text('En el tema anterior aprendiste a decidir si una afirmación es verdadera o falsa. Ahora vamos ' +
+    'a hacer algo que parece mucho más modesto —agrupar cosas— y que resulta ser más potente. Fíjate ' +
+    'en que la pregunta <em>«¿es verdad que 3 es impar?»</em> y la pregunta <em>«¿está el 3 en el ' +
+    'montón de los impares?»</em> son la misma pregunta escrita de dos maneras. Esa coincidencia no es ' +
+    'una casualidad: es el puente por el que la lógica del tema anterior se convierte en matemáticas, ' +
+    'y lo vamos a cruzar en este.');
+
+  p.text('Un <strong>conjunto</strong> es una colección de objetos bien determinada. Toda la exigencia ' +
+    'está en esas dos últimas palabras: dado cualquier objeto, tiene que estar claro si pertenece o no ' +
+    'pertenece, sin discusión posible. No sirve «los números grandes», porque nadie sabría decir dónde ' +
+    'está la frontera; sí sirve «los números mayores que mil», porque de cualquier número sabes ' +
+    'responder sí o no. No se pide nada más: ni orden, ni cantidad, ni que los elementos se parezcan ' +
+    'entre sí.');
+
+  p.text('Cuesta creer cuánto se puede levantar con tan poco. A finales del siglo XIX se descubrió que ' +
+    'los números, las funciones, el espacio y prácticamente cualquier objeto matemático se pueden ' +
+    'definir como conjuntos hechos de conjuntos. No vamos a hacerlo aquí, pero conviene que sepas que ' +
+    'el suelo que vas a pisar durante todo el curso está hecho de esta única idea.');
+
+  p.sub('Dos maneras de decir quién está dentro');
+
+  p.text('Para dar un conjunto hay que dejar claro quiénes son sus elementos, y eso se puede hacer de ' +
+    'dos formas. La primera es la más obvia: <strong>enumerarlos</strong> uno a uno entre llaves. Se ' +
+    'dice que el conjunto está dado <em>por extensión</em>, y solo resulta práctico cuando son pocos: ' +
+    'nadie va a escribir por extensión el conjunto de los números pares.');
+
+  p.text('La segunda es no listar a nadie y dar en su lugar la <strong>regla</strong> que cumplen ' +
+    'exactamente sus elementos. Se dice que el conjunto está dado <em>por comprensión</em>. Para ' +
+    'leerlo, basta con ponerle voz a los símbolos: las llaves se leen «el conjunto de los», y los dos ' +
+    'puntos se leen «tales que».');
 
   p.formulas([
-    'A = \\{1, 2, 3, 4\\} \\quad \\text{(por extensión)}',
-    'A = \\{x \\in \\mathbb{N} : x < 5,\\ x \\ne 0\\} \\quad \\text{(por comprensión)}'
-  ]);
+    'A = \\{1, 2, 3, 4\\}',
+    'A = \\{x \\in \\mathbb{N} : x < 5,\\ x \\ne 0\\}'
+  ], 'el mismo conjunto, por extensión y por comprensión');
+
+  p.text('Las dos líneas describen el mismo conjunto. La segunda se lee así, de izquierda a derecha: ' +
+    '<em>«el conjunto de los $x$ de los naturales tales que $x$ es menor que 5 y $x$ no es cero»</em>. ' +
+    'Merece la pena pararse a leerla en voz alta, porque esta notación te va a acompañar hasta el ' +
+    'último tema del curso.');
+
+  p.sub('El vocabulario mínimo');
+
+  p.text('Con la idea de conjunto vienen cuatro símbolos que conviene tener frescos. Los tres primeros ' +
+    'son relaciones —dicen cómo se sitúa algo respecto a un conjunto— y el cuarto es un conjunto muy ' +
+    'particular:');
 
   p.list([
-    '$x \\in A$: el elemento $x$ <strong>pertenece</strong> a $A$.',
-    '$A \\subset B$: todo elemento de $A$ está en $B$ ($A$ es <strong>subconjunto</strong>).',
-    '$\\emptyset$: el conjunto <strong>vacío</strong>, sin ningún elemento. Es subconjunto de todos.',
-    'No importa el orden ni repetir: $\\{1,2,2,3\\} = \\{3,1,2\\}$.'
+    '$x \\in A$: el elemento $x$ <strong>pertenece</strong> a $A$. Es la pregunta básica que todo ' +
+      'conjunto tiene que saber responder.',
+    '$A \\subset B$: todo elemento de $A$ está también en $B$; se dice que $A$ es <strong>subconjunto' +
+      '</strong> de $B$. Ojo, esto no habla de un elemento sino de dos conjuntos enteros.',
+    '$\\emptyset$: el conjunto <strong>vacío</strong>, el que no tiene ningún elemento. Parece inútil y ' +
+      'no lo es: es subconjunto de todos los conjuntos, y aparecerá cada vez que dos cosas no tengan ' +
+      'nada en común.',
+    'No importa el orden ni repetir un elemento: $\\{1,2,2,3\\}$ y $\\{3,1,2\\}$ son el mismo conjunto. ' +
+      'Un conjunto solo sabe <em>quién está</em>, no cuántas veces ni en qué orden.'
   ]);
 
   p.note('Cuidado con dos símbolos que se confunden: $\\in$ relaciona un <em>elemento</em> con un ' +
@@ -23,6 +66,16 @@ Course.topic('lg-conjuntos', function (p) {
 
   /* ---------------------------------------------------------------- */
   p.section('Operaciones');
+
+  p.text('Con dos números puedes hacer cosas: sumarlos, restarlos, multiplicarlos. Con dos conjuntos ' +
+    'también, y las operaciones que existen no son un invento arbitrario: salen de preguntarse lo ' +
+    'único que un conjunto sabe responder. Si tengo dos conjuntos $A$ y $B$ y cojo un objeto ' +
+    'cualquiera, hay cuatro respuestas posibles —está en los dos, solo en $A$, solo en $B$, o en ' +
+    'ninguno—, y cada operación no es más que quedarse con algunas de esas cuatro zonas.');
+
+  p.text('De ahí salen las cinco de la tabla. Léela despacio fijándote en la última columna, porque en ' +
+    'ella está escondida la sorpresa del tema: cada operación se define con una palabra de las que ' +
+    'usabas ayer para hablar de verdadero y falso.');
 
   p.table(['Operación', 'Símbolo', 'Es el conjunto de los que…'],
     [['Unión', '$A \\cup B$', 'están en $A$ <strong>o</strong> en $B$'],
@@ -98,15 +151,43 @@ Course.topic('lg-conjuntos', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Toda base de datos del mundo funciona con estas operaciones, y hasta con estos nombres: ' +
+    '<code>UNION</code>, <code>INTERSECT</code>, <code>EXCEPT</code>. Cuando un hospital cruza ' +
+    '«pacientes con esta dolencia» con «pacientes que toman este fármaco», está haciendo una ' +
+    'intersección; cuando una tienda busca a quien compró el año pasado pero no este, una ' +
+    'diferencia. El diagrama de Venn que dibujas aquí es literalmente lo que ejecuta el servidor.');
+
   p.section('Cardinal y producto cartesiano');
 
-  p.text('El <strong>cardinal</strong> $|A|$ es el número de elementos. Para contar uniones hay que ' +
-    'tener cuidado de no contar dos veces lo común, exactamente igual que con probabilidades:');
+  p.text('Hasta ahora hemos hablado de <em>quién</em> está en un conjunto. Vamos a preguntarnos ahora ' +
+    '<em>cuántos</em>, que es una pregunta distinta y con truco. El <strong>cardinal</strong> de $A$, ' +
+    'que se escribe $|A|$, es simplemente su número de elementos.');
+
+  p.text('Contar un conjunto solo es fácil hasta que aparecen dos. Imagina una clase de 30 alumnos ' +
+    'donde 18 juegan al fútbol y 15 al baloncesto. ¿Cuántos hacen deporte? La tentación es decir 33, ' +
+    'que además es imposible porque solo hay 30. El error está en que quien juega a los dos ha sido ' +
+    'contado dos veces, una en cada grupo, así que hay que descontarlo una vez:');
 
   p.formula('|A \\cup B| = |A| + |B| - |A \\cap B|', 'principio de inclusión-exclusión');
 
-  p.text('El <strong>producto cartesiano</strong> $A \\times B$ es el conjunto de todos los pares ' +
-    'ordenados. Aquí el orden <em>sí</em> importa: $(1,2) \\ne (2,1)$.');
+  p.text('Con 18 y 15 sobre 30, el número de repetidos es $18+15-30=3$. Guarda esta idea de sumar y ' +
+    'descontar lo repetido: reaparecerá tal cual cuando calcules la probabilidad de que ocurra una ' +
+    'cosa <em>o</em> la otra.');
+
+  p.sub('Combinar dos conjuntos en lugar de mezclarlos');
+
+  p.text('La unión y la intersección meten los elementos de $A$ y $B$ en un mismo saco. Hay otra manera ' +
+    'de juntarlos que no los mezcla: <strong>emparejarlos</strong>. Si $A$ son los tamaños de una ' +
+    'camiseta y $B$ los colores, lo que le interesa a la tienda no es la unión de ambos sino la lista ' +
+    'de combinaciones —talla M en azul, talla L en azul, talla M en rojo…—, que es un objeto nuevo.');
+
+  p.text('Ese objeto es el <strong>producto cartesiano</strong> $A \\times B$: el conjunto de todos los ' +
+    'pares ordenados con el primer elemento de $A$ y el segundo de $B$. Aquí, a diferencia de lo que ' +
+    'pasaba dentro de un conjunto, el orden <em>sí</em> importa: $(1,2)$ y $(2,1)$ son pares distintos, ' +
+    'igual que «talla M en rojo» no es «talla roja en M».');
+
+  p.text('Contarlos es inmediato: por cada elección del primero hay tantas posibilidades como elementos ' +
+    'tenga el segundo conjunto, así que se multiplican.');
 
   p.formula('|A \\times B| = |A| \\cdot |B|');
 
@@ -117,10 +198,26 @@ Course.topic('lg-conjuntos', function (p) {
   /* ---------------------------------------------------------------- */
   p.section('Aplicaciones');
 
-  p.text('Una <strong>aplicación</strong> (o función) $f: A \\to B$ asigna a cada elemento de $A$ ' +
-    'exactamente un elemento de $B$. $A$ es el conjunto inicial, $B$ el final.');
+  p.text('Llegamos a la idea más productiva del tema. Hasta aquí los conjuntos han sido montones ' +
+    'quietos; ahora vamos a relacionarlos, y para eso sirve una <strong>aplicación</strong> (o ' +
+    'función) $f: A \\to B$: una regla que asigna a cada elemento de $A$ exactamente un elemento de ' +
+    '$B$. Se llama $A$ el conjunto inicial y $B$ el final.');
 
-  p.text('Según cómo reparta, se clasifican en tres tipos que hay que distinguir bien:');
+  p.text('Las dos palabras que hacen todo el trabajo son <em>«a cada»</em> y <em>«exactamente uno»</em>. ' +
+    'La primera prohíbe dejar a alguien sin asignar: si un solo elemento de $A$ se queda sin destino, ' +
+    'no hay aplicación. La segunda prohíbe la ambigüedad: un elemento de $A$ no puede ir a dos sitios a ' +
+    'la vez. Piensa en el vestuario de un gimnasio —cada socio tiene su taquilla asignada, una y solo ' +
+    'una—; en cambio «el número de teléfono de una persona» no sirve como aplicación, porque hay quien ' +
+    'tiene dos y quien no tiene ninguno.');
+
+  p.text('Fíjate en que la definición no dice nada sobre $B$. Es perfectamente legal que dos socios ' +
+    'compartan taquilla, o que queden taquillas vacías: lo que se exige es sobre quien sale, no sobre ' +
+    'quien recibe. Y precisamente por eso, preguntarse qué ocurre en $B$ es lo que da lugar a la ' +
+    'clasificación siguiente.');
+
+  p.text('Hay dos cosas que pueden estropearse en $B$: que alguien reciba <em>dos</em> flechas, o que ' +
+    'alguien no reciba <em>ninguna</em>. Prohibir la primera da las inyectivas, prohibir la segunda las ' +
+    'sobreyectivas, y prohibir las dos a la vez, las biyectivas:');
 
   p.table(['Tipo', 'Condición', 'En palabras'],
     [['<strong>Inyectiva</strong>', '$f(x)=f(y) \\Rightarrow x=y$', 'elementos distintos van a imágenes distintas: nadie comparte destino'],
@@ -185,6 +282,13 @@ Course.topic('lg-conjuntos', function (p) {
     'refundar la teoría con axiomas más cuidadosos, y de esa crisis salió la lógica matemática moderna.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Que una aplicación sea inyectiva es lo que hace que un identificador sirva: si dos personas ' +
+    'pudieran tener el mismo DNI, el DNI no identificaría a nadie. Que sea biyectiva es lo que hace ' +
+    'que algo se pueda <strong>deshacer</strong>: comprimir un archivo y recuperarlo intacto, cifrar ' +
+    'un mensaje y descifrarlo. Y las funciones que a propósito <em>no</em> son inyectivas también ' +
+    'trabajan: cuando una web guarda tu contraseña resumida, usa una función que aplasta cualquier ' +
+    'texto en un código fijo, precisamente para que no se pueda dar marcha atrás.');
+
   p.section('Practica');
 
   p.exercise({
