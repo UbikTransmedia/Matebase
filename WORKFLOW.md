@@ -97,12 +97,14 @@ Lo que queda por hacer si el curso se quiere llevar más lejos:
    Course.topic('mi-id', function (p) {
      p.section('Idea');
      p.text('Texto con matemáticas en línea: $x^2+1$.');
-     p.formula('\int_0^1 x^2\,dx = \frac{1}{3}');
+     p.formula('\\int_0^1 x^2\\,dx = \\frac{1}{3}');   // en JS, barra doble
      p.demo({ title: 'Míralo', build: function (host, d) { /* Plot2D... */ } });
-     p.exercise({ /* generate / question / check / steps */ });
+     p.exercise({ /* gen / ask / sol / steps */ });
+     p.keys(['idea 1', 'idea 2']);
    });
    ```
 2. Añadir una entrada en el array del bloque correspondiente de `assets/js/curriculum.js`.
 3. Recargar. No hay paso 3.
+4. Abrir `tests.html`: el tema debe salir en verde y su auditoría limpia.
 
 Detalle de la API en `GUIA-AUTOR.md`.
