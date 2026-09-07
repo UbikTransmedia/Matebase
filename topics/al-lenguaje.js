@@ -16,6 +16,12 @@ Course.topic('al-lenguaje', function (p) {
     '($a, b, c$) para lo conocido.');
 
   p.section('Traducir del castellano al álgebra');
+  p.text('Aquí empieza de verdad el álgebra, y empieza por lo que más cuesta en los exámenes: convertir ' +
+    'un enunciado en castellano en una expresión con letras. Conviene ir despacio y traducir trozo a ' +
+    'trozo, como quien traduce de un idioma. La tabla siguiente recoge las expresiones que más se ' +
+    'repiten; fíjate especialmente en las dos últimas filas, porque «un número cualquiera» y «dos ' +
+    'números consecutivos» aparecen en la mitad de los problemas.');
+
 
   p.table(['En palabras', 'En álgebra'],
     [['un número cualquiera', '$x$'],

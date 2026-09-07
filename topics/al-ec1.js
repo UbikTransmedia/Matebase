@@ -80,6 +80,10 @@ Course.topic('al-ec1', function (p) {
     'La regla es siempre la misma: lo que haces a un lado, lo haces al otro.');
 
   p.section('El método, paso a paso');
+  p.text('Con la imagen de la balanza en la cabeza, resolver es siempre la misma secuencia. Conviene ' +
+    'hacerla en este orden, porque cada paso deja el terreno preparado para el siguiente y ' +
+    'saltárselos suele acabar en un lío de signos.');
+
 
   p.list([
     'Quitar <strong>denominadores</strong>: multiplicar toda la ecuación por el m.c.m. de los denominadores.',

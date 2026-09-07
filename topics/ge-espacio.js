@@ -35,6 +35,10 @@ Course.topic('ge-espacio', function (p) {
     'mide perpendicularidad (es cero si son paralelos). Son complementarios.', 'ok');
 
   p.sub('Producto mixto y volumen');
+  p.text('Combinando las dos operaciones anteriores aparece una tercera que devuelve un número y tiene ' +
+    'una lectura geométrica muy directa: el volumen de la caja torcida que forman tres vectores. ' +
+    'Merece la pena fijarse en lo que ocurre cuando esa caja se aplasta del todo.');
+
 
   p.formula('[\\vec{u},\\vec{v},\\vec{w}] = \\vec{u}\\cdot(\\vec{v}\\times\\vec{w}) = \\begin{vmatrix} u_1 & u_2 & u_3 \\\\ v_1 & v_2 & v_3 \\\\ w_1 & w_2 & w_3\\end{vmatrix}');
 
@@ -93,16 +97,22 @@ Course.topic('ge-espacio', function (p) {
     'una dimensión más arriba.', 'ok');
 
   p.sub('Posiciones relativas');
+  p.text('En el plano, dos rectas o se cortan o son paralelas. En el espacio aparece una tercera ' +
+    'posibilidad que no tiene equivalente plano: que <strong>se crucen sin tocarse</strong>, como ' +
+    'dos calles a distinta altura. Son las rectas que se cruzan, y olvidar que existen es el error ' +
+    'clásico al pasar del plano al espacio.');
+
 
   p.table(['Elementos', 'Posibilidades'],
     [['Dos rectas', 'se cortan · paralelas · coincidentes · <strong>se cruzan</strong> (esto es nuevo del espacio)'],
      ['Recta y plano', 'la recta corta al plano · es paralela · está contenida'],
      ['Dos planos', 'se cortan en una recta · paralelos · coincidentes']]);
 
-  p.text('Que dos rectas puedan <strong>cruzarse</strong> sin cortarse ni ser paralelas es la novedad ' +
-    'del espacio, y no tiene equivalente en el plano. Piensa en dos carreteras a distinta altura.');
-
   p.sub('Distancias');
+  p.text('Medir distancias en el espacio se reduce siempre a la misma idea: la distancia más corta es la ' +
+    'que se mide en perpendicular. Con esa idea y el producto escalar salen todas las fórmulas que ' +
+    'vienen; ninguna hay que memorizarla si se entiende que lo que se está haciendo es proyectar.');
+
 
   p.formula('d(P, \\pi) = \\frac{|A p_1 + B p_2 + C p_3 + D|}{\\sqrt{A^2+B^2+C^2}}',
     'distancia de un punto a un plano');

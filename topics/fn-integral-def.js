@@ -136,6 +136,11 @@ Course.topic('fn-integral-def', function (p) {
   ], true);
 
   p.section('Área entre dos curvas');
+  p.text('Si la integral de una función da el área que hay entre ella y el eje, el área encerrada entre ' +
+    'dos curvas sale de una resta: se calcula la de arriba y se le quita la de abajo. Lo único ' +
+    'delicado es saber cuál va arriba, y eso puede cambiar a lo largo del intervalo, así que ' +
+    'conviene localizar antes los puntos donde se cruzan.');
+
 
   p.formula('A = \\int_a^b \\left[f(x) - g(x)\\right]dx', 'con f por encima de g');
 

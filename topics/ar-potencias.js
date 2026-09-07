@@ -91,6 +91,11 @@ Course.topic('ar-potencias', function (p) {
     'warn', 'La que no existe');
 
   p.sub('Los dos casos raros');
+  p.text('Quedan dos casos que chirrían la primera vez que se ven, porque parecen definiciones sacadas de ' +
+    'la manga: ¿qué significa multiplicar algo <em>cero</em> veces, o <em>menos tres</em> veces? La ' +
+    'respuesta es que no significan nada por sí solos; son la única forma de que las propiedades ' +
+    'anteriores sigan cumpliéndose sin excepciones.');
+
 
   p.formulas(['a^0 = 1 \\quad (a \\ne 0)', 'a^{-n} = \\frac{1}{a^n}']);
 

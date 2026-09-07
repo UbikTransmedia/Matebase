@@ -19,6 +19,11 @@ Course.topic('tr-funciones', function (p) {
 
   /* ---------------------------------------------------------------- */
   p.section('Los cuatro mandos de una onda');
+  p.text('Cualquier onda que te encuentres —un sonido, la marea, la corriente de un enchufe, las horas de ' +
+    'luz a lo largo del año— se puede escribir con la misma plantilla, cambiando solo cuatro ' +
+    'números. Merece la pena entender qué hace cada uno, porque a partir de ahí leerás cualquier ' +
+    'función trigonométrica de un vistazo en lugar de dibujarla punto a punto.');
+
 
   p.formula('y = A\\,\\operatorname{sen}(B x + C) + D', 'la forma general');
 

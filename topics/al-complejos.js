@@ -68,6 +68,10 @@ Course.topic('al-complejos', function (p) {
     'función de onda es un número complejo en cada punto.');
 
   p.section('Operar en forma binómica');
+  p.text('Operar con complejos en forma binómica es operar con binomios normales, tratando la $i$ como si ' +
+    'fuera una letra cualquiera. Solo hay una regla extra, y es la que lo cambia todo: cada vez que ' +
+    'aparezca $i^2$, se sustituye por $-1$. Con eso basta para las cuatro operaciones.');
+
 
   p.list([
     '<strong>Sumar y restar</strong>: parte real con parte real, imaginaria con imaginaria. Es sumar vectores.',
@@ -85,6 +89,11 @@ Course.topic('al-complejos', function (p) {
     'Por eso sirve para quitar la $i$ del denominador.', 'ok');
 
   p.sub('Las potencias de i se repiten cada cuatro');
+  p.text('Elevar $i$ a potencias sucesivas no produce números cada vez mayores, como pasaría con ' +
+    'cualquier número real: produce un ciclo que se repite. La razón es que $i^2=-1$ y, por tanto, ' +
+    '$i^4 = (i^2)^2 = 1$; multiplicar cuatro veces por $i$ te devuelve al punto de partida. Es ' +
+    'exactamente lo que ocurre al girar 90° cuatro veces.');
+
 
   p.formula('i^1 = i, \\quad i^2 = -1, \\quad i^3 = -i, \\quad i^4 = 1, \\quad i^5 = i \\dots');
 

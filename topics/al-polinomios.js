@@ -11,6 +11,10 @@ Course.topic('al-polinomios', function (p) {
     'que todo lo que sigue resulte familiar.');
 
   p.section('Suma, resta y producto');
+  p.text('Operar con polinomios no exige aprender nada nuevo: son las mismas reglas de siempre, aplicadas ' +
+    'con cuidado de no mezclar términos de distinto grado. La única novedad es la vigilancia con los ' +
+    'signos al restar, que es donde se pierde la mayoría de los puntos.');
+
 
   p.list([
     '<strong>Sumar y restar</strong>: agrupar términos semejantes. Solo se suman los del mismo grado.',

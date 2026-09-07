@@ -139,6 +139,12 @@ Course.topic('pe-condicionada', function (p) {
 
   /* ---------------------------------------------------------------- */
   p.section('El teorema de Bayes');
+  p.text('Llegamos al resultado más útil y peor entendido de toda la probabilidad. La idea es esta: ' +
+    'normalmente sabes la probabilidad del <em>efecto dada la causa</em> —«si estás enfermo, la ' +
+    'prueba da positivo el 99 % de las veces»— y lo que de verdad quieres saber es la contraria, la ' +
+    'de la <em>causa dado el efecto</em>: «he dado positivo, ¿estoy enfermo?». Bayes es la fórmula ' +
+    'que le da la vuelta, y su conclusión desconcierta a casi todo el mundo la primera vez.');
+
 
   p.formula('P(A_i|B) = \\frac{P(A_i)\\,P(B|A_i)}{P(B)} = \\frac{P(A_i)\\,P(B|A_i)}{\\sum_j P(A_j)P(B|A_j)}');
 

@@ -172,6 +172,12 @@ Course.topic('av-edp', function (p) {
 
   /* ---------------------------------------------------------------- */
   p.section('Ondas: la otra gran ecuación');
+  p.text('Junto a la del calor hay una segunda ecuación fundamental, y la diferencia entre ambas es una ' +
+    'sola letra: donde el calor lleva una derivada temporal, la onda lleva dos. Esa segunda derivada ' +
+    'cambia por completo el comportamiento. El calor difunde y se apaga; la onda viaja, rebota e ' +
+    'interfiere sin perder energía. Una cuerda de guitarra, el sonido, la luz y un terremoto ' +
+    'obedecen a esta.');
+
 
   p.formula('\\frac{\\partial^2 u}{\\partial t^2} = c^2\\frac{\\partial^2 u}{\\partial x^2}',
     'ecuación de ondas, con c la velocidad de propagación');

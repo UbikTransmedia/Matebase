@@ -67,6 +67,11 @@ Course.topic('ge-transformaciones', function (p) {
 
   /* ---------------------------------------------------------------- */
   p.section('En coordenadas');
+  p.text('Hasta aquí has movido figuras con la imaginación. Para que las mueva un ordenador hace falta ' +
+    'traducir cada movimiento a cuentas con coordenadas, y ahí es donde estas transformaciones dejan ' +
+    'de ser geometría de dibujo para convertirse en la base de cualquier programa gráfico. Fíjate en ' +
+    'que todas responden a la misma pregunta: si el punto estaba en $(x,y)$, ¿dónde acaba?');
+
 
   p.formulas([
     '\\text{traslación de } \\vec{v}=(a,b):\\quad (x,y) \\mapsto (x+a,\\ y+b)',

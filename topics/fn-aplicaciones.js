@@ -141,6 +141,10 @@ Course.topic('fn-aplicaciones', function (p) {
     'sigan subiendo.');
 
   p.section('Receta para estudiar una función');
+  p.text('Con todo lo anterior ya se puede dibujar una función sin dar un solo valor, y conviene hacerlo ' +
+    'siempre en el mismo orden: cada paso aprovecha lo averiguado en el anterior. Esta receta es, ' +
+    'literalmente, lo que se pide en el problema clásico de selectividad.');
+
 
   p.list([
     'Dominio y cortes con los ejes.',

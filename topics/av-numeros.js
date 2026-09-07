@@ -128,6 +128,11 @@ Course.topic('av-numeros', function (p) {
   });
 
   p.sub('Preguntas todavía abiertas');
+  p.text('Conviene terminar con una idea que rara vez se cuenta en clase: las matemáticas no son un ' +
+    'edificio acabado. En la teoría de números —la parte que trabaja con los objetos más sencillos ' +
+    'que existen, los números enteros— hay preguntas que se formulan en una línea, que un niño ' +
+    'entiende, y que llevan siglos sin respuesta.');
+
 
   p.list([
     '<strong>Conjetura de Goldbach</strong> (1742): todo par mayor que 2 es suma de dos primos. Comprobada hasta $4\\cdot10^{18}$. Sin demostrar.',
@@ -137,6 +142,11 @@ Course.topic('av-numeros', function (p) {
 
   /* ---------------------------------------------------------------- */
   p.section('El pequeño teorema de Fermat');
+  p.text('Fermat descubrió una regularidad sorprendente al elevar números a exponentes primos y quedarse ' +
+    'con el resto. Parece un juego de aritmética modular sin más consecuencia, y sin embargo es la ' +
+    'pieza sobre la que se apoya el cifrado que protege internet: da una forma barata de sospechar ' +
+    'si un número enorme es primo, y explica por qué el sistema RSA descifra bien lo que ha cifrado.');
+
 
   p.formula('a^{p-1} \\equiv 1 \\pmod{p} \\qquad (p \\text{ primo},\\ p \\nmid a)');
 

@@ -109,6 +109,11 @@ Course.topic('fn-lineales', function (p) {
     'parte variable.');
 
   p.section('Rectas paralelas y perpendiculares');
+  p.text('Dos rectas son paralelas cuando suben igual, así que basta con que tengan la misma pendiente: ' +
+    'eso no sorprende a nadie. Lo de las perpendiculares es menos evidente y merece una explicación. ' +
+    'Girar una recta un ángulo recto convierte su avance en subida y su subida en avance, cambiando ' +
+    'además el sentido; por eso la pendiente se da la vuelta y cambia de signo.');
+
 
   p.formulas([
     '\\text{paralelas:}\\quad m_1 = m_2',

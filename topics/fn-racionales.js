@@ -6,6 +6,11 @@ Course.topic('fn-racionales', function (p) {
     'que tienen <strong>zonas prohibidas</strong> y las que dan <strong>saltos</strong>.');
 
   p.section('Funciones racionales');
+  p.text('Una función racional es un cociente de polinomios, y todo lo interesante que le ocurre pasa ' +
+    'donde el denominador se acerca a cero. Ahí la función se dispara, y esa es la novedad respecto ' +
+    'a todo lo que has visto hasta ahora: aparecen rectas a las que la curva se aproxima sin llegar ' +
+    'a tocarlas nunca.');
+
 
   p.formula('f(x) = \\frac{P(x)}{Q(x)}', 'cociente de dos polinomios');
 

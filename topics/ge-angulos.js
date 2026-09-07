@@ -16,6 +16,11 @@ Course.topic('ge-angulos', function (p) {
      ['Completo', '$360^\\circ$', 'la vuelta entera']]);
 
   p.sub('Parejas de ángulos con nombre');
+  p.text('Antes de nada, un poco de vocabulario. Cuando dos ángulos aparecen juntos con frecuencia se les ' +
+    'pone nombre, y esos nombres se refieren siempre a <em>cuánto suman</em>, nunca a cómo son por ' +
+    'separado. Merece la pena fijarse en las cifras 90 y 180, porque son las que hay detrás de todos ' +
+    'estos términos.');
+
 
   p.list([
     '<strong>Complementarios</strong>: suman $90^\\circ$.',
@@ -86,6 +91,10 @@ Course.topic('ge-angulos', function (p) {
     'Egipto.');
 
   p.section('Los ángulos de un triángulo');
+  p.text('Que los tres ángulos de cualquier triángulo sumen siempre lo mismo no es un dato que haya que ' +
+    'creerse: se <em>demuestra</em>, y con lo que acabas de aprender sobre paralelas ya tienes todo lo ' +
+    'necesario para hacerlo.');
+
 
   p.formula('A + B + C = 180^\\circ', 'suma de los ángulos de cualquier triángulo');
 
@@ -134,6 +143,11 @@ Course.topic('ge-angulos', function (p) {
   });
 
   p.sub('Clasificar triángulos');
+  p.text('Los triángulos se clasifican de dos maneras distintas y compatibles: por sus lados y por sus ' +
+    'ángulos. Un mismo triángulo tiene, por tanto, dos apellidos —puede ser isósceles y rectángulo a ' +
+    'la vez—, y en los problemas conviene decirlos los dos, porque cada uno aporta información ' +
+    'diferente.');
+
 
   p.table(['Por sus lados', '', 'Por sus ángulos', ''],
     [['Equilátero', 'tres lados iguales', 'Acutángulo', 'los tres ángulos agudos'],

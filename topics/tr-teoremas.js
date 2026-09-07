@@ -6,6 +6,13 @@ Course.topic('tr-teoremas', function (p) {
     'tenga la forma que tenga.');
 
   p.section('Teorema del seno');
+  p.text('Hasta ahora todo lo que sabes de trigonometría exige un ángulo recto. El problema es que la ' +
+    'mayoría de los triángulos del mundo no lo tienen: una parcela, la vela de un barco, tres ' +
+    'antenas de telefonía. Los dos teoremas de este tema son los que quitan esa restricción, y con ' +
+    'ellos se puede resolver <strong>cualquier</strong> triángulo. El primero relaciona cada lado ' +
+    'con el ángulo que tiene enfrente, y dice algo muy razonable: a mayor ángulo, mayor lado ' +
+    'opuesto, y además la proporción entre ambos es la misma para los tres.');
+
 
   p.formula('\\frac{a}{\\operatorname{sen} A} = \\frac{b}{\\operatorname{sen} B} = \\frac{c}{\\operatorname{sen} C} = 2R',
     'a, b, c son los lados opuestos a los ángulos A, B, C');
@@ -15,6 +22,12 @@ Course.topic('tr-teoremas', function (p) {
     '<strong>un lado con su ángulo opuesto</strong>.');
 
   p.section('Teorema del coseno');
+  p.text('El teorema del seno falla cuando no conoces ningún par «lado con su ángulo opuesto»; por ' +
+    'ejemplo, si te dan dos lados y el ángulo que forman entre ellos. Para ese caso está el segundo ' +
+    'teorema, y conviene mirarlo con atención porque es un viejo conocido disfrazado: es el ' +
+    '<strong>teorema de Pitágoras con un término de corrección</strong>. Si el ángulo mide 90°, su ' +
+    'coseno vale cero, ese término desaparece y queda exactamente $a^2=b^2+c^2$.');
+
 
   p.formula('a^2 = b^2 + c^2 - 2bc\\cos A', 'teorema del coseno');
 
@@ -68,6 +81,11 @@ Course.topic('tr-teoremas', function (p) {
 
   /* ---------------------------------------------------------------- */
   p.section('¿Cuál de los dos uso?');
+  p.text('Con dos teoremas disponibles, la duda ya no es cómo aplicarlos sino cuál toca. La regla es ' +
+    'sencilla y depende solo de los datos que te den: si entre ellos hay <strong>un lado y el ángulo ' +
+    'que tiene enfrente</strong>, el del seno resuelve; si no lo hay, el del coseno. Esta tabla ' +
+    'recoge los cuatro casos que pueden aparecer.');
+
 
   p.table(['Datos que tengo', 'Teorema', 'Nombre del caso'],
     [['Dos ángulos y un lado', 'del <strong>seno</strong>', 'AAL'],
@@ -87,6 +105,11 @@ Course.topic('tr-teoremas', function (p) {
     'según los datos que tengas es exactamente la decisión que toma el sistema.');
 
   p.section('Área de un triángulo cualquiera');
+  p.text('La fórmula del área que aprendiste —base por altura partido por dos— tiene un inconveniente ' +
+    'práctico: la altura casi nunca es un dato, hay que construirla. Si en vez de la altura conoces ' +
+    'dos lados y el ángulo que forman, hay una fórmula que va directa, y sale de sustituir esa ' +
+    'altura por lo que vale en función del seno.');
+
 
   p.formulas([
     'S = \\frac{1}{2}\\,b\\,c\\,\\operatorname{sen} A',

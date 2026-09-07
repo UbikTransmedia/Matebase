@@ -10,6 +10,12 @@ Course.topic('av-grafos', function (p) {
     'puntos o si las líneas son rectas o curvas da exactamente igual: es topología pura.');
 
   p.section('Vocabulario mínimo');
+  p.text('Un grafo es lo más sencillo que se puede imaginar: unos puntos y unas líneas que unen algunos ' +
+    'de ellos. Nada más. Lo asombroso es cuántas cosas encajan en esa descripción —una red de metro, ' +
+    'las amistades de una red social, las páginas de internet enlazadas entre sí, las tareas de una ' +
+    'obra con sus dependencias— y que todas se estudian con las mismas herramientas. Antes hace ' +
+    'falta media docena de palabras.');
+
 
   p.list([
     '<strong>Grado</strong> de un vértice: cuántas aristas salen de él.',

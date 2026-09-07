@@ -97,6 +97,12 @@ Course.topic('av-juegos', function (p) {
 
   /* ---------------------------------------------------------------- */
   p.section('El equilibrio de Nash');
+  p.text('Nash propuso una definición de «solución» de un juego que parece modesta y resultó ser ' +
+    'enormemente fértil: una combinación de estrategias en la que <strong>nadie gana cambiando la ' +
+    'suya en solitario</strong>. Fíjate en el matiz, porque es lo que da toda su fuerza y toda su ' +
+    'tristeza al concepto: no dice que sea la mejor situación posible para todos, solo que nadie ' +
+    'tiene incentivo individual para moverse.');
+
 
   p.formula('\\text{Nash} \\iff \\text{ningún jugador mejora cambiando su estrategia él solo}');
 

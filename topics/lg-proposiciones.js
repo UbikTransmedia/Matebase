@@ -86,6 +86,12 @@ Course.topic('lg-proposiciones', function (p) {
   });
 
   p.sub('Leyes de De Morgan');
+  p.text('Hay dos reglas para negar que se usan constantemente y que casi todo el mundo aplica mal en el ' +
+    'lenguaje corriente. Piensa en la frase «llueve y hace frío». ¿Cómo se niega? Mucha gente ' +
+    'responde «no llueve y no hace frío», y es falso: para que la frase original sea mentira basta ' +
+    'con que falle <em>una</em> de las dos cosas. La negación correcta es «no llueve ' +
+    '<strong>o</strong> no hace frío». Al negar, la «y» se convierte en «o» y viceversa.');
+
 
   p.formulas([
     '\\neg(p \\land q) \\equiv \\neg p \\lor \\neg q',
@@ -178,6 +184,12 @@ Course.topic('lg-proposiciones', function (p) {
   ]);
 
   p.sub('Negar un cuantificador');
+  p.text('Con los cuantificadores pasa lo mismo y es igual de práctico. Para tumbar la afirmación «todos ' +
+    'los alumnos han aprobado» no hace falta demostrar que ha suspendido todo el mundo: basta con ' +
+    'encontrar <strong>uno</strong> que haya suspendido. Y para tumbar «existe algún alumno que ha ' +
+    'copiado» sí hay que garantizar que <em>ninguno</em> lo ha hecho. Negar cambia el cuantificador ' +
+    'por el otro y niega lo de dentro.');
+
 
   p.formulas([
     '\\neg\\left(\\forall x : P(x)\\right) \\equiv \\exists x : \\neg P(x)',

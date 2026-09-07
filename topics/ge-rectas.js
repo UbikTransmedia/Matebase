@@ -50,6 +50,11 @@ Course.topic('ge-rectas', function (p) {
 
   /* ---------------------------------------------------------------- */
   p.section('Las cinco formas de escribir la misma recta');
+  p.text('Viene una tabla con cinco maneras de escribir lo mismo, y eso desconcierta con razón. La clave ' +
+    'es que <strong>no compiten entre sí</strong>: cada una deja a la vista un dato distinto y se ' +
+    'elige según lo que te den y lo que busques. Antes de aprendértelas, fíjate en qué información ' +
+    'se lee de un vistazo en cada una.');
+
 
   p.table(['Nombre', 'Ecuación', 'Cuándo conviene'],
     [['Vectorial', '$(x,y) = (p_1,p_2)+t(v_1,v_2)$', 'para entender qué es la recta'],

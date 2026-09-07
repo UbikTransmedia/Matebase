@@ -13,6 +13,11 @@ Course.topic('al-gauss', function (p) {
     'matriz ampliada del sistema');
 
   p.sub('Las tres operaciones permitidas');
+  p.text('El método de Gauss consiste en ir simplificando el sistema hasta que se lea solo, y para eso ' +
+    'hay tres jugadas legales. Lo importante no es memorizarlas sino entender por qué son legales: ' +
+    'ninguna de las tres cambia las soluciones, solo cambian la forma de escribirlas. Es la misma ' +
+    'licencia que tenías con la balanza, ahora aplicada a varias ecuaciones a la vez.');
+
 
   p.list([
     'Intercambiar dos filas.',

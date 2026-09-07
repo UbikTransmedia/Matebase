@@ -191,6 +191,11 @@ Course.topic('av-espacios', function (p) {
     'minúsculas, tirar esas y quedarse con unas pocas. Un JPEG es un cambio de base con recorte.');
 
   p.section('Núcleo, imagen y el teorema del rango');
+  p.text('De toda aplicación lineal interesan dos conjuntos que responden a dos preguntas muy concretas: ' +
+    '<em>¿qué se aplasta hasta desaparecer?</em> y <em>¿hasta dónde llega lo que sale?</em>. El ' +
+    'primero es el núcleo, el segundo la imagen, y entre ambos hay una relación de conservación que ' +
+    'es uno de los resultados más elegantes del álgebra lineal.');
+
 
   p.list([
     'El <strong>núcleo</strong> $\\operatorname{Ker} f$ son los vectores que van a parar al cero: lo que la aplicación destruye.',

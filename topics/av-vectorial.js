@@ -6,6 +6,12 @@ Course.topic('av-vectorial', function (p) {
     'cada punto. El <strong>cálculo vectorial</strong> extiende derivadas e integrales a esos casos.');
 
   p.section('Campos escalares y campos vectoriales');
+  p.text('Hasta ahora una función devolvía un número por cada número que le dabas. Aquí damos el salto a ' +
+    'funciones que asignan algo <em>a cada punto del espacio</em>, y hay dos sabores según lo que ' +
+    'asignen. Si a cada punto le corresponde un número —la temperatura de una habitación, la presión ' +
+    'de la atmósfera, la altura de un terreno— se llama campo escalar. Si le corresponde un vector ' +
+    '—el viento, la corriente de un río, la fuerza en cada punto— se llama campo vectorial.');
+
 
   p.list([
     '<strong>Campo escalar</strong> $f(x,y)$: a cada punto le asigna un <em>número</em>. La temperatura, la altitud, la presión.',

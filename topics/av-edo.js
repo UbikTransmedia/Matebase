@@ -121,6 +121,10 @@ Course.topic('av-edo', function (p) {
     'desintegración radiactiva y la eliminación de un fármaco en sangre son idénticas en forma.');
 
   p.section('Lineales de primer orden');
+  p.text('No todas las ecuaciones se dejan separar. La siguiente familia en dificultad son las lineales, ' +
+    'que tienen la incógnita y su derivada apareciendo solo en primer grado. También estas se dejan ' +
+    'resolver siempre, mediante un truco que a primera vista parece sacado de la manga.');
+
 
   p.formula('y\' + P(x)\\,y = Q(x)');
 

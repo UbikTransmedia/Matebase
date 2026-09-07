@@ -77,6 +77,11 @@ Course.topic('ar-enteros', function (p) {
     'Menos delante de menos da más.', null, 'Signos pegados');
 
   p.section('Multiplicar y dividir: la regla de los signos');
+  p.text('La regla de los signos se enuncia en una línea y se cree por costumbre, pero tiene una ' +
+    'explicación razonable. Multiplicar por un negativo es «lo contrario de»: si deber 3 euros cinco ' +
+    'veces es $-15$, dejar de deber 3 euros cinco veces tiene que ser $+15$. Menos por menos da más ' +
+    'porque lo contrario de lo contrario es lo de partida.');
+
 
   p.formula('\\begin{array}{cc} (+)\\cdot(+) = + & (+)\\cdot(-) = - \\\\ (-)\\cdot(+) = - & (-)\\cdot(-) = + \\end{array}');
 

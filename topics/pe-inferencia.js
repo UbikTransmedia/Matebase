@@ -10,6 +10,13 @@ Course.topic('pe-inferencia', function (p) {
     'Nadie pregunta a 47 millones de personas: se pregunta a 1000 y se cuantifica el margen de error.');
 
   p.section('Muestreo');
+  p.text('Toda la inferencia se apoya en una apuesta: mirar una parte para hablar del todo. Preguntar a ' +
+    'mil personas para describir a millones parece temerario, y sin embargo funciona, siempre que la ' +
+    'parte elegida no esté sesgada. La palabra clave es <strong>representativa</strong>, y la ' +
+    'historia guarda un aviso célebre: en 1936 una revista estadounidense predijo con dos millones ' +
+    'de respuestas que Landon ganaría a Roosevelt. Se equivocó estrepitosamente porque preguntó por ' +
+    'teléfono en plena Depresión, es decir, solo a quien podía permitirse uno.');
+
 
   p.list([
     'La <strong>muestra</strong> debe ser <strong>representativa</strong>: obtenida al azar, sin que ' +

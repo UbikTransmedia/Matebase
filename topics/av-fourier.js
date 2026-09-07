@@ -154,6 +154,9 @@ Course.topic('av-fourier', function (p) {
     'números complejos: permiten escribir en un solo símbolo lo que si no serían dos integrales.');
 
   p.sub('Dónde está esto funcionando ahora mismo');
+  p.text('Conviene ver de golpe hasta dónde llega esto, porque es difícil encontrar una tecnología ' +
+    'cotidiana en la que no haya una transformada de Fourier trabajando por debajo.');
+
 
   p.list([
     '<strong>MP3 y AAC</strong>: se pasa el sonido al espectro y se eliminan las frecuencias que el oído no percibe.',

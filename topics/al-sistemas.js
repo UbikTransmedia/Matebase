@@ -96,6 +96,11 @@ Course.topic('al-sistemas', function (p) {
     'aquí, pero en el espacio.');
 
   p.section('Clasificar un sistema');
+  p.text('Antes de resolver conviene saber qué esperas encontrar, porque un sistema no siempre tiene una ' +
+    'solución. Geométricamente la respuesta es muy visual: dos rectas en un plano o se cortan en un ' +
+    'punto, o son paralelas y no se cortan nunca, o son la misma recta dibujada dos veces. Esos tres ' +
+    'dibujos son exactamente los tres casos de la tabla.');
+
 
   p.table(['Comparando coeficientes', 'Tipo', 'Geometría'],
     [['$\\dfrac{a_1}{a_2} \\ne \\dfrac{b_1}{b_2}$', 'compatible determinado', 'se cortan en un punto'],

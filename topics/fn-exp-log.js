@@ -129,6 +129,12 @@ Course.topic('fn-exp-log', function (p) {
 
   /* ---------------------------------------------------------------- */
   p.section('Modelos de crecimiento y decaimiento');
+  p.text('Casi todo lo que crece o decae en la naturaleza obedece a una misma frase: <em>lo que cambia es ' +
+    'proporcional a lo que hay</em>. Cuantas más bacterias, más nacen; cuanto más capital, más ' +
+    'intereses; cuantos más átomos radiactivos quedan, más se desintegran por segundo. Esa frase, ' +
+    'escrita en símbolos, produce siempre una exponencial, y solo cambia el signo del exponente ' +
+    'según crezca o mengüe.');
+
 
   p.formulas([
     'N(t) = N_0\\,e^{kt} \\quad (k>0: \\text{crecimiento})',

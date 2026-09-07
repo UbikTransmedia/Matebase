@@ -13,6 +13,12 @@ Course.topic('pe-descriptiva', function (p) {
   ]);
 
   p.section('Medidas de centralización');
+  p.text('Cuando tienes un montón de datos, lo primero que quieres es un número que los represente a ' +
+    'todos. Hay tres candidatos y no dicen lo mismo: la <strong>media</strong> reparte el total a ' +
+    'partes iguales, la <strong>mediana</strong> es el valor que deja la mitad a cada lado, y la ' +
+    '<strong>moda</strong> es el que más se repite. Elegir uno u otro no es indiferente, y en cuanto ' +
+    'haya un dato extremo verás que la diferencia es enorme.');
+
 
   p.formulas([
     '\\overline{x} = \\frac{\\sum x_i}{N} = \\frac{\\sum f_i\\,x_i}{N}',

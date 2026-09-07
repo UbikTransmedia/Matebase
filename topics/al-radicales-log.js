@@ -94,6 +94,11 @@ Course.topic('al-radicales-log', function (p) {
     'logaritmos deslizando uno sobre otro.');
 
   p.section('Resolver ecuaciones exponenciales');
+  p.text('En estas ecuaciones la incógnita está <em>arriba</em>, en el exponente, y ahí las herramientas ' +
+    'de siempre no llegan: no se puede despejar un exponente sumando ni dividiendo. Aquí es donde la ' +
+    'tercera propiedad de antes se gana el sueldo. Hay dos caminos, y conviene reconocer cuál toca ' +
+    'antes de ponerse a operar.');
+
 
   p.list([
     '<strong>Si se pueden igualar las bases</strong>, se igualan los exponentes: $2^{x+1} = 8 = 2^3 \\Rightarrow x+1 = 3$.',

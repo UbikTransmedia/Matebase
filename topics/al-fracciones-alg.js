@@ -83,6 +83,12 @@ Course.topic('al-fracciones-alg', function (p) {
     'exactamente lo que hace un programador cuidadoso antes de publicar.');
 
   p.section('Operar');
+  p.text('Buena noticia: no hay reglas nuevas que aprender. Las fracciones algebraicas se suman, restan, ' +
+    'multiplican y dividen <strong>exactamente igual</strong> que las de números que ya manejas; lo ' +
+    'único que cambia es que ahora en el numerador y el denominador hay polinomios en vez de cifras. ' +
+    'Si dudas de un paso, hazlo primero con números pequeños y luego repítelo con letras: funciona ' +
+    'igual.');
+
 
   p.formulas([
     '\\frac{A}{B} \\pm \\frac{C}{D} = \\frac{A D \\pm C B}{B D}',

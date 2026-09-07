@@ -63,16 +63,18 @@ Course.topic('pe-bidimensional', function (p) {
 
   /* ---------------------------------------------------------------- */
   p.section('Covarianza y correlación');
+  p.text('Ver una nube de puntos está bien, pero hace falta un número que diga <em>cuánto</em> se parecen ' +
+    'esas dos variables. La <strong>covarianza</strong> es el primer intento: mide si cuando una ' +
+    'está por encima de su media la otra también lo está. Tiene un defecto grave para comparar ' +
+    '—depende de las unidades, y en centímetros sale cien veces mayor que en metros—, y el ' +
+    '<strong>coeficiente de correlación</strong> lo arregla dividiendo por las desviaciones típicas, ' +
+    'con lo que siempre queda entre $-1$ y $1$.');
+
 
   p.formulas([
     '\\sigma_{xy} = \\frac{\\sum (x_i - \\overline{x})(y_i - \\overline{y})}{N}',
     'r = \\frac{\\sigma_{xy}}{\\sigma_x\\,\\sigma_y}'
   ], 'covarianza y coeficiente de correlación de Pearson');
-
-  p.text('La covarianza dice si las dos variables se mueven en el mismo sentido, pero su valor depende ' +
-    'de las unidades y por eso no se puede interpretar a solas. El <strong>coeficiente de ' +
-    'correlación</strong> arregla eso dividiendo por las desviaciones típicas: sale un número sin ' +
-    'unidades, siempre entre $-1$ y $1$.');
 
   p.table(['Valor de r', 'Significa'],
     [['$r = 1$', 'todos los puntos en una recta creciente'],
@@ -98,13 +100,19 @@ Course.topic('pe-bidimensional', function (p) {
     'de cualquier trabajo con datos.', 'Utilidad: qué medir y qué no');
 
   p.section('La recta de regresión');
+  p.text('Si los puntos se alinean, lo natural es trazar la recta que mejor los representa y usarla para ' +
+    'predecir. Pero «la que mejor los representa» hay que definirlo con precisión, y la definición ' +
+    'aceptada es esta: la recta que hace <strong>mínima la suma de los cuadrados</strong> de las ' +
+    'distancias verticales a los puntos. Se elevan al cuadrado para que los errores por arriba no ' +
+    'cancelen a los de por abajo, y de esa condición sale una fórmula cerrada.');
+
 
   p.formula('y - \\overline{y} = \\frac{\\sigma_{xy}}{\\sigma_x^2}\\,(x - \\overline{x})',
     'recta de regresión de Y sobre X');
 
-  p.text('Es la recta que hace <strong>mínima la suma de los cuadrados</strong> de las distancias ' +
-    'verticales a los puntos (por eso se llama <em>método de mínimos cuadrados</em>). Siempre pasa ' +
-    'por el punto medio $(\\overline{x}, \\overline{y})$.');
+  p.text('A ese procedimiento se le llama <em>método de mínimos cuadrados</em>, y tiene una ' +
+    'propiedad que conviene recordar porque sirve de comprobación: la recta pasa siempre por el ' +
+    'punto medio de la nube, $(\\overline{x}, \\overline{y})$.');
 
   p.text('Sirve para <strong>predecir</strong>: dado un valor de $x$, estimar el $y$ correspondiente. ' +
     'Pero la predicción solo es fiable si $|r|$ es alto y si $x$ está dentro del rango observado.');

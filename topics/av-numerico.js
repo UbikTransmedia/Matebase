@@ -218,6 +218,12 @@ Course.topic('av-numerico', function (p) {
   });
 
   p.section('Errores: lo que de verdad estudia esta disciplina');
+  p.text('Aquí llega lo que distingue al cálculo numérico de la mera programación. Un ordenador no guarda ' +
+    'números exactos sino aproximaciones con unas cuantas cifras, así que cada operación introduce ' +
+    'un error minúsculo. El asunto no es que exista ese error, sino <strong>cómo se comporta al ' +
+    'acumularse</strong> a lo largo de millones de operaciones: si se mantiene a raya, el resultado ' +
+    'sirve; si se amplifica, el resultado es basura con aspecto de número.');
+
 
   p.list([
     '<strong>Error de truncamiento</strong>: el que viene de sustituir el problema infinito por uno finito. Se controla afinando el método.',

@@ -188,6 +188,11 @@ Course.topic('fn-prog-lineal', function (p) {
     'y el reparto de turnos de un hospital. Es de las matemáticas que más dinero mueven al día.');
 
   p.section('Casos especiales');
+  p.text('No siempre hay un único ganador. Conviene reconocer los tres finales raros, porque en un examen ' +
+    'aparecen y porque en la práctica dicen cosas útiles: que el problema está mal planteado, que ' +
+    'sobran recursos o que hay varias soluciones igual de buenas y se puede elegir por otro ' +
+    'criterio.');
+
 
   p.table(['Situación', 'Qué pasa'],
     [['Región vacía', 'las restricciones se contradicen: el problema no tiene solución'],

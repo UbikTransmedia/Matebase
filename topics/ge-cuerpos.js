@@ -6,6 +6,12 @@ Course.topic('ge-cuerpos', function (p) {
     'una figura plana alrededor de un eje.');
 
   p.section('Volúmenes');
+  p.text('Las fórmulas de volumen se recuerdan mucho mejor si se agrupan por familias en vez de una a ' +
+    'una. Los cuerpos con dos bases iguales —prismas y cilindros— son «área de la base por altura», ' +
+    'sin más. Los que acaban en punta —pirámides y conos— son exactamente <strong>un tercio</strong> ' +
+    'de lo anterior, y ese tercio no es casualidad: tres pirámides iguales llenan justo un prisma de ' +
+    'su misma base y altura. La esfera va aparte y tiene su propia historia.');
+
 
   p.table(['Cuerpo', 'Volumen', 'Área total'],
     [['Prisma / ortoedro', '$A_b \\cdot h$', '$2A_b + P_b\\,h$'],

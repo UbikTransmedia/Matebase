@@ -110,6 +110,10 @@ Course.topic('pe-normal', function (p) {
   });
 
   p.sub('Propiedades que ahorran trabajo');
+  p.text('La campana es simétrica respecto a su centro, y de esa simetría salen dos atajos que evitan la ' +
+    'mitad de las consultas a la tabla. Conviene tenerlos a mano desde el principio, porque cubren ' +
+    'justo los casos que la tabla no trae impresos.');
+
 
   p.formulas([
     'P(Z \\le z) = \\Phi(z)',

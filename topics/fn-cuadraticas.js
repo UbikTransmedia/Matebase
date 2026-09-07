@@ -12,6 +12,12 @@ Course.topic('fn-cuadraticas', function (p) {
     'todos los rayos paralelos al eje se concentran en el foco.');
 
   p.section('Los elementos de la parábola');
+  p.text('Toda parábola tiene los mismos cuatro elementos, y con ellos se dibuja sin dar valores. Antes ' +
+    'de la lista, quédate con lo que hace cada coeficiente: el de $x^2$ decide si abre hacia arriba ' +
+    'o hacia abajo y cómo de estrecha es, y el término independiente marca por dónde corta al eje ' +
+    'vertical. El del medio es el que menos se ve a simple vista y el que decide dónde cae el ' +
+    'vértice.');
+
 
   p.list([
     '<strong>Orientación</strong>: si $a>0$ se abre hacia arriba (tiene mínimo); si $a<0$, hacia abajo (tiene máximo).',

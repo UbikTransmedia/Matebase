@@ -100,6 +100,13 @@ Course.topic('pe-combinatoria', function (p) {
     'pruebas necesita para cubrir todas las combinaciones de un fármaco.');
 
   p.section('El factorial y los números combinatorios');
+  p.text('Para contar de golpe hacen falta dos herramientas con nombre propio. El ' +
+    '<strong>factorial</strong> cuenta de cuántas maneras se pueden ordenar unos objetos: el primer ' +
+    'puesto admite $n$ candidatos, el segundo ya solo $n-1$, y así hasta agotarlos. El ' +
+    '<strong>número combinatorio</strong> cuenta de cuántas maneras se pueden elegir unos cuantos ' +
+    'sin importar el orden, y se obtiene contando las ordenaciones y dividiendo después por las que ' +
+    'sobran por haber contado lo mismo varias veces.');
+
 
   p.formula('m! = m\\cdot(m-1)\\cdot\\dots\\cdot 2\\cdot 1, \\qquad 0! = 1');
 

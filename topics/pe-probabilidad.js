@@ -13,6 +13,11 @@ Course.topic('pe-probabilidad', function (p) {
   ]);
 
   p.section('La regla de Laplace');
+  p.text('La probabilidad tiene una definición sorprendentemente sencilla cuando todos los resultados ' +
+    'posibles son igual de probables: se cuentan los que te interesan, se cuentan todos, y se ' +
+    'dividen. Laplace la escribió así, con dos palabras que hay que tomarse en serio: casos ' +
+    '<em>favorables</em> entre casos <em>posibles</em>.');
+
 
   p.formula('P(A) = \\frac{\\text{casos favorables}}{\\text{casos posibles}}');
 
@@ -71,6 +76,11 @@ Course.topic('pe-probabilidad', function (p) {
     'Comprobar si los casos son realmente equiprobables antes de dividir es la mitad del trabajo.');
 
   p.section('Álgebra de sucesos');
+  p.text('Un suceso no es más que un conjunto de resultados —«sacar par» es el conjunto $\\{2,4,6\\}$—, y ' +
+    'por eso todo lo que aprendiste sobre conjuntos vale aquí sin cambiar nada, solo con otro ' +
+    'vocabulario. Esta tabla es el diccionario entre las dos formas de hablar; si te suena a lo que ' +
+    'ya viste en el bloque 0, es exactamente eso.');
+
 
   p.table(['Notación', 'Nombre', 'Significa'],
     [['$A \\cup B$', 'unión', 'ocurre $A$ <strong>o</strong> $B$ (o los dos)'],
@@ -79,6 +89,11 @@ Course.topic('pe-probabilidad', function (p) {
      ['$A \\cap B = \\emptyset$', 'incompatibles', 'no pueden ocurrir a la vez']]);
 
   p.section('Propiedades');
+  p.text('De la definición salen unas cuantas consecuencias que ahorran muchísimo trabajo. La más ' +
+    'rentable de todas es la del suceso contrario: cuando calcular «al menos uno» es un lío, casi ' +
+    'siempre es más fácil calcular «ninguno» y restarlo de 1. Recuérdala, porque resuelve la mitad ' +
+    'de los problemas de probabilidad que caen en un examen.');
+
 
   p.formulas([
     '0 \\le P(A) \\le 1, \\qquad P(E) = 1, \\qquad P(\\emptyset) = 0',

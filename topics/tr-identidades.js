@@ -11,6 +11,14 @@ Course.topic('tr-identidades', function (p) {
     'no reparte sobre la suma.', 'warn', 'El error que hay que matar primero');
 
   p.section('Fórmulas de adición');
+  p.text('Empecemos por lo que <em>no</em> vale, porque es el error más frecuente: el seno ' +
+    '<strong>no</strong> se reparte entre sumandos. $\\operatorname{sen}(a+b)$ no es ' +
+    '$\\operatorname{sen} a + \\operatorname{sen} b$, igual que la raíz de una suma no es la suma de ' +
+    'las raíces. Compruébalo con $a=b=30°$: el primer miembro es $\\operatorname{sen} 60° \\approx ' +
+    '0{,}87$ y el segundo vale $0{,}5+0{,}5=1$. Lo que sí vale son estas fórmulas, que mezclan senos ' +
+    'y cosenos de una manera que al principio parece caprichosa y que sale de girar un punto en la ' +
+    'circunferencia.');
+
 
   p.formulas([
     '\\operatorname{sen}(\\alpha \\pm \\beta) = \\operatorname{sen}\\alpha\\cos\\beta \\pm \\cos\\alpha\\operatorname{sen}\\beta',

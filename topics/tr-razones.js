@@ -83,6 +83,12 @@ Course.topic('tr-razones', function (p) {
     'disfrazado».');
 
   p.section('Los ángulos que hay que saberse');
+  p.text('Hay tres ángulos que salen una y otra vez, y merece la pena tenerlos en la cabeza: 30°, 45° y ' +
+    '60°. No hace falta memorizar seis números sueltos, porque los seis salen de dos dibujos muy ' +
+    'sencillos. El de 45° sale de partir un cuadrado por la diagonal; los de 30° y 60°, de partir un ' +
+    'triángulo equilátero por la mitad. Con Pitágoras en esas dos figuras aparecen todos los valores ' +
+    'de la tabla, y por eso siempre llevan raíces de 2 o de 3.');
+
 
   p.table(['α', '$\\operatorname{sen}\\alpha$', '$\\cos\\alpha$', '$\\operatorname{tg}\\alpha$'],
     [['$0^\\circ$', '$0$', '$1$', '$0$'],
@@ -90,9 +96,6 @@ Course.topic('tr-razones', function (p) {
      ['$45^\\circ$', '$\\dfrac{\\sqrt{2}}{2}$', '$\\dfrac{\\sqrt{2}}{2}$', '$1$'],
      ['$60^\\circ$', '$\\dfrac{\\sqrt{3}}{2}$', '$\\dfrac{1}{2}$', '$\\sqrt{3}$'],
      ['$90^\\circ$', '$1$', '$0$', 'no existe']]);
-
-  p.text('No hay que memorizarlos a lo bruto: el de $45^\\circ$ sale de un cuadrado partido por la ' +
-    'diagonal, y los de $30^\\circ$ y $60^\\circ$ de un triángulo equilátero partido por la mitad.');
 
   p.section('Resolver un triángulo rectángulo');
 

@@ -20,6 +20,12 @@ Course.topic('fn-concepto', function (p) {
     'Ese salto abrió la puerta al análisis moderno.');
 
   p.section('Dominio y recorrido');
+  p.text('Toda función tiene dos conjuntos asociados que conviene no confundir: por dónde puede ' +
+    '<em>entrar</em> y por dónde puede <em>salir</em>. El <strong>dominio</strong> son los valores ' +
+    'de $x$ que la función admite; el <strong>recorrido</strong>, los valores de $y$ que llega a ' +
+    'alcanzar. En la práctica el dominio se calcula buscando lo que está prohibido, que en ' +
+    'Bachillerato es casi siempre una de estas tres cosas.');
+
 
   p.list([
     '<strong>Dominio</strong> $\\operatorname{Dom} f$: los valores de $x$ para los que la función existe.',
@@ -90,6 +96,10 @@ Course.topic('fn-concepto', function (p) {
     'imposible están comprobando un dominio.');
 
   p.section('Lo que se lee en una gráfica');
+  p.text('Una gráfica bien mirada cuenta casi todo lo que hay que saber de una función, y aprender a ' +
+    'interrogarla ahorra muchísimo cálculo. Estas son las preguntas que conviene hacerle siempre, en ' +
+    'este orden.');
+
 
   p.list([
     '<strong>Cortes con los ejes</strong>: con el eje Y, el valor $f(0)$. Con el eje X, las soluciones de $f(x)=0$ (las <em>raíces</em>).',
