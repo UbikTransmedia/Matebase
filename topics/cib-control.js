@@ -61,6 +61,40 @@ Course.topic('cib-control', function (p) {
   p.text('Cada término arregla un defecto concreto, y la mejor manera de entenderlos es verlos fallar ' +
     'de uno en uno.');
 
+  p.sub('Cómo se calcula esto de verdad');
+
+  p.text('Hay una pregunta que conviene resolver antes de seguir, porque si no la fórmula y la ' +
+    'práctica parecen dos cosas distintas. La fórmula del PID lleva una <em>integral</em> y una ' +
+    '<em>derivada</em>, que son operaciones sobre funciones continuas. Pero un controlador real es ' +
+    'un aparato que se despierta cada pocos milisegundos, toma <strong>una</strong> medida y decide. ' +
+    'No tiene la función entera delante. <em>¿Cómo integra y deriva algo que solo conoce a trocitos?</em>');
+
+  p.text('La respuesta es que no lo hace: lo <strong>aproxima</strong>, y con las dos aproximaciones ' +
+    'más naturales que existen. Llamemos $\\Delta t$ al tiempo entre dos medidas —el <em>paso</em>— y ' +
+    '$e_n$ al error medido en el paso $n$.');
+
+  p.formulas([
+    '\\int_0^{t} e\\,d\\tau \\ \\approx\\ \\sum_{k} e_k\\,\\Delta t',
+    '\\frac{de}{dt} \\ \\approx\\ \\frac{e_n - e_{n-1}}{\\Delta t}'
+  ], 'la integral y la derivada, tal como las calcula una máquina',
+    'La primera dice: <em>«la integral del error se aproxima por la suma de todos los errores medidos, ' +
+    'cada uno multiplicado por el paso»</em>. Es exactamente la definición del bloque 5: el área bajo ' +
+    'la curva como suma de rectangulitos de anchura $\\Delta t$.<br><br>' +
+    'La segunda: <em>«la derivada se aproxima por el error de ahora menos el anterior, partido por el ' +
+    'paso»</em>. Es el cociente incremental, el mismo con el que se definió la derivada, pero sin ' +
+    'llegar a hacer el límite: parándose en un $\\Delta t$ pequeño pero real.');
+
+  p.note('Merece la pena apreciar lo que esto significa. Un controlador PID <strong>no sabe cálculo ' +
+    'infinitesimal</strong>: solo suma y resta. Lo que ocurre es que sumar muchos trocitos se parece ' +
+    'a integrar, y restar dos valores seguidos se parece a derivar, y con un paso lo bastante pequeño ' +
+    'ese parecido es suficiente. Toda la computación científica funciona así: la máquina no calcula ' +
+    'límites, calcula aproximaciones con pasos finitos.', 'ok', 'Por qué en el ejercicio se suma y se resta');
+
+  p.text('En los ejercicios de este tema el paso vale $\\Delta t = 1$ para no arrastrar decimales, ' +
+    'con lo que la integral se queda en «suma de los errores» y la derivada en «error de ahora menos ' +
+    'el anterior». En un aparato real ese paso suele ser de milisegundos, y entonces sí hay que ' +
+    'multiplicar y dividir por él.');
+
   p.sub('Solo proporcional: se queda corto');
 
   p.text('Con únicamente el término proporcional, la corrección es proporcional al error. El problema ' +

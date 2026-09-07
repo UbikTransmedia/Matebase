@@ -169,12 +169,36 @@ Course.topic('cib-filtrado', function (p) {
     'derivadas, usada como bola de cristal. Se supone que durante un ratito la señal seguirá con la ' +
     'misma pendiente que lleva.');
 
+  p.sub('Por qué derivar es peligroso con datos ruidosos');
+
+  p.text('Antes de seguir hace falta justificar algo que suele soltarse como si fuera evidente: que ' +
+    '<strong>la derivada amplifica el ruido</strong>. Con un número se ve enseguida.');
+
+  p.text('Supón que mides cada centésima de segundo, o sea $\\Delta t = 0{,}01$, y que tu sensor tiene ' +
+    'un error de apenas una décima de unidad. Dos medidas seguidas pueden diferir en $0{,}2$ solo por ' +
+    'el ruido —una se desvía hacia arriba y la siguiente hacia abajo—. Al estimar la derivada como ' +
+    'cociente incremental, ese error se divide por el paso:');
+
+  p.formula('\\frac{0{,}2}{0{,}01} = 20',
+    'una décima de ruido, veinte de derivada falsa',
+    'La cuenta es la del cociente incremental: variación partido por tiempo transcurrido.<br><br>' +
+    'Lo importante es de dónde sale el desastre: <strong>el ruido no se divide, se multiplica por ' +
+    '$1/\\Delta t$</strong>. Y $\\Delta t$ es pequeño precisamente porque queremos medir a menudo. ' +
+    'Cuanto más rápido midas, peor: con paso de un milisegundo, esa misma décima de ruido produce una ' +
+    'derivada falsa de 200.');
+
+  p.text('Fíjate en la ironía: medir más a menudo <em>mejora</em> la estimación de la posición y ' +
+    '<em>empeora</em> la de la velocidad. La señal verdadera apenas cambia en una centésima de ' +
+    'segundo, así que su contribución al numerador es minúscula; el ruido, en cambio, salta lo mismo ' +
+    'sin importar el paso. En el cociente, el ruido gana por goleada.');
+
   p.note('Y aquí está la tensión que hace difícil el problema, y la razón de que hiciera falta un ' +
     'Wiener. Para predecir necesitas la <strong>derivada</strong> de la señal; pero la derivada ' +
-    'amplifica el ruido, así que antes tienes que <strong>suavizar</strong>; y suavizar introduce ' +
-    'retraso, que es precisamente lo que querías compensar prediciendo. Las tres cosas tiran unas de ' +
-    'otras, y el filtro de Wiener es la respuesta óptima a ese tira y afloja cuando se conocen las ' +
-    'propiedades estadísticas de la señal y del ruido.', 'warn', 'La pescadilla que se muerde la cola');
+    'amplifica el ruido, como acabas de ver, así que antes tienes que <strong>suavizar</strong>; y ' +
+    'suavizar introduce retraso, que es precisamente lo que querías compensar prediciendo. Las tres ' +
+    'cosas tiran unas de otras, y el filtro de Wiener es la respuesta óptima a ese tira y afloja ' +
+    'cuando se conocen las propiedades estadísticas de la señal y del ruido.',
+    'warn', 'La pescadilla que se muerde la cola');
 
   p.hist('Wiener publicó su solución en 1942 en un informe militar de tapas amarillas que los ' +
     'ingenieros apodaron <em>the yellow peril</em> —«el peligro amarillo»— por lo arduo de sus ' +

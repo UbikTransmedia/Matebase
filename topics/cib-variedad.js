@@ -205,6 +205,38 @@ Course.topic('cib-variedad', function (p) {
     'como el intento más ambicioso de aplicar cibernética a un país entero.');
 
   /* ---------------------------------------------------------------- */
+  p.sub('¿Y no podría una jugada valer para dos perturbaciones?');
+
+  p.text('Es la objeción correcta, y conviene responderla con precisión porque la respuesta afina la ' +
+    'ley. Sí, podría. Nada impide que una misma fila dé la casilla buena en dos columnas distintas: ' +
+    'basta con mirar la tabla y comprobarlo. Si eso ocurre, ese regulador se apaña con menos jugadas ' +
+    'de las que había supuesto.');
+
+  p.text('Lo que pasa es que <strong>eso depende de la tabla, y la tabla no la elige el ' +
+    'regulador</strong>. La tabla dice cómo responde el mundo a cada combinación, y ahí hay dos ' +
+    'situaciones muy distintas:');
+
+  p.list([
+    'Si el mundo es <em>benévolo</em> —una misma respuesta sirve para varias situaciones— entonces ' +
+      'hace falta menos variedad. Es el caso de un paraguas: vale igual para lluvia fina que para ' +
+      'chaparrón.',
+    'Si el mundo es <em>exigente</em> —cada situación anula lo que servía para la anterior— entonces ' +
+      'cada perturbación necesita su propia respuesta, y la variedad requerida es la máxima posible. ' +
+      'Es el caso de una llave: una por cerradura.'
+  ]);
+
+  p.text('La forma <strong>fuerte</strong> de la ley, la que se cita, se refiere al segundo caso: es ' +
+    'una <em>cota</em>, la peor situación posible, y por tanto la que hay que suponer cuando no se ' +
+    'conoce la tabla. En la tabla del juego de arriba, por ejemplo, cada fila da la casilla buena ' +
+    'exactamente una vez, y por eso hacen falta las cuatro jugadas.');
+
+  p.note('Que sea una cota y no una igualdad no le quita fuerza, le da otra distinta. Como cota, ' +
+    'permite afirmar cosas <strong>sin conocer los detalles</strong>: sin saber nada de tu problema, ' +
+    'si me dices que el entorno tiene mil situaciones y tu regulador diez respuestas, puedo asegurarte ' +
+    'que hay casos que no vas a poder atender. Eso es exactamente lo que se le pide a un resultado ' +
+    'general.', null, 'Por qué una cota vale tanto como una igualdad');
+
+  /* ---------------------------------------------------------------- */
   p.section('El teorema del buen regulador');
 
   p.text('Hay un corolario de esta línea de pensamiento que es más profundo todavía y que Ashby ' +
@@ -280,7 +312,8 @@ Course.topic('cib-variedad', function (p) {
     },
     ask: function (d) {
       return 'Un entorno puede presentar <strong>' + d.vd + ' perturbaciones</strong> distintas y el ' +
-        'regulador dispone de <strong>' + d.vr + ' jugadas</strong>.<br><br>' +
+        'regulador dispone de <strong>' + d.vr + ' jugadas</strong>. Supón el caso exigente: cada ' +
+        'perturbación necesita su propia respuesta.<br><br>' +
         '¿Cuántas perturbaciones puede neutralizar como máximo, y qué porcentaje de casos queda fuera ' +
         'de su alcance en el mejor de los casos?';
     },
@@ -293,11 +326,16 @@ Course.topic('cib-variedad', function (p) {
       return { n: n, pc: 100 * (d.vd - n) / d.vd };
     },
     tol: 0.01,
-    hint: function () { return 'Cada jugada puede hacerse cargo de una perturbación como mucho. Si sobran jugadas, no hacen daño, pero tampoco sirven.'; },
+    hint: function () {
+      return 'En el caso exigente, cada jugada se hace cargo de una sola perturbación. Si sobran ' +
+        'jugadas no hacen daño, pero tampoco sirven de nada.';
+    },
     steps: function (d) {
       var n = Math.min(d.vr, d.vd);
       return [
-        'Cada jugada del regulador puede neutralizar una perturbación, así que cubre como mucho $\\min(' + d.vr + ', ' + d.vd + ') = ' + n + '$.',
+        'En el caso exigente cada jugada neutraliza una sola perturbación, así que cubre como mucho ' +
+          '$\\min(' + d.vr + ', ' + d.vd + ') = ' + n + '$. Con una tabla más benévola podría cubrir ' +
+          'más, pero eso no se puede dar por supuesto.',
         d.vr >= d.vd
           ? 'Como $V_R \\ge V_D$, le llega para todas: la ley de la variedad requerida se cumple y puede regular del todo.'
           : 'Como $V_R < V_D$, quedan $' + d.vd + ' - ' + n + ' = ' + (d.vd - n) + '$ perturbaciones sin respuesta posible.',

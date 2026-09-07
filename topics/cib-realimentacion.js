@@ -131,6 +131,60 @@ Course.topic('cib-realimentacion', function (p) {
     'antes de reaccionar.');
 
   /* ---------------------------------------------------------------- */
+  p.section('El bucle escrito como una fórmula');
+
+  p.text('Antes de seguir conviene atar un cabo que ha quedado suelto. Definimos la corrección como ' +
+    '$u = K\\,e$, pero en la simulación de arriba lo que se hace es $y_{\\text{nuevo}} = y + K\\,e$. ' +
+    '<em>¿Dónde ha ido a parar la $u$?</em>');
+
+  p.text('Está ahí: <strong>la acción $u$ es lo que se le suma al sistema</strong>. En el termostato, ' +
+    '$u$ es el calor que aporta la caldera durante ese minuto, y el efecto de aportarlo es que la ' +
+    'temperatura sube en esa cantidad. Escribirlo junto da la regla completa del bucle, paso a paso:');
+
+  p.formula('y_{n+1} = y_n + K\\,(r - y_n)',
+    'el bucle proporcional, en una línea',
+    'Se lee: <em>«i griega sub ene más uno es igual a i griega sub ene, más ka por, erre menos i ' +
+    'griega sub ene»</em>.<br><br>El subíndice $n$ numera los pasos: $y_n$ es el valor ahora e ' +
+    '$y_{n+1}$ el del instante siguiente. Es una <strong>sucesión definida por recurrencia</strong>, ' +
+    'de las del bloque 5: cada término se calcula a partir del anterior.<br><br>' +
+    'Y aquí está el puente con la simulación: el paréntesis es el error $e_n$, y $K$ por ese ' +
+    'paréntesis es exactamente la acción $u_n$.');
+
+  p.sub('De dónde sale que la desviación se multiplica por $1-K$');
+
+  p.text('Con esa fórmula se puede predecir el comportamiento sin simular nada, y merece la pena ' +
+    'verlo porque son tres líneas y explican las cuatro zonas de la gráfica de antes.');
+
+  p.text('Lo que interesa no es $y$ sino <strong>cuánto se aparta de la referencia</strong>. Llamemos ' +
+    '$d_n = y_n - r$ a esa desviación. Restando $r$ a los dos lados de la fórmula del bucle:');
+
+  p.formulas([
+    'y_{n+1} - r = y_n - r + K\\,(r - y_n)',
+    'd_{n+1} = d_n - K\\,d_n',
+    'd_{n+1} = (1-K)\\,d_n'
+  ], 'tres pasos y sale sola',
+    'El truco del segundo paso es fijarse en que $r - y_n$ es justo $-d_n$, la desviación cambiada de ' +
+    'signo. Sustituyendo, queda $d_n - K d_n$, y sacando $d_n$ factor común aparece la última línea.' +
+    '<br><br>Lo que dice es contundente: <em>la desviación de cada paso es la anterior multiplicada ' +
+    'por $1-K$</em>. Nada más. Es una progresión geométrica de razón $1-K$, de las del bloque 5.');
+
+  p.text('Y con eso se entiende toda la gráfica de antes, sin simular. Como es una progresión ' +
+    'geométrica, lo que decide su destino es el <strong>valor absoluto de la razón</strong>:');
+
+  p.table(['Valor de $K$', 'Razón $1-K$', 'Qué pasa con la desviación'],
+    [['$0 < K < 1$', 'entre 0 y 1, positiva', 'encoge en cada paso sin cambiar de lado: se acerca por abajo'],
+     ['$K = 1$', 'cero', 'desaparece de golpe: llega al objetivo en un solo paso'],
+     ['$1 < K < 2$', 'entre −1 y 0', 'encoge pero cambiando de signo: oscila y se calma'],
+     ['$K = 2$', 'exactamente −1', 'cambia de signo sin encoger: oscila para siempre'],
+     ['$K > 2$', 'menor que −1', 'crece en cada paso: se descontrola']]);
+
+  p.note('Esta es la misma condición de estabilidad de la que hablábamos con Maxwell, en su versión ' +
+    'más simple: el sistema es estable <strong>si y solo si $|1-K| < 1$</strong>. En sistemas más ' +
+    'complicados ese número se convierte en varios —los autovalores— y la condición pasa a ser que ' +
+    'todos ellos queden dentro de cierto límite. Pero la idea es exactamente la que acabas de ' +
+    'deducir en tres líneas.', 'ok', 'Estabilidad, en su versión mínima');
+
+  /* ---------------------------------------------------------------- */
   p.section('El regulador de Watt');
 
   p.text('El ejemplo clásico es anterior a la palabra en siglo y medio. En 1788, James Watt puso a su ' +
