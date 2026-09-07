@@ -30,13 +30,20 @@
    pone en .fbox, el navegador recorta también en vertical y se come la
    etiqueta y las fracciones altas. */
 .fbox{
-  margin:18px 0; padding:15px 18px; background:var(--panel); border:1px solid var(--line);
+  margin:18px 0; padding:2px 18px; background:var(--panel); border:1px solid var(--line);
   border-radius:var(--radius); text-align:center; box-shadow:var(--shadow); position:relative;
   overflow:visible;
 }
-.fbox > div{overflow-x:auto; overflow-y:visible}
+/* El scroll horizontal obliga al navegador a calcular tambien overflow-y:auto,
+   asi que una fraccion o una raiz que sobresalgan dos pixeles del renglon sacan
+   una barra vertical que no pinta nada. Se les da hueco en vertical para que
+   eso no ocurra; el desplazamiento lateral, cuando hace falta, sigue estando. */
+.fbox > div{overflow-x:auto; padding:14px 0}
+/* Entre dos formulas seguidas ese relleno se sumaria dos veces y la caja
+   quedaria desangelada; se solapa para dejar una separacion normal. */
+.fbox > div + div{margin-top:-14px}
 /* con etiqueta hace falta hueco arriba para que no pise a la fórmula */
-.fbox--lab{padding-top:30px}
+.fbox--lab{padding-top:9px}
 .fbox__lab{
   position:absolute; top:9px; left:16px; padding:0;
   font-size:11px; text-transform:uppercase; letter-spacing:.09em; color:var(--ink-faint);
@@ -48,7 +55,6 @@
    tambien al pulsar, porque en un movil no hay raton. El globo se ancla a la
    derecha y nunca es mas ancho que la caja, para que no se salga. */
 .fbox--ayuda{padding-right:38px}
-.fbox--ayuda.fbox--lab{padding-top:30px}
 .fbox__help{
   position:absolute; top:8px; right:9px; z-index:3;
   width:21px; height:21px; padding:0; border-radius:50%;

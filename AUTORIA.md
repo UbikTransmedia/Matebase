@@ -12,7 +12,7 @@ Copyright (C) 2026 Guillem Carbonell
 
 Este programa es software libre: puedes redistribuirlo y/o modificarlo bajo los
 términos de la **Licencia Pública General GNU (GPL), versión 3**, publicada por
-la Free Software Foundation.
+la Free Software Foundation, o —a tu elección— cualquier versión posterior.
 
 Se distribuye con la esperanza de que sea útil, pero **SIN NINGUNA GARANTÍA**;
 ni siquiera la garantía implícita de COMERCIABILIDAD o IDONEIDAD PARA UN

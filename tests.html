@@ -4,9 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Matebase · pruebas del núcleo</title>
-<link rel="stylesheet" href="assets/css/base.css">
-<link rel="stylesheet" href="assets/css/components.css">
-<link rel="stylesheet" href="assets/css/math.css">
+<!-- Con marca de tiempo: si el navegador sirviera un CSS cacheado, las medidas
+     de esta página (recortes, barras de scroll) estarían midiendo otra cosa. -->
+<script>
+  document.write(['base', 'layout', 'components', 'math'].map(function (n) {
+    return '<link rel="stylesheet" href="assets/css/' + n + '.css?t=' + Date.now() + '">';
+  }).join(''));
+</script>
 <style>
   body{padding:28px; max-width:900px; margin:0 auto}
   h1{font-size:26px; margin-bottom:4px}
@@ -409,11 +413,21 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
             var rb = b.getBoundingClientRect();
             if (!rb.height) return;
             [].forEach.call(b.querySelectorAll('.mx, .fbox__lab'), function (m) {
+              // El globo de «cómo se lee» vive fuera de la caja a propósito.
+              if (m.closest('.fbox__tip')) return;
               var rm = m.getBoundingClientRect();
               if (rm.top < rb.top - 0.5 || rm.bottom > rb.bottom + 0.5) fuera++;
             });
           });
           if (fuera) aud.push(fuera + ' fórmula(s) o etiqueta(s) se salen de su caja');
+          // Como el scroll horizontal fuerza overflow-y:auto, una fórmula que
+          // sobresalga un par de píxeles del renglón saca una barra vertical
+          // que no sirve para nada. No debe haber ninguna.
+          var barras = 0;
+          [].forEach.call(h.querySelectorAll('.fbox > div'), function (d) {
+            if (d.scrollHeight > d.clientHeight) barras++;
+          });
+          if (barras) aud.push(barras + ' línea(s) de fórmula sacan barra de scroll vertical');
           // fórmulas de la explicación (las que no pasan por los ejercicios)
           var malas = h.querySelectorAll('.mx-err');
           if (malas.length) {

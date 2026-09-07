@@ -205,7 +205,9 @@
     var total = FLAT.length;
 
     var h = U.el('div.hdr');
-    h.innerHTML = '<div class="hdr__over">Curso interactivo</div>' +
+    h.innerHTML = '<div class="hdr__over">Curso interactivo diseñado por ' +
+      '<a href="https://gcarbonell.com" target="_blank" rel="noopener noreferrer">' +
+      'Guillem Carbonell</a></div>' +
       '<h1>Matemáticas desde el principio</h1>' +
       '<p class="hdr__sub">De contar con los dedos a los sistemas dinámicos, en ' + total +
       ' temas con ejemplos que se tocan y ejercicios que nunca se repiten.</p>';
@@ -288,7 +290,8 @@
     wrapEl.appendChild(U.el('footer.creditos', {
       html: '<p>Diseñado por <a href="https://gcarbonell.com" target="_blank" rel="noopener noreferrer">' +
         'Guillem Carbonell</a>.</p>' +
-        '<p>Se distribuye bajo licencia libre <strong>GPLv3</strong>: puedes usarlo, copiarlo, ' +
+        '<p>Se distribuye bajo licencia libre <strong>GPLv3</strong> o, a tu elección, cualquier ' +
+        'versión posterior: puedes usarlo, copiarlo, ' +
         'modificarlo y repartirlo, incluso en clase o comercialmente, siempre que lo que publiques a ' +
         'partir de él conserve esta misma libertad. El texto completo está en el archivo ' +
         '<code>LICENSE</code> de la carpeta.</p>'

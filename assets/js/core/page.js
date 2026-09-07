@@ -86,7 +86,7 @@
   Page.prototype.formulas = function (list, label, lectura) {
     var box = U.el('div.fbox' + (label ? '.fbox--lab' : ''));
     if (label) box.appendChild(U.el('span.fbox__lab', { text: label }));
-    list.forEach(function (t) { box.appendChild(U.el('div', { html: MathX.display(t), style: { margin: '6px 0' } })); });
+    list.forEach(function (t) { box.appendChild(U.el('div', { html: MathX.display(t), style: { margin: '0' } })); });
     if (lectura) ayudaLectura(box, lectura);
     return this._add(box);
   };

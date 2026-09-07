@@ -120,7 +120,8 @@ idea, y qué problema vino a resolver, es la mitad de entenderla.*
 
 Diseñado por **Guillem Carbonell** — [gcarbonell.com](https://gcarbonell.com)
 
-Se distribuye bajo la **Licencia Pública General GNU, versión 3 (GPLv3)**:
+Se distribuye bajo la **Licencia Pública General GNU, versión 3 (GPLv3)** o, a
+tu elección, cualquier versión posterior:
 puedes usarlo, copiarlo, modificarlo y repartirlo, también en clase y también
 comercialmente, siempre que lo que publiques a partir de él conserve esta misma
 libertad y su código fuente. El texto completo está en [`LICENSE`](LICENSE), y
