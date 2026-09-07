@@ -96,8 +96,9 @@ Los detalles están en **`GUIA-AUTOR.md`**.
 - Sin dependencias, sin `npm`, sin compilación. JavaScript plano.
 - No se usa `fetch` ni módulos ES porque el navegador los bloquea en `file://`;
   los temas se cargan inyectando etiquetas `<script>` clásicas bajo demanda.
-- Tres temas de color —claro, oscuro y **monokai** de contraste suave—, que se
-  recorren con el botón de abajo a la izquierda y se recuerdan entre sesiones.
+- Tres temas de color —**claro** por defecto, oscuro y **monokai** de contraste
+  suave—, con un botón para cada uno al pie del índice: el activo se distingue a
+  simple vista, y la elección se recuerda entre sesiones.
 - Diseño adaptado a móvil, y botón de inicio siempre visible en la barra superior.
 - `tests.html` comprueba el núcleo (112 verificaciones) y **audita los 312
   ejercicios**: genera cada uno 40 veces y verifica que la solución declarada

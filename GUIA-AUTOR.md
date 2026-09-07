@@ -115,7 +115,10 @@ p.exercise({
 
 ### Temas de color
 
-El curso trae tres: **claro**, **oscuro** y **monokai** (contraste suave). No
+El curso trae tres: **claro** (el de por defecto), **oscuro** y **monokai**
+(contraste suave), con un botón por tema al pie del índice. Añadir un cuarto es
+añadir una entrada a `TEMAS` en `app.js` y su bloque de tokens en `base.css`:
+los botones se construyen solos a partir de esa lista. No
 escribas nunca un color literal en un tema: usa las variables CSS (`var(--c1)`,
 `var(--ink)`, `var(--bad)`…) o los nombres que entiende `Plot2D` (`0`-`5`,
 `'ink'`, `'axis'`, `'ok'`, `'bad'`, `'bg'`). Así el dibujo se adapta solo, y las

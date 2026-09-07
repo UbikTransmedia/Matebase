@@ -272,24 +272,34 @@
     { id: 'monokai', nombre: 'Monokai', icono: '◐' }
   ];
 
+  /** Un boton por tema, para que se vean los tres y no haya que adivinarlos. */
+  function buildThemeButtons() {
+    var caja = U.$('#themes');
+    if (!caja) return;
+    U.clear(caja);
+    TEMAS.forEach(function (t) {
+      caja.appendChild(U.el('button.themes__b', {
+        type: 'button',
+        'data-tema': t.id,
+        title: 'Tema ' + t.nombre.toLowerCase(),
+        onclick: function () { setTheme(t.id); }
+      }, [
+        U.el('span.themes__i', null, t.icono),
+        U.el('span', null, t.nombre)
+      ]));
+    });
+  }
+
   function setTheme(mode) {
     var t = TEMAS.filter(function (x) { return x.id === mode; })[0] || TEMAS[0];
     document.documentElement.setAttribute('data-theme', t.id);
     Progress.pref('theme', t.id);
-    var b = U.$('#themeBtn');
-    if (b) {
-      b.textContent = t.icono + ' ' + t.nombre;
-      b.title = 'Tema actual: ' + t.nombre + '. Pulsa para cambiar.';
-    }
+    U.$$('#themes .themes__b').forEach(function (b) {
+      var activo = b.getAttribute('data-tema') === t.id;
+      b.classList.toggle('is-on', activo);
+      b.setAttribute('aria-pressed', activo ? 'true' : 'false');
+    });
     U.bus.emit('theme', t.id);
-  }
-
-  /** Pasa al siguiente tema de la lista, dando la vuelta al final. */
-  function nextTheme() {
-    var actual = document.documentElement.getAttribute('data-theme');
-    var i = 0;
-    TEMAS.forEach(function (t, k) { if (t.id === actual) i = k; });
-    setTheme(TEMAS[(i + 1) % TEMAS.length].id);
   }
 
   function irAInicio(e) {
@@ -318,8 +328,10 @@
     crumbEl = U.$('#crumb');
 
     buildIndex();
-    setTheme(Progress.pref('theme') ||
-      (global.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+    buildThemeButtons();
+    // Por defecto, claro: es el tema en el que esta pensado el curso. Los otros
+    // dos se eligen a mano, y la eleccion se recuerda.
+    setTheme(Progress.pref('theme') || 'light');
 
     var search = U.$('#search');
     search.addEventListener('input', function () {
@@ -330,7 +342,6 @@
       search.value = ''; filterIndex(''); search.parentNode.classList.remove('is-filled'); search.focus();
     });
 
-    U.$('#themeBtn').addEventListener('click', nextTheme);
     U.$('#resetBtn').addEventListener('click', function () {
       if (confirm('¿Borrar el progreso guardado (temas visitados y aciertos)?')) {
         Progress.reset(); paintIndex();

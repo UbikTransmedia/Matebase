@@ -9,6 +9,7 @@
   --bad:#c0392b; --bad-soft:#fbe6e3;
   --demo:#0d7c9b; --demo-soft:#dff2f7;
   --shadow:0 1px 2px rgba(20,25,40,.06),0 8px 24px rgba(20,25,40,.06);
+  --glow:rgba(63,91,217,.30);
   --radius:14px;
   --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
   --sans:"Segoe UI",Inter,system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
@@ -27,6 +28,7 @@ html[data-theme="dark"]{
   --bad:#f0776a; --bad-soft:#361f1d;
   --demo:#4cc4e0; --demo-soft:#13303a;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.28);
+  --glow:rgba(123,147,255,.34);
   --plot-bg:#191c22; --plot-grid:#2b303a; --plot-grid2:#22262e;
   --plot-axis:#8d95a5; --plot-ink:#c9cfdb;
   --c1:#7b93ff; --c2:#ff8b93; --c3:#4bd39b; --c4:#e5a44b; --c5:#b795f5; --c6:#4cc4e0;
@@ -44,6 +46,7 @@ html[data-theme="monokai"]{
   --bad:#d96a80; --bad-soft:#3b292d;
   --demo:#7cc7d4; --demo-soft:#2c3b3f;
   --shadow:0 1px 2px rgba(0,0,0,.28),0 10px 28px rgba(0,0,0,.22);
+  --glow:rgba(124,199,212,.32);
   --plot-bg:#2b2c25; --plot-grid:#3d3e35; --plot-grid2:#343529;
   --plot-axis:#8a887c; --plot-ink:#c7c5ba;
   --c1:#7cc7d4; --c2:#d96a80; --c3:#9cbf4a; --c4:#d99a4a; --c5:#a68fd4; --c6:#d6cd7a;
