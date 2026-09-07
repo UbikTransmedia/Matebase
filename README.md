@@ -22,6 +22,13 @@ tocan y ejercicios que se pueden repetir infinitas veces.
   «Otro ejercicio» rebaraja los números, así que se puede practicar el mismo
   tipo las veces que haga falta. Corrige, da pistas y enseña la solución paso a paso.
 
+A la derecha, un **glosario** que se abre y se cierra con el botón de la barra
+superior. Tiene buscador —que mira también dentro de las definiciones, y no
+distingue tildes— y cada término se despliega en su sitio, sin tocar el
+contenido central. Incluye los casos en que una misma palabra significa cosas
+distintas: «módulo» aparece tres veces, para el vector, el complejo y la
+aritmética modular.
+
 El progreso (temas visitados y aciertos) se guarda en el propio navegador.
 El botón «Reiniciar» de abajo a la izquierda lo borra.
 
@@ -64,6 +71,7 @@ matebase/
 │   ├── css/              base · layout · components · math
 │   └── js/
 │       ├── curriculum.js ← EL TEMARIO (el único sitio donde se decide qué hay)
+│       ├── glosario.js   ← EL VOCABULARIO (un término por entrada)
 │       └── core/         ← el motor, compartido por todos los temas
 └── topics/               ← un archivo por tema
 ```

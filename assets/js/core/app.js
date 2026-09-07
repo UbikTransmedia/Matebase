@@ -339,6 +339,113 @@
     U.bus.emit('theme', t.id);
   }
 
+  /* ---------------- glosario ----------------
+     Columna derecha ocultable. Cada termino es un desplegable que se abre
+     en su sitio: el contenido central no se toca nunca. */
+
+  function sinTildes(s) {
+    return s.normalize ? s.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : s;
+  }
+
+  /** Resalta el trozo buscado dentro del titulo, respetando las tildes. */
+  function resaltar(texto, q) {
+    if (!q) return texto;
+    var plano = sinTildes(texto).toLowerCase();
+    var i = plano.indexOf(q);
+    if (i < 0) return texto;
+    return texto.slice(0, i) + '<mark class="glos__marca">' +
+      texto.slice(i, i + q.length) + '</mark>' + texto.slice(i + q.length);
+  }
+
+  function montarGlosario() {
+    var caja = U.$('#glos');
+    var lista = U.$('#glosList');
+    var boton = U.$('#glosBtn');
+    var buscar = U.$('#glosSearch');
+    var cuenta = U.$('#glosCount');
+    if (!caja || !lista || !global.GLOSARIO) return;
+
+    var TERMINOS = global.GLOSARIO.slice().sort(function (a, b) {
+      return sinTildes(a.t).toLowerCase().localeCompare(sinTildes(b.t).toLowerCase(), 'es');
+    });
+    // texto sobre el que busca cada entrada: titulo + variantes + definicion
+    TERMINOS.forEach(function (e) {
+      e._b = sinTildes((e.t + ' ' + (e.v || '') + ' ' +
+        String(e.d).replace(/<[^>]+>/g, '')).toLowerCase());
+    });
+
+    var abierto = {};   // que definiciones estan desplegadas
+
+    function pintar(q) {
+      q = sinTildes(String(q || '').trim().toLowerCase());
+      U.clear(lista);
+      var vistos = 0;
+      TERMINOS.forEach(function (e) {
+        if (q && e._b.indexOf(q) < 0) return;
+        vistos++;
+        var item = U.el('div.glos__item');
+        var def = U.el('div.glos__d' + (abierto[e.t] ? '.is-open' : ''), {
+          html: MathX.inline(e.d)
+        });
+        if (e.i && BYID[e.i]) {
+          def.appendChild(U.el('a.glos__ir', {
+            href: '#/' + e.i, text: 'Ver en «' + BYID[e.i].t + '» →'
+          }));
+        }
+        var bt = U.el('button.glos__t', {
+          type: 'button', 'aria-expanded': abierto[e.t] ? 'true' : 'false',
+          onclick: function () {
+            abierto[e.t] = !abierto[e.t];
+            bt.setAttribute('aria-expanded', abierto[e.t] ? 'true' : 'false');
+            def.classList.toggle('is-open', !!abierto[e.t]);
+          }
+        }, [
+          U.el('span.glos__caret', null, '▸'),
+          U.el('span', { html: resaltar(e.t, q) })
+        ]);
+        item.appendChild(bt);
+        item.appendChild(def);
+        lista.appendChild(item);
+      });
+      if (!vistos) {
+        lista.appendChild(U.el('div.glos__nada', {
+          html: 'Ningún término coincide con <strong>«' + q + '»</strong>.<br>' +
+            'La búsqueda mira también dentro de las definiciones, así que prueba con ' +
+            'una palabra suelta.'
+        }));
+      }
+      cuenta.textContent = vistos === TERMINOS.length
+        ? TERMINOS.length + ' términos'
+        : vistos + ' de ' + TERMINOS.length + ' términos';
+    }
+
+    function mostrar(v) {
+      caja.classList.toggle('is-open', v);
+      boton.setAttribute('aria-expanded', v ? 'true' : 'false');
+      Progress.pref('glosario', v ? '1' : '0');
+      if (v) buscar.focus();
+    }
+
+    boton.addEventListener('click', function () {
+      mostrar(!caja.classList.contains('is-open'));
+    });
+    U.$('#glosClose').addEventListener('click', function () { mostrar(false); });
+    buscar.addEventListener('input', function () {
+      pintar(buscar.value);
+      buscar.parentNode.classList.toggle('is-filled', buscar.value !== '');
+    });
+    U.$('#glosClear').addEventListener('click', function () {
+      buscar.value = ''; pintar(''); buscar.parentNode.classList.remove('is-filled');
+      buscar.focus();
+    });
+    global.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && caja.classList.contains('is-open')) mostrar(false);
+    });
+
+    pintar('');
+    if (Progress.pref('glosario') === '1') mostrar(true);
+  }
+
   function irAInicio(e) {
     if (e) e.preventDefault();
     if (location.hash.replace(/^#\/?/, '') === '') { route(); return; }
@@ -395,6 +502,7 @@
     });
     U.$('#homeLink').addEventListener('click', irAInicio);
     U.$('#homeBtn').addEventListener('click', irAInicio);
+    montarGlosario();
 
     U.bus.on('progress', function () { paintIndex(); });
     global.addEventListener('hashchange', route);

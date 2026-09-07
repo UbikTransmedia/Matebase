@@ -48,9 +48,28 @@
     <div class="topbar">
       <button class="burger" id="burger" type="button" aria-label="Índice">☰</button>
       <div class="topbar__crumb" id="crumb"></div>
+      <button class="topbar__glos" id="glosBtn" type="button" aria-expanded="false"
+              aria-controls="glos" title="Mostrar u ocultar el glosario">
+        ▤ <span>Glosario</span>
+      </button>
     </div>
     <div class="wrap" id="wrap"></div>
   </main>
+
+  <!-- ================= GLOSARIO ================= -->
+  <aside class="glos" id="glos" aria-label="Glosario de términos">
+    <div class="glos__head">
+      <span class="glos__title">Glosario</span>
+      <button class="glos__x" id="glosClose" type="button" aria-label="Ocultar el glosario">×</button>
+      <div class="search search--glos">
+        <span class="search__icon">⌕</span>
+        <input id="glosSearch" type="search" placeholder="Buscar un término…" autocomplete="off" spellcheck="false">
+        <button class="search__clear" id="glosClear" type="button" title="Limpiar">×</button>
+      </div>
+      <div class="glos__count" id="glosCount"></div>
+    </div>
+    <div class="glos__scroll" id="glosList"></div>
+  </aside>
 
 </div>
 
@@ -62,8 +81,9 @@
 <script src="assets/js/core/progress.js"></script>
 <script src="assets/js/core/exercise.js"></script>
 <script src="assets/js/core/page.js"></script>
-<!-- ============ temario ============ -->
+<!-- ============ temario y vocabulario ============ -->
 <script src="assets/js/curriculum.js"></script>
+<script src="assets/js/glosario.js"></script>
 <!-- ============ arranque (los temas se cargan solos al abrirlos) ============ -->
 <script src="assets/js/core/app.js"></script>
 
