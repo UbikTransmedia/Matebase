@@ -106,6 +106,12 @@ Course.topic('av-vectorial', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('El gradiente apunta hacia donde algo crece más deprisa, y por eso es la brújula de casi todo lo ' +
+    'que se optimiza hoy. En un mapa de temperaturas señala hacia el calor; en un modelo de ' +
+    'aprendizaje automático señala hacia el error, y el entrenamiento consiste en caminar en sentido ' +
+    'contrario. Cada vez que un sistema de inteligencia artificial «aprende» algo, está calculando ' +
+    'gradientes millones de veces.');
+
   p.section('Divergencia y rotacional');
 
   p.text('Con un campo <em>vectorial</em> hay dos preguntas naturales: ¿de aquí sale o entra materia? ' +
@@ -190,6 +196,12 @@ Course.topic('av-vectorial', function (p) {
     'manipular estos operadores.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Estos teoremas son las ecuaciones de Maxwell, y las ecuaciones de Maxwell son la razón de que ' +
+    'exista la electricidad tal como la usamos, la radio, el wifi y la luz entendida como onda. ' +
+    'Maxwell las escribió hacia 1865 y de ellas dedujo, sin haberlas visto nunca, que debían existir ' +
+    'ondas electromagnéticas viajando a la velocidad de la luz. Hertz las produjo en un laboratorio ' +
+    'veinte años después. Prácticamente toda la tecnología del siglo XX salió de ahí.');
+
   p.section('Practica');
 
   p.exercise({

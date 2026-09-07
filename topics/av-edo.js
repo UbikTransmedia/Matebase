@@ -114,6 +114,12 @@ Course.topic('av-edo', function (p) {
     'el crecimiento de bacterias y la descarga de un condensador: todos obedecen «la variación es ' +
     'proporcional a lo que hay».');
 
+  p.util('Una ecuación diferencial dice «cómo cambia esto» y su solución dice «cómo es esto», que es el ' +
+    'salto más útil de la ciencia aplicada. La ley de enfriamiento de Newton, separable, es la que ' +
+    'usa un forense para estimar la hora de la muerte a partir de la temperatura del cuerpo; la ' +
+    'misma ecuación describe cómo se enfría un motor y cuánto tarda una casa en perder el calor. La ' +
+    'desintegración radiactiva y la eliminación de un fármaco en sangre son idénticas en forma.');
+
   p.section('Lineales de primer orden');
 
   p.formula('y\' + P(x)\\,y = Q(x)');
@@ -124,6 +130,12 @@ Course.topic('av-edo', function (p) {
   p.formula('y = \\frac{1}{\\mu}\\left(\\int \\mu\\,Q\\,dx + C\\right), \\qquad \\mu = e^{\\int P\\,dx}');
 
   /* ================= EJERCICIOS ================= */
+  p.util('El circuito eléctrico más común —una resistencia y una bobina, o una resistencia y un ' +
+    'condensador— obedece exactamente a una lineal de primer orden, y su solución explica la ' +
+    '«constante de tiempo» que aparece en cualquier hoja de características. Es también el modelo de ' +
+    'un depósito que se llena y se vacía a la vez, de la deuda con pagos e intereses simultáneos y ' +
+    'del nivel de un fármaco con dosis repetidas.');
+
   p.section('Practica');
 
   p.exercise({

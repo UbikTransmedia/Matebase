@@ -151,6 +151,13 @@ Course.topic('av-numerico', function (p) {
     'Ese compromiso entre velocidad y robustez recorre todo el análisis numérico.', 'warn');
 
   /* ---------------------------------------------------------------- */
+  p.util('El método de Newton es el que ejecuta tu calculadora al pulsar la tecla de la raíz cuadrada, y ' +
+    'el que resuelve por dentro casi cualquier ecuación que no tenga fórmula. Su velocidad —cada ' +
+    'paso duplica las cifras correctas— es lo que permite que un simulador estructural o un programa ' +
+    'de circuitos resuelva millones de ecuaciones no lineales en segundos. Su punto débil, que se ' +
+    'despiste si la derivada es pequeña, es la razón de que los programas serios lo combinen con la ' +
+    'bisección.');
+
   p.section('Integración numérica');
 
   p.text('Si una integral no tiene primitiva, se aproxima el área con figuras sencillas. Es ' +
@@ -225,6 +232,12 @@ Course.topic('av-numerico', function (p) {
     'mejor. Misma matemática, resultados distintos.', 'warn', 'La misma fórmula, mejor escrita');
 
   /* ================= EJERCICIOS ================= */
+  p.util('El error numérico ha costado vidas. En 1991, una batería Patriot falló al interceptar un misil ' +
+    'en Dhahran y murieron 28 personas: el reloj interno acumulaba un error de redondeo minúsculo ' +
+    'que, tras cien horas encendido, se había convertido en un tercio de segundo, suficiente para ' +
+    'errar el blanco por medio kilómetro. En 1996, el Ariane 5 se autodestruyó a los 37 segundos por ' +
+    'una conversión numérica que desbordó. Estudiar el error no es pedantería académica.');
+
   p.section('Practica');
 
   p.exercise({

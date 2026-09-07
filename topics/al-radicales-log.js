@@ -87,6 +87,12 @@ Course.topic('al-radicales-log', function (p) {
     'Lo que convierte productos en sumas, no sumas en nada.', 'warn');
 
   /* ---------------------------------------------------------------- */
+  p.util('La propiedad de que el logaritmo convierte productos en sumas cambió la historia de la ciencia: ' +
+    'durante trescientos años, astrónomos y navegantes multiplicaban números enormes buscándolos en ' +
+    'tablas de logaritmos, sumando y deshaciendo, porque sumar es muchísimo más rápido que ' +
+    'multiplicar a mano. La regla de cálculo, que llevó al hombre a la Luna, no era más que dos ' +
+    'logaritmos deslizando uno sobre otro.');
+
   p.section('Resolver ecuaciones exponenciales');
 
   p.list([
@@ -107,6 +113,12 @@ Course.topic('al-radicales-log', function (p) {
     'algebraicamente correcta pero imposible. Se descarta.', 'warn', 'No te saltes la comprobación');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Estas ecuaciones responden a «¿cuánto tiempo hace falta?». Cuánto tarda una inversión en ' +
+    'duplicarse, cuánto tarda un fármaco en bajar a la mitad en sangre —la vida media que viene en ' +
+    'el prospecto—, cuántos años tiene un hueso según el carbono 14 que le queda. En los tres casos ' +
+    'se conoce el resultado y se busca el exponente, y despejar un exponente es exactamente para lo ' +
+    'que se inventó el logaritmo.');
+
   p.section('Practica');
 
   p.exercise({

@@ -171,6 +171,13 @@ Course.topic('av-fourier', function (p) {
     'buena parte del análisis moderno nació de esta discusión.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Fourier es probablemente la matemática que más veces se ejecuta cada día en el mundo. Está ' +
+    'dentro del MP3 y del JPEG, que descomponen sonido e imagen en frecuencias y tiran las que el ' +
+    'oído o el ojo no aprecian; dentro de cada llamada de móvil; dentro del ecualizador de tu ' +
+    'reproductor; dentro de una resonancia magnética, que reconstruye la imagen del cuerpo ' +
+    'justamente invirtiendo una transformada; y dentro de los detectores que confirmaron las ondas ' +
+    'gravitacionales en 2015.');
+
   p.section('Practica');
 
   p.exercise({

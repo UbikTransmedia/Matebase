@@ -156,6 +156,12 @@ Course.topic('pe-inferencia', function (p) {
     }
   });
 
+  p.util('Esa coletilla de las encuestas —«margen de error de ±3 puntos»— es exactamente esto. Y explica ' +
+    'algo que sorprende: para estimar bien no hace falta preguntar a mucha gente en proporción, sino ' +
+    'en número absoluto. Con unas 1000 personas se estima igual de bien un país de un millón que uno ' +
+    'de cincuenta millones, porque el margen depende de la raíz del tamaño de la muestra, no de la ' +
+    'población. Lo que sí importa, y mucho, es que la muestra sea representativa.');
+
   p.section('Contraste de hipótesis');
 
   p.text('El otro gran instrumento de la inferencia. Se plantea una <strong>hipótesis nula</strong> ' +
@@ -174,6 +180,12 @@ Course.topic('pe-inferencia', function (p) {
     'lógica, y con los mismos dos tipos de error posibles.', null, 'Inocente hasta que se demuestre lo contrario');
 
   /* ================= EJERCICIOS ================= */
+  p.util('El contraste de hipótesis es el procedimiento con el que se aprueba un medicamento, se valida ' +
+    'un método industrial o se publica un resultado científico. También tiene una patología ' +
+    'conocida: si se prueban veinte hipótesis al azar con un nivel del 5 %, es de esperar que una ' +
+    'salga «significativa» por pura suerte. De ahí vienen buena parte de los estudios que luego ' +
+    'nadie consigue reproducir, y por eso los ensayos serios se registran antes de empezar.');
+
   p.section('Practica');
 
   p.exercise({

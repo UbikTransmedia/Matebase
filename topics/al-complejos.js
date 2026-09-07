@@ -61,6 +61,12 @@ Course.topic('al-complejos', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Los números complejos son la herramienta cotidiana de la ingeniería eléctrica. Una corriente ' +
+    'alterna tiene amplitud y desfase —dos datos—, y meterlos en un solo número complejo convierte ' +
+    'ecuaciones diferenciales endiabladas en simples sumas y productos. La electrónica de tu casa se ' +
+    'diseña así. Y la mecánica cuántica no es que los use: está <em>escrita</em> en ellos, porque la ' +
+    'función de onda es un número complejo en cada punto.');
+
   p.section('Operar en forma binómica');
 
   p.list([
@@ -143,6 +149,11 @@ Course.topic('al-complejos', function (p) {
     'ya sin solución. Ese fue el premio a inventarse $i$.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('En forma polar, multiplicar es girar. Esa idea es la base del tratamiento digital de señales: ' +
+    'cuando el móvil separa tu voz del ruido, cuando una canción se guarda en MP3 o cuando una foto ' +
+    'se comprime en JPEG, por dentro hay millones de multiplicaciones de números complejos girando. ' +
+    'La verás con nombre propio en el tema de Fourier.');
+
   p.section('Practica');
 
   p.exercise({

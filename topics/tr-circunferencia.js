@@ -81,6 +81,14 @@ Course.topic('tr-circunferencia', function (p) {
     'de conversión por todas partes.', null, 'Por qué los matemáticos no usan grados');
 
   /* ---------------------------------------------------------------- */
+  p.util('El grado es una herencia babilónica —dividieron la vuelta en 360 partes porque su sistema ' +
+    'contaba de 60 en 60—, pero el radián no es un convenio: es la medida que hace que las fórmulas ' +
+    'salgan limpias. La longitud de un arco es simplemente radio por ángulo, y la derivada del seno ' +
+    'es el coseno <em>solo</em> si trabajas en radianes; en grados aparece un factor feísimo. Por ' +
+    'eso toda calculadora científica tiene el modo RAD y por eso conviene comprobarlo antes de un ' +
+    'examen: la mitad de los resultados absurdos en trigonometría vienen de tener la calculadora en ' +
+    'el modo equivocado.');
+
   p.section('Signos por cuadrante');
 
   p.text('Como el seno es la $y$ y el coseno es la $x$, sus signos son los del punto en el plano. ' +

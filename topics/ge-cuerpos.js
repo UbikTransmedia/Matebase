@@ -67,6 +67,12 @@ Course.topic('ge-cuerpos', function (p) {
     'por ese dibujo.');
 
   /* ---------------------------------------------------------------- */
+  p.util('La relación entre el cono y el cilindro —un tercio— es la que hace que un embudo, una copa ' +
+    'cónica o un montón de arena tengan la capacidad que tienen, y la usan a diario los que calculan ' +
+    'silos, depósitos y áridos de obra. Arquímedes estaba tan orgulloso de haber descubierto la ' +
+    'relación análoga entre la esfera y el cilindro que pidió que se la grabaran en la tumba; ' +
+    'Cicerón la encontró así, siglo y medio después, abandonada entre matorrales.');
+
   p.section('Poliedros regulares');
 
   p.text('Solo existen <strong>cinco</strong> poliedros regulares (todas las caras iguales y ' +

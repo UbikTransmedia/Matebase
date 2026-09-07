@@ -79,6 +79,12 @@ Course.topic('pe-binomial', function (p) {
     'exactamente el problema que la estadística sigue intentando resolver.');
 
   /* ---------------------------------------------------------------- */
+  p.util('La binomial cuenta éxitos en intentos repetidos, y por eso es el modelo del control de calidad: ' +
+    'si el 2 % de las piezas sale defectuosa, ¿cuál es la probabilidad de que en un lote de 100 haya ' +
+    'más de cinco? De ahí salen los planes de muestreo que deciden si un envío se acepta o se ' +
+    'devuelve. También es el modelo de los ensayos clínicos, donde se cuenta cuántos pacientes ' +
+    'mejoran de cuántos tratados.');
+
   p.section('Probabilidades acumuladas');
 
   p.text('En los problemas casi nunca se pide $P(X=k)$ a secas, sino cosas como «al menos 3» o «como ' +

@@ -76,6 +76,12 @@ Course.topic('al-fracciones-alg', function (p) {
   p.text('Aunque después de simplificar el $-3$ ya no aparezca, la expresión de partida seguía sin ' +
     'estar definida ahí. Es un agujero: exactamente la discontinuidad evitable que verás en límites.');
 
+  p.util('Los valores prohibidos son la causa de una buena parte de los fallos de software. Cuando una ' +
+    'aplicación se cierra sola o muestra un error incomprensible, muy a menudo es que algo ha ' +
+    'acabado dividiendo entre cero: un promedio calculado sobre una lista vacía, un porcentaje sobre ' +
+    'un total que resultó ser nulo. Localizar de antemano qué valores rompen una expresión es ' +
+    'exactamente lo que hace un programador cuidadoso antes de publicar.');
+
   p.section('Operar');
 
   p.formulas([

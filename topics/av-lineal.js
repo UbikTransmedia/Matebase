@@ -111,6 +111,13 @@ Course.topic('av-lineal', function (p) {
     'doctoral, un autovector y una empresa de un billón de dólares.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Los autovalores son las frecuencias propias de una estructura, y conocerlas es cuestión de ' +
+    'seguridad. Un puente, un rascacielos o un ala de avión vibran de forma natural a ciertas ' +
+    'frecuencias, y si una excitación externa coincide con una de ellas, la amplitud crece sola: eso ' +
+    'es la resonancia. El puente del Milenio de Londres tuvo que cerrar a los dos días de abrir en ' +
+    'el año 2000 porque el paso de la gente excitó uno de sus modos propios. Calcular autovalores es ' +
+    'lo que evita que eso ocurra.');
+
   p.section('Practica');
 
   p.exercise({

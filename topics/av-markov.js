@@ -102,6 +102,12 @@ Course.topic('av-markov', function (p) {
     'distribución estacionaria de esa cadena dice qué porcentaje del tiempo pasa en cada página, y eso ' +
     'es exactamente la «importancia» de la página.');
 
+  p.util('La distribución estacionaria de una cadena de Markov es, literalmente, el algoritmo que hizo ' +
+    'rico a Google. PageRank modela a un internauta que salta al azar de enlace en enlace, y la ' +
+    'importancia de cada página es la probabilidad de encontrarlo allí a largo plazo: el vector ' +
+    'estacionario de una matriz gigantesca. La misma matemática predice cuotas de mercado, ocupación ' +
+    'de camas hospitalarias y el tiempo que un servidor pasa en cada estado.');
+
   p.section('Estados absorbentes');
 
   p.text('Un estado del que ya no se sale ($p_{ii} = 1$) se llama <strong>absorbente</strong>. Si la ' +
@@ -162,6 +168,13 @@ Course.topic('av-markov', function (p) {
     'primer modelo estadístico de un texto: el tatarabuelo de los modelos de lenguaje actuales.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Un estado absorbente es aquel del que no se sale, y por eso modela finales: un cliente que se ' +
+    'da de baja, una pieza que falla, un jugador arruinado. Calcular cuántos pasos se tarda en ' +
+    'llegar a él responde preguntas muy concretas —cuánto durará un cliente medio, cuándo tocará ' +
+    'mantenimiento— y es la base de los modelos de fiabilidad y de la llamada «ruina del jugador», ' +
+    'que demuestra que apostando contra un rival con más dinero se acaba perdiendo aunque el juego ' +
+    'sea justo.');
+
   p.section('Practica');
 
   p.exercise({

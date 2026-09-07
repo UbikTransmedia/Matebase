@@ -71,6 +71,11 @@ Course.topic('ge-areas', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Calcular superficies es lo que decide un presupuesto. Los metros cuadrados de una vivienda, la ' +
+    'pintura que hace falta para una fachada, la tela de un toldo o la chapa de una pieza salen de ' +
+    'descomponer una forma rara en triángulos y rectángulos, exactamente como aquí. Los programas de ' +
+    'catastro y los de diseño hacen lo mismo, solo que con miles de triángulos por segundo.');
+
   p.section('La circunferencia y el número π');
 
   p.text('Si mides el contorno de cualquier objeto redondo y lo divides entre su diámetro, siempre ' +
@@ -136,6 +141,12 @@ Course.topic('ge-areas', function (p) {
   p.formula('A_{\\text{sector}} = \\pi r^2 \\cdot \\frac{n^\\circ}{360^\\circ}');
 
   /* ================= EJERCICIOS ================= */
+  p.util('El número $\\pi$ está en sitios donde no se le espera. Aparece en el periodo de un péndulo, en ' +
+    'la fórmula de la distribución normal que gobierna los errores de medida y en cualquier fenómeno ' +
+    'que oscile, porque todo lo que da vueltas o se repite acaba pasando por una circunferencia. La ' +
+    'NASA calcula las trayectorias interplanetarias con quince decimales de $\\pi$: con eso, el ' +
+    'error al medir la órbita de la Tierra es menor que el grosor de un cabello.');
+
   p.section('Practica');
 
   p.exercise({

@@ -74,6 +74,11 @@ Course.topic('al-ec1', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('La imagen de la balanza no es una metáfora escolar: es cómo funciona cualquier ajuste real. Un ' +
+    'anestesista que calcula la dosis según el peso, un cocinero que reduce una receta de 8 a 5 ' +
+    'comensales y un contable que reparte un gasto entre departamentos están despejando incógnitas. ' +
+    'La regla es siempre la misma: lo que haces a un lado, lo haces al otro.');
+
   p.section('El método, paso a paso');
 
   p.list([
@@ -97,6 +102,12 @@ Course.topic('al-ec1', function (p) {
      ['$0 = 5$ (algo falso)', 'Ningún número vale: <strong>incompatible</strong>', '$x+1 = x+3$']]);
 
   /* ================= EJERCICIOS ================= */
+  p.util('Que una ecuación salga «sin solución» o «con infinitas» no es un fallo, es información valiosa. ' +
+    'Cuando un programa de rutas te dice «no hay camino» está resolviendo un sistema incompatible; ' +
+    'cuando un ingeniero encuentra infinitas soluciones sabe que le falta una condición por imponer ' +
+    'y que la pieza aún no está determinada. Aprender a leer esos dos finales es tan importante como ' +
+    'saber despejar.');
+
   p.section('Practica');
 
   p.exercise({

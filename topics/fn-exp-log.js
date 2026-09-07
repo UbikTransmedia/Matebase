@@ -102,6 +102,13 @@ Course.topic('fn-exp-log', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('El número $e$ aparece porque describe lo que crece proporcionalmente a lo que ya hay. Un ' +
+    'capital con interés continuo, una población de bacterias, una reacción en cadena, el número de ' +
+    'contagios al principio de una epidemia. Salió por primera vez de una pregunta muy práctica que ' +
+    'se hizo Jacob Bernoulli: si un banco paga el 100 % anual pero reparte el interés en plazos cada ' +
+    'vez más cortos, ¿cuánto se puede llegar a ganar? La respuesta no es infinito: es $e$, ' +
+    'aproximadamente 2,718.');
+
   p.section('La función logarítmica');
 
   p.text('Es la <strong>inversa</strong> de la exponencial: deshace lo que aquella hace. Su gráfica es ' +
@@ -135,6 +142,13 @@ Course.topic('fn-exp-log', function (p) {
     'ecuación diferencial.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('La intuición humana no está preparada para lo exponencial, y esa es su lección más importante. ' +
+    'La leyenda del tablero de ajedrez —un grano en la primera casilla, dos en la segunda, cuatro en ' +
+    'la tercera— acaba pidiendo más trigo del que se ha cosechado en la historia. El mismo efecto ' +
+    'explica por qué en una epidemia esperar una semana cambia el resultado por completo, por qué el ' +
+    'interés compuesto arruina o enriquece según de qué lado estés, y por qué doblar una hoja de ' +
+    'papel 42 veces llegaría a la Luna.');
+
   p.section('Practica');
 
   p.exercise({

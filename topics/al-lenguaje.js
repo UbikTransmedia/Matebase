@@ -34,6 +34,12 @@ Course.topic('al-lenguaje', function (p) {
     'en castellano y no lo es en álgebra. $2x+5$ y $2(x+5)$ son cosas distintas. Esa precisión es ' +
     'justamente para lo que sirven los paréntesis.', null, 'Por qué el álgebra es más clara que el idioma');
 
+  p.util('Traducir a álgebra es exactamente lo que hace una hoja de cálculo. Cuando escribes en una celda ' +
+    '<code>=B2*1,21</code> estás poniendo «el precio más el IVA» en lenguaje algebraico, con $x$ ' +
+    'llamada B2. Toda la contabilidad del mundo, el presupuesto de una obra y la nómina que cobrarás ' +
+    'algún día son eso: frases en castellano convertidas en fórmulas para que un ordenador las ' +
+    'repita sin equivocarse.');
+
   p.section('Valor numérico');
 
   p.text('Una expresión algebraica es una <strong>máquina</strong>: le metes un número por la letra y ' +
@@ -98,6 +104,11 @@ Course.topic('al-lenguaje', function (p) {
   p.formula('(-5x^3y)\\cdot(2x^2y^4) = -10\\,x^{5}y^{5}');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Que solo se puedan sumar monomios semejantes no es una regla arbitraria: es que <strong>no se ' +
+    'pueden sumar peras y manzanas</strong>. $3x$ son metros y $3x^2$ son metros cuadrados; sumarlos ' +
+    'sería como sumar la longitud de una habitación con su superficie. Esta misma idea, llevada a la ' +
+    'física, se llama análisis dimensional y es lo que evita que un puente se calcule mal.');
+
   p.section('Practica');
 
   p.exercise({

@@ -114,6 +114,13 @@ Course.topic('fn-cuadraticas', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('El vértice es «lo mejor posible», y por eso esta es la primera optimización que aprende ' +
+    'cualquier estudiante. Con una longitud fija de valla, el rectángulo de área máxima es el ' +
+    'cuadrado, y sale del vértice de una parábola; con un presupuesto fijo de publicidad, el ' +
+    'beneficio máximo también. La trayectoria de cualquier proyectil es una parábola y su vértice es ' +
+    'la altura máxima: es la cuenta que hace la artillería, y también la que hace un jugador de ' +
+    'baloncesto sin saberlo.');
+
   p.section('Practica');
 
   p.exercise({

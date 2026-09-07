@@ -128,6 +128,11 @@ Course.topic('fn-sucesiones', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('La suma de una progresión geométrica es la fórmula de la cuota de una hipoteca. Cada ' +
+    'mensualidad futura vale hoy un poco menos, y ese «poco menos» es una razón constante, así que ' +
+    'el total es una progresión geométrica; el banco despeja de ahí la cuota. La misma fórmula da el ' +
+    'valor de un plan de pensiones y el alcance de una campaña que se propaga por recomendación.');
+
   p.section('Límite de una sucesión');
 
   p.text('Igual que con las funciones, se puede preguntar a dónde se dirigen los términos cuando $n$ ' +
@@ -143,6 +148,12 @@ Course.topic('fn-sucesiones', function (p) {
   p.text('Se calculan igual que los límites en el infinito de las funciones: comparando grados.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Que una suma de infinitos términos pueda dar un número finito es lo que hace posible la ' +
+    'compresión digital. Un sonido o una imagen se representan como suma de infinitas componentes, ' +
+    'pero como los términos decrecen deprisa, quedarse con unos pocos basta: eso es un MP3 y eso es ' +
+    'un JPEG. Lo que tiras es la cola de la serie, y la razón de que no se note es precisamente que ' +
+    'converge.');
+
   p.section('Practica');
 
   p.exercise({

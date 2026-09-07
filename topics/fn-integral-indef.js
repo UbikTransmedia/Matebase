@@ -66,6 +66,12 @@ Course.topic('fn-integral-indef', function (p) {
     'conectan dos mundos aparentemente distintos.', null, 'El agujero de la regla de la potencia');
 
   /* ---------------------------------------------------------------- */
+  p.util('Integrar es deshacer una derivada, y eso responde a la pregunta inversa de la del tema ' +
+    'anterior: si sé el ritmo, ¿cuánto se ha acumulado? Un caudalímetro mide litros por segundo e ' +
+    'integra para facturarte el agua del mes; un contador de la luz mide potencia e integra para dar ' +
+    'kilovatios hora; el navegador de un avión mide aceleración con sensores e integra dos veces ' +
+    'para saber dónde está sin necesidad de señal exterior.');
+
   p.section('Cambio de variable');
 
   p.text('Es la regla de la cadena leída al revés. Si dentro de la integral aparece una función ' +
@@ -94,6 +100,11 @@ Course.topic('fn-integral-indef', function (p) {
     'es la integral más importante de toda la estadística.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('La constante de integración, esa $+C$ que tanto se olvida, es lo que hace falta un dato más: ' +
+    'saber el ritmo no basta para saber dónde estás, hay que saber además de dónde saliste. Un GPS ' +
+    'inercial que integre aceleraciones necesita una posición inicial; un depósito del que se conoce ' +
+    'el caudal necesita el nivel de partida. La $C$ no es un formalismo: es el dato que falta.');
+
   p.section('Practica');
 
   p.exercise({

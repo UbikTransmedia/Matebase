@@ -25,6 +25,12 @@ Course.topic('pe-descriptiva', function (p) {
     'La mediana describe mucho mejor a esa plantilla. Cuando alguien te dé una media, pregunta ' +
     'siempre por la dispersión.', 'warn', 'Por qué la media a veces miente');
 
+  p.util('La diferencia entre media y mediana es un asunto político. Si diez personas ganan 1000 € y una ' +
+    'gana un millón, la media dice que cobran unos 91 000 € y la mediana dice 1000 €: solo una de ' +
+    'las dos describe la vida de esa gente. Por eso los informes de salarios y de precios de ' +
+    'vivienda serios dan siempre la mediana, y por eso conviene desconfiar cuando alguien elige la ' +
+    'media para hablar de rentas.');
+
   p.section('Medidas de dispersión');
 
   p.text('El centro no basta. Dos grupos pueden tener la misma media y ser completamente distintos: ' +
@@ -83,6 +89,12 @@ Course.topic('pe-descriptiva', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('La dispersión suele importar más que el promedio. Dos procesos de fabricación con la misma ' +
+    'medida media son muy distintos si uno tiene el doble de desviación: ese produce más piezas ' +
+    'fuera de tolerancia, y de ahí sale el control de calidad, que vigila la desviación típica y no ' +
+    'la media. En una inversión, la desviación es literalmente lo que se llama riesgo. Un río con ' +
+    'caudal medio agradable puede inundar el pueblo si su dispersión es grande.');
+
   p.section('Tablas y gráficos');
 
   p.text('Con muchos datos se agrupan en una <strong>tabla de frecuencias</strong>:');

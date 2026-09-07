@@ -55,6 +55,12 @@ Course.topic('fn-racionales', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Las asíntotas son límites físicos, no adornos del dibujo. La velocidad de una reacción química ' +
+    'crece con la concentración pero se estanca en un techo; la eficacia de un fármaco sube con la ' +
+    'dosis hasta saturarse; el rendimiento de un equipo mejora al añadir gente pero cada vez menos. ' +
+    'Todas esas curvas son racionales y su asíntota horizontal es el techo real del sistema, el ' +
+    'número que de verdad interesa.');
+
   p.section('Funciones con radicales');
 
   p.text('Una raíz de índice <strong>par</strong> exige que el radicando no sea negativo. Eso convierte ' +
@@ -116,6 +122,12 @@ Course.topic('fn-racionales', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Casi todas las tarifas del mundo son funciones a trozos: el IRPF por tramos, la factura de la ' +
+    'luz por franjas, el precio de un envío por peso, el aparcamiento por horas. Entender el punto ' +
+    'donde cambia de tramo es lo que evita el error de creer que subir de tramo te hace ganar menos: ' +
+    'en un impuesto progresivo bien diseñado solo tributa al tipo alto la parte que supera el ' +
+    'umbral, y eso se ve leyendo la función.');
+
   p.section('Practica');
 
   p.exercise({

@@ -61,6 +61,12 @@ Course.topic('tr-identidades', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Estas fórmulas son las que permiten a un móvil separar conversaciones. Cuando dos señales de ' +
+    'distinta frecuencia se multiplican, las fórmulas de adición las convierten en suma y diferencia ' +
+    'de frecuencias, y ese es literalmente el mecanismo con el que una radio sintoniza una emisora y ' +
+    'descarta las demás. Se llama modulación, y sin ella no habría radio, ni televisión, ni ' +
+    'telefonía móvil.');
+
   p.section('Ángulo doble y ángulo mitad');
 
   p.text('Salen de las anteriores haciendo $\\beta = \\alpha$. No hay nada nuevo que memorizar: si ' +
@@ -137,6 +143,12 @@ Course.topic('tr-identidades', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Que estas ecuaciones tengan infinitas soluciones no es una molestia, es lo que las hace útiles: ' +
+    'describen cosas que se repiten. ¿A qué horas del año amanece antes de las siete? ¿Cuándo vuelve ' +
+    'a haber marea alta? ¿En qué instantes la corriente alterna pasa por cero? Todas esas preguntas ' +
+    'tienen infinitas respuestas separadas por un periodo, y lo que se busca en la práctica son las ' +
+    'que caen dentro de un intervalo concreto.');
+
   p.section('Practica');
 
   p.exercise({

@@ -181,6 +181,12 @@ Course.topic('fn-prog-lineal', function (p) {
     'días. Eran dos problemas abiertos de estadística que nadie había podido resolver.');
 
   /* ---------------------------------------------------------------- */
+  p.util('Que el óptimo esté siempre en un vértice es lo que convierte un problema con infinitas ' +
+    'posibilidades en uno con una lista corta que revisar, y eso es lo que hace que se pueda ' +
+    'resolver de verdad. Con esta idea se planifican las rutas y la carga de las aerolíneas, la ' +
+    'mezcla de crudos de una refinería, la dieta más barata que cumple unos requisitos nutricionales ' +
+    'y el reparto de turnos de un hospital. Es de las matemáticas que más dinero mueven al día.');
+
   p.section('Casos especiales');
 
   p.table(['Situación', 'Qué pasa'],

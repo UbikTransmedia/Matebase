@@ -77,6 +77,13 @@ Course.topic('ge-semejanza', function (p) {
     'formuló Galileo en 1638.', null, 'Por qué no existen gigantes');
 
   /* ---------------------------------------------------------------- */
+  p.util('Que el área crezca al cuadrado y el volumen al cubo explica por qué no existen hormigas ' +
+    'gigantes. Si duplicas todas las medidas de un animal, su peso se multiplica por 8 pero la ' +
+    'sección de sus patas solo por 4: la carga por unidad de hueso se duplica. Por eso un elefante ' +
+    'tiene patas como columnas y una gacela no. Lo mismo decide el tamaño de las gotas, por qué los ' +
+    'animales pequeños pierden calor tan rápido y por qué un edificio no se puede escalar sin ' +
+    'rediseñarlo.');
+
   p.section('El teorema de Tales');
 
   p.text('Si varias rectas <strong>paralelas</strong> cortan a dos rectas secantes, los segmentos que ' +
@@ -133,6 +140,12 @@ Course.topic('ge-semejanza', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Tales midió la pirámide de Keops con una vara y su sombra: cuando la sombra de la vara igualaba ' +
+    'su altura, la sombra de la pirámide igualaba la suya. Ese mismo razonamiento se sigue usando ' +
+    'para medir árboles, edificios y montañas sin escalarlos, y es el principio de un instrumento ' +
+    'que se llama telémetro. También es la razón de que una foto ampliada no se deforme: al ' +
+    'multiplicar todos los lados por lo mismo, las proporciones aguantan.');
+
   p.section('Practica');
 
   p.exercise({

@@ -110,6 +110,12 @@ Course.topic('al-matrices', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('El producto de matrices es la operación más ejecutada del planeta. Cada fotograma de un ' +
+    'videojuego mueve, gira y proyecta miles de puntos multiplicando matrices; las tarjetas gráficas ' +
+    'existen para hacer justamente eso a toda velocidad. Y las redes neuronales que están detrás de ' +
+    'cualquier inteligencia artificial son, por dentro, cadenas de productos de matrices: entrenar ' +
+    'un modelo consiste en repetir esta operación billones de veces.');
+
   p.section('El determinante');
 
   p.text('El <strong>determinante</strong> es un número que se asocia a toda matriz cuadrada y que ' +
@@ -171,6 +177,12 @@ Course.topic('al-matrices', function (p) {
     'inversa de una matriz 2×2');
 
   /* ================= EJERCICIOS ================= */
+  p.util('La inversa es el «deshacer». Si una matriz codifica una transformación —girar una imagen, ' +
+    'mezclar unas señales, cifrar un mensaje—, su inversa la revierte. Por eso el hecho de que una ' +
+    'matriz con determinante cero no tenga inversa no es una curiosidad: significa que esa ' +
+    'transformación <strong>ha perdido información</strong> y ya no se puede volver atrás, igual que ' +
+    'no se puede reconstruir una foto a partir de su sombra.');
+
   p.section('Practica');
 
   p.exercise({

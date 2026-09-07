@@ -100,6 +100,12 @@ Course.topic('ge-pitagoras', function (p) {
   p.text('Y todos sus múltiplos: $(6,8,10)$, $(9,12,15)$, $(30,40,50)$…');
 
   /* ================= EJERCICIOS ================= */
+  p.util('El sentido inverso —si $a^2+b^2=c^2$ entonces el ángulo es recto— es una herramienta de obra. ' +
+    'Los albañiles replantean esquinas con la «regla del 3-4-5»: se miden 3 metros en una dirección, ' +
+    '4 en la otra, y si la diagonal da exactamente 5, la esquina está a escuadra. Los egipcios ' +
+    'tensaban cuerdas con doce nudos para lo mismo hace 4000 años, y hoy cualquier maestro de obras ' +
+    'lo sigue usando porque no necesita instrumentos.');
+
   p.section('Practica');
 
   p.exercise({

@@ -174,6 +174,12 @@ Course.topic('av-juegos', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('El equilibrio de Nash describe situaciones en las que nadie gana cambiando de estrategia por su ' +
+    'cuenta, aunque todos estarían mejor cooperando. Explica las guerras de precios entre ' +
+    'gasolineras, la carrera armamentística, por qué es tan difícil un acuerdo climático y por qué ' +
+    'dos supermercados acaban abriendo en la misma esquina. Nash recibió el Nobel de Economía en ' +
+    '1994 por una tesis doctoral de veintisiete páginas escrita a los veintiuno.');
+
   p.section('Juegos repetidos: cuando vuelve a haber mañana');
 
   p.text('Si el dilema del prisionero se juega <strong>una sola vez</strong>, traicionar es lo racional. ' +
@@ -201,6 +207,13 @@ Course.topic('av-juegos', function (p) {
     'accidente de taxi en 2015, volviendo de recibir el premio Abel.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Que la cooperación aparezca cuando el juego se repite es uno de los resultados más ' +
+    'esperanzadores de esta teoría, y tiene confirmación histórica: en las trincheras de la Primera ' +
+    'Guerra Mundial surgieron treguas espontáneas entre unidades que se enfrentaban día tras día. La ' +
+    'estrategia ganadora en los torneos de Axelrod fue la más simple, «donde las dan las toman»: ' +
+    'empieza cooperando y luego copia lo que hizo el otro. Es la base matemática de la reputación en ' +
+    'el comercio y de por qué funcionan las valoraciones de vendedores.');
+
   p.section('Practica');
 
   p.exercise({

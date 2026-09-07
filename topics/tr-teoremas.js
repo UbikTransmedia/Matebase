@@ -80,6 +80,12 @@ Course.topic('tr-teoremas', function (p) {
     'que comprobar si la segunda opción es compatible con que los tres ángulos sumen $180^\\circ$.',
     'warn', 'El caso ambiguo');
 
+  p.util('Estos dos teoremas son la triangulación, y la triangulación es cómo sabe tu móvil dónde está ' +
+    'cuando no hay GPS: mide la señal de tres antenas y resuelve el triángulo. Es también como se ' +
+    'localiza el epicentro de un terremoto con tres sismógrafos, como aterriza un avión guiado por ' +
+    'radiobalizas y como los barcos navegaban antes del satélite. Saber cuál de los dos aplicar ' +
+    'según los datos que tengas es exactamente la decisión que toma el sistema.');
+
   p.section('Área de un triángulo cualquiera');
 
   p.formulas([
@@ -92,6 +98,11 @@ Course.topic('tr-teoremas', function (p) {
     'sin necesidad de conocer ningún ángulo ni ninguna altura.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('La fórmula del área con el seno es la que usan los programas de catastro y los GPS agrícolas ' +
+    'para calcular la superficie de una finca de forma irregular: se descompone en triángulos a ' +
+    'partir de las coordenadas de sus esquinas y se suman. Un tractor autónomo hace esa cuenta para ' +
+    'saber cuánta semilla cargar.');
+
   p.section('Practica');
 
   p.exercise({

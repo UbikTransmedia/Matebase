@@ -83,6 +83,12 @@ Course.topic('fn-concepto', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('El dominio es la respuesta a «¿qué valores tienen sentido aquí?», y no considerarlo es una ' +
+    'fuente clásica de disparates. Una fórmula que calcula el índice de masa corporal no significa ' +
+    'nada con una altura de cero; un modelo de crecimiento de población ajustado con datos de diez ' +
+    'años no vale para predecir a cien. Los formularios que rechazan una fecha de nacimiento ' +
+    'imposible están comprobando un dominio.');
+
   p.section('Lo que se lee en una gráfica');
 
   p.list([
@@ -129,6 +135,12 @@ Course.topic('fn-concepto', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Saber leer una gráfica es una defensa ciudadana. La mayoría de los gráficos engañosos que ' +
+    'circulan no mienten en los datos: mienten en el eje. Un eje vertical que no empieza en cero ' +
+    'convierte una subida del 2 % en un precipicio; un eje horizontal comprimido convierte una ' +
+    'tendencia suave en una explosión. Mirar primero los ejes y después la curva es el hábito que ' +
+    'distingue a quien entiende un dato de quien se lo cree.');
+
   p.section('Practica');
 
   p.exercise({

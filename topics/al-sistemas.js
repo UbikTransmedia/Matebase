@@ -89,6 +89,12 @@ Course.topic('al-sistemas', function (p) {
     'multiplica cada ecuación por lo que haga falta. Si no hay nada evidente, reducción sigue siendo ' +
     'la apuesta segura.', null, 'Por qué reducción suele ganar');
 
+  p.util('Un sistema de ecuaciones es lo que resuelve un GPS cada segundo. Tu móvil recibe la señal de ' +
+    'varios satélites y de cada uno deduce una distancia; cruzar esas distancias para averiguar ' +
+    'dónde estás es exactamente resolver un sistema. Con dos satélites hay dos posiciones posibles, ' +
+    'con tres queda una: es el mismo «cortar rectas para encontrar el punto» que estás haciendo ' +
+    'aquí, pero en el espacio.');
+
   p.section('Clasificar un sistema');
 
   p.table(['Comparando coeficientes', 'Tipo', 'Geometría'],
@@ -97,6 +103,11 @@ Course.topic('al-sistemas', function (p) {
      ['$\\dfrac{a_1}{a_2} = \\dfrac{b_1}{b_2} \\ne \\dfrac{c_1}{c_2}$', 'incompatible', 'paralelas']]);
 
   /* ================= EJERCICIOS ================= */
+  p.util('Clasificar antes de resolver ahorra trabajo y evita disparates. Un sistema incompatible en una ' +
+    'mezcla química significa que la receta pedida es imposible con esos ingredientes; uno ' +
+    'indeterminado significa que hay varias mezclas válidas y se puede elegir la más barata. En los ' +
+    'dos casos, la respuesta útil aparece <em>antes</em> de ponerse a calcular.');
+
   p.section('Practica');
 
   p.exercise({

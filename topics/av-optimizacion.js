@@ -127,6 +127,12 @@ Course.topic('av-optimizacion', function (p) {
     'misma fórmula de dos líneas.', null);
 
   /* ---------------------------------------------------------------- */
+  p.util('El descenso de gradiente es el algoritmo que entrena a todos los modelos de inteligencia ' +
+    'artificial que existen, sin excepción. La idea es exactamente la de bajar una montaña con ' +
+    'niebla: mirar la pendiente bajo los pies y dar un paso hacia abajo. Lo que cambia entre un ' +
+    'modelo y otro es el tamaño del paso, que es el mismo dilema que ves aquí: demasiado corto y no ' +
+    'llegas nunca, demasiado largo y te pasas de largo dando saltos.');
+
   p.section('Mínimos locales');
 
   p.text('El descenso de gradiente es <strong>ciego</strong>: solo ve la pendiente que tiene debajo. Si ' +

@@ -147,6 +147,13 @@ Course.topic('av-informacion', function (p) {
     'Por qué no se puede comprimir infinitamente');
 
   /* ---------------------------------------------------------------- */
+  p.util('Shannon puso un límite exacto a cuánto se puede comprimir algo sin perder nada, y ese límite ' +
+    'explica por qué un archivo ZIP no se puede volver a comprimir: la primera pasada ya ha ' +
+    'exprimido la redundancia, y lo que queda es indistinguible del azar. Es también el motivo de ' +
+    'que una foto ya guardada en JPEG apenas encoja al meterla en un ZIP. Cuando alguien anuncia un ' +
+    'compresor que reduce cualquier archivo a la mitad, está anunciando algo demostradamente ' +
+    'imposible.');
+
   p.section('Redundancia y corrección de errores');
 
   p.text('El idioma castellano tiene una entropía de aproximadamente <strong>1,5 bits por letra</strong>, ' +
@@ -168,6 +175,12 @@ Course.topic('av-informacion', function (p) {
     'ok', 'Tu conexión a internet, en una fórmula');
 
   /* ---------------------------------------------------------------- */
+  p.util('Añadir redundancia a propósito es lo que permite que las cosas funcionen en un mundo con ruido. ' +
+    'Un CD rayado sigue sonando, un código QR medio tapado se lee igual, y las sondas Voyager siguen ' +
+    'enviando datos legibles desde fuera del sistema solar con la potencia de una bombilla de ' +
+    'nevera. En los tres casos hay códigos correctores que reconstruyen lo que se perdió, y el ' +
+    'margen de cuánto se puede reconstruir lo fija esta teoría.');
+
   p.section('Entropía y desorden');
 
   p.text('El nombre no es casual. La fórmula de Shannon es prácticamente idéntica a la entropía de la ' +

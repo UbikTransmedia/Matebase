@@ -199,6 +199,13 @@ Course.topic('av-edp', function (p) {
     'análisis para demostrarlo.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Las ecuaciones en derivadas parciales son las que simulan la realidad continua, y hoy ' +
+    'sustituyen a buena parte de los ensayos físicos. Un coche se choca miles de veces en un ' +
+    'ordenador antes de estrellar el primer prototipo real; el ala de un avión se prueba en un túnel ' +
+    'de viento virtual; la previsión meteorológica es una EDP resuelta sobre una malla del planeta. ' +
+    'La ecuación del calor gobierna además la difusión de un contaminante, y con otro nombre, el ' +
+    'modelo de Black-Scholes con el que se ponen precio a las opciones financieras.');
+
   p.section('Practica');
 
   p.exercise({

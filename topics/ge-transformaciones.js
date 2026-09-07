@@ -81,6 +81,12 @@ Course.topic('ge-transformaciones', function (p) {
     'ese es el puente entre la geometría y el álgebra lineal.', 'ok', 'Geometría = matrices');
 
   /* ---------------------------------------------------------------- */
+  p.util('Cada vez que arrastras, giras o amplías algo en una pantalla se está aplicando una de estas ' +
+    'transformaciones a miles de puntos a la vez. Los editores de imagen, los programas de diseño y ' +
+    'los videojuegos las guardan como matrices y las encadenan multiplicando, que es exactamente lo ' +
+    'que verás en el bloque avanzado. La animación de una película es una sucesión de ' +
+    'transformaciones aplicadas a un modelo.');
+
   p.section('Homotecias: cambiar el tamaño');
 
   p.text('Una <strong>homotecia</strong> de centro $O$ y razón $k$ multiplica por $k$ la distancia de ' +
@@ -134,6 +140,11 @@ Course.topic('ge-transformaciones', function (p) {
     'transformaciones consideres legales.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('La homotecia es lo que hace el zoom, y también lo que explica la escala de un plano o de una ' +
+    'maqueta. Tiene una consecuencia que arruina presupuestos: al ampliar un plano al doble, las ' +
+    'superficies se multiplican por cuatro y los volúmenes por ocho. Quien encarga una maqueta al ' +
+    'doble de tamaño y espera pagar el doble de material se lleva una sorpresa.');
+
   p.section('Practica');
 
   p.exercise({

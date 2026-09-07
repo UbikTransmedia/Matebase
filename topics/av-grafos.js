@@ -213,6 +213,12 @@ Course.topic('av-grafos', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('El algoritmo de caminos mínimos es el que ejecuta tu móvil cada vez que pides una ruta, con las ' +
+    'calles como aristas y el tiempo de recorrido como peso. El mismo algoritmo enruta los paquetes ' +
+    'de internet salto a salto, decide el tendido eléctrico más barato que conecta unos pueblos y ' +
+    'organiza el orden de las tareas de una obra. Es de los algoritmos que más veces se ejecutan por ' +
+    'segundo en el planeta.');
+
   p.section('Dos problemas parecidos y muy distintos');
 
   p.text('Un <strong>circuito euleriano</strong> pasa una vez por cada <em>arista</em>; un ' +
@@ -230,6 +236,12 @@ Course.topic('av-grafos', function (p) {
     'de los siete Problemas del Milenio, con un premio de un millón de dólares.', null, 'Un millón de dólares');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Que un problema tenga solución eficiente y su gemelo no la tenga es el corazón de la pregunta ' +
+    'abierta más importante de la informática, la de P frente a NP, con un premio de un millón de ' +
+    'dólares esperando. No es filosofía: si alguien demostrara que son iguales, toda la criptografía ' +
+    'actual caería en un fin de semana. Mientras tanto, los repartidores y las fábricas resuelven ' +
+    'sus rutas con métodos que dan una solución buena sin garantizar que sea la mejor.');
+
   p.section('Practica');
 
   p.exercise({

@@ -111,6 +111,12 @@ Course.topic('al-gauss', function (p) {
   ], 'n es el número de incógnitas');
 
   /* ================= EJERCICIOS ================= */
+  p.util('El método de Gauss es probablemente el algoritmo más ejecutado de la ingeniería. Calcular las ' +
+    'tensiones de una estructura, la corriente de cada rama de un circuito, cómo se reparte el ' +
+    'caudal en una red de tuberías o cómo se distribuye el calor en una pieza acaba siempre en un ' +
+    'sistema de muchas ecuaciones que se resuelve así. Con miles de incógnitas nadie lo hace a mano, ' +
+    'pero el ordenador ejecuta exactamente los pasos que estás aprendiendo.');
+
   p.section('Practica');
 
   p.exercise({

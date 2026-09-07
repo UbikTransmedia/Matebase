@@ -204,6 +204,13 @@ Course.topic('av-geodif', function (p) {
     }
   });
 
+  p.util('El teorema egregio explica por qué no existe un mapa plano fiel de la Tierra: la esfera tiene ' +
+    'curvatura y el papel no, y ninguna curvatura se cambia sin estirar. Toda proyección deforma ' +
+    'algo —la de Mercator conserva los ángulos, que es lo que necesita un navegante, a cambio de ' +
+    'convertir Groenlandia en un continente—, y por eso hay decenas de proyecciones distintas y ' +
+    'ninguna es «la buena». Es también la razón de que una porción de pizza se sostenga si la ' +
+    'doblas.');
+
   p.section('Geodésicas');
 
   p.text('En una superficie curva no hay rectas, pero sí <strong>geodésicas</strong>: los caminos más ' +
@@ -218,6 +225,13 @@ Course.topic('av-geodif', function (p) {
     'geodésicas. La herramienta ya estaba construida, esperando.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Las geodésicas son la razón de que un vuelo de Madrid a Nueva York suba hacia Groenlandia: ' +
+    'sobre una esfera el camino más corto no es la línea recta del mapa, sino un arco de círculo ' +
+    'máximo. Las rutas aéreas y marítimas se calculan así. Y en relatividad general la idea se lleva ' +
+    'al extremo: la gravedad no es una fuerza sino curvatura del espacio-tiempo, y un planeta en ' +
+    'órbita simplemente sigue su geodésica, es decir, va todo lo recto que puede en un espacio ' +
+    'curvado.');
+
   p.section('Practica');
 
   p.exercise({

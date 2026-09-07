@@ -92,6 +92,12 @@ Course.topic('ge-vectores', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Un vector es la forma natural de decir «cuánto y hacia dónde», y por eso aparece en cuanto algo ' +
+    'tiene dirección: el viento que desvía a un avión, la corriente que arrastra a un nadador, la ' +
+    'fuerza con la que dos personas empujan un mueble. Sumar vectores es lo que hace un piloto al ' +
+    'calcular el rumbo que debe llevar para acabar donde quiere pese al viento cruzado: el rumbo ' +
+    'verdadero es la suma del suyo y el del aire.');
+
   p.section('Producto escalar');
 
   p.text('Esta operación toma dos vectores y devuelve <strong>un número</strong> (por eso se llama ' +
@@ -141,6 +147,12 @@ Course.topic('ge-vectores', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('El producto escalar mide «cuánto va en la misma dirección», y de ahí salen dos usos constantes. ' +
+    'En física es el trabajo: empujar un carrito hacia delante cansa, empujarlo hacia el suelo no lo ' +
+    'mueve, y la fórmula lo recoge sola porque el coseno de 90° vale cero. En informática es cómo se ' +
+    'ilumina una escena en 3D: el brillo de cada punto se calcula con el producto escalar entre la ' +
+    'normal de la superficie y la dirección de la luz.');
+
   p.section('Practica');
 
   p.exercise({

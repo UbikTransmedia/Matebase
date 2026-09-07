@@ -189,6 +189,14 @@ Course.topic('pe-condicionada', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Bayes es el teorema que más malentendidos evita, y aquí se cierra el aviso que quedó abierto en ' +
+    'el primer tema del curso. Imagina una prueba que acierta el 99 % de las veces para una ' +
+    'enfermedad que tiene 1 persona de cada 10 000. Si das positivo, la probabilidad de estar ' +
+    'enfermo no es del 99 %: es de alrededor del 1 %, porque los falsos positivos de las 9999 ' +
+    'personas sanas superan con mucho a los verdaderos. Los tribunales han condenado a inocentes por ' +
+    'ignorar esto, y por eso los filtros de spam, los diagnósticos médicos y los sistemas de ' +
+    'detección de fraude se construyen sobre esta fórmula.');
+
   p.section('Practica');
 
   p.exercise({

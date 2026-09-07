@@ -128,6 +128,13 @@ Course.topic('av-caos', function (p) {
     'un mes, no.', null, 'Por qué no hay partes meteorológicos a un mes vista');
 
   /* ---------------------------------------------------------------- */
+  p.util('El caos es la razón por la que el tiempo no se puede predecir a más de dos semanas, y no por ' +
+    'falta de ordenadores. Lorenz lo descubrió en 1961 al reintroducir un dato con tres decimales en ' +
+    'vez de seis: la simulación se separó por completo de la anterior. Como la atmósfera nunca se ' +
+    'conoce con precisión infinita, el error crece hasta hacerse del tamaño de la predicción. Por ' +
+    'eso los partes hablan de probabilidades y no de certezas, y por eso se ejecutan decenas de ' +
+    'simulaciones con datos ligeramente distintos.');
+
   p.section('El diagrama de bifurcación');
 
   p.text('Si dibujamos, para cada valor de $r$, los valores en los que acaba la población a largo ' +
@@ -244,6 +251,13 @@ Course.topic('av-caos', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('La dimensión fraccionaria no es una excentricidad: mide rugosidad, y se usa en medicina. La ' +
+    'ramificación de los vasos de una retina, la del árbol bronquial o la textura de un tejido ' +
+    'tienen dimensiones fractales características, y desviarse de ellas es señal de enfermedad. En ' +
+    'ingeniería, la dimensión fractal de una superficie predice cómo se desgastará o cuánta luz ' +
+    'reflejará, y las antenas fractales aprovechan la repetición a distintas escalas para funcionar ' +
+    'en muchas frecuencias con muy poco espacio.');
+
   p.section('Practica');
 
   p.exercise({

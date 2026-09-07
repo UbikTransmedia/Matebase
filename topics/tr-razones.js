@@ -76,6 +76,12 @@ Course.topic('tr-razones', function (p) {
 
   p.formula('1 + \\operatorname{tg}^2\\alpha = \\frac{1}{\\cos^2\\alpha}');
 
+  p.util('Que $\\operatorname{sen}^2\\alpha+\\cos^2\\alpha=1$ no es más que el teorema de Pitágoras en ' +
+    'una circunferencia de radio 1, y por eso aparece en cuanto algo se conserva. En un péndulo, la ' +
+    'energía se reparte entre cinética y potencial cambiando a cada instante, pero la suma se ' +
+    'mantiene: la misma estructura. Cuando veas esa identidad, piensa «esto es Pitágoras ' +
+    'disfrazado».');
+
   p.section('Los ángulos que hay que saberse');
 
   p.table(['α', '$\\operatorname{sen}\\alpha$', '$\\cos\\alpha$', '$\\operatorname{tg}\\alpha$'],
@@ -101,6 +107,13 @@ Course.topic('tr-razones', function (p) {
   ], true);
 
   /* ================= EJERCICIOS ================= */
+  p.util('Resolver triángulos es cómo se mide lo que no se puede alcanzar. Un topógrafo calcula la altura ' +
+    'de una montaña midiendo un ángulo desde dos puntos conocidos; así se levantaron todos los mapas ' +
+    'antes de los satélites, encadenando triángulos por un país entero, y así se midió por primera ' +
+    'vez el Everest en 1852, con un error de pocos metros y sin pisarlo. Un carpintero que corta una ' +
+    'escalera, un instalador que decide la inclinación de unas placas solares y una grúa que calcula ' +
+    'su alcance hacen la misma cuenta.');
+
   p.section('Practica');
 
   p.exercise({

@@ -60,6 +60,11 @@ Course.topic('al-identidades', function (p) {
   p.formula('97 \\cdot 103 = (100-3)(100+3) = 100^2 - 3^2 = 10000 - 9 = 9991');
 
   /* ---------------------------------------------------------------- */
+  p.util('La identidad $a^2-b^2=(a+b)(a-b)$ sirve para multiplicar de cabeza. ¿Cuánto es $53 \\times 47$? ' +
+    'Son $50+3$ y $50-3$, así que el resultado es $50^2-3^2 = 2500-9 = 2491$, sin papel. Lo mismo ' +
+    'con $98\\times102 = 100^2-4 = 9996$. Los mercaderes hacían esto siglos antes de que existiera ' +
+    'la calculadora, y sigue funcionando.');
+
   p.section('Factorizar');
 
   p.text('<strong>Factorizar</strong> es escribir una suma como un producto. Es la operación inversa ' +
@@ -102,6 +107,12 @@ Course.topic('al-identidades', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Factorizar es la operación que sostiene la criptografía moderna, precisamente porque con ' +
+    'números grandes <strong>nadie sabe hacerla deprisa</strong>. Multiplicar dos primos de 300 ' +
+    'cifras es instantáneo; recuperar los factores a partir del producto llevaría más años que la ' +
+    'edad del universo con los ordenadores actuales. Esa asimetría —fácil en un sentido, imposible ' +
+    'en el otro— es lo que protege tu cuenta del banco.');
+
   p.section('Practica');
 
   p.exercise({

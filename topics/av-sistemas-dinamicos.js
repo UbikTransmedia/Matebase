@@ -108,6 +108,12 @@ Course.topic('av-sistemas-dinamicos', function (p) {
     'por dos números.', 'ok', 'La conexión con el álgebra lineal');
 
   /* ---------------------------------------------------------------- */
+  p.util('Distinguir un equilibrio estable de uno inestable es la pregunta central del control ' +
+    'automático. Un péndulo colgando es estable y el mismo péndulo invertido no lo es, y sin embargo ' +
+    'un patinete eléctrico autoequilibrado mantiene el segundo corrigiendo cien veces por segundo. ' +
+    'La misma clasificación decide si un ecosistema se recupera de una perturbación, si un precio ' +
+    'vuelve a su nivel tras un sobresalto o si un reactor se estabiliza solo.');
+
   p.section('Depredador y presa: el modelo de Lotka-Volterra');
 
   p.text('El ejemplo clásico de dos especies acopladas. Los conejos crecerían solos; los zorros se ' +
@@ -181,6 +187,12 @@ Course.topic('av-sistemas-dinamicos', function (p) {
     'ecuaciones estudiando reacciones químicas.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Este modelo nació de un dato real y desconcertante: durante la Primera Guerra Mundial, con ' +
+    'mucha menos pesca en el Adriático, la proporción de tiburones capturados subió en lugar de ' +
+    'bajar. Volterra demostró que reducir la pesca beneficia más al depredador que a la presa, algo ' +
+    'que ninguna intuición anticipaba. Hoy la misma matemática se usa en gestión pesquera, en ' +
+    'control de plagas y, con otros nombres, en modelos de competencia entre empresas.');
+
   p.section('Practica');
 
   p.exercise({

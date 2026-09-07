@@ -69,6 +69,12 @@ Course.topic('al-ec2', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('El discriminante responde a «¿llega o no llega?» sin necesidad de resolver nada. La trayectoria ' +
+    'de un balón es una parábola: preguntar si entra por la escuadra es preguntar si esa parábola ' +
+    'corta cierta altura, y el signo de $b^2-4ac$ lo dice de un vistazo. Los simuladores de física ' +
+    'de los videojuegos lo calculan miles de veces por segundo para decidir si dos objetos van a ' +
+    'chocar, precisamente porque es mucho más barato que resolver la ecuación entera.');
+
   p.section('Ecuaciones incompletas: no uses la fórmula');
 
   p.text('Si falta un término, hay atajos mucho más rápidos (y con menos posibilidades de error):');
@@ -93,6 +99,12 @@ Course.topic('al-ec2', function (p) {
     '$x^2-5x+6 = (x-2)(x-3)$.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Estas dos relaciones permiten reconstruir una ecuación a partir de sus soluciones, que es lo ' +
+    'que hace un ingeniero al diseñar: sabe qué comportamiento quiere y necesita la ecuación que lo ' +
+    'produce. En control de sistemas —el piloto automático de un avión, la suspensión de un coche— ' +
+    'se eligen primero las raíces, porque son las que deciden si el sistema oscila o se estabiliza, ' +
+    'y después se construye la ecuación que las tiene.');
+
   p.section('Practica');
 
   p.exercise({

@@ -65,6 +65,11 @@ Course.topic('pe-probabilidad', function (p) {
     'probabilidad, la que se usa cuando no hay equiprobabilidad.');
 
   /* ---------------------------------------------------------------- */
+  p.util('La regla de Laplace solo vale si todos los casos son igual de probables, y olvidar esa ' +
+    'condición es el error que explota la industria del juego. En una ruleta hay 37 casillas y el ' +
+    'premio se paga como si hubiera 36: esa casilla de diferencia es todo el negocio del casino. ' +
+    'Comprobar si los casos son realmente equiprobables antes de dividir es la mitad del trabajo.');
+
   p.section('Álgebra de sucesos');
 
   p.table(['Notación', 'Nombre', 'Significa'],
@@ -125,6 +130,12 @@ Course.topic('pe-probabilidad', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Estas propiedades son la base del cálculo de riesgos, que es una industria entera. Una ' +
+    'aseguradora fija el precio de una póliza a partir de la probabilidad de cada siniestro; una ' +
+    'central nuclear calcula la de un fallo combinado multiplicando las de sus sistemas ' +
+    'independientes; una empresa decide si le compensa un proyecto ponderando ganancias por sus ' +
+    'probabilidades. Cuando oigas «riesgo de uno entre un millón», detrás hay estas cuentas.');
+
   p.section('Practica');
 
   p.exercise({

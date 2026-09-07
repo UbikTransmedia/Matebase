@@ -102,6 +102,12 @@ Course.topic('fn-lineales', function (p) {
     }
   });
 
+  p.util('La pendiente es la respuesta a «¿cuánto sube por cada unidad que avanzo?», y con ese nombre ' +
+    'aparece en todas partes: el 12 % de una señal de tráfico, la tarifa de un taxi por kilómetro, ' +
+    'el consumo por hora de un aparato, los euros por unidad de una factura. Cuando alguien dice «me ' +
+    'cobran tanto fijo más tanto por cada uno» está describiendo una recta, y la pendiente es la ' +
+    'parte variable.');
+
   p.section('Rectas paralelas y perpendiculares');
 
   p.formulas([
@@ -113,6 +119,12 @@ Course.topic('fn-lineales', function (p) {
     'perpendicular tiene que avanzar 2 por cada 1 que baja. Se intercambian los papeles y cambia el signo.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Que dos rectas perpendiculares tengan pendientes cuyo producto es $-1$ es lo que permite a un ' +
+    'programa de diseño trazar una perpendicular exacta, y a un robot calcular la dirección en la ' +
+    'que debe apartarse de un obstáculo. En estadística, la recta de regresión que verás más ' +
+    'adelante se define minimizando distancias perpendiculares o verticales a ella, y de nuevo hace ' +
+    'falta esta relación.');
+
   p.section('Practica');
 
   p.exercise({

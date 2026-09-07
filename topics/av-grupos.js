@@ -167,6 +167,12 @@ Course.topic('av-grupos', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Que solo existan 17 formas de repetir un motivo en el plano es un resultado de grupos, y los ' +
+    'artesanos de la Alhambra las encontraron todas siglos antes de que nadie lo demostrara. La ' +
+    'misma teoría clasifica los 230 grupos cristalográficos del espacio, que es como se identifica ' +
+    'un mineral o una proteína por difracción de rayos X: fue así como Rosalind Franklin obtuvo la ' +
+    'imagen de la que se dedujo la estructura del ADN.');
+
   p.section('Por qué no hay fórmula para el grado 5');
 
   p.text('Y ahora, el resultado que hizo nacer la teoría de grupos. Hay fórmula para las ecuaciones de ' +
@@ -189,6 +195,12 @@ Course.topic('av-grupos', function (p) {
     'entera de las matemáticas.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Que no exista fórmula general para el grado 5 no es que no se haya encontrado: está ' +
+    '<strong>demostrado que no puede existir</strong>, y esa demostración inauguró el álgebra ' +
+    'moderna. Galois la escribió con veinte años, la noche anterior a morir en un duelo. Su idea ' +
+    '—estudiar las simetrías de las soluciones en lugar de las soluciones— es hoy la herramienta con ' +
+    'la que se construyen los códigos correctores de un disco duro y buena parte de la criptografía.');
+
   p.section('Practica');
 
   p.exercise({

@@ -144,6 +144,12 @@ Course.topic('al-polinomios', function (p) {
     'no hay que probar al azar.', 'ok', 'La estrategia para factorizar');
 
   /* ================= EJERCICIOS ================= */
+  p.util('Ruffini no es un truco de examen: es el algoritmo que usan las calculadoras y los programas de ' +
+    'dibujo para evaluar polinomios deprisa, y ahí se llama <em>regla de Horner</em>. Evaluar ' +
+    '$x^5-3x^3+2x-7$ a lo bruto exige nueve multiplicaciones; con el esquema de Ruffini, cuatro. ' +
+    'Cuando un videojuego dibuja una curva suave, está evaluando polinomios miles de veces por ' +
+    'segundo y ese ahorro es la diferencia entre ir fluido o a tirones.');
+
   p.section('Practica');
 
   p.exercise({

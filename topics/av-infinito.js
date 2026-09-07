@@ -189,6 +189,12 @@ Course.topic('av-infinito', function (p) {
     'una torre infinita de infinitos, cada uno mayor que el anterior. No hay un «infinito más grande».',
     'ok', 'Infinitos infinitos');
 
+  p.util('El argumento diagonal parece un juego y resultó ser una herramienta demoledora. Con él demostró ' +
+    'Turing en 1936 que hay problemas que ningún ordenador podrá resolver jamás —no por falta de ' +
+    'potencia, sino por imposibilidad lógica—, entre ellos decidir si un programa cualquiera acabará ' +
+    'o se quedará colgado. Cada vez que un antivirus admite que no puede garantizar que un archivo ' +
+    'sea inofensivo, detrás está este razonamiento.');
+
   p.section('La hipótesis del continuo');
 
   p.text('Cantor se preguntó lo obvio: ¿hay algún infinito <em>entre</em> $\\aleph_0$ y $|\\mathbb{R}|$? ' +

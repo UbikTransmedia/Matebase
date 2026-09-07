@@ -144,6 +144,12 @@ Course.topic('av-numeros', function (p) {
     'gigantescas módulo $p$ sin calcularlas, y es la base de los tests de primalidad rápidos que usan ' +
     'los ordenadores para generar claves.');
 
+  p.util('Este teorema es lo que permite comprobar si un número enorme es primo sin factorizarlo, y sin ' +
+    'esa comprobación no habría comercio electrónico: cada vez que se establece una conexión segura ' +
+    'hay que fabricar primos de cientos de cifras en milisegundos. Los tests que se usan en la ' +
+    'práctica son descendientes directos de este resultado del siglo XVII, escrito por un juez que ' +
+    'hacía matemáticas por afición.');
+
   p.section('RSA: por qué esto protege tus datos');
 
   p.text('Y aquí llega la vuelta de tuerca histórica. En 1940 G. H. Hardy presumía de que la teoría de ' +

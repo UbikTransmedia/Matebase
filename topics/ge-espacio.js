@@ -71,6 +71,13 @@ Course.topic('ge-espacio', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('El producto vectorial da un vector perpendicular a otros dos, y esa es exactamente la pregunta ' +
+    'que se hace cualquier motor gráfico para saber hacia dónde «mira» una superficie: sin esa ' +
+    'normal no se puede calcular ni la iluminación ni si una cara se ve o queda de espaldas. En ' +
+    'física es el momento de una fuerza —por qué una llave larga afloja mejor un tornillo— y la ' +
+    'fuerza que sufre una carga en un campo magnético, que es lo que hace girar cualquier motor ' +
+    'eléctrico.');
+
   p.section('El plano');
 
   p.text('Un plano queda determinado por un punto y <strong>dos</strong> vectores directores (o, mucho ' +
@@ -101,6 +108,12 @@ Course.topic('ge-espacio', function (p) {
     'distancia de un punto a un plano');
 
   /* ================= EJERCICIOS ================= */
+  p.util('La ecuación del plano es la base de la impresión 3D y del diseño asistido por ordenador: una ' +
+    'pieza se guarda como una malla de miles de caras planas, cada una con su ecuación, y la ' +
+    'impresora la corta en capas resolviendo intersecciones de planos. Los sistemas de escaneo láser ' +
+    'hacen lo contrario: ajustan planos a nubes de puntos para reconstruir una habitación o un ' +
+    'edificio entero.');
+
   p.section('Practica');
 
   p.exercise({

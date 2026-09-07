@@ -122,6 +122,12 @@ Course.topic('pe-normal', function (p) {
     'simétrica, así que el área a la izquierda de $-z$ es igual al área a la derecha de $z$.');
 
   /* ---------------------------------------------------------------- */
+  p.util('Tipificar es poner en una escala común cosas medidas en unidades distintas, y eso lo hace ' +
+    'posible comparar lo incomparable: si tu nota de Matemáticas está a 1,5 desviaciones por encima ' +
+    'de la media y la de Lengua a 0,8, has ido mejor en Matemáticas aunque el número de Lengua fuera ' +
+    'más alto. Con esa misma idea se construyen las tablas de percentiles del pediatra y las ' +
+    'puntuaciones estandarizadas de las pruebas internacionales.');
+
   p.section('Aproximación de la binomial');
 
   p.text('Cuando $n$ es grande, calcular una binomial a mano es inviable. Pero ya has visto que su ' +
@@ -134,6 +140,13 @@ Course.topic('pe-normal', function (p) {
     'discreto ocupa una barra de anchura 1.', null, 'Corrección de continuidad');
 
   /* ================= EJERCICIOS ================= */
+  p.util('La campana de Gauss aparece en todas partes por una razón profunda: cuando muchos efectos ' +
+    'pequeños e independientes se suman, el resultado tiende a ser normal, digan lo que digan las ' +
+    'causas por separado. Por eso son normales las alturas de una población, los errores de una ' +
+    'medida repetida y las variaciones de una pieza fabricada en serie. La «regla del 68-95-99,7» ' +
+    '—el porcentaje que cae a una, dos y tres desviaciones— es lo que hace que un control de calidad ' +
+    'hable de «seis sigmas».');
+
   p.section('Practica');
 
   p.exercise({

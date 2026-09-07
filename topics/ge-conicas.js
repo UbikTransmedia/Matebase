@@ -122,6 +122,13 @@ Course.topic('ge-conicas', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Las cónicas son las trayectorias del universo. Kepler descubrió que los planetas describen ' +
+    'elipses con el Sol en un foco, y desde entonces toda la mecánica celeste es geometría de ' +
+    'cónicas: un satélite en órbita va en elipse, una sonda que escapa del sistema solar va en ' +
+    'hipérbola, y una piedra lanzada describe un trozo de parábola. La propiedad del foco de la ' +
+    'parábola es la que hace que una antena parabólica concentre toda la señal en un punto, y la de ' +
+    'la elipse explica las salas de los ecos, donde un susurro en un foco se oye nítido en el otro.');
+
   p.section('Excentricidad');
 
   p.text('Un solo número mide «cuánto se aparta de ser un círculo»:');
@@ -144,6 +151,11 @@ Course.topic('ge-conicas', function (p) {
   ]);
 
   /* ================= EJERCICIOS ================= */
+  p.util('La excentricidad de la órbita terrestre vale 0,017: casi cero, es decir, casi un círculo. Esa ' +
+    'cifra tan pequeña tiene consecuencias enormes, porque sus variaciones a lo largo de decenas de ' +
+    'miles de años son una de las causas de las glaciaciones. En los cometas, en cambio, la ' +
+    'excentricidad ronda 0,97, y por eso pasan cerca del Sol una vez y desaparecen durante décadas.');
+
   p.section('Practica');
 
   p.exercise({

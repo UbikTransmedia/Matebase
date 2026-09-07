@@ -93,6 +93,12 @@ Course.topic('pe-combinatoria', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('La combinatoria es la que mide de verdad si algo es seguro. Una contraseña de 8 caracteres ' +
+    'entre 94 símbolos da unas $6\\cdot10^{15}$ combinaciones; añadir dos caracteres la multiplica ' +
+    'por casi 9000. Es también la que dice que la probabilidad de acertar una lotería de 6 números ' +
+    'entre 49 es una entre casi 14 millones, y la que permite a un laboratorio calcular cuántas ' +
+    'pruebas necesita para cubrir todas las combinaciones de un fármaco.');
+
   p.section('El factorial y los números combinatorios');
 
   p.formula('m! = m\\cdot(m-1)\\cdot\\dots\\cdot 2\\cdot 1, \\qquad 0! = 1');

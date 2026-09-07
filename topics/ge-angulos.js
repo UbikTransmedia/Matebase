@@ -78,6 +78,13 @@ Course.topic('ge-angulos', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Con estos ángulos midió Eratóstenes la Tierra hacia el año 240 a. C. Sabía que a mediodía del ' +
+    'solsticio el Sol caía a plomo en Asuán, y midió que en Alejandría formaba un ángulo de unos 7°. ' +
+    'Suponiendo los rayos paralelos, ese ángulo es el mismo que separa las dos ciudades vistas desde ' +
+    'el centro, es decir, la cincuentava parte de una vuelta. Multiplicó la distancia entre ambas ' +
+    'por 50 y acertó el tamaño del planeta con un error de pocos puntos porcentuales, sin salir de ' +
+    'Egipto.');
+
   p.section('Los ángulos de un triángulo');
 
   p.formula('A + B + C = 180^\\circ', 'suma de los ángulos de cualquier triángulo');
@@ -149,6 +156,12 @@ Course.topic('ge-angulos', function (p) {
   ]);
 
   /* ================= EJERCICIOS ================= */
+  p.util('Que solo el triángulo, el cuadrado y el hexágono llenen el plano sin dejar huecos no es una ' +
+    'curiosidad: es la razón de que las baldosas, los panales y las mallas metálicas tengan las ' +
+    'formas que tienen. Las abejas eligieron el hexágono porque es el que encierra más superficie ' +
+    'con menos cera, y los ingenieros lo copian en los paneles de nido de abeja de los aviones, que ' +
+    'aguantan mucho pesando poquísimo.');
+
   p.section('Practica');
 
   p.exercise({

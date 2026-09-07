@@ -71,6 +71,12 @@ Course.topic('tr-funciones', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Amplitud, frecuencia, fase y desplazamiento son los cuatro mandos de casi todo lo que se ' +
+    'repite. En un sonido, la amplitud es el volumen y la frecuencia es lo grave o agudo que suena; ' +
+    'en la luz, la frecuencia es el color. Un ecualizador manipula amplitudes; el mando del volumen ' +
+    'mueve una sola de esas letras. Y las mareas, las horas de sol a lo largo del año o el consumo ' +
+    'eléctrico de una ciudad se modelan con estas mismas cuatro cifras.');
+
   p.section('La tangente es distinta');
 
   p.text('La tangente es $\\frac{\\operatorname{sen}x}{\\cos x}$, así que se dispara donde el coseno se ' +
@@ -164,6 +170,12 @@ Course.topic('tr-funciones', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Sumar ondas explica dos cosas que se oyen. Una es el batido: dos notas casi iguales producen un ' +
+    'temblor lento, y es exactamente lo que escucha un afinador de pianos —cuando el temblor ' +
+    'desaparece, la cuerda está afinada—. La otra son los auriculares con cancelación de ruido, que ' +
+    'graban el sonido del exterior y emiten esa misma onda invertida para que la suma se anule. ' +
+    'Silencio construido a base de sumar.');
+
   p.section('Practica');
 
   p.exercise({

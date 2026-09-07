@@ -193,6 +193,13 @@ Course.topic('av-topologia', function (p) {
     'decide qué es posible y qué no, sin hacer una sola cuenta.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('La topología parece la más abstracta y ha resultado ser de las más aplicadas. El análisis ' +
+    'topológico de datos encuentra la «forma» de conjuntos enormes de información y se usa para ' +
+    'clasificar tumores y detectar fraude. En robótica, el espacio de configuraciones de un brazo ' +
+    'articulado es una superficie con agujeros, y planificar un movimiento es encontrar un camino en ' +
+    'ella. Y el Nobel de Física de 2016 se concedió por fases topológicas de la materia, que son la ' +
+    'base de una de las vías hacia el ordenador cuántico.');
+
   p.section('Practica');
 
   p.exercise({

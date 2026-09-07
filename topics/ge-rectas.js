@@ -65,6 +65,12 @@ Course.topic('ge-rectas', function (p) {
   p.formula('Ax+By+C = 0 \\ \\Longrightarrow\\ \\vec{n} = (A,B) \\perp r, \\quad \\vec{v} = (-B, A) \\parallel r');
 
   /* ---------------------------------------------------------------- */
+  p.util('Cinco formas para la misma recta no es un capricho: cada una responde bien a una pregunta ' +
+    'distinta. La explícita $y=mx+n$ es la que se lee de un vistazo en una gráfica de datos; la ' +
+    'paramétrica es la que usa un robot o un dron, porque describe <em>dónde está en cada ' +
+    'instante</em>; la general es la que le conviene al ordenador para decidir de qué lado de la ' +
+    'recta cae un punto. Saber cambiar de una a otra es saber elegir la herramienta.');
+
   p.section('Posiciones relativas');
 
   p.text('Dos rectas del plano solo pueden hacer tres cosas, y se distingue comparando sus vectores ' +
@@ -119,6 +125,12 @@ Course.topic('ge-rectas', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('La distancia de un punto a una recta es lo que calcula un coche con asistente de carril: la ' +
+    'línea pintada en el asfalto es la recta, el coche es el punto, y si esa distancia se sale del ' +
+    'margen suena el aviso. Es también como un programa de dibujo decide si has hecho clic «sobre» ' +
+    'una línea, y cómo un sistema de control mide cuánto se desvía una máquina de la trayectoria que ' +
+    'debía seguir.');
+
   p.section('Practica');
 
   p.exercise({

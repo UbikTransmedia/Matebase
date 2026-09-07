@@ -184,6 +184,12 @@ Course.topic('av-espacios', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('Que una matriz «sea» una transformación es lo que hace funcionar a los gráficos por ordenador: ' +
+    'girar un modelo, escalarlo o proyectarlo en la pantalla son matrices, y encadenar movimientos ' +
+    'es multiplicarlas. Pero el ejemplo que más te afecta es otro: comprimir una imagen o una ' +
+    'canción consiste en cambiar de base a una en la que casi todas las coordenadas salen ' +
+    'minúsculas, tirar esas y quedarse con unas pocas. Un JPEG es un cambio de base con recorte.');
+
   p.section('Núcleo, imagen y el teorema del rango');
 
   p.list([
@@ -204,6 +210,12 @@ Course.topic('av-espacios', function (p) {
     'ok', 'Todo encaja');
 
   /* ================= EJERCICIOS ================= */
+  p.util('El núcleo es «lo que se pierde por el camino». Si una transformación tiene núcleo no trivial, ' +
+    'distintos datos de entrada acaban dando la misma salida y ya no se puede volver atrás: eso es ' +
+    'exactamente lo que ocurre al reducir la resolución de una foto. El teorema del rango pone ' +
+    'números a ese balance —lo que conservas más lo que pierdes es siempre lo que tenías—, y es la ' +
+    'razón matemática de que no exista un compresor que reduzca cualquier archivo sin perder nada.');
+
   p.section('Practica');
 
   p.exercise({

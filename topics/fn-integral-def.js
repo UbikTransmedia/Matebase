@@ -74,6 +74,12 @@ Course.topic('fn-integral-def', function (p) {
   p.formula('\\int_0^2 x^2\\,dx = \\left[\\frac{x^3}{3}\\right]_0^2 = \\frac{8}{3} - 0 = \\frac{8}{3}');
 
   /* ---------------------------------------------------------------- */
+  p.util('La regla de Barrow es probablemente el atajo más rentable de las matemáticas: convierte «sumar ' +
+    'infinitos trocitos» en «restar dos valores». Gracias a ella se calculan volúmenes de depósitos ' +
+    'de forma irregular, el centro de gravedad de una pieza —que decide si un mueble vuelca—, el ' +
+    'trabajo de una fuerza variable y el área bajo una curva de consumo. Sin ella, cada uno de esos ' +
+    'cálculos exigiría una suma infinita.');
+
   p.section('Cuidado con los signos');
 
   p.text('La integral definida no es exactamente «el área»: es un <strong>área con signo</strong>. Lo ' +
@@ -137,6 +143,12 @@ Course.topic('fn-integral-def', function (p) {
     '$f(x) = g(x)$.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('El área entre dos curvas es una medida de diferencia acumulada, y con ese nombre aparece en ' +
+    'economía: entre la curva de ingresos y la de costes está el beneficio total del periodo; entre ' +
+    'la recta de reparto perfecto y la curva real de rentas está la desigualdad de un país, que es ' +
+    'como se calcula el índice de Gini. También es el consumo extra de un motor frente a otro a lo ' +
+    'largo de un trayecto.');
+
   p.section('Practica');
 
   p.exercise({

@@ -121,6 +121,12 @@ Course.topic('al-inecuaciones', function (p) {
     'de otro en la recta hace el trabajo solo.');
 
   /* ================= EJERCICIOS ================= */
+  p.util('El mundo real casi nunca dice «exactamente»; dice «como mucho» y «al menos». El presupuesto no ' +
+    'puede pasar de tanto, la viga tiene que aguantar al menos tanto, la temperatura debe quedarse ' +
+    'entre dos valores. Por eso las inecuaciones describen la realidad mejor que las ecuaciones, y ' +
+    'por eso el conjunto de soluciones no es un punto sino una región. Esa región tiene nombre y ' +
+    'tema propio: se llama región factible y la verás en programación lineal.');
+
   p.section('Practica');
 
   p.exercise({

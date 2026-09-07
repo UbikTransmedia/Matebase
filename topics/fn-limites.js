@@ -160,6 +160,12 @@ Course.topic('fn-limites', function (p) {
      ['Asintótica', 'algún lateral es infinito', 'la curva se dispara']]);
 
   /* ================= EJERCICIOS ================= */
+  p.util('Una función discontinua es un salto, y en ingeniería los saltos rompen cosas. El perfil de una ' +
+    'carretera o de una vía de tren no solo tiene que ser continuo, sino también su pendiente y su ' +
+    'curvatura: por eso las curvas de las autopistas no pasan de recta a círculo de golpe, sino con ' +
+    'una curva de transición, la clotoide, que evita el tirón brusco del volante. Un cambio de ' +
+    'rasante mal enlazado es una discontinuidad que se nota en el estómago.');
+
   p.section('Practica');
 
   p.exercise({

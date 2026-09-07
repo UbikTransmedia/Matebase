@@ -92,6 +92,13 @@ Course.topic('fn-aplicaciones', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.util('La segunda derivada tiene un nombre que oyes a menudo sin saberlo: en un coche es la ' +
+    'aceleración, y su derivada —la tercera— es el <em>tirón</em>, que es lo que hace que un ' +
+    'ascensor resulte cómodo o desagradable. Los ingenieros de montañas rusas y de ascensores no ' +
+    'diseñan la posición, diseñan las derivadas. En una epidemia, el punto de inflexión, donde la ' +
+    'segunda derivada cambia de signo, es el día en que la cosa empieza a mejorar aunque los casos ' +
+    'sigan subiendo.');
+
   p.section('Receta para estudiar una función');
 
   p.list([
@@ -156,6 +163,13 @@ Course.topic('fn-aplicaciones', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.util('Optimizar es lo que hace que las cosas cuesten menos, y está por todas partes. La forma de una ' +
+    'lata de refresco que gasta menos aluminio para un volumen dado, la ruta de reparto más corta, ' +
+    'el grosor mínimo de una viga que aguanta la carga, el precio que maximiza el ingreso. En todos ' +
+    'los casos el método es el mismo que estás aprendiendo: escribir la magnitud a optimizar en ' +
+    'función de una variable, derivar e igualar a cero. Y es también, literalmente, lo que hace una ' +
+    'inteligencia artificial al entrenarse: buscar el mínimo de una función de error.');
+
   p.section('Practica');
 
   p.exercise({

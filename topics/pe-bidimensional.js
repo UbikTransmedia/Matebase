@@ -85,6 +85,12 @@ Course.topic('pe-bidimensional', function (p) {
     'una parábola perfecta tienen $r \\approx 0$ y sin embargo están perfectamente relacionados. ' +
     'Por eso hay que dibujar siempre la nube antes de fiarse de $r$.', 'warn');
 
+  p.util('Aquí vive la advertencia más importante de toda la estadística: <strong>correlación no es ' +
+    'causalidad</strong>. El consumo de helados y los ahogamientos suben juntos, y no es que el ' +
+    'helado ahogue: es que ambos suben en verano. Antes de creer que una cosa causa la otra hay que ' +
+    'descartar que haya una tercera detrás moviendo las dos. Media prensa científica mal contada y ' +
+    'buena parte de la publicidad viven de saltarse este párrafo.');
+
   p.section('La recta de regresión');
 
   p.formula('y - \\overline{y} = \\frac{\\sigma_{xy}}{\\sigma_x^2}\\,(x - \\overline{x})',
@@ -103,6 +109,12 @@ Course.topic('pe-bidimensional', function (p) {
     'la que más se ignora en los periódicos.', 'warn', 'La advertencia fundamental');
 
   /* ================= EJERCICIOS ================= */
+  p.util('La recta de regresión es el modelo predictivo más sencillo que existe y sigue siendo de los más ' +
+    'usados: estimar ventas según la inversión en publicidad, el consumo eléctrico según la ' +
+    'temperatura, el precio de un piso según los metros. Toda la ciencia de datos empieza aquí, y ' +
+    'también su principal peligro: extrapolar fuera del rango con el que se ajustó la recta, que es ' +
+    'como usar el crecimiento de un niño para predecir su altura a los cuarenta años.');
+
   p.section('Practica');
 
   function tablaHTML(d, host) {
