@@ -73,9 +73,10 @@
 .fbox__tip{
   position:absolute; top:34px; right:10px; z-index:6;
   width:min(400px, calc(100% - 20px));
-  padding:11px 14px; border:1px solid var(--line); border-radius:10px;
-  background:var(--panel); box-shadow:var(--shadow);
-  font-size:13.7px; line-height:1.55; color:var(--ink-soft);
+  padding:12px 15px; border:1px solid var(--tip-line); border-radius:4px 4px 10px 4px;
+  background:var(--tip);
+  box-shadow:0 1px 2px rgba(0,0,0,.14), 0 8px 20px -6px rgba(0,0,0,.22);
+  font-size:13.7px; line-height:1.55; color:var(--tip-ink);
   text-align:left; text-wrap:pretty;
   opacity:0; visibility:hidden; transform:translateY(-4px);
   transition:opacity .14s, transform .14s, visibility .14s;
@@ -85,7 +86,8 @@
 .fbox__help[aria-expanded="true"] ~ .fbox__tip{
   opacity:1; visibility:visible; transform:none;
 }
-.fbox__tip em{color:var(--ink); font-style:normal; font-weight:620}
+.fbox__tip em{color:var(--tip-strong); font-style:normal; font-weight:620}
+.fbox__tip strong{color:var(--tip-strong)}
 
 /* --- ideas clave --- */
 .keys{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);

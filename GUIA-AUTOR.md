@@ -60,8 +60,9 @@ Dentro de cualquier texto, `$...$` se renderiza como matemáticas.
 
 Si a `p.formula` o `p.formulas` les pasas un tercer argumento, la caja gana un
 botón **?** en la esquina que, al pasar el ratón o al pulsarlo, despliega la
-lectura en voz alta de la fórmula. Es para el alumno que reconoce el símbolo
-pero no sabría pronunciarlo.
+lectura en voz alta de la fórmula. Se presenta como una nota adhesiva amarilla,
+para que se distinga de un vistazo del contenido del tema. Es para el alumno que
+reconoce el símbolo pero no sabría pronunciarlo.
 
 Ponlo **siempre que aparezca notación nueva**. Escribe la frase entera y
 corrida, como la dirías tú, y añade después el desglose símbolo a símbolo:
