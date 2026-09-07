@@ -67,10 +67,10 @@ Ponlo **siempre que aparezca notación nueva**. Escribe la frase entera y
 corrida, como la dirías tú, y añade después el desglose símbolo a símbolo:
 
 ```js
-p.formula('A = \{x \in \mathbb{N} : x < 5\}', 'por comprensión',
+p.formula('A = \\{x \\in \\mathbb{N} : x < 5\\}', 'por comprensión',
   'Se dice: <em>«A es el conjunto de los equis que pertenecen a los naturales, ' +
   'tales que equis es menor que 5»</em>.<br><br>' +
-  'Símbolo a símbolo: $\{$ «el conjunto de los» · $\in$ «pertenece a».');
+  'Símbolo a símbolo: $\\{$ «el conjunto de los» · $\\in$ «pertenece a».');
 ```
 
 ### El cuadro UTILIDAD
