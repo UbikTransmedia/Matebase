@@ -58,6 +58,8 @@ matebase/
 ├── tests.html            ← comprobaciones del núcleo (para desarrollo)
 ├── WORKFLOW.md           ← plan de trabajo y decisiones de diseño
 ├── GUIA-AUTOR.md         ← cómo añadir o modificar un tema
+├── AUTORIA.md            ← autoría y qué permite la licencia
+├── LICENSE               ← texto completo de la GPLv3
 ├── assets/
 │   ├── css/              base · layout · components · math
 │   └── js/
@@ -99,7 +101,7 @@ Los detalles están en **`GUIA-AUTOR.md`**.
 - Tres temas de color —**claro** por defecto, oscuro y **monokai** de contraste
   suave—, con un botón para cada uno al pie del índice: el activo se distingue a
   simple vista, y la elección se recuerda entre sesiones.
-- Diseño adaptado a móvil, y botón de inicio siempre visible en la barra superior.
+- Diseño adaptado a móvil, y botón de inicio junto al nombre, en la cabecera del índice.
 - `tests.html` comprueba el núcleo (112 verificaciones) y **audita los 312
   ejercicios**: genera cada uno 40 veces y verifica que la solución declarada
   pasa su propio corrector, que nada lanza excepciones, que no queda ninguna
@@ -111,3 +113,15 @@ Los detalles están en **`GUIA-AUTOR.md`**.
 
 *Los apuntes históricos de cada tema no son adorno: entender de dónde salió cada
 idea, y qué problema vino a resolver, es la mitad de entenderla.*
+
+---
+
+## Autoría y licencia
+
+Diseñado por **Guillem Carbonell** — [gcarbonell.com](https://gcarbonell.com)
+
+Se distribuye bajo la **Licencia Pública General GNU, versión 3 (GPLv3)**:
+puedes usarlo, copiarlo, modificarlo y repartirlo, también en clase y también
+comercialmente, siempre que lo que publiques a partir de él conserve esta misma
+libertad y su código fuente. El texto completo está en [`LICENSE`](LICENSE), y
+el resumen de lo que implica en [`AUTORIA.md`](AUTORIA.md).

@@ -212,8 +212,32 @@
     wrapEl.appendChild(h);
 
     var p = new Page(wrapEl, { id: '__home' });
+
+    p.text('Si alguna vez has pensado que las matemáticas no son para ti, es muy probable que el ' +
+      'problema no fueras tú. Casi todo el mundo que se atasca lo hace en un punto concreto —una ' +
+      'tarde que faltó a clase, un profesor que iba deprisa— y a partir de ahí todo lo demás se ' +
+      'construye encima de un hueco. Este curso está hecho para taparlo: empieza tan atrás que ' +
+      'parecerá innecesario, y avanza sin saltarse un solo escalón.');
+
+    p.text('La idea de fondo es que las matemáticas son un <strong>idioma</strong>, no una prueba de ' +
+      'inteligencia. Un idioma que sirve para decir con precisión cosas que ya sabes: que cada socio ' +
+      'del gimnasio tiene una taquilla y solo una, que dos autobuses que pasan cada 12 y cada 18 ' +
+      'minutos vuelven a coincidir cada 36, que subir un 10 % y bajar un 10 % no te deja donde ' +
+      'estabas. Cuando aprendes a decirlo con símbolos ganas tres cosas: entiendes lo que ya ' +
+      'conocías, puedes modelarlo y, con suerte, predecirlo. Por eso cada concepto viene aquí con un ' +
+      'cuadro de <strong>utilidad</strong> que cuenta dónde vive fuera del aula, y por eso las ' +
+      'fórmulas traen un botón <strong>?</strong> que te las lee en voz alta: reconocer un símbolo y ' +
+      'saber pronunciarlo no es lo mismo, y nadie aprende un idioma que no sabe decir.');
+
+    p.text('El recorrido va de contar con los dedos a la teoría del caos, pasando por todo el temario ' +
+      'de la ESO y el Bachillerato español. No hay vídeos, no hay que registrarse y no se envía nada ' +
+      'a ninguna parte: son ' + total + ' temas que se leen a tu ritmo, y que rinden mucho más si te ' +
+      'paras a mover los mandos de los ejemplos en vez de mirarlos, que es de lo que se trata.');
+
     p.text('Este curso está pensado para recorrerse <strong>en orden</strong>. Cada tema supone ' +
-      'que entiendes el anterior y ninguno usa una herramienta que no se haya explicado antes.');
+      'que entiendes el anterior y ninguno usa una herramienta que no se haya explicado antes. Si ' +
+      'algo no se entiende, casi siempre la respuesta está uno o dos temas más atrás, no más ' +
+      'adelante.');
 
     p.text('Dentro de cada tema encontrarás dos cosas distintas, y conviene no confundirlas:');
     p.raw(U.el('div.grid2', null, [
@@ -260,6 +284,16 @@
 
     p.note('Todo funciona sin conexión y sin servidor. Puedes copiar la carpeta en un ' +
       'lápiz de memoria y abrir <code>index.html</code> en cualquier ordenador.', 'ok', 'Nota técnica');
+
+    wrapEl.appendChild(U.el('footer.creditos', {
+      html: '<p>Diseñado por <a href="https://gcarbonell.com" target="_blank" rel="noopener noreferrer">' +
+        'Guillem Carbonell</a>.</p>' +
+        '<p>Se distribuye bajo licencia libre <strong>GPLv3</strong>: puedes usarlo, copiarlo, ' +
+        'modificarlo y repartirlo, incluso en clase o comercialmente, siempre que lo que publiques a ' +
+        'partir de él conserve esta misma libertad. El texto completo está en el archivo ' +
+        '<code>LICENSE</code> de la carpeta.</p>'
+    }));
+
     mainEl.scrollTop = 0;
     paintIndex();
   }

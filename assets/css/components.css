@@ -219,3 +219,13 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
   background:var(--panel)}
 .soon h3{font-size:16px; margin-bottom:8px}
 .soon ul{margin-top:6px}
+
+/* --- creditos de la portada --- */
+.creditos{
+  margin:38px 0 0; padding:18px 0 0; border-top:1px solid var(--line-soft);
+  font-size:13.6px; line-height:1.6; color:var(--ink-faint);
+}
+.creditos p{margin:0 0 7px}
+.creditos p:last-child{margin-bottom:0}
+.creditos a{color:var(--accent); font-weight:600}
+.creditos strong{color:var(--ink-soft)}
