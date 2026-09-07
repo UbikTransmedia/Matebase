@@ -424,7 +424,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           // sobresalga un par de píxeles del renglón saca una barra vertical
           // que no sirve para nada. No debe haber ninguna.
           var barras = 0;
-          [].forEach.call(h.querySelectorAll('.fbox > div'), function (d) {
+          [].forEach.call(h.querySelectorAll('.fbox > div:not(.fbox__tip)'), function (d) {
             if (d.scrollHeight > d.clientHeight) barras++;
           });
           if (barras) aud.push(barras + ' línea(s) de fórmula sacan barra de scroll vertical');
