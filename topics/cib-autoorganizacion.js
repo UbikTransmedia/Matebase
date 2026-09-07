@@ -32,9 +32,34 @@ Course.topic('cib-autoorganizacion', function (p) {
     'que decidir, para cada una de esas ocho, si la celda queda encendida o apagada.');
 
   p.text('Como cada una de las ocho respuestas es un sí o un no, hay $2^8 = 256$ reglas distintas, ni ' +
-    'una más. Se numeran del 0 al 255 leyendo esas ocho respuestas como un número binario, y por eso ' +
-    'se habla de «la regla 30» o «la regla 110». Con ese universo minúsculo y completamente ' +
-    'catalogado se puede hacer un experimento honesto: <em>probarlas todas y ver qué sale</em>.');
+    'una más. Con ese universo minúsculo y completamente catalogado se puede hacer un experimento ' +
+    'honesto: <em>probarlas todas y ver qué sale</em>.');
+
+  p.sub('De dónde sale el número de una regla');
+
+  p.text('Se habla de «la regla 30» o «la regla 110», y conviene entender qué significa ese número, ' +
+    'porque no es una etiqueta arbitraria: <strong>es la regla entera, comprimida</strong>. La idea ' +
+    'es la del valor posicional que viste en el primer bloque, pero contando con dos símbolos en vez ' +
+    'de diez.');
+
+  p.text('Escribe las ocho respuestas en fila, de la vecindad 7 a la 0, y léelas como un número en ' +
+    'base 2. En base 10 cada posición vale una potencia de diez; en base 2 vale una potencia de dos: ' +
+    '128, 64, 32, 16, 8, 4, 2 y 1. Se suman las posiciones que llevan un 1 y ya está.');
+
+  p.formula('110 = 64 + 32 + 8 + 4 = 01101110_2',
+    'la regla 110, desmontada',
+    'El subíndice 2 avisa de que ese número está escrito en <strong>base 2</strong>, no en la de ' +
+    'siempre. Se lee cifra a cifra: «cero, uno, uno, cero, uno, uno, uno, cero», nunca «un millón ' +
+    'ciento un mil…».<br><br>Cómo se obtiene: se va restando la mayor potencia de dos que quepa. ' +
+    '¿Cabe 128 en 110? No, así que primera cifra 0. ¿Cabe 64? Sí, queda 46, cifra 1. ¿Cabe 32? Sí, ' +
+    'queda 14, cifra 1. ¿16? No, cifra 0. ¿8? Sí, queda 6, cifra 1. ¿4? Sí, queda 2, cifra 1. ¿2? Sí, ' +
+    'queda 0, cifra 1. ¿1? No, cifra 0.<br><br>Y esas ocho cifras <em>son</em> la regla: dicen si la ' +
+    'celda queda encendida ante cada una de las ocho vecindades posibles.');
+
+  p.note('Las posiciones se cuentan <strong>desde la derecha y empezando en cero</strong>, que es el ' +
+    'convenio universal en informática y despista al principio. La cifra de más a la derecha ' +
+    'corresponde a la vecindad 0 —las tres celdas apagadas— y la de más a la izquierda, a la vecindad ' +
+    '7, con las tres encendidas.', null, 'Cómo se numeran las posiciones');
 
   p.demo({
     title: 'Las 256 reglas, una por una',

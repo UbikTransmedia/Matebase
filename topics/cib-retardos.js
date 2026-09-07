@@ -36,6 +36,14 @@ Course.topic('cib-retardos', function (p) {
     'esté arreglado</strong>. En la ducha, cuando por fin llega el agua caliente que pediste, ya has ' +
     'pedido tres veces más. Todas esas peticiones están en camino y van a llegar.');
 
+  p.note('Hay un detalle práctico que conviene señalar antes de calcular nada, porque si no despista: ' +
+    '<strong>un bucle con retardo necesita más de un valor para arrancar</strong>. Con retardo cero ' +
+    'basta con saber dónde estás; con retardo 1, para dar el primer paso hace falta además el valor ' +
+    'anterior, que todavía no existe. Por eso los ejercicios dan dos valores de partida, y por eso un ' +
+    'controlador real guarda un pequeño historial de medidas: <em>el retardo obliga al sistema a ' +
+    'tener memoria</em>. Con retardo $d$ hacen falta $d+1$ valores iniciales.',
+    null, 'Por qué hacen falta dos valores para empezar');
+
   p.demo({
     title: 'El mismo bucle, con y sin retardo',
     intro: 'Empieza con retardo cero y una ganancia razonable: el sistema se estabiliza sin problema. Ahora sube el retardo sin tocar nada más. Verás aparecer una oscilación que antes no existía, y con retardo suficiente el sistema se vuelve incontrolable con esa misma ganancia que antes era buena.',

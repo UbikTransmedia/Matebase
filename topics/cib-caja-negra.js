@@ -43,6 +43,17 @@ Course.topic('cib-caja-negra', function (p) {
     'En esta transformación de ejemplo, $T^3$ devuelve cada estado a donde estaba: da la vuelta ' +
     'completa. Se dice que tiene <em>periodo</em> 3.');
 
+  p.text('Ese <em>periodo</em> no es una curiosidad: es una herramienta de cálculo. Si aplicar la ' +
+    'transformación tres veces devuelve todo a su sitio, entonces aplicarla 300 veces también, y ' +
+    'aplicarla 302 equivale a aplicarla 2. <strong>Basta con quedarse con el resto de dividir entre ' +
+    'el periodo</strong>, que es exactamente la aritmética del reloj que viste en teoría de números.');
+
+  p.text('Conviene tenerlo presente porque es la diferencia entre un cálculo de tres pasos y uno de ' +
+    'trescientos. Eso sí, hay un detalle: no toda transformación tiene periodo. Si alguna cadena de ' +
+    'estados desemboca en un ciclo sin poder salir de él —o se queda atrapada en un estado que se ' +
+    'transforma en sí mismo— el sistema deja de dar la vuelta completa, y entonces hay que seguir el ' +
+    'camino paso a paso hasta entrar en el ciclo.');
+
   p.text('Un sistema cuyo estado siguiente queda determinado por el actual se llama <strong>determinado ' +
     'por su estado</strong>. Es una condición fuerte y muy útil: significa que no hace falta conocer ' +
     'la historia, basta con saber dónde está ahora. Si dos veces desde el mismo estado ocurren cosas ' +
@@ -201,7 +212,10 @@ Course.topic('cib-caja-negra', function (p) {
       for (var i = 0; i < d.pasos; i++) s = d.destino[s];
       return { ok: String(v.raw.fin || '').trim().toUpperCase() === d.NOM[s] };
     },
-    hint: function () { return 'Ve paso a paso y anota dónde estás después de cada aplicación. No hay atajo, y no hace falta.'; },
+    hint: function () {
+      return 'Con tan pocos pasos, ir anotando dónde estás después de cada aplicación es lo más ' +
+        'rápido. Si te pidieran cien aplicaciones sí compensaría buscar antes el periodo del ciclo.';
+    },
     steps: function (d) {
       var s = d.ini, l = ['Partimos de <strong>' + d.NOM[s] + '</strong>.'];
       for (var i = 0; i < d.pasos; i++) {

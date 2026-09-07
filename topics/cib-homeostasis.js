@@ -188,6 +188,35 @@ Course.topic('cib-homeostasis', function (p) {
     'adaptativo?</em> La discusión, con otras palabras, sigue viva hoy en cada debate sobre qué ' +
     'cuenta como inteligencia en una máquina.');
 
+  p.sub('¿Cuánto tarda en acertar barajando al azar?');
+
+  p.text('El homeostato prueba configuraciones hasta dar con una buena, así que conviene saber cuánto ' +
+    'se tarda en eso. La respuesta es más sencilla de lo que parece y no hace falta ninguna fórmula ' +
+    'nueva: basta con pensarlo al derecho.');
+
+  p.text('Supón que de cada cinco configuraciones hay una que aguanta, es decir, que la probabilidad ' +
+    'de acertar en un sorteo es $p = 1/5$. Si haces cien sorteos, esperas unos veinte aciertos, ' +
+    'repartidos más o menos por igual a lo largo de los cien. Entre acierto y acierto hay, por tanto, ' +
+    'unos cinco sorteos. <strong>Ese es el número medio de intentos hasta el primer acierto: ' +
+    'cinco</strong>, que es justamente $1/p$.');
+
+  p.formula('\\text{intentos de media} = \\frac{1}{p}',
+    'cuántos sorteos hasta el primer acierto',
+    'Se lee: <em>«los intentos de media son uno partido por pe»</em>, donde $p$ es la probabilidad de ' +
+    'acertar en cada intento.<br><br>Con un ejemplo cotidiano: si un dado acierta el 6 con ' +
+    'probabilidad $1/6$, hay que tirarlo <strong>seis veces de media</strong> para sacar el primer 6. ' +
+    'No seis exactas —puede salir a la primera o tardar veinte— pero seis de promedio si repites el ' +
+    'experimento muchas veces.<br><br>A esta situación, contar intentos hasta el primer éxito, los ' +
+    'libros la llaman <em>distribución geométrica</em>; aquí no hace falta el nombre, solo el ' +
+    'razonamiento de arriba.');
+
+  p.note('Este cálculo pone número al punto débil del método. Cuantas menos configuraciones sirvan, ' +
+    'más se tarda, y la cuenta empeora deprisa: con doce variables acopladas de dos en dos hay ' +
+    'billones de combinaciones posibles, y sortear a ciegas dejaría de ser viable. Por eso el ' +
+    'homeostato de Ashby tenía cuatro unidades y no cuarenta, y por eso los métodos actuales que ' +
+    'heredan su idea —algoritmos genéticos, recocido simulado— no sortean del todo a ciegas: ' +
+    'conservan lo que funcionaba y solo alteran una parte.', 'warn', 'Dónde deja de funcionar el azar');
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -260,12 +289,13 @@ Course.topic('cib-homeostasis', function (p) {
     sol: function (d) { return { p: d.buenas / d.total, n: d.total / d.buenas }; },
     tol: 1e-6,
     hint: function () {
-      return 'La segunda parte es la media de una distribución geométrica: si algo ocurre con probabilidad $p$, hay que esperar $1/p$ intentos de media.';
+      return 'Para la segunda parte, usa el razonamiento de arriba: si aciertas una de cada tantas ' +
+        'veces, de media necesitas justamente esas tantas.';
     },
     steps: function (d) {
       return [
         'Probabilidad de acertar en un sorteo: $\\dfrac{' + d.buenas + '}{' + d.total + '} = ' + U.fmt(d.buenas / d.total, 4) + '$.',
-        'El número de intentos hasta el primer acierto sigue una distribución geométrica, cuya media es $1/p$.',
+        'Si aciertas esa fracción de las veces, entre acierto y acierto pasan de media tantos sorteos como indica su inverso: $1/p$.',
         'Media de sorteos: $\\dfrac{' + d.total + '}{' + d.buenas + '} = ' + U.fmt(d.total / d.buenas, 3) + '$.',
         'Ahí está el precio de este método: es sencillísimo de construir y no necesita entender nada, pero cuantas menos configuraciones sirvan, más se tarda. Con muchas variables el número de combinaciones crece tan deprisa que el azar puro deja de ser viable.'
       ];
