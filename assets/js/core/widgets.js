@@ -26,17 +26,45 @@
     return d;
   };
 
+  /* Un paso fraccionario significa que el deslizador mide una magnitud
+     continua, no que cuente unidades. En ese caso no hay ninguna razón para
+     saltar de 0,5 en 0,5: se afina hasta unas 400 posiciones (redondeando a
+     un 1, 2 o 5 por potencia de diez) y se muestran al menos dos decimales.
+     Los pasos enteros se respetan tal cual: ahí sí se está contando. */
+  function pasoFino(min, max, paso) {
+    var rango = max - min;
+    if (!isFinite(rango) || rango <= 0) return paso;
+    var objetivo = rango / 400;
+    var mag = Math.pow(10, Math.floor(Math.log(objetivo) / Math.LN10));
+    var n = objetivo / mag;
+    var fino = (n >= 5 ? 5 : (n >= 2 ? 2 : 1)) * mag;
+    return Math.min(paso, fino);
+  }
+  function decimalesDe(paso) {
+    if (Number.isInteger(paso)) return 0;
+    var s = paso.toFixed(10).replace(/0+$/, '');
+    var pto = s.indexOf('.');
+    return pto < 0 ? 0 : Math.min(6, s.length - pto - 1);
+  }
+
   /** Deslizador con etiqueta y lectura del valor. */
   W.slider = function (host, o) {
     o = o || {};
+    var paso = (o.step === undefined) ? 0.01 : o.step;
+    var dec = o.dec;
+    if (!Number.isInteger(paso)) {
+      paso = pasoFino(o.min, o.max, paso);
+      dec = Math.max(dec === undefined ? 0 : dec, decimalesDe(paso), 2);
+    } else if (dec === undefined) {
+      dec = 0;
+    }
     var box = U.el('div.ctrl');
     var val = U.el('span.ctrl__val');
     var top = U.el('div.ctrl__top', null, [U.el('span.ctrl__lab', { html: MathX.inline(o.label || '') }), val]);
     var inp = U.el('input', {
-      type: 'range', min: o.min, max: o.max,
-      step: o.step === undefined ? 0.01 : o.step, value: o.value
+      type: 'range', min: o.min, max: o.max, step: paso, value: o.value
     });
-    var fmt = o.format || function (v) { return U.fmt(v, o.dec === undefined ? 2 : o.dec); };
+    var fmt = o.format || function (v) { return U.fmt(v, dec); };
     var api = { el: box, input: inp, value: parseFloat(o.value) };
     function upd(fire) {
       api.value = parseFloat(inp.value);
@@ -139,6 +167,7 @@
     this.el.appendChild(this.canvas);
     host.appendChild(this.el);
     this.ctx = this.canvas.getContext('2d');
+    this.canvas.__plot = this;      // para inspeccionar el encuadre desde tests.html
 
     var self = this;
     this._onResize = function () { self.resize(); };
@@ -148,6 +177,11 @@
     } else {
       global.addEventListener('resize', this._onResize);
     }
+    // Ventana pedida por el autor. Se guarda aparte porque `equal` la
+    // recalcula en cada resize, y si se partiera de la ya ajustada el
+    // encuadre se iría acumulando redimensionado tras redimensionado.
+    this._req = [this.xmin, this.xmax, this.ymin, this.ymax];
+
     this._bindPointer();
     LIVE.push(this);
     this.resize();
@@ -166,17 +200,27 @@
     this.render();
   };
 
+  /* Escala 1:1 en los dos ejes SIN recortar lo que se pidió dibujar: se
+     elige la escala que hace caber por completo la ventana solicitada y se
+     ensancha el eje que sobre. Derivando y a partir de x (que es lo que se
+     hacía antes) un lienzo ancho aplastaba el rango vertical y cortaba por
+     arriba y por abajo todo lo circular. */
   Plot.prototype._equalize = function () {
-    var upx = (this.xmax - this.xmin) / this.W;   // unidades por pixel en X
-    var yc = (this.ymax + this.ymin) / 2;
-    var half = upx * this.H / 2;
-    this.ymin = yc - half; this.ymax = yc + half;
+    var r = this._req;
+    var w = r[1] - r[0], h = r[3] - r[2];
+    if (!(w > 0) || !(h > 0) || !this.W || !this.H) return;
+    var xc = (r[0] + r[1]) / 2, yc = (r[2] + r[3]) / 2;
+    var esc = Math.min(this.W / w, this.H / h);     // pixeles por unidad
+    var nw = this.W / esc / 2, nh = this.H / esc / 2;
+    this.xmin = xc - nw; this.xmax = xc + nw;
+    this.ymin = yc - nh; this.ymax = yc + nh;
   };
 
   /** Cambia la ventana visible. */
   Plot.prototype.view = function (xmin, xmax, ymin, ymax) {
     this.xmin = xmin; this.xmax = xmax;
     if (ymin !== undefined) { this.ymin = ymin; this.ymax = ymax; }
+    this._req = [this.xmin, this.xmax, this.ymin, this.ymax];
     if (this.equal) this._equalize();
     this.render();
     return this;

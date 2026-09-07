@@ -113,6 +113,14 @@ p.exercise({
 > **Declara siempre `sol`, incluso si usas `check`.** No estorba (gana `check`)
 > y es lo que permite que `tests.html` audite el ejercicio automáticamente.
 
+### Temas de color
+
+El curso trae tres: **claro**, **oscuro** y **monokai** (contraste suave). No
+escribas nunca un color literal en un tema: usa las variables CSS (`var(--c1)`,
+`var(--ink)`, `var(--bad)`…) o los nombres que entiende `Plot2D` (`0`-`5`,
+`'ink'`, `'axis'`, `'ok'`, `'bad'`, `'bg'`). Así el dibujo se adapta solo, y las
+gráficas se repintan al cambiar de tema sin que tengas que hacer nada.
+
 ---
 
 ## El motor gráfico (`W`)
@@ -152,13 +160,19 @@ Opciones comunes: `color` (número 0-5 de la paleta, o `'ink'`/`'axis'`/`'ok'`/`
 **Envoltorios:**
 
 - `W.board(host, o)` — lienzo con la misma escala en los dos ejes (geometría).
+  La ventana que pidas (`xmin…ymax`) **cabe entera, garantizado**: el motor elige
+  la escala que la hace caber y ensancha el eje que sobre. Encuádrala con holgura
+  y olvídate de la proporción del contenedor.
 - `W.numberLine(host, {min, max, step, ...})` — recta real.
 - `W.barChart(host, {labels, values, ...})` — diagrama de barras / histograma.
 
 **Controles:**
 
 - `W.row(host)` — fila contenedora para los deslizadores.
-- `W.slider(fila, {label, min, max, step, value, dec, format, on})`
+- `W.slider(fila, {label, min, max, step, value, dec, format, on})` — si el `step`
+  **no es entero**, el deslizador mide una magnitud continua: se afina solo hasta
+  unas 400 posiciones y muestra al menos dos decimales. Un `step` entero se
+  respeta tal cual, porque ahí se está contando (lados, términos, cifras).
 - `W.chips(host, items, {value, toggle, on})`
 - `W.buttons(host, [{t, cls, on}])`
 - `W.readout(host, html)` → objeto con `.set(html)`
@@ -209,5 +223,6 @@ Abre **`tests.html`**. Comprueba:
 1. Las comprobaciones del núcleo siguen en verde.
 2. Tu tema aparece con un ✓ en la lista de temas.
 3. La auditoría no se queja: genera cada ejercicio 40 veces y verifica que la
-   solución declarada pasa su propio corrector, que nada lanza excepciones y que
-   no hay fórmulas mal escritas.
+   solución declarada pasa su propio corrector, que nada lanza excepciones, que
+   no hay fórmulas mal escritas, que ninguna gráfica 1:1 recorta su encuadre y
+   que ninguna fórmula se sale de su caja.

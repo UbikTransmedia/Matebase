@@ -207,6 +207,62 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   W.barChart(host, { labels: ['a', 'b'], values: [3, 5] });
   truthy('el diagrama de barras se construye', host.querySelectorAll('canvas').length >= 3);
 
+  /* --- deslizadores: los continuos se afinan solos --- */
+  group('deslizadores y encuadre de las gráficas');
+  var sFino = W.slider(host, { label: 'a', min: -3, max: 3, step: 0.5, value: 1, dec: 1 });
+  truthy('un paso fraccionario se afina (0,5 → ≤0,02)', parseFloat(sFino.input.step) <= 0.02);
+  var sEntero = W.slider(host, { label: 'n', min: 1, max: 10, step: 1, value: 5, dec: 0 });
+  eq('un paso entero se respeta', parseFloat(sEntero.input.step), 1);
+  var sDefecto = W.slider(host, { label: 'x', min: 0, max: 1, value: 0.5 });
+  truthy('sin paso indicado también sale fino', parseFloat(sDefecto.input.step) <= 0.01);
+  W.slider(host, { label: 'p', min: 0.001, max: 0.3, step: 0.001, value: 0.01, dec: 3 });
+  truthy('no se reducen los decimales que ya pedía el autor',
+    host.querySelectorAll('.ctrl').length >= 4);
+
+  /* --- encuadre 1:1 sin recortar --- */
+  var anc = U.el('div');
+  anc.style.cssText = 'position:absolute;left:-9999px;width:800px';
+  document.body.appendChild(anc);
+  var pEq = W.board(anc, { xmin: -1.5, xmax: 1.5, ymin: -1.5, ymax: 1.5, height: 300, draw: function () { } });
+  truthy('con escala 1:1 la ventana pedida cabe entera en vertical',
+    pEq.ymin <= -1.5 + 1e-9 && pEq.ymax >= 1.5 - 1e-9);
+  truthy('con escala 1:1 la ventana pedida cabe entera en horizontal',
+    pEq.xmin <= -1.5 + 1e-9 && pEq.xmax >= 1.5 - 1e-9);
+  var escX = pEq.W / (pEq.xmax - pEq.xmin), escY = pEq.H / (pEq.ymax - pEq.ymin);
+  eq('la escala es realmente la misma en los dos ejes', escX, escY, 1e-6);
+  pEq.resize(); pEq.resize();
+  truthy('redimensionar no descuadra el encuadre',
+    pEq.ymin <= -1.5 + 1e-9 && pEq.ymax >= 1.5 - 1e-9);
+  anc.remove();
+
+  /* --- temas --- */
+  group('temas');
+  var raiz = document.documentElement;
+  var previo = raiz.getAttribute('data-theme');
+  ['light', 'dark', 'monokai'].forEach(function (t) {
+    raiz.setAttribute('data-theme', t);
+    var p = U.palette();
+    truthy('el tema «' + t + '» define fondo, tinta y seis colores de serie',
+      !!p.bg && !!p.ink && p.c.length === 6 && p.c.every(function (c) { return !!c; }));
+  });
+  raiz.setAttribute('data-theme', 'monokai');
+  var mk = U.palette();
+  raiz.setAttribute('data-theme', 'dark');
+  var dk = U.palette();
+  truthy('monokai no es una copia del tema oscuro', mk.bg !== dk.bg && mk.accent !== dk.accent);
+  raiz.setAttribute('data-theme', previo || 'light');
+
+  /* --- caja de fórmula con etiqueta --- */
+  var hf = document.createElement('div');
+  var pf = new Page(hf, { id: '__fbox' });
+  pf.formula('x^2', 'una etiqueta');
+  pf.formula('y^2');
+  truthy('la fórmula con etiqueta reserva hueco arriba',
+    hf.querySelectorAll('.fbox--lab').length === 1);
+  truthy('la fórmula sin etiqueta no lo reserva',
+    hf.querySelectorAll('.fbox').length === 2);
+
+  group('motor de ejercicios');
   var card = Ex.card(host, {
     title: 'prueba', gen: function (r) { return { a: r.int(2, 9) }; },
     ask: function (d) { return 'doble de ' + d.a; },
@@ -333,6 +389,31 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           var pg = new Page(h, t);
           reg[t.id](pg);
           var aud = auditar(pg.specs);
+          // Ninguna gráfica de escala 1:1 puede recortar la ventana que pidió
+          // su autor: si lo hiciera, se comería parte del dibujo.
+          var recortadas = [];
+          [].forEach.call(h.querySelectorAll('canvas'), function (c, i) {
+            var g = c.__plot;
+            if (!g || !g.equal || !g._req) return;
+            var r = g._req, e = 1e-6;
+            if (g.xmin > r[0] + e || g.xmax < r[1] - e ||
+                g.ymin > r[2] + e || g.ymax < r[3] - e) recortadas.push(i + 1);
+          });
+          if (recortadas.length) {
+            aud.push('gráfica(s) ' + recortadas.join(', ') + ' recortan su propio encuadre');
+          }
+          // Ninguna fórmula ni etiqueta puede salirse por arriba o por abajo
+          // de su caja: si se sale, el navegador la corta y deja de leerse.
+          var fuera = 0;
+          [].forEach.call(h.querySelectorAll('.fbox'), function (b) {
+            var rb = b.getBoundingClientRect();
+            if (!rb.height) return;
+            [].forEach.call(b.querySelectorAll('.mx, .fbox__lab'), function (m) {
+              var rm = m.getBoundingClientRect();
+              if (rm.top < rb.top - 0.5 || rm.bottom > rb.bottom + 0.5) fuera++;
+            });
+          });
+          if (fuera) aud.push(fuera + ' fórmula(s) o etiqueta(s) se salen de su caja');
           // fórmulas de la explicación (las que no pasan por los ejercicios)
           var malas = h.querySelectorAll('.mx-err');
           if (malas.length) {

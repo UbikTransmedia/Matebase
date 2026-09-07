@@ -19,15 +19,22 @@
   font-weight:700; opacity:.75; margin-bottom:5px}
 .note p:last-child{margin-bottom:0}
 
-/* --- formula destacada --- */
+/* --- formula destacada ---
+   El scroll horizontal va en las líneas de fórmula, no en la caja: si se
+   pone en .fbox, el navegador recorta también en vertical y se come la
+   etiqueta y las fracciones altas. */
 .fbox{
   margin:18px 0; padding:15px 18px; background:var(--panel); border:1px solid var(--line);
   border-radius:var(--radius); text-align:center; box-shadow:var(--shadow); position:relative;
-  overflow-x:auto;
+  overflow:visible;
 }
+.fbox > div{overflow-x:auto; overflow-y:visible}
+/* con etiqueta hace falta hueco arriba para que no pise a la fórmula */
+.fbox--lab{padding-top:30px}
 .fbox__lab{
-  position:absolute; top:-9px; left:14px; background:var(--panel); padding:0 7px;
-  font-size:11px; text-transform:uppercase; letter-spacing:.09em; color:var(--ink-faint); font-weight:650;
+  position:absolute; top:9px; left:16px; padding:0;
+  font-size:11px; text-transform:uppercase; letter-spacing:.09em; color:var(--ink-faint);
+  font-weight:650; line-height:1.1;
 }
 
 /* --- ideas clave --- */

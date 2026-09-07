@@ -55,7 +55,7 @@
 
   /** Formula centrada, opcionalmente con etiqueta encima. */
   Page.prototype.formula = function (tex, label) {
-    var box = U.el('div.fbox');
+    var box = U.el('div.fbox' + (label ? '.fbox--lab' : ''));
     if (label) box.appendChild(U.el('span.fbox__lab', { text: label }));
     box.appendChild(U.el('div', { html: MathX.display(tex) }));
     return this._add(box);
@@ -63,7 +63,7 @@
 
   /** Varias formulas seguidas en la misma caja. */
   Page.prototype.formulas = function (list, label) {
-    var box = U.el('div.fbox');
+    var box = U.el('div.fbox' + (label ? '.fbox--lab' : ''));
     if (label) box.appendChild(U.el('span.fbox__lab', { text: label }));
     list.forEach(function (t) { box.appendChild(U.el('div', { html: MathX.display(t), style: { margin: '6px 0' } })); });
     return this._add(box);

@@ -264,14 +264,39 @@
     paintIndex();
   }
 
-  /* ---------------- tema claro / oscuro ---------------- */
+  /* ---------------- temas: claro, oscuro y monokai ---------------- */
+
+  var TEMAS = [
+    { id: 'light', nombre: 'Claro', icono: '☀' },
+    { id: 'dark', nombre: 'Oscuro', icono: '☾' },
+    { id: 'monokai', nombre: 'Monokai', icono: '◐' }
+  ];
 
   function setTheme(mode) {
-    document.documentElement.setAttribute('data-theme', mode);
-    Progress.pref('theme', mode);
+    var t = TEMAS.filter(function (x) { return x.id === mode; })[0] || TEMAS[0];
+    document.documentElement.setAttribute('data-theme', t.id);
+    Progress.pref('theme', t.id);
     var b = U.$('#themeBtn');
-    if (b) b.textContent = mode === 'dark' ? '☀ Claro' : '☾ Oscuro';
-    U.bus.emit('theme', mode);
+    if (b) {
+      b.textContent = t.icono + ' ' + t.nombre;
+      b.title = 'Tema actual: ' + t.nombre + '. Pulsa para cambiar.';
+    }
+    U.bus.emit('theme', t.id);
+  }
+
+  /** Pasa al siguiente tema de la lista, dando la vuelta al final. */
+  function nextTheme() {
+    var actual = document.documentElement.getAttribute('data-theme');
+    var i = 0;
+    TEMAS.forEach(function (t, k) { if (t.id === actual) i = k; });
+    setTheme(TEMAS[(i + 1) % TEMAS.length].id);
+  }
+
+  function irAInicio(e) {
+    if (e) e.preventDefault();
+    if (location.hash.replace(/^#\/?/, '') === '') { route(); return; }
+    location.hash = '';
+    if (!location.hash) route();
   }
 
   /* ---------------- arranque ---------------- */
@@ -305,9 +330,7 @@
       search.value = ''; filterIndex(''); search.parentNode.classList.remove('is-filled'); search.focus();
     });
 
-    U.$('#themeBtn').addEventListener('click', function () {
-      setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-    });
+    U.$('#themeBtn').addEventListener('click', nextTheme);
     U.$('#resetBtn').addEventListener('click', function () {
       if (confirm('¿Borrar el progreso guardado (temas visitados y aciertos)?')) {
         Progress.reset(); paintIndex();
@@ -322,10 +345,8 @@
       U.$('.side').classList.remove('is-open');
       this.classList.remove('is-on');
     });
-    U.$('#homeLink').addEventListener('click', function (e) {
-      e.preventDefault(); location.hash = '';
-      if (!location.hash) route();
-    });
+    U.$('#homeLink').addEventListener('click', irAInicio);
+    U.$('#homeBtn').addEventListener('click', irAInicio);
 
     U.bus.on('progress', function () { paintIndex(); });
     global.addEventListener('hashchange', route);

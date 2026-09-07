@@ -96,12 +96,15 @@ Los detalles están en **`GUIA-AUTOR.md`**.
 - Sin dependencias, sin `npm`, sin compilación. JavaScript plano.
 - No se usa `fetch` ni módulos ES porque el navegador los bloquea en `file://`;
   los temas se cargan inyectando etiquetas `<script>` clásicas bajo demanda.
-- Tema claro y oscuro, y diseño adaptado a móvil.
-- `tests.html` comprueba el núcleo (98 verificaciones) y **audita los 312
+- Tres temas de color —claro, oscuro y **monokai** de contraste suave—, que se
+  recorren con el botón de abajo a la izquierda y se recuerdan entre sesiones.
+- Diseño adaptado a móvil, y botón de inicio siempre visible en la barra superior.
+- `tests.html` comprueba el núcleo (112 verificaciones) y **audita los 312
   ejercicios**: genera cada uno 40 veces y verifica que la solución declarada
   pasa su propio corrector, que nada lanza excepciones, que no queda ninguna
-  fórmula con comandos LaTeX inexistentes y que todos los temas del temario
-  se construyen sin errores.
+  fórmula con comandos LaTeX inexistentes, que ninguna gráfica de escala 1:1
+  recorta su encuadre, que ninguna fórmula se sale de su caja y que todos los
+  temas del temario se construyen sin errores.
 
 ---
 

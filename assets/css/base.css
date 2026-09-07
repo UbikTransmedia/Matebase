@@ -31,6 +31,24 @@ html[data-theme="dark"]{
   --plot-axis:#8d95a5; --plot-ink:#c9cfdb;
   --c1:#7b93ff; --c2:#ff8b93; --c3:#4bd39b; --c4:#e5a44b; --c5:#b795f5; --c6:#4cc4e0;
 }
+/* Monokai de contraste suave: los colores característicos de Monokai pero
+   desaturados y con el texto por debajo del blanco puro, para cansar menos
+   la vista en sesiones largas. */
+html[data-theme="monokai"]{
+  --bg:#272822; --bg-alt:#2c2d26; --panel:#31322b; --panel-2:#3a3b33;
+  --ink:#dcdacf; --ink-soft:#a9a89c; --ink-faint:#7f7c6a;
+  --line:#41423a; --line-soft:#36372f;
+  --accent:#7cc7d4; --accent-soft:#2c3b3f; --accent-ink:#9adae6;
+  --ok:#9cbf4a; --ok-soft:#2f3823;
+  --warn:#d99a4a; --warn-soft:#3b3123;
+  --bad:#d96a80; --bad-soft:#3b292d;
+  --demo:#7cc7d4; --demo-soft:#2c3b3f;
+  --shadow:0 1px 2px rgba(0,0,0,.28),0 10px 28px rgba(0,0,0,.22);
+  --plot-bg:#2b2c25; --plot-grid:#3d3e35; --plot-grid2:#343529;
+  --plot-axis:#8a887c; --plot-ink:#c7c5ba;
+  --c1:#7cc7d4; --c2:#d96a80; --c3:#9cbf4a; --c4:#d99a4a; --c5:#a68fd4; --c6:#d6cd7a;
+}
+
 *,*::before,*::after{box-sizing:border-box}
 html,body{margin:0;padding:0;height:100%}
 body{
