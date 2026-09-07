@@ -105,14 +105,37 @@ Course.topic('ge-vectores', function (p) {
 
   p.section('Producto escalar');
 
-  p.text('Esta operación toma dos vectores y devuelve <strong>un número</strong> (por eso se llama ' +
-    'escalar). Tiene dos fórmulas equivalentes, y de igualarlas sale el ángulo entre los vectores.');
+  p.text('Llega una operación rara. Hasta ahora, al operar con vectores salían vectores: sumas uno y ' +
+    'otro y obtienes un vector. Esta devuelve <strong>un número</strong> —por eso se llama ' +
+    '<em>escalar</em>, que es como se llaman los números cuando se los quiere distinguir de los ' +
+    'vectores— y hay que entender antes qué mide ese número, porque si no la fórmula parece salida ' +
+    'de la nada.');
+
+  p.text('Lo que mide es <strong>cuánto van los dos vectores en la misma dirección</strong>. Piensa en ' +
+    'empujar un carrito. Si empujas justo hacia donde quieres que vaya, todo tu esfuerzo cuenta. Si ' +
+    'empujas un poco de lado, solo aprovechas una parte. Y si empujas perpendicularmente, hacia el ' +
+    'suelo, el carrito no avanza nada por mucho que te canses: tu esfuerzo no cuenta.');
+
+  p.text('El producto escalar pone número a esa idea. Sale <strong>positivo</strong> si los dos ' +
+    'vectores apuntan más o menos hacia el mismo lado, <strong>cero</strong> si son perpendiculares y ' +
+    '<strong>negativo</strong> si apuntan en sentidos opuestos. Solo con el signo ya sabes en qué ' +
+    'situación estás, sin calcular ningún ángulo.');
+
+  p.text('Y ahora las fórmulas, que son dos y dan lo mismo. La primera es la que se usa para calcular, ' +
+    'porque solo pide las coordenadas; la segunda es la que se usa para <em>entender</em>, porque ' +
+    'enseña el ángulo. Igualarlas es lo que permite despejar ese ángulo, y de ahí sale la tercera línea.');
 
   p.formulas([
     '\\vec{u}\\cdot\\vec{v} = u_1v_1 + u_2v_2',
     '\\vec{u}\\cdot\\vec{v} = |\\vec{u}|\\,|\\vec{v}|\\cos\\alpha',
     '\\cos\\alpha = \\frac{u_1v_1+u_2v_2}{|\\vec{u}|\\,|\\vec{v}|}'
-  ]);
+  ], 'las dos caras del producto escalar, y el ángulo que sale de igualarlas',
+    'El punto entre los vectores se lee «producto escalar»: $\\vec{u}\\cdot\\vec{v}$ es «u escalar v», ' +
+    'nunca «u por v».<br><br>Se leen: <em>«u escalar v es igual a u uno por uve uno, más u dos por ' +
+    'uve dos»</em> · <em>«u escalar v es igual al módulo de u, por el módulo de v, por el coseno de ' +
+    'alfa»</em> · <em>«coseno de alfa es igual a u uno uve uno más u dos uve dos, partido por el ' +
+    'módulo de u por el módulo de v»</em>.<br><br>$\\alpha$ es la letra griega alfa y aquí es el ' +
+    'ángulo que forman los dos vectores.');
 
   p.note('Consecuencia importantísima: <strong>dos vectores son perpendiculares si y solo si su ' +
     'producto escalar vale cero</strong>, porque $\\cos 90^\\circ = 0$. Es la forma más rápida de ' +

@@ -11,6 +11,21 @@ Course.topic('al-fracciones-alg', function (p) {
     '$\\frac{x+3}{x+5}$ no se puede tachar el $x$: no es un factor común, es un sumando. ' +
     'Este es, con diferencia, el error más repetido del tema.', 'warn', 'La regla de oro');
 
+  p.text('Merece la pena entender <em>por qué</em>, porque quien lo entiende deja de cometer el error. ' +
+    'Simplificar una fracción es dividir arriba y abajo por lo mismo, y para poder dividir todo el ' +
+    'numerador entre algo, ese algo tiene que estar multiplicando a <strong>todo</strong> el ' +
+    'numerador. Un factor multiplica al conjunto; un sumando solo es una parte.');
+
+  p.text('Con números se ve enseguida y nadie se equivoca. En $\\frac{6}{9}$ puedes dividir entre 3 ' +
+    'porque $6=3\\cdot 2$ y $9=3\\cdot 3$: el 3 multiplica a todo. Pero a nadie se le ocurre ' +
+    'simplificar $\\frac{3+4}{3+5}$ tachando los treses para dejar $\\frac{4}{5}$, porque saltaría a ' +
+    'la vista que $\\frac{7}{8}$ no es $\\frac{4}{5}$. Con letras el error se cuela porque no se ve ' +
+    'el resultado, pero es exactamente el mismo disparate.');
+
+  p.text('De ahí sale la regla práctica del tema: <strong>antes de simplificar, factoriza</strong>. ' +
+    'Mientras haya sumas a la vista no se puede tachar nada; en cuanto todo esté escrito como ' +
+    'producto, se tacha sin miedo.');
+
   p.demo({
     title: 'Simplificar: lo que se puede y lo que no',
     intro: 'Compara las dos expresiones evaluándolas en varios valores. Si la simplificación fuera legítima, las dos columnas coincidirían siempre.',

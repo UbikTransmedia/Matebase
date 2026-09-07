@@ -1,15 +1,34 @@
 /* Tema: Identidades notables y factorización */
 Course.topic('al-identidades', function (p) {
 
-  p.text('Hay tres productos que aparecen tantas veces que conviene reconocerlos de un vistazo, en ' +
-    'los dos sentidos: saber desarrollarlos y, sobre todo, saber verlos al revés. Se llaman ' +
-    '<strong>identidades notables</strong>.');
+  p.text('Hay tres productos que aparecen tantas veces que conviene reconocerlos de un vistazo. No ' +
+    'tienen nada de especial: si los desarrollas a mano, término a término, salen solos. Lo que pasa ' +
+    'es que aparecen <em>constantemente</em>, y quien los reconoce se ahorra media hoja de cuentas ' +
+    'cada vez.');
+
+  p.text('Y hay algo más importante que desarrollarlos, que es saber leerlos <strong>al revés</strong>. ' +
+    'Desarrollar es fácil y mecánico; lo difícil, y lo que de verdad se pide en los ejercicios, es ver ' +
+    'un $x^2+6x+9$ y reconocer que eso <em>es</em> $(x+3)^2$. Eso se llama factorizar y es la mitad ' +
+    'del tema.');
 
   p.formulas([
     '(a+b)^2 = a^2 + 2ab + b^2',
     '(a-b)^2 = a^2 - 2ab + b^2',
     '(a+b)(a-b) = a^2 - b^2'
-  ], 'las tres identidades notables');
+  ], 'las tres identidades notables',
+    'Se leen: <em>«a más be, al cuadrado, es igual a a al cuadrado, más dos a be, más be al ' +
+    'cuadrado»</em> · <em>«a menos be, al cuadrado, es igual a a al cuadrado, menos dos a be, más be ' +
+    'al cuadrado»</em> · <em>«a más be, por a menos be, es igual a a al cuadrado menos be al ' +
+    'cuadrado»</em>.<br><br>Fíjate en dos detalles que se preguntan mucho: en la segunda, el último ' +
+    'término es <strong>positivo</strong>, porque menos por menos da más. Y en la tercera <strong>no ' +
+    'hay término del medio</strong>: los dos productos cruzados se cancelan, y por eso el resultado ' +
+    'es tan limpio.');
+
+  p.text('La tercera merece una mirada aparte, porque es la que más se usa y la única que hace ' +
+    'desaparecer un término. Si desarrollas $(a+b)(a-b)$ multiplicando todo con todo salen cuatro ' +
+    'sumandos: $a^2$, $-ab$, $+ab$ y $-b^2$. Los dos del medio son iguales y de signo contrario, así ' +
+    'que se anulan y queda solo la diferencia de cuadrados. Ese detalle es el que la convierte en un ' +
+    'atajo para multiplicar de cabeza.');
 
   p.note('El error clásico, y hay que quitárselo de encima ya: $(a+b)^2$ <strong>no</strong> es ' +
     '$a^2+b^2$. Falta el doble producto $2ab$. Compruébalo con números: $(3+4)^2 = 49$, mientras que ' +

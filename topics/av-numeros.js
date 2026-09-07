@@ -187,7 +187,13 @@ Course.topic('av-numeros', function (p) {
     'n = p\\cdot q, \\qquad \\varphi(n) = (p-1)(q-1)',
     'e\\,d \\equiv 1 \\pmod{\\varphi(n)}',
     'c = m^e \\bmod n \\qquad m = c^d \\bmod n'
-  ], 'cifrado y descifrado');
+  ], 'cifrado y descifrado',
+    'La letra $\\varphi$ es la fi griega y $\\varphi(n)$ se dice «fi de ene» o «indicador de Euler»: ' +
+      'cuenta cuántos números menores que $n$ no comparten factores con él.<br><br>Se lee: <em>«ene es ' +
+      'igual a pe por cu; fi de ene es igual a pe menos uno por cu menos uno»</em>.<br><br>Y aquí está ' +
+      'toda la seguridad del sistema: cualquiera puede ver $n$, porque es público, pero para calcular ' +
+      '$\\varphi(n)$ hacen falta $p$ y $q$ por separado, y recuperarlos a partir de $n$ es el problema ' +
+      'de factorizar que nadie sabe resolver deprisa.');
 
   p.note('La clave pública $(n, e)$ se puede publicar en internet sin ningún riesgo: cualquiera puede ' +
     'cifrar con ella. Solo quien conozca $p$ y $q$ puede calcular $d$ y descifrar. Y para conocer $p$ ' +

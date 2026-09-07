@@ -117,7 +117,13 @@ Course.topic('av-espacios', function (p) {
     'todo lo demás. Y esas imágenes, puestas por columnas, <em>son</em> la matriz. Eso es una matriz: ' +
     'no una tabla de números, sino el destino de los vectores de la base.', 'ok', 'Qué es una matriz');
 
-  p.formula('A = \\begin{pmatrix} \\uparrow & \\uparrow \\\\ f(\\vec{e}_1) & f(\\vec{e}_2) \\\\ \\downarrow & \\downarrow \\end{pmatrix}');
+  p.formula('A = \\begin{pmatrix} \\uparrow & \\uparrow \\\\ f(\\vec{e}_1) & f(\\vec{e}_2) \\\\ \\downarrow & \\downarrow \\end{pmatrix}', 'la matriz como colección de columnas',
+    'Las flechitas hacia arriba son solo un recurso de dibujo para indicar que cada columna es un ' +
+      'vector completo, puesto de pie.<br><br>La idea que hay que llevarse: <strong>las columnas de ' +
+      'una matriz son las imágenes de los vectores de la base</strong>. Es decir, para saber qué hace ' +
+      'una transformación basta con saber a dónde manda los vectores unitarios; el resto se deduce. ' +
+      'Por eso una matriz de dos por dos contiene toda la información de un giro, y por eso se puede ' +
+      'componer transformaciones multiplicando.');
 
   p.demo({
     title: 'Deformar el plano',

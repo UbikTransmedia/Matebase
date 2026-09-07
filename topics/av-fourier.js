@@ -159,7 +159,14 @@ Course.topic('av-fourier', function (p) {
   p.text('La serie sirve para señales <em>periódicas</em>. Para una señal cualquiera hay que dejar que ' +
     'las frecuencias sean continuas, y la suma se convierte en una integral:');
 
-  p.formula('\\hat{f}(\\xi) = \\int_{-\\infty}^{\\infty} f(x)\\,e^{-2\\pi i x \\xi}\\,dx');
+  p.formula('\\hat{f}(\\xi) = \\int_{-\\infty}^{\\infty} f(x)\\,e^{-2\\pi i x \\xi}\\,dx', 'la transformada de Fourier',
+    'El sombrero, $\\hat{f}$, se dice «efe sombrero» o «transformada de efe». La letra $\\xi$ es la ' +
+      'xi griega y representa la frecuencia. La $i$ del exponente es la unidad imaginaria.<br><br>Se ' +
+      'lee: <em>«efe sombrero de xi es igual a la integral, entre menos infinito e infinito, de efe de ' +
+      'equis por e elevado a menos dos pi i xi equis, diferencial de equis»</em>.<br><br>Qué hace, sin ' +
+      'fórmulas: coge una señal escrita en el tiempo y devuelve <strong>cuánta cantidad hay de cada ' +
+      'frecuencia</strong>. Es pasar de la partitura al sonido y viceversa. La diferencia con las ' +
+      'series de antes es que aquí no hace falta que la señal se repita.');
 
   p.text('Ese $e^{-2\\pi i x\\xi}$ no es más que un seno y un coseno juntos, gracias a la fórmula de ' +
     'Euler $e^{i\\theta} = \\cos\\theta + i\\operatorname{sen}\\theta$. Aquí ves para qué servían los ' +

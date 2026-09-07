@@ -111,7 +111,13 @@ Course.topic('av-edp', function (p) {
   p.formulas([
     'T\'(t) = -\\lambda k\\,T(t) \\ \\Rightarrow\\ T = e^{-\\lambda k t}',
     'X\'\'(x) = -\\lambda X(x) \\ \\Rightarrow\\ X = \\operatorname{sen}(\\sqrt{\\lambda}\\,x)'
-  ]);
+  ], 'las dos ecuaciones que quedan al separar',
+    'La prima y las dos primas siguen significando «derivada» y «derivada segunda»; $\\lambda$ es la ' +
+      'lambda griega y aquí es una constante que aparece al separar.<br><br>Lo importante no son los ' +
+      'símbolos sino lo que acaba de ocurrir: hemos partido <strong>una</strong> ecuación con dos ' +
+      'variables en <strong>dos</strong> ecuaciones con una variable cada una. Ese es todo el truco ' +
+      'del método, y por eso se llama separación de variables: convertir un problema difícil en dos ' +
+      'fáciles que ya sabemos resolver.');
 
   p.note('Las condiciones de contorno (extremos a temperatura cero) obligan a que $\\sqrt{\\lambda}$ ' +
     'solo pueda tomar ciertos valores discretos: $\\lambda_n = (n\\pi/L)^2$. La ecuación ' +
