@@ -334,6 +334,8 @@ Course.topic('av-informacion', function (p) {
     answer: function (d) { return U.fmt(d.var_, 4) + ' bits'; }
   });
 
+  p.note('Este resultado reaparece en el bloque 12 con otro nombre y desde otro problema. Ross Ashby, estudiando cómo se regula un sistema, definió la <strong>variedad</strong> de algo como el número de estados distintos que puede presentar, y la midió tomando su logaritmo en base dos. Es decir, la misma cuenta que acabas de hacer aquí. Shannon preguntaba cuánta información hace falta para transmitir un mensaje y Ashby cuántas jugadas hacen falta para controlar una situación, y la respuesta resultó ser el mismo logaritmo: por eso la teoría de la información y la cibernética nacieron de la mano.', null, 'La misma medida, otra vez');
+
   p.keys([
     'Información = sorpresa: $I = \\log_2(1/p)$. Un suceso seguro no informa de nada.',
     'La <strong>entropía</strong> $H = -\\sum p_i\\log_2 p_i$ es la información media por símbolo.',

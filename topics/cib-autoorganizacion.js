@@ -1,0 +1,348 @@
+/* Tema: Autoorganización: autómatas celulares */
+Course.topic('cib-autoorganizacion', function (p) {
+
+  p.text('Hasta aquí, en todos los sistemas del bloque había algo parecido a un gobernante: un ' +
+    'controlador que mide, decide y actúa. Este tema quita esa figura y hace una pregunta molesta: ' +
+    '<strong>¿puede aparecer orden sin que nadie lo organice?</strong>');
+
+  p.text('La respuesta es que sí, y de forma tan clara que resulta desconcertante la primera vez que se ' +
+    've. Basta con muchas piezas idénticas, cada una siguiendo una regla tonta que solo mira a sus ' +
+    'vecinas inmediatas. Ninguna sabe qué está haciendo el conjunto; ninguna tiene un plan. Y sin ' +
+    'embargo del conjunto sale estructura: rayas, ondas, figuras que se desplazan, formas que se ' +
+    'reproducen.');
+
+  p.text('A esto se le llama <strong>autoorganización</strong>, y las herramientas más limpias para ' +
+    'estudiarlo son los <strong>autómatas celulares</strong>: una cuadrícula de celdas que solo ' +
+    'pueden estar encendidas o apagadas, y una regla que dice cómo cambia cada una según sus vecinas.');
+
+  p.hist('Ashby escribió sobre esto en 1947 en un artículo titulado <em>Principles of the ' +
+    'Self-Organizing Dynamic System</em>, y volvió sobre ello en 1962 con una advertencia célebre: ' +
+    'que la expresión «sistema autoorganizado» es tramposa, porque ningún sistema se organiza ' +
+    'realmente a sí mismo <em>desde dentro de la nada</em> — siempre hay una regla, y esa regla vino ' +
+    'de fuera. Lo que sí ocurre, y es asombroso, es que la organización que emerge no estaba escrita ' +
+    'en la regla de forma reconocible. Su frase resume el tema: el diseñador pone la regla, pero no ' +
+    'ha diseñado lo que va a salir.');
+
+  /* ---------------------------------------------------------------- */
+  p.section('Autómatas de una dimensión');
+
+  p.text('Empecemos por lo más pequeño posible. Una fila de celdas, cada una encendida o apagada. Para ' +
+    'calcular la fila siguiente, cada celda mira <strong>tres casillas</strong>: la de encima y sus ' +
+    'dos vecinas. Con tres casillas binarias hay ocho combinaciones posibles, y la regla no es más ' +
+    'que decidir, para cada una de esas ocho, si la celda queda encendida o apagada.');
+
+  p.text('Como cada una de las ocho respuestas es un sí o un no, hay $2^8 = 256$ reglas distintas, ni ' +
+    'una más. Se numeran del 0 al 255 leyendo esas ocho respuestas como un número binario, y por eso ' +
+    'se habla de «la regla 30» o «la regla 110». Con ese universo minúsculo y completamente ' +
+    'catalogado se puede hacer un experimento honesto: <em>probarlas todas y ver qué sale</em>.');
+
+  p.demo({
+    title: 'Las 256 reglas, una por una',
+    intro: 'Cada fila se calcula a partir de la anterior mirando solo tres casillas. Se empieza con una única celda encendida en el centro. Recorre las reglas y fíjate en lo distintas que son: unas mueren, otras hacen rayas periódicas, otras dibujan triángulos anidados, y unas pocas producen algo que parece azar puro sin serlo.',
+    build: function (host, d) {
+      var regla = 30, filas = 60, ancho = 121;
+
+      function generar() {
+        var fila = [];
+        for (var i = 0; i < ancho; i++) fila.push(i === (ancho - 1) / 2 ? 1 : 0);
+        var todas = [fila];
+        for (var f = 1; f < filas; f++) {
+          var nueva = [];
+          for (var c = 0; c < ancho; c++) {
+            var izq = fila[(c - 1 + ancho) % ancho];
+            var cen = fila[c];
+            var der = fila[(c + 1) % ancho];
+            var idx = izq * 4 + cen * 2 + der;
+            nueva.push((regla >> idx) & 1);
+          }
+          fila = nueva;
+          todas.push(fila);
+        }
+        return todas;
+      }
+
+      var out = W.readout(host, '');
+      var plot = W.plot(host, {
+        xmin: 0, xmax: ancho, ymin: -filas, ymax: 0, height: 330,
+        grid: false, axes: false,
+        draw: function (g) {
+          var t = generar();
+          for (var f = 0; f < t.length; f++) {
+            for (var c = 0; c < ancho; c++) {
+              if (t[f][c]) g.rect(c, -f - 1, 1, 1, { color: 0, fill: 0, fillAlpha: 1, w: 0 });
+            }
+          }
+        }
+      });
+
+      var FAMOSAS = {
+        0: 'Muere en el primer paso: la regla apaga todo.',
+        30: 'Caos a partir de un solo punto. Wolfram la usó como generador de números aleatorios, y así se implementó en el software Mathematica.',
+        90: 'Dibuja el triángulo de Sierpinski, el mismo fractal del bloque 8, sin que nadie lo haya programado.',
+        110: 'La más asombrosa: se demostró que es capaz de computar cualquier cosa que compute un ordenador. Con esta regla tonta.',
+        150: 'Simetría intrincada, periódica en el tiempo.',
+        184: 'Modela el tráfico de coches en una carretera de un carril: las celdas encendidas son vehículos.',
+        250: 'Un triángulo relleno, orden puro y aburrido.',
+        255: 'Lo enciende todo de inmediato.'
+      };
+
+      function paint() {
+        var bits = [];
+        for (var i = 7; i >= 0; i--) bits.push((regla >> i) & 1);
+        out.set('<strong>Regla ' + regla + '</strong> &nbsp;·&nbsp; en binario: ' + bits.join('') +
+          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Esos ocho bits son la regla entera: ' +
+          'dicen qué hacer ante cada una de las ocho vecindades posibles.</span>' +
+          (FAMOSAS[regla] ? '<br><strong style="color:var(--accent-ink)">' + FAMOSAS[regla] + '</strong>' : ''));
+        plot.render();
+      }
+
+      W.slider(W.row(host), {
+        label: 'número de regla', min: 0, max: 255, step: 1, value: regla, dec: 0,
+        on: function (v) { regla = v; paint(); }
+      });
+      W.buttons(W.row(host), [
+        { t: 'Regla 30', on: function () { regla = 30; paint(); } },
+        { t: 'Regla 90', on: function () { regla = 90; paint(); } },
+        { t: 'Regla 110', cls: 'btn--main', on: function () { regla = 110; paint(); } },
+        { t: 'Regla 184', on: function () { regla = 184; paint(); } }
+      ]);
+      W.hint(host, 'Mira la 90: aparece el triángulo de Sierpinski. Nadie ha dibujado un fractal; ha salido de que cada celda mire a dos vecinas.');
+      paint();
+    }
+  });
+
+  p.note('La regla 110 merece un párrafo aparte. En 2004 se demostró que es <strong>computacionalmente ' +
+    'universal</strong>: cualquier cálculo que pueda hacer un ordenador se puede hacer con esa regla ' +
+    'de ocho bits, dándole la entrada adecuada. Es decir, una máquina capaz de todo lo que hace tu ' +
+    'portátil cabe en la frase «mira tus dos vecinas y aplica esta tabla». La frontera entre lo ' +
+    'trivial y lo universal está muchísimo más cerca de lo que la intuición sugiere.',
+    'ok', 'Ocho bits que lo pueden todo');
+
+  /* ---------------------------------------------------------------- */
+  p.section('El Juego de la Vida');
+
+  p.text('El autómata más famoso vive en dos dimensiones y lo inventó el matemático John Conway en ' +
+    '1970. Sus reglas caben en dos líneas y no hay ninguna más:');
+
+  p.list([
+    'Una celda <strong>viva</strong> sigue viva si tiene 2 o 3 vecinas vivas. Con menos muere de ' +
+      'soledad; con más, de agobio.',
+    'Una celda <strong>muerta</strong> revive si tiene exactamente 3 vecinas vivas.'
+  ], true);
+
+  p.text('Eso es todo. No hay más reglas, no hay azar, no hay objetivo. Y sin embargo, de ahí salen ' +
+    'estructuras con nombre propio que la gente lleva cincuenta años catalogando: bloques que no se ' +
+    'mueven, osciladores que laten, <em>planeadores</em> que se desplazan por el tablero, cañones que ' +
+    'los disparan cada treinta pasos, y configuraciones capaces de construir copias de sí mismas.');
+
+  p.demo({
+    title: 'El Juego de la Vida',
+    intro: 'Pon una figura y déjala correr. El planeador se desplaza en diagonal, indefinidamente. La «rana» late. Y la configuración al azar suele acabar en un revoltijo de restos quietos y osciladores, tras un rato de actividad sorprendente.',
+    build: function (host, d) {
+      var W2 = 42, H2 = 26;
+      var g0 = [];
+      function vaciar() {
+        g0 = [];
+        for (var y = 0; y < H2; y++) { var f = []; for (var x = 0; x < W2; x++) f.push(0); g0.push(f); }
+      }
+      vaciar();
+
+      function poner(pts, ox, oy) {
+        pts.forEach(function (q) { g0[(q[1] + oy + H2) % H2][(q[0] + ox + W2) % W2] = 1; });
+      }
+      var PLANEADOR = [[1, 0], [2, 1], [0, 2], [1, 2], [2, 2]];
+      var RANA = [[1, 0], [2, 0], [3, 0], [0, 1], [1, 1], [2, 1]];
+      var PENTA = [[1, 0], [1, 1], [0, 1], [2, 1], [1, 2], [1, 3], [1, 4], [0, 5], [2, 5], [1, 6], [1, 7]];
+
+      var gen = 0, vivas = 0, corriendo = null;
+      poner(PLANEADOR, 4, 4);
+
+      function paso() {
+        var n = [];
+        for (var y = 0; y < H2; y++) {
+          var f = [];
+          for (var x = 0; x < W2; x++) {
+            var c = 0;
+            for (var dy = -1; dy <= 1; dy++) for (var dx = -1; dx <= 1; dx++) {
+              if (dx === 0 && dy === 0) continue;
+              c += g0[(y + dy + H2) % H2][(x + dx + W2) % W2];
+            }
+            f.push(g0[y][x] ? ((c === 2 || c === 3) ? 1 : 0) : (c === 3 ? 1 : 0));
+          }
+          n.push(f);
+        }
+        g0 = n; gen++;
+      }
+
+      var out = W.readout(host, '');
+      var plot = W.plot(host, {
+        xmin: 0, xmax: W2, ymin: -H2, ymax: 0, height: 300,
+        grid: false, axes: false,
+        draw: function (g) {
+          vivas = 0;
+          for (var y = 0; y < H2; y++) for (var x = 0; x < W2; x++) {
+            if (g0[y][x]) { vivas++; g.rect(x, -y - 1, 1, 1, { color: 2, fill: 2, fillAlpha: 1, w: 0 }); }
+          }
+        }
+      });
+
+      function paint() {
+        out.set('Generación <strong>' + gen + '</strong> &nbsp;·&nbsp; celdas vivas: <strong>' + vivas + '</strong>' +
+          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Las dos reglas no cambian nunca. ' +
+          'Todo lo que ves sale de contar vecinas.</span>');
+        plot.render();
+      }
+
+      function avanzar(n) { for (var i = 0; i < n; i++) paso(); paint(); }
+
+      W.buttons(W.row(host), [
+        { t: 'Un paso', on: function () { avanzar(1); } },
+        { t: 'Avanzar 20', cls: 'btn--main', on: function () { avanzar(20); } },
+        { t: 'Planeador', on: function () { vaciar(); gen = 0; poner(PLANEADOR, 4, 4); paint(); } },
+        { t: 'Rana', on: function () { vaciar(); gen = 0; poner(RANA, 18, 12); paint(); } },
+        { t: 'Pentadecatlón', on: function () { vaciar(); gen = 0; poner(PENTA, 20, 9); paint(); } },
+        { t: 'Al azar', cls: 'btn--ghost', on: function () {
+          vaciar(); gen = 0;
+          var r = U.rng(Date.now() % 100000);
+          for (var y = 0; y < H2; y++) for (var x = 0; x < W2; x++) g0[y][x] = r.bool(0.32) ? 1 : 0;
+          paint();
+        } }
+      ]);
+      W.hint(host, 'Empieza con el planeador y avanza de veinte en veinte: se desplaza en diagonal sin deformarse. Después prueba «al azar» varias veces y observa cuánto tarda en calmarse.');
+      paint();
+    }
+  });
+
+  p.hist('Conway diseñó las reglas a mano durante meses, con tablero y fichas, buscando un equilibrio ' +
+    'muy concreto: que no muriera todo enseguida, que no creciera sin control y que fuera imposible ' +
+    'saber a simple vista qué haría una configuración dada. Se publicó en 1970 en la columna de ' +
+    'Martin Gardner en <em>Scientific American</em> y provocó una pequeña fiebre: se calcula que ' +
+    'durante un tiempo consumió una cantidad notable del tiempo de computación disponible en las ' +
+    'universidades, con gente dejando programas corriendo toda la noche para ver qué pasaba. Conway, ' +
+    'que hizo matemáticas mucho más profundas en teoría de grupos y de nudos, acabó algo harto de que ' +
+    'se le conociera sobre todo por esto.');
+
+  p.util('Los autómatas celulares no se quedaron en juego. Se usan para simular la propagación de ' +
+    'incendios forestales, donde cada celda es una parcela que puede arder y contagiar a sus vecinas; ' +
+    'para modelar tráfico —la regla 184 es literalmente un modelo de coches en un carril— y para ' +
+    'entender cómo se forman los patrones de las conchas de algunos moluscos, que reproducen figuras ' +
+    'de autómatas de una dimensión con una fidelidad asombrosa: el borde de la concha va escribiendo ' +
+    'fila a fila, igual que la pantalla de arriba.');
+
+  /* ---------------------------------------------------------------- */
+  p.section('Emergencia');
+
+  p.text('Conviene poner nombre a lo que estamos viendo. Se llama <strong>emergencia</strong> a que ' +
+    'aparezcan en el conjunto propiedades que <em>no están</em> en las piezas ni en las reglas.');
+
+  p.text('El planeador es el ejemplo perfecto. Se desplaza por el tablero, mantiene su forma, choca ' +
+    'con otras figuras; tiene, en todos los sentidos prácticos, entidad propia. Y sin embargo ' +
+    '<strong>en las reglas del Juego de la Vida no aparece la palabra «planeador» ni la idea de ' +
+    'movimiento</strong>. Ninguna celda se mueve nunca: solo se encienden y se apagan. El movimiento ' +
+    'es una interpretación nuestra de un patrón que se reconstruye un poco más allá en cada paso.');
+
+  p.note('Esa es exactamente la advertencia de Ashby de la que hablábamos al principio. La regla la ' +
+    'puso alguien; lo que <em>no</em> puso nadie es el planeador, y sin embargo ahí está, deducible ' +
+    'de la regla pero imposible de anticipar leyéndola. Por eso la emergencia no es magia ni ' +
+    'misticismo: es que <strong>saber las reglas no es lo mismo que saber las consecuencias</strong>.',
+    null, 'Qué significa y qué no');
+
+  p.util('Esa distinción tiene consecuencias muy prácticas fuera de la pantalla. Un atasco de tráfico ' +
+    'que se desplaza hacia atrás mientras los coches avanzan hacia delante es un planeador: nadie lo ' +
+    'ha creado y ningún coche «es» el atasco. Una burbuja de precios, un rumor que se propaga o el ' +
+    'patrón de aplausos que se sincroniza solo en un teatro son de la misma familia. En todos ellos, ' +
+    'buscar al culpable individual es un error de nivel: el fenómeno vive en el conjunto, no en las ' +
+    'piezas.');
+
+  /* ================= EJERCICIOS ================= */
+  p.section('Practica');
+
+  p.exercise({
+    title: 'Aplica las reglas de la Vida',
+    level: 'basico',
+    gen: function (r) {
+      var viva = r.bool(0.5);
+      var vecinas = r.int(0, 6);
+      return { viva: viva, vecinas: vecinas };
+    },
+    ask: function (d) {
+      return 'Una celda está <strong>' + (d.viva ? 'viva' : 'muerta') + '</strong> y tiene ' +
+        '<strong>' + d.vecinas + ' vecinas vivas</strong>.<br><br>' +
+        'Recuerda las reglas: una viva sobrevive con 2 o 3 vecinas; una muerta revive con exactamente 3.' +
+        '<br><br>¿Cómo estará en la generación siguiente?';
+    },
+    fields: [{ name: 'q', label: 'quedará', w: 'tiny' }],
+    sol: function (d) {
+      var r = d.viva ? (d.vecinas === 2 || d.vecinas === 3) : (d.vecinas === 3);
+      return { q: r ? 'viva' : 'muerta' };
+    },
+    check: function (v, d) {
+      var r = d.viva ? (d.vecinas === 2 || d.vecinas === 3) : (d.vecinas === 3);
+      var s = String(v.raw.q || '').toLowerCase();
+      var vi = /viv|encend|1/.test(s), mu = /muert|apag|0/.test(s);
+      if (vi === mu) return { ok: false, msg: 'Responde «viva» o «muerta».' };
+      return { ok: r ? vi : mu };
+    },
+    hint: function () { return 'Con 0 o 1 vecinas siempre se muere; con 4 o más también. La franja buena es estrecha.'; },
+    steps: function (d) {
+      var r = d.viva ? (d.vecinas === 2 || d.vecinas === 3) : (d.vecinas === 3);
+      var l = ['La celda está ' + (d.viva ? 'viva' : 'muerta') + ' y tiene ' + d.vecinas + ' vecinas vivas.'];
+      if (d.viva) {
+        l.push(r ? 'Como tiene 2 o 3 vecinas, sobrevive.'
+          : (d.vecinas < 2 ? 'Con menos de 2 vecinas muere de soledad.' : 'Con más de 3 vecinas muere de agobio.'));
+      } else {
+        l.push(r ? 'Una celda muerta con exactamente 3 vecinas nace.'
+          : 'Para nacer harían falta exactamente 3 vecinas, y tiene ' + d.vecinas + '.');
+      }
+      l.push('Quedará <strong>' + (r ? 'viva' : 'muerta') + '</strong>.');
+      return l;
+    },
+    answer: function (d) {
+      return (d.viva ? (d.vecinas === 2 || d.vecinas === 3) : (d.vecinas === 3)) ? 'viva' : 'muerta';
+    }
+  });
+
+  p.exercise({
+    title: 'Descifra una regla elemental',
+    level: 'medio',
+    gen: function (r) {
+      var n = r.int(1, 254);
+      var vecindad = r.int(0, 7);
+      return { n: n, v: vecindad };
+    },
+    ask: function (d) {
+      var bits = [(d.v >> 2) & 1, (d.v >> 1) & 1, d.v & 1];
+      return 'En un autómata elemental, la regla <strong>' + d.n + '</strong> se lee escribiendo el ' +
+        'número en binario con 8 bits: el bit de la posición $i$ dice qué sale cuando la vecindad ' +
+        '(izquierda, centro, derecha) vale $i$ leído en binario.<br><br>' +
+        'La vecindad es <strong>' + bits.join('') + '</strong>, es decir, $i = ' + d.v + '$.<br><br>' +
+        '¿Qué valor tendrá la celda en la fila siguiente, 0 o 1?';
+    },
+    fields: [{ name: 'b', label: 'sale un', w: 'tiny' }],
+    sol: function (d) { return { b: (d.n >> d.v) & 1 }; },
+    hint: function () {
+      return 'Escribe el número de la regla en binario y cuenta las posiciones <strong>desde la derecha</strong>, empezando en cero.';
+    },
+    steps: function (d) {
+      var bits = [];
+      for (var i = 7; i >= 0; i--) bits.push((d.n >> i) & 1);
+      return [
+        'La regla ' + d.n + ' en binario con 8 bits es <strong>' + bits.join('') + '</strong>.',
+        'Las posiciones se cuentan desde la derecha empezando en 0, así que la posición ' + d.v +
+          ' es el bit número ' + (8 - d.v) + ' contando desde la izquierda.',
+        'Ese bit vale <strong>' + ((d.n >> d.v) & 1) + '</strong>.',
+        'Con ocho decisiones como esta queda completamente definida la regla, y por eso solo hay $2^8 = 256$.'
+      ];
+    }
+  });
+
+  p.keys([
+    '<strong>Autoorganización</strong>: aparece estructura global sin que ninguna pieza la conozca ni la dirija.',
+    'Un <strong>autómata celular</strong> es una cuadrícula de celdas binarias con una regla que solo mira a las vecinas.',
+    'Con vecindad de tres celdas hay exactamente $2^8 = 256$ reglas posibles, y se pueden explorar todas.',
+    'La regla 110 es <strong>computacionalmente universal</strong>: puede calcular cualquier cosa que calcule un ordenador.',
+    'El <strong>Juego de la Vida</strong> tiene dos reglas y produce figuras que se desplazan, laten y se reproducen.',
+    '<strong>Emergencia</strong> es que el conjunto tenga propiedades que no están en las reglas: saberlas no es saber sus consecuencias.'
+  ]);
+
+});

@@ -24,7 +24,7 @@ Se abre haciendo doble clic en `index.html`. **Sin servidor local, sin internet,
 
 ## Fase 1 — Temario (cerrada) → `assets/js/curriculum.js`
 
-12 bloques, 79 temas, en progresión estricta. El orden es el contrato pedagógico:
+13 bloques, 88 temas, en progresión estricta. El orden es el contrato pedagógico:
 ningún tema usa una herramienta que no se haya explicado antes.
 
 0. **Lógica, conjuntos y demostración** (3) — proposiciones, conjuntos e inducción.
@@ -45,6 +45,9 @@ ningún tema usa una herramienta que no se haya explicado antes.
    simetría, el infinito de Cantor.
 11. **Discreta y computacional** (4) — grafos, análisis numérico, teoría de la
    información y teoría de juegos.
+12. **Cibernética** (9) — realimentación, la caja negra, la ley de la variedad
+   requerida, control PID, homeostasis y ultraestabilidad, retardos, filtrado y
+   predicción, autómatas celulares y cibernética de segundo orden.
 
 > Los cinco últimos empezaron siendo **un solo bloque de 19 temas** llamado
 > «Escalada avanzada», y funcionaba mal: su único criterio de agrupación era
@@ -85,9 +88,13 @@ Ocho módulos, cero duplicación. El orden es el de carga:
 Por cada tema: explicación → apunte histórico → ejemplo interactivo → 3-5
 ejercicios procedimentales → ideas clave.
 
-**Los 79 temas están escritos**: 147 ejemplos interactivos, 312 ejercicios
-procedimentales y 139 gráficas. Cada tanda se entregó dejando el proyecto
+**Los 88 temas están escritos**. Cada tanda se entregó dejando el proyecto
 funcionando y pasando `tests.html`.
+
+> El bloque 12 se colocó al final por una razón pedagógica, no cronológica: la
+> cibernética es la única parte del temario que necesita **todo** lo anterior a la
+> vez, y por eso funciona como cierre. Es donde el alumno ve para qué servía lo que
+> fue aprendiendo suelto.
 
 ## Fase 4 — Repaso y ampliación (pendiente, a petición)
 

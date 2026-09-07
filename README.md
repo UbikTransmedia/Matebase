@@ -10,7 +10,7 @@ abrirla en cualquier ordenador con un navegador.
 
 ## Qué hay dentro
 
-A la izquierda, un índice desplegable con los doce bloques del curso. A la
+A la izquierda, un índice desplegable con los trece bloques del curso. A la
 derecha, el tema abierto. Cada tema tiene explicación, historia, ejemplos que se
 tocan y ejercicios que se pueden repetir infinitas veces.
 
@@ -50,11 +50,18 @@ El botón «Reiniciar» de abajo a la izquierda lo borra.
 | 9. Varias variables y geometría | 4 | cálculo vectorial, optimización, curvatura y topología |
 | 10. Estructuras, números e infinito | 3 | teoría de números y RSA, grupos, Cantor |
 | 11. Discreta y computacional | 4 | grafos, cálculo numérico, información, teoría de juegos |
+| 12. Cibernética | 9 | realimentación, caja negra, variedad requerida, PID, homeostasis, retardos, filtrado, autómatas, segundo orden |
 
-**79 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
-se haya explicado antes. Los cinco últimos bloques recogen lo que queda más allá
-del Bachillerato, agrupado por disciplina y no en un cajón común. En total, **147 ejemplos interactivos**, **312 ejercicios
-procedimentales** y **139 gráficas**.
+**88 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
+se haya explicado antes. Los bloques 7 a 11 recogen lo que queda más allá del
+Bachillerato, agrupado por disciplina y no en un cajón común. El **bloque 12,
+Cibernética**, cierra el curso a propósito: es el que reutiliza todo lo anterior a
+la vez —la derivada y la integral como anticipación y memoria de un controlador,
+la entropía como variedad, los autovalores como criterio de estabilidad— para
+responder a una sola pregunta: cómo se mantiene algo en su sitio en un mundo que
+lo empuja. En total, **158 ejemplos interactivos**, **334 ejercicios
+procedimentales** y **150 gráficas**, más **165 cuadros de utilidad**, **93 apuntes
+históricos** y un glosario de **145 términos**.
 
 El temario vive en `assets/js/curriculum.js`. Si en el futuro se añade un tema
 nuevo al índice sin su archivo, aparece marcado como «en preparación» con sus
@@ -115,7 +122,7 @@ Los detalles están en **`GUIA-AUTOR.md`**.
   suave—, con un botón para cada uno al pie del índice: el activo se distingue a
   simple vista, y la elección se recuerda entre sesiones.
 - Diseño adaptado a móvil, y botón de inicio junto al nombre, en la cabecera del índice.
-- `tests.html` comprueba el núcleo (112 verificaciones) y **audita los 312
+- `tests.html` comprueba el núcleo (112 verificaciones) y **audita los 334
   ejercicios**: genera cada uno 40 veces y verifica que la solución declarada
   pasa su propio corrector, que nada lanza excepciones, que no queda ninguna
   fórmula con comandos LaTeX inexistentes, que ninguna gráfica de escala 1:1

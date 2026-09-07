@@ -291,6 +291,8 @@ Course.topic('av-sistemas-dinamicos', function (p) {
     answer: function (d) { return '(' + U.fmt(d.xe, 4) + ', ' + U.fmt(d.ye, 4) + ')'; }
   });
 
+  p.note('Todo lo que has visto aquí sobre equilibrios estables tiene una lectura que se desarrolla en el bloque 12. Un equilibrio estable no se mantiene solo: se mantiene porque hay algo que <strong>corrige las desviaciones</strong>, y a ese algo se le llama realimentación negativa. Visto así, la condición de estabilidad que aquí sale de los autovalores es exactamente la que estudió Maxwell en 1868 para averiguar por qué algunas máquinas de vapor se ponían nerviosas.', null, 'Lo que sostiene un equilibrio');
+
   p.keys([
     'El espacio de fases dibuja el estado del sistema, no su evolución temporal: el tiempo se esconde en la trayectoria.',
     'De un vistazo se ve el comportamiento de <strong>todos</strong> los estados iniciales.',
