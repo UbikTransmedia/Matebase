@@ -369,9 +369,10 @@ window.CURRICULUM = [
   },
 
   /* ================= 7. ESCALADA AVANZADA ================= */
+  /* ================= 7. ÁLGEBRA LINEAL ================= */
   {
-    id: 'av', n: 7, title: 'Escalada avanzada',
-    desc: 'Más allá del Bachillerato: las matemáticas con las que se describe el mundo real.',
+    id: 'lin', n: 7, title: 'Álgebra lineal',
+    desc: 'La continuación natural de las matrices: qué son de verdad, qué hacen y cómo se comportan a largo plazo.',
     temas: [
       {
         id: 'av-espacios', t: 'Espacios vectoriales y aplicaciones lineales',
@@ -387,7 +388,15 @@ window.CURRICULUM = [
         id: 'av-markov', t: 'Cadenas de Markov y procesos estocásticos',
         r: 'Azar con memoria de un solo paso: del tiempo al PageRank.',
         o: ['Matriz de transición', 'Evolución del estado y distribución estacionaria', 'Estados absorbentes']
-      },
+      }
+    ]
+  },
+
+  /* ================= 8. ECUACIONES DIFERENCIALES Y ONDAS ================= */
+  {
+    id: 'dif', n: 8, title: 'Ecuaciones diferenciales y ondas',
+    desc: 'Las matemáticas del cambio: ecuaciones cuya incógnita es una función. Con ellas está escrita casi toda la física.',
+    temas: [
       {
         id: 'av-edo', t: 'Ecuaciones diferenciales ordinarias',
         r: 'Ecuaciones cuya incógnita es una función entera.',
@@ -404,6 +413,24 @@ window.CURRICULUM = [
         o: ['Mapa logístico y duplicación de periodo', 'Dependencia sensible', 'Dimensión fractal']
       },
       {
+        id: 'av-edp', t: 'Ecuaciones en derivadas parciales',
+        r: 'Las ecuaciones del calor, la onda y el potencial.',
+        o: ['De la EDO a la EDP', 'Separación de variables', 'Ecuación del calor y de ondas']
+      },
+      {
+        id: 'av-fourier', t: 'Series y transformada de Fourier',
+        r: 'Toda señal es una suma de ondas puras.',
+        o: ['Serie de Fourier', 'Espectro', 'Idea de la transformada']
+      }
+    ]
+  },
+
+  /* ================= 9. VARIAS VARIABLES Y GEOMETRÍA ================= */
+  {
+    id: 'var', n: 9, title: 'Varias variables y geometría',
+    desc: 'Cuando el escenario deja de ser una recta: campos, superficies curvas y formas que se estudian sin medirlas.',
+    temas: [
+      {
         id: 'av-vectorial', t: 'Cálculo vectorial',
         r: 'Derivar e integrar campos en varias dimensiones.',
         o: ['Derivadas parciales y gradiente', 'Divergencia y rotacional', 'Integrales de línea y teoremas integrales']
@@ -414,35 +441,46 @@ window.CURRICULUM = [
         o: ['Extremos con varias variables', 'El algoritmo del descenso de gradiente', 'Tasa de aprendizaje y mínimos locales']
       },
       {
-        id: 'av-edp', t: 'Ecuaciones en derivadas parciales',
-        r: 'Las ecuaciones del calor, la onda y el potencial.',
-        o: ['De la EDO a la EDP', 'Separación de variables', 'Ecuación del calor y de ondas']
-      },
-      {
-        id: 'av-fourier', t: 'Series y transformada de Fourier',
-        r: 'Toda señal es una suma de ondas puras.',
-        o: ['Serie de Fourier', 'Espectro', 'Idea de la transformada']
-      },
-      {
         id: 'av-geodif', t: 'Geometría diferencial: curvatura',
         r: 'Medir cuánto se dobla una curva o una superficie.',
         o: ['Curvatura de una curva plana', 'Curvatura de Gauss', 'Geodésicas y el teorema egregio']
       },
       {
-        id: 'av-infinito', t: 'El infinito: cardinalidad y Cantor',
-        r: 'Hay infinitos más grandes que otros, y se puede demostrar.',
-        o: ['Biyecciones y conjuntos numerables', 'La diagonal de Cantor', 'Hipótesis del continuo']
-      },
-      {
         id: 'av-topologia', t: 'Topología',
         r: 'Geometría sin distancias: lo que sobrevive al estirar.',
         o: ['Espacios topológicos y continuidad', 'Homeomorfismo y género', 'Característica de Euler']
+      }
+    ]
+  },
+
+  /* ================= 10. ESTRUCTURAS, NÚMEROS E INFINITO ================= */
+  {
+    id: 'est', n: 10, title: 'Estructuras, números e infinito',
+    desc: 'La cara más abstracta, y la que sostiene la criptografía: qué tienen en común los objetos matemáticos y qué significa contar lo incontable.',
+    temas: [
+      {
+        id: 'av-numeros', t: 'Teoría de números',
+        r: 'La reina de las matemáticas: los enteros y sus misterios.',
+        o: ['Aritmética modular', 'Teorema fundamental de la aritmética', 'Criptografía RSA']
       },
       {
         id: 'av-grupos', t: 'Teoría de grupos y simetría',
         r: 'La estructura matemática de la simetría.',
         o: ['Definición de grupo y ejemplos', 'Grupos de simetría y teselados', 'Por qué no hay fórmula para el grado 5']
       },
+      {
+        id: 'av-infinito', t: 'El infinito: cardinalidad y Cantor',
+        r: 'Hay infinitos más grandes que otros, y se puede demostrar.',
+        o: ['Biyecciones y conjuntos numerables', 'La diagonal de Cantor', 'Hipótesis del continuo']
+      }
+    ]
+  },
+
+  /* ================= 11. DISCRETA Y COMPUTACIONAL ================= */
+  {
+    id: 'dis', n: 11, title: 'Discreta y computacional',
+    desc: 'Las matemáticas de lo que se cuenta y de lo que calcula un ordenador: redes, algoritmos, información y decisiones.',
+    temas: [
       {
         id: 'av-grafos', t: 'Teoría de grafos',
         r: 'Puntos y conexiones: redes, mapas y rutas.',
@@ -454,19 +492,14 @@ window.CURRICULUM = [
         o: ['Bisección y Newton-Raphson', 'Integración numérica', 'Errores y estabilidad']
       },
       {
-        id: 'av-numeros', t: 'Teoría de números',
-        r: 'La reina de las matemáticas: los enteros y sus misterios.',
-        o: ['Aritmética modular', 'Teorema fundamental de la aritmética', 'Criptografía RSA']
+        id: 'av-informacion', t: 'Teoría de la información y entropía',
+        r: 'Cuánta información cabe en un mensaje, medida en bits.',
+        o: ['Cantidad de información y entropía de Shannon', 'Codificación óptima', 'Redundancia y compresión']
       },
       {
         id: 'av-juegos', t: 'Teoría de juegos',
         r: 'Matemáticas para decidir cuando el otro también decide.',
         o: ['Matriz de pagos y estrategias dominantes', 'Equilibrio de Nash', 'El dilema del prisionero']
-      },
-      {
-        id: 'av-informacion', t: 'Teoría de la información y entropía',
-        r: 'Cuánta información cabe en un mensaje, medida en bits.',
-        o: ['Cantidad de información y entropía de Shannon', 'Codificación óptima', 'Redundancia y compresión']
       }
     ]
   }

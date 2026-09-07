@@ -10,7 +10,7 @@ abrirla en cualquier ordenador con un navegador.
 
 ## Qué hay dentro
 
-A la izquierda, un índice desplegable con los ocho bloques del curso. A la
+A la izquierda, un índice desplegable con los doce bloques del curso. A la
 derecha, el tema abierto. Cada tema tiene explicación, historia, ejemplos que se
 tocan y ejercicios que se pueden repetir infinitas veces.
 
@@ -45,10 +45,15 @@ El botón «Reiniciar» de abajo a la izquierda lo borra.
 | 4. Trigonometría | 5 | del triángulo rectángulo a las ondas |
 | 5. Funciones y análisis | 12 | del concepto de función a la integral definida, con programación lineal |
 | 6. Probabilidad y estadística | 8 | de la media a la inferencia |
-| 7. Escalada avanzada | 19 | espacios vectoriales, Markov, EDO y EDP, caos, Fourier, grupos, topología, el infinito de Cantor, juegos, información… |
+| 7. Álgebra lineal | 3 | espacios vectoriales, autovalores y cadenas de Markov |
+| 8. Ecuaciones diferenciales y ondas | 5 | EDO, sistemas dinámicos, caos, EDP y Fourier |
+| 9. Varias variables y geometría | 4 | cálculo vectorial, optimización, curvatura y topología |
+| 10. Estructuras, números e infinito | 3 | teoría de números y RSA, grupos, Cantor |
+| 11. Discreta y computacional | 4 | grafos, cálculo numérico, información, teoría de juegos |
 
 **79 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
-se haya explicado antes. En total, **147 ejemplos interactivos**, **312 ejercicios
+se haya explicado antes. Los cinco últimos bloques recogen lo que queda más allá
+del Bachillerato, agrupado por disciplina y no en un cajón común. En total, **147 ejemplos interactivos**, **312 ejercicios
 procedimentales** y **139 gráficas**.
 
 El temario vive en `assets/js/curriculum.js`. Si en el futuro se añade un tema

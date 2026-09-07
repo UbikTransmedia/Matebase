@@ -24,7 +24,7 @@ Se abre haciendo doble clic en `index.html`. **Sin servidor local, sin internet,
 
 ## Fase 1 — Temario (cerrada) → `assets/js/curriculum.js`
 
-8 bloques, 79 temas, en progresión estricta. El orden es el contrato pedagógico:
+12 bloques, 79 temas, en progresión estricta. El orden es el contrato pedagógico:
 ningún tema usa una herramienta que no se haya explicado antes.
 
 0. **Lógica, conjuntos y demostración** (3) — proposiciones, conjuntos e inducción.
@@ -36,11 +36,23 @@ ningún tema usa una herramienta que no se haya explicado antes.
 5. **Funciones y análisis** (12) — del concepto de función a la integral definida,
    pasando por programación lineal.
 6. **Probabilidad y estadística** (8) — de la media a la inferencia.
-7. **Escalada avanzada** (19) — espacios vectoriales y autovalores, cadenas de
-   Markov, EDO y EDP, sistemas dinámicos, caos, cálculo vectorial y descenso de
-   gradiente, Fourier, geometría diferencial, el infinito de Cantor, topología,
-   grupos y simetría, grafos, análisis numérico, teoría de números, juegos e
-   información.
+7. **Álgebra lineal** (3) — espacios vectoriales, autovalores, cadenas de Markov.
+8. **Ecuaciones diferenciales y ondas** (5) — EDO, sistemas dinámicos, caos, EDP
+   y Fourier.
+9. **Varias variables y geometría** (4) — cálculo vectorial, descenso de
+   gradiente, geometría diferencial y topología.
+10. **Estructuras, números e infinito** (3) — teoría de números y RSA, grupos y
+   simetría, el infinito de Cantor.
+11. **Discreta y computacional** (4) — grafos, análisis numérico, teoría de la
+   información y teoría de juegos.
+
+> Los cinco últimos empezaron siendo **un solo bloque de 19 temas** llamado
+> «Escalada avanzada», y funcionaba mal: su único criterio de agrupación era
+> negativo —*esto no entra en Bachillerato*—, así que reunía álgebra lineal,
+> análisis, geometría, álgebra abstracta y computación sin más relación entre sí
+> que no ser currículo. Un alumno que abría ese bloque no sabía qué estaba
+> empezando. Repartirlo por disciplinas no cambió ni una línea de contenido: solo
+> el array de `curriculum.js`.
 
 Cada tema declara: `id`, `titulo`, `resumen`, `objetivos[]` y `requisitos[]`.
 Se pueden **intercalar temas nuevos** en cualquier punto insertando un objeto en el array.
