@@ -188,6 +188,15 @@ Course.topic('lg-proposiciones', function (p) {
       'A tal que pe de equis»</em>.<br><br>$P(x)$ es simplemente «la propiedad que se afirma de ' +
       'equis»: puede ser «es par», «aprueba» o lo que haga falta.');
 
+  p.hist('Aristóteles fundó la lógica en el siglo IV a. C. y durante más de dos mil años nadie la mejoró ' +
+    'de forma sustancial; Kant llegó a escribir que estaba acabada y cerrada. Se equivocó. En 1847 ' +
+    'George Boole publicó un libro con un título revelador, <em>El análisis matemático del ' +
+    'pensamiento</em>, donde convirtió el razonamiento en álgebra: verdadero era 1, falso era 0, y ' +
+    'las conectivas eran operaciones. Nadie le vio aplicación práctica. Noventa años después, un ' +
+    'estudiante llamado Claude Shannon se dio cuenta de que aquellos ceros y unos describían ' +
+    'exactamente los circuitos de interruptores, y escribió con esa idea la tesis de máster más ' +
+    'influyente de la historia.');
+
   p.sub('Negar un cuantificador');
   p.text('Con los cuantificadores pasa lo mismo y es igual de práctico. Para tumbar la afirmación «todos ' +
     'los alumnos han aprobado» no hace falta demostrar que ha suspendido todo el mundo: basta con ' +

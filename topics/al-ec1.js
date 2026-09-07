@@ -112,6 +112,12 @@ Course.topic('al-ec1', function (p) {
     'y que la pieza aún no está determinada. Aprender a leer esos dos finales es tan importante como ' +
     'saber despejar.');
 
+  p.hist('Durante siglos las ecuaciones se enunciaban con palabras, y resolver una era un ejercicio de ' +
+    'literatura. Al-Juarismi, en Bagdad hacia el 820, escribía cosas como «un cuadrado y diez raíces ' +
+    'son iguales a treinta y nueve dirhams». La palabra <em>álgebra</em> viene del título de aquel ' +
+    'libro, <em>al-yabr</em>, que significa «recomponer»: justamente lo que haces al pasar un ' +
+    'término al otro lado. Y <em>algoritmo</em> viene de su nombre.');
+
   p.section('Practica');
 
   p.exercise({

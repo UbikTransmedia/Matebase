@@ -120,6 +120,12 @@ Course.topic('av-edo', function (p) {
     'misma ecuación describe cómo se enfría un motor y cuánto tarda una casa en perder el calor. La ' +
     'desintegración radiactiva y la eliminación de un fármaco en sangre son idénticas en forma.');
 
+  p.hist('Las ecuaciones diferenciales nacieron a la vez que el cálculo, porque eran su razón de ser: ' +
+    'Newton escribió las leyes del movimiento como ecuaciones diferenciales, no como fórmulas. La ' +
+    'segunda ley, esa $F=ma$ que parece una multiplicación inocente, es en realidad una ecuación ' +
+    'diferencial de segundo orden, porque la aceleración es la derivada segunda de la posición. Toda ' +
+    'la física posterior está escrita en este idioma.');
+
   p.section('Lineales de primer orden');
   p.text('No todas las ecuaciones se dejan separar. La siguiente familia en dificultad son las lineales, ' +
     'que tienen la incógnita y su derivada apareciendo solo en primer grado. También estas se dejan ' +

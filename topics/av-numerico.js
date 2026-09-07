@@ -158,6 +158,11 @@ Course.topic('av-numerico', function (p) {
     'despiste si la derivada es pequeña, es la razón de que los programas serios lo combinen con la ' +
     'bisección.');
 
+  p.hist('El cálculo numérico es tan antiguo como las matemáticas: hay una tablilla babilónica, la YBC ' +
+    '7289, de hace unos 3700 años, que da el valor de $\\sqrt{2}$ con una precisión de seis cifras ' +
+    'decimales. El método que usaron es el mismo que hoy se enseña como caso particular del de ' +
+    'Newton. Es decir, alguien lo estaba aplicando tres mil años antes de que Newton naciera.');
+
   p.section('Integración numérica');
 
   p.text('Si una integral no tiene primitiva, se aproxima el área con figuras sencillas. Es ' +

@@ -136,6 +136,13 @@ Course.topic('pe-bidimensional', function (p) {
     'también su principal peligro: extrapolar fuera del rango con el que se ajustó la recta, que es ' +
     'como usar el crecimiento de un niño para predecir su altura a los cuarenta años.');
 
+  p.hist('La palabra <em>regresión</em> viene de un hallazgo incómodo. Francis Galton midió en 1886 la ' +
+    'estatura de padres e hijos y descubrió que los hijos de los muy altos tendían a ser algo más ' +
+    'bajos que sus padres, y los de los muy bajos algo más altos: había una «regresión hacia la ' +
+    'media». Galton lo interpretó en clave hereditaria y eugenésica, cosa que hoy resulta ' +
+    'impresentable, pero el fenómeno es real y sigue explicando por qué el mejor equipo de una ' +
+    'temporada casi nunca repite al año siguiente.');
+
   p.section('Practica');
 
   function tablaHTML(d, host) {

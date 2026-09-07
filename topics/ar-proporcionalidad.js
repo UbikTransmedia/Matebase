@@ -154,6 +154,13 @@ Course.topic('ar-proporcionalidad', function (p) {
     'es la que explica por qué empezar a ahorrar diez años antes cambia el resultado más que ahorrar ' +
     'el doble. Cuando llegues a exponenciales verás que es la misma curva.');
 
+  p.hist('El interés compuesto es más antiguo que casi todo lo demás de este curso: hay tablillas ' +
+    'babilónicas de hace casi cuatro mil años que calculan en cuánto tiempo se duplica un capital ' +
+    'prestado, y la respuesta que dan coincide con la que daría hoy una calculadora. Durante siglos, ' +
+    'sin embargo, cobrar interés estuvo prohibido o mal visto en el cristianismo y el islam, y buena ' +
+    'parte de la ingeniería financiera medieval consistió en inventar contratos que hicieran lo ' +
+    'mismo sin llamarlo así.');
+
   p.section('Practica');
 
   p.exercise({

@@ -105,6 +105,12 @@ Course.topic('fn-integral-indef', function (p) {
     'inercial que integre aceleraciones necesita una posición inicial; un depósito del que se conoce ' +
     'el caudal necesita el nivel de partida. La $C$ no es un formalismo: es el dato que falta.');
 
+  p.hist('El símbolo de la integral es una ese alargada, de <em>summa</em>, y lo escribió Leibniz por ' +
+    'primera vez el 29 de octubre de 1675, en un manuscrito privado. Ese mismo día inventó también ' +
+    'la notación $dx$. Newton, que había llegado a los mismos resultados antes, usaba puntitos sobre ' +
+    'las letras; el pleito por la prioridad entre ambos envenenó las matemáticas británicas durante ' +
+    'un siglo, porque Inglaterra se aferró por patriotismo a una notación peor.');
+
   p.section('Practica');
 
   p.exercise({

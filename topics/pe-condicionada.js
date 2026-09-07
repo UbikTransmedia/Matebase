@@ -203,6 +203,12 @@ Course.topic('pe-condicionada', function (p) {
     'ignorar esto, y por eso los filtros de spam, los diagnósticos médicos y los sistemas de ' +
     'detección de fraude se construyen sobre esta fórmula.');
 
+  p.hist('Thomas Bayes era un pastor presbiteriano y su teorema se publicó en 1763, dos años después de ' +
+    'su muerte, porque un amigo encontró el manuscrito entre sus papeles y lo envió a la Royal ' +
+    'Society. Estuvo olvidado o directamente despreciado durante buena parte del siglo XX; se le ' +
+    'acusaba de poco riguroso por incorporar creencias previas. Hoy es la base de los filtros de ' +
+    'spam, del diagnóstico automático y de buena parte del aprendizaje automático.');
+
   p.section('Practica');
 
   p.exercise({

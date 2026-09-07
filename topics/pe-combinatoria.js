@@ -150,6 +150,12 @@ Course.topic('pe-combinatoria', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.hist('El triángulo que en Europa lleva el nombre de Pascal aparece en un tratado chino de Yang Hui de ' +
+    '1261, y ya entonces se citaba como conocido desde hacía dos siglos. También lo estudiaron ' +
+    'al-Karaji en Bagdad y Tartaglia en Italia, y en cada país se llama de una manera distinta. Es ' +
+    'un buen recordatorio de que los nombres de los teoremas dicen más sobre quién escribió la ' +
+    'historia que sobre quién descubrió qué.');
+
   p.section('Practica');
 
   p.exercise({

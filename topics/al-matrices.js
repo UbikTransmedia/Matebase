@@ -160,6 +160,12 @@ Course.topic('al-matrices', function (p) {
     }
   });
 
+  p.hist('Los determinantes son más antiguos que las matrices, que es lo contrario de lo que parece al ' +
+    'estudiarlos. Se usaban para resolver sistemas desde el siglo XVII —Seki en Japón y Leibniz en ' +
+    'Europa, casi a la vez— y solo en 1858 Cayley se dio cuenta de que la tabla de números en sí ' +
+    'misma era un objeto interesante, con sus propias operaciones. Es decir, primero se inventó el ' +
+    'cálculo y después el objeto sobre el que se calcula.');
+
   p.section('Matriz inversa');
 
   p.text('La <strong>inversa</strong> $A^{-1}$ es la matriz que deshace lo que hace $A$:');

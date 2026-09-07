@@ -193,6 +193,13 @@ Course.topic('ar-potencias', function (p) {
     'vistazo: basta mirar el exponente para saber que algo es mil veces mayor que otra cosa, que es ' +
     'la manera en que un ingeniero decide si un efecto le importa o puede despreciarlo.');
 
+  p.hist('El sistema de escribir potencias con un exponente pequeño arriba es de Descartes, en 1637, y es ' +
+    'una de esas invenciones que parecen menores y cambian el pensamiento. Antes se escribía ' +
+    '<em>quadratus</em>, <em>cubus</em>, o se repetían las letras: lo que hoy es $x^4$ se ponía como ' +
+    '<em>xxxx</em>. Con la notación de Descartes el exponente se convirtió en un número con el que ' +
+    'se puede operar, y eso es lo que permitió después hablar de exponentes negativos, fraccionarios ' +
+    'y hasta irracionales.');
+
   p.section('Practica');
 
   p.exercise({

@@ -81,6 +81,12 @@ Course.topic('ge-rectas', function (p) {
     'instante</em>; la general es la que le conviene al ordenador para decidir de qué lado de la ' +
     'recta cae un punto. Saber cambiar de una a otra es saber elegir la herramienta.');
 
+  p.hist('La idea de describir una figura con una ecuación es de Descartes, en 1637, y aparece en un ' +
+    'apéndice de cien páginas a un libro de filosofía. Fue posiblemente la unificación más fértil de ' +
+    'la historia de las matemáticas: hasta entonces geometría y álgebra eran disciplinas separadas, ' +
+    'con lenguajes distintos, y desde entonces cualquier problema de una se puede traducir a la ' +
+    'otra. Que a los ejes los llamemos cartesianos viene de ahí.');
+
   p.section('Posiciones relativas');
 
   p.text('Dos rectas del plano solo pueden hacer tres cosas, y se distingue comparando sus vectores ' +

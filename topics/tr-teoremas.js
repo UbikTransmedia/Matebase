@@ -80,6 +80,12 @@ Course.topic('tr-teoremas', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.hist('El teorema del coseno aparece, sin trigonometría y en forma puramente geométrica, en las ' +
+    'proposiciones 12 y 13 del Libro II de los <em>Elementos</em> de Euclides. Euclides no tenía la ' +
+    'palabra coseno ni el concepto de función, así que lo enunció como una relación entre áreas de ' +
+    'rectángulos. Hicieron falta mil ochocientos años y la trigonometría árabe y persa para ' +
+    'escribirlo en la línea que hoy cabe en un renglón.');
+
   p.section('¿Cuál de los dos uso?');
   p.text('Con dos teoremas disponibles, la duda ya no es cómo aplicarlos sino cuál toca. La regla es ' +
     'sencilla y depende solo de los datos que te den: si entre ellos hay <strong>un lado y el ángulo ' +

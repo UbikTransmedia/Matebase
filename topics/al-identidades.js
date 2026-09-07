@@ -132,6 +132,13 @@ Course.topic('al-identidades', function (p) {
     'edad del universo con los ordenadores actuales. Esa asimetría —fácil en un sentido, imposible ' +
     'en el otro— es lo que protege tu cuenta del banco.');
 
+  p.hist('Los griegos no escribían identidades, las dibujaban. El Libro II de los <em>Elementos</em> de ' +
+    'Euclides, hacia el 300 a. C., contiene lo que hoy llamamos identidades notables enunciadas como ' +
+    'teoremas sobre áreas de rectángulos, porque para ellos $a\\cdot b$ <em>era</em> un rectángulo y ' +
+    '$a^2$ <em>era</em> un cuadrado. Esa es la razón de que sigamos diciendo «al cuadrado» y «al ' +
+    'cubo», y también de que la demostración con el cuadrado partido en cuatro trozos siga siendo la ' +
+    'más convincente.');
+
   p.section('Practica');
 
   p.exercise({

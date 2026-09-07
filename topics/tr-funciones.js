@@ -181,6 +181,12 @@ Course.topic('tr-funciones', function (p) {
     'graban el sonido del exterior y emiten esa misma onda invertida para que la suma se anule. ' +
     'Silencio construido a base de sumar.');
 
+  p.hist('Que cualquier vibración se pueda descomponer en senos lo intuyó Daniel Bernoulli en 1753 ' +
+    'estudiando cuerdas vibrantes, y la idea provocó una de las grandes broncas del siglo XVIII: ' +
+    'Euler y d\'Alembert sostuvieron que no podía ser cierto para funciones con esquinas. Bernoulli ' +
+    'tenía razón y no supo demostrarlo. La demostración llegó con Fourier, medio siglo después, y ' +
+    'también a él se la rechazaron al principio.');
+
   p.section('Practica');
 
   p.exercise({

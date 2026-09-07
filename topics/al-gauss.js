@@ -104,6 +104,12 @@ Course.topic('al-gauss', function (p) {
     'trío de números que lo cumpla: el sistema no tiene solución. Es la manera más limpia de ' +
     'descubrirlo.', null, 'La fila delatora');
 
+  p.hist('Gauss desarrolló su método hacia 1809 por una necesidad muy concreta: acababa de aparecer y ' +
+    'perderse el asteroide Ceres, del que solo existían unas pocas observaciones antes de que se ' +
+    'ocultara tras el Sol. Gauss ajustó su órbita resolviendo un sistema enorme por eliminación, ' +
+    'predijo dónde reaparecería y acertó. Tenía veinticuatro años y aquello lo hizo célebre en toda ' +
+    'Europa.');
+
   p.sub('Rouché-Frobenius, en una línea');
 
   p.text('El teorema que formaliza todo esto compara el <strong>rango</strong> de la matriz de ' +

@@ -75,6 +75,12 @@ Course.topic('tr-identidades', function (p) {
     'descarta las demás. Se llama modulación, y sin ella no habría radio, ni televisión, ni ' +
     'telefonía móvil.');
 
+  p.hist('Antes de los logaritmos, los astrónomos multiplicaban números grandes usando estas fórmulas, ' +
+    'con un método llamado <em>prostaféresis</em>: convertían un producto en una suma de cosenos, ' +
+    'que se buscaban en tablas. Tycho Brahe lo usó para sus cálculos de posiciones planetarias. Fue ' +
+    'un apaño que duró apenas medio siglo, hasta que Napier publicó los logaritmos en 1614 y ' +
+    'resolvió el mismo problema mucho mejor.');
+
   p.section('Ángulo doble y ángulo mitad');
 
   p.text('Salen de las anteriores haciendo $\\beta = \\alpha$. No hay nada nuevo que memorizar: si ' +

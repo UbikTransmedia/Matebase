@@ -181,6 +181,13 @@ Course.topic('ge-vectores', function (p) {
     'ilumina una escena en 3D: el brillo de cada punto se calcula con el producto escalar entre la ' +
     'normal de la superficie y la dirección de la luz.');
 
+  p.hist('Los vectores tal como los usamos son sorprendentemente recientes. Nacieron a finales del siglo ' +
+    'XIX de una guerra académica: Hamilton había inventado los cuaterniones, un sistema elegante ' +
+    'pero incómodo, y Gibbs y Heaviside extrajeron de ellos por separado lo que de verdad hacía ' +
+    'falta en física, los productos escalar y vectorial. Los partidarios de Hamilton lo consideraron ' +
+    'una mutilación y la polémica duró décadas. Ganaron los prácticos, y por eso hoy se estudia esto ' +
+    'y no aquello.');
+
   p.section('Practica');
 
   p.exercise({

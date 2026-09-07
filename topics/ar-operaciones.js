@@ -122,6 +122,12 @@ Course.topic('ar-operaciones', function (p) {
     'redes con expresiones tipo $8 \\div 2(2+2)$ no son un problema de matemáticas sino de notación ' +
     'ambigua: con un paréntesis más, la discusión desaparece.');
 
+  p.hist('El orden de las operaciones no lo dictó ningún matemático: se fue asentando con la imprenta ' +
+    'entre los siglos XVI y XVII, por comodidad tipográfica. Como los polinomios se escribían ' +
+    'constantemente, resultaba práctico que $3x^2$ significara «tres por equis al cuadrado» sin ' +
+    'necesidad de paréntesis. Es decir, la jerarquía que hoy se enseña como si fuera una ley natural ' +
+    'es en realidad un convenio de impresores que se quedó.');
+
   p.section('Practica');
 
   p.exercise({

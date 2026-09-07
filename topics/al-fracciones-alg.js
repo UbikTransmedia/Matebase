@@ -97,6 +97,13 @@ Course.topic('al-fracciones-alg', function (p) {
     'un total que resultó ser nulo. Localizar de antemano qué valores rompen una expresión es ' +
     'exactamente lo que hace un programador cuidadoso antes de publicar.');
 
+  p.hist('La prohibición de dividir entre cero costó mucho asentarla. El matemático indio Brahmagupta, en ' +
+    'el año 628, fue el primero en tratar el cero como un número con derecho propio, pero se ' +
+    'equivocó justamente aquí: escribió que cero dividido entre cero es cero. Quinientos años ' +
+    'después, Bhaskara propuso que dividir entre cero daba infinito, lo que tampoco funciona. Hizo ' +
+    'falta el rigor del siglo XIX para aceptar la respuesta correcta, que es más humilde: esa ' +
+    'operación sencillamente no está definida.');
+
   p.section('Operar');
   p.text('Buena noticia: no hay reglas nuevas que aprender. Las fracciones algebraicas se suman, restan, ' +
     'multiplican y dividen <strong>exactamente igual</strong> que las de números que ya manejas; lo ' +

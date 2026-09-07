@@ -133,6 +133,12 @@ Course.topic('fn-racionales', function (p) {
     'en un impuesto progresivo bien diseñado solo tributa al tipo alto la parte que supera el ' +
     'umbral, y eso se ve leyendo la función.');
 
+  p.hist('La idea de que una función pueda definirse con reglas distintas en trozos distintos escandalizó ' +
+    'al siglo XVIII: se esperaba que una función fuera una única expresión, y lo demás se ' +
+    'consideraba un artificio. Dirichlet zanjó la discusión en 1829 con un ejemplo provocador, la ' +
+    'función que vale 1 en los racionales y 0 en los irracionales, imposible de dibujar y ' +
+    'perfectamente legítima. Aquello obligó a redefinir qué es una función.');
+
   p.section('Practica');
 
   p.exercise({

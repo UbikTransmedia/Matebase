@@ -75,6 +75,12 @@ Course.topic('pe-probabilidad', function (p) {
     'premio se paga como si hubiera 36: esa casilla de diferencia es todo el negocio del casino. ' +
     'Comprobar si los casos son realmente equiprobables antes de dividir es la mitad del trabajo.');
 
+  p.hist('El cálculo de probabilidades nació en 1654 de una consulta muy poco académica: el caballero de ' +
+    'Méré, jugador empedernido, escribió a Pascal preguntándole cómo repartir el dinero de una ' +
+    'partida de dados interrumpida a mitad. Pascal se lo consultó a Fermat, y de aquella ' +
+    'correspondencia de unas pocas cartas salió una rama entera de las matemáticas. Durante dos ' +
+    'siglos se la consideró una curiosidad de tahúres.');
+
   p.section('Álgebra de sucesos');
   p.text('Un suceso no es más que un conjunto de resultados —«sacar par» es el conjunto $\\{2,4,6\\}$—, y ' +
     'por eso todo lo que aprendiste sobre conjuntos vale aquí sin cambiar nada, solo con otro ' +

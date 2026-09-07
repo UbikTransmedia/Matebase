@@ -99,6 +99,13 @@ Course.topic('av-espacios', function (p) {
     'de referencia sin tocar los objetos: es lo que haremos al diagonalizar.', null);
 
   /* ---------------------------------------------------------------- */
+  p.hist('Hermann Grassmann publicó en 1844 la teoría de los espacios vectoriales de dimensión ' +
+    'arbitraria, cincuenta años antes de que a nadie le hiciera falta. El libro estaba tan mal ' +
+    'escrito y era tan abstracto que prácticamente nadie lo leyó; desanimado, Grassmann abandonó las ' +
+    'matemáticas y se hizo lingüista, llegando a ser un sanscritista de prestigio. Su obra ' +
+    'matemática se redescubrió cuando la física del siglo XX empezó a necesitar espacios de muchas ' +
+    'dimensiones.');
+
   p.section('Aplicaciones lineales: qué es de verdad una matriz');
 
   p.text('Una aplicación $f: V \\to W$ es <strong>lineal</strong> si respeta las dos operaciones:');

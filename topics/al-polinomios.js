@@ -131,6 +131,12 @@ Course.topic('al-polinomios', function (p) {
     }
   });
 
+  p.hist('Paolo Ruffini publicó su método en 1804, en el mismo trabajo en el que intentó demostrar que no ' +
+    'existe fórmula para las ecuaciones de quinto grado. La demostración tenía una laguna y la ' +
+    'comunidad matemática la ignoró; el propio Ruffini murió sin ver reconocida su intuición. Abel ' +
+    'la completó veinte años después y hoy el resultado lleva el nombre de los dos. De aquel trabajo ' +
+    'incomprendido solo sobrevive en las aulas la parte pequeña: el esquema de dividir.');
+
   p.sub('Teorema del resto');
 
   p.text('El último número de Ruffini no es un número cualquiera. Es exactamente el valor del ' +

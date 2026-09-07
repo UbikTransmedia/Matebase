@@ -132,6 +132,12 @@ Course.topic('al-inecuaciones', function (p) {
     'por eso el conjunto de soluciones no es un punto sino una región. Esa región tiene nombre y ' +
     'tema propio: se llama región factible y la verás en programación lineal.');
 
+  p.hist('Los signos $<$ y $>$ los introdujo el inglés Thomas Harriot, y se publicaron en 1631, diez años ' +
+    'después de su muerte. El $\\le$ tardó dos siglos más en generalizarse. Que unos símbolos tan ' +
+    'simples tardaran tanto en asentarse da idea de lo despacio que se mueve la notación: durante ' +
+    'generaciones, cada matemático escribía a su manera y leer a un colega extranjero era media ' +
+    'traducción.');
+
   p.section('Practica');
 
   p.exercise({

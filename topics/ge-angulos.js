@@ -176,6 +176,12 @@ Course.topic('ge-angulos', function (p) {
     'con menos cera, y los ingenieros lo copian en los paneles de nido de abeja de los aviones, que ' +
     'aguantan mucho pesando poquísimo.');
 
+  p.hist('Gauss demostró con diecinueve años que el polígono regular de 17 lados se puede construir con ' +
+    'regla y compás, algo que nadie había logrado en los dos mil años transcurridos desde Euclides. ' +
+    'Quedó tan satisfecho que abandonó la idea de dedicarse a la filología y pidió que le grabaran ' +
+    'un heptadecágono en la lápida. El cantero se negó, alegando que con tantos lados no se ' +
+    'distinguiría de una circunferencia.');
+
   p.section('Practica');
 
   p.exercise({

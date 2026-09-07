@@ -132,6 +132,12 @@ Course.topic('av-numeros', function (p) {
     }
   });
 
+  p.hist('Euclides demostró hacia el 300 a. C. que los primos son infinitos, con un argumento que sigue ' +
+    'siendo el ejemplo favorito de demostración elegante: si hubiera una lista completa, ' +
+    'multiplícalos todos y suma uno; el resultado no es divisible por ninguno de la lista, así que ' +
+    'falta alguno. Veintitrés siglos después, ese mismo conjunto infinito sostiene el cifrado de las ' +
+    'comunicaciones. Pocas ideas han tardado tanto en encontrar aplicación.');
+
   p.sub('Preguntas todavía abiertas');
   p.text('Conviene terminar con una idea que rara vez se cuenta en clase: las matemáticas no son un ' +
     'edificio acabado. En la teoría de números —la parte que trabaja con los objetos más sencillos ' +

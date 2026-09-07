@@ -215,6 +215,12 @@ Course.topic('fn-aplicaciones', function (p) {
     'función de una variable, derivar e igualar a cero. Y es también, literalmente, lo que hace una ' +
     'inteligencia artificial al entrenarse: buscar el mínimo de una función de error.');
 
+  p.hist('El primer problema de optimización de la historia es una leyenda: Dido, fundadora de Cartago, ' +
+    'obtuvo permiso para ocupar la tierra que abarcara una piel de buey, la cortó en tiras finísimas ' +
+    'y encerró con ellas la mayor superficie posible. La respuesta correcta, un semicírculo con el ' +
+    'mar de base, no se demostró rigurosamente hasta el siglo XIX. Los problemas de máximos y ' +
+    'mínimos son mucho más viejos que el cálculo que los resuelve.');
+
   p.section('Practica');
 
   p.exercise({

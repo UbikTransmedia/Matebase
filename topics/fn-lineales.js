@@ -108,6 +108,12 @@ Course.topic('fn-lineales', function (p) {
     'cobran tanto fijo más tanto por cada uno» está describiendo una recta, y la pendiente es la ' +
     'parte variable.');
 
+  p.hist('La palabra <em>función</em> la introdujo Leibniz en 1673, y durante más de un siglo significó ' +
+    'algo bastante más estrecho que hoy: una expresión construida con operaciones conocidas. La ' +
+    'definición moderna —una regla cualquiera que asigna a cada entrada una salida, tenga o no ' +
+    'fórmula— es de Dirichlet, en 1837, y fue revolucionaria porque permitía funciones que no se ' +
+    'pueden escribir. Sin ella no existiría la matemática del siglo XX.');
+
   p.section('Rectas paralelas y perpendiculares');
   p.text('Dos rectas son paralelas cuando suben igual, así que basta con que tengan la misma pendiente: ' +
     'eso no sorprende a nadie. Lo de las perpendiculares es menos evidente y merece una explicación. ' +

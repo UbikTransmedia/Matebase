@@ -204,6 +204,12 @@ Course.topic('pe-inferencia', function (p) {
     'salga «significativa» por pura suerte. De ahí vienen buena parte de los estudios que luego ' +
     'nadie consigue reproducir, y por eso los ensayos serios se registran antes de empezar.');
 
+  p.hist('El contraste de hipótesis moderno nació en una discusión de sobremesa en Cambridge, hacia 1920. ' +
+    'Una señora afirmó que distinguía si en su té se había echado antes la leche o la infusión; ' +
+    'Ronald Fisher, en vez de reírse, diseñó un experimento con ocho tazas para comprobarlo y lo ' +
+    'convirtió después en el ejemplo con el que explicaría toda su metodología. La historia no ' +
+    'aclara si la señora acertó, aunque los testigos dijeron que sí.');
+
   p.section('Practica');
 
   p.exercise({

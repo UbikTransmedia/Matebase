@@ -89,6 +89,11 @@ Course.topic('tr-circunferencia', function (p) {
     'examen: la mitad de los resultados absurdos en trigonometría vienen de tener la calculadora en ' +
     'el modo equivocado.');
 
+  p.hist('Los 360 grados vienen de Babilonia, que contaba en base 60 y usaba un calendario de 360 días; ' +
+    'de ahí salen también los 60 minutos y los 60 segundos. El radián es muy posterior: lo propuso ' +
+    'Roger Cotes hacia 1714 y el nombre no se acuñó hasta 1873, en un examen del Queen\'s College de ' +
+    'Belfast. Es decir, la unidad «natural» del ángulo tardó más de tres mil años en aparecer.');
+
   p.section('Signos por cuadrante');
 
   p.text('Como el seno es la $y$ y el coseno es la $x$, sus signos son los del punto en el plano. ' +

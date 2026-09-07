@@ -127,6 +127,13 @@ Course.topic('fn-cuadraticas', function (p) {
     'la altura máxima: es la cuenta que hace la artillería, y también la que hace un jugador de ' +
     'baloncesto sin saberlo.');
 
+  p.hist('Que un proyectil describe una parábola lo demostró Galileo hacia 1638, y fue mucho más ' +
+    'subversivo de lo que parece: contradecía la física de Aristóteles, según la cual el proyectil ' +
+    'iba recto hasta agotar su impulso y luego caía a plomo. Galileo comprendió que el movimiento se ' +
+    'descompone en dos independientes, uno horizontal uniforme y otro vertical acelerado, y que de ' +
+    'combinarlos sale una parábola. Es la primera vez que una curva matemática describe un fenómeno ' +
+    'físico real.');
+
   p.section('Practica');
 
   p.exercise({

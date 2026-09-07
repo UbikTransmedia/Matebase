@@ -161,6 +161,13 @@ Course.topic('pe-descriptiva', function (p) {
   });
 
   /* ================= EJERCICIOS ================= */
+  p.hist('Los gráficos estadísticos son un invento sorprendentemente tardío: William Playfair publicó el ' +
+    'primer diagrama de barras en 1786 y el primer gráfico de sectores en 1801, y tuvo que ' +
+    'defenderse de quienes los consideraban poco serios. Medio siglo después, Florence Nightingale ' +
+    'usó un diagrama circular para demostrar al gobierno británico que en Crimea morían muchos más ' +
+    'soldados por infecciones que por heridas de guerra. Le hicieron caso, y aquel gráfico salvó ' +
+    'miles de vidas.');
+
   p.section('Practica');
 
   function datosAleatorios(r, n, lo, hi) {

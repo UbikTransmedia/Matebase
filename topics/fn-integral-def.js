@@ -86,6 +86,11 @@ Course.topic('fn-integral-def', function (p) {
     'trabajo de una fuerza variable y el área bajo una curva de consumo. Sin ella, cada uno de esos ' +
     'cálculos exigiría una suma infinita.');
 
+  p.hist('Isaac Barrow fue el profesor de Newton en Cambridge y quien vio antes que nadie que derivar e ' +
+    'integrar son operaciones inversas. En 1669 renunció a su cátedra para que se la dieran a su ' +
+    'alumno, que tenía veintiséis años, y se dedicó a la teología. Es uno de los pocos casos ' +
+    'documentados de un maestro apartándose voluntariamente para dejar sitio a alguien mejor.');
+
   p.section('Cuidado con los signos');
 
   p.text('La integral definida no es exactamente «el área»: es un <strong>área con signo</strong>. Lo ' +

@@ -85,8 +85,8 @@ Course.topic('al-sistemas', function (p) {
     'opuestos, y súmalas: esa incógnita desaparece.');
   p.formula('\\begin{aligned} 2x + y &= 7 \\\\ x - y &= 2 \\\\ \\hline 3x\\ \\ \\ \\ &= 9 \\ \\Rightarrow\\ x = 3 \\end{aligned}', 'método de reducción',
     'Las dos ecuaciones van una debajo de otra porque forman un sistema: hay que resolverlas a la vez, ' +
-    'no por separado. ' +
-      'la llave que las agrupa se sobreentiende.<br><br>La idea del método: multiplicar las ecuaciones ' +
+      'no por separado. La raya horizontal indica que lo de abajo es el resultado de sumarlas, igual ' +
+      'que en una suma de toda la vida.<br><br>La idea del método: multiplicar las ecuaciones ' +
       'por lo que haga falta para que una incógnita tenga coeficientes opuestos, y entonces sumarlas ' +
       'para que desaparezca. Es la balanza otra vez: si sumas dos igualdades verdaderas, obtienes otra ' +
       'igualdad verdadera.');
@@ -118,6 +118,12 @@ Course.topic('al-sistemas', function (p) {
     'mezcla química significa que la receta pedida es imposible con esos ingredientes; uno ' +
     'indeterminado significa que hay varias mezclas válidas y se puede elegir la más barata. En los ' +
     'dos casos, la respuesta útil aparece <em>antes</em> de ponerse a calcular.');
+
+  p.hist('El método de eliminación aparece resuelto en <em>Los nueve capítulos del arte matemático</em>, ' +
+    'un texto chino compilado hace unos dos mil años, mil ochocientos antes de que Gauss naciera. ' +
+    'Sus autores colocaban los coeficientes en columnas sobre un tablero de cálculo y los iban ' +
+    'restando exactamente como se hace hoy con las filas de una matriz. Es uno de los casos más ' +
+    'claros de una misma idea descubierta dos veces, con veinte siglos de diferencia.');
 
   p.section('Practica');
 

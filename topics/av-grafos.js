@@ -137,6 +137,12 @@ Course.topic('av-grafos', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.hist('El problema de los siete puentes se lo planteaban los vecinos de Königsberg como pasatiempo ' +
+    'dominical hasta que Euler lo resolvió en 1736 demostrando que no tenía solución. Su aportación ' +
+    'fue más profunda que la respuesta: se dio cuenta de que la forma de la ciudad, las distancias y ' +
+    'el tamaño de las islas eran irrelevantes, y que solo importaba qué estaba conectado con qué. ' +
+    'Con esa abstracción fundó dos disciplinas de golpe, la teoría de grafos y la topología.');
+
   p.section('Árboles y caminos mínimos');
 
   p.text('Un <strong>árbol</strong> es un grafo conexo sin ciclos: la forma más barata de mantener ' +

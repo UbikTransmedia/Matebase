@@ -114,6 +114,11 @@ Course.topic('fn-exp-log', function (p) {
     'vez más cortos, ¿cuánto se puede llegar a ganar? La respuesta no es infinito: es $e$, ' +
     'aproximadamente 2,718.');
 
+  p.hist('Napier publicó los logaritmos en 1614 tras veinte años de cálculos a mano, con un objetivo ' +
+    'declarado: ahorrar tiempo a los astrónomos. Laplace escribió después que aquello «duplicó la ' +
+    'vida de un astrónomo», y no exageraba. La letra $e$ es de Euler, hacia 1731; se cree que la ' +
+    'eligió por <em>exponencial</em> y no por su propio apellido, aunque nunca lo aclaró.');
+
   p.section('La función logarítmica');
 
   p.text('Es la <strong>inversa</strong> de la exponencial: deshace lo que aquella hace. Su gráfica es ' +

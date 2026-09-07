@@ -44,6 +44,12 @@ Course.topic('ge-espacio', function (p) {
     'alineación (es cero si son perpendiculares). El producto <em>vectorial</em> devuelve un vector y ' +
     'mide perpendicularidad (es cero si son paralelos). Son complementarios.', 'ok');
 
+  p.hist('Hamilton llevaba diez años buscando la manera de multiplicar tripletes de números cuando, el 16 ' +
+    'de octubre de 1843, paseando con su mujer por el puente de Brougham en Dublín, se dio cuenta de ' +
+    'que la solución exigía cuatro dimensiones en vez de tres. Grabó la fórmula a navaja en la ' +
+    'piedra del puente allí mismo. La inscripción se borró hace mucho, pero cada año se celebra una ' +
+    'marcha conmemorativa por ese camino.');
+
   p.sub('Producto mixto y volumen');
   p.text('Combinando las dos operaciones anteriores aparece una tercera que devuelve un número y tiene ' +
     'una lectura geométrica muy directa: el volumen de la caja torcida que forman tres vectores. ' +

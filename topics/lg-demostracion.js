@@ -189,6 +189,12 @@ Course.topic('lg-demostracion', function (p) {
     }
   });
 
+  p.hist('La inducción se usaba de forma intuitiva desde antiguo, pero fue Blaise Pascal quien la formuló ' +
+    'con claridad hacia 1654, estudiando su triángulo. Curiosamente, llegó a las matemáticas por una ' +
+    'apuesta: un jugador profesional le preguntó cómo repartir el dinero de una partida ' +
+    'interrumpida, y de esa correspondencia entre Pascal y Fermat nació también el cálculo de ' +
+    'probabilidades. Dos ramas enteras de las matemáticas salieron de una pregunta de casino.');
+
   p.sub('Cómo se escribe una demostración por inducción');
 
   p.text('Vamos con el ejemplo canónico: la suma de los $n$ primeros naturales.');
