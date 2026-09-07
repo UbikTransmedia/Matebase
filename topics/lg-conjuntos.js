@@ -28,19 +28,31 @@ Course.topic('lg-conjuntos', function (p) {
     'nadie va a escribir por extensión el conjunto de los números pares.');
 
   p.text('La segunda es no listar a nadie y dar en su lugar la <strong>regla</strong> que cumplen ' +
-    'exactamente sus elementos. Se dice que el conjunto está dado <em>por comprensión</em>. Para ' +
-    'leerlo, basta con ponerle voz a los símbolos: las llaves se leen «el conjunto de los», y los dos ' +
-    'puntos se leen «tales que».');
+    'exactamente sus elementos. Se dice que el conjunto está dado <em>por comprensión</em>, y para ' +
+    'escribirla hacen falta tres símbolos que conviene que sepas <em>decir</em>, no solo reconocer:');
+
+  p.list([
+    'Las <strong>llaves</strong> $\\{\\ \\}$ se leen «el conjunto de los».',
+    'Los <strong>dos puntos</strong> $:$ se leen «tales que». En algunos libros verás una barra $|$ ' +
+      'en su lugar; significa lo mismo.',
+    'El símbolo $\\in$ se lee «pertenece a», y la letra hueca $\\mathbb{N}$ se dice «ene» y es el ' +
+      'nombre de los números naturales: $0, 1, 2, 3, \\dots$'
+  ]);
 
   p.formulas([
     'A = \\{1, 2, 3, 4\\}',
     'A = \\{x \\in \\mathbb{N} : x < 5,\\ x \\ne 0\\}'
-  ], 'el mismo conjunto, por extensión y por comprensión');
+  ], 'el mismo conjunto, por extensión y por comprensión',
+    'La primera línea se dice: <em>«A es el conjunto formado por el 1, el 2, el 3 y el 4»</em>.<br><br>' +
+    'La segunda, entera y de corrido: <em>«A es el conjunto de los equis que pertenecen a los números ' +
+    'naturales, tales que equis es menor que 5 y equis es distinto de cero»</em>.<br><br>' +
+    'Símbolo a símbolo: $\\{$ «el conjunto de los» · $x$ «equis» · $\\in$ «pertenece a» · ' +
+    '$\\mathbb{N}$ «ene, los naturales» · $:$ «tales que» · $\\ne$ «distinto de».');
 
-  p.text('Las dos líneas describen el mismo conjunto. La segunda se lee así, de izquierda a derecha: ' +
-    '<em>«el conjunto de los $x$ de los naturales tales que $x$ es menor que 5 y $x$ no es cero»</em>. ' +
-    'Merece la pena pararse a leerla en voz alta, porque esta notación te va a acompañar hasta el ' +
-    'último tema del curso.');
+  p.text('Las dos líneas describen el mismo conjunto, y aquí está la gracia: la de arriba lo enseña y ' +
+    'la de abajo lo describe. Si tienes dudas de cómo se pronuncia algo, pulsa el <strong>?</strong> ' +
+    'de la esquina de la caja; lo encontrarás en las fórmulas nuevas de todo el curso. Merece la pena ' +
+    'leerla en voz alta una vez, porque esta forma de escribir te va a acompañar hasta el último tema.');
 
   p.sub('El vocabulario mínimo');
 
@@ -91,7 +103,13 @@ Course.topic('lg-conjuntos', function (p) {
   p.formulas([
     '\\overline{A \\cap B} = \\overline{A} \\cup \\overline{B}',
     '\\overline{A \\cup B} = \\overline{A} \\cap \\overline{B}'
-  ], 'leyes de De Morgan, versión conjuntista');
+  ], 'leyes de De Morgan, versión conjuntista',
+    'La rayita de encima se lee «complementario de», o más llanamente «todo lo que NO está en». ' +
+    'Así que la primera línea se dice: <em>«el complementario de A intersección B es igual al ' +
+    'complementario de A unión el complementario de B»</em>.<br><br>En cristiano: <em>«lo que no ' +
+    'está en los dos a la vez es lo mismo que lo que falta en uno o falta en el otro»</em>.<br><br>' +
+    'Los dos símbolos: $\\cap$ se dice «intersección» (la zona común) y $\\cup$ se dice ' +
+    '«unión» (todo junto).');
 
   p.demo({
     title: 'Diagramas de Venn',
@@ -168,7 +186,11 @@ Course.topic('lg-conjuntos', function (p) {
     'que además es imposible porque solo hay 30. El error está en que quien juega a los dos ha sido ' +
     'contado dos veces, una en cada grupo, así que hay que descontarlo una vez:');
 
-  p.formula('|A \\cup B| = |A| + |B| - |A \\cap B|', 'principio de inclusión-exclusión');
+  p.formula('|A \\cup B| = |A| + |B| - |A \\cap B|', 'principio de inclusión-exclusión',
+    'Las barras verticales se leen «cardinal de», que es la forma corta de decir «cuántos elementos ' +
+    'tiene».<br><br>Entera: <em>«el cardinal de A unión B es igual al cardinal de A, más el cardinal ' +
+    'de B, menos el cardinal de A intersección B»</em>.<br><br>Dicho como se piensa: <em>«los que ' +
+    'están en A o en B son los de A más los de B, quitando una vez los que estaban en los dos»</em>.');
 
   p.text('Con 18 y 15 sobre 30, el número de repetidos es $18+15-30=3$. Guarda esta idea de sumar y ' +
     'descontar lo repetido: reaparecerá tal cual cuando calcules la probabilidad de que ocurra una ' +
@@ -189,7 +211,11 @@ Course.topic('lg-conjuntos', function (p) {
   p.text('Contarlos es inmediato: por cada elección del primero hay tantas posibilidades como elementos ' +
     'tenga el segundo conjunto, así que se multiplican.');
 
-  p.formula('|A \\times B| = |A| \\cdot |B|');
+  p.formula('|A \\times B| = |A| \\cdot |B|', null,
+    'Se lee: <em>«el cardinal de A por B es igual al cardinal de A multiplicado por el cardinal de ' +
+    'B»</em>.<br><br>Cuidado con el aspa: entre dos conjuntos, $\\times$ no es una multiplicación ' +
+    'sino el «producto cartesiano», la lista de todas las parejas posibles. Lo que sí se multiplica ' +
+    'son las cantidades, que es lo que dice el lado derecho.');
 
   p.note('$\\mathbb{R} \\times \\mathbb{R} = \\mathbb{R}^2$ <strong>es el plano</strong>. Cada punto ' +
     'del plano es un par ordenado de reales. Toda la geometría analítica que has estudiado descansa ' +

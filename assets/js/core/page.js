@@ -53,19 +53,41 @@
     return this._add(l);
   };
 
-  /** Formula centrada, opcionalmente con etiqueta encima. */
-  Page.prototype.formula = function (tex, label) {
+  /* Boton «?» con la lectura en voz alta de la formula. Es ayuda opcional:
+     aparece al pasar el raton y tambien al pulsarlo, para que funcione en un
+     movil, donde no hay raton que pasar. */
+  function ayudaLectura(box, lectura) {
+    box.classList.add('fbox--ayuda');
+    var tip = U.el('div.fbox__tip', { html: MathX.inline(lectura), role: 'tooltip' });
+    var b = U.el('button.fbox__help', {
+      type: 'button', 'aria-expanded': 'false',
+      'aria-label': 'Cómo se lee esta fórmula',
+      title: 'Cómo se lee',
+      onclick: function () {
+        var abierto = b.getAttribute('aria-expanded') === 'true';
+        b.setAttribute('aria-expanded', abierto ? 'false' : 'true');
+      },
+      onblur: function () { b.setAttribute('aria-expanded', 'false'); }
+    }, '?');
+    box.appendChild(b);
+    box.appendChild(tip);
+  }
+
+  /** Formula centrada, con etiqueta y lectura en voz alta opcionales. */
+  Page.prototype.formula = function (tex, label, lectura) {
     var box = U.el('div.fbox' + (label ? '.fbox--lab' : ''));
     if (label) box.appendChild(U.el('span.fbox__lab', { text: label }));
     box.appendChild(U.el('div', { html: MathX.display(tex) }));
+    if (lectura) ayudaLectura(box, lectura);
     return this._add(box);
   };
 
   /** Varias formulas seguidas en la misma caja. */
-  Page.prototype.formulas = function (list, label) {
+  Page.prototype.formulas = function (list, label, lectura) {
     var box = U.el('div.fbox' + (label ? '.fbox--lab' : ''));
     if (label) box.appendChild(U.el('span.fbox__lab', { text: label }));
     list.forEach(function (t) { box.appendChild(U.el('div', { html: MathX.display(t), style: { margin: '6px 0' } })); });
+    if (lectura) ayudaLectura(box, lectura);
     return this._add(box);
   };
 

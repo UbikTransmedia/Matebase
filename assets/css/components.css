@@ -43,6 +43,41 @@
   font-weight:650; line-height:1.1;
 }
 
+/* --- «como se lee esto» ---
+   Ayuda opcional en la esquina de la formula. Se abre al pasar el raton y
+   tambien al pulsar, porque en un movil no hay raton. El globo se ancla a la
+   derecha y nunca es mas ancho que la caja, para que no se salga. */
+.fbox--ayuda{padding-right:38px}
+.fbox--ayuda.fbox--lab{padding-top:30px}
+.fbox__help{
+  position:absolute; top:8px; right:9px; z-index:3;
+  width:21px; height:21px; padding:0; border-radius:50%;
+  border:1px solid var(--line); background:var(--panel); color:var(--ink-faint);
+  font:inherit; font-size:12px; font-weight:700; line-height:1;
+  display:grid; place-items:center; cursor:help; transition:.13s;
+}
+.fbox__help:hover,
+.fbox__help[aria-expanded="true"]{
+  border-color:var(--accent); color:var(--accent); background:var(--accent-soft);
+}
+.fbox__help:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.fbox__tip{
+  position:absolute; top:34px; right:10px; z-index:6;
+  width:min(400px, calc(100% - 20px));
+  padding:11px 14px; border:1px solid var(--line); border-radius:10px;
+  background:var(--panel); box-shadow:var(--shadow);
+  font-size:13.7px; line-height:1.55; color:var(--ink-soft);
+  text-align:left; text-wrap:pretty;
+  opacity:0; visibility:hidden; transform:translateY(-4px);
+  transition:opacity .14s, transform .14s, visibility .14s;
+}
+.fbox__help:hover ~ .fbox__tip,
+.fbox__help:focus-visible ~ .fbox__tip,
+.fbox__help[aria-expanded="true"] ~ .fbox__tip{
+  opacity:1; visibility:visible; transform:none;
+}
+.fbox__tip em{color:var(--ink); font-style:normal; font-weight:620}
+
 /* --- ideas clave --- */
 .keys{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
   padding:16px 20px; margin:26px 0 8px; box-shadow:var(--shadow)}

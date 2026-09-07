@@ -43,8 +43,9 @@ posición que corresponda del array. El orden del array es el orden del curso.
 | `p.sub('Título')` | Subapartado |
 | `p.text('...')` | Párrafos. Admite HTML y `$latex$`. Dos saltos de línea = párrafo nuevo |
 | `p.list([...], ordenada)` | Lista con viñetas o numerada |
-| `p.formula(tex, 'etiqueta')` | Fórmula centrada en su caja |
-| `p.formulas([tex, tex], 'etiqueta')` | Varias fórmulas en una caja |
+| `p.formula(tex, 'etiqueta', 'lectura')` | Fórmula centrada en su caja |
+| `p.formulas([tex, tex], 'etiqueta', 'lectura')` | Varias fórmulas en una caja |
+| `p.util(html, 'título')` | **Cuadro UTILIDAD**: para qué sirve esto fuera del aula |
 | `p.table(cabeceras, filas, {num:[0,2]})` | Tabla (`num` alinea esas columnas a la derecha) |
 | `p.note(html, tipo, 'título')` | Aviso. `tipo`: `null`, `'warn'`, `'ok'` |
 | `p.hist(html)` | Apunte histórico |
@@ -54,6 +55,32 @@ posición que corresponda del array. El orden del array es el orden del curso.
 | `p.raw(elemento)` | Insertar un nodo DOM a pelo |
 
 Dentro de cualquier texto, `$...$` se renderiza como matemáticas.
+
+### El tercer argumento: «cómo se lee»
+
+Si a `p.formula` o `p.formulas` les pasas un tercer argumento, la caja gana un
+botón **?** en la esquina que, al pasar el ratón o al pulsarlo, despliega la
+lectura en voz alta de la fórmula. Es para el alumno que reconoce el símbolo
+pero no sabría pronunciarlo.
+
+Ponlo **siempre que aparezca notación nueva**. Escribe la frase entera y
+corrida, como la dirías tú, y añade después el desglose símbolo a símbolo:
+
+```js
+p.formula('A = \{x \in \mathbb{N} : x < 5\}', 'por comprensión',
+  'Se dice: <em>«A es el conjunto de los equis que pertenecen a los naturales, ' +
+  'tales que equis es menor que 5»</em>.<br><br>' +
+  'Símbolo a símbolo: $\{$ «el conjunto de los» · $\in$ «pertenece a».');
+```
+
+### El cuadro UTILIDAD
+
+`p.util(html)` produce una caja resaltada, con color propio, que cuenta **para
+qué sirve de verdad** el concepto que se acaba de explicar. Colócala al final de
+la sección, no al principio: primero se entiende la idea, después se ve para qué
+vale. Busca aplicaciones concretas y comprobables —el dígito de control del DNI,
+el folio A4, la sonda que se perdió por confundir unidades—, no frases genéricas
+del tipo «esto se usa mucho en ingeniería».
 
 ---
 
