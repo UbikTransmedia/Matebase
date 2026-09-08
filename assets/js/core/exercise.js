@@ -115,7 +115,13 @@
 
   Card.prototype.paintScore = function () {
     var t = Progress.topic(this.topicId);
-    this.score.textContent = t.tries ? ('aciertos ' + t.ok + '/' + t.tries) : '';
+    // Se enseña lo que lleva resuelto, no la proporcion de fallos: el
+    // marcador esta para animar a seguir, no para llevar la cuenta de los
+    // tropiezos. Los intentos se siguen guardando; simplemente no se
+    // restriegan.
+    this.score.textContent = t.ok
+      ? (t.ok === 1 ? '1 resuelto en este tema' : t.ok + ' resueltos en este tema')
+      : '';
   };
 
   /** Genera un enunciado nuevo. */
@@ -225,13 +231,33 @@
     else if (s.check) for (var q in this.inputs) this.mark(q, res.ok);
 
     this.verdict.className = 'verdict is-on ' + (res.ok ? 'verdict--ok' : 'verdict--bad');
-    this.verdict.innerHTML = MathX.inline(res.msg ||
-      (res.ok ? '<strong>¡Correcto!</strong> Pulsa «Otro ejercicio» para practicar con números nuevos.'
-        : '<strong>No es correcto.</strong> Revisa el cálculo, o mira la pista y la solución paso a paso.'));
+    this.verdict.innerHTML = MathX.inline(res.msg || (res.ok
+      ? '<strong>¡Correcto!</strong> Pulsa «Otro ejercicio» para practicar con números nuevos.'
+      : this._casi()));
 
     if (!this.tried) { Progress.answer(this.topicId, res.ok); this.tried = true; }
     this.paintScore();
-    if (res.ok) this.bCheck.disabled = true;
+    // El boton no se bloquea: si el alumno quiere escribirlo de otra forma y
+    // volver a comprobar, que pueda. El acierto ya esta apuntado.
+
+  };
+
+  /* Cuando hay varios campos y unos cuantos estan bien, decirlo. No es
+     consuelo: es informacion, y le dice al alumno donde mirar. */
+  Card.prototype._casi = function () {
+    var n = 0, bien = 0;
+    for (var k in this.inputs) {
+      n++;
+      if (this.inputs[k].box.classList.contains('is-ok')) bien++;
+    }
+    if (n > 1 && bien > 0) {
+      return '<strong>Casi.</strong> ' + (bien === 1 ? 'Uno' : bien) + ' de ' + n +
+        ' está' + (bien === 1 ? '' : 'n') + ' bien; repasa ' +
+        (n - bien === 1 ? 'el que falta' : 'los que faltan') +
+        '. La pista y la solución paso a paso están ahí abajo.';
+    }
+    return '<strong>Todavía no.</strong> Prueba otra vez, mira la pista, ' +
+      'o abre la solución paso a paso: consultarla no resta nada.';
   };
 
   Card.prototype.showHint = function () {
@@ -242,7 +268,11 @@
 
   Card.prototype.reveal = function () {
     var s = this.spec;
-    if (!this.tried) { Progress.answer(this.topicId, false); this.tried = true; this.paintScore(); }
+    // Consultar sale gratis. Se marca el ejercicio como ya mirado -para que
+    // copiar la solucion no cuente como acierto- pero no se apunta ningun
+    // fallo: cobrarle a alguien por leer la explicacion es la mejor forma
+    // de que no la lea.
+    this.tried = true;
     var html = '';
     if (s.steps) {
       var st = s.steps(this.data);

@@ -259,8 +259,8 @@
     p.section('Tu progreso');
     p.raw(U.el('div.readout', {
       html: 'Temas visitados: <strong>' + st.seen + '</strong> de ' + total + '<br>' +
-        'Temas dominados (5 aciertos o más): <strong>' + st.done + '</strong><br>' +
-        'Ejercicios acertados: <strong>' + st.ok + '</strong> de ' + st.tries + ' intentos'
+        'Temas dominados (5 ejercicios resueltos o más): <strong>' + st.done + '</strong><br>' +
+        'Ejercicios resueltos: <strong>' + st.ok + '</strong>'
     }));
 
     p.section('El recorrido');
