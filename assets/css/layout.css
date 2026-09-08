@@ -309,3 +309,13 @@
 @media (max-width:430px){
   .brand__name{display:none}
 }
+
+
+/* --- bloque 13: programación gráfica ---
+   Redefinir el acento dentro del bloque hace que TODO lo herede sin tocar
+   ni una regla más: barras de sección, avisos, enlaces, botones, y las
+   gráficas, que leen estas variables al pintarse. */
+.blk[data-piel="gfx"] .blk__num{background:var(--gfx-soft); color:var(--gfx-ink)}
+.blk[data-piel="gfx"] .blk__btn{color:var(--gfx-ink)}
+.blk[data-piel="gfx"] .tpc.is-active{background:var(--gfx-soft); color:var(--gfx-ink)}
+.blk[data-piel="gfx"] .blk__list{border-left-color:color-mix(in srgb, var(--gfx) 30%, transparent)}

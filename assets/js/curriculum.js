@@ -595,5 +595,77 @@ window.CURRICULUM = [
         o: ['El teorema del buen regulador', 'Autorreferencia y observador', 'Del control a la conversación']
       }
     ]
+  },
+
+  /* ================= 13. PROGRAMACION GRAFICA =================
+     Piel propia: aqui ya no estamos solo en matematicas. Es la golosina
+     del curso, el sitio al que el alumno viene a convertir numeros en
+     algo bello. El campo `piel` es lo unico que hace falta para que todo
+     el bloque cambie de color. */
+  {
+    id: 'gfx', n: 13, title: 'Programación gráfica', piel: 'gfx',
+    desc: 'Reglas de tres líneas que producen imágenes que no caben en la cabeza. Las matemáticas del curso, dibujándose a sesenta imágenes por segundo.',
+    temas: [
+      {
+        id: 'gfx-pixel', t: 'El píxel que se pregunta de qué color es',
+        r: 'Un shader no dibuja: contesta. El cambio de mentalidad que lo abre todo.',
+        o: ['Qué es un fragment shader', 'Coordenadas normalizadas', 'Tu primer shader en tres líneas']
+      },
+      {
+        id: 'gfx-coordenadas', t: 'El lienzo es un plano cartesiano',
+        r: 'Centrar el origen, arreglar la deformación de la pantalla y pasarse a polares.',
+        o: ['De píxeles a coordenadas', 'Corregir la relación de aspecto', 'Coordenadas polares con atan y length']
+      },
+      {
+        id: 'gfx-distancia', t: 'Distancia: dibujar sin dibujar',
+        r: 'Un círculo no se traza: se pregunta. Funciones de distancia con signo.',
+        o: ['La distancia como campo', 'step y el borde duro', 'smoothstep y el antialiasing']
+      },
+      {
+        id: 'gfx-decidir', t: 'Decidir sin bifurcar',
+        r: 'mix, clamp, min y max: la lógica booleana escrita con aritmética.',
+        o: ['mix como interpolación', 'min y max como unión e intersección', 'Por qué se evita el if']
+      },
+      {
+        id: 'gfx-tiempo', t: 'El tiempo entra en la ecuación',
+        r: 'Todo el movimiento del mundo sale de un seno.',
+        o: ['El uniform iTime', 'Amplitud, frecuencia y fase', 'Desfasar el espacio para animar']
+      },
+      {
+        id: 'gfx-repetir', t: 'Repetir el espacio: fract y mod',
+        r: 'Una rejilla infinita con una sola operación: plegar el dominio.',
+        o: ['La parte decimal como repetición', 'Coordenada local y celda', 'Variar cada celda sin bucles']
+      },
+      {
+        id: 'gfx-matrices', t: 'Matrices que giran el mundo',
+        r: 'Rotar, escalar y torcer, y la idea que descoloca: transformas la coordenada, no la figura.',
+        o: ['La matriz de rotación 2×2', 'Por qué todo va al revés', 'Componer transformaciones']
+      },
+      {
+        id: 'gfx-ruido', t: 'Azar sin azar: ruido',
+        r: 'El azar reproducible, que es el único que sirve para dibujar.',
+        o: ['Funciones hash deterministas', 'Ruido de valor e interpolación', 'Ruido fractal (fbm)']
+      },
+      {
+        id: 'gfx-derivadas', t: 'Derivar dentro del shader',
+        r: 'fwidth y dFdx: el antialiasing que se calcula solo y las normales de un relieve.',
+        o: ['Derivadas por diferencias entre píxeles vecinos', 'Antialiasing independiente del zoom', 'Normales a partir de un campo de alturas']
+      },
+      {
+        id: 'gfx-raymarching', t: 'Raymarching: 3D con una fórmula',
+        r: 'Esferas y cajas sin un solo triángulo, avanzando a lo largo de la mirada.',
+        o: ['Distancias con signo en 3D', 'El algoritmo de avance por esferas', 'Luz con la normal, que es el gradiente']
+      },
+      {
+        id: 'gfx-fractales', t: 'Fractales: iterar en el plano complejo',
+        r: 'Mandelbrot y Julia en tiempo real, con zoom. El caos, ahora tocable.',
+        o: ['Iterar z² + c en el shader', 'Escape y coloreado', 'Conjuntos de Julia y su relación con el de Mandelbrot']
+      },
+      {
+        id: 'gfx-directo', t: 'La actuación',
+        r: 'Del ejercicio al directo: reglas simples, complejidad epatante, y adónde ir después.',
+        o: ['Componer un shader por capas', 'Parámetros como mandos de una actuación', 'Herramientas libres y comunidad']
+      }
+    ]
   }
 ];

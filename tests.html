@@ -49,7 +49,8 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   (function () {
     var t = '?t=' + Date.now();
     ['core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
-     'core/exercise', 'core/page', 'curriculum', 'glosario'].forEach(function (f) {
+     'core/shader', 'core/exercise', 'core/page', 'curriculum',
+     'glosario'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
   })();
@@ -432,7 +433,12 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
               var want = s.sol(d), v = { raw: {} };
               for (var k in want) {
                 v[k] = (typeof want[k] === 'number') ? want[k] : ML.tryEval(String(want[k]));
-                v.raw[k] = String(want[k]).replace('.', ',');
+                /* La coma decimal solo tiene sentido si la respuesta es un
+                   numero: si es texto -codigo GLSL, por ejemplo- cambiar el
+                   punto por una coma lo estropea. */
+                v.raw[k] = (typeof want[k] === 'number')
+                  ? String(want[k]).replace('.', ',')
+                  : String(want[k]);
               }
               var res = s.check ? s.check(v, d) : (function () {
                 for (var n in want) {
@@ -451,7 +457,12 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
                   var w = { raw: {} }, tocado = 0;
                   for (var k2 in want) {
                     w[k2] = (typeof want[k2] === 'number') ? want[k2] : ML.tryEval(String(want[k2]));
-                    w.raw[k2] = String(want[k2]).replace('.', ',');
+                    /* La coma decimal solo tiene sentido si la respuesta es un
+                       numero. Si es texto -codigo GLSL, por ejemplo- cambiar el
+                       punto por una coma lo estropea. */
+                    w.raw[k2] = (typeof want[k2] === 'number')
+                      ? String(want[k2]).replace('.', ',')
+                      : String(want[k2]);
                   }
                   flds.forEach(function (f) {
                     if (typeof want[f.name] === 'string') {

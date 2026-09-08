@@ -57,7 +57,10 @@
   function buildIndex() {
     U.clear(sideScroll);
     CURRICULUM.forEach(function (b) {
-      var blk = U.el('div.blk', { 'data-blk': b.id });
+      /* El bloque 13 no es solo matemáticas: es programación y arte, y tiene
+         que notarse antes de leer una palabra. Se marca aquí y el color lo
+         hereda todo lo de dentro, desde el CSS. */
+      var blk = U.el('div.blk', { 'data-blk': b.id, 'data-piel': b.piel || null });
       var caret = U.el('span.blk__caret', { html: '&#9654;' });
       var btn = U.el('button.blk__btn', { type: 'button' }, [
         U.el('span.blk__num', { text: b.n }),
@@ -174,6 +177,10 @@
     var t = BYID[id];
     if (!t) return renderHome();
     U.clear(wrapEl);
+    // La piel del bloque tiñe el contenido entero: secciones, avisos,
+    // enlaces, botones y hasta las gráficas, que leen las variables CSS.
+    if (t._block.piel) wrapEl.setAttribute('data-piel', t._block.piel);
+    else wrapEl.removeAttribute('data-piel');
     crumbEl.innerHTML = '<b>' + U.escape(t._block.title) + '</b> &nbsp;/&nbsp; ' + U.escape(t.t);
     wrapEl.appendChild(header(t));
     var body = U.el('div');
@@ -201,6 +208,7 @@
 
   function renderHome() {
     U.clear(wrapEl);
+    wrapEl.removeAttribute('data-piel');
     crumbEl.innerHTML = '<b>Inicio</b>';
     document.title = 'Matebase · curso interactivo de matemáticas';
     var st = Progress.stats();
