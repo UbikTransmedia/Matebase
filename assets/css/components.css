@@ -367,3 +367,9 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
   color:var(--tip-strong); font-weight:600;
 }
 .ans__panel strong{color:var(--tip-strong)}
+
+
+/* El h1 se enfoca por programa al cambiar de tema; no debe salir marcado
+   como si el alumno lo hubiera tabulado. */
+h1[tabindex]:focus{outline:none}
+h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; border-radius:4px}

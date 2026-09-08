@@ -131,7 +131,9 @@
   function header(t) {
     var h = U.el('div.hdr');
     h.appendChild(U.el('div.hdr__over', { text: 'Bloque ' + t._block.n + ' · ' + t._block.title }));
-    h.appendChild(U.el('h1', { html: MathX.inline(t.t) }));
+    // El titulo se puede enfocar: al cambiar de tema, el foco aterriza aqui
+    // en vez de quedarse a mitad del indice.
+    h.appendChild(U.el('h1', { html: MathX.inline(t.t), tabindex: '-1' }));
     if (t.r) h.appendChild(U.el('p.hdr__sub', { html: MathX.inline(t.r) }));
     if (t.o && t.o.length) {
       var meta = U.el('div.hdr__meta');
@@ -495,9 +497,19 @@
 
   /* ---------------- arranque ---------------- */
 
+  var arrancado = false;
+
   function route() {
     var id = location.hash.replace(/^#\/?/, '');
     if (!id) renderHome(); else renderTopic(id);
+    // Al navegar, llevar el foco al titulo: quien usa teclado no tiene que
+    // volver a recorrer el indice, y quien usa lector de pantalla se entera
+    // de que ha cambiado de tema.
+    if (arrancado) {
+      var h1 = wrapEl && wrapEl.querySelector('h1');
+      if (h1 && h1.focus) h1.focus({ preventScroll: true });
+    }
+    arrancado = true;
     var side = U.$('.side');
     if (side) side.classList.remove('is-open');
     var sc = U.$('.scrim');
@@ -518,6 +530,14 @@
     setTheme(Progress.pref('theme') || 'light');
     buildLetraButtons();
     setLetra(Progress.pref('letra') || 'n');
+
+    // El boton de salto lleva el foco al contenido sin tocar el hash, que
+    // aqui es la ruta: un href="#wrap" cambiaria de tema.
+    var salto = U.$('#saltar');
+    if (salto) salto.addEventListener('click', function () {
+      var h = wrapEl.querySelector('h1');
+      if (h) { h.focus(); h.scrollIntoView({ block: 'start' }); }
+    });
 
     var search = U.$('#search');
     search.addEventListener('input', function () {

@@ -16,6 +16,10 @@
 
 <div class="app">
 
+  <!-- Lo primero que encuentra el tabulador: la salida del indice.
+       Solo se ve cuando tiene el foco, asi que no estorba a nadie mas. -->
+  <button class="saltar" id="saltar" type="button">Saltar al contenido</button>
+
   <!-- ================= ÍNDICE ================= -->
   <aside class="side">
     <div class="side__head">
@@ -33,7 +37,7 @@
       </div>
     </div>
 
-    <nav class="side__scroll" id="sideScroll"></nav>
+    <nav class="side__scroll" id="sideScroll" aria-label="Índice del curso"></nav>
 
     <div class="side__foot">
       <div class="themes" id="themes" role="group" aria-label="Tema de color"></div>
