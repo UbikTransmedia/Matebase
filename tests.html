@@ -543,6 +543,21 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           if (anonimas.length) {
             aud.push('gráfica(s) ' + anonimas.join(', ') + ' sin nombre accesible');
           }
+          // Un shader que no compila deja un recuadro vacio con un error rojo
+          // justo donde el tema promete una imagen. Se compila aqui el codigo
+          // original de cada visor, con sus mandos, antes de que nadie lo abra.
+          [].forEach.call(h.querySelectorAll('.shd'), function (sh, i) {
+            var v = sh.__shd;
+            if (!v || !W.glslCompila) return;
+            var r = W.glslCompila(v.original, v.mandos);
+            if (r.sinWebgl) return;
+            if (!r.ok) {
+              aud.push('shader ' + (i + 1) + ' no compila: ' +
+                r.errores.slice(0, 2).map(function (e) {
+                  return 'línea ' + e.linea + ', ' + e.msg;
+                }).join(' · '));
+            }
+          });
           // Un enlace entre capitulos que apunta a un tema inexistente deja al
           // alumno en una pagina en blanco justo cuando iba a repasar algo.
           var rotos = [];

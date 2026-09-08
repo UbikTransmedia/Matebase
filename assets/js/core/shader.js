@@ -36,6 +36,7 @@
      importa: los errores de compilacion vienen numerados sobre el fuente
      completo y hay que restarlo para senalar la linea del editor. */
   var PREAMBULO = [
+    '#extension GL_OES_standard_derivatives : enable',
     'precision highp float;',
     'uniform vec3  iResolution;',
     'uniform float iTime;',
@@ -69,6 +70,7 @@
     c.width = 64; c.height = 64;
     aux = c.getContext('webgl', { preserveDrawingBuffer: true }) ||
           c.getContext('experimental-webgl', { preserveDrawingBuffer: true }) || false;
+    if (aux) aux.getExtension('OES_standard_derivatives');
     return aux;
   }
 
@@ -179,6 +181,10 @@
     var self = this, o = this.o;
 
     this.el = U.el('div.shd');
+    /* Un asa para las pruebas: tests.html recorre los visores de cada tema
+       y compila su codigo original, para que un shader roto salga alli y no
+       en la cara del alumno. */
+    this.el.__shd = this;
 
     /* --- el lienzo --- */
     this.stage = U.el('div.shd__stage');
@@ -301,6 +307,7 @@
   Visor.prototype.arranca = function () {
     var gl = this.canvas.getContext('webgl', { antialias: false, alpha: false }) ||
              this.canvas.getContext('experimental-webgl', { antialias: false, alpha: false });
+    if (gl) gl.getExtension('OES_standard_derivatives');
     if (!gl) {
       this.gl = false;
       this.aviso.textContent = 'Este navegador no tiene WebGL, así que no puede mostrar shaders. ' +
