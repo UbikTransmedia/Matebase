@@ -5,7 +5,13 @@ Course.topic('al-complejos', function (p) {
     'Durante siglos la respuesta fue «esta ecuación no tiene solución». Hasta que alguien probó a ' +
     '<em>inventarse</em> una.');
 
-  p.formula('i = \\sqrt{-1} \\qquad\\text{es decir}\\qquad i^2 = -1', 'la unidad imaginaria');
+  p.formula('i = \\sqrt{-1} \\qquad\\text{es decir}\\qquad i^2 = -1', 'la unidad imaginaria',
+    'Se lee: <em>«i es igual a la raíz de menos uno; es decir, i al cuadrado es igual a menos ' +
+      'uno»</em>.<br><br>Conviene fijarse en cuál de las dos es la definición seria. La segunda, ' +
+      '$i^2=-1$, es la que se usa siempre y la que no da problemas. La primera es una manera cómoda de ' +
+      'decirlo, pero escribir «la raíz de menos uno» invita a operar con ella como si fuera una raíz ' +
+      'corriente, y ahí aparecen paradojas.<br><br>La letra $i$ es de <em>imaginario</em>, un nombre ' +
+      'que le puso Descartes con intención despectiva y que se quedó.');
 
   p.text('Con ese único ingrediente nuevo se construye todo un sistema numérico. Un ' +
     '<strong>número complejo</strong> tiene una parte real y una imaginaria:');

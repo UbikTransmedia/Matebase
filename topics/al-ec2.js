@@ -8,7 +8,15 @@ Course.topic('al-ec2', function (p) {
   p.text('A diferencia de las de primer grado, estas pueden tener <strong>dos</strong> soluciones, una ' +
     'o ninguna. Y hay una fórmula que las da todas de golpe.');
 
-  p.formula('x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}', 'la fórmula general');
+  p.formula('x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}', 'la fórmula general',
+    'Probablemente la fórmula más famosa que vas a aprender. Se dice: <em>«equis es igual a menos ' +
+      'be, más menos raíz de be al cuadrado menos cuatro a ce, partido por dos a»</em>.<br><br>El ' +
+      'signo $\\pm$ se lee «más menos» y es la clave de todo: <strong>no es una fórmula, son ' +
+      'dos</strong>. Una con el más y otra con el menos, y por eso salen dos soluciones.<br><br>Las ' +
+      'letras $a$, $b$ y $c$ son los coeficientes de la ecuación escrita como $ax^2+bx+c=0$; $a$ es el ' +
+      'que acompaña al cuadrado, $b$ el de la equis sola y $c$ el número suelto.<br><br>Cuidado con ' +
+      'dos cosas al leerla: la raíz cubre <em>todo</em> $b^2-4ac$, y el $2a$ de abajo divide a ' +
+      '<em>toda</em> la parte de arriba, no solo a la raíz.');
 
   p.hist('Los babilonios ya resolvían problemas equivalentes a ecuaciones de segundo grado hace 4000 años, ' +
     'con procedimientos geométricos: «completar el cuadrado» era literalmente completar un cuadrado. ' +
@@ -21,7 +29,12 @@ Course.topic('al-ec2', function (p) {
 
   p.text('Todo depende de lo que hay dentro de la raíz. Se le llama <strong>discriminante</strong>:');
 
-  p.formula('\\Delta = b^2 - 4ac');
+  p.formula('\\Delta = b^2 - 4ac', 'el discriminante',
+    'La letra $\\Delta$ es la delta griega mayúscula, y aquí se lee <strong>«discriminante»</strong> ' +
+      '—viene de «discriminar», que aquí significa distinguir unos casos de otros—.<br><br>Se dice: ' +
+      '<em>«delta es igual a be al cuadrado menos cuatro a ce»</em>.<br><br>Es exactamente lo que hay ' +
+      'debajo de la raíz en la fórmula de arriba, y por eso su signo decide todo: si es negativo, la ' +
+      'raíz de un número negativo no existe entre los reales y no hay solución.');
 
   p.table(['Discriminante', 'Soluciones reales', 'La parábola…'],
     [['$\\Delta > 0$', 'dos distintas', 'corta el eje X en dos puntos'],

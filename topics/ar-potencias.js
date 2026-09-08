@@ -118,7 +118,13 @@ Course.topic('ar-potencias', function (p) {
 
   p.text('La <strong>raíz</strong> deshace la potencia: $\\sqrt[n]{a}$ es el número que elevado a $n$ da $a$.');
 
-  p.formula('\\sqrt[3]{125} = 5 \\quad \\text{porque} \\quad 5^3 = 125');
+  p.formula('\\sqrt[3]{125} = 5 \\quad \\text{porque} \\quad 5^3 = 125', 'una raíz cúbica',
+    'Se lee: <em>«la raíz cúbica de ciento veinticinco es cinco, porque cinco al cubo es ciento ' +
+      'veinticinco»</em>.<br><br>El numerito de fuera del signo radical se llama ' +
+      '<strong>índice</strong> y dice qué clase de raíz es: con un 3 es cúbica, con un 4 es de índice ' +
+      'cuatro. Cuando no hay número escrito, se sobreentiende un 2 y es la raíz cuadrada de ' +
+      'siempre.<br><br>Y fíjate en el «porque»: una raíz siempre se comprueba multiplicando hacia ' +
+      'atrás, que es la mejor manera de no equivocarse.');
 
   p.text('Y ahora un giro que parece un truco y no lo es: <strong>toda raíz se puede escribir como una ' +
     'potencia</strong>, con el exponente en forma de fracción. Merece la pena ver por qué, porque no ' +

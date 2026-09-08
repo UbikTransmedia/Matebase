@@ -5,7 +5,14 @@ Course.topic('ar-naturales', function (p) {
     'objetos: $1, 2, 3, 4, \\dots$ No se acaban nunca: por muy grande que sea uno, siempre puedes ' +
     'sumarle 1 y obtener otro mayor. Ese conjunto infinito se llama $\\mathbb{N}$.');
 
-  p.formula('\\mathbb{N} = \\{0,\\ 1,\\ 2,\\ 3,\\ 4,\\ 5,\\ \\dots\\}', 'el conjunto de los naturales');
+  p.formula('\\mathbb{N} = \\{0,\\ 1,\\ 2,\\ 3,\\ 4,\\ 5,\\ \\dots\\}', 'el conjunto de los naturales',
+    'La letra hueca $\\mathbb{N}$ se dice <strong>«ene»</strong> y es el nombre del conjunto de los ' +
+      'números naturales. Las llaves $\\{\\ \\}$ se leen «el conjunto de los», y los tres puntos ' +
+      '$\\dots$ significan «y así sucesivamente, sin final».<br><br>Entera: <em>«ene es el conjunto ' +
+      'formado por cero, uno, dos, tres, cuatro, cinco, y así sucesivamente»</em>.<br><br>Se escribe ' +
+      'con esa letra doble para distinguirla de una ene cualquiera que estuviera haciendo de ' +
+      'incógnita. Verás la misma idea con $\\mathbb{Z}$, $\\mathbb{Q}$ y $\\mathbb{R}$ según vayan ' +
+      'apareciendo más números.');
 
   p.text('El $0$ es un caso especial: durante siglos no se consideró un número, porque nadie ' +
     'cuenta «cero ovejas». Hoy se incluye en $\\mathbb{N}$ porque hace falta para escribir ' +

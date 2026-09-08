@@ -5,7 +5,13 @@ Course.topic('ar-enteros', function (p) {
     'preguntarla: son siete grados menos que tres, o deber cuatro euros. Los <strong>números enteros</strong> ' +
     'son la solución: se añaden los negativos y el cero.');
 
-  p.formula('\\mathbb{Z} = \\{\\dots,\\ -3,\\ -2,\\ -1,\\ 0,\\ 1,\\ 2,\\ 3,\\ \\dots\\}');
+  p.formula('\\mathbb{Z} = \\{\\dots,\\ -3,\\ -2,\\ -1,\\ 0,\\ 1,\\ 2,\\ 3,\\ \\dots\\}', 'los números enteros',
+    'La letra $\\mathbb{Z}$ se dice <strong>«zeta»</strong> y nombra a los enteros: los naturales ' +
+      'más sus negativos. La eligieron por <em>Zahl</em>, que en alemán significa «número».<br><br>Se ' +
+      'lee: <em>«zeta es el conjunto formado por, y así sucesivamente hacia atrás, menos tres, menos ' +
+      'dos, menos uno, cero, uno, dos, tres, y así sucesivamente»</em>.<br><br>Fíjate en que los ' +
+      'puntos suspensivos están <strong>a los dos lados</strong>: a diferencia de los naturales, aquí ' +
+      'no hay principio ni final.');
 
   p.text('En $\\mathbb{Z}$ la resta <em>siempre</em> se puede hacer. Eso es lo que se gana. La recta ' +
     'numérica se prolonga hacia la izquierda y el cero deja de ser el principio para pasar a ser el centro.');

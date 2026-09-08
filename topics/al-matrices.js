@@ -6,7 +6,13 @@ Course.topic('al-matrices', function (p) {
     'transformaciones geométricas, para el buscador de Google y para casi toda la inteligencia artificial.');
 
   p.formula('A = \\begin{pmatrix} 2 & -1 & 0 \\\\ 3 & 5 & 4 \\end{pmatrix}',
-    'matriz de dimensión 2×3 (filas × columnas)');
+    'matriz de dimensión 2×3 (filas × columnas)',
+    'Se lee <strong>«a es la matriz dos por tres»</strong>, y ese orden importa: <em>primero las ' +
+      'filas y después las columnas</em>, siempre. Una matriz «tres por dos» sería otra ' +
+      'cosa.<br><br>Los paréntesis grandes que la envuelven no son una multiplicación: solo indican ' +
+      'que todo eso es un único objeto. Algunos libros usan corchetes, y significa lo ' +
+      'mismo.<br><br>Para nombrar una casilla se usan dos subíndices con el mismo convenio: $a_{23}$ ' +
+      'se dice «a sub dos tres» y es el elemento de la <strong>fila 2, columna 3</strong>.');
 
   p.text('Se nombra $a_{ij}$ al elemento de la fila $i$ y la columna $j$. Siempre en ese orden: ' +
     'primero fila, después columna.');
@@ -216,7 +222,12 @@ Course.topic('al-matrices', function (p) {
 
   p.text('Y no todas las matrices tienen inversa. La condición es exactamente esta:');
 
-  p.formula('\\exists A^{-1} \\iff \\det A \\ne 0', 'matriz regular (o inversible)');
+  p.formula('\\exists A^{-1} \\iff \\det A \\ne 0', 'matriz regular (o inversible)',
+    'El símbolo $\\exists$ es una E del revés y se lee <strong>«existe»</strong>; $A^{-1}$ se dice ' +
+      '«a inversa» —no «a elevado a menos uno»— y $\\det A$ es «determinante de a».<br><br>Entera: ' +
+      '<em>«existe la matriz inversa de a si y solo si el determinante de a es distinto de ' +
+      'cero»</em>.<br><br>Y lo que significa: el determinante es el examen que decide si la ' +
+      'transformación se puede deshacer. Si vale cero, aplastó el espacio y no hay vuelta atrás.');
 
   p.text('Tiene todo el sentido con la interpretación del área: si el determinante es cero, la ' +
     'transformación aplasta el plano sobre una recta, y una vez aplastado no hay forma de volver atrás.');

@@ -186,7 +186,14 @@ Course.topic('ar-divisibilidad', function (p) {
     '72 = 2^3\\cdot 3^2 \\qquad 120 = 2^3\\cdot 3\\cdot 5',
     '\\operatorname{mcd}(72,120) = 2^3\\cdot 3 = 24',
     '\\operatorname{mcm}(72,120) = 2^3\\cdot 3^2\\cdot 5 = 360'
-  ]);
+  ], 'descomposición en factores primos',
+    'Se lee: <em>«setenta y dos es igual a dos al cubo por tres al cuadrado; ciento veinte es igual ' +
+      'a dos al cubo por tres por cinco»</em>.<br><br>Escribir un número así se llama ' +
+      '<strong>descomponerlo en factores primos</strong>, y tiene una propiedad notable: solo hay una ' +
+      'manera de hacerlo. Da igual por dónde empieces a dividir, siempre acabas con los mismos primos ' +
+      'y los mismos exponentes.<br><br>Con las descomposiciones a la vista, el máximo común divisor y ' +
+      'el mínimo común múltiplo salen de mirar: los factores comunes con el exponente más pequeño para ' +
+      'el uno, y todos con el más grande para el otro.');
 
   p.note('Truco de comprobación: siempre se cumple $\\operatorname{mcd}(a,b)\\cdot\\operatorname{mcm}(a,b) = a\\cdot b$. ' +
     'Con el ejemplo: $24\\cdot 360 = 8640 = 72\\cdot 120$.', 'ok');

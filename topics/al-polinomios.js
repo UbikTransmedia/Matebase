@@ -74,7 +74,12 @@ Course.topic('al-polinomios', function (p) {
   p.text('Funciona igual que la división entera de toda la vida, y cumple exactamente la misma ' +
     'relación fundamental:');
 
-  p.formula('P(x) = Q(x)\\cdot C(x) + R(x), \\qquad \\operatorname{gr}(R) < \\operatorname{gr}(Q)');
+  p.formula('P(x) = Q(x)\\cdot C(x) + R(x), \\qquad \\operatorname{gr}(R) < \\operatorname{gr}(Q)', 'la división de polinomios',
+    'Se lee: <em>«pe de equis es igual a cu de equis por ce de equis, más erre de equis»</em>, donde ' +
+      '$P$ es el dividendo, $Q$ el divisor, $C$ el cociente y $R$ el resto.<br><br>Y ' +
+      '$\\operatorname{grado}(R) < \\operatorname{grado}(Q)$ se dice <em>«el grado del resto es menor ' +
+      'que el grado del divisor»</em>. Esa condición es la que dice cuándo parar de dividir, ' +
+      'exactamente igual que con números: se para cuando el resto es más pequeño que el divisor.');
 
   p.text('Cuando el resto es cero se dice que la división es <strong>exacta</strong> y que $Q(x)$ es ' +
     'un <em>divisor</em> de $P(x)$. Eso es lo que buscamos al factorizar.');

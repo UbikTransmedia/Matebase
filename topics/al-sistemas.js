@@ -4,7 +4,12 @@ Course.topic('al-sistemas', function (p) {
   p.text('Un <strong>sistema</strong> es un conjunto de ecuaciones que tienen que cumplirse ' +
     '<em>a la vez</em>. Con dos incógnitas hace falta, en general, dos condiciones.');
 
-  p.formula('\\begin{cases} 2x + y = 7 \\\\ x - y = 2 \\end{cases}');
+  p.formula('\\begin{cases} 2x + y = 7 \\\\ x - y = 2 \\end{cases}', 'un sistema de dos ecuaciones',
+    'La llave grande que abraza las dos líneas se lee <strong>«sistema»</strong>, y significa que ' +
+      'las dos ecuaciones tienen que cumplirse <em>a la vez</em>, no una u otra.<br><br>Se dice: ' +
+      '<em>«sistema: dos equis más i griega igual a siete; equis menos i griega igual a ' +
+      'dos»</em>.<br><br>Ese matiz de «a la vez» es todo el tema: una sola ecuación con dos incógnitas ' +
+      'tiene infinitas soluciones, y lo que las reduce a una es tener que satisfacer las dos.');
 
   p.text('Cada ecuación de primer grado con dos incógnitas representa una <strong>recta</strong>: ' +
     'infinitos pares $(x,y)$ la cumplen. Resolver el sistema es encontrar el punto (o los puntos) que ' +

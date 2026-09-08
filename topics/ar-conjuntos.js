@@ -123,7 +123,14 @@ Course.topic('ar-conjuntos', function (p) {
   p.formulas([
     '|x| < r \\iff -r < x < r \\iff x \\in (-r, r)',
     '|x - c| < r \\iff x \\in (c-r,\\ c+r)'
-  ]);
+  ], 'desigualdad con valor absoluto',
+    'Las barras $|x|$ se leen <strong>«valor absoluto de equis»</strong>, y el símbolo $\\iff$ se ' +
+      'lee <strong>«si y solo si»</strong>: significa que las tres afirmaciones son la misma cosa ' +
+      'dicha de tres maneras.<br><br>Entera: <em>«valor absoluto de equis menor que erre, si y solo si ' +
+      'menos erre menor que equis menor que erre, si y solo si equis pertenece al intervalo abierto de ' +
+      'menos erre a erre»</em>.<br><br>En cristiano, y es la lectura que conviene guardar: <em>«equis ' +
+      'está a menos de erre de distancia del cero»</em>. El valor absoluto mide distancia, así que esa ' +
+      'desigualdad describe un entorno alrededor del origen.');
 
   p.text('En palabras: «$|x-c| < r$» significa «$x$ está a menos de $r$ de distancia de $c$».');
 
