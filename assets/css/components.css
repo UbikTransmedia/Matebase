@@ -119,7 +119,7 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
   border:1px solid var(--line); border-radius:var(--radius); background:var(--panel);
   margin:22px 0; box-shadow:var(--shadow); overflow:hidden;
 }
-.card__head{display:flex; align-items:center; gap:10px; padding:11px 16px;
+.card__head{display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:11px 16px;
   border-bottom:1px solid var(--line-soft)}
 .card__kind{font-size:10.5px; font-weight:730; text-transform:uppercase; letter-spacing:.09em;
   padding:3px 8px; border-radius:6px; white-space:nowrap}
@@ -240,3 +240,16 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
 .creditos p:last-child{margin-bottom:0}
 .creditos a{color:var(--accent); font-weight:600}
 .creditos strong{color:var(--ink-soft)}
+
+/* --- matemáticas dentro del texto, en pantalla estrecha ---
+   Una fórmula larga escrita en línea (dentro de un párrafo, una lista o un
+   aviso) no tiene dónde romper y en un móvil se sale de la pantalla: llegó a
+   medirse un desbordamiento de 185 px, es decir, texto sencillamente
+   ilegible. Se le da su propio desplazamiento lateral, con hueco arriba y
+   abajo para que el scroll horizontal no arrastre una barra vertical. */
+@media (max-width:560px){
+  .prose .mx, .note .mx, .keys .mx, li .mx, td .mx, th .mx{
+    display:inline-block; max-width:100%; overflow-x:auto;
+    padding:7px 0; vertical-align:middle;
+  }
+}
