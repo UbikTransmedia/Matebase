@@ -97,18 +97,22 @@ Course.topic('av-computabilidad', function (p) {
           'de qué es sumar. La suma <em>emerge</em> de mover el cabezal y cambiar símbolos.</span>');
         plot.render();
       }
-      W.chips(host, [
-        { label: '1011 (11)', value: '1011' },
-        { label: '0111 (7)', value: '0111' },
-        { label: '1111 (15)', value: '1111' }
-      ], { value: '1011', on: function (v) { inicial = v; paso = 0; paint(); } });
+      // El ejercicio de mas abajo pide contar pasos para cualquier numero
+      // entre 3 y 30: la demostracion tiene que dejar probarlos todos, o el
+      // alumno no tiene con que comprobarse.
+      W.slider(W.row(host), {
+        label: 'número de entrada', min: 3, max: 30, step: 1, value: 11, dec: 0,
+        on: function (v) { inicial = v.toString(2); paso = 0; paint(); }
+      });
       W.buttons(host, [
         { t: 'Siguiente paso →', cls: 'btn--main', on: function () { paso++; paint(); } },
         { t: 'Hasta el final', on: function () { paso = 20; paint(); } },
         { t: '↺ Reiniciar', on: function () { paso = 0; paint(); } }
       ]);
       W.hint(host, 'El estado q0 recorre el número hasta el final. El q1 vuelve sumando 1 y ' +
-        'arrastrando el acarreo. Con 0111 verás propagarse el acarreo tres casillas.');
+        'arrastrando el acarreo. Prueba con el 7 (111 en binario) y verás propagarse el acarreo tres ' +
+        'casillas seguidas; con el 8 (1000) el acarreo se para en la primera. El contador de pasos de ' +
+        'arriba es el mismo que te pide el ejercicio.');
       paint();
     }
   });
@@ -261,7 +265,14 @@ Course.topic('av-computabilidad', function (p) {
     'como enunciados sobre demostraciones. Con esa herramienta construyó una fórmula que dice, en ' +
     'esencia:');
 
-  p.formula('G \\equiv \\text{«esta afirmación no tiene demostración»}', 'la sentencia de Gödel');
+  p.formula('G \\equiv \\text{«esta afirmación no tiene demostración»}', 'la sentencia de Gödel',
+    'Se dice: <em>«ge es, por definición, la afirmación esta afirmación no tiene ' +
+      'demostración»</em>.<br><br>El símbolo $\\equiv$ —tres rayas en vez de dos— significa aquí ' +
+      '«es, por definición»: no se está calculando nada, se le está poniendo nombre a un ' +
+      'enunciado.<br><br>Lo difícil de creer no es la frase, que suena a juego de palabras, sino que ' +
+      'Gödel consiguiera <strong>escribirla en el lenguaje de la aritmética</strong>, hablando solo ' +
+      'de números. Ese fue el trabajo: la numeración de Gödel convierte «tener demostración» en una ' +
+      'propiedad aritmética de un número.');
 
   p.text('Si $G$ fuera demostrable, sería falsa —porque afirma que no lo es— y el sistema estaría ' +
     'demostrando falsedades. Si el sistema es consistente, $G$ no es demostrable; y entonces lo que ' +

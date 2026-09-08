@@ -58,7 +58,13 @@ Course.topic('fn-finanzas', function (p) {
     'La <strong>TAE</strong> (tasa anual equivalente) es lo que realmente cuesta el dinero en un año, incluyendo la frecuencia de cobro y las comisiones obligatorias. Es la que hay que mirar.'
   ]);
 
-  p.formula('\\text{TAE} = \\left(1 + \\frac{\\text{TIN}}{m}\\right)^{m} - 1', 'con m pagos al año');
+  p.formula('\\text{TAE} = \\left(1 + \\frac{\\text{TIN}}{m}\\right)^{m} - 1', 'con m pagos al año',
+    'Se dice: <em>«la tae es igual a, abro paréntesis, uno más tin partido por eme, cierro ' +
+      'paréntesis, elevado a eme, menos uno»</em>.<br><br>$m$ es el número de veces al año que se ' +
+      'liquidan los intereses: 12 si es mensual, 4 si es trimestral, 2 si es ' +
+      'semestral.<br><br>Fíjate en la lógica: $\\text{TIN}/m$ es lo que se aplica en cada periodo, ' +
+      'y elevar a $m$ es encadenar los $m$ periodos del año. El $-1$ del final quita el capital ' +
+      'inicial para quedarse solo con lo que ha crecido.');
 
   p.note('La ley obliga a publicar la TAE precisamente porque el TIN se presta a engaño. Cuando dos ' +
     'ofertas tienen el mismo TIN y distinta TAE, la diferencia está en las comisiones o en la ' +

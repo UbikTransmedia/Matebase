@@ -161,7 +161,12 @@ Course.topic('fn-series', function (p) {
   p.section('La serie armónica: el contraejemplo que lo cambia todo');
 
   p.formula('\\sum_{n=1}^{\\infty} \\frac{1}{n} = 1 + \\frac{1}{2} + \\frac{1}{3} + \\frac{1}{4} + \\dots',
-    'la serie armónica');
+    'la serie armónica',
+    'Se dice: <em>«el sumatorio, desde ene igual a uno hasta infinito, de uno partido por ene»</em>, ' +
+      'y el lado derecho es esa misma suma escrita término a término.<br><br>El $\\infty$ encima ' +
+      'del sumatorio no significa que se llegue a sumar infinitas cosas: significa que la lista de ' +
+      'sumandos no se acaba nunca, y que lo que preguntamos es a dónde van las sumas parciales. Los ' +
+      'puntos suspensivos del final dicen «y así indefinidamente», no «y luego se para».');
 
   p.text('Se llama armónica porque cada término es la longitud de la cuerda que produce el armónico ' +
     'correspondiente en un instrumento. Sus términos tienden a cero, y bastante deprisa a ojo: el ' +
@@ -535,8 +540,12 @@ Course.topic('fn-series', function (p) {
     sol: function (d) { return { N: d.N }; },
     tol: 1e-9,
     hint: function (d) {
-      return 'Resuelve $\\dfrac{r^N}{1-r} < 10^{-' + d.cifras + '}$ tomando logaritmos, y redondea ' +
-        'hacia arriba: los términos son números enteros.';
+      return 'Despeja $r^N < 10^{-' + d.cifras + '}(1-r)$ y toma logaritmos en los dos lados. ' +
+        '<strong>Cuidado con un detalle</strong>: como $r < 1$, su logaritmo es <em>negativo</em>, y ' +
+        'al dividir entre un número negativo <strong>la desigualdad se da la vuelta</strong> y el ' +
+        '$<$ se convierte en $>$. Después redondea hacia arriba, porque los términos se cuentan de ' +
+        'uno en uno. Si prefieres no pelearte con eso, también vale ir probando valores de $N$: la ' +
+        'cota baja tan deprisa que enseguida das con el bueno.';
     },
     steps: function (d) {
       return ['La cola desde el término $N$ en adelante vuelve a ser geométrica, de primer término ' +

@@ -233,7 +233,14 @@ Course.topic('av-reales', function (p) {
     '\\inf\\,[0,1] = 0 \\quad (\\text{y es mínimo})',
     '\\inf\\,(0,1] = 0 \\quad (\\text{y no es mínimo})',
     '\\inf\\left\\{\\tfrac{1}{n} : n \\in \\mathbb{N}\\right\\} = 0'
-  ], 'ínfimos');
+  ], 'ínfimos',
+    'Se dicen: <em>«ínfimo del intervalo cerrado cero uno», «ínfimo del intervalo abierto por la ' +
+      'izquierda cero uno», «ínfimo del conjunto de los uno partido por ene, con ene perteneciente a ' +
+      'los naturales»</em>.<br><br>$\\inf$ se escribe así, sin punto y en letra recta, igual que ' +
+      '$\\sup$, $\\lim$ o $\\max$: son abreviaturas de palabras, no variables.<br><br>Fíjate en ' +
+      'la diferencia entre el corchete $[$ y el paréntesis $($: el corchete <em>incluye</em> el ' +
+      'extremo y el paréntesis lo deja fuera. De ahí que el primero tenga mínimo y el segundo no, ' +
+      'aunque los dos tengan el mismo ínfimo.');
 
   p.text('El tercero es interesante: el conjunto $\\{1, \\frac12, \\frac13, \\frac14, \\dots\\}$ tiene ' +
     'ínfimo 0, y el 0 no está en el conjunto. Ningún elemento es el más pequeño, pero el borde ' +

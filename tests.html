@@ -49,7 +49,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   (function () {
     var t = '?t=' + Date.now();
     ['core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
-     'core/exercise', 'core/page', 'curriculum'].forEach(function (f) {
+     'core/exercise', 'core/page', 'curriculum', 'glosario'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
   })();
@@ -195,6 +195,32 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     MathX.render('\\left(x+1\\right)').indexOf('scaleY(1.2)') >= 0);
   truthy('$...$ en línea', MathX.inline('vale $x^2$ aquí').indexOf('mx-var') >= 0);
   truthy('texto sin $ se deja intacto', MathX.inline('nada de mates') === 'nada de mates');
+
+  /* ---------------- glosario ---------------- */
+  /* Estuvo vacio por una coma que faltaba y nadie se entero, porque estas
+     pruebas no lo cargaban. Ahora se mira. */
+  group('glosario');
+  truthy('el glosario se carga', !!window.GLOSARIO && GLOSARIO.length > 0);
+  if (window.GLOSARIO) {
+    var glosOk = true, glosSinDef = 0, glosSinTema = 0, glosVistos = {}, glosRepes = [];
+    GLOSARIO.forEach(function (e) {
+      if (!e.t || typeof e.t !== 'string') glosOk = false;
+      if (!e.d || e.d.length < 40) glosSinDef++;
+      if (!e.i) glosSinTema++;
+      var k = e.t.toLowerCase();
+      if (glosVistos[k]) glosRepes.push(e.t); else glosVistos[k] = 1;
+    });
+    truthy('todas las entradas tienen término', glosOk);
+    eq('entradas sin definición seria', glosSinDef, 0);
+    truthy('no hay términos repetidos', glosRepes.length === 0);
+    /* Cada entrada dice en qué tema se explica: ese tema tiene que existir. */
+    var glosIds = {};
+    CURRICULUM.forEach(function (b2) { b2.temas.forEach(function (t) { glosIds[t.id] = 1; }); });
+    var glosHuerfanas = [];
+    GLOSARIO.forEach(function (e) { if (e.i && !glosIds[e.i]) glosHuerfanas.push(e.t + ' → ' + e.i); });
+    if (glosHuerfanas.length) ko('cada entrada apunta a un tema real', glosHuerfanas.join(', '), 'temas del temario');
+    else ok('cada entrada apunta a un tema real (' + GLOSARIO.length + ' entradas)');
+  }
 
   /* ---------------- contraste de la paleta ---------------- */
   /* Un curso no se lee con el color que uno elige, sino con el que puede

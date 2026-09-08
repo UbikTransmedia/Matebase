@@ -239,7 +239,16 @@ Course.topic('pe-continuas', function (p) {
   p.formulas([
     '\\mu = E[X] = \\int_{-\\infty}^{\\infty} x\\,f(x)\\,dx',
     '\\sigma^2 = \\int_{-\\infty}^{\\infty} (x-\\mu)^2 f(x)\\,dx = E[X^2] - \\mu^2'
-  ], 'esperanza y varianza');
+  ], 'esperanza y varianza',
+    'Se dicen: <em>«mu es la esperanza de equis mayúscula, igual a la integral entre menos infinito ' +
+      'e infinito de equis por efe de equis, diferencial de equis»</em> y <em>«sigma al cuadrado es ' +
+      'la integral de equis menos mu, al cuadrado, por efe de equis»</em>.<br><br>La notación ' +
+      '$E[X]$, con <strong>corchetes</strong>, se lee «esperanza de equis» o «valor esperado de ' +
+      'equis». Los corchetes no son un paréntesis cualquiera: señalan que $E$ no es una función que ' +
+      'coma números, sino una operación que se aplica a una <em>variable aleatoria</em> ' +
+      'entera.<br><br>$\\mu$ es la letra griega mu y $\\sigma$ es sigma minúscula, las mismas que ' +
+      'ya usabas para la media y la desviación típica. Aquí significan exactamente lo mismo: solo ' +
+      'cambia la manera de calcularlas.');
 
   p.util('La esperanza de una variable continua es el <strong>centro de gravedad</strong> de la ' +
     'curva, en el sentido literal de la física: si recortases la región bajo la densidad en cartón, ' +

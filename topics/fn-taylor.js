@@ -49,8 +49,45 @@ Course.topic('fn-taylor', function (p) {
       '$f$ al cubo. Para las primeras se siguen usando las comillas, $f\'$ y $f\'\'$, porque tres ' +
       'comillas ya empiezan a no verse.');
 
-  p.text('Resolver esas condiciones es un ejercicio de paciencia que sale solo, y el resultado es una ' +
-    'de las fórmulas más útiles de las matemáticas:');
+  p.sub('Hagámoslo con el grado 2');
+
+  p.text('Antes de escribir la fórmula general conviene sacarla una vez a mano, porque así se ve de ' +
+    'dónde sale cada trozo —y de dónde sale, sobre todo, ese factorial que parece caído del cielo—. ' +
+    'Tomemos $a=0$ para no arrastrar paréntesis y busquemos un polinomio de grado 2:');
+
+  p.formula('P(x) = c_0 + c_1 x + c_2 x^2', 'tres coeficientes por determinar');
+
+  p.text('Tenemos tres incógnitas y vamos a imponer tres condiciones. La primera es que $P$ y $f$ ' +
+    'valgan lo mismo en $0$. Sustituyendo $x=0$ en $P$ desaparece todo menos el primer término:');
+
+  p.formulas([
+    'P(0) = c_0 \\quad\\Longrightarrow\\quad c_0 = f(0)'
+  ], 'primera condición');
+
+  p.text('La segunda es que tengan la misma pendiente. Derivamos $P$ una vez y volvemos a sustituir ' +
+    '$x=0$; ahora desaparece el término cuadrático y sobrevive el coeficiente $c_1$:');
+
+  p.formulas([
+    'P\'(x) = c_1 + 2c_2 x',
+    'P\'(0) = c_1 \\quad\\Longrightarrow\\quad c_1 = f\'(0)'
+  ], 'segunda condición');
+
+  p.text('Y la tercera es que se curven igual. Derivamos otra vez. Aquí está la sorpresa: al derivar ' +
+    'dos veces $c_2x^2$ <strong>aparece un 2 multiplicando</strong>, y ese 2 hay que quitarlo:');
+
+  p.formulas([
+    'P\'\'(x) = 2c_2',
+    'P\'\'(0) = 2c_2 \\quad\\Longrightarrow\\quad c_2 = \\frac{f\'\'(0)}{2}'
+  ], 'tercera condición');
+
+  p.note('Ese 2 del denominador no es un capricho: es <strong>el número que aparece al derivar dos ' +
+    'veces una potencia</strong>. Si siguiéramos con el término $c_3x^3$, derivando tres veces ' +
+    'saldría $3\\cdot2\\cdot1 = 6$; con $c_4x^4$ saldría $4\\cdot3\\cdot2\\cdot1 = 24$. Ese producto ' +
+    'es exactamente el factorial, y por eso la fórmula general lleva un $n!$ debajo: está ' +
+    'deshaciendo lo que la derivada acaba de multiplicar.', 'ok', 'De dónde sale el factorial');
+
+  p.text('Repitiendo el mismo razonamiento para cada grado —derivar $k$ veces, sustituir en $a$, ' +
+    'despejar— sale la fórmula general, que ya no debería sorprender:');
 
   p.formula('P_n(x) = f(a) + f\'(a)(x-a) + \\frac{f\'\'(a)}{2!}(x-a)^2 + \\dots + \\frac{f^{(n)}(a)}{n!}(x-a)^n',
     'polinomio de Taylor de orden n en el punto a',

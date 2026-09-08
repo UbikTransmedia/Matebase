@@ -197,9 +197,11 @@ Course.topic('av-noeuclidea', function (p) {
           // ecuador visto en escorzo
           g.param(function (t) { return Math.cos(t); }, function (t) { return 0.28 * Math.sin(t); },
             0, 6.2832, { color: 'axis', w: 1.2, dash: true });
-          var f = lat * Math.PI / 180;
-          // triangulo: polo norte y dos puntos del ecuador separados 90 grados aparentes
-          var ang1 = -0.9, ang2 = 0.9;
+          // El angulo del polo ES la diferencia de longitud entre los dos
+          // meridianos: si el deslizador dice 170 grados, hay que separarlos
+          // 170 grados. Antes estaban fijos y el dibujo no obedecia al mando.
+          var mitad = lat * Math.PI / 360;
+          var ang1 = -mitad, ang2 = mitad;
           function pto(a, b) {   // longitud a, latitud b -> proyeccion
             return [Math.cos(b) * Math.sin(a), Math.sin(b) * 0.98 - Math.cos(b) * Math.cos(a) * 0.28];
           }
@@ -214,7 +216,7 @@ Course.topic('av-noeuclidea', function (p) {
           g.path(meridiano(ang1), { color: 0, w: 2.6 });
           g.path(meridiano(ang2), { color: 0, w: 2.6 });
           var arco = [];
-          for (var a = ang1; a <= ang2; a += 0.03) arco.push(pto(a, 0));
+          for (var a = ang1; a <= ang2 + 1e-9; a += (ang2 - ang1) / 90) arco.push(pto(a, 0));
           g.path(arco, { color: 0, w: 2.6 });
           g.point(N[0], N[1], { color: 1, r: 5 });
           g.point(A[0], A[1], { color: 1, r: 5 });
@@ -240,7 +242,8 @@ Course.topic('av-noeuclidea', function (p) {
         on: function (v) { lat = v; paint(); }
       });
       W.hint(host, 'Los dos ángulos del ecuador son rectos siempre, porque los meridianos cortan al ' +
-        'ecuador perpendicularmente. Así que la suma ya empieza en 180° antes de contar el tercero.');
+        'ecuador perpendicularmente. Así que la suma ya empieza en 180° antes de contar el tercero, y ' +
+        'el tercero es el que abres tú con el deslizador: fíjate en cómo se separan los meridianos.');
       paint();
     }
   });
