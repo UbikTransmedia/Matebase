@@ -206,13 +206,28 @@ Course.topic('av-topologia', function (p) {
     title: 'Característica de Euler',
     level: 'basico',
     gen: function (r) {
+      // Con solo cuerpos convexos la respuesta seria SIEMPRE 2 y el ejercicio
+      // no ensenaria nada tras el primer intento. Se mezclan cuerpos con
+      // agujeros, que es justamente lo que el tema quiere que se descubra.
       var solidos = [
-        { n: 'tetraedro', C: 4, V: 4, A: 6 }, { n: 'cubo', C: 6, V: 8, A: 12 },
-        { n: 'octaedro', C: 8, V: 6, A: 12 }, { n: 'dodecaedro', C: 12, V: 20, A: 30 },
-        { n: 'icosaedro', C: 20, V: 12, A: 30 }, { n: 'prisma hexagonal', C: 8, V: 12, A: 18 },
-        { n: 'pirámide cuadrangular', C: 5, V: 5, A: 8 }, { n: 'balón de fútbol', C: 32, V: 60, A: 90 }
+        { n: 'tetraedro', C: 4, V: 4, A: 6, g: 0 },
+        { n: 'cubo', C: 6, V: 8, A: 12, g: 0 },
+        { n: 'octaedro', C: 8, V: 6, A: 12, g: 0 },
+        { n: 'dodecaedro', C: 12, V: 20, A: 30, g: 0 },
+        { n: 'icosaedro', C: 20, V: 12, A: 30, g: 0 },
+        { n: 'prisma hexagonal', C: 8, V: 12, A: 18, g: 0 },
+        { n: 'pirámide cuadrangular', C: 5, V: 5, A: 8, g: 0 },
+        { n: 'balón de fútbol', C: 32, V: 60, A: 90, g: 0 },
+        { n: 'marco de cuadro, con su hueco central', C: 16, V: 16, A: 32, g: 1 },
+        { n: 'prisma hexagonal con un agujero hexagonal de lado a lado', C: 24, V: 24, A: 48, g: 1 }
       ];
-      var s = r.pick(solidos);
+      // se sortea antes si toca un cuerpo con agujero o sin el, para que las
+      // dos respuestas salgan por igual y no se pueda contestar 2 a ciegas
+      var conAgujero = r.bool(0.5);
+      var elegibles = solidos.filter(function (x) {
+        return conAgujero ? x.g > 0 : x.g === 0;
+      });
+      var s = r.pick(elegibles);
       return { s: s, chi: s.C - s.A + s.V };
     },
     ask: function (d) {
@@ -221,11 +236,17 @@ Course.topic('av-topologia', function (p) {
     },
     fields: [{ name: 'v', label: 'χ', w: 'tiny' }],
     sol: function (d) { return { v: d.chi }; },
-    hint: function () { return 'Caras menos aristas más vértices. Para cualquier cuerpo inflable a esfera sale siempre lo mismo.'; },
+    hint: function () {
+      return 'Caras menos aristas más vértices, sin más. Cuidado con dar por hecho el resultado: ' +
+        'solo vale 2 si el cuerpo se puede inflar hasta ser una esfera, y aquí no todos pueden.';
+    },
     steps: function (d) {
       return ['$\\chi = C - A + V = ' + d.s.C + ' - ' + d.s.A + ' + ' + d.s.V + ' = ' + d.chi + '$',
-        'Sale $2$, como en cualquier poliedro convexo: todos son topológicamente esferas.',
-        'Y por $\\chi = 2 - 2g$, el género es $0$: ningún agujero.'];
+        d.s.g === 0
+          ? 'Sale $2$, como en cualquier cuerpo sin agujeros: todos son topológicamente una esfera.'
+          : 'Sale $0$, no $2$. Y no es un error de cuentas: este cuerpo <strong>tiene un agujero</strong>, así que no se puede deformar hasta convertirlo en una esfera.',
+        'Por $\\chi = 2 - 2g$, el género es $' + d.s.g + '$: ' +
+          (d.s.g === 0 ? 'ningún agujero.' : d.s.g + ' agujero. La característica de Euler lo ha detectado sin mirar la forma, solo contando piezas.')];
     },
     answer: function (d) { return String(d.chi); }
   });

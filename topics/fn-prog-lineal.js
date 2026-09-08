@@ -214,7 +214,18 @@ Course.topic('fn-prog-lineal', function (p) {
     gen: function (r) {
       var p1 = r.int(1, 4), q1 = r.int(1, 4), r1 = r.int(10, 30);
       var p2 = r.int(1, 4), q2 = r.int(1, 4), r2 = r.int(10, 30);
-      var x = r.int(0, 10), y = r.int(0, 10);
+      // Con el punto al azar quedaba fuera el 75% de las veces. La mitad de
+      // las veces se elige dentro de la region, para que no valga responder
+      // «no» sin mirar.
+      var x, y;
+      if (r.bool(0.5)) {
+        var tope = Math.min(r1 / p1, r2 / p2);
+        x = r.int(0, Math.max(0, Math.floor(tope)));
+        var libre = Math.min((r1 - p1 * x) / q1, (r2 - p2 * x) / q2);
+        y = r.int(0, Math.max(0, Math.floor(libre)));
+      } else {
+        x = r.int(0, 10); y = r.int(0, 10);
+      }
       var c1 = p1 * x + q1 * y <= r1;
       var c2 = p2 * x + q2 * y <= r2;
       return { p1: p1, q1: q1, r1: r1, p2: p2, q2: q2, r2: r2, x: x, y: y, ok: c1 && c2 };

@@ -289,6 +289,9 @@ Course.topic('av-infinito', function (p) {
       var n = r.int(1, 6);
       var cifras = [];
       for (var i = 0; i < 8; i++) cifras.push(r.int(0, 9));
+      // Con cifras al azar, la de la diagonal casi nunca era un 5 y la
+      // respuesta salia 5 el 90% de las veces. Se fuerza el empate.
+      if (r.bool(0.5)) cifras[n - 1] = 5;
       var c = cifras[n - 1];
       return { n: n, cifras: cifras, c: c, res: c === 5 ? 3 : 5 };
     },

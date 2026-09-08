@@ -302,8 +302,16 @@ Course.topic('pe-descriptiva', function (p) {
     title: 'Comparar dispersiones',
     level: 'avanzado',
     gen: function (r) {
+      // Los rangos fijos hacian que B saliera casi siempre mas disperso en
+      // terminos relativos, y el alumno podia acertar respondiendo B a ciegas.
+      // Ahora el nivel y la amplitud de cada grupo se sortean por separado.
       var a = [], b = [];
-      for (var i = 0; i < 6; i++) { a.push(r.int(40, 60)); b.push(r.int(2, 12)); }
+      var baseA = r.int(8, 60), ampA = r.int(2, 14);
+      var baseB = r.int(8, 60), ampB = r.int(2, 14);
+      for (var i = 0; i < 6; i++) {
+        a.push(Math.max(1, baseA + r.pm(0, ampA)));
+        b.push(Math.max(1, baseB + r.pm(0, ampB)));
+      }
       var cvA = ML.sd(a) / ML.mean(a), cvB = ML.sd(b) / ML.mean(b);
       if (Math.abs(cvA - cvB) < 0.02) return null;
       return { a: a, b: b, cvA: cvA, cvB: cvB, mayor: cvA > cvB ? 'A' : 'B' };

@@ -286,8 +286,14 @@ Course.topic('cib-autoorganizacion', function (p) {
     title: 'Aplica las reglas de la Vida',
     level: 'basico',
     gen: function (r) {
+      // Sorteando viva/muerta y vecinas al azar, el resultado salia «muerta»
+      // el 83% de las veces y bastaba responder eso siempre. Se sortea primero
+      // el desenlace y despues un caso que lo produzca.
+      var sobrevive = r.bool(0.5);
       var viva = r.bool(0.5);
-      var vecinas = r.int(0, 6);
+      var vecinas;
+      if (sobrevive) vecinas = viva ? r.pick([2, 3]) : 3;
+      else vecinas = viva ? r.pick([0, 1, 4, 5, 6]) : r.pick([0, 1, 2, 4, 5, 6]);
       return { viva: viva, vecinas: vecinas };
     },
     ask: function (d) {
