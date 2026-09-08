@@ -24,6 +24,44 @@ Course.topic('ge-cuerpos', function (p) {
     'la misma base y la misma altura. Pirámide y prisma, cono y cilindro. Ese $\\frac{1}{3}$ no es ' +
     'arbitrario: se demuestra, y Arquímedes ya lo sabía.', 'ok', 'El patrón del tercio');
 
+  p.sub('El principio de Cavalieri');
+
+  p.text('Antes de seguir conviene conocer una idea que hace fácil casi todo lo anterior, y que además ' +
+    'responde a una pregunta incómoda: ¿por qué un cono <em>inclinado</em> tiene el mismo volumen que ' +
+    'uno recto de la misma base y la misma altura, si tiene una forma completamente distinta?');
+
+  p.text('La respuesta es un principio que enunció el italiano Bonaventura Cavalieri hacia 1635, y que ' +
+    'se puede decir con una imagen: <strong>imagina los dos cuerpos cortados en lonchas ' +
+    'horizontales finísimas</strong>. Si a cada altura las dos lonchas tienen la misma área, los dos ' +
+    'cuerpos tienen el mismo volumen. No importa cómo estén colocadas esas lonchas.');
+
+  p.formula('\\text{misma área en cada corte} \\ \\Longrightarrow\\ \\text{mismo volumen}',
+    'el principio de Cavalieri',
+    'La flecha doble larga $\\Longrightarrow$ se lee «implica» o «entonces».<br><br>' +
+    'La imagen que hay que retener es la de una <strong>baraja de cartas</strong>: si la inclinas ' +
+    'empujándola de lado, cambia de forma por completo pero sigue teniendo exactamente las mismas ' +
+    'cartas, y por tanto el mismo volumen. Cada carta es una de esas lonchas.<br><br>' +
+    'Ojo a lo que el principio <em>no</em> dice: las lonchas tienen que tener la misma ' +
+    '<strong>área</strong>, no la misma forma. Una circular y una cuadrada de igual área valen lo mismo.');
+
+  p.text('Con esa idea, el famoso tercio deja de ser un dato que hay que creerse. Se demuestra que un ' +
+    'prisma triangular se puede partir en <strong>tres pirámides</strong> que, aunque parezcan ' +
+    'distintas, tienen a cada altura cortes de la misma área. Por Cavalieri, las tres tienen el mismo ' +
+    'volumen; y como entre las tres llenan el prisma, cada una vale un tercio.');
+
+  p.util('El principio se usa en cuanto hay que medir el volumen de algo irregular a partir de cortes, ' +
+    'y hoy eso significa <strong>escáneres médicos</strong>: un TAC o una resonancia producen un ' +
+    'montón de secciones transversales, y el volumen de un tumor o de un órgano se obtiene midiendo ' +
+    'el área de cada corte y sumando. Nadie calcula la fórmula de la forma; se cuenta loncha a ' +
+    'loncha. Es también como funciona el cálculo de volúmenes por integración que verás en el bloque 5.');
+
+  p.hist('Cavalieri era discípulo de Galileo y llamó a sus lonchas <em>indivisibles</em>. Su método ' +
+    'levantó una polémica considerable, porque trataba un volumen como una suma de infinitas ' +
+    'superficies sin grosor, y a muchos matemáticos de la época aquello les pareció sencillamente ' +
+    'ilegítimo. Tenían parte de razón: el razonamiento no estaba bien fundamentado y con él se podían ' +
+    'construir paradojas. Pero funcionaba, y funcionaba tan bien que abrió el camino al cálculo ' +
+    'integral, que llegó medio siglo después y le puso los cimientos que le faltaban.');
+
   p.demo({
     title: 'Tres conos llenan un cilindro',
     intro: 'Compara los volúmenes de un cilindro, un cono y una esfera con el mismo radio. Cambia las medidas y observa las proporciones.',
