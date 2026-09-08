@@ -43,25 +43,26 @@ El botón «Reiniciar» de abajo a la izquierda lo borra.
 | 2. Álgebra | 12 | del lenguaje algebraico a los complejos |
 | 3. Geometría | 10 | de los ángulos a la geometría del espacio |
 | 4. Trigonometría | 5 | del triángulo rectángulo a las ondas |
-| 5. Funciones y análisis | 12 | del concepto de función a la integral definida, con programación lineal |
-| 6. Probabilidad y estadística | 8 | de la media a la inferencia |
+| 5. Funciones y análisis | 15 | del concepto de función a la integral definida, con series, Taylor y matemática financiera |
+| 6. Probabilidad y estadística | 10 | de la media a la inferencia causal, pasando por las variables continuas |
 | 7. Álgebra lineal | 3 | espacios vectoriales, autovalores y cadenas de Markov |
 | 8. Ecuaciones diferenciales y ondas | 5 | EDO, sistemas dinámicos, caos, EDP y Fourier |
-| 9. Varias variables y geometría | 4 | cálculo vectorial, optimización, curvatura y topología |
-| 10. Estructuras, números e infinito | 3 | teoría de números y RSA, grupos, Cantor |
+| 9. Varias variables y geometría | 5 | cálculo vectorial, optimización, geometrías no euclídeas, curvatura y topología |
+| 10. Estructuras, números e infinito | 5 | teoría de números y RSA, grupos, la completitud de ℝ, Cantor, Turing y Gödel |
 | 11. Discreta y computacional | 4 | grafos, cálculo numérico, información, teoría de juegos |
 | 12. Cibernética | 9 | realimentación, caja negra, variedad requerida, PID, homeostasis, retardos, filtrado, autómatas, segundo orden |
 
-**88 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
-se haya explicado antes. Los bloques 7 a 11 recogen lo que queda más allá del
+**96 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
+se haya explicado antes, y cada tema avisa de cuáles necesita para que se pueda
+retroceder si falta alguna. Los bloques 7 a 11 recogen lo que queda más allá del
 Bachillerato, agrupado por disciplina y no en un cajón común. El **bloque 12,
 Cibernética**, cierra el curso a propósito: es el que reutiliza todo lo anterior a
 la vez —la derivada y la integral como anticipación y memoria de un controlador,
 la entropía como variedad, los autovalores como criterio de estabilidad— para
 responder a una sola pregunta: cómo se mantiene algo en su sitio en un mundo que
-lo empuja. En total, **158 ejemplos interactivos**, **334 ejercicios
-procedimentales** y **150 gráficas**, más **165 cuadros de utilidad**, **93 apuntes
-históricos** y un glosario de **145 términos**.
+lo empuja. En total, **178 ejemplos interactivos**, **362 ejercicios
+procedimentales** y **169 gráficas**, más **182 cuadros de utilidad**, **104 apuntes
+históricos** y un glosario de **198 términos**.
 
 El temario vive en `assets/js/curriculum.js`. Si en el futuro se añade un tema
 nuevo al índice sin su archivo, aparece marcado como «en preparación» con sus
@@ -122,12 +123,21 @@ Los detalles están en **`GUIA-AUTOR.md`**.
   suave—, con un botón para cada uno al pie del índice: el activo se distingue a
   simple vista, y la elección se recuerda entre sesiones.
 - Diseño adaptado a móvil, y botón de inicio junto al nombre, en la cabecera del índice.
-- `tests.html` comprueba el núcleo (112 verificaciones) y **audita los 334
+- **Accesible de verdad, no de boquilla**: acierto y fallo se distinguen por
+  forma además de por color; las 26 gráficas con puntos móviles se manejan
+  también con el teclado; los tamaños de letra están en `rem` y hay un control
+  propio de tamaño de lectura; los marcadores y veredictos se anuncian por
+  `aria-live`; hay enlace para saltarse el índice; se respeta
+  `prefers-reduced-motion`; y las 48 combinaciones de color de los tres temas
+  pasan el contraste AA, comprobado en cada ejecución de las pruebas.
+- `tests.html` comprueba el núcleo (147 verificaciones) y **audita los 362
   ejercicios**: genera cada uno 40 veces y verifica que la solución declarada
   pasa su propio corrector, que nada lanza excepciones, que no queda ninguna
   fórmula con comandos LaTeX inexistentes, que ninguna gráfica de escala 1:1
-  recorta su encuadre, que ninguna fórmula se sale de su caja y que todos los
-  temas del temario se construyen sin errores.
+  recorta su encuadre, que ninguna fórmula se sale de su caja, que ninguna
+  gráfica se queda sin nombre accesible ni fuera del alcance del teclado, que el
+  glosario carga y apunta a temas que existen, y que todos los temas del temario
+  se construyen sin errores.
 
 ---
 
