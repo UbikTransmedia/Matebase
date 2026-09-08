@@ -155,15 +155,30 @@
     this.paintScore();
   };
 
+  /* Cortesias de redaccion: el alumno escribe como habla, y no debe perder
+     un ejercicio por terminar la frase con un punto o por anteponer «es».
+     Se limpia aqui, una vez, para que ningun corrector tenga que ocuparse. */
+  function aseado(s) {
+    s = String(s == null ? '' : s).trim();
+    s = s.replace(/[.;,\s]+$/, '');                    // punto o coma al final
+    s = s.replace(/^(?:es|son|seria|serian|creo que)\s+/i, '');
+    s = s.replace(/^(?:el|la|los|las|un|una)\s+(?=\S)/i, '');
+    return s.trim();
+  }
+
   Card.prototype.values = function () {
     var v = { raw: {} };
     for (var k in this.inputs) {
-      var s = this.inputs[k].input.value.trim();
+      var bruto = this.inputs[k].input.value;
+      var s = aseado(bruto);
+      // si al asear se queda vacio, vale lo que escribio: no inventamos nada
+      if (s === '' && String(bruto).trim() !== '') s = String(bruto).trim();
       v.raw[k] = s;
       v[k] = s === '' ? NaN : ML.tryEval(s);
     }
     return v;
   };
+  Ex.aseado = aseado;
 
   Card.prototype.mark = function (name, ok) {
     var f = this.inputs[name];
