@@ -52,7 +52,12 @@ Course.topic('av-juegos', function (p) {
           for (var j = 0; j < 2; j++) {
             var on = (sel[0] === i && sel[1] === j);
             var esNash = (i === 1 && j === 1);
-            h += '<td data-i="' + i + '" data-j="' + j + '" style="' + mono +
+            // Las casillas se pulsan, asi que tienen que comportarse como
+            // botones tambien para quien navega con el teclado.
+            h += '<td data-i="' + i + '" data-j="' + j + '" role="button" tabindex="0"' +
+              ' aria-pressed="' + (on ? 'true' : 'false') + '"' +
+              ' aria-label="A ' + nombres[i] + ' y B ' + nombres[j] + '"' +
+              ' style="' + mono +
               (on ? ';background:var(--accent-soft);color:var(--accent-ink);font-weight:700' : '') +
               (esNash ? ';box-shadow:inset 0 0 0 2px var(--bad)' : '') + '">' +
               '(' + pagos[i][j][0] + ', ' + pagos[i][j][1] + ')</td>';
@@ -62,9 +67,15 @@ Course.topic('av-juegos', function (p) {
         h += '</tbody></table></div>';
         caja.innerHTML = h;
         U.$$('td[data-i]', caja).forEach(function (td) {
-          td.addEventListener('click', function () {
+          function elegir() {
             sel = [Number(td.getAttribute('data-i')), Number(td.getAttribute('data-j'))];
             pinta();
+            var mismo = U.$('td[data-i="' + sel[0] + '"][data-j="' + sel[1] + '"]', caja);
+            if (mismo) mismo.focus();
+          }
+          td.addEventListener('click', elegir);
+          td.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); elegir(); }
           });
         });
         var i0 = sel[0], j0 = sel[1];
