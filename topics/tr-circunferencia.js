@@ -131,7 +131,7 @@ Course.topic('tr-circunferencia', function (p) {
     },
     ask: function (d) {
       return 'Pasa $' + d.g + '^\\circ$ a radianes. ' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Puedes escribirlo con <code>pi</code>, ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Puedes escribirlo con <code>pi</code>, ' +
         'por ejemplo <code>3pi/4</code>.</span>';
     },
     fields: [{ name: 'v', label: 'Radianes', w: 'wide' }],

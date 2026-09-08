@@ -78,8 +78,8 @@ Course.topic('al-matrices', function (p) {
       }
       function tabla(M, nombre, resaltarFila, resaltarCol) {
         var h = '<div style="display:inline-block;margin:0 10px;text-align:center">' +
-          '<div style="font-family:var(--serif);font-style:italic;font-size:15px;margin-bottom:4px">' + nombre + '</div>' +
-          '<table style="border-collapse:collapse;font-family:var(--mono);font-size:15px">';
+          '<div style="font-family:var(--serif);font-style:italic;font-size:0.9375rem;margin-bottom:4px">' + nombre + '</div>' +
+          '<table style="border-collapse:collapse;font-family:var(--mono);font-size:0.9375rem">';
         for (var i = 0; i < 2; i++) {
           h += '<tr>';
           for (var j = 0; j < 2; j++) {
@@ -96,12 +96,12 @@ Course.topic('al-matrices', function (p) {
         var C = prod();
         var h = '<div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap">' +
           tabla(A, 'A', sel[0], null) +
-          '<span style="font-size:20px">·</span>' +
+          '<span style="font-size:1.25rem">·</span>' +
           tabla(B, 'B', null, sel[1]) +
-          '<span style="font-size:20px">=</span>' +
+          '<span style="font-size:1.25rem">=</span>' +
           '<div style="display:inline-block;margin:0 10px;text-align:center">' +
-          '<div style="font-family:var(--serif);font-style:italic;font-size:15px;margin-bottom:4px">A·B</div>' +
-          '<table style="border-collapse:collapse;font-family:var(--mono);font-size:15px">';
+          '<div style="font-family:var(--serif);font-style:italic;font-size:0.9375rem;margin-bottom:4px">A·B</div>' +
+          '<table style="border-collapse:collapse;font-family:var(--mono);font-size:0.9375rem">';
         for (var i = 0; i < 2; i++) {
           h += '<tr>';
           for (var j = 0; j < 2; j++) {
@@ -124,7 +124,7 @@ Course.topic('al-matrices', function (p) {
         out.set('$c_{' + (i0 + 1) + (j0 + 1) + '} = ' +
           A[i0][0] + '\\cdot' + (B[0][j0] < 0 ? '(' + B[0][j0] + ')' : B[0][j0]) + ' + ' +
           A[i0][1] + '\\cdot' + (B[1][j0] < 0 ? '(' + B[1][j0] + ')' : B[1][j0]) + ' = ' + C[i0][j0] + '$' +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Fila ' + (i0 + 1) + ' de A por columna ' +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Fila ' + (i0 + 1) + ' de A por columna ' +
           (j0 + 1) + ' de B.</span>');
       }
       W.buttons(host, [{

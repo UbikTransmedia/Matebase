@@ -158,7 +158,7 @@ Course.topic('tr-identidades', function (p) {
           out.set('$\\operatorname{sen} x = ' + U.fmt(k, 2) + '$<br>' +
             'Soluciones: $x = ' + U.fmt(base, 2) + '^\\circ + 360^\\circ k$ &nbsp;o&nbsp; ' +
             '$x = ' + U.fmt(180 - base, 2) + '^\\circ + 360^\\circ k$<br>' +
-            '<span style="font-size:12.5px;color:var(--ink-faint)">Dos por cada vuelta, infinitas en total.</span>');
+            '<span style="font-size:0.7812rem;color:var(--ink-faint)">Dos por cada vuelta, infinitas en total.</span>');
         }
         plot.render();
       }

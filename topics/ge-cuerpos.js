@@ -91,7 +91,7 @@ Course.topic('ge-cuerpos', function (p) {
           'Cilindro: $\\pi r^2 h = ' + U.fmt(vcil, 3) + '$ &nbsp;·&nbsp; ' +
           'Cono: $\\frac{1}{3}\\pi r^2 h = ' + U.fmt(vcil / 3, 3) + '$ &nbsp;·&nbsp; ' +
           'Esfera: $\\frac{4}{3}\\pi r^3 = ' + U.fmt(4 / 3 * Math.PI * rad * rad * rad, 3) + '$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">El cono es siempre exactamente un ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">El cono es siempre exactamente un ' +
           'tercio del cilindro que lo envuelve.' +
           (Math.abs(h - 2 * rad) < 0.01 ? ' Y con $h = 2r$, la esfera es dos tercios del cilindro: ' +
             'ese fue el resultado del que Arquímedes se sintió más orgulloso.' : '') + '</span>');
@@ -267,7 +267,7 @@ Course.topic('ge-cuerpos', function (p) {
     ask: function (d) {
       return 'Un depósito cilíndrico mide $' + d.rad + '$ cm de radio y $' + d.h + '$ cm de altura. ' +
         '¿Cuántos <strong>litros</strong> caben? (cuatro decimales)<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Recuerda: 1 litro = 1000 cm³.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Recuerda: 1 litro = 1000 cm³.</span>';
     },
     fields: [{ name: 'v', label: 'Litros', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.litros, 4) }; },

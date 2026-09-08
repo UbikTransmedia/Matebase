@@ -34,7 +34,7 @@ Course.topic('av-topologia', function (p) {
         out.set('Curva deformada con ' + lobulos + ' lóbulos y amplitud $' + U.fmt(def, 2) + '$.<br>' +
           '<strong>Topológicamente sigue siendo una circunferencia</strong>: una sola pieza, ' +
           'un solo «agujero» encerrado, sin cortes ni empalmes.<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Lo que ha cambiado (longitud, área, ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Lo que ha cambiado (longitud, área, ' +
           'curvatura) es justo lo que a la topología no le importa.</span>');
         plot.render();
       }
@@ -294,7 +294,7 @@ Course.topic('av-topologia', function (p) {
     },
     ask: function (d) {
       return '¿Son topológicamente equivalentes <strong>' + d.a + '</strong> y <strong>' + d.b +
-        '</strong>?<br><span style="font-size:14px;color:var(--ink-faint)">Escribe <code>si</code> ' +
+        '</strong>?<br><span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> ' +
         'o <code>no</code>.</span>';
     },
     fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],

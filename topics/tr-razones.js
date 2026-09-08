@@ -52,7 +52,7 @@ Course.topic('tr-razones', function (p) {
         out.set('$\\operatorname{sen} ' + U.fmt(ang, 0) + '^\\circ = ' + U.fmt(Math.sin(a), 4) + '$ &nbsp;·&nbsp; ' +
           '$\\cos ' + U.fmt(ang, 0) + '^\\circ = ' + U.fmt(Math.cos(a), 4) + '$ &nbsp;·&nbsp; ' +
           '$\\operatorname{tg} ' + U.fmt(ang, 0) + '^\\circ = ' + U.fmt(Math.tan(a), 4) + '$' +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Cambia el tamaño: los lados cambian, ' +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Cambia el tamaño: los lados cambian, ' +
           'estos tres números no.</span>');
         plot.render();
       }

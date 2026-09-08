@@ -164,7 +164,7 @@ Course.topic('fn-limites', function (p) {
       function paint() {
         plot.view(-zoom, zoom, -4, 4);
         out.set('$\\lim_{x\\to\\infty} ' + fns[cual].t + '$ &nbsp;→&nbsp; ' + fns[cual].lim +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Ventana actual: de $-' + zoom +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Ventana actual: de $-' + zoom +
           '$ a $' + zoom + '$.</span>');
       }
       W.chips(host, [
@@ -283,7 +283,7 @@ Course.topic('fn-limites', function (p) {
           : ML.termTex(d.a, 'x', 3, true) + '+2');
       var den = ML.termTex(d.b, 'x', 2, true) + '+x-4';
       return 'Calcula $\\displaystyle\\lim_{x\\to +\\infty} \\dfrac{' + num + '}{' + den + '}$' +
-        '<br><span style="font-size:14px;color:var(--ink-faint)">Si es infinito, escribe ' +
+        '<br><span style="font-size:0.875rem;color:var(--ink-faint)">Si es infinito, escribe ' +
         '<code>inf</code> o <code>-inf</code>.</span>';
     },
     fields: [{ name: 'v', label: 'Límite', w: 'tiny' }],

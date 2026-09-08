@@ -105,7 +105,7 @@ Course.topic('av-vectorial', function (p) {
       function paint() {
         puntos = [];
         out.set('$' + campos[tipo].t + '$<br>' + campos[tipo].txt +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Haz clic para colocar puntos y ver el gradiente.</span>');
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Haz clic para colocar puntos y ver el gradiente.</span>');
         plot.render();
       }
       W.chips(host, [
@@ -321,7 +321,7 @@ Course.topic('av-vectorial', function (p) {
     ask: function (d) {
       return 'Calcula la componente $z$ del rotacional del campo plano ' +
         '$\\vec{F} = \\left(' + ML.termTex(d.a, 'y', 1, true) + ',\\ ' + ML.termTex(d.b, 'x', 1, true) +
-        '\\right)$.<br><span style="font-size:14px;color:var(--ink-faint)">Recuerda: ' +
+        '\\right)$.<br><span style="font-size:0.875rem;color:var(--ink-faint)">Recuerda: ' +
         '$\\operatorname{rot}_z = \\frac{\\partial F_2}{\\partial x} - \\frac{\\partial F_1}{\\partial y}$.</span>';
     },
     fields: [{ name: 'v', label: 'Rotacional', w: 'tiny' }],

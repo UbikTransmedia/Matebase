@@ -309,6 +309,46 @@
     { id: 'monokai', nombre: 'Monokai', icono: '◐' }
   ];
 
+  /* Tamano de lectura. Todo el curso mide la letra en rem, asi que basta
+     con mover el tamano de la raiz para que crezca hasta la ultima etiqueta
+     de las graficas. Quien lee con esfuerzo no deberia tener que pelearse
+     con los ajustes del navegador para leer un libro de texto. */
+  var LETRAS = [
+    { id: 'n', nombre: 'Normal', px: 16, titulo: 'Tamaño de letra normal' },
+    { id: 'g', nombre: 'Grande', px: 18.5, titulo: 'Letra grande' },
+    { id: 'xg', nombre: 'Mayor', px: 21.5, titulo: 'Letra muy grande' }
+  ];
+
+  function buildLetraButtons() {
+    var caja = U.$('#letras');
+    if (!caja) return;
+    U.clear(caja);
+    LETRAS.forEach(function (t) {
+      caja.appendChild(U.el('button.themes__b', {
+        type: 'button', 'data-letra': t.id, title: t.titulo,
+        onclick: function () { setLetra(t.id); }
+      }, [
+        U.el('span.themes__i', { style: { fontSize: (0.72 + LETRAS.indexOf(t) * 0.17) + 'rem' } }, 'A'),
+        U.el('span', null, t.nombre)
+      ]));
+    });
+  }
+
+  function setLetra(id) {
+    var t = LETRAS[0];
+    for (var i = 0; i < LETRAS.length; i++) if (LETRAS[i].id === id) t = LETRAS[i];
+    document.documentElement.style.fontSize = t.px + 'px';
+    Progress.pref('letra', t.id);
+    U.$$('#letras .themes__b').forEach(function (b) {
+      var activo = b.getAttribute('data-letra') === t.id;
+      b.classList.toggle('is-on', activo);
+      b.setAttribute('aria-pressed', activo ? 'true' : 'false');
+    });
+    // Las graficas dibujan su texto en el canvas: hay que repintarlas.
+    U.bus.emit('letra', t.id);
+    if (window.W && W.redibuja) W.redibuja();
+  }
+
   /** Un boton por tema, para que se vean los tres y no haya que adivinarlos. */
   function buildThemeButtons() {
     var caja = U.$('#themes');
@@ -476,6 +516,8 @@
     // Por defecto, claro: es el tema en el que esta pensado el curso. Los otros
     // dos se eligen a mano, y la eleccion se recuerda.
     setTheme(Progress.pref('theme') || 'light');
+    buildLetraButtons();
+    setLetra(Progress.pref('letra') || 'n');
 
     var search = U.$('#search');
     search.addEventListener('input', function () {

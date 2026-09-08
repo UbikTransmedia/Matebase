@@ -169,7 +169,7 @@ Course.topic('av-espacios', function (p) {
         out.set('$A = ' + ML.matTex(M) + '$ &nbsp;·&nbsp; $\\det A = ' + U.fmt(det, 3) + '$<br>' +
           '$f(\\vec{e}_1) = (' + U.fmt(M[0][0], 2) + ', ' + U.fmt(M[1][0], 2) + ')$ — la <strong>primera columna</strong><br>' +
           '$f(\\vec{e}_2) = (' + U.fmt(M[0][1], 2) + ', ' + U.fmt(M[1][1], 2) + ')$ — la <strong>segunda columna</strong><br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           (Math.abs(det) < 1e-9
             ? '<strong style="color:var(--bad)">Determinante cero: el plano se aplasta sobre una recta.</strong> ' +
               'La aplicación pierde una dimensión, no tiene inversa y su núcleo no es solo el origen.'
@@ -249,7 +249,7 @@ Course.topic('av-espacios', function (p) {
     },
     ask: function (d) {
       return '¿Son linealmente independientes $\\vec{u} = (' + d.u + ')$ y $\\vec{v} = (' + d.v + ')$?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
     },
     fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
     sol: function (d) { return { r: d.indep ? 'si' : 'no' }; },

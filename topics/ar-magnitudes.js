@@ -66,7 +66,7 @@ Course.topic('ar-magnitudes', function (p) {
         var P = pares[idx];
         out.set('$' + U.fmt(val, 4) + '\\ \\text{' + P.de.replace('^2', '}^2\\text{').replace('^3', '}^3\\text{') + '} ' +
           P.cad + ' = ' + U.fmt(val * P.f, 6) + '\\ \\text{' + P.a.replace('^2', '}^2\\text{').replace('^3', '}^3\\text{') + '}$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">' + P.nota + '</span>');
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">' + P.nota + '</span>');
       }
       W.chips(host, pares.map(function (P, i) {
         return { label: P.de.replace('^2', '²').replace('^3', '³') + ' → ' + P.a.replace('^2', '²').replace('^3', '³'), value: i };
@@ -282,7 +282,7 @@ Course.topic('ar-magnitudes', function (p) {
     },
     ask: function (d) {
       return '¿Es dimensionalmente posible la fórmula $' + d.f + '$?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>. ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>. ' +
         'Recuerda: $[v] = L\\,T^{-1}$, $[a] = L\\,T^{-2}$, $[F] = M\\,L\\,T^{-2}$, $[E] = M\\,L^2\\,T^{-2}$.</span>';
     },
     fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],

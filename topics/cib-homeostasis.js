@@ -132,7 +132,7 @@ Course.topic('cib-homeostasis', function (p) {
           (dentro
             ? '<span style="color:var(--ok)">Las cuatro variables están dentro de sus límites: el sistema sobrevive con la configuración actual.</span>'
             : '<span style="color:var(--warn)">Alguna variable se ha salido: reconfigurando…</span>') +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Cada barajeo es un sorteo nuevo de los dieciséis coeficientes. La máquina no sabe cuál es bueno: prueba hasta que uno aguanta.</span>');
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Cada barajeo es un sorteo nuevo de los dieciséis coeficientes. La máquina no sabe cuál es bueno: prueba hasta que uno aguanta.</span>');
         plot.render();
       }
 

@@ -65,7 +65,7 @@ Course.topic('av-geodif', function (p) {
             '$y\' = ' + U.fmt(yp, 3) + '$, &nbsp; $y\'\' = ' + U.fmt(ypp, 3) + '$<br>' +
             '$\\kappa = \\dfrac{|' + U.fmt(ypp, 3) + '|}{(1 + ' + U.fmt(yp * yp, 3) + ')^{3/2}} = ' + U.fmt(kap, 5) + '$ ' +
             '&nbsp;·&nbsp; radio de curvatura $R = ' + (kap > 1e-6 ? U.fmt(1 / kap, 4) : '\\infty') + '$<br>' +
-            '<span style="font-size:12.5px;color:var(--ink-faint)">' +
+            '<span style="font-size:0.7812rem;color:var(--ink-faint)">' +
             (kap < 0.05 ? 'Aquí la curva es casi recta: el círculo osculador es gigantesco.'
               : 'Donde la curva se cierra más, el círculo se hace pequeño y la curvatura crece.') + '</span>');
         }
@@ -194,7 +194,7 @@ Course.topic('av-geodif', function (p) {
         out.set('Triángulo formado por dos meridianos separados $' + ang + '^\\circ$ y el ecuador.<br>' +
           'Los dos ángulos del ecuador son rectos ($90^\\circ$ cada uno) y el del polo mide $' + ang + '^\\circ$.<br>' +
           '<strong>Suma: $' + suma + '^\\circ$</strong> &nbsp;·&nbsp; exceso sobre $180^\\circ$: $' + exceso + '^\\circ$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">El exceso es proporcional al área del ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">El exceso es proporcional al área del ' +
           'triángulo: en una esfera, cuanto más grande es un triángulo, más se pasa de $180^\\circ$. ' +
           'Una hormiga que midiera esto sabría que vive en una superficie curva sin salir de ella nunca.</span>');
         plot.render();
@@ -269,7 +269,7 @@ Course.topic('av-geodif', function (p) {
     ask: function (d) {
       return 'Calcula la curvatura de $y = ' + U.fmt(d.a, 1) + 'x^2$ en el punto de abscisa $x = ' +
         d.x + '$ (seis decimales).<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Usa $\\kappa = \\dfrac{|y\'\'|}{(1+(y\')^2)^{3/2}}$.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Usa $\\kappa = \\dfrac{|y\'\'|}{(1+(y\')^2)^{3/2}}$.</span>';
     },
     fields: [{ name: 'k', label: 'κ', w: 'wide' }],
     sol: function (d) { return { k: U.round(d.k, 8) }; },
@@ -301,7 +301,7 @@ Course.topic('av-geodif', function (p) {
     },
     ask: function (d) {
       return '¿Qué signo tiene la curvatura de Gauss de <strong>' + d.s + '</strong>?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)"><code>1</code> positiva · ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> positiva · ' +
         '<code>2</code> cero · <code>3</code> negativa</span>';
     },
     fields: [{ name: 't', label: 'Signo', w: 'tiny' }],

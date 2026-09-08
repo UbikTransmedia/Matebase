@@ -66,7 +66,7 @@ Course.topic('av-numeros', function (p) {
         out.set('Módulo <strong>' + n + '</strong>, sumando <strong>' + paso + '</strong> cada vez.<br>' +
           '$' + k + ' \\cdot ' + paso + ' \\equiv ' + pos + ' \\pmod{' + n + '}$ &nbsp;·&nbsp; ' +
           'visitados: <strong>' + cuantos + '</strong> de ' + n + '<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">$\\operatorname{mcd}(' + paso + ', ' + n + ') = ' + g + '$: ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">$\\operatorname{mcd}(' + paso + ', ' + n + ') = ' + g + '$: ' +
           (g === 1 ? 'como es 1, este paso <strong>recorre todos</strong> los números antes de repetirse.'
             : 'como no es 1, el paso solo alcanza ' + (n / g) + ' posiciones y se queda dando vueltas en un ciclo corto.') +
           '</span>');
@@ -123,7 +123,7 @@ Course.topic('av-numeros', function (p) {
         out.set('Hasta $' + U.miles(N) + '$ hay <strong>' + primos.length + '</strong> primos.<br>' +
           'La estimación $\\dfrac{x}{\\ln x}$ da $' + U.fmt(est, 2) + '$ — se equivoca en un $' +
           U.fmt(Math.abs(est - primos.length) / primos.length * 100, 2) + '\\%$.<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">La densidad de primos cerca de $x$ es ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">La densidad de primos cerca de $x$ es ' +
           'aproximadamente $1/\\ln x$: hacia el millón, uno de cada 14 números es primo.</span>');
       }
       W.slider(W.row(host), { label: 'hasta N', min: 50, max: 5000, step: 50, value: 200, dec: 0, on: function (v) { N = v; paint(); } });
@@ -256,7 +256,7 @@ Course.topic('av-numeros', function (p) {
     },
     ask: function (d) {
       return 'Calcula $' + d.a + '^{' + d.e + '} \\bmod ' + d.p + '$.<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">No calcules la potencia entera: ve ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">No calcules la potencia entera: ve ' +
         'reduciendo en cada paso.</span>';
     },
     fields: [{ name: 'v', label: 'Resto', w: 'tiny' }],

@@ -69,7 +69,7 @@ Course.topic('av-edp', function (p) {
         var total = U.sum(u) / N;
         out.set('Instante <strong>' + t + '</strong> &nbsp;·&nbsp; temperatura máxima: $' + U.fmt(maxT, 5) + '$ ' +
           '&nbsp;·&nbsp; media: $' + U.fmt(total, 5) + '$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           (t === 0 ? 'Perfil inicial. Pulsa para avanzar el tiempo.'
             : (t < 60 ? 'Los picos se aplanan y los valles se rellenan: la difusión <em>promedia</em>.'
               : 'A la larga todo tiende al equilibrio impuesto por los extremos fríos. La ecuación del calor ' +
@@ -172,7 +172,7 @@ Course.topic('av-edp', function (p) {
           '<span style="color:var(--c1)">modo 1</span>: amplitud $' + U.fmt(a1, 6) + '$ &nbsp;·&nbsp; ' +
           '<span style="color:var(--c2)">modo 3</span>: $' + U.fmt(a3, 6) + '$ &nbsp;·&nbsp; ' +
           '<span style="color:var(--c3)">modo 6</span>: $' + U.fmt(a6, 6) + '$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">El modo $n$ decae como $e^{-kn^2\\pi^2 t}$: ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">El modo $n$ decae como $e^{-kn^2\\pi^2 t}$: ' +
           'el exponente lleva $n$ <strong>al cuadrado</strong>, así que el modo 6 se apaga 36 veces más ' +
           'rápido que el modo 1. Eso es el desenfoque.</span>');
         plot.render();
@@ -243,7 +243,7 @@ Course.topic('av-edp', function (p) {
     },
     ask: function (d) {
       return '¿Qué ecuación es $' + d.f + '$?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)"><code>1</code> del calor · ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> del calor · ' +
         '<code>2</code> de ondas · <code>3</code> de Laplace</span>';
     },
     fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],

@@ -123,7 +123,7 @@ Course.topic('ge-areas', function (p) {
         out.set('Con <strong>' + n + ' lados</strong>:<br>' +
           '<span style="color:var(--c3)">inscrito</span>: $' + U.fmt(pi_in, 8) + '$ &nbsp;&lt;&nbsp; ' +
           '$\\pi$ &nbsp;&lt;&nbsp; <span style="color:var(--c2)">circunscrito</span>: $' + U.fmt(pi_out, 8) + '$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Valor real: 3,14159265… · ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Valor real: 3,14159265… · ' +
           'Horquilla de $' + U.fmt(pi_out - pi_in, 8) + '$</span>');
         plot.render();
       }

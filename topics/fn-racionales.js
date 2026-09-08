@@ -180,10 +180,10 @@ Course.topic('fn-racionales', function (p) {
     ask: function (d) {
       if (d.t === 0) {
         return 'Halla el dominio de $f(x) = \\sqrt{x' + (d.a >= 0 ? ' - ' + d.a : ' + ' + (-d.a)) + '}$. ' +
-          '<span style="font-size:14px;color:var(--ink-faint)">Escribe el menor valor admitido.</span>';
+          '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe el menor valor admitido.</span>';
       }
       return 'Halla el dominio de $f(x) = \\sqrt{x^2 - ' + (d.k * d.k) + '}$. ' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Es $(-\\infty, -k] \\cup [k, +\\infty)$: ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Es $(-\\infty, -k] \\cup [k, +\\infty)$: ' +
         'escribe el valor de $k$ (positivo).</span>';
     },
     fields: [{ name: 'v', label: 'Valor', w: 'tiny' }],
@@ -220,7 +220,7 @@ Course.topic('fn-racionales', function (p) {
         '$f(x) = \\begin{cases}' + ML.termTex(d.m, 'x', 1, true) + ML.termTex(d.n, '', 0, false) +
         ' & \\text{si } x \\le ' + d.c + ' \\\\ x^2' + ML.termTex(d.k, '', 0, false) +
         ' & \\text{si } x > ' + d.c + '\\end{cases}$<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe el tamaño del salto ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe el tamaño del salto ' +
         '(límite por la derecha menos límite por la izquierda). Si es continua, escribe 0.</span>';
     },
     fields: [{ name: 's', label: 'Salto', w: 'tiny' }],

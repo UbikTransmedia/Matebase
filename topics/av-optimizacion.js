@@ -115,7 +115,7 @@ Course.topic('av-optimizacion', function (p) {
           (eta < 0.05 ? '<strong>muy pequeña</strong>, avanza a paso de tortuga y necesita muchísimas iteraciones.'
             : (eta > 1.5 ? '<strong style="color:var(--bad)">demasiado grande</strong>: los pasos se pasan de largo y la trayectoria oscila o se dispara.'
               : 'razonable: converge en pocos pasos.')) +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Haz clic en el gráfico para soltar una bola.</span>');
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Haz clic en el gráfico para soltar una bola.</span>');
         plot.render();
       }
       W.chips(host, [
@@ -191,7 +191,7 @@ Course.topic('av-optimizacion', function (p) {
     ask: function (d) {
       return 'Halla el punto crítico de $f(x,y) = ' + d.a + '(x' + (d.p >= 0 ? '-' + d.p : '+' + (-d.p)) +
         ')^2 ' + (d.b >= 0 ? '+ ' + d.b : '- ' + (-d.b)) + '(y' + (d.q >= 0 ? '-' + d.q : '+' + (-d.q)) + ')^2$ ' +
-        'y di de qué tipo es.<br><span style="font-size:14px;color:var(--ink-faint)">' +
+        'y di de qué tipo es.<br><span style="font-size:0.875rem;color:var(--ink-faint)">' +
         '<code>1</code> mínimo · <code>2</code> máximo · <code>3</code> punto de silla</span>';
     },
     fields: [
@@ -255,7 +255,7 @@ Course.topic('av-optimizacion', function (p) {
     ask: function (d) {
       return 'Aplicamos descenso de gradiente a $f(x) = ' + d.a + 'x^2$ con $\\eta = ' + U.fmt(d.eta, 2) +
         '$. ¿Converge al mínimo o se dispara?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>si</code> si converge o ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> si converge o ' +
         '<code>no</code> si diverge.</span>';
     },
     fields: [{ name: 'r', label: '¿Converge?', w: 'tiny', ph: 'si / no' }],

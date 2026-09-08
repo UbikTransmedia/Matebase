@@ -57,11 +57,11 @@ Course.topic('ar-naturales', function (p) {
         var col = ['var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c5)'];
         var big = '';
         for (var j = 0; j < 5; j++) {
-          big += '<span style="color:' + col[j] + ';font-size:30px;font-weight:600">' + dig[j] + '</span>';
+          big += '<span style="color:' + col[j] + ';font-size:1.875rem;font-weight:600">' + dig[j] + '</span>';
         }
         out.innerHTML = '<div style="text-align:center;letter-spacing:3px;margin-bottom:6px">' + big + '</div>' +
           MathX.inline('$' + n + ' = ' + (terms.join(' + ') || '0') + '$') +
-          '<div style="margin-top:6px;font-size:13px;color:var(--ink-faint)">' +
+          '<div style="margin-top:6px;font-size:0.8125rem;color:var(--ink-faint)">' +
           'se lee: ' + leer(n) + '</div>';
       }
       for (var i = 0; i < 5; i++) (function (i) {

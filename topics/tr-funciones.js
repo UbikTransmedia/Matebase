@@ -158,7 +158,7 @@ Course.topic('tr-funciones', function (p) {
       function paint() {
         out.set('$y = ' + U.fmt(A1, 2) + '\\operatorname{sen}(' + U.fmt(f1, 2) + 'x) + ' +
           U.fmt(A2, 2) + '\\operatorname{sen}(' + U.fmt(f2, 2) + 'x)$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           (Math.abs(f1 - f2) < 0.35 && Math.abs(f1 - f2) > 0.01
             ? 'Frecuencias muy parecidas: aparecen <strong>pulsaciones</strong>, la envolvente que oyes como un «uau-uau» cuando se afinan dos cuerdas.'
             : 'La suma sigue siendo periódica, pero ya no tiene forma de seno.') + '</span>');

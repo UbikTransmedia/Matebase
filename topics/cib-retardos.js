@@ -84,7 +84,7 @@ Course.topic('cib-retardos', function (p) {
         else msg = '<strong style="color:var(--bad)">Oscila con fuerza.</strong> Cada vaivén es mayor que el anterior.';
         out.set('Ganancia $K = ' + U.fmt(K, 2) + '$ &nbsp;·&nbsp; retardo = <strong>' + ret + ' pasos</strong>' +
           ' &nbsp;·&nbsp; oscilación al final: ' + (s.length <= N ? '—' : U.fmt(amp, 2)) + '<br>' + msg +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Prueba: con retardo 0 aguanta hasta K≈1. Con retardo 4, la misma K de antes ya oscila.</span>');
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Prueba: con retardo 0 aguanta hasta K≈1. Con retardo 4, la misma K de antes ya oscila.</span>');
         plot.render();
       }
 

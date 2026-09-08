@@ -113,7 +113,7 @@ Course.topic('av-infinito', function (p) {
         h += '</tbody></table></div>';
         caja.innerHTML = h;
         out.set('Numeradas <strong>' + Math.min(cont, pasos) + '</strong> fracciones.<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Recorriendo por diagonales (donde ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Recorriendo por diagonales (donde ' +
           'numerador + denominador es constante) y saltando las equivalentes, <strong>toda</strong> ' +
           'fracción acaba recibiendo un número. Por tanto $|\\mathbb{Q}| = |\\mathbb{N}| = \\aleph_0$: ' +
           'hay tantos racionales como naturales.</span>');
@@ -167,12 +167,12 @@ Course.topic('av-infinito', function (p) {
         });
         h += '<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--line)">' +
           '<span style="color:var(--ok);font-weight:700">d &nbsp;= 0,' + diag + '…</span>' +
-          ' <span style="font-family:var(--sans);font-size:12.5px;color:var(--ink-faint)">← el número que no está en la lista</span></div>';
+          ' <span style="font-family:var(--sans);font-size:0.7812rem;color:var(--ink-faint)">← el número que no está en la lista</span></div>';
         caja.innerHTML = h;
         out.set('La regla usada es: <em>si la cifra marcada es un 5, pongo un 3; si no, pongo un 5</em>.<br>' +
           'El número $d$ se diferencia de $x_1$ en la primera cifra, de $x_2$ en la segunda, de $x_3$ en ' +
           'la tercera… <strong>de $x_n$ en la $n$-ésima, para todo $n$</strong>.<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Por tanto $d$ no puede ser ninguno de ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Por tanto $d$ no puede ser ninguno de ' +
           'la lista. Y como la lista era arbitraria, <strong>ninguna lista puede contener todos los ' +
           'reales</strong>: $\\mathbb{R}$ no es numerable.</span>');
       }
@@ -237,7 +237,7 @@ Course.topic('av-infinito', function (p) {
     },
     ask: function (d) {
       return '¿Es numerable el conjunto de <strong>' + d.s + '</strong>?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
     },
     fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
     sol: function (d) { return { r: d.t === 1 ? 'si' : 'no' }; },

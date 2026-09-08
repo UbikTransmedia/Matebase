@@ -407,7 +407,7 @@ Course.topic('lg-conjuntos', function (p) {
         return 'Si $|A| = ' + d.a + '$ y $|B| = ' + d.b + '$, ¿cuántos elementos tiene $A \\times B$?';
       }
       return 'Si $|A| = ' + d.a + '$, ¿cuántos <strong>subconjuntos</strong> distintos tiene $A$? ' +
-        '<span style="font-size:14px;color:var(--ink-faint)">(contando el vacío y el propio $A$)</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">(contando el vacío y el propio $A$)</span>';
     },
     fields: [{ name: 'n', label: 'Cantidad', w: 'tiny' }],
     sol: function (d) { return { n: d.res }; },
@@ -444,7 +444,7 @@ Course.topic('lg-conjuntos', function (p) {
     },
     ask: function (d) {
       return 'Clasifica la aplicación $' + d.f + '$.<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)"><code>0</code> ninguna de las dos · ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>0</code> ninguna de las dos · ' +
         '<code>1</code> solo inyectiva · <code>2</code> solo sobreyectiva · <code>3</code> biyectiva</span>';
     },
     fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],

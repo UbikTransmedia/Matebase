@@ -94,7 +94,7 @@ Course.topic('pe-descriptiva', function (p) {
           '$, desviación típica $' + U.fmt(ML.sd(base), 3) + '$<br>' +
           '<span style="color:var(--c2)">Grupo B</span>: media $' + U.fmt(ML.mean(g2), 3) +
           '$, desviación típica $' + U.fmt(ML.sd(g2), 3) + '$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">La media no distingue los dos grupos; ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">La media no distingue los dos grupos; ' +
           'la desviación típica sí.</span>');
         plot.render();
       }

@@ -81,7 +81,7 @@ Course.topic('fn-prog-lineal', function (p) {
         out.set('Restricciones activas: $' + restr.slice(0, activas).map(function (c) { return c.t; }).join('$, $') +
           '$, más $x \\ge 0$ e $y \\ge 0$.<br>' +
           'La región factible tiene <strong>' + V.length + ' vértices</strong>.<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Cada restricción nueva corta un trozo ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Cada restricción nueva corta un trozo ' +
           'del plano. La zona que queda es siempre convexa: si unes dos puntos de dentro, el segmento ' +
           'entero está dentro.</span>');
         plot.render();
@@ -161,7 +161,7 @@ Course.topic('fn-prog-lineal', function (p) {
         }).join(' &nbsp;·&nbsp; ');
         out.set('$Z = ' + U.fmt(a, 0) + 'x + ' + U.fmt(b, 0) + 'y$ &nbsp;·&nbsp; recta dibujada: $Z = ' + U.fmt(Z, 0) + '$<br>' +
           tabla + '<br><strong>Máximo: Z = ' + U.fmt(op.z, 2) + ' en (' + U.fmt(op.p[0], 1) + ', ' + U.fmt(op.p[1], 1) + ')</strong>' +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Cambia los coeficientes: al girar ' +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Cambia los coeficientes: al girar ' +
           'la recta de nivel, el vértice ganador puede cambiar, pero <em>siempre</em> es un vértice.</span>');
         plot.render();
       }
@@ -234,7 +234,7 @@ Course.topic('fn-prog-lineal', function (p) {
       return '¿Pertenece el punto $(' + d.x + ', ' + d.y + ')$ a la región factible definida por<br>' +
         '$\\begin{cases}' + d.p1 + 'x + ' + d.q1 + 'y \\le ' + d.r1 + ' \\\\ ' +
         d.p2 + 'x + ' + d.q2 + 'y \\le ' + d.r2 + ' \\\\ x \\ge 0,\\ y \\ge 0\\end{cases}$?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
     },
     fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
     sol: function (d) { return { r: d.ok ? 'si' : 'no' }; },

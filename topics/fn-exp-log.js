@@ -44,7 +44,7 @@ Course.topic('fn-exp-log', function (p) {
         out.set('Recta: $y = ' + m + 'x$ &nbsp;·&nbsp; Exponencial: $y = ' + U.fmt(a, 2) + '^x$<br>' +
           'En $x = ' + zoom + '$: recta $= ' + U.fmt(m * zoom, 1) + '$, exponencial $= ' +
           U.fmt(Math.pow(a, zoom), 1) + '$<br>' +
-          (cruce ? '<span style="font-size:12.5px;color:var(--ink-faint)">La exponencial adelanta ' +
+          (cruce ? '<span style="font-size:0.7812rem;color:var(--ink-faint)">La exponencial adelanta ' +
             'definitivamente a la recta a partir de $x \\approx ' + U.fmt(cruce, 1) + '$.</span>' : ''));
       }
       var row = W.row(host);
@@ -97,7 +97,7 @@ Course.topic('fn-exp-log', function (p) {
         var nom = { 1: 'una vez al año', 2: 'cada 6 meses', 4: 'cada trimestre', 12: 'cada mes', 365: 'cada día' }[n];
         out.set('Con $' + n + '$ ' + U.plural(n, 'plazo', 'plazos') + (nom ? ' (' + nom + ')' : '') + ': ' +
           '$\\left(1 + \\dfrac{1}{' + n + '}\\right)^{' + n + '} = ' + U.fmt(v, 8) + '$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Diferencia con $e$: $' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Diferencia con $e$: $' +
           U.fmt(Math.E - v, 8) + '$. Por muchos plazos que pongas, nunca pasa de $e$.</span>');
         plot.render();
       }

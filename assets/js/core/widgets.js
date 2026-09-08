@@ -143,6 +143,16 @@
     host.appendChild(U.el('div.hintline', { html: MathX.inline(text) }));
   };
 
+  /* Dentro de un <canvas> los pixeles son pixeles: el texto que se dibuja
+     ahi no obedece ni al navegador ni al control de lectura. Se mira cuanto
+     ha crecido la letra de la pagina y se aplica el mismo aumento, con tope
+     para que las etiquetas no se coman el dibujo. */
+  function aumento() {
+    var raiz = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    return Math.min(1.6, Math.max(1, raiz / 16));
+  }
+  W.aumento = aumento;
+
   /* ========================= Plot2D ========================= */
 
   function Plot(host, o) {
@@ -159,6 +169,7 @@
     this.pad = o.pad || 0;
     this.handles = [];
     this._drag = null;
+    this.k = aumento();          // cuanto ha crecido la letra de la pagina
     // Puntos arrastrables declarados de entrada: existen ya en el primer
     // pintado, asi que `draw` puede usarlos sin comprobar nada.
     if (o.handles) {
@@ -236,6 +247,7 @@
     this.canvas.height = Math.round(cssH * dpr);
     this.canvas.style.height = cssH + 'px';
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.k = aumento();
     if (this.equal) this._equalize();
     this._nombra();
     this.render();
@@ -350,7 +362,7 @@
 
     // numeros
     ctx.fillStyle = p.ink;
-    ctx.font = '11px ' + 'system-ui, sans-serif';
+    ctx.font = U.fmt2(11 * this.k) + 'px system-ui, sans-serif';
     var sx = this.step('x'), sy = this.step('y'), i, d;
     d = Math.max(0, -Math.floor(Math.log(sx) / Math.LN10));
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
@@ -377,7 +389,7 @@
     }
     // nombres de los ejes
     ctx.fillStyle = p.ink;
-    ctx.font = 'italic 13px ' + 'Georgia, serif';
+    ctx.font = 'italic ' + U.fmt2(13 * this.k) + 'px Georgia, serif';
     ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
     if (this.o.xlabel !== null) ctx.fillText(this.o.xlabel || 'x', this.W - 6, y0 - 5);
     if (this.o.yaxis !== false && this.o.ylabel !== null) {
@@ -388,7 +400,7 @@
 
   Plot.prototype._boxedText = function (txt, px, py, align) {
     var ctx = this.ctx, p = this.p;
-    ctx.font = '11px system-ui, sans-serif';
+    ctx.font = U.fmt2(11 * this.k) + 'px system-ui, sans-serif';
     ctx.textAlign = align || 'center';
     ctx.textBaseline = align ? 'middle' : 'top';
     var w = ctx.measureText(txt).width;
@@ -600,7 +612,8 @@
     o = o || {};
     var ctx = this.ctx;
     var px = this.X(x) + (o.dx || 0), py = this.Y(y) + (o.dy || 0);
-    ctx.font = (o.italic ? 'italic ' : '') + (o.bold ? '600 ' : '') + (o.size || 13) + 'px ' +
+    ctx.font = (o.italic ? 'italic ' : '') + (o.bold ? '600 ' : '') +
+      U.fmt2((o.size || 13) * this.k) + 'px ' +
       (o.serif === false ? 'system-ui, sans-serif' : 'Georgia, serif');
     ctx.textAlign = o.align || 'left';
     ctx.textBaseline = o.baseline || 'middle';
@@ -788,6 +801,13 @@
     U.on(c, 'mousedown', down); U.on(c, 'touchstart', down, { passive: false });
     U.on(global, 'mousemove', move); U.on(c, 'touchmove', move, { passive: false });
     U.on(global, 'mouseup', up); U.on(global, 'touchend', up);
+  };
+
+  /** Vuelve a medir y a pintar todo lo vivo: cambio el tamano de la letra. */
+  W.redibuja = function () {
+    for (var i = 0; i < LIVE.length; i++) {
+      if (LIVE[i].canvas.isConnected) LIVE[i].resize();
+    }
   };
 
   W.Plot = Plot;

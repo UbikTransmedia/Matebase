@@ -162,7 +162,7 @@ Course.topic('ge-pitagoras', function (p) {
     },
     ask: function (d) {
       return 'Un triángulo tiene lados $' + d.a + '$, $' + d.b + '$ y $' + d.c + '$. ¿Qué tipo es?' +
-        '<br><span style="font-size:14px;color:var(--ink-faint)">Escribe <code>1</code> si es rectángulo, ' +
+        '<br><span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> si es rectángulo, ' +
         '<code>2</code> si es acutángulo, <code>3</code> si es obtusángulo.</span>';
     },
     fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],

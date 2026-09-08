@@ -125,7 +125,7 @@ Course.topic('av-grafos', function (p) {
         else veredicto = '<strong style="color:var(--bad)">No se puede: hay ' + impares + ' vértices de grado impar, y solo se admiten 0 o 2.</strong>';
         out.set('<strong>' + G.n + '</strong> — $V = ' + G.V.length + '$, $A = ' + G.A.length + '$<br>' +
           'Grados: ' + grados.join(', ') + ' &nbsp;·&nbsp; vértices impares: <strong>' + impares + '</strong><br>' +
-          veredicto + '<br><span style="font-size:12.5px;color:var(--ink-faint)">' +
+          veredicto + '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           'Suma de grados = ' + U.sum(grados) + ' = 2 · ' + G.A.length + ' ✓ (lema del apretón de manos). ' +
           'Los vértices rojos tienen grado impar.</span>');
         plot.render();
@@ -219,7 +219,7 @@ Course.topic('av-grafos', function (p) {
         out.set('Ruta más corta de <strong>A</strong> a <strong>' + nombres[destino] + '</strong>: ' +
           res.ruta.map(function (i) { return nombres[i]; }).join(' → ') +
           ' &nbsp;·&nbsp; longitud total <strong>' + res.dist + '</strong><br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Fíjate en que la ruta más corta no ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Fíjate en que la ruta más corta no ' +
           'siempre es la que menos tramos tiene.</span>');
         plot.render();
       }
@@ -303,7 +303,7 @@ Course.topic('av-grafos', function (p) {
     ask: function (d) {
       return 'Un grafo conexo tiene vértices de grados $' + d.grados.join(',\\ ') + '$. ' +
         '¿Admite un recorrido que pase una sola vez por cada arista?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)"><code>1</code> sí, cerrado (vuelve al ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> sí, cerrado (vuelve al ' +
         'inicio) · <code>2</code> sí, pero abierto · <code>3</code> no se puede</span>';
     },
     fields: [{ name: 'r', label: 'Respuesta', w: 'tiny' }],

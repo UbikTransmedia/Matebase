@@ -144,7 +144,7 @@ Course.topic('pe-probabilidad', function (p) {
       function paint() {
         out.set('Con <strong>' + n + ' personas</strong>, la probabilidad de que al menos dos ' +
           'compartan cumpleaños es <strong>' + U.fmt(prob(n) * 100, 2) + '%</strong>.<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Se calcula por el contrario: ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Se calcula por el contrario: ' +
           '$1 - \\frac{365}{365}\\cdot\\frac{364}{365}\\cdots$. Con 23 personas ya se pasa del 50 %, ' +
           'y con 50 se llega al 97 %. La intuición falla porque no comparamos cada uno con el resto, ' +
           'sino <em>todas las parejas posibles</em>: con 23 personas hay 253 parejas.</span>');

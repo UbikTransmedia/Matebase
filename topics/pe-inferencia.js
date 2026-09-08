@@ -98,7 +98,7 @@ Course.topic('pe-inferencia', function (p) {
         out.set('Población de partida: muy <strong>asimétrica</strong> (media real $' + U.fmt(muPob, 4) + '$).<br>' +
           'Tomando <strong>' + muestras + '</strong> muestras de tamaño <strong>' + n + '</strong>: ' +
           'media de las medias $' + U.fmt(ML.mean(medias), 4) + '$, dispersión $' + U.fmt(ML.sd(medias), 4) + '$.<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Sube el tamaño de muestra: el ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Sube el tamaño de muestra: el ' +
           'histograma se estrecha y se vuelve simétrico, aunque la población no lo sea.</span>');
       }
       var row = W.row(host);
@@ -161,7 +161,7 @@ Course.topic('pe-inferencia', function (p) {
         out.set('Muestra de $n = ' + n + '$, media $' + media + '$ cm, $\\sigma = ' + sd + '$ cm.<br>' +
           'Error máximo: $E = ' + zs[conf] + ' \\cdot \\dfrac{' + sd + '}{\\sqrt{' + n + '}} = ' + U.fmt(e, 4) + '$ cm<br>' +
           '<strong>IC al ' + conf + '%: $(' + U.fmt(media - e, 3) + ',\\ ' + U.fmt(media + e, 3) + ')$</strong><br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Para reducir el error a la mitad ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Para reducir el error a la mitad ' +
           'harían falta $' + (n * 4) + '$ individuos, cuatro veces más.</span>');
         plot.render();
       }
@@ -252,7 +252,7 @@ Course.topic('pe-inferencia', function (p) {
       return 'De una población con $\\sigma = ' + d.sd + '$ se toma una muestra de $n = ' + d.n +
         '$ individuos y se obtiene una media de $' + d.media + '$. Construye el intervalo de ' +
         'confianza al $' + d.conf + '\\%$ (cuatro decimales).<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Usa $z = ' + d.z + '$.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Usa $z = ' + d.z + '$.</span>';
     },
     fields: [{ name: 'a', label: 'Extremo inferior', w: 'wide' }, { name: 'b', label: 'Extremo superior', w: 'wide' }],
     sol: function (d) { return { a: U.round(d.lo, 6), b: U.round(d.hi, 6) }; },
@@ -284,7 +284,7 @@ Course.topic('pe-inferencia', function (p) {
       return 'Queremos estimar la media de una población con $\\sigma = ' + d.sd + '$ cometiendo un ' +
         'error máximo de $' + U.fmt(d.E, 1) + '$ con un $' + d.conf + '\\%$ de confianza. ' +
         '¿Cuál es el tamaño mínimo de muestra?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Usa $z = ' + d.z + '$ y redondea hacia arriba.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Usa $z = ' + d.z + '$ y redondea hacia arriba.</span>';
     },
     fields: [{ name: 'n', label: 'n mínimo', w: 'wide' }],
     sol: function (d) { return { n: d.n }; },
@@ -314,7 +314,7 @@ Course.topic('pe-inferencia', function (p) {
       return { t: c.t, ok: c.ok };
     },
     ask: function (d) {
-      return d.t + '<br><span style="font-size:14px;color:var(--ink-faint)">' +
+      return d.t + '<br><span style="font-size:0.875rem;color:var(--ink-faint)">' +
         '<code>1</code> ese valor queda fuera del intervalo, así que los datos no lo respaldan · ' +
         '<code>2</code> no, la media es un valor fijo: el 95 % se refiere al método, no a este intervalo · ' +
         '<code>3</code> se hace más ancho · ' +

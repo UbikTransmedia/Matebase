@@ -191,9 +191,9 @@ Course.topic('fn-concepto', function (p) {
     },
     ask: function (d) {
       if (d.t === 0) return 'Halla el dominio de $f(x) = \\dfrac{1}{x' + (d.a >= 0 ? '-' + d.a : '+' + (-d.a)) + '}$. ' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe el valor de $x$ que hay que excluir.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe el valor de $x$ que hay que excluir.</span>';
       if (d.t === 1) return 'Halla el dominio de $f(x) = \\sqrt{x' + (d.a >= 0 ? '-' + d.a : '+' + (-d.a)) + '}$. ' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe el menor valor de $x$ admitido.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe el menor valor de $x$ admitido.</span>';
       var b = -(d.r1 + d.r2), c = d.r1 * d.r2;
       return 'La función $f(x) = \\dfrac{x}{' + ML.polyTex([1, b, c]) + '}$ tiene dos valores prohibidos. ' +
         'Escribe el <strong>mayor</strong> de los dos.';
@@ -232,7 +232,7 @@ Course.topic('fn-concepto', function (p) {
     ask: function (d) {
       var tex = d.t === 1 ? ML.termTex(d.c[0], 'x', 3, true) : ML.polyTex(d.c);
       return '¿Es $f(x) = ' + tex + '$ par, impar o ninguna de las dos cosas?' +
-        '<br><span style="font-size:14px;color:var(--ink-faint)">Escribe <code>par</code>, ' +
+        '<br><span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>par</code>, ' +
         '<code>impar</code> o <code>ninguna</code>.</span>';
     },
     fields: [{ name: 'r', label: 'Respuesta', w: 'tiny' }],

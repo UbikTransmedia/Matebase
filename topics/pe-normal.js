@@ -43,7 +43,7 @@ Course.topic('pe-normal', function (p) {
           'de los datos &nbsp;·&nbsp; ' +
           '<span style="color:var(--c4)">hasta $2\\sigma$, el <strong>95,4 %</strong></span> &nbsp;·&nbsp; ' +
           'hasta $3\\sigma$, el <strong>99,7 %</strong><br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Esos porcentajes son los mismos ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Esos porcentajes son los mismos ' +
           'siempre, valgan lo que valgan μ y σ. Por eso basta con una única tabla.</span>');
         plot.render();
       }
@@ -98,7 +98,7 @@ Course.topic('pe-normal', function (p) {
           '\\Phi(' + U.fmt(hi, 2) + ') - \\Phi(' + U.fmt(lo, 2) + ')$<br>' +
           '$= ' + U.fmt(ML.normalCdf(hi), 5) + ' - ' + U.fmt(ML.normalCdf(lo), 5) + ' = ' +
           '<strong>' + U.fmt(P, 5) + '</strong>$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">$\\Phi(z)$ es el área acumulada hasta $z$: ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">$\\Phi(z)$ es el área acumulada hasta $z$: ' +
           'lo que da directamente la tabla.</span>');
         plot.render();
       }

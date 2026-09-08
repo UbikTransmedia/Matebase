@@ -129,7 +129,7 @@ Course.topic('ar-fracciones', function (p) {
         out.set('$\\dfrac{' + a + '}{' + b + '} + \\dfrac{' + c + '}{' + e + '} = ' +
           '\\dfrac{' + (a * (m / b)) + '}{' + m + '} + \\dfrac{' + (c * (m / e)) + '}{' + m + '} = ' +
           '\\dfrac{' + num + '}{' + m + '}' + (f.toString() !== num + '/' + m ? ' = ' + f.tex() : '') + '$' +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">m.c.m.(' + b + ', ' + e + ') = ' + m + '</span>');
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">m.c.m.(' + b + ', ' + e + ') = ' + m + '</span>');
         plot.render();
       }
       var row = W.row(host);

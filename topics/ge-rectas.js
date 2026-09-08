@@ -224,7 +224,7 @@ Course.topic('ge-rectas', function (p) {
       };
       return '¿Qué posición relativa tienen las rectas<br>$r: ' + eq(d.a1, d.b1, d.c1) + '$<br>' +
         '$s: ' + eq(d.a2, d.b2, d.c2) + '$?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>1</code> si se cortan, ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> si se cortan, ' +
         '<code>2</code> si son paralelas, <code>3</code> si son coincidentes.</span>';
     },
     fields: [{ name: 't', label: 'Posición', w: 'tiny' }],

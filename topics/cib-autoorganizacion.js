@@ -115,7 +115,7 @@ Course.topic('cib-autoorganizacion', function (p) {
         var bits = [];
         for (var i = 7; i >= 0; i--) bits.push((regla >> i) & 1);
         out.set('<strong>Regla ' + regla + '</strong> &nbsp;·&nbsp; en binario: ' + bits.join('') +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Esos ocho bits son la regla entera: ' +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Esos ocho bits son la regla entera: ' +
           'dicen qué hacer ante cada una de las ocho vecindades posibles.</span>' +
           (FAMOSAS[regla] ? '<br><strong style="color:var(--accent-ink)">' + FAMOSAS[regla] + '</strong>' : ''));
         plot.render();
@@ -213,7 +213,7 @@ Course.topic('cib-autoorganizacion', function (p) {
 
       function paint() {
         out.set('Generación <strong>' + gen + '</strong> &nbsp;·&nbsp; celdas vivas: <strong>' + vivas + '</strong>' +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Las dos reglas no cambian nunca. ' +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Las dos reglas no cambian nunca. ' +
           'Todo lo que ves sale de contar vecinas.</span>');
         plot.render();
       }

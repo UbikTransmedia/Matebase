@@ -70,10 +70,10 @@ Course.topic('ar-decimales', function (p) {
           return '<span style="color:' + col + '">' + x.r + '</span>';
         }).join(' → ');
         out.innerHTML = MathX.inline('$\\dfrac{' + n + '}{' + den + '} = ' + entera + '{,}$') +
-          '<span style="font-size:20px">' + cifras + '</span>…<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">restos: ' + restos + '</span><br>' +
+          '<span style="font-size:1.25rem">' + cifras + '</span>…<br>' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">restos: ' + restos + '</span><br>' +
           MathX.inline(texto) +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">' + den + ' = ' + ML.factorTex(den) +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">' + den + ' = ' + ML.factorTex(den) +
           '</span>';
       }
       var row = W.row(host);
@@ -151,7 +151,7 @@ Course.topic('ar-decimales', function (p) {
     },
     ask: function (d) {
       return '¿Qué tipo de número decimal es $\\dfrac{' + d.n + '}{' + d.den + '}$?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>1</code> si es exacto, ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> si es exacto, ' +
         '<code>2</code> si es periódico puro, <code>3</code> si es periódico mixto.</span>';
     },
     fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],

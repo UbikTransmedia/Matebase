@@ -44,7 +44,7 @@ Course.topic('pe-condicionada', function (p) {
           '$P(A\\cap B) = ' + U.fmt(inter, 3) + '$<br>' +
           '$P(A|B) = \\dfrac{P(A\\cap B)}{P(B)} = \\dfrac{' + U.fmt(inter, 3) + '}{' + U.fmt(pb, 2) + '} = ' +
           U.fmt(inter / pb, 4) + '$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Aquí $P(A|B) = P(A)$: los sucesos son ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Aquí $P(A|B) = P(A)$: los sucesos son ' +
           '<strong>independientes</strong>, saber que ocurrió $B$ no cambia nada sobre $A$.</span>');
         plot.render();
       }
@@ -198,7 +198,7 @@ Course.topic('pe-condicionada', function (p) {
           'Positivos verdaderos: $' + U.fmt(vp, 1) + '$ &nbsp;·&nbsp; falsos positivos: $' + U.fmt(fp, 1) + '$<br>' +
           '<strong>Si el test da positivo, la probabilidad de estar realmente enfermo es solo del ' +
           U.fmt(ppv * 100, 2) + ' %.</strong><br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Y eso con un test que acierta el ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Y eso con un test que acierta el ' +
           U.fmt(sens * 100, 0) + ' % de los enfermos. El problema es que los sanos son tantísimos que ' +
           'incluso un porcentaje pequeño de error genera muchos positivos falsos.</span>');
       }

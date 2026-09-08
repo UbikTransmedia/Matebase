@@ -76,7 +76,7 @@ Course.topic('fn-sucesiones', function (p) {
           ar.join(', ') + ', …<br>' +
           '<span style="color:var(--c2)"><strong>Geométrica</strong> ($r = ' + U.fmt(raz, 2) + '$)</span>: ' +
           ge.join(', ') + ', …<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Suma de los 10 primeros: aritmética $' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Suma de los 10 primeros: aritmética $' +
           U.fmt((2 * a1 + 9 * dif) * 10 / 2, 2) + '$ · geométrica $' +
           U.fmt(a1 * (Math.pow(raz, 10) - 1) / (raz - 1), 2) + '$</span>');
         plot.render();
@@ -116,7 +116,7 @@ Course.topic('fn-sucesiones', function (p) {
         for (var k = 0; k < Math.min(n, 6); k++) terms.push(U.fmt(Math.pow(r0, k) * (1 - r0), 5));
         out.set('$' + terms.join(' + ') + (n > 6 ? ' + \\dots' : '') + ' = ' + U.fmt(suma, 8) + '$<br>' +
           'Falta para llegar a 1: $' + U.fmt(1 - suma, 8) + '$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Con infinitos términos: ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Con infinitos términos: ' +
           '$S_\\infty = \\frac{a_1}{1-r} = \\frac{' + U.fmt(1 - r0, 2) + '}{' + U.fmt(1 - r0, 2) + '} = 1$ exactamente.</span>');
         plot.render();
       }
@@ -260,7 +260,7 @@ Course.topic('fn-sucesiones', function (p) {
       var den = d.caso === 1 ? ML.termTex(d.c, 'n', 2, true) + ML.termTex(d.e, '', 0, false)
         : ML.termTex(d.c, 'n', 1, true) + ML.termTex(d.e, '', 0, false);
       return 'Calcula $\\displaystyle\\lim_{n\\to\\infty} \\dfrac{' + num + '}{' + den + '}$<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Si es infinito escribe <code>inf</code> ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Si es infinito escribe <code>inf</code> ' +
         'o <code>-inf</code>; si no, el valor con cuatro decimales.</span>';
     },
     fields: [{ name: 'v', label: 'Límite', w: 'wide' }],

@@ -227,7 +227,7 @@ Course.topic('ge-conicas', function (p) {
         'y^2 = ' + (2 * d.pp) + 'x'
       ][d.t];
       return '¿Qué cónica es $' + eq + '$?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>1</code> circunferencia, ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> circunferencia, ' +
         '<code>2</code> elipse, <code>3</code> hipérbola, <code>4</code> parábola.</span>';
     },
     fields: [{ name: 'c', label: 'Cónica', w: 'tiny' }],

@@ -34,7 +34,7 @@ Course.topic('ar-potencias', function (p) {
         var l = [];
         for (var n = 1; n <= 8; n++) l.push(Math.pow(base, n));
         out.set('$' + base + '^1, ' + base + '^2, \\dots, ' + base + '^8$ &nbsp;=&nbsp; ' + l.join(', ') +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Frente a la multiplicación ' +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Frente a la multiplicación ' +
           base + '·n, que solo llega a ' + (base * 8) + '.</span>');
         plot.render();
       }
@@ -181,7 +181,7 @@ Course.topic('ar-potencias', function (p) {
         else if (ex < 0 && ex >= -12) plano = v.toFixed(Math.min(15, -ex + 2)).replace('.', ',');
         else plano = '(demasiado ' + (ex > 0 ? 'grande' : 'pequeño') + ' para escribirlo entero)';
         out.set('$' + U.fmt(mant, 2) + ' \\cdot 10^{' + ex + '} = $ <strong>' + plano + '</strong>' +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">' +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           (ex >= 0 ? 'La coma se mueve ' + ex + ' lugares a la derecha.'
             : 'La coma se mueve ' + (-ex) + ' lugares a la izquierda.') + '</span>');
       }
@@ -249,7 +249,7 @@ Course.topic('ar-potencias', function (p) {
     },
     ask: function (d) {
       return 'Calcula $\\left(' + d.base + '\\right)^{' + d.e + '}$. ' +
-        (d.e < 0 ? '<span style="font-size:14px;color:var(--ink-faint)">Puedes responder con fracción, por ejemplo <code>1/8</code>.</span>' : '');
+        (d.e < 0 ? '<span style="font-size:0.875rem;color:var(--ink-faint)">Puedes responder con fracción, por ejemplo <code>1/8</code>.</span>' : '');
     },
     fields: [{ name: 'v', label: 'Resultado', w: 'tiny' }],
     sol: function (d) { return { v: d.val }; },

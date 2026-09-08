@@ -147,7 +147,7 @@ Course.topic('fn-cuadraticas', function (p) {
     },
     ask: function (d) {
       return 'Halla el vértice de $f(x) = ' + ML.polyTex([d.a, d.b, d.c]) + '$ y di si es un máximo ' +
-        'o un mínimo.<br><span style="font-size:14px;color:var(--ink-faint)">Para lo último escribe ' +
+        'o un mínimo.<br><span style="font-size:0.875rem;color:var(--ink-faint)">Para lo último escribe ' +
         '<code>1</code> si es mínimo o <code>2</code> si es máximo.</span>';
     },
     fields: [

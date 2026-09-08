@@ -181,6 +181,9 @@
      Esto lo resuelve una vez para todos. */
 
   /** Quita tildes y pasa a minusculas, para comparar sin sorpresas. */
+  /** Numero con dos decimales y punto: para CSS y para canvas, no para leer. */
+  U.fmt2 = function (n) { return Math.round(n * 100) / 100; };
+
   /** ¿Ha pedido el sistema que se mueva lo menos posible? */
   U.pocoMovimiento = function () {
     return !!(window.matchMedia &&

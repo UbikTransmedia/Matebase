@@ -56,7 +56,7 @@ Course.topic('av-informacion', function (p) {
         var h = H(prob);
         out.set('$p(\\text{cara}) = ' + U.fmt(prob, 2) + '$, $p(\\text{cruz}) = ' + U.fmt(1 - prob, 2) + '$<br>' +
           '<strong>Entropía: $H = ' + U.fmt(h, 5) + '$ bits por lanzamiento</strong><br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           (Math.abs(prob - 0.5) < 0.01
             ? 'Moneda justa: máxima incertidumbre, exactamente 1 bit. No se puede comprimir.'
             : (prob < 0.05 || prob > 0.95
@@ -126,7 +126,7 @@ Course.topic('av-informacion', function (p) {
         out.set('<strong>Entropía de la fuente: $H = ' + U.fmt(H, 4) + '$ bits/símbolo</strong> (el mínimo teórico)<br>' +
           'Código de longitud fija: <strong>2,0000</strong> bits/símbolo<br>' +
           'Código de longitud variable: <strong>' + U.fmt(medio, 4) + '</strong> bits/símbolo<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           (medio < 2
             ? 'Ahorro del <strong>' + U.fmt((2 - medio) / 2 * 100, 1) + ' %</strong> frente al código fijo. ' +
               'Y todavía queda un margen de ' + U.fmt(medio - H, 4) + ' bits hasta el límite de Shannon.'

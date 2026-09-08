@@ -36,7 +36,7 @@ Course.topic('fn-integral-indef', function (p) {
       function paint() {
         out.set('$\\displaystyle\\int 2x\\,dx = x^2 + C$ &nbsp;·&nbsp; ahora $C = ' + U.fmt(C, 1) + '$<br>' +
           'La pendiente en $x=1$ vale $2$ <strong>en todas ellas</strong>, valga lo que valga $C$.<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Por eso hace falta un dato extra ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Por eso hace falta un dato extra ' +
           '(un punto por el que pase) para determinar una primitiva concreta.</span>');
         plot.render();
       }

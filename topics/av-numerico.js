@@ -52,7 +52,7 @@ Course.topic('av-numerico', function (p) {
         out.set('Paso <strong>' + n + '</strong> &nbsp;·&nbsp; intervalo $[' + U.fmt(a, 8) + ',\\ ' + U.fmt(b, 8) + ']$<br>' +
           'Punto medio: $' + U.fmt(m, 8) + '$, con $f = ' + U.fmt(f(m), 8) + '$<br>' +
           'Error máximo: $\\dfrac{' + (b0 - a0) + '}{2^{' + n + '}} = ' + U.fmt((b0 - a0) / Math.pow(2, n), 10) + '$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Raíz real: 1,5213797…</span>');
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Raíz real: 1,5213797…</span>');
         plot.render();
       }
       W.buttons(host, [
@@ -128,7 +128,7 @@ Course.topic('av-numerico', function (p) {
         out.set('Paso <strong>' + n + '</strong> &nbsp;·&nbsp; $x_{' + n + '} = ' + U.fmt(x, 12) + '$<br>' +
           'Error: $' + (err === 0 ? '0' : err.toExponential(3)) + '$ → unos <strong>' + dec +
           ' decimales correctos</strong><br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Cada paso aproximadamente duplica ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Cada paso aproximadamente duplica ' +
           'los decimales buenos. Con bisección harían falta ' + Math.round(dec * 3.32) + ' pasos para lo mismo.</span>');
         plot.render();
       }

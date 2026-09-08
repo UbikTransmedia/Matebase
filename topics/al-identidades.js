@@ -116,7 +116,7 @@ Course.topic('al-identidades', function (p) {
           g.point(v, (v - a) * (v - b), { color: 2, r: 4.5, label: 'vértice', labelDy: 14, labelDx: -22 });
           out.set('$(x' + (a >= 0 ? '-' + a : '+' + (-a)) + ')(x' + (b >= 0 ? '-' + b : '+' + (-b)) + ') = ' +
             ML.polyTex([1, -(a + b), a * b]) + '$' +
-            '<br><span style="font-size:12.5px;color:var(--ink-faint)">La suma de las raíces es ' +
+            '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">La suma de las raíces es ' +
             (a + b) + ' y su producto ' + (a * b) + ': justo $-b$ y $c$ del polinomio.</span>');
         }
       });
@@ -198,7 +198,7 @@ Course.topic('al-identidades', function (p) {
     },
     ask: function (d) {
       return 'Factoriza $' + ML.polyTex(d.coefs) + '$ usando una identidad notable. ' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe la expresión factorizada, por ejemplo <code>(2x-3)^2</code> o <code>(x-3)(x+3)</code>.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe la expresión factorizada, por ejemplo <code>(2x-3)^2</code> o <code>(x-3)(x+3)</code>.</span>';
     },
     sol: function (d) {
       var A = (d.a === 1 ? '' : d.a) + 'x';

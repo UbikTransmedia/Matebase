@@ -195,7 +195,7 @@ Course.topic('al-gauss', function (p) {
         return ML.termTex(f[0], 'x', 1, true) + ML.termTex(f[1], 'y', 1, false) + ' = ' + f[2];
       };
       return 'Escalona y clasifica: $\\begin{cases}' + eq(d.f1) + ' \\\\ ' + eq(d.f2) + '\\end{cases}$<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>1</code> determinado, ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> determinado, ' +
         '<code>2</code> indeterminado, <code>3</code> incompatible.</span>';
     },
     fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],

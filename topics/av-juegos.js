@@ -248,7 +248,7 @@ Course.topic('av-juegos', function (p) {
         '$\\begin{array}{c|cc} & B_1 & B_2 \\\\ \\hline A_1 & ' + d.a + ' & ' + d.b + ' \\\\ A_2 & ' +
         d.c + ' & ' + d.e + ' \\end{array}$<br>' +
         '¿Tiene A alguna estrategia dominante?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)"><code>1</code> sí, $A_1$ · ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> sí, $A_1$ · ' +
         '<code>2</code> sí, $A_2$ · <code>0</code> no tiene ninguna</span>';
     },
     fields: [{ name: 'r', label: 'Respuesta', w: 'tiny' }],
@@ -330,7 +330,7 @@ Course.topic('av-juegos', function (p) {
     },
     ask: function (d) {
       return '<em>' + d.s + '</em><br>¿Qué tipo de juego es?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)"><code>1</code> dilema del prisionero ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> dilema del prisionero ' +
         '(lo racional individual perjudica a todos) · <code>2</code> juego de coordinación ' +
         '(lo importante es ponerse de acuerdo, da igual en qué)</span>';
     },
@@ -363,9 +363,9 @@ Course.topic('av-juegos', function (p) {
     },
     ask: function (d) {
       return 'El rival juega, ronda a ronda: <strong>' + d.jugadas.slice(0, d.n).join(' · ') + '</strong> ' +
-        '<span style="font-size:14px;color:var(--ink-faint)">(C = coopera, T = traiciona)</span><br>' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">(C = coopera, T = traiciona)</span><br>' +
         '¿Qué juega <em>Tit for Tat</em> en la ronda <strong>' + d.n + '</strong>?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>C</code> o <code>T</code>.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>C</code> o <code>T</code>.</span>';
     },
     fields: [{ name: 'j', label: 'Jugada', w: 'tiny', ph: 'C / T' }],
     sol: function (d) { return { j: d.res }; },

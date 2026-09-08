@@ -132,7 +132,7 @@ Course.topic('al-ec2', function (p) {
     },
     ask: function (d) {
       return 'Resuelve $' + ML.polyTex([d.a, d.b, d.c]) + ' = 0$.' +
-        '<br><span style="font-size:14px;color:var(--ink-faint)">Escribe las dos soluciones ' +
+        '<br><span style="font-size:0.875rem;color:var(--ink-faint)">Escribe las dos soluciones ' +
         'separadas por punto y coma, en cualquier orden.</span>';
     },
     fields: [{ name: 's', label: 'Soluciones', w: 'wide', ph: '2; -3' }],
@@ -174,7 +174,7 @@ Course.topic('al-ec2', function (p) {
         ? ML.polyTex([d.a, 0, d.c])
         : ML.polyTex([d.a, d.b, 0]);
       return 'Resuelve sin usar la fórmula general: $' + tex + ' = 0$' +
-        '<br><span style="font-size:14px;color:var(--ink-faint)">Las dos soluciones, separadas por punto y coma.</span>';
+        '<br><span style="font-size:0.875rem;color:var(--ink-faint)">Las dos soluciones, separadas por punto y coma.</span>';
     },
     fields: [{ name: 's', label: 'Soluciones', w: 'wide', ph: '0; 3' }],
     sol: function (d) { return { s: d.sols.join('; ') }; },

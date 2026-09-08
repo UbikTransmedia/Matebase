@@ -62,10 +62,10 @@ Course.topic('av-markov', function (p) {
         var s = (1 - pll) / (2 - pss - pll);
         out.set('$P = \\begin{pmatrix} ' + U.fmt(pss, 2) + ' & ' + U.fmt(1 - pss, 2) + ' \\\\ ' +
           U.fmt(1 - pll, 2) + ' & ' + U.fmt(pll, 2) + '\\end{pmatrix}$ ' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">(filas: hoy sol / hoy lluvia)</span><br>' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">(filas: hoy sol / hoy lluvia)</span><br>' +
           'Día <strong>' + dia + '</strong>: sol $' + U.fmt(x[0], 5) + '$ &nbsp;·&nbsp; lluvia $' + U.fmt(x[1], 5) + '$<br>' +
           'Distribución <strong>estacionaria</strong>: sol $' + U.fmt(s, 5) + '$, lluvia $' + U.fmt(1 - s, 5) + '$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           (dia > 8 ? 'La predicción ya no depende de si hoy hacía sol o llovía: el sistema ha <em>olvidado</em> su punto de partida.'
             : 'Sigue avanzando días y verás que las curvas convergen, empieces donde empieces.') + '</span>');
         plot.render();
@@ -150,7 +150,7 @@ Course.topic('av-markov', function (p) {
         out.set('Objetivo: <strong>' + N + ' €</strong> &nbsp;·&nbsp; capital actual: <strong>' + k + ' €</strong> ' +
           '&nbsp;·&nbsp; probabilidad de ganar cada partida: <strong>' + U.fmt(prob, 2) + '</strong><br>' +
           'Probabilidad de alcanzar el objetivo antes de arruinarse: <strong>' + U.fmt(pGana(k) * 100, 2) + ' %</strong><br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           (prob < 0.5 ? 'Con el juego en contra (como en cualquier casino real), la probabilidad se desploma ' +
             'aunque la desventaja por partida sea mínima. Esa es toda la matemática del negocio.'
             : (prob > 0.5 ? 'Con ventaja, la ruina deja de ser casi segura, pero nunca es imposible.'

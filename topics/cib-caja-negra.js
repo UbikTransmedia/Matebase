@@ -111,7 +111,7 @@ Course.topic('cib-caja-negra', function (p) {
             (hist.length > 14 ? ' <span style="color:var(--ink-faint)">(' + hist.length + ' en total)</span>' : '');
         }
         var na = Object.keys(visto.a).length, nb = Object.keys(visto.b).length;
-        lineas += '<br><span style="font-size:12.5px;color:var(--ink-faint)">Transiciones distintas que has observado: ' +
+        lineas += '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Transiciones distintas que has observado: ' +
           na + ' de 4 con el primer mando, ' + nb + ' de 4 con el segundo.</span>';
         if (na === 4 && nb === 4 && !revelado) {
           lineas += '<br><strong style="color:var(--ok)">Ya has visto la caja entera: con esas ocho observaciones puedes reconstruir la tabla sin abrirla.</strong>';

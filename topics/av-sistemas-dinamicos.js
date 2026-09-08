@@ -87,7 +87,7 @@ Course.topic('av-sistemas-dinamicos', function (p) {
       function paint() {
         pistas = [];
         out.set('$' + sistemas[tipo].t + '$<br>' + sistemas[tipo].txt +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Haz clic en el plano para soltar ' +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Haz clic en el plano para soltar ' +
           'el sistema desde ese estado.</span>');
         plot.render();
       }
@@ -166,7 +166,7 @@ Course.topic('av-sistemas-dinamicos', function (p) {
           '<span style="color:var(--c1)">presas</span> · <span style="color:var(--c2)">depredadores</span> — ' +
           'en el espacio de fases la trayectoria es una <strong>órbita cerrada</strong>: el ciclo se ' +
           'repite indefinidamente.<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Fíjate en el desfase: los depredadores ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Fíjate en el desfase: los depredadores ' +
           'alcanzan su máximo <em>después</em> que las presas, porque necesitan comer para reproducirse.</span>');
         p1.render(); p2.render();
       }
@@ -245,7 +245,7 @@ Course.topic('av-sistemas-dinamicos', function (p) {
     },
     ask: function (d) {
       return 'El sistema $x\' = ' + d.a + 'x$, $y\' = ' + d.b + 'y$ tiene el equilibrio en el origen. ' +
-        '¿De qué tipo es?<br><span style="font-size:14px;color:var(--ink-faint)">' +
+        '¿De qué tipo es?<br><span style="font-size:0.875rem;color:var(--ink-faint)">' +
         '<code>1</code> nodo estable · <code>2</code> nodo inestable · <code>3</code> punto de silla</span>';
     },
     fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],

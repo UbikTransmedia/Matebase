@@ -39,7 +39,7 @@ Course.topic('lg-demostracion', function (p) {
         out.set('$n = ' + n + '$ → $' + n + '^2 + ' + n + ' + 41 = ' + U.miles(val) + '$ → ' +
           (esPrimo ? '<strong style="color:var(--ok)">primo</strong>' :
             '<strong style="color:var(--bad)">NO es primo</strong>: $' + val + ' = ' + ML.factorTex(val) + '$') +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">' +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           (n < 40 ? 'Llevamos ' + (n + 1) + ' aciertos seguidos. Sigue subiendo…'
             : 'Falla en $n = 40$, porque $40^2+40+41 = 40\\cdot41+41 = 41^2$. Cuarenta comprobaciones ' +
               'correctas no valían absolutamente nada como demostración.') + '</span>');
@@ -348,7 +348,7 @@ Course.topic('lg-demostracion', function (p) {
     },
     ask: function (d) {
       return '<em>' + d.t + '</em><br>¿Qué método es el más adecuado?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)"><code>1</code> demostración directa · ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> demostración directa · ' +
         '<code>2</code> contrarrecíproco · <code>3</code> reducción al absurdo · ' +
         '<code>4</code> inducción · <code>5</code> contraejemplo</span>';
     },

@@ -154,7 +154,7 @@ Course.topic('ar-divisibilidad', function (p) {
         out.innerHTML = MathX.inline('$' + n + ' = ' + (ML.isPrime(n) ? n + '$ &nbsp;(es primo)' :
           ML.factorTex(n) + '$')) +
           '<br>Divisores (' + nd + '): ' + ds.join(', ') +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">El número de divisores sale de ' +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">El número de divisores sale de ' +
           'sumar 1 a cada exponente y multiplicar: ' +
           MathX.inline('$' + (f.map(function (e) { return '(' + e[1] + '+1)'; }).join('\\cdot') || '1') +
             ' = ' + nd + '$') + '</span>';

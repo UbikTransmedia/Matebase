@@ -197,7 +197,7 @@ Course.topic('al-fracciones-alg', function (p) {
     ask: function (d) {
       var f = function (x) { return 'x' + (x >= 0 ? '-' + x : '+' + (-x)); };
       return 'Suma y simplifica: $\\dfrac{' + d.k1 + '}{' + f(d.a) + '} + \\dfrac{' + d.k2 + '}{' + f(d.b) + '}$<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Da los coeficientes del numerador resultante ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Da los coeficientes del numerador resultante ' +
         '(en la forma $mx+n$).</span>';
     },
     fields: [{ name: 'm', label: 'Coef. de x', w: 'tiny' }, { name: 'n', label: 'Término indep.', w: 'tiny' }],

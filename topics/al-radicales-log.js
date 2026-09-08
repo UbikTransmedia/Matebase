@@ -50,7 +50,7 @@ Course.topic('al-radicales-log', function (p) {
           }
           out.set('$' + base + '^{' + U.fmt(x, 2) + '} = ' + U.fmt(y, 4) + '$ &nbsp;⟺&nbsp; ' +
             '$\\log_{' + base + '} ' + U.fmt(y, 4) + ' = ' + U.fmt(x, 2) + '$<br>' +
-            '<span style="font-size:12.5px;color:var(--ink-faint)">El punto $(' + U.fmt(x, 2) + ', ' +
+            '<span style="font-size:0.7812rem;color:var(--ink-faint)">El punto $(' + U.fmt(x, 2) + ', ' +
             U.fmt(y, 2) + ')$ de la exponencial se convierte en $(' + U.fmt(y, 2) + ', ' + U.fmt(x, 2) +
             ')$ del logaritmo: se intercambian las coordenadas.</span>');
         }

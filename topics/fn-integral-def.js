@@ -126,7 +126,7 @@ Course.topic('fn-integral-def', function (p) {
           U.fmt(I, 5) + '$<br>' +
           '<span style="color:var(--c3)">verde: cuenta positivo</span> &nbsp;·&nbsp; ' +
           '<span style="color:var(--c2)">rojo: cuenta negativo</span><br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Si lo que quieres es el área ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Si lo que quieres es el área ' +
           'geométrica de verdad, hay que partir la integral por los cortes con el eje y sumar los ' +
           'valores absolutos.</span>');
         plot.render();

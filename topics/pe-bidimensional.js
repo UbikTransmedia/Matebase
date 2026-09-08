@@ -281,7 +281,7 @@ Course.topic('pe-bidimensional', function (p) {
       return { t: c.t, ok: c.ok };
     },
     ask: function (d) {
-      return d.t + '<br><span style="font-size:14px;color:var(--ink-faint)">¿Qué conclusión es la ' +
+      return d.t + '<br><span style="font-size:0.875rem;color:var(--ink-faint)">¿Qué conclusión es la ' +
         'correcta? <code>1</code>: hay relación lineal fuerte y tiene sentido usar la regresión. ' +
         '<code>2</code>: hay relación, pero no lineal, así que $r$ engaña. ' +
         '<code>3</code>: hay correlación pero seguramente por una tercera variable oculta.</span>';

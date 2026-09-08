@@ -70,7 +70,7 @@ Course.topic('ge-angulos', function (p) {
       function paint() {
         out.set('Ángulo <span style="color:var(--c3)">verde</span>: $' + ang + '^\\circ$ &nbsp;·&nbsp; ' +
           'ángulo <span style="color:var(--c4)">naranja</span>: $' + (180 - ang) + '^\\circ$<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Los cuatro verdes son iguales ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Los cuatro verdes son iguales ' +
           '(correspondientes y alternos); cada verde con cada naranja suma $180^\\circ$. ' +
           'Separar las paralelas no cambia ningún ángulo.</span>');
         plot.render();
@@ -278,7 +278,7 @@ Course.topic('ge-angulos', function (p) {
     },
     ask: function (d) {
       return '¿Existe un triángulo con lados $' + d.a + '$, $' + d.b + '$ y $' + d.c + '$?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
     },
     fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
     sol: function (d) { return { r: d.ok ? 'si' : 'no' }; },

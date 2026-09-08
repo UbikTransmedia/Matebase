@@ -212,7 +212,7 @@ Course.topic('ar-enteros', function (p) {
     },
     ask: function (d) {
       return 'Ordena de menor a mayor: $' + d.s.join(',\\quad ') + '$<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escríbelos separados por punto y coma.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escríbelos separados por punto y coma.</span>';
     },
     fields: [{ name: 'o', label: 'Ordenados', w: 'wide', ph: '-3; -1; 0; 5' }],
     sol: function (d) { return { o: d.orden.join('; ') }; },

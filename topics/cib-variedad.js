@@ -7,7 +7,7 @@ Course.topic('cib-variedad', function (p) {
     'requerida</strong>, y suele citarse así:');
 
   p.note('<strong>Solo la variedad puede absorber variedad.</strong><br>' +
-    '<span style="font-size:13px;color:var(--ink-faint)">Ashby, <em>An Introduction to Cybernetics</em>, 1956</span>',
+    '<span style="font-size:0.8125rem;color:var(--ink-faint)">Ashby, <em>An Introduction to Cybernetics</em>, 1956</span>',
     'ok', 'La ley, en siete palabras');
 
   p.text('Dicho sin misterio: <strong>un regulador que tiene menos jugadas que el entorno pierde ' +

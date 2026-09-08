@@ -156,7 +156,7 @@ Course.topic('al-inecuaciones', function (p) {
     ask: function (d) {
       return 'Resuelve $' + ML.termTex(d.a, 'x', 1, true) + ML.termTex(d.b, '', 0, false) + ' ' +
         d.sentido + ' ' + d.c + '$<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Da el valor frontera y escribe ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Da el valor frontera y escribe ' +
         '<code>1</code> si la solución es «x mayor que» ese valor, o <code>2</code> si es «x menor que».</span>';
     },
     fields: [{ name: 'v', label: 'Valor frontera', w: 'tiny' }, { name: 's', label: 'Sentido (1 o 2)', w: 'tiny' }],
@@ -190,7 +190,7 @@ Course.topic('al-inecuaciones', function (p) {
     },
     ask: function (d) {
       return 'Resuelve $' + ML.polyTex([d.a, d.b, d.c]) + ' ' + d.sentido + ' 0$<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>1</code> si la solución es ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> si la solución es ' +
         'el intervalo <em>entre</em> las raíces, o <code>2</code> si son los dos tramos <em>de fuera</em>.</span>';
     },
     fields: [

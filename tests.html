@@ -461,7 +461,10 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           [].forEach.call(h.querySelectorAll('.fbox'), function (b) {
             var rb = b.getBoundingClientRect();
             if (!rb.height) return;
+            // El globo de ayuda es un panel flotante: cuelga por debajo de la
+            // caja a proposito, y no cuenta como formula que se sale.
             [].forEach.call(b.querySelectorAll('.mx, .fbox__lab'), function (m) {
+              if (m.closest && m.closest('.fbox__tip')) return;
               // El globo de «cómo se lee» vive fuera de la caja a propósito.
               if (m.closest('.fbox__tip')) return;
               var rm = m.getBoundingClientRect();

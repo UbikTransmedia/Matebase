@@ -103,7 +103,7 @@ Course.topic('ar-operaciones', function (p) {
       var out = W.readout(host, '');
       function paint() {
         out.innerHTML = MathX.display(pasos[i]) +
-          '<div style="text-align:center;font-family:var(--sans);font-size:13.5px;color:var(--ink-faint);margin-top:8px">' +
+          '<div style="text-align:center;font-family:var(--sans);font-size:0.8438rem;color:var(--ink-faint);margin-top:8px">' +
           MathX.inline(notas[i]) + '</div>';
       }
       W.buttons(host, [

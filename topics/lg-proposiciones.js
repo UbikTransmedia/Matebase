@@ -125,13 +125,13 @@ Course.topic('lg-proposiciones', function (p) {
       function paint() {
         var cumplida = !apruebo || regalo;
         out.innerHTML =
-          '<div style="font-size:15px;margin-bottom:8px">Promesa: <em>«si apruebas ($p$), te regalo la bici ($q$)»</em></div>' +
+          '<div style="font-size:0.9375rem;margin-bottom:8px">Promesa: <em>«si apruebas ($p$), te regalo la bici ($q$)»</em></div>' +
           '<div>Ha aprobado: <strong>' + (apruebo ? 'SÍ' : 'NO') + '</strong> &nbsp;·&nbsp; ' +
           'Le he regalado la bici: <strong>' + (regalo ? 'SÍ' : 'NO') + '</strong></div>' +
-          '<div style="margin-top:8px;font-size:16px;color:' + (cumplida ? 'var(--ok)' : 'var(--bad)') + '">' +
+          '<div style="margin-top:8px;font-size:1rem;color:' + (cumplida ? 'var(--ok)' : 'var(--bad)') + '">' +
           '<strong>' + (cumplida ? 'La promesa NO se ha roto' : 'La promesa SE HA ROTO') + '</strong> → ' +
           MathX.inline('$p \\to q$') + ' es <strong>' + (cumplida ? 'verdadera' : 'falsa') + '</strong></div>' +
-          '<div style="margin-top:6px;font-size:12.5px;color:var(--ink-faint)">' +
+          '<div style="margin-top:6px;font-size:0.7812rem;color:var(--ink-faint)">' +
           (!apruebo
             ? 'Si no aprueba, la promesa no dice nada sobre lo que debe pasar: no puede haberse roto, ' +
               'le regale la bici o no. Por eso una implicación con premisa falsa es <em>siempre</em> verdadera.'
@@ -256,7 +256,7 @@ Course.topic('lg-proposiciones', function (p) {
     ask: function (d) {
       return 'Si $p$ es <strong>' + (d.pv ? 'verdadera' : 'falsa') + '</strong> y $q$ es ' +
         '<strong>' + (d.qv ? 'verdadera' : 'falsa') + '</strong>, ¿qué valor tiene $' + d.t + '$?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>V</code> o <code>F</code>.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>V</code> o <code>F</code>.</span>';
     },
     fields: [{ name: 'v', label: 'Valor', w: 'tiny', ph: 'V / F' }],
     sol: function (d) { return { v: d.val ? 'V' : 'F' }; },
@@ -293,7 +293,7 @@ Course.topic('lg-proposiciones', function (p) {
     ask: function (d) {
       var nom = ['<strong>recíproca</strong>', '<strong>contraria</strong>', '<strong>contrarrecíproca</strong>'][d.cual];
       return 'Dada la implicación «si ' + d.p + ', entonces ' + d.q + '», ¿cuál es su ' + nom + '?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">' +
         '<code>1</code> si ' + d.q + ', entonces ' + d.p + '<br>' +
         '<code>2</code> si no ' + d.p + ', entonces no ' + d.q + '<br>' +
         '<code>3</code> si no ' + d.q + ', entonces no ' + d.p + '</span>';
@@ -331,7 +331,7 @@ Course.topic('lg-proposiciones', function (p) {
       var op1 = d.correcta === 1 ? d.n : d.mal;
       var op2 = d.correcta === 1 ? d.mal : d.n;
       return '¿Cuál es la negación de «<em>' + d.t + '</em>»?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">' +
         '<code>1</code> ' + op1 + '<br><code>2</code> ' + op2 + '</span>';
     },
     fields: [{ name: 'r', label: 'Opción', w: 'tiny' }],
@@ -376,7 +376,7 @@ Course.topic('lg-proposiciones', function (p) {
     },
     ask: function (d) {
       return 'Clasifica la fórmula $' + d.t + '$ construyendo su tabla de verdad.<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)"><code>1</code> tautología (siempre V) · ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> tautología (siempre V) · ' +
         '<code>2</code> contradicción (siempre F) · <code>3</code> contingencia (depende)</span>';
     },
     fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],

@@ -228,7 +228,7 @@ Course.topic('al-complejos', function (p) {
     },
     ask: function (d) {
       return 'Calcula $i^{' + d.n + '}$.<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>1</code>, <code>-1</code>, ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code>, <code>-1</code>, ' +
         '<code>i</code> o <code>-i</code>.</span>';
     },
     fields: [{ name: 'v', label: 'Resultado', w: 'tiny' }],

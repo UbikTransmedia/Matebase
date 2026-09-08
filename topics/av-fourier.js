@@ -88,7 +88,7 @@ Course.topic('av-fourier', function (p) {
         var F = formas[forma];
         out.set('<strong>' + F.t + '</strong> con <strong>' + N + '</strong> ' +
           U.plural(N, 'armónico', 'armónicos') + ' — ' + F.coef + '<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           (N < 4 ? 'Con pocos términos la aproximación es tosca.'
             : (N < 20 ? 'Ya se reconoce la forma, aunque las esquinas se resisten.'
               : 'Fíjate en los picos que quedan junto a los saltos: no desaparecen por muchos armónicos ' +
@@ -140,7 +140,7 @@ Course.topic('av-fourier', function (p) {
         var activas = [];
         [0, 1, 2].forEach(function (i) { if (A[i] > 0.01) activas.push('f = ' + frec[i]); });
         out.set('La señal contiene ' + (activas.length ? activas.join(', ') : 'nada') + '.<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">La vista temporal y la espectral ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">La vista temporal y la espectral ' +
           'contienen exactamente la misma información. Comprimir un MP3 consiste en tirar las barras ' +
           'del espectro que el oído no distingue.</span>');
         p1.render();

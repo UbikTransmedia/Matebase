@@ -46,7 +46,7 @@ Course.topic('al-ec1', function (p) {
       }
       function paint(msg) {
         out.set('Ecuación actual: $' + ML.termTex(A, 'x', 1, true) + ML.termTex(B, '', 0, false) + ' = ' + C + '$' +
-          (msg ? '<br><span style="font-size:13px;color:var(--ink-faint)">' + msg + '</span>' : '') +
+          (msg ? '<br><span style="font-size:0.8125rem;color:var(--ink-faint)">' + msg + '</span>' : '') +
           (A === 1 && B === 0 ? '<br><strong style="color:var(--ok)">¡Resuelto! x = ' + C + '</strong>' : ''));
         plot.render();
       }

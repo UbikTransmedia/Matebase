@@ -62,7 +62,7 @@ Course.topic('pe-binomial', function (p) {
           'Media $\\mu = np = ' + U.fmt(mu, 3) + '$ &nbsp;·&nbsp; ' +
           'desviación típica $\\sigma = \\sqrt{np(1-p)} = ' + U.fmt(sd, 4) + '$<br>' +
           'El valor más probable es $k = ' + mejor + '$, con $P = ' + U.fmt(vals[mejor], 5) + '$.' +
-          (n >= 25 ? '<br><span style="font-size:12.5px;color:var(--ink-faint)">Con $n$ grande la ' +
+          (n >= 25 ? '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Con $n$ grande la ' +
             'silueta ya es prácticamente una campana: eso es lo que permitirá aproximarla por una normal.</span>' : ''));
       }
       var row = W.row(host);

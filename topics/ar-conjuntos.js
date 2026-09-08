@@ -91,7 +91,7 @@ Course.topic('ar-conjuntos', function (p) {
             'Pertenece a $\\mathbb{R}$. ' +
             (esEntero ? 'Está prácticamente sobre el entero $' + Math.round(x) + '$, que es de $\\mathbb{Z}$ (y por tanto de $\\mathbb{Q}$).'
               : 'La fracción más simple que lo aproxima es $' + f.tex() + ' = ' + U.fmt(f.val(), 5) + '$.') +
-            '<br><span style="font-size:12.5px;color:var(--ink-faint)">Los puntos verdes son enteros, ' +
+            '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Los puntos verdes son enteros, ' +
             'los naranjas racionales no enteros y los rojos irracionales.</span>');
         }
       });
@@ -190,7 +190,7 @@ Course.topic('ar-conjuntos', function (p) {
     },
     ask: function (d) {
       return '¿Cuál es el conjunto <strong>más pequeño</strong> al que pertenece $' + d.t + '$?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>1</code> para $\\mathbb{N}$, ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> para $\\mathbb{N}$, ' +
         '<code>2</code> para $\\mathbb{Z}$, <code>3</code> para $\\mathbb{Q}$, ' +
         '<code>4</code> para irracional.</span>';
     },
@@ -285,7 +285,7 @@ Course.topic('ar-conjuntos', function (p) {
     },
     ask: function (d) {
       return '¿Es $' + d.t + '$ racional o irracional?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>r</code> si es racional ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>r</code> si es racional ' +
         'o <code>i</code> si es irracional.</span>';
     },
     fields: [{ name: 'x', label: 'Respuesta', w: 'tiny', ph: 'r / i' }],

@@ -54,7 +54,7 @@ Course.topic('al-polinomios', function (p) {
         tabla.appendChild(wrap);
         var prod = ML.polyMul(A, B);
         out.set('$\\left(' + ML.polyTex(A) + '\\right)\\left(' + ML.polyTex(B) + '\\right) = ' +
-          ML.polyTex(prod) + '$<br><span style="font-size:12.5px;color:var(--ink-faint)">Grado ' +
+          ML.polyTex(prod) + '$<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Grado ' +
           (A.length - 1) + ' por grado ' + (B.length - 1) + ' da grado ' + (prod.length - 1) + '.</span>');
       }
       var row = W.row(host);

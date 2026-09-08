@@ -117,7 +117,7 @@ Course.topic('ar-proporcionalidad', function (p) {
         out.set('$' + p0 + ' \\cdot ' + U.fmt(i1, 2) + ' \\cdot ' + U.fmt(i2, 2) + ' = ' + U.fmt(fin, 2) + '$ €' +
           '<br>Índice total: $' + U.fmt(i1 * i2, 4) + '$ → variación global del <strong>' +
           U.fmts(total, 2) + ' %</strong>' +
-          (Math.abs(total) < 0.001 ? '' : '<br><span style="font-size:12.5px;color:var(--ink-faint)">' +
+          (Math.abs(total) < 0.001 ? '' : '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">' +
             'No es la suma de los dos porcentajes: los índices se <em>multiplican</em>, no se suman.</span>'));
         plot.render();
       }

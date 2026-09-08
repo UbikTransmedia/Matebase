@@ -2,15 +2,15 @@
 
 /* --- secciones y prosa --- */
 .sec{margin:34px 0 14px}
-.sec h2{font-size:22.5px; letter-spacing:-.02em; display:flex; align-items:center; gap:10px}
+.sec h2{font-size:1.4062rem; letter-spacing:-.02em; display:flex; align-items:center; gap:10px}
 .sec h2::before{content:""; width:4px; height:20px; border-radius:3px; background:var(--accent); flex:0 0 4px}
-.sub{font-size:17.5px; font-weight:640; margin:24px 0 8px; color:var(--ink)}
+.sub{font-size:1.0938rem; font-weight:640; margin:24px 0 8px; color:var(--ink)}
 .prose p{margin:0 0 .95em}
 
 /* --- avisos --- */
 .note{
   border-left:3px solid var(--accent); background:var(--accent-soft);
-  padding:12px 15px; border-radius:0 10px 10px 0; margin:16px 0; font-size:15.4px;
+  padding:12px 15px; border-radius:0 10px 10px 0; margin:16px 0; font-size:0.9625rem;
 }
 .note--warn{border-color:var(--warn); background:var(--warn-soft)}
 .note--ok{border-color:var(--ok); background:var(--ok-soft)}
@@ -21,7 +21,7 @@
   box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--use) 22%, transparent);
 }
 .note--util .note__t{color:var(--use); opacity:1; font-weight:750}
-.note__t{display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.1em;
+.note__t{display:block; font-size:0.7188rem; text-transform:uppercase; letter-spacing:.1em;
   font-weight:700; opacity:.75; margin-bottom:5px}
 .note p:last-child{margin-bottom:0}
 
@@ -41,15 +41,15 @@
 /* El globo de ayuda tambien es un div hijo de .fbox, y este selector tiene mas
    especificidad que .fbox__tip: si no se le excluye, le impone padding lateral
    cero y un scroll horizontal que no le corresponde. */
-.fbox > div:not(.fbox__tip){overflow-x:auto; padding:14px 0}
+.fbox > div:not(.fbox__tip){overflow-x:auto; padding:.875rem 0}
 /* Entre dos formulas seguidas ese relleno se sumaria dos veces y la caja
    quedaria desangelada; se solapa para dejar una separacion normal. */
-.fbox > div:not(.fbox__tip) + div:not(.fbox__tip){margin-top:-14px}
+.fbox > div:not(.fbox__tip) + div:not(.fbox__tip){margin-top:-.875rem}
 /* con etiqueta hace falta hueco arriba para que no pise a la fórmula */
 .fbox--lab{padding-top:9px}
 .fbox__lab{
   position:absolute; top:9px; left:16px; padding:0;
-  font-size:11px; text-transform:uppercase; letter-spacing:.09em; color:var(--ink-faint);
+  font-size:0.6875rem; text-transform:uppercase; letter-spacing:.09em; color:var(--ink-faint);
   font-weight:650; line-height:1.1;
 }
 
@@ -57,12 +57,12 @@
    Ayuda opcional en la esquina de la formula. Se abre al pasar el raton y
    tambien al pulsar, porque en un movil no hay raton. El globo se ancla a la
    derecha y nunca es mas ancho que la caja, para que no se salga. */
-.fbox--ayuda{padding-right:38px}
+.fbox--ayuda{padding-right:2.38rem}
 .fbox__help{
-  position:absolute; top:8px; right:9px; z-index:3;
-  width:21px; height:21px; padding:0; border-radius:50%;
+  position:absolute; top:.5rem; right:.56rem; z-index:3;
+  width:1.32rem; height:1.32rem; padding:0; border-radius:50%;
   border:1px solid var(--line); background:var(--panel); color:var(--ink-faint);
-  font:inherit; font-size:12px; font-weight:700; line-height:1;
+  font:inherit; font-size:0.75rem; font-weight:700; line-height:1;
   display:grid; place-items:center; cursor:help; transition:.13s;
 }
 .fbox__help:hover,
@@ -77,12 +77,12 @@
   content:''; position:absolute; inset:-7px;   /* cuadrada: aprovecha las esquinas */
 }
 .fbox__tip{
-  position:absolute; top:34px; right:10px; z-index:6;
+  position:absolute; top:2.13rem; right:.62rem; z-index:6;
   width:min(400px, calc(100% - 20px));
   padding:12px 15px; border:1px solid var(--tip-line); border-radius:4px 4px 10px 4px;
   background:var(--tip);
   box-shadow:0 1px 2px rgba(0,0,0,.14), 0 8px 20px -6px rgba(0,0,0,.22);
-  font-size:13.7px; line-height:1.55; color:var(--tip-ink);
+  font-size:0.8562rem; line-height:1.55; color:var(--tip-ink);
   text-align:left; text-wrap:pretty;
   opacity:0; visibility:hidden; transform:translateY(-4px);
   transition:opacity .14s, transform .14s, visibility .14s;
@@ -96,7 +96,7 @@
 /* Puente invisible entre el botón y el globo: sin él, el globo se cerraba
    justo al mover el ratón hacia el texto para leerlo con calma. */
 .fbox__tip::before{
-  content:''; position:absolute; left:0; right:0; top:-13px; height:13px;
+  content:''; position:absolute; left:0; right:0; top:-.82rem; height:.82rem;
 }
 .fbox__tip:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 .fbox__tip em{color:var(--tip-strong); font-style:normal; font-weight:620}
@@ -105,22 +105,22 @@
 /* --- ideas clave --- */
 .keys{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
   padding:16px 20px; margin:26px 0 8px; box-shadow:var(--shadow)}
-.keys h3{font-size:13px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-faint); margin-bottom:9px}
+.keys h3{font-size:0.8125rem; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-faint); margin-bottom:9px}
 .keys ul{margin:0; padding-left:18px}
 .keys li{margin:.42em 0}
 
 /* --- tablas --- */
 .tbl-wrap{overflow-x:auto; margin:16px 0}
-table.tbl{border-collapse:collapse; width:100%; font-size:15px; background:var(--panel);
+table.tbl{border-collapse:collapse; width:100%; font-size:0.9375rem; background:var(--panel);
   border:1px solid var(--line); border-radius:10px; overflow:hidden}
 table.tbl th,table.tbl td{padding:8px 12px; text-align:left; border-bottom:1px solid var(--line-soft)}
-table.tbl th{background:var(--panel-2); font-size:13px; text-transform:uppercase;
+table.tbl th{background:var(--panel-2); font-size:0.8125rem; text-transform:uppercase;
   letter-spacing:.05em; color:var(--ink-soft); font-weight:660}
 table.tbl tr:last-child td{border-bottom:0}
 table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular-nums}
 
 /* --- etiquetas --- */
-.tag{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:640;
+.tag{display:inline-flex; align-items:center; gap:5px; font-size:0.7188rem; font-weight:640;
   padding:3px 9px; border-radius:20px; background:var(--panel-2); color:var(--ink-soft);
   border:1px solid var(--line-soft); text-transform:uppercase; letter-spacing:.05em}
 .tag--b{background:var(--ok-soft); color:var(--ok); border-color:transparent}
@@ -134,9 +134,9 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
 }
 .card__head{display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:11px 16px;
   border-bottom:1px solid var(--line-soft)}
-.card__kind{font-size:10.5px; font-weight:730; text-transform:uppercase; letter-spacing:.09em;
+.card__kind{font-size:0.6562rem; font-weight:730; text-transform:uppercase; letter-spacing:.09em;
   padding:3px 8px; border-radius:6px; white-space:nowrap}
-.card__title{font-size:15.5px; font-weight:640}
+.card__title{font-size:0.9688rem; font-weight:640}
 .card__body{padding:15px 16px}
 .card__foot{display:flex; flex-wrap:wrap; gap:8px; align-items:center;
   padding:11px 16px; border-top:1px solid var(--line-soft); background:var(--panel-2)}
@@ -147,12 +147,12 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
 .card--ex .card__head{background:var(--ok-soft)}
 .card--ex .card__kind{background:var(--ok); color:#fff}
 .card__spacer{flex:1}
-.card__score{font-size:12.5px; color:var(--ink-faint); font-variant-numeric:tabular-nums}
+.card__score{font-size:0.7812rem; color:var(--ink-faint); font-variant-numeric:tabular-nums}
 
 /* botones */
 .btn{
   border:1px solid var(--line); background:var(--panel); color:var(--ink-soft);
-  padding:6.5px 13px; border-radius:9px; cursor:pointer; font-size:14px; font-weight:560;
+  padding:6.5px 13px; border-radius:9px; cursor:pointer; font-size:0.875rem; font-weight:560;
   display:inline-flex; align-items:center; gap:6px; transition:.13s;
 }
 .btn:hover{border-color:var(--accent); color:var(--accent); background:var(--accent-soft)}
@@ -163,18 +163,18 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
 .btn--ok:hover{filter:brightness(1.08); color:#fff; background:var(--ok); border-color:var(--ok)}
 .btn--ghost{background:transparent}
 .btn[disabled]{opacity:.45; cursor:default; transform:none}
-.btn--sm{padding:4px 9px; font-size:12.5px; border-radius:7px}
+.btn--sm{padding:4px 9px; font-size:0.7812rem; border-radius:7px}
 
 /* enunciado */
-.q{font-size:16.5px; margin-bottom:13px}
+.q{font-size:1.0312rem; margin-bottom:13px}
 .q .qn{font-weight:660; color:var(--accent); margin-right:5px}
 
 /* campos de respuesta */
 .ans{display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; margin:10px 0 2px}
 .fld{display:flex; flex-direction:column; gap:4px}
-.fld label{font-size:12.5px; color:var(--ink-faint); font-weight:600}
+.fld label{font-size:0.7812rem; color:var(--ink-faint); font-weight:600}
 .fld input{
-  font:inherit; font-size:15.5px; font-family:var(--mono); width:130px; padding:7px 10px;
+  font:inherit; font-size:0.9688rem; font-family:var(--mono); width:130px; padding:7px 10px;
   border:1.5px solid var(--line); border-radius:9px; background:var(--bg-alt); color:var(--ink);
 }
 .fld input:focus{border-color:var(--accent); outline:none}
@@ -183,7 +183,7 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
 .fld.is-ok input{border-color:var(--ok); background:var(--ok-soft)}
 .fld.is-bad input{border-color:var(--bad); background:var(--bad-soft)}
 
-.verdict{margin-top:12px; padding:10px 13px; border-radius:10px; font-size:14.8px; display:none}
+.verdict{margin-top:12px; padding:10px 13px; border-radius:10px; font-size:0.925rem; display:none}
 .verdict.is-on{display:block}
 .verdict--ok{background:var(--ok-soft); color:var(--ok); border:1px solid color-mix(in srgb,var(--ok) 30%,transparent)}
 .verdict--bad{background:var(--bad-soft); color:var(--bad); border:1px solid color-mix(in srgb,var(--bad) 30%,transparent)}
@@ -193,12 +193,12 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
 .steps{display:none; margin-top:14px; border-top:1px dashed var(--line); padding-top:13px}
 .steps.is-on{display:block}
 .steps ol{counter-reset:s; list-style:none; padding-left:0; margin:0}
-.steps li{position:relative; padding-left:32px; margin:.55em 0; font-size:15.4px}
+.steps li{position:relative; padding-left:32px; margin:.55em 0; font-size:0.9625rem}
 .steps li::before{
   counter-increment:s; content:counter(s);
   position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:7px;
   background:var(--accent-soft); color:var(--accent-ink);
-  font-size:11.5px; font-weight:700; display:grid; place-items:center;
+  font-size:0.7188rem; font-weight:700; display:grid; place-items:center;
 }
 .steps .fin{margin-top:12px; padding:9px 13px; background:var(--ok-soft); color:var(--ok);
   border-radius:9px; font-weight:600}
@@ -209,9 +209,9 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
 .stage canvas{display:block; width:100%; touch-action:none}
 .ctrls{display:flex; flex-wrap:wrap; gap:14px 20px; align-items:center; margin:13px 0 4px}
 .ctrl{display:flex; flex-direction:column; gap:3px; min-width:180px; flex:1 1 180px}
-.ctrl__top{display:flex; justify-content:space-between; align-items:baseline; font-size:13px}
+.ctrl__top{display:flex; justify-content:space-between; align-items:baseline; font-size:0.8125rem}
 .ctrl__lab{color:var(--ink-soft); font-weight:600}
-.ctrl__val{font-family:var(--mono); font-size:13px; color:var(--accent); font-weight:600}
+.ctrl__val{font-family:var(--mono); font-size:0.8125rem; color:var(--accent); font-weight:600}
 /* El deslizador se veia como una raya de 5 px, y esos 5 px eran TODO lo que
    habia que acertar con el raton: la caja del control medía justo eso. La
    pista sigue siendo fina, pero la zona de agarre es ahora de 26 px. */
@@ -235,30 +235,30 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
   border:2.5px solid var(--panel);
 }
 .ctrl input[type=range]:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:6px}
-.readout{font-family:var(--mono); font-size:14px; background:var(--panel-2);
+.readout{font-family:var(--mono); font-size:0.875rem; background:var(--panel-2);
   border:1px solid var(--line-soft); border-radius:9px; padding:9px 13px; margin-top:11px;
   color:var(--ink); line-height:1.75; overflow-x:auto}
 .chips{display:flex; flex-wrap:wrap; gap:7px; margin:10px 0 2px}
 .chip{border:1px solid var(--line); background:var(--panel); border-radius:20px;
-  padding:6px 13px; font-size:13px; cursor:pointer; color:var(--ink-soft)}
+  padding:6px 13px; font-size:0.8125rem; cursor:pointer; color:var(--ink-soft)}
 .chip:hover{border-color:var(--accent); color:var(--accent)}
 .chip.is-on{background:var(--accent); border-color:var(--accent); color:#fff}
-.legend{display:flex; flex-wrap:wrap; gap:14px; font-size:13px; color:var(--ink-soft); margin-top:9px}
+.legend{display:flex; flex-wrap:wrap; gap:14px; font-size:0.8125rem; color:var(--ink-soft); margin-top:9px}
 .legend i{display:inline-block; width:14px; height:3px; border-radius:2px; vertical-align:middle; margin-right:6px}
-.hintline{font-size:12.5px; color:var(--ink-faint); margin-top:8px; font-style:italic}
+.hintline{font-size:0.7812rem; color:var(--ink-faint); margin-top:8px; font-style:italic}
 .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
 @media (max-width:640px){.grid2{grid-template-columns:1fr}}
 
 /* placeholder de tema no escrito */
 .soon{border:1px dashed var(--line); border-radius:var(--radius); padding:22px;
   background:var(--panel)}
-.soon h3{font-size:16px; margin-bottom:8px}
+.soon h3{font-size:1rem; margin-bottom:8px}
 .soon ul{margin-top:6px}
 
 /* --- creditos de la portada --- */
 .creditos{
   margin:38px 0 0; padding:18px 0 0; border-top:1px solid var(--line-soft);
-  font-size:13.6px; line-height:1.6; color:var(--ink-faint);
+  font-size:0.85rem; line-height:1.6; color:var(--ink-faint);
 }
 .creditos p{margin:0 0 7px}
 .creditos p:last-child{margin-bottom:0}
@@ -274,7 +274,7 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
 @media (max-width:560px){
   .prose .mx, .note .mx, .keys .mx, li .mx, td .mx, th .mx{
     display:inline-block; max-width:100%; overflow-x:auto;
-    padding:7px 0; vertical-align:middle;
+    padding:.44rem 0; vertical-align:middle;
   }
 }
 
@@ -284,7 +284,7 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
    con forma, no solo con color. */
 .fld{position:relative}
 .fld__marca{
-  position:absolute; right:8px; bottom:9px; font-size:15px; font-weight:800;
+  position:absolute; right:8px; bottom:9px; font-size:0.9375rem; font-weight:800;
   line-height:1; pointer-events:none;
 }
 .fld.is-ok input{border-color:var(--ok); background:var(--ok-soft); padding-right:26px}
@@ -301,11 +301,11 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
   outline:3px solid var(--accent); outline-offset:-3px;
 }
 .stage__teclas{
-  margin:-1px 0 6px; font-size:12.5px; color:var(--ink-faint); line-height:1.6;
+  margin:-1px 0 6px; font-size:0.7812rem; color:var(--ink-faint); line-height:1.6;
 }
 .stage__teclas kbd{
   display:inline-block; min-width:1.1em; text-align:center;
-  padding:1px 5px; margin:0 1px; font:inherit; font-size:11.5px;
+  padding:1px 5px; margin:0 1px; font:inherit; font-size:0.7188rem;
   border:1px solid var(--line); border-bottom-width:2px; border-radius:4px;
   background:var(--bg-alt); color:var(--ink-soft);
 }
@@ -325,7 +325,7 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
   .btn--sm{padding:8px 12px}
   .chip{padding:9px 15px}
   .fld input{min-height:46px}
-  .fbox__help{width:27px; height:27px; font-size:14px}
+  .fbox__help{width:27px; height:27px; font-size:0.875rem}
   .fbox__help::after{inset:-9px}
   .ctrl input[type=range]{height:34px}
   .ctrl input[type=range]::-webkit-slider-thumb{width:22px; height:22px; margin-top:-8.5px}

@@ -82,7 +82,7 @@ Course.topic('av-grupos', function (p) {
           'Estado actual: giro de $' + U.fmt(360 * giro / n, 0) + '^\\circ$' + (reflejado ? ' + reflexión' : '') + '<br>' +
           'Su grupo de simetrías es el <strong>diédrico $D_{' + n + '}$</strong>, con $' + (2 * n) + '$ elementos: ' +
           n + ' giros (incluido no mover nada) y ' + n + ' reflexiones.<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Prueba: gira y luego refleja, y después ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Prueba: gira y luego refleja, y después ' +
           'hazlo al revés. No se llega al mismo sitio: el grupo <strong>no es conmutativo</strong>.</span>');
         plot.render();
       }
@@ -156,7 +156,7 @@ Course.topic('av-grupos', function (p) {
             ? '<strong style="color:var(--ok)">Es un número entero: el ' + (nombres[n] || 'polígono') +
               ' <strong>sí</strong> tesela el plano.</strong>'
             : '<strong style="color:var(--bad)">No es entero: quedan huecos (en rojo). No tesela.</strong>') +
-          '<br><span style="font-size:12.5px;color:var(--ink-faint)">Solo tres polígonos regulares dan ' +
+          '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">Solo tres polígonos regulares dan ' +
           'cociente entero: el triángulo (6 piezas), el cuadrado (4) y el hexágono (3). Y por eso las ' +
           'abejas construyen hexágonos: es la forma que más superficie encierra con menos cera.</span>');
         plot.render();
@@ -222,7 +222,7 @@ Course.topic('av-grupos', function (p) {
     },
     ask: function (d) {
       return '¿Es un grupo ' + d.c + '?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
     },
     fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
     sol: function (d) { return { r: d.ok ? 'si' : 'no' }; },
@@ -282,7 +282,7 @@ Course.topic('av-grupos', function (p) {
     },
     ask: function (d) {
       return '¿Puede un polígono regular de $' + d.n + '$ lados teselar el plano él solo?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
     },
     fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
     sol: function (d) { return { r: d.ok ? 'si' : 'no' }; },
@@ -316,7 +316,7 @@ Course.topic('av-grupos', function (p) {
     ask: function (d) {
       return 'En el grupo $(\\mathbb{Z}_{' + d.n + '}, +)$, ¿cuántas veces hay que sumar $' + d.a +
         '$ consigo mismo para volver al $0$?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)">A eso se le llama el <em>orden</em> del elemento.</span>';
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">A eso se le llama el <em>orden</em> del elemento.</span>';
     },
     fields: [{ name: 'o', label: 'Orden', w: 'tiny' }],
     sol: function (d) { return { o: d.orden }; },

@@ -81,7 +81,7 @@ Course.topic('av-edo', function (p) {
       function paint() {
         curvas = [];
         out.set('$' + eqs[tipo].t + '$ &nbsp;→&nbsp; solución general: $' + eqs[tipo].sol + '$<br>' +
-          eqs[tipo].txt + '<br><span style="font-size:12.5px;color:var(--ink-faint)">' +
+          eqs[tipo].txt + '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           'Haz clic en el gráfico para lanzar una solución desde ese punto.</span>');
         plot.render();
       }

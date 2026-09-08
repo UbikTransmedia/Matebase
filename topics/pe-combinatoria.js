@@ -141,7 +141,7 @@ Course.topic('pe-combinatoria', function (p) {
         caja.innerHTML = h;
         out.set('La fila $n$ contiene $\\binom{n}{0}, \\binom{n}{1}, \\dots, \\binom{n}{n}$.<br>' +
           'Cada número es la suma de los dos que tiene encima: $\\binom{n}{k} = \\binom{n-1}{k-1} + \\binom{n-1}{k}$.<br>' +
-          '<span style="font-size:12.5px;color:var(--ink-faint)">Y la suma de toda la fila $n$ vale $2^n$: ' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">Y la suma de toda la fila $n$ vale $2^n$: ' +
           'son todos los subconjuntos posibles de un conjunto de $n$ elementos.</span>');
       }
       W.slider(W.row(host), { label: 'filas', min: 3, max: 12, step: 1, value: 8, dec: 0, on: function (v) { filas = v; paint(); } });
@@ -283,7 +283,7 @@ Course.topic('pe-combinatoria', function (p) {
     },
     ask: function (d) {
       return '<em>' + d.t + '</em><br>¿Qué tipo de problema combinatorio es?<br>' +
-        '<span style="font-size:14px;color:var(--ink-faint)"><code>1</code> variaciones · ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> variaciones · ' +
         '<code>2</code> variaciones con repetición · <code>3</code> combinaciones · ' +
         '<code>4</code> permutaciones.</span>';
     },

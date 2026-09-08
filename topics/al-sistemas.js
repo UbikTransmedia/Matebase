@@ -186,7 +186,7 @@ Course.topic('al-sistemas', function (p) {
       return 'Clasifica sin resolver: $\\begin{cases}' +
         ML.termTex(d.a1, 'x', 1, true) + ML.termTex(d.b1, 'y', 1, false) + ' = ' + d.c1 + '\\\\' +
         ML.termTex(d.a2, 'x', 1, true) + ML.termTex(d.b2, 'y', 1, false) + ' = ' + d.c2 + '\\end{cases}$' +
-        '<br><span style="font-size:14px;color:var(--ink-faint)">Escribe <code>1</code> si es compatible ' +
+        '<br><span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> si es compatible ' +
         'determinado, <code>2</code> si es compatible indeterminado, <code>3</code> si es incompatible.</span>';
     },
     fields: [{ name: 't', label: 'Tipo (1, 2 o 3)', w: 'tiny' }],
