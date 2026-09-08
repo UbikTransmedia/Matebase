@@ -89,9 +89,16 @@
 }
 .fbox__help:hover ~ .fbox__tip,
 .fbox__help:focus-visible ~ .fbox__tip,
-.fbox__help[aria-expanded="true"] ~ .fbox__tip{
+.fbox__help[aria-expanded="true"] ~ .fbox__tip,
+.fbox__tip:hover, .fbox__tip:focus-within{
   opacity:1; visibility:visible; transform:none;
 }
+/* Puente invisible entre el botón y el globo: sin él, el globo se cerraba
+   justo al mover el ratón hacia el texto para leerlo con calma. */
+.fbox__tip::before{
+  content:''; position:absolute; left:0; right:0; top:-13px; height:13px;
+}
+.fbox__tip:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 .fbox__tip em{color:var(--tip-strong); font-style:normal; font-weight:620}
 .fbox__tip strong{color:var(--tip-strong)}
 
@@ -323,4 +330,16 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
   .ctrl input[type=range]{height:34px}
   .ctrl input[type=range]::-webkit-slider-thumb{width:22px; height:22px; margin-top:-8.5px}
   .ctrl input[type=range]::-moz-range-thumb{width:20px; height:20px}
+}
+
+
+/* --- para quien el movimiento marea ---
+   Hay quien tiene trastornos vestibulares o migrana con aura y a quien
+   simplemente le distrae que las cosas se deslicen. El sistema operativo
+   ya lo sabe; aqui solo hay que hacerle caso. */
+@media (prefers-reduced-motion:reduce){
+  *, *::before, *::after{
+    animation-duration:.01ms !important; animation-iteration-count:1 !important;
+    transition-duration:.01ms !important; scroll-behavior:auto !important;
+  }
 }

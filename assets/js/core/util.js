@@ -181,6 +181,12 @@
      Esto lo resuelve una vez para todos. */
 
   /** Quita tildes y pasa a minusculas, para comparar sin sorpresas. */
+  /** ¿Ha pedido el sistema que se mueva lo menos posible? */
+  U.pocoMovimiento = function () {
+    return !!(window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  };
+
   U.llano = function (s) {
     s = String(s == null ? '' : s).toLowerCase();
     return s.normalize ? s.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : s;

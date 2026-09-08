@@ -67,8 +67,23 @@
         var abierto = b.getAttribute('aria-expanded') === 'true';
         b.setAttribute('aria-expanded', abierto ? 'false' : 'true');
       },
-      onblur: function () { b.setAttribute('aria-expanded', 'false'); }
+      // Se cerraba en cuanto el foco salía del botón, y salía en cuanto el
+      // alumno iba a seleccionar el texto del globo. Ahora solo se cierra
+      // si el foco abandona la caja entera.
+      onblur: function (e) {
+        var v = e && e.relatedTarget;
+        if (v && box.contains(v)) return;
+        b.setAttribute('aria-expanded', 'false');
+      },
+      // Y con Escape, como cualquier cosa que se abre encima de otra.
+      onkeydown: function (e) {
+        if (e.key === 'Escape' && b.getAttribute('aria-expanded') === 'true') {
+          b.setAttribute('aria-expanded', 'false');
+          e.stopPropagation();
+        }
+      }
     }, '?');
+    tip.tabIndex = -1;                       // se puede enfocar para leerlo
     box.appendChild(b);
     box.appendChild(tip);
   }

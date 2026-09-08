@@ -173,6 +173,9 @@ Course.topic('lg-demostracion', function (p) {
       }
       function animar() {
         if (animando) return;
+        // Si el sistema pide menos movimiento, se enseña el resultado sin
+        // la caída ficha a ficha: lo que importa es que caen todas.
+        if (U.pocoMovimiento()) { t = 14; plot.render(); return; }
         animando = true; t = -1;
         var id = setInterval(function () {
           t++;
