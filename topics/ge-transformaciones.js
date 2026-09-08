@@ -94,7 +94,7 @@ Course.topic('ge-transformaciones', function (p) {
   p.util('Cada vez que arrastras, giras o amplías algo en una pantalla se está aplicando una de estas ' +
     'transformaciones a miles de puntos a la vez. Los editores de imagen, los programas de diseño y ' +
     'los videojuegos las guardan como matrices y las encadenan multiplicando, que es exactamente lo ' +
-    'que verás en el bloque avanzado. La animación de una película es una sucesión de ' +
+    'que verás en el bloque 7, el de álgebra lineal. La animación de una película es una sucesión de ' +
     'transformaciones aplicadas a un modelo.');
 
   p.section('Homotecias: cambiar el tamaño');

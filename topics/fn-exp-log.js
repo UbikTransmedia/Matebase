@@ -159,8 +159,8 @@ Course.topic('fn-exp-log', function (p) {
 
   p.text('El decaimiento radiactivo, el enfriamiento de un café, la eliminación de un medicamento en ' +
     'sangre y la descarga de un condensador siguen todos la misma ecuación. Es uno de los patrones ' +
-    'más repetidos de la naturaleza, y en el bloque avanzado verás por qué: todos vienen de la misma ' +
-    'ecuación diferencial.');
+    'más repetidos de la naturaleza, y en el bloque 8, el de las ecuaciones diferenciales, verás por ' +
+    'qué: todos salen de la misma ecuación.');
 
   /* ================= EJERCICIOS ================= */
   p.util('La intuición humana no está preparada para lo exponencial, y esa es su lección más importante. ' +

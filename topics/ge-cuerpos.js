@@ -100,8 +100,9 @@ Course.topic('ge-cuerpos', function (p) {
   p.formula('C + V - A = 2', 'caras + vértices − aristas = 2');
 
   p.note('Esta fórmula no habla de longitudes ni de ángulos: solo de cómo están conectadas las ' +
-    'piezas. Es el primer resultado de <em>topología</em> de la historia, y volverá a aparecer en ' +
-    'el bloque avanzado con toda su potencia.', null, 'Un aviso de lo que viene');
+    'piezas. Es el primer resultado de <em>topología</em> de la historia, y volverá a aparecer con ' +
+    'toda su potencia en el bloque 9, donde la topología tiene tema propio.',
+    null, 'Un aviso de lo que viene');
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

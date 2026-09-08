@@ -137,7 +137,8 @@ Course.topic('tr-funciones', function (p) {
 
   p.note('<strong>Cualquier</strong> señal periódica, por complicada que sea, se puede escribir como ' +
     'suma de senos y cosenos. Es el <em>análisis de Fourier</em>, y es la razón de que existan el MP3, ' +
-    'el JPEG, el wifi y la resonancia magnética. Lo verás en el bloque avanzado.', 'ok', 'Hacia dónde lleva esto');
+    'el JPEG, el wifi y la resonancia magnética. Lo verás en el bloque 8, con nombre propio.',
+    'ok', 'Hacia dónde lleva esto');
 
   p.demo({
     title: 'Sumar dos ondas',
