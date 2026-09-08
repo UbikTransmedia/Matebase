@@ -304,7 +304,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     (window.CURRICULUM || []).forEach(function (b) {
       b.temas.forEach(function (t) { ids.push(t); });
     });
-    var reg = {}, pend = ids.length, escritos = 0;
+    var reg = {}, pend = ids.length, escritos = 0, conPuntos = 0;
     var existe = {};        // el archivo se descargó (aunque luego no se registre)
     window.Course = { topic: function (id, fn) { reg[id] = fn; } };
     if (!pend) { box.textContent = 'sin temario'; return; }
@@ -431,6 +431,18 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           if (recortadas.length) {
             aud.push('gráfica(s) ' + recortadas.join(', ') + ' recortan su propio encuadre');
           }
+          // Ningún punto que se pueda arrastrar puede quedar fuera del alcance
+          // del teclado: quien no usa ratón tiene que poder moverlo igual.
+          var sinTeclado = [];
+          [].forEach.call(h.querySelectorAll('canvas'), function (c, i) {
+            var g = c.__plot;
+            if (!g || !g._movibles || !g._movibles().length) return;
+            conPuntos++;
+            if (c.tabIndex !== 0 || !g._voz) sinTeclado.push(i + 1);
+          });
+          if (sinTeclado.length) {
+            aud.push('gráfica(s) ' + sinTeclado.join(', ') + ' solo se pueden usar con el ratón');
+          }
           // Ninguna fórmula ni etiqueta puede salirse por arriba o por abajo
           // de su caja: si se sale, el navegador la corta y deja de leerse.
           var fuera = 0;
@@ -480,6 +492,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       box.innerHTML = '<div style="margin-bottom:6px;color:var(--ink-soft)">' + escritos +
         ' temas escritos de ' + ids.length + ' previstos' +
         (malos ? ' · <b style="color:var(--bad)">' + malos + ' con errores</b>' : ' · todos se construyen bien') +
+        ' · ' + conPuntos + ' gráficas con puntos móviles, todas manejables con el teclado' +
         '</div>' + html;
     }
   })();

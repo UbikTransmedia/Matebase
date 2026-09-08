@@ -267,3 +267,26 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
 .fld.is-bad input{border-color:var(--bad); background:var(--bad-soft); padding-right:26px}
 .fld.is-ok .fld__marca{color:var(--ok)}
 .fld.is-bad .fld__marca{color:var(--bad)}
+
+/* --- graficas manejables con el teclado ---
+   Los 22 dibujos con puntos moviles solo se podian usar arrastrando con el
+   raton. Ahora el lienzo se enfoca con el tabulador. */
+.stage canvas:focus{outline:none}
+.stage canvas:focus-visible{
+  /* hacia dentro: .stage recorta con overflow:hidden */
+  outline:3px solid var(--accent); outline-offset:-3px;
+}
+.stage__teclas{
+  margin:-1px 0 6px; font-size:12.5px; color:var(--ink-faint); line-height:1.6;
+}
+.stage__teclas kbd{
+  display:inline-block; min-width:1.1em; text-align:center;
+  padding:1px 5px; margin:0 1px; font:inherit; font-size:11.5px;
+  border:1px solid var(--line); border-bottom-width:2px; border-radius:4px;
+  background:var(--bg-alt); color:var(--ink-soft);
+}
+/* Texto solo para lectores de pantalla: ocupa sitio cero pero se lee. */
+.sr-solo{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}

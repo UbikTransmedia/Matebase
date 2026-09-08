@@ -183,6 +183,7 @@
     this._req = [this.xmin, this.xmax, this.ymin, this.ymax];
 
     this._bindPointer();
+    this._bindKeys();
     LIVE.push(this);
     this.resize();
   }
@@ -606,6 +607,7 @@
     return h;
   };
   Plot.prototype._drawHandles = function () {
+    var activo = this._foco ? this._movibles()[this._act || 0] : null;
     for (var i = 0; i < this.handles.length; i++) {
       var h = this.handles[i];
       if (h.o.hidden) continue;
@@ -614,12 +616,102 @@
       ctx.beginPath();
       ctx.arc(this.X(h.x), this.Y(h.y), 11, 0, 6.284);
       ctx.fillStyle = this.color(col); ctx.globalAlpha = .16; ctx.fill(); ctx.globalAlpha = 1;
+      // Aro a trazos: cuando se maneja con el teclado hay que ver cual de
+      // los puntos es el que van a mover las flechas.
+      if (h === activo) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.X(h.x), this.Y(h.y), 15, 0, 6.284);
+        ctx.setLineDash([4, 3]);
+        ctx.strokeStyle = this.color('accent'); ctx.lineWidth = 2.2; ctx.stroke();
+        ctx.restore();
+      }
       this.point(h.x, h.y, {
         color: col, r: 6, label: h.o.label,
         labelDx: h.o.labelDx, labelDy: h.o.labelDy
       });
     }
   };
+  /* --- manejo por teclado ---------------------------------------------
+     Arrastrar con el raton no esta al alcance de todo el mundo: hay quien
+     navega solo con teclado, quien usa un conmutador y quien simplemente
+     no tiene el pulso para acertar un punto de once pixeles. Toda grafica
+     con puntos moviles se enfoca con el tabulador y se maneja con las
+     flechas; el aro a trazos dice cual se esta moviendo. */
+  Plot.prototype._movibles = function () {
+    var r = [];
+    for (var i = 0; i < this.handles.length; i++) {
+      var h = this.handles[i];
+      if (!h.o.hidden && !h.o.fixed) r.push(h);
+    }
+    return r;
+  };
+
+  Plot.prototype._mueve = function (h, dx, dy) {
+    h.x += dx; h.y += dy;
+    if (h.o.constrain) h.o.constrain(h, this);
+    if (h.o.snap) {
+      h.x = Math.round(h.x / h.o.snap) * h.o.snap;
+      h.y = Math.round(h.y / h.o.snap) * h.o.snap;
+    }
+    if (this.o.onDrag) this.o.onDrag(h, this);
+    this.render();
+    this._digo(h);
+  };
+
+  /** Dice en voz alta (para el lector de pantalla) donde ha quedado. */
+  Plot.prototype._digo = function (h) {
+    if (!this._voz) return;
+    var nom = (h.o.label || h.id || 'punto').replace(/[$\\{}]/g, '');
+    this._voz.textContent = nom + ': x = ' + U.fmt(h.x, 3) + ', y = ' + U.fmt(h.y, 3);
+  };
+
+  Plot.prototype._bindKeys = function () {
+    var self = this, c = this.canvas;
+    if (!this._movibles().length) return;      // nada que mover, nada que enfocar
+
+    c.tabIndex = 0;
+    c.setAttribute('role', 'application');
+    c.setAttribute('aria-label', (this.o.aria || 'Grafica con puntos que se pueden mover') +
+      '. Muevelos con las flechas; con Mayusculas se mueven mas despacio; ' +
+      'la barra espaciadora pasa al punto siguiente.');
+
+    // Fuera de .stage: ese recuadro recorta lo que sobresale y tiene fondo propio.
+    this._voz = U.el('div.sr-solo', { 'aria-live': 'polite', 'aria-atomic': 'true' });
+    var pie = U.el('div.stage__teclas', {
+      html: 'Tambi\u00e9n con el teclado: <kbd>Tab</kbd> hasta el dibujo y ' +
+        '<kbd>&#8592;</kbd><kbd>&#8593;</kbd><kbd>&#8595;</kbd><kbd>&#8594;</kbd> para mover el punto.'
+    });
+    var tras = this.el.nextSibling, padre = this.el.parentNode;
+    if (padre) { padre.insertBefore(pie, tras); padre.insertBefore(this._voz, pie); }
+
+    U.on(c, 'focus', function () { self._foco = true; self.render(); self._digo(self._movibles()[self._act || 0]); });
+    U.on(c, 'blur', function () { self._foco = false; self.render(); });
+
+    U.on(c, 'keydown', function (ev) {
+      var libres = self._movibles();
+      if (!libres.length) return;
+      if (self._act === undefined || self._act >= libres.length) self._act = 0;
+      var h = libres[self._act];
+      var paso = ev.shiftKey ? 200 : 40;   // Mayusculas = paso fino
+      var px = (self.xmax - self.xmin) / paso;
+      var py = (self.ymax - self.ymin) / paso;
+      if (h.o.snap) { px = h.o.snap; py = h.o.snap; }
+      switch (ev.key) {
+        case 'ArrowLeft': self._mueve(h, -px, 0); break;
+        case 'ArrowRight': self._mueve(h, px, 0); break;
+        case 'ArrowUp': self._mueve(h, 0, py); break;
+        case 'ArrowDown': self._mueve(h, 0, -py); break;
+        case ' ': case 'Spacebar': case 'Enter':
+          self._act = (self._act + 1) % libres.length;
+          self.render(); self._digo(libres[self._act]);
+          break;
+        default: return;
+      }
+      ev.preventDefault();
+    });
+  };
+
   Plot.prototype._bindPointer = function () {
     var self = this, c = this.canvas;
     function pos(ev) {
