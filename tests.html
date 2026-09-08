@@ -383,6 +383,8 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       b.temas.forEach(function (t) { ids.push(t); });
     });
     var reg = {}, pend = ids.length, escritos = 0, conPuntos = 0;
+    var idsCurso = {};
+    ids.forEach(function (x) { idsCurso[x.id] = 1; });   // ids guarda objetos, no cadenas
     var existe = {};        // el archivo se descargó (aunque luego no se registre)
     window.Course = { topic: function (id, fn) { reg[id] = fn; } };
     if (!pend) { box.textContent = 'sin temario'; return; }
@@ -530,6 +532,14 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           if (anonimas.length) {
             aud.push('gráfica(s) ' + anonimas.join(', ') + ' sin nombre accesible');
           }
+          // Un enlace entre capitulos que apunta a un tema inexistente deja al
+          // alumno en una pagina en blanco justo cuando iba a repasar algo.
+          var rotos = [];
+          [].forEach.call(h.querySelectorAll('a.xref'), function (a2) {
+            var destino = (a2.getAttribute('href') || '').replace(/^#[/]/, '');
+            if (!destino || !idsCurso[destino]) rotos.push(destino || '(vacio)');
+          });
+          if (rotos.length) aud.push('enlace(s) a temas que no existen: ' + rotos.join(', '));
           // Lo que cambia solo tiene que anunciarse.
           var mudos = h.querySelectorAll('.readout:not([aria-live]), .verdict:not([aria-live])').length;
           if (mudos) aud.push(mudos + ' panel(es) que cambian sin anunciarse');

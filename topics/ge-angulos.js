@@ -164,7 +164,7 @@ Course.topic('ge-angulos', function (p) {
     'acepta sin demostración. Durante dos mil años se intentó deducirlo de los otros cuatro y no ' +
     'se pudo, porque no se deduce: negándolo salen geometrías igual de coherentes en las que la ' +
     'suma es mayor o menor que 180°. Esa historia —y la esfera, donde un triángulo puede tener ' +
-    'tres ángulos rectos— está en <strong>Geometrías no euclídeas</strong>, en el bloque 9.',
+    'tres ángulos rectos— está en [[av-noeuclidea|<strong>Geometrías no euclídeas</strong>]], en el bloque 9.',
     null, 'Lo que aquí se acepta sin demostrar');
 
   p.section('Polígonos');

@@ -168,7 +168,7 @@ Course.topic('av-topologia', function (p) {
   p.hist('La banda la describieron a la vez y por separado Möbius y Listing en 1858. Listing fue quien ' +
     'acuñó el término <em>topología</em>. Pero el acta de nacimiento de la disciplina es anterior: en ' +
     '1736 Euler resolvió el problema de los puentes de Königsberg demostrando que la respuesta no ' +
-    'depende de distancias ni de formas, solo de las conexiones. Ese problema lo verás en el tema de grafos.');
+    'depende de distancias ni de formas, solo de las conexiones. Ese problema lo verás en [[av-grafos|el tema de grafos]].');
 
   /* ---------------------------------------------------------------- */
   p.section('Dos teoremas con consecuencias sorprendentes');

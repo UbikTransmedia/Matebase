@@ -422,6 +422,10 @@
   /** Sustituye los tramos $...$ dentro de un texto que puede llevar HTML. */
   MathX.inline = function (s) {
     if (s === null || s === undefined) return '';
+    /* Los enlaces entre capitulos se resuelven aqui porque este es el embudo
+       por el que pasa toda la prosa del curso: parrafos, notas, pistas, pasos
+       de una solucion y marcadores. Un solo sitio, y funcionan en todos. */
+    if (window.U && U.enlaces) s = U.enlaces(s);
     s = String(s);
     if (s.indexOf('$') < 0) return s;
     var parts = s.split('$'), out = '';

@@ -187,7 +187,7 @@ Course.topic('al-complejos', function (p) {
   p.util('En forma polar, multiplicar es girar. Esa idea es la base del tratamiento digital de señales: ' +
     'cuando el móvil separa tu voz del ruido, cuando una canción se guarda en MP3 o cuando una foto ' +
     'se comprime en JPEG, por dentro hay millones de multiplicaciones de números complejos girando. ' +
-    'La verás con nombre propio en el tema de Fourier.');
+    'La verás con nombre propio en [[av-fourier|el tema de Fourier]].');
 
   p.section('Practica');
 

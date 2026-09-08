@@ -7,8 +7,8 @@ Course.topic('av-computabilidad', function (p) {
     '<strong>¿se puede calcular todo lo que está bien definido?</strong>');
 
   p.text('Las dos respuestas son que no, las dos se obtuvieron en los años treinta y las dos usan ' +
-    'el mismo truco: <strong>el argumento diagonal de Cantor</strong>, que ya conoces del tema del ' +
-    'infinito. Allí sirvió para demostrar que hay más números reales que naturales. Aquí va a servir ' +
+    'el mismo truco: <strong>el argumento diagonal de Cantor</strong>, que ya conoces d[[av-infinito|el tema del ' +
+    'infinito]]. Allí sirvió para demostrar que hay más números reales que naturales. Aquí va a servir ' +
     'para demostrar que hay más problemas que programas, que es la misma idea vestida de otra manera ' +
     'y con consecuencias mucho más incómodas.');
 
@@ -337,7 +337,7 @@ Course.topic('av-computabilidad', function (p) {
         { t: 'las funciones de $\\mathbb{N}$ en $\\{0,1\\}$', num: false,
           por: 'Cada una es una sucesión infinita de ceros y unos: el argumento diagonal de Cantor demuestra que no caben en una lista.' },
         { t: 'los números racionales', num: true,
-          por: 'Se numeran recorriendo en zigzag la tabla de fracciones, como viste en el tema del infinito.' },
+          por: 'Se numeran recorriendo en zigzag la tabla de fracciones, como viste en [[av-infinito|el tema del infinito]].' },
         { t: 'los subconjuntos de $\\mathbb{N}$', num: false,
           por: 'Un subconjunto equivale a una sucesión de síes y noes: hay $2^{\\aleph_0}$, estrictamente más que $\\aleph_0$.' },
         { t: 'las máquinas de Turing', num: true,

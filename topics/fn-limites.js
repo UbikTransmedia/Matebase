@@ -185,7 +185,7 @@ Course.topic('fn-limites', function (p) {
     'buena sin nombrarla: que <strong>no tienen agujeros</strong>. Que una sucesión creciente y ' +
     'acotada tenga límite, o que una función continua que cambia de signo se anule, son falsos en ' +
     '$\\mathbb{Q}$. La propiedad que lo arregla se llama <em>completitud</em> y se estudia en el ' +
-    'tema <strong>La completitud de los reales</strong>, del bloque 10. No hace falta para operar ' +
+    'tema [[av-reales|<strong>La completitud de los reales</strong>]], del bloque 10. No hace falta para operar ' +
     'con límites, pero sí para creérselos.',
     null, 'La letra pequeña de los límites');
 

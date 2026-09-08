@@ -139,7 +139,7 @@ Course.topic('fn-finanzas', function (p) {
 
   p.text('Mira lo que hay a la derecha: cada sumando es el anterior multiplicado por $\\frac{1}{1+i}$. ' +
     'Es una progresión geométrica de razón $r = \\frac{1}{1+i}$ y $n$ términos, y su suma la sabes ' +
-    'desde el tema de sucesiones. Aplicando la fórmula y despejando $c$:');
+    'desde [[fn-sucesiones|el tema de sucesiones]]. Aplicando la fórmula y despejando $c$:');
 
   p.formula('c = P\\,\\frac{i}{1 - (1+i)^{-n}}', 'la cuota (sistema francés)',
     'Se dice: <em>«ce es igual a pe por i, partido por uno menos, abro paréntesis, uno más i, cierro ' +

@@ -1,7 +1,7 @@
 /* Tema: Inferencia causal */
 Course.topic('pe-causal', function (p) {
 
-  p.text('En el tema de regresión apareció una advertencia en mayúsculas: <strong>correlación no ' +
+  p.text('En [[pe-bidimensional|el tema de regresión]] apareció una advertencia en mayúsculas: <strong>correlación no ' +
     'implica causalidad</strong>. Es cierta, es importante y se repite en todas partes. También es, ' +
     'tal como suele contarse, profundamente insatisfactoria, porque deja al alumno con el ' +
     'escepticismo y sin la herramienta.');

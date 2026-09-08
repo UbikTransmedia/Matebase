@@ -181,6 +181,34 @@
      Esto lo resuelve una vez para todos. */
 
   /** Quita tildes y pasa a minusculas, para comparar sin sorpresas. */
+  /* Enlaces entre capitulos.
+     En cualquier texto del curso se puede escribir [[fn-derivadas|derivar]] y
+     sale un enlace al tema. Con [[fn-derivadas]] a secas, el texto del enlace
+     es el titulo del tema, que se saca del temario: asi no hay que repetirlo
+     ni se queda desfasado cuando se retitula un tema.
+     Es la unica forma que tiene el alumno de retroceder a lo que le falta sin
+     buscarlo a mano en el indice. */
+  var RE_XREF = /\[\[([a-z]{2,4}-[a-z0-9-]+)(?:\|([^\]]*))?\]\]/g;
+
+  U.tituloDe = function (id) {
+    if (!window.CURRICULUM) return id;
+    for (var i = 0; i < CURRICULUM.length; i++) {
+      var ts = CURRICULUM[i].temas || [];
+      for (var j = 0; j < ts.length; j++) if (ts[j].id === id) return ts[j].t;
+    }
+    return id;
+  };
+
+  U.enlaces = function (html) {
+    if (html.indexOf('[[') < 0) return html;
+    return String(html).replace(RE_XREF, function (todo, id, texto) {
+      var t = U.tituloDe(id);
+      var visible = texto || t;
+      return '<a class="xref" href="#/' + id + '" title="Ir al tema «' + t + '»">' +
+        visible + '</a>';
+    });
+  };
+
   /** Numero con dos decimales y punto: para CSS y para canvas, no para leer. */
   U.fmt2 = function (n) { return Math.round(n * 100) / 100; };
 

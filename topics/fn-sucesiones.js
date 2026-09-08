@@ -51,7 +51,7 @@ Course.topic('fn-sucesiones', function (p) {
     'de infinitos términos <em>valga</em> un número exige definir primero qué significa sumar ' +
     'infinitas cosas, porque literalmente no se puede hacer. Esa definición, y la sorpresa de que ' +
     'hay sumas cuyos términos tienden a cero y aun así se van al infinito, están en el tema ' +
-    'siguiente, <strong>Series numéricas y convergencia</strong>. Aquí basta con quedarse con la ' +
+    'siguiente, [[fn-series|<strong>Series numéricas y convergencia</strong>]]. Aquí basta con quedarse con la ' +
     'fórmula; allí se justifica.',
     null, 'Esto se demuestra en el tema siguiente');
 
@@ -141,7 +141,7 @@ Course.topic('fn-sucesiones', function (p) {
     'el total es una progresión geométrica; el banco despeja de ahí la cuota. La misma fórmula da el ' +
     'valor de un plan de pensiones y el alcance de una campaña que se propaga por recomendación. ' +
     'Esa deducción, con la cuota despejada y una tabla de amortización que se puede manosear, ' +
-    'está en el tema <strong>Matemática financiera</strong>, dos más adelante.');
+    'está en el tema [[fn-finanzas|<strong>Matemática financiera</strong>]], dos más adelante.');
 
   p.section('Límite de una sucesión');
 
@@ -303,7 +303,7 @@ Course.topic('fn-sucesiones', function (p) {
     'Una sucesión es una función de dominio $\\mathbb{N}$; el término general la describe entera.',
     'Aritmética: se <strong>suma</strong> $d$. $a_n = a_1+(n-1)d$, $S_n = \\frac{(a_1+a_n)n}{2}$.',
     'Geométrica: se <strong>multiplica</strong> por $r$. $a_n = a_1 r^{n-1}$, $S_n = a_1\\frac{r^n-1}{r-1}$.',
-    'Si $|r|<1$ se puede sumar la sucesión entera: $S_\\infty = \\frac{a_1}{1-r}$. Qué significa eso exactamente se ve en el tema de series.',
+    'Si $|r|<1$ se puede sumar la sucesión entera: $S_\\infty = \\frac{a_1}{1-r}$. Qué significa eso exactamente se ve en [[fn-series|el tema de series]].',
     'Los límites de sucesiones se calculan comparando grados, igual que en las funciones.'
   ]);
 });

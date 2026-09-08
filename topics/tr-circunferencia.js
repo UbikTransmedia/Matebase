@@ -76,7 +76,7 @@ Course.topic('tr-circunferencia', function (p) {
   p.table(['Grados', '$0^\\circ$', '$30^\\circ$', '$45^\\circ$', '$60^\\circ$', '$90^\\circ$', '$180^\\circ$', '$270^\\circ$', '$360^\\circ$'],
     [['Radianes', '$0$', '$\\dfrac{\\pi}{6}$', '$\\dfrac{\\pi}{4}$', '$\\dfrac{\\pi}{3}$', '$\\dfrac{\\pi}{2}$', '$\\pi$', '$\\dfrac{3\\pi}{2}$', '$2\\pi$']]);
 
-  p.note('En cálculo se usan <em>siempre</em> radianes. La razón se verá en el tema de derivadas: la ' +
+  p.note('En cálculo se usan <em>siempre</em> radianes. La razón se verá en [[fn-derivadas|el tema de derivadas]]: la ' +
     'derivada del seno solo vale $\\cos x$ si $x$ está en radianes. Con grados aparecerían factores ' +
     'de conversión por todas partes.', null, 'Por qué los matemáticos no usan grados');
 

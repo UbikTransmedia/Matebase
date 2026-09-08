@@ -19,7 +19,7 @@ Course.topic('pe-continuas', function (p) {
   p.text('La respuesta incómoda es <strong>cero</strong>. Y no porque sea imposible —alguien tiene ' +
     'que medir eso— sino porque hay infinitos valores posibles en cualquier tramo, y si a cada uno le ' +
     'diéramos una probabilidad positiva, por pequeña que fuese, al sumarlas todas nos pasaríamos de ' +
-    '1. Es el mismo choque con el infinito que apareció en el tema de series: infinitas cantidades ' +
+    '1. Es el mismo choque con el infinito que apareció en [[fn-series|el tema de series]]: infinitas cantidades ' +
     'positivas iguales no pueden sumar algo finito.');
 
   p.note('En una variable continua, <strong>los sucesos con probabilidad no nula son los intervalos, ' +
@@ -212,7 +212,7 @@ Course.topic('pe-continuas', function (p) {
   p.formula('P(a \\le X \\le b) = F(b) - F(a)', 'la regla de Barrow, otra vez');
 
   p.text('Esto no es una casualidad ni una fórmula nueva que memorizar: es exactamente la regla de ' +
-    'Barrow del tema de la integral definida. $F$ es una primitiva de $f$, y por tanto ' +
+    'Barrow d[[fn-integral-def|el tema de la integral definida]]. $F$ es una primitiva de $f$, y por tanto ' +
     '$F\'(x) = f(x)$: <strong>la densidad es la derivada de la función de distribución</strong>. Toda ' +
     'la probabilidad continua es cálculo con otro vocabulario.');
 

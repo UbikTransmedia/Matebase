@@ -1,7 +1,7 @@
 /* Tema: Series y transformada de Fourier */
 Course.topic('av-fourier', function (p) {
 
-  p.text('En el tema de trigonometría viste que sumando ondas aparecen formas nuevas. Fourier ' +
+  p.text('En [[tr-funciones|el tema de trigonometría]] viste que sumando ondas aparecen formas nuevas. Fourier ' +
     'demostró en 1807 algo mucho más fuerte, y tan chocante que la Academia de Ciencias de París ' +
     'tardó quince años en publicárselo:');
 
@@ -15,7 +15,7 @@ Course.topic('av-fourier', function (p) {
     '<em>cerca de un punto</em>, deteriorándose al alejarse; Fourier usa senos y cosenos y ' +
     'aproxima <em>en todo el intervalo a la vez</em>, incluso donde la función tiene esquinas, ' +
     'que es justo donde Taylor no puede ni empezar, porque ahí no hay derivadas. Si el sumatorio ' +
-    'infinito te incomoda, el tema de <strong>series numéricas</strong> es el que dice cuándo ' +
+    'infinito te incomoda, [[fn-series|el tema de <strong>series numéricas</strong>]] es el que dice cuándo ' +
     'tiene derecho a existir.',
     null, 'El peldaño anterior: Taylor');
 

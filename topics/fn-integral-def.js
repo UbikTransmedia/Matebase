@@ -148,8 +148,8 @@ Course.topic('fn-integral-def', function (p) {
 
   p.note('Esta misma integral es, sin cambiar una letra, la que da las probabilidades del bloque ' +
     'siguiente: en una variable aleatoria continua, la probabilidad de caer entre dos valores ' +
-    '<em>es</em> el área bajo una curva entre esos dos valores. Lo verás en <strong>Variables ' +
-    'aleatorias continuas</strong>.',
+    '<em>es</em> el área bajo una curva entre esos dos valores. Lo verás en [[pe-continuas|<strong>Variables ' +
+    'aleatorias continuas</strong>]].',
     null, 'Dónde reaparece esto');
 
   p.section('Área entre dos curvas');

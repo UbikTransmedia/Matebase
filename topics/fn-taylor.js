@@ -14,7 +14,7 @@ Course.topic('fn-taylor', function (p) {
 
   p.section('Ya lo hiciste una vez: la recta tangente');
 
-  p.text('En el tema de derivadas construiste la recta tangente a una función en un punto. Ahí no lo ' +
+  p.text('En [[fn-derivadas|el tema de derivadas]] construiste la recta tangente a una función en un punto. Ahí no lo ' +
     'llamamos así, pero lo que hacías era <strong>sustituir la función por algo más simple que se le ' +
     'parece cerca de ese punto</strong>:');
 
@@ -199,7 +199,7 @@ Course.topic('fn-taylor', function (p) {
       'basta con saber lo grande que puede llegar a ser $f^{(n+1)}$ en ese tramo.');
 
   p.text('De dónde sale ese punto $c$ no es magia: es el <strong>teorema del valor medio</strong> que ' +
-    'viste al final del tema de derivadas, aplicado con más cuidado. Aquel decía que en algún punto ' +
+    'viste al final d[[fn-derivadas|el tema de derivadas]], aplicado con más cuidado. Aquel decía que en algún punto ' +
     'del intervalo la pendiente instantánea coincide con la media; esto es la misma idea llevada a ' +
     'las derivadas de orden superior.');
 
@@ -305,7 +305,7 @@ Course.topic('fn-taylor', function (p) {
     'warn', 'Hasta dónde llega el desarrollo');
 
   p.text('A ese radio se le llama <strong>radio de convergencia</strong>, y decidir cuánto vale es ' +
-    'exactamente el problema del tema de series: dado $x$, ¿converge $\\sum \\frac{f^{(n)}(0)}{n!}x^n$? ' +
+    'exactamente el problema d[[fn-series|el tema de series]]: dado $x$, ¿converge $\\sum \\frac{f^{(n)}(0)}{n!}x^n$? ' +
     'Para $e^x$, el seno y el coseno la respuesta es que converge para todo $x$, gracias al factorial ' +
     'del denominador. Para $\\frac{1}{1-x}$ y para $\\ln(1+x)$ el radio es 1.');
 
@@ -326,7 +326,7 @@ Course.topic('fn-taylor', function (p) {
 
   p.section('Un regalo: de dónde sale eiπ + 1 = 0');
 
-  p.text('En el tema de números complejos apareció la fórmula de Euler como un hecho consumado. Con ' +
+  p.text('En [[al-complejos|el tema de números complejos]] apareció la fórmula de Euler como un hecho consumado. Con ' +
     'Taylor deja de serlo. Escribe la serie de $e^x$ y sustituye $x$ por $i\\theta$, recordando que ' +
     '$i^2=-1$, $i^3=-i$, $i^4=1$ y vuelta a empezar:');
 

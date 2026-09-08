@@ -106,7 +106,7 @@ Course.topic('av-reales', function (p) {
     'cotas.');
 
   p.text('El argumento es este. Si $q$ fuera racional y cota, tendría que cumplir $q^2 \\ge 2$. Pero ' +
-    'no puede ser $q^2 = 2$, porque en el tema de conjuntos numéricos se demostró por reducción al ' +
+    'no puede ser $q^2 = 2$, porque en [[ar-conjuntos|el tema de conjuntos numéricos]] se demostró por reducción al ' +
     'absurdo que $\\sqrt2$ no es racional. Así que $q^2 > 2$, y entonces siempre se puede encontrar ' +
     'otro racional un poco más pequeño que siga siendo cota. Ninguna cota es la mínima: hay una ' +
     'sucesión infinita de cotas cada vez más ajustadas, y ninguna gana.');
@@ -167,7 +167,7 @@ Course.topic('av-reales', function (p) {
 
   p.demo({
     title: 'La bisección buscando algo que no está',
-    intro: 'Este es exactamente el algoritmo del tema de análisis numérico, ejecutado sobre x² − 2. Cada paso da dos racionales que encierran la raíz. Fíjate en que los extremos son siempre fracciones y en que nunca llegan: si solo existieran los racionales, este proceso apuntaría a un sitio vacío.',
+    intro: 'Este es exactamente el algoritmo d[[av-numerico|el tema de análisis numérico]], ejecutado sobre x² − 2. Cada paso da dos racionales que encierran la raíz. Fíjate en que los extremos son siempre fracciones y en que nunca llegan: si solo existieran los racionales, este proceso apuntaría a un sitio vacío.',
     build: function (host) {
       var pasos = 0;
       var out = W.readout(host, '');

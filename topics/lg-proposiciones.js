@@ -16,7 +16,7 @@ Course.topic('lg-proposiciones', function (p) {
 
   p.note('Esa última fila es la <em>paradoja del mentiroso</em>, y no es un juego: paradojas de ese ' +
     'tipo obligaron a refundar las matemáticas a principios del siglo XX. Volverás a encontrarla en ' +
-    'el tema del infinito.', null, 'Una frase que rompe el sistema');
+    '[[av-infinito|el tema del infinito]].', null, 'Una frase que rompe el sistema');
 
   /* ---------------------------------------------------------------- */
   p.section('Conectivas y tablas de verdad');

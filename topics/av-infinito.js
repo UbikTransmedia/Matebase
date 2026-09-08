@@ -197,7 +197,7 @@ Course.topic('av-infinito', function (p) {
 
   p.note('Ese mismo argumento, aplicado a los programas en lugar de a los números, demuestra que hay ' +
     'problemas que ningún ordenador puede resolver. Es el contenido del tema siguiente, ' +
-    '<strong>Computabilidad: Turing y Gödel</strong>, y no necesita ninguna idea nueva: solo la ' +
+    '[[av-computabilidad|<strong>Computabilidad: Turing y Gödel</strong>]], y no necesita ninguna idea nueva: solo la ' +
     'diagonal que acabas de ver, aplicada a un objeto distinto.',
     null, 'La diagonal vuelve enseguida');
 

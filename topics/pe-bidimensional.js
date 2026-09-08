@@ -130,7 +130,7 @@ Course.topic('pe-bidimensional', function (p) {
     'la que más se ignora en los periódicos.<br><br>Dicho esto, la advertencia se queda coja si ' +
     'no se dice qué se hace al respecto, porque alguna manera hay de averiguar qué causa qué: ' +
     'los médicos recetan y los ingenieros deciden. El último tema de este bloque, ' +
-    '<strong>Inferencia causal</strong>, va justamente de eso.',
+    '[[pe-causal|<strong>Inferencia causal</strong>]], va justamente de eso.',
     'warn', 'La advertencia fundamental');
 
   /* ================= EJERCICIOS ================= */

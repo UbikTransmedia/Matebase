@@ -386,7 +386,7 @@ Course.topic('fn-derivadas', function (p) {
     'algún instante concreto ibas exactamente a esa velocidad, y por tanto por encima del límite. La ' +
     'multa se sostiene sobre un teorema de 1797.');
 
-  p.note('Estos dos resultados vuelven en el tema de <em>polinomios de Taylor</em>, donde el valor ' +
+  p.note('Estos dos resultados vuelven en [[fn-taylor|el tema de <em>polinomios de Taylor</em>]], donde el valor ' +
     'medio es lo que produce el punto misterioso $c$ que aparece en la fórmula del error. Si allí te ' +
     'preguntas de dónde sale ese $c$, la respuesta está aquí.', null, 'Dónde se usa esto');
 

@@ -66,7 +66,7 @@ Course.topic('pe-normal', function (p) {
   p.note('Todo lo que sigue son <strong>áreas bajo una curva</strong>, es decir, integrales. La ' +
     'campana es una función de densidad: la probabilidad de caer entre dos valores es el área que ' +
     'encierra entre ellos, y el área total vale 1. Si esa idea no te resulta familiar, el tema ' +
-    'anterior, <strong>Variables aleatorias continuas</strong>, la construye desde el histograma. ' +
+    'anterior, [[pe-continuas|<strong>Variables aleatorias continuas</strong>]], la construye desde el histograma. ' +
     'Y si te preguntas por qué hace falta una tabla en vez de una fórmula: porque esta curva no ' +
     'tiene primitiva elemental, así que no hay manera de escribir su integral con funciones ' +
     'conocidas.',

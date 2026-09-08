@@ -1,7 +1,7 @@
 /* Tema: Álgebra lineal: autovalores */
 Course.topic('av-lineal', function (p) {
 
-  p.text('En el tema de matrices las viste como tablas de números. Hay una manera mucho más ' +
+  p.text('En [[al-matrices|el tema de matrices]] las viste como tablas de números. Hay una manera mucho más ' +
     'iluminadora de entenderlas: <strong>una matriz es una transformación del espacio</strong>. ' +
     'Coge el plano entero, lo estira, lo comprime, lo gira y lo tuerce, todo a la vez.');
 
