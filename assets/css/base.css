@@ -1,11 +1,11 @@
 /* ============ Matebase · tokens, reset y tipografía ============ */
 :root{
   --bg:#f6f5f1; --bg-alt:#fffdf9; --panel:#ffffff; --panel-2:#f2f1ec;
-  --ink:#20242c; --ink-soft:#535a67; --ink-faint:#8b93a1;
+  --ink:#20242c; --ink-soft:#535a67; --ink-faint:#666f7e;
   --line:#dedbd2; --line-soft:#eae7de;
   --accent:#3f5bd9; --accent-soft:#e5e9fb; --accent-ink:#2a3f9e;
-  --ok:#0f8a5f; --ok-soft:#e0f4ec;
-  --warn:#b4690e; --warn-soft:#fbeed9;
+  --ok:#0d7a54; --ok-soft:#e0f4ec;
+  --warn:#9c5b0c; --warn-soft:#fbeed9;
   --bad:#c0392b; --bad-soft:#fbe6e3;
   --demo:#0d7c9b; --demo-soft:#dff2f7;
   --use:#a3248c; --use-soft:#f9e3f4;
@@ -23,7 +23,7 @@
 }
 html[data-theme="dark"]{
   --bg:#14161b; --bg-alt:#191c22; --panel:#1d2027; --panel-2:#22262e;
-  --ink:#e6e8ee; --ink-soft:#aeb4c1; --ink-faint:#79808f;
+  --ink:#e6e8ee; --ink-soft:#aeb4c1; --ink-faint:#838997;
   --line:#2e333d; --line-soft:#262a33;
   --accent:#7b93ff; --accent-soft:#232a48; --accent-ink:#a8b8ff;
   --ok:#4bd39b; --ok-soft:#16332a;
@@ -44,12 +44,12 @@ html[data-theme="dark"]{
    la vista en sesiones largas. */
 html[data-theme="monokai"]{
   --bg:#272822; --bg-alt:#2c2d26; --panel:#31322b; --panel-2:#3a3b33;
-  --ink:#dcdacf; --ink-soft:#a9a89c; --ink-faint:#7f7c6a;
+  --ink:#dcdacf; --ink-soft:#a9a89c; --ink-faint:#9e9b8b;
   --line:#41423a; --line-soft:#36372f;
   --accent:#7cc7d4; --accent-soft:#2c3b3f; --accent-ink:#9adae6;
   --ok:#9cbf4a; --ok-soft:#2f3823;
   --warn:#d99a4a; --warn-soft:#3b3123;
-  --bad:#d96a80; --bad-soft:#3b292d;
+  --bad:#dd788c; --bad-soft:#3b292d;
   --demo:#7cc7d4; --demo-soft:#2c3b3f;
   --use:#cf7fc0; --use-soft:#382a36;
   --on-accent:#272822;

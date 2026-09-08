@@ -196,6 +196,58 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   truthy('$...$ en línea', MathX.inline('vale $x^2$ aquí').indexOf('mx-var') >= 0);
   truthy('texto sin $ se deja intacto', MathX.inline('nada de mates') === 'nada de mates');
 
+  /* ---------------- contraste de la paleta ---------------- */
+  /* Un curso no se lee con el color que uno elige, sino con el que puede
+     ver quien lo lee. Se mide de verdad, en los tres temas. */
+  group('contraste de los tres temas');
+  (function () {
+    function rgb(v) {
+      var m = /(-?\d+)[,\s]+(-?\d+)[,\s]+(-?\d+)/.exec(v);
+      if (m) return [+m[1], +m[2], +m[3]];
+      m = /^#?([0-9a-f]{6})$/i.exec(v.trim());
+      if (!m) return null;
+      var h = m[1];
+      return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+    }
+    function lum(c) {
+      var f = function (x) {
+        x /= 255;
+        return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+      };
+      return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
+    }
+    function contraste(a, b) {
+      var la = lum(a), lb = lum(b);
+      return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+    }
+    var parejas = [
+      ['--ink', '--panel', 'texto sobre tarjeta'],
+      ['--ink-soft', '--bg', 'texto secundario'],
+      ['--ink-faint', '--panel', 'apuntes tenues'],
+      ['--ink-faint', '--bg-alt', 'apuntes tenues en el índice'],
+      ['--accent', '--bg', 'enlaces'],
+      ['--ok', '--ok-soft', 'veredicto de acierto'],
+      ['--bad', '--bad-soft', 'veredicto de fallo'],
+      ['--warn', '--warn-soft', 'pista'],
+      ['--tip-ink', '--tip', 'globo de ayuda'],
+      ['--on-accent', '--accent', 'texto del botón principal']
+    ];
+    var raiz = document.documentElement;
+    var previo = raiz.getAttribute('data-theme');
+    ['light', 'dark', 'monokai'].forEach(function (tema) {
+      raiz.setAttribute('data-theme', tema);
+      var cs = getComputedStyle(raiz);
+      parejas.forEach(function (par) {
+        var a = rgb(cs.getPropertyValue(par[0])), b = rgb(cs.getPropertyValue(par[1]));
+        if (!a || !b) { ko(tema + ' · ' + par[2], 'sin color', 'dos colores'); return; }
+        var c = contraste(a, b);
+        if (c >= 4.5) ok(tema + ' · ' + par[2] + ' (' + c.toFixed(2) + ':1)');
+        else ko(tema + ' · ' + par[2], c.toFixed(2) + ':1', '4.5:1 o más');
+      });
+    });
+    if (previo) raiz.setAttribute('data-theme', previo); else raiz.removeAttribute('data-theme');
+  })();
+
   /* ---------------- widgets y ejercicios ---------------- */
   group('widgets y motor de ejercicios');
   var host = document.createElement('div');
