@@ -84,8 +84,16 @@ Course.topic('lg-demostracion', function (p) {
     'contradicción. Como no puede haber contradicciones, la suposición era imposible y la conclusión ' +
     'tenía que ser cierta.');
 
-  p.text('Es el método con el que se demostró que $\\sqrt{2}$ es irracional y que los primos son ' +
-    'infinitos. Los dos argumentos ya los has visto en el bloque de aritmética; ahora sabes cómo se llaman.');
+  p.text('Es el método con el que se demostraron dos de los resultados más célebres de las matemáticas ' +
+    'griegas: que <strong>los números primos son infinitos</strong> y que <strong>$\\sqrt{2}$ no se ' +
+    'puede escribir como fracción</strong>. Los dos los verás con todo detalle en el bloque de ' +
+    'aritmética, que viene justo después; aquí interesa solo la forma del razonamiento.');
+
+  p.note('Por si esa segunda frase te suena rara: decir que $\\sqrt{2}$ no se puede escribir como ' +
+    'fracción significa que no hay <em>ningún</em> par de números enteros cuyo cociente dé exactamente ' +
+    'ese valor, por mucho que se busque. A esos números se les llama <strong>irracionales</strong>, y ' +
+    'tienen su tema propio más adelante. Lo asombroso —y lo que hace falta demostrar— es que sea ' +
+    'imposible, no simplemente que nadie lo haya conseguido.', null, 'Qué significa «irracional»');
 
   p.sub('Y el atajo: el contraejemplo');
 

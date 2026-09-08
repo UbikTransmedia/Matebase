@@ -17,7 +17,8 @@ Course.topic('cib-realimentacion', function (p) {
     'causa y quién el efecto, si cada uno es el del otro?— y por eso hizo falta inventar un lenguaje ' +
     'nuevo para hablar de ella.');
 
-  p.hist('El nombre lo puso Norbert Wiener en 1948, en un libro titulado <em>Cybernetics, or Control ' +
+  p.hist('El nombre de esta disciplina, <strong>cibernética</strong>, lo puso Norbert Wiener en 1948 ' +
+    'en un libro titulado <em>Cybernetics, or Control ' +
     'and Communication in the Animal and the Machine</em>. Lo tomó del griego <em>kybernetes</em>, ' +
     'el timonel de un barco, que es exactamente la imagen: alguien que mira a dónde va, ve que se ' +
     'desvía y mueve el timón. La palabra «gobernar» viene de esa misma raíz, y también «governor», ' +
