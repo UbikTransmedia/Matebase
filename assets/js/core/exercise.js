@@ -142,8 +142,12 @@
       });
       inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') self.check(); });
       box.appendChild(inp);
+      // Marca de acierto o fallo que NO depende del color: quien no distingue
+      // el rojo del verde tiene que poder saber igual que campo ha fallado.
+      var senal = U.el('span.fld__marca', { 'aria-hidden': 'true' });
+      box.appendChild(senal);
       self.ansEl.appendChild(box);
-      self.inputs[f.name] = { input: inp, box: box, def: f };
+      self.inputs[f.name] = { input: inp, box: box, def: f, marca: senal };
     });
 
     this.verdict.className = 'verdict';
@@ -185,6 +189,12 @@
     if (!f) return;
     f.box.classList.remove('is-ok', 'is-bad');
     f.box.classList.add(ok ? 'is-ok' : 'is-bad');
+    if (f.marca) f.marca.textContent = ok ? '✓' : '✗';
+    // y para quien navega con lector de pantalla
+    f.input.setAttribute('aria-invalid', ok ? 'false' : 'true');
+    var etq = String((f.def && f.def.label) || (f.def && f.def.name) || 'respuesta')
+      .replace(/<[^>]+>/g, '').replace(/[\s=:]+$/, '').trim() || 'respuesta';
+    f.input.setAttribute('aria-label', etq + (ok ? ', correcto' : ', incorrecto'));
   };
 
   Card.prototype.check = function () {

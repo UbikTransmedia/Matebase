@@ -253,3 +253,17 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
     padding:7px 0; vertical-align:middle;
   }
 }
+
+/* --- acierto y fallo sin depender del color ---
+   El borde verde o rojo era la ÚNICA señal de si un campo estaba bien, y para
+   quien no distingue el rojo del verde son el mismo campo. Se añade una marca
+   con forma, no solo con color. */
+.fld{position:relative}
+.fld__marca{
+  position:absolute; right:8px; bottom:9px; font-size:15px; font-weight:800;
+  line-height:1; pointer-events:none;
+}
+.fld.is-ok input{border-color:var(--ok); background:var(--ok-soft); padding-right:26px}
+.fld.is-bad input{border-color:var(--bad); background:var(--bad-soft); padding-right:26px}
+.fld.is-ok .fld__marca{color:var(--ok)}
+.fld.is-bad .fld__marca{color:var(--bad)}

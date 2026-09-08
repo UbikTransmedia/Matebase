@@ -74,6 +74,11 @@ Course.topic('av-numerico', function (p) {
         },
         { t: '↺ Reiniciar', on: function () { a = a0; b = b0; n = 0; paint(); } }
       ]);
+      W.legend(host, [
+        { c: 0, t: 'la curva $f(x)=x^3-x-2$' },
+        { c: 2, t: 'la franja donde aún puede estar la raíz' },
+        { c: 1, t: 'el punto medio que estamos probando' }
+      ]);
       W.hint(host, 'La ecuación es x³ − x − 2 = 0, que no se puede resolver con radicales de forma cómoda.');
       paint();
     }
