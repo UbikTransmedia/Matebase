@@ -70,6 +70,12 @@
   border-color:var(--accent); color:var(--accent); background:var(--accent-soft);
 }
 .fbox__help:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+/* El circulo se ve de 21 px, pero acertarlo con el raton (o con el dedo)
+   pedia una punteria que no todo el mundo tiene. La zona sensible se
+   agranda hasta 35 px sin tocar lo que se ve. */
+.fbox__help::after{
+  content:''; position:absolute; inset:-7px;   /* cuadrada: aprovecha las esquinas */
+}
 .fbox__tip{
   position:absolute; top:34px; right:10px; z-index:6;
   width:min(400px, calc(100% - 20px));
@@ -199,24 +205,35 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
 .ctrl__top{display:flex; justify-content:space-between; align-items:baseline; font-size:13px}
 .ctrl__lab{color:var(--ink-soft); font-weight:600}
 .ctrl__val{font-family:var(--mono); font-size:13px; color:var(--accent); font-weight:600}
+/* El deslizador se veia como una raya de 5 px, y esos 5 px eran TODO lo que
+   habia que acertar con el raton: la caja del control medía justo eso. La
+   pista sigue siendo fina, pero la zona de agarre es ahora de 26 px. */
 .ctrl input[type=range]{
-  -webkit-appearance:none; appearance:none; width:100%; height:5px; border-radius:4px;
-  background:var(--line); outline:none; cursor:pointer; margin:5px 0;
+  -webkit-appearance:none; appearance:none; width:100%; height:26px;
+  background:transparent; outline:none; cursor:pointer; margin:0;
+}
+.ctrl input[type=range]::-webkit-slider-runnable-track{
+  height:5px; border-radius:4px; background:var(--line);
 }
 .ctrl input[type=range]::-webkit-slider-thumb{
   -webkit-appearance:none; width:17px; height:17px; border-radius:50%;
   background:var(--accent); border:2.5px solid var(--panel); box-shadow:0 1px 4px rgba(0,0,0,.25);
+  margin-top:-6px;                      /* centrado sobre la pista */
+}
+.ctrl input[type=range]::-moz-range-track{
+  height:5px; border-radius:4px; background:var(--line);
 }
 .ctrl input[type=range]::-moz-range-thumb{
   width:15px; height:15px; border-radius:50%; background:var(--accent);
   border:2.5px solid var(--panel);
 }
+.ctrl input[type=range]:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:6px}
 .readout{font-family:var(--mono); font-size:14px; background:var(--panel-2);
   border:1px solid var(--line-soft); border-radius:9px; padding:9px 13px; margin-top:11px;
   color:var(--ink); line-height:1.75; overflow-x:auto}
 .chips{display:flex; flex-wrap:wrap; gap:7px; margin:10px 0 2px}
 .chip{border:1px solid var(--line); background:var(--panel); border-radius:20px;
-  padding:4px 12px; font-size:13px; cursor:pointer; color:var(--ink-soft)}
+  padding:6px 13px; font-size:13px; cursor:pointer; color:var(--ink-soft)}
 .chip:hover{border-color:var(--accent); color:var(--accent)}
 .chip.is-on{background:var(--accent); border-color:var(--accent); color:#fff}
 .legend{display:flex; flex-wrap:wrap; gap:14px; font-size:13px; color:var(--ink-soft); margin-top:9px}
@@ -289,4 +306,21 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
 .sr-solo{
   position:absolute; width:1px; height:1px; padding:0; margin:-1px;
   overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+
+
+/* --- dianas grandes cuando se maneja con el dedo ---
+   Un raton apunta con precision de un pixel; un dedo, de unos diez
+   milimetros. Con puntero grueso todo crece, y de paso crece para quien
+   tiene el pulso justo. */
+@media (pointer:coarse){
+  .btn{padding:10px 15px}
+  .btn--sm{padding:8px 12px}
+  .chip{padding:9px 15px}
+  .fld input{min-height:46px}
+  .fbox__help{width:27px; height:27px; font-size:14px}
+  .fbox__help::after{inset:-9px}
+  .ctrl input[type=range]{height:34px}
+  .ctrl input[type=range]::-webkit-slider-thumb{width:22px; height:22px; margin-top:-8.5px}
+  .ctrl input[type=range]::-moz-range-thumb{width:20px; height:20px}
 }
