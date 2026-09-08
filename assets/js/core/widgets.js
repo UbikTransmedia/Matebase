@@ -115,8 +115,14 @@
   };
 
   /** Panel monoespaciado para mostrar resultados. */
+  /* El marcador es donde aterriza el resultado de cada cosa que toca el
+     alumno. Cambiaba en silencio: quien no ve la pantalla movia el punto y
+     no se enteraba de nada. Con aria-live el lector lo canta al parar. */
   W.readout = function (host, html) {
-    var d = U.el('div.readout', { html: MathX.inline(html || '') });
+    var d = U.el('div.readout', {
+      html: MathX.inline(html || ''),
+      role: 'status', 'aria-live': 'polite', 'aria-atomic': 'true'
+    });
     host.appendChild(d);
     d.set = function (h) { d.innerHTML = MathX.inline(h); };
     return d;
@@ -188,6 +194,39 @@
     this.resize();
   }
 
+  /* Un <canvas> sin nombre es, para un lector de pantalla, un agujero: no
+     dice ni que hay un dibujo. Se le pone nombre a partir del titulo del
+     ejemplo y del encuadre, que es lo poco que la maquina sabe de verdad. */
+  Plot.prototype._nombra = function () {
+    var c = this.canvas;
+    var txt = this.o.aria;
+    if (!txt) {
+      var card = this.el.closest ? this.el.closest('.card') : null;
+      var t = card && card.querySelector('.card__title');
+      txt = t ? ('Gráfica del ejemplo «' + t.textContent.trim() + '»')
+              : 'Gráfica';
+    }
+    txt += '. Eje horizontal de ' + U.fmt(this.xmin, 2) + ' a ' + U.fmt(this.xmax, 2);
+    if (this.o.yaxis !== false) {
+      txt += '; eje vertical de ' + U.fmt(this.ymin, 2) + ' a ' + U.fmt(this.ymax, 2);
+    }
+    txt += '.';
+    if (c.tabIndex === 0) {
+      // Si tiene puntos que se mueven es un control, no una ilustracion,
+      // y hay que decir ademas como se maneja.
+      var n = this._movibles().length;
+      c.setAttribute('role', 'application');
+      c.setAttribute('aria-label', txt +
+        (n === 1
+          ? ' Tiene un punto que se puede mover. Muévelo con las flechas; con Mayúsculas se mueve más despacio.'
+          : ' Tiene ' + n + ' puntos que se pueden mover. Muévelos con las flechas; ' +
+            'con Mayúsculas se mueven más despacio; la barra espaciadora pasa al punto siguiente.'));
+    } else {
+      c.setAttribute('role', 'img');
+      c.setAttribute('aria-label', txt);
+    }
+  };
+
   Plot.prototype.resize = function () {
     var cssW = this.el.clientWidth || 600;
     var cssH = this.height;
@@ -198,6 +237,7 @@
     this.canvas.style.height = cssH + 'px';
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     if (this.equal) this._equalize();
+    this._nombra();
     this.render();
   };
 
@@ -670,16 +710,12 @@
     var self = this, c = this.canvas;
     if (!this._movibles().length) return;      // nada que mover, nada que enfocar
 
-    c.tabIndex = 0;
-    c.setAttribute('role', 'application');
-    c.setAttribute('aria-label', (this.o.aria || 'Grafica con puntos que se pueden mover') +
-      '. Muevelos con las flechas; con Mayusculas se mueven mas despacio; ' +
-      'la barra espaciadora pasa al punto siguiente.');
+    c.tabIndex = 0;                            // el nombre lo pone _nombra()
 
     // Fuera de .stage: ese recuadro recorta lo que sobresale y tiene fondo propio.
     this._voz = U.el('div.sr-solo', { 'aria-live': 'polite', 'aria-atomic': 'true' });
     var pie = U.el('div.stage__teclas', {
-      html: 'Tambi\u00e9n con el teclado: <kbd>Tab</kbd> hasta el dibujo y ' +
+      html: 'También con el teclado: <kbd>Tab</kbd> hasta el dibujo y ' +
         '<kbd>&#8592;</kbd><kbd>&#8593;</kbd><kbd>&#8595;</kbd><kbd>&#8594;</kbd> para mover el punto.'
     });
     var tras = this.el.nextSibling, padre = this.el.parentNode;

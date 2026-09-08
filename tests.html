@@ -443,6 +443,18 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           if (sinTeclado.length) {
             aud.push('gráfica(s) ' + sinTeclado.join(', ') + ' solo se pueden usar con el ratón');
           }
+          // Un <canvas> sin nombre no existe para un lector de pantalla.
+          var anonimas = [];
+          [].forEach.call(h.querySelectorAll('canvas'), function (c, i) {
+            var n = c.getAttribute('aria-label');
+            if (!c.getAttribute('role') || !n || n.length < 12) anonimas.push(i + 1);
+          });
+          if (anonimas.length) {
+            aud.push('gráfica(s) ' + anonimas.join(', ') + ' sin nombre accesible');
+          }
+          // Lo que cambia solo tiene que anunciarse.
+          var mudos = h.querySelectorAll('.readout:not([aria-live]), .verdict:not([aria-live])').length;
+          if (mudos) aud.push(mudos + ' panel(es) que cambian sin anunciarse');
           // Ninguna fórmula ni etiqueta puede salirse por arriba o por abajo
           // de su caja: si se sale, el navegador la corta y deja de leerse.
           var fuera = 0;

@@ -86,8 +86,10 @@
     this.qEl = U.el('div.q');
     this.showEl = U.el('div');
     this.ansEl = U.el('div.ans');
-    this.verdict = U.el('div.verdict');
-    this.stepsEl = U.el('div.steps');
+    // «Correcto» / «No es correcto» aparecia sin avisar: para quien usa
+    // lector de pantalla, pulsar Comprobar no producia ninguna respuesta.
+    this.verdict = U.el('div.verdict', { role: 'status', 'aria-live': 'polite' });
+    this.stepsEl = U.el('div.steps', { role: 'region', 'aria-label': 'Solución paso a paso' });
     U.add(this.body, [this.qEl, this.showEl, this.ansEl, this.verdict, this.stepsEl]);
 
     this.bCheck = U.el('button.btn.btn--ok', { type: 'button', text: 'Comprobar' });
