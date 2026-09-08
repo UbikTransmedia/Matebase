@@ -181,6 +181,14 @@ Course.topic('fn-limites', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.note('Todo lo anterior descansa en una propiedad de los números reales que aquí se ha dado por ' +
+    'buena sin nombrarla: que <strong>no tienen agujeros</strong>. Que una sucesión creciente y ' +
+    'acotada tenga límite, o que una función continua que cambia de signo se anule, son falsos en ' +
+    '$\\mathbb{Q}$. La propiedad que lo arregla se llama <em>completitud</em> y se estudia en el ' +
+    'tema <strong>La completitud de los reales</strong>, del bloque 10. No hace falta para operar ' +
+    'con límites, pero sí para creérselos.',
+    null, 'La letra pequeña de los límites');
+
   p.section('Continuidad');
 
   p.text('Una función es <strong>continua</strong> en $a$ cuando se cumplen tres cosas a la vez:');

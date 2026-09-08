@@ -146,6 +146,12 @@ Course.topic('fn-integral-def', function (p) {
     'Calcular cada trozo y sumar sus <strong>valores absolutos</strong>.'
   ], true);
 
+  p.note('Esta misma integral es, sin cambiar una letra, la que da las probabilidades del bloque ' +
+    'siguiente: en una variable aleatoria continua, la probabilidad de caer entre dos valores ' +
+    '<em>es</em> el área bajo una curva entre esos dos valores. Lo verás en <strong>Variables ' +
+    'aleatorias continuas</strong>.',
+    null, 'Dónde reaparece esto');
+
   p.section('Área entre dos curvas');
   p.text('Si la integral de una función da el área que hay entre ella y el eje, el área encerrada entre ' +
     'dos curvas sale de una resta: se calcula la de arriba y se le quita la de abajo. Lo único ' +

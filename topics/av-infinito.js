@@ -195,6 +195,12 @@ Course.topic('av-infinito', function (p) {
     'o se quedará colgado. Cada vez que un antivirus admite que no puede garantizar que un archivo ' +
     'sea inofensivo, detrás está este razonamiento.');
 
+  p.note('Ese mismo argumento, aplicado a los programas en lugar de a los números, demuestra que hay ' +
+    'problemas que ningún ordenador puede resolver. Es el contenido del tema siguiente, ' +
+    '<strong>Computabilidad: Turing y Gödel</strong>, y no necesita ninguna idea nueva: solo la ' +
+    'diagonal que acabas de ver, aplicada a un objeto distinto.',
+    null, 'La diagonal vuelve enseguida');
+
   p.section('La hipótesis del continuo');
 
   p.text('Cantor se preguntó lo obvio: ¿hay algún infinito <em>entre</em> $\\aleph_0$ y $|\\mathbb{R}|$? ' +

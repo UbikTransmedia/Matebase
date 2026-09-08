@@ -288,9 +288,19 @@ window.CURRICULUM = [
         o: ['Propiedades de la exponencial', 'El número e', 'Modelos de crecimiento y decaimiento']
       },
       {
-        id: 'fn-sucesiones', t: 'Sucesiones y series',
+        id: 'fn-sucesiones', t: 'Sucesiones y progresiones',
         r: 'Listas infinitas de números y sus sumas.',
         o: ['Progresiones aritmética y geométrica', 'Límite de una sucesión', 'Suma de series geométricas']
+      },
+      {
+        id: 'fn-series', t: 'Series numéricas y convergencia',
+        r: 'Qué significa sumar infinitos números, y por qué a veces no se puede.',
+        o: ['Sumas parciales y definición de convergencia', 'La serie armónica diverge', 'p-series y criterios de comparación']
+      },
+      {
+        id: 'fn-finanzas', t: 'Matemática financiera',
+        r: 'Valor del dinero en el tiempo, TAE y la cuota de una hipoteca.',
+        o: ['Valor actual y descuento', 'TIN frente a TAE', 'Amortización de un préstamo']
       },
       {
         id: 'fn-limites', t: 'Límites y continuidad',
@@ -306,6 +316,11 @@ window.CURRICULUM = [
         id: 'fn-aplicaciones', t: 'Estudio de funciones y optimización',
         r: 'Usar la derivada para dibujar y para decidir.',
         o: ['Monotonía y extremos', 'Curvatura y puntos de inflexión', 'Problemas de optimización']
+      },
+      {
+        id: 'fn-taylor', t: 'Polinomios de Taylor',
+        r: 'Sustituir una función por un polinomio: lo que hay dentro de tu calculadora.',
+        o: ['Del polinomio de Taylor a la serie', 'Resto de Lagrange y control del error', 'Desarrollos de e^x, sen x y cos x']
       },
       {
         id: 'fn-integral-indef', t: 'Integral indefinida',
@@ -356,6 +371,11 @@ window.CURRICULUM = [
         o: ['Variable aleatoria discreta', 'Función de probabilidad binomial', 'Media y desviación típica']
       },
       {
+        id: 'pe-continuas', t: 'Variables aleatorias continuas',
+        r: 'Cuando la probabilidad se mide con áreas: densidad e integrales.',
+        o: ['Función de densidad y de distribución', 'Probabilidad como área bajo la curva', 'Esperanza y varianza como integrales']
+      },
+      {
         id: 'pe-normal', t: 'Distribución normal',
         r: 'La campana que aparece por todas partes.',
         o: ['Densidad y tipificación', 'Uso de la tabla N(0,1)', 'Aproximación de la binomial']
@@ -364,6 +384,11 @@ window.CURRICULUM = [
         id: 'pe-inferencia', t: 'Muestreo e inferencia',
         r: 'Deducir cómo es el todo mirando una parte.',
         o: ['Distribución de la media muestral', 'Intervalos de confianza', 'Contraste de hipótesis']
+      },
+      {
+        id: 'pe-causal', t: 'Inferencia causal',
+        r: 'Qué se hace cuando la correlación no basta: la respuesta que falta a la advertencia.',
+        o: ['Variable de confusión y paradoja de Simpson', 'Por qué se aleatoriza', 'Anatomía de un ensayo clínico']
       }
     ]
   },
@@ -441,6 +466,11 @@ window.CURRICULUM = [
         o: ['Extremos con varias variables', 'El algoritmo del descenso de gradiente', 'Tasa de aprendizaje y mínimos locales']
       },
       {
+        id: 'av-noeuclidea', t: 'Geometrías no euclídeas',
+        r: 'Qué pasa si niegas el quinto postulado: dos mil años de historia y la forma del universo.',
+        o: ['El quinto postulado y su independencia', 'Geometría elíptica e hiperbólica', 'Exceso esférico y disco de Poincaré']
+      },
+      {
         id: 'av-geodif', t: 'Geometría diferencial: curvatura',
         r: 'Medir cuánto se dobla una curva o una superficie.',
         o: ['Curvatura de una curva plana', 'Curvatura de Gauss', 'Geodésicas y el teorema egregio']
@@ -469,9 +499,19 @@ window.CURRICULUM = [
         o: ['Definición de grupo y ejemplos', 'Grupos de simetría y teselados', 'Por qué no hay fórmula para el grado 5']
       },
       {
+        id: 'av-reales', t: 'La completitud de los reales',
+        r: 'El supremo: lo único que de verdad distingue ℝ de ℚ.',
+        o: ['Cotas, supremo e ínfimo', 'El agujero de ℚ', 'Qué se cae sin el axioma de completitud']
+      },
+      {
         id: 'av-infinito', t: 'El infinito: cardinalidad y Cantor',
         r: 'Hay infinitos más grandes que otros, y se puede demostrar.',
         o: ['Biyecciones y conjuntos numerables', 'La diagonal de Cantor', 'Hipótesis del continuo']
+      },
+      {
+        id: 'av-computabilidad', t: 'Computabilidad: Turing y Gödel',
+        r: 'Qué se puede demostrar y qué se puede calcular. Los dos límites, con la misma diagonal.',
+        o: ['La máquina de Turing y qué es calcular', 'El problema de la parada', 'Los teoremas de incompletitud de Gödel']
       }
     ]
   },

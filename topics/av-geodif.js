@@ -134,6 +134,12 @@ Course.topic('av-geodif', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.note('Si has llegado aquí sin pasar por <strong>Geometrías no euclídeas</strong>, el tema ' +
+    'anterior, merece la pena volver: allí está la historia de por qué a alguien se le ocurrió ' +
+    'que la geometría del plano podía no ser la única, y de dónde salen la esfera y la silla de ' +
+    'montar como mundos con derecho propio. Aquí se les pone número.',
+    null, 'De dónde viene todo esto');
+
   p.section('El teorema egregio');
 
   p.note('Gauss demostró en 1827 que <strong>la curvatura $K$ se puede calcular midiendo únicamente ' +

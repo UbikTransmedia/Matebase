@@ -100,6 +100,12 @@ Course.topic('ar-conjuntos', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.note('Que $\\sqrt2$ no sea racional deja un <strong>agujero</strong> en la recta de las ' +
+    'fracciones, y taparlo es exactamente lo que define a los reales. La propiedad concreta que ' +
+    'hace falta —el axioma del supremo— se ve en el tema <strong>La completitud de los ' +
+    'reales</strong>, en el bloque 10, cuando ya tenga sentido preguntarse por ella.',
+    null, 'Por dónde sigue esto');
+
   p.section('Intervalos');
 
   p.text('Un <strong>intervalo</strong> es un tramo de recta. La notación distingue si los extremos ' +

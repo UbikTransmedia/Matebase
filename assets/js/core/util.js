@@ -205,9 +205,15 @@
    *     NEGADA, no como elegida.
    *   - Si solo hay dos opciones y el alumno niega una, elige la otra.
    */
+  /* Rendirse no es elegir. Sin esto, «no lo se» entra por la clase «no» en
+     cualquier pregunta de si o no, y el corrector da por buena una respuesta
+     que dice justamente que no se sabe la respuesta. */
+  var RENDIRSE = /^(no(\s+l[oa])?\s*se|nose|ni\s+idea|ns|npi|paso|no\s+lo\s+entiendo|no\s+se\s+cuall?e?s?)$/;
+
   U.eligeOpcion = function (texto, clases) {
     var s = U.llano(texto);
     if (!s.trim()) return null;
+    if (RENDIRSE.test(s.trim())) return null;
     var nombres = Object.keys(clases);
     var elegidas = [], negadas = [];
     nombres.forEach(function (k) {

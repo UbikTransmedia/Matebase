@@ -277,6 +277,119 @@ Course.topic('fn-derivadas', function (p) {
     'derivar, igualar a cero y mirar. Es el tema siguiente, y el motivo de que este importe tanto.',
     'Utilidad: encontrar lo mejor');
 
+  p.section('Rolle y el valor medio');
+
+  p.text('Hay dos teoremas que parecen una obviedad dibujada y que sostienen buena parte de lo que ' +
+    'viene después. Conviene verlos ahora, porque son la garantía de que las cuentas con derivadas ' +
+    'dicen algo sobre la función y no solo sobre un punto suelto.');
+
+  p.sub('El teorema de Rolle');
+
+  p.text('Si una función continua sale de una altura y vuelve a la misma altura, en algún momento ' +
+    'tuvo que dejar de subir para empezar a bajar (o al revés). En ese momento la tangente está ' +
+    'horizontal.');
+
+  p.formula('f(a) = f(b) \\ \\Longrightarrow\\ \\exists\\,c \\in (a,b) : f\'(c) = 0',
+    'teorema de Rolle',
+    'Se dice: <em>«si efe de a es igual a efe de be, entonces existe un ce, perteneciente al ' +
+      'intervalo abierto a be, tal que efe prima de ce es igual a cero»</em>.<br><br>El símbolo ' +
+      '$\\exists$ es el cuantificador existencial del bloque 0: «existe al menos un». Los dos puntos ' +
+      'se leen «tal que».<br><br>Fíjate en lo que <strong>no</strong> dice: no dice cuántos hay, ni ' +
+      'dónde están, ni cómo encontrarlos. Solo que hay al menos uno. Es un teorema de existencia, y ' +
+      'aun así resuelve muchas cosas.');
+
+  p.text('Hacen falta las tres condiciones —continua en $[a,b]$, derivable en $(a,b)$ y con los ' +
+    'extremos a la misma altura— y ninguna sobra. La función $|x|$ en $[-1,1]$ empieza y acaba en 1, ' +
+    'es continua, y su derivada no se anula en ningún punto: falla porque en el cero tiene un pico y ' +
+    'no es derivable.');
+
+  p.sub('El teorema del valor medio');
+
+  p.text('Es Rolle, pero inclinado. Si en un viaje de dos horas has recorrido 180 km, tu velocidad ' +
+    'media ha sido 90 km/h; y por muchos frenazos y acelerones que hayas dado, <strong>en algún ' +
+    'instante concreto el velocímetro marcaba exactamente 90</strong>. No puedes haber ido siempre ' +
+    'por encima ni siempre por debajo de tu propia media.');
+
+  p.formula('\\exists\\,c \\in (a,b) : f\'(c) = \\frac{f(b) - f(a)}{b - a}',
+    'teorema del valor medio (Lagrange)',
+    'Se dice: <em>«existe un ce en el intervalo abierto a be tal que efe prima de ce es igual a efe ' +
+      'de be menos efe de a, partido por be menos a»</em>.<br><br>El lado derecho es la pendiente de ' +
+      'la recta que une los dos extremos de la curva: la <strong>media</strong>. El lado izquierdo es ' +
+      'una pendiente <strong>instantánea</strong>. El teorema dice que en algún punto coinciden, o ' +
+      'sea, que la tangente en ese punto es paralela a la cuerda.');
+
+  p.demo({
+    title: 'La tangente paralela a la cuerda',
+    intro: 'La recta gris une los dos extremos. Mueve los extremos y busca dónde la tangente (en color) queda paralela a ella: el teorema garantiza que ese punto existe siempre.',
+    build: function (host, d) {
+      var f = function (x) { return 0.35 * x * x * x - 1.6 * x + 0.5; };
+      var fp = function (x) { return 1.05 * x * x - 1.6; };
+      var out = W.readout(host, '');
+      var plot = W.plot(host, {
+        xmin: -3, xmax: 3, ymin: -4, ymax: 4, height: 280,
+        handles: {
+          A: { x: -2, y: 0, label: 'a', color: 2, constrain: function (h) { h.y = f(h.x); h.x = U.clamp(h.x, -2.8, 2.8); } },
+          B: { x: 2, y: 0, label: 'b', color: 2, constrain: function (h) { h.y = f(h.x); h.x = U.clamp(h.x, -2.8, 2.8); } }
+        },
+        draw: function (g) {
+          var a = g.h('A').x, b = g.h('B').x;
+          if (b < a) { var t = a; a = b; b = t; }
+          g.fn(f, { color: 0, w: 2.6 });
+          g.seg(a, f(a), b, f(b), { color: 'axis', w: 2, dash: true });
+          if (b - a > 0.05) {
+            var m = (f(b) - f(a)) / (b - a);
+            // resolver 1.05 c^2 - 1.6 = m  dentro de (a,b)
+            var arg = (m + 1.6) / 1.05;
+            if (arg >= 0) {
+              var raiz = Math.sqrt(arg);
+              [raiz, -raiz].forEach(function (c) {
+                if (c > a && c < b) {
+                  g.fn(function (x) { return f(c) + m * (x - c); },
+                    { color: 1, w: 2, from: c - 1.2, to: c + 1.2 });
+                  g.point(c, f(c), { color: 1, r: 6 });
+                }
+              });
+            }
+          }
+        },
+        onDrag: function () { paint(); }
+      });
+      function paint() {
+        var a = plot.h('A').x, b = plot.h('B').x;
+        if (b < a) { var t = a; a = b; b = t; }
+        var m = (b - a > 0.05) ? (f(b) - f(a)) / (b - a) : 0;
+        var arg = (m + 1.6) / 1.05, cs = [];
+        if (arg >= 0) {
+          var raiz = Math.sqrt(arg);
+          [raiz, -raiz].forEach(function (c) { if (c > a && c < b) cs.push(U.fmt(c, 4)); });
+        }
+        out.set('Intervalo: $[' + U.fmt(a, 2) + ',\\ ' + U.fmt(b, 2) + ']$<br>' +
+          'Pendiente media (la cuerda): $' + U.fmt(m, 4) + '$<br>' +
+          'Punto' + (cs.length === 1 ? '' : 's') + ' donde la tangente vale eso: $c = ' +
+          (cs.length ? cs.join(',\\ ') : '—') + '$<br>' +
+          '<span style="font-size:0.8125rem;color:var(--ink-faint)">Por estrecho o ancho que hagas el ' +
+          'intervalo, siempre hay al menos uno. Eso es exactamente lo que afirma el teorema.</span>');
+        plot.render();
+      }
+      W.legend(host, [
+        { c: 0, t: 'la función' },
+        { c: 'axis', t: 'la cuerda entre los extremos' },
+        { c: 1, t: 'la tangente paralela a ella' }
+      ]);
+      paint();
+    }
+  });
+
+  p.util('El teorema del valor medio es la base legal de los <strong>radares de tramo</strong>. La ' +
+    'cámara no mide tu velocidad instantánea: mide cuánto has tardado en recorrer una distancia ' +
+    'conocida, o sea, tu velocidad media. Si la media supera el límite, el teorema garantiza que en ' +
+    'algún instante concreto ibas exactamente a esa velocidad, y por tanto por encima del límite. La ' +
+    'multa se sostiene sobre un teorema de 1797.');
+
+  p.note('Estos dos resultados vuelven en el tema de <em>polinomios de Taylor</em>, donde el valor ' +
+    'medio es lo que produce el punto misterioso $c$ que aparece en la fórmula del error. Si allí te ' +
+    'preguntas de dónde sale ese $c$, la respuesta está aquí.', null, 'Dónde se usa esto');
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 

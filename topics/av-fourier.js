@@ -9,6 +9,16 @@ Course.topic('av-fourier', function (p) {
     'saltos, como una onda cuadrada— se puede escribir como suma de senos y cosenos. Infinitos, sí, ' +
     'pero solo senos y cosenos.', 'ok', 'El teorema de Fourier');
 
+  p.note('Esta idea no es nueva del todo: en el bloque 5 ya se aproximó una función por una suma ' +
+    'infinita de piezas sencillas, con los <strong>polinomios de Taylor</strong>. La diferencia ' +
+    'está en las piezas y en el alcance. Taylor usa potencias de $x$ y aproxima muy bien ' +
+    '<em>cerca de un punto</em>, deteriorándose al alejarse; Fourier usa senos y cosenos y ' +
+    'aproxima <em>en todo el intervalo a la vez</em>, incluso donde la función tiene esquinas, ' +
+    'que es justo donde Taylor no puede ni empezar, porque ahí no hay derivadas. Si el sumatorio ' +
+    'infinito te incomoda, el tema de <strong>series numéricas</strong> es el que dice cuándo ' +
+    'tiene derecho a existir.',
+    null, 'El peldaño anterior: Taylor');
+
   p.formula('f(x) = \\frac{a_0}{2} + \\sum_{n=1}^{\\infty}\\left[a_n\\cos(nx) + b_n\\operatorname{sen}(nx)\\right]',
     'serie de Fourier',
     'El $\\sum_{n=1}^{\\infty}$ se lee «sumatorio, desde ene igual a uno hasta infinito»: significa ' +
