@@ -642,9 +642,29 @@ window.CURRICULUM = [
         o: ['La matriz de rotación 2×2', 'Por qué todo va al revés', 'Componer transformaciones']
       },
       {
+        id: 'gfx-color', t: 'El color como función',
+        r: 'Del gris al arcoíris con una línea de cosenos, y por qué las mezclas suelen salir sucias.',
+        o: ['La paleta de cosenos', 'Gamma: mezclar sin ensuciar', 'Rampas, gradientes y el color como señal']
+      },
+      {
         id: 'gfx-ruido', t: 'Azar sin azar: ruido',
         r: 'El azar reproducible, que es el único que sirve para dibujar.',
         o: ['Funciones hash deterministas', 'Ruido de valor e interpolación', 'Ruido fractal (fbm)']
+      },
+      {
+        id: 'gfx-warp', t: 'Torcer el espacio',
+        r: 'Meter ruido dentro del ruido. La receta más rentable del arte generativo.',
+        o: ['Desplazar el dominio antes de dibujar', 'Ruido dentro de ruido', 'Dos vueltas de deformación y el humo que sale']
+      },
+      {
+        id: 'gfx-voronoi', t: 'Voronoi: el patrón de las células',
+        r: 'Sembrar puntos y preguntar por el más cercano: escamas, cristales, grietas y piel de jirafa.',
+        o: ['La distancia al punto sembrado más cercano', 'Mirar solo las nueve celdas vecinas', 'Bordes, células y la segunda distancia']
+      },
+      {
+        id: 'gfx-simetria', t: 'Caleidoscopios',
+        r: 'Un valor absoluto es un espejo. Con dos o tres se construye cualquier roseta.',
+        o: ['abs como espejo', 'Simetría de orden n en polares', 'Plegar varias veces: el caleidoscopio']
       },
       {
         id: 'gfx-derivadas', t: 'Derivar dentro del shader',
@@ -652,14 +672,34 @@ window.CURRICULUM = [
         o: ['Derivadas por diferencias entre píxeles vecinos', 'Antialiasing independiente del zoom', 'Normales a partir de un campo de alturas']
       },
       {
+        id: 'gfx-tunel', t: 'El túnel',
+        r: 'El efecto que definió una época: polares, una división y la ilusión de profundidad infinita.',
+        o: ['Uno partido por erre es profundidad', 'Vestir la pared sin tener texturas', 'Curvar el túnel y hacerlo respirar']
+      },
+      {
         id: 'gfx-raymarching', t: 'Raymarching: 3D con una fórmula',
         r: 'Esferas y cajas sin un solo triángulo, avanzando a lo largo de la mirada.',
         o: ['Distancias con signo en 3D', 'El algoritmo de avance por esferas', 'Luz con la normal, que es el gradiente']
       },
       {
+        id: 'gfx-escena', t: 'Modelar con distancias',
+        r: 'Uniones suaves, repetición infinita y torsiones: un catálogo para construir cualquier cosa.',
+        o: ['smin: fundir dos cuerpos', 'Repetir el espacio en tres dimensiones', 'Torcer, doblar y rascar la superficie']
+      },
+      {
+        id: 'gfx-luz', t: 'Luz, sombra y aire',
+        r: 'Sombras suaves, oclusión ambiental, brillo especular y niebla: lo que separa una maqueta de una imagen.',
+        o: ['Sombras suaves con la distancia más corta', 'Oclusión ambiental de tres líneas', 'Especular, Fresnel y niebla']
+      },
+      {
         id: 'gfx-fractales', t: 'Fractales: iterar en el plano complejo',
         r: 'Mandelbrot y Julia en tiempo real, con zoom. El caos, ahora tocable.',
         o: ['Iterar z² + c en el shader', 'Escape y coloreado', 'Conjuntos de Julia y su relación con el de Mandelbrot']
+      },
+      {
+        id: 'gfx-post', t: 'La última pasada',
+        r: 'Viñeta, aberración cromática, grano y trama: el acabado que hace que una imagen parezca de alguien.',
+        o: ['Trabajar sobre el color ya calculado', 'Viñeta y aberración cromática', 'Grano, tramado y líneas de barrido']
       },
       {
         id: 'gfx-directo', t: 'La actuación',
