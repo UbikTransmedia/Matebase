@@ -495,12 +495,58 @@
     if (!location.hash) route();
   }
 
+  /* ---------------- historial de navegación ----------------
+     El curso vive en el hash, así que el «atrás» del navegador ya
+     funcionaba. Lo que faltaba era poder volver sobre tus pasos sin salir
+     de la página y, sobre todo, VER por dónde has pasado. Se lleva una pila
+     propia porque el navegador no deja preguntar si hay algo detrás: sin
+     ella no se podrían apagar los botones cuando no llevan a ningún sitio. */
+  var pila = [], cur = -1, saltando = false;
+
+  function nombreDe(id) {
+    if (!id) return 'Inicio';
+    var t = BYID[id];
+    return t ? t.t : id;
+  }
+
+  function apila(id) {
+    if (saltando) { saltando = false; return; }
+    if (pila[cur] === id) return;              // recargar no cuenta como viaje
+    pila = pila.slice(0, cur + 1);             // navegar corta el futuro
+    pila.push(id);
+    if (pila.length > 60) pila.shift();        // no crece sin fin
+    cur = pila.length - 1;
+    Progress.pref('historial', pila.slice(-25).join(','));
+  }
+
+  function vaA(i) {
+    if (i < 0 || i >= pila.length || i === cur) return;
+    cur = i;
+    saltando = true;
+    var destino = pila[i] ? '#/' + pila[i] : '';
+    if (location.hash.replace(/^#\/?/, '') === (pila[i] || '')) { saltando = false; route(); }
+    else location.hash = destino;
+    pintarNav();
+  }
+
+  function pintarNav() {
+    var a = U.$('#navAtras'), d = U.$('#navAlante');
+    if (!a) return;
+    a.disabled = (cur <= 0);
+    d.disabled = (cur >= pila.length - 1);
+    // El título dice a dónde lleva: así se sabe antes de pulsar.
+    a.title = a.disabled ? 'No hay nada detrás' : 'Volver a «' + nombreDe(pila[cur - 1]) + '»';
+    d.title = d.disabled ? 'No hay nada delante' : 'Ir a «' + nombreDe(pila[cur + 1]) + '»';
+  }
+
   /* ---------------- arranque ---------------- */
 
   var arrancado = false;
 
   function route() {
     var id = location.hash.replace(/^#\/?/, '');
+    apila(id);
+    pintarNav();
     if (!id) renderHome(); else renderTopic(id);
     // Al navegar, llevar el foco al titulo: quien usa teclado no tiene que
     // volver a recorrer el indice, y quien usa lector de pantalla se entera
@@ -564,6 +610,9 @@
     });
     U.$('#homeLink').addEventListener('click', irAInicio);
     U.$('#homeBtn').addEventListener('click', irAInicio);
+
+    U.$('#navAtras').addEventListener('click', function () { vaA(cur - 1); });
+    U.$('#navAlante').addEventListener('click', function () { vaA(cur + 1); });
     montarGlosario();
 
     U.bus.on('progress', function () { paintIndex(); });

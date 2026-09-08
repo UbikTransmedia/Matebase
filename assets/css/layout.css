@@ -8,7 +8,7 @@
   display:flex; flex-direction:column; z-index:20;
 }
 .side__head{padding:16px 18px 12px; border-bottom:1px solid var(--line-soft)}
-.brand{display:flex; align-items:center; gap:9px; margin-bottom:12px}
+.brand{display:flex; align-items:center; gap:7px; margin-bottom:12px}
 .brand__mark{
   display:flex; align-items:baseline; gap:9px;
   text-decoration:none; color:inherit;
@@ -18,16 +18,22 @@
   color:var(--accent); line-height:1;
 }
 .brand__name{font-size:1.1875rem; font-weight:680; letter-spacing:-.02em}
-/* Boton de inicio, junto al nombre: es donde se busca instintivamente. */
-.brand__home{
-  margin-left:auto; flex:0 0 auto;
-  display:inline-flex; align-items:center; gap:5px;
+/* Boton de inicio, junto al nombre: es donde se busca instintivamente.
+   Atras y adelante comparten la regla en vez de copiarla: son la misma
+   familia de mandos y tienen que seguir pareciendose dentro de un ano. */
+.brand__home,
+.nav__b{
+  flex:0 0 auto;
+  display:inline-flex; align-items:center; justify-content:center; gap:5px;
   background:var(--accent); border:1px solid var(--accent); border-radius:9px;
-  padding:6px 11px; font-size:0.7812rem; font-weight:650; color:var(--on-accent);
+  padding:6px 11px; font:inherit; font-size:0.7812rem; font-weight:650; line-height:1.65;
+  color:var(--on-accent);
   cursor:pointer; text-decoration:none; transition:.13s;
   box-shadow:0 1px 2px rgba(0,0,0,.12);
 }
-.brand__home:hover{
+.brand__home{margin-left:auto}
+.brand__home:hover,
+.nav__b:hover:not([disabled]){
   background:var(--accent-ink); border-color:var(--accent-ink); color:var(--on-accent);
   text-decoration:none;
 }
@@ -280,3 +286,26 @@
   transition:top .12s;
 }
 .saltar:focus{top:0; text-decoration:none; color:var(--on-accent)}
+
+
+/* --- atrás y adelante ---
+   Lo visual sale de la regla que comparten con Inicio, ahí arriba. Aquí solo
+   queda lo que es suyo: la fila, el ancho mínimo y el estado apagado. */
+.nav{display:flex; align-items:center; gap:3px; flex:0 0 auto}
+/* Son dos galones, no dos palabras: con estrecharlos caben los tres mandos
+   junto al nombre sin que este tenga que encogerse. Y la altura se estira
+   hasta la del boton de Inicio en vez de calcularse, para que sigan
+   midiendo lo mismo cuando cambie el tamano de lectura. */
+.nav__b{padding-left:8px; padding-right:8px}
+.nav__b:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.nav__b[disabled]{opacity:.34; cursor:default; box-shadow:none}
+
+@media (pointer:coarse){
+  .brand__home, .nav__b{padding-top:9px; padding-bottom:9px}
+}
+
+/* En pantallas estrechas la cabecera va justa y los tres botones no caben
+   en la misma línea que el nombre: que el nombre ceda sitio antes que ellos. */
+@media (max-width:430px){
+  .brand__name{display:none}
+}
