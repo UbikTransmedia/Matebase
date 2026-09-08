@@ -59,6 +59,52 @@
     return true;
   };
 
+  /* El corrector entiende mucho mas de lo que el alumno imagina: fracciones,
+     raices, potencias, pi, expresiones enteras. Si no se dice, nadie lo usa,
+     y quien no calcula bien de cabeza se queda fuera de un ejercicio que en
+     realidad no iba de calcular. Va en la misma esquina y con el mismo globo
+     amarillo que la ayuda de lectura de las formulas. */
+  function panelComo() {
+    return U.el('div.ans__panel', {
+      html: '<strong>No hace falta que calcules el decimal.</strong> ' +
+        'La casilla admite tal cual:' +
+        '<ul>' +
+        '<li>fracciones: <em>3/4</em>, <em>120/7</em></li>' +
+        '<li>decimales con coma: <em>-2,5</em></li>' +
+        '<li>potencias: <em>2^10</em></li>' +
+        '<li>raíces: <em>sqrt(2)</em> o <em>raiz(2)</em></li>' +
+        '<li>constantes: <em>pi</em>, <em>e</em></li>' +
+        '<li>cuentas sin resolver: <em>(3+5)*2</em></li>' +
+        '</ul>' +
+        'Y si la respuesta es una expresión, vale escribirla entera: ' +
+        '<em>2x+1</em>, <em>(x-3)(x+2)</em>.'
+    });
+  }
+
+  /** El circulito que abre y cierra ese panel. Se rehace con cada enunciado. */
+  function botonComo(panel) {
+    var caja = U.el('div.ans__como');
+    var b = U.el('button.fbox__help', {
+      type: 'button', 'aria-expanded': 'false',
+      'aria-label': 'Cómo se escribe la respuesta',
+      title: 'Cómo escribir la respuesta',
+      onclick: function () {
+        var abierto = b.getAttribute('aria-expanded') === 'true';
+        b.setAttribute('aria-expanded', abierto ? 'false' : 'true');
+        panel.classList.toggle('is-on', !abierto);
+      },
+      onkeydown: function (e) {
+        if (e.key === 'Escape' && b.getAttribute('aria-expanded') === 'true') {
+          b.setAttribute('aria-expanded', 'false');
+          panel.classList.remove('is-on');
+          e.stopPropagation();
+        }
+      }
+    }, '?');
+    caja.appendChild(b);
+    return caja;
+  }
+
   /* ------------------------------------------------------------------ */
 
   function Card(host, spec, topicId, index) {
@@ -86,11 +132,13 @@
     this.qEl = U.el('div.q');
     this.showEl = U.el('div');
     this.ansEl = U.el('div.ans');
+    this.comoEl = panelComo();
+    this.ansEl.appendChild(botonComo(this.comoEl));
     // «Correcto» / «No es correcto» aparecia sin avisar: para quien usa
     // lector de pantalla, pulsar Comprobar no producia ninguna respuesta.
     this.verdict = U.el('div.verdict', { role: 'status', 'aria-live': 'polite' });
     this.stepsEl = U.el('div.steps', { role: 'region', 'aria-label': 'Solución paso a paso' });
-    U.add(this.body, [this.qEl, this.showEl, this.ansEl, this.verdict, this.stepsEl]);
+    U.add(this.body, [this.qEl, this.showEl, this.ansEl, this.comoEl, this.verdict, this.stepsEl]);
 
     this.bCheck = U.el('button.btn.btn--ok', { type: 'button', text: 'Comprobar' });
     this.bHint = U.el('button.btn', { type: 'button', text: 'Pista' });
@@ -137,6 +185,8 @@
     if (s.show) s.show(this.data, this.showEl);
 
     U.clear(this.ansEl);
+    this.comoEl.classList.remove('is-on');
+    this.ansEl.appendChild(botonComo(this.comoEl));
     this.fields = (typeof s.fields === 'function' ? s.fields(this.data) : s.fields) ||
       [{ name: 'r', label: 'Respuesta' }];
     this.inputs = {};
@@ -212,7 +262,9 @@
     for (var k in v.raw) if (v.raw[k] !== '') empty = false;
     if (empty) {
       this.verdict.className = 'verdict verdict--hint is-on';
-      this.verdict.innerHTML = 'Escribe tu respuesta antes de comprobar.';
+      this.verdict.innerHTML = 'Escribe tu respuesta antes de comprobar. ' +
+        'Vale una fracción o una cuenta sin resolver: mira el <strong>?</strong> ' +
+        'que hay junto a la casilla.';
       return;
     }
 
