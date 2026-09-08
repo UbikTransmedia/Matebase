@@ -46,9 +46,13 @@ Course.topic('fn-limites', function (p) {
         }
       });
       function paint() {
+        /* Tres decimales, que son los que el número tiene: el deslizador se
+           mueve de milésima en milésima. Rellenar hasta seis con ceros hacía
+           creer que el valor estaba truncado, cuando es exacto. */
+        var xi = U.round(2 - dist, 3), xd = U.round(2 + dist, 3);
         out.set('$f(x) = \\dfrac{x^2-4}{x-2}$ &nbsp;·&nbsp; en $x=2$ daría $\\dfrac{0}{0}$: no está definida.<br>' +
-          '<span style="color:var(--c2)">Por la izquierda</span>: $f(' + U.fmt(2 - dist, 6) + ') = ' + U.fmt(f(2 - dist), 6) + '$<br>' +
-          '<span style="color:var(--c4)">Por la derecha</span>: $f(' + U.fmt(2 + dist, 6) + ') = ' + U.fmt(f(2 + dist), 6) + '$<br>' +
+          '<span style="color:var(--c2)">Por la izquierda</span>: $f(' + U.fmt(xi, 3) + ') = ' + U.fmt(xi + 2, 3) + '$<br>' +
+          '<span style="color:var(--c4)">Por la derecha</span>: $f(' + U.fmt(xd, 3) + ') = ' + U.fmt(xd + 2, 3) + '$<br>' +
           (dist < 0.05 ? '<strong style="color:var(--ok)">Los dos lados apuntan a 4. Ese es el límite.</strong>'
             : 'Acerca más el deslizador y mira a dónde van los dos valores.'));
         plot.render();
@@ -57,12 +61,23 @@ Course.topic('fn-limites', function (p) {
         label: 'distancia al punto', min: 0.001, max: 1, step: 0.001, value: 1, dec: 3,
         on: function (v) { dist = v; paint(); }
       });
-      W.hint(host, 'Aunque el agujero nunca se rellena, el límite existe y vale 4.');
+      W.hint(host, 'Aunque el agujero nunca se rellena, el límite existe y vale 4. Y fíjate en por ' +
+        'qué los valores salen tan redondos: fuera de $x=2$ esta función <strong>es</strong> ' +
+        'exactamente $x+2$, porque $\\frac{x^2-4}{x-2} = \\frac{(x-2)(x+2)}{x-2}$ y el $(x-2)$ se ' +
+        'cancela. Los números de arriba no son aproximaciones: son exactos.');
       paint();
     }
   });
 
   /* ---------------------------------------------------------------- */
+  p.note('Un apunte que parece menor y no lo es. Si le pides a un ordenador que calcule ' +
+    '$\\frac{x^2-4}{x-2}$ en $x = 1{,}999$ tal cual está escrita, no obtiene $3{,}999$: obtiene ' +
+    '$3{,}99899999999986\\dots$ El numerador y el denominador son los dos casi cero, y al restar ' +
+    'cantidades muy parecidas se pierden cifras significativas. Con la fórmula simplificada ' +
+    '$x+2$ el resultado sale exacto. Es el mismo cálculo y no da lo mismo: en [[av-numerico]] se ' +
+    'estudia por qué, y qué se hace al respecto.',
+    null, 'Lo exacto y lo que calcula la máquina');
+
   p.section('Límites laterales');
 
   p.text('Uno se puede acercar a $a$ por la izquierda ($x \\to a^-$) o por la derecha ($x \\to a^+$). ' +
