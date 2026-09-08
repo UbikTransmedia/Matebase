@@ -316,7 +316,10 @@ Course.topic('av-numeros', function (p) {
     },
     fields: [{ name: 'v', label: 'Hasta', w: 'tiny' }],
     sol: function (d) { return { v: d.limite }; },
-    hint: function (d) { return 'Calcula $\\sqrt{' + d.n + '} = ' + U.fmt(Math.sqrt(d.n), 4) + '$ y quédate con la parte entera.'; },
+    hint: function (d) {
+      return 'Busca el mayor entero cuyo cuadrado no pase de $' + d.n + '$. Tira de los cuadrados que ' +
+        'ya te sabes —$10^2=100$, $15^2=225$, $20^2=400$— y ajusta desde ahí.';
+    },
     steps: function (d) {
       return ['Si $n = a\\cdot b$ con $a \\le b$, entonces $a \\le \\sqrt{n}$: siempre hay un divisor pequeño.',
         'Por tanto basta con probar hasta $\\lfloor\\sqrt{' + d.n + '}\\rfloor = ' + d.limite + '$.',

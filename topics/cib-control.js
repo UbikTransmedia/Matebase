@@ -312,7 +312,9 @@ Course.topic('cib-control', function (p) {
       return { ok: q === d.q };
     },
     hint: function () {
-      return 'Error que no se cierra nunca → integral. Sobrepaso y vaivenes → derivativo. Todo demasiado lento → proporcional.';
+      return 'Fíjate en QUÉ falla, no en cuánto. ¿Se queda un hueco que nadie cierra? ¿Llega pero ' +
+        'pasándose y volviendo? ¿O simplemente reacciona con desgana? Cada síntoma señala a un ' +
+        'término distinto, y ya has visto cuál arregla cada cosa.';
     },
     steps: function (d) {
       return [d.por, 'El término que hay que reforzar es el <strong>' + d.q + '</strong>.'];
