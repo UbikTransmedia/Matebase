@@ -558,6 +558,19 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
                 }).join(' · '));
             }
           });
+          // Un shader puede compilar perfectamente y pintar un rectangulo de
+          // un solo color: un fallo mudo que ninguna otra prueba ve. Se pinta
+          // cada ejemplo fuera de pantalla y se mira si tiene algo dentro.
+          [].forEach.call(h.querySelectorAll('.shd'), function (sh, i) {
+            var v = sh.__shd;
+            if (!v || !W.glslEstadisticas) return;
+            var st = W.glslEstadisticas(v.original, v.mandos, { tam: 32, t: 1.7 });
+            if (!st) return;                       // no compila: ya avisa la prueba de arriba
+            if (st.desv < 2.0) {
+              aud.push('shader ' + (i + 1) + ' pinta una imagen lisa (desviacion ' +
+                st.desv.toFixed(2) + ' sobre 255)');
+            }
+          });
           // Un enlace entre capitulos que apunta a un tema inexistente deja al
           // alumno en una pagina en blanco justo cuando iba a repasar algo.
           var rotos = [];

@@ -1,6 +1,6 @@
 # Matebase
 
-Curso interactivo de matemáticas, desde contar hasta los sistemas dinámicos.
+Curso interactivo de matemáticas, desde contar hasta programar imágenes con una fórmula.
 
 **Se abre haciendo doble clic en `index.html`.** No hace falta servidor, ni
 internet, ni instalar nada. Puedes copiar la carpeta en un lápiz de memoria y
@@ -10,7 +10,7 @@ abrirla en cualquier ordenador con un navegador.
 
 ## Qué hay dentro
 
-A la izquierda, un índice desplegable con los trece bloques del curso. A la
+A la izquierda, un índice desplegable con los catorce bloques del curso. A la
 derecha, el tema abierto. Cada tema tiene explicación, historia, ejemplos que se
 tocan y ejercicios que se pueden repetir infinitas veces.
 
@@ -51,18 +51,31 @@ El botón «Reiniciar» de abajo a la izquierda lo borra.
 | 10. Estructuras, números e infinito | 5 | teoría de números y RSA, grupos, la completitud de ℝ, Cantor, Turing y Gödel |
 | 11. Discreta y computacional | 4 | grafos, cálculo numérico, información, teoría de juegos |
 | 12. Cibernética | 9 | realimentación, caja negra, variedad requerida, PID, homeostasis, retardos, filtrado, autómatas, segundo orden |
+| 13. Programación gráfica | 20 | shaders GLSL: del píxel que se pregunta de qué color es al raymarching, los fractales y una actuación en directo |
 
-**96 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
+**116 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
 se haya explicado antes, y cada tema avisa de cuáles necesita para que se pueda
 retroceder si falta alguna. Los bloques 7 a 11 recogen lo que queda más allá del
 Bachillerato, agrupado por disciplina y no en un cajón común. El **bloque 12,
-Cibernética**, cierra el curso a propósito: es el que reutiliza todo lo anterior a
-la vez —la derivada y la integral como anticipación y memoria de un controlador,
-la entropía como variedad, los autovalores como criterio de estabilidad— para
-responder a una sola pregunta: cómo se mantiene algo en su sitio en un mundo que
-lo empuja. En total, **178 ejemplos interactivos**, **362 ejercicios
-procedimentales** y **169 gráficas**, más **182 cuadros de utilidad**, **104 apuntes
-históricos** y un glosario de **198 términos**.
+Cibernética**, reutiliza todo lo anterior a la vez —la derivada y la integral como
+anticipación y memoria de un controlador, la entropía como variedad, los
+autovalores como criterio de estabilidad— para responder a una sola pregunta: cómo
+se mantiene algo en su sitio en un mundo que lo empuja.
+
+El **bloque 13, Programación gráfica**, es la golosina del curso y tiene piel
+propia —cambia de color entero— porque ahí ya no estamos solo en matemáticas: es
+programación y es arte. Enseña shaders GLSL desde cero, con un visor tipo
+Shadertoy en cada tema donde el código se edita y se recompila al vuelo, y donde
+los ejercicios se corrigen **comparando lo que pinta tu shader con lo que pinta la
+solución**, así que se acepta cualquier respuesta equivalente. Va del píxel que se
+pregunta de qué color es hasta el raymarching, el ruido fractal, Voronoi, los
+caleidoscopios, Mandelbrot y el post-proceso, y termina en cómo se toca todo eso
+en directo y adónde ir después. La idea que lo sostiene, que es la del curso
+entero: **reglas simples, complejidad epatante**.
+
+En total, **219 ejemplos interactivos**, **422 ejercicios procedimentales** y
+**210 gráficas**, más **203 cuadros de utilidad**, **123 apuntes históricos** y un
+glosario de **221 términos**.
 
 El temario vive en `assets/js/curriculum.js`. Si en el futuro se añade un tema
 nuevo al índice sin su archivo, aparece marcado como «en preparación» con sus
@@ -100,6 +113,7 @@ El núcleo (`assets/js/core/`) es lo que evita repetir código:
 | `exercise.js` | motor de ejercicios procedimentales |
 | `page.js` | constructor declarativo de páginas |
 | `progress.js` | progreso en `localStorage` |
+| `shader.js` | visor de shaders GLSL: editor, recompilación al vuelo, errores con su número de línea y comparación de dos shaders píxel a píxel |
 | `app.js` | índice desplegable, buscador, enrutado y carga perezosa de temas |
 
 Un tema de trigonometría y uno de geometría usan exactamente el mismo código de
@@ -130,14 +144,20 @@ Los detalles están en **`GUIA-AUTOR.md`**.
   `aria-live`; hay enlace para saltarse el índice; se respeta
   `prefers-reduced-motion`; y las 48 combinaciones de color de los tres temas
   pasan el contraste AA, comprobado en cada ejecución de las pruebas.
-- `tests.html` comprueba el núcleo (147 verificaciones) y **audita los 362
+- El bloque 13 usa **WebGL 1.0**, que llevan todos los navegadores desde hace más
+  de una década. Si falta, el visor lo dice y el código sigue leyéndose. Las
+  texturas se generan por fórmula y no se carga ninguna imagen, que es
+  precisamente lo que permite que funcione desde `file://`.
+- `tests.html` comprueba el núcleo (147 verificaciones) y **audita los 422
   ejercicios**: genera cada uno 40 veces y verifica que la solución declarada
   pasa su propio corrector, que nada lanza excepciones, que no queda ninguna
   fórmula con comandos LaTeX inexistentes, que ninguna gráfica de escala 1:1
   recorta su encuadre, que ninguna fórmula se sale de su caja, que ninguna
-  gráfica se queda sin nombre accesible ni fuera del alcance del teclado, que el
-  glosario carga y apunta a temas que existen, y que todos los temas del temario
-  se construyen sin errores.
+  gráfica se queda sin nombre accesible ni fuera del alcance del teclado, que
+  ningún enlace entre capítulos apunta a un tema inexistente, que el glosario
+  carga y apunta a temas que existen, que **los 41 shaders del curso compilan y
+  no pintan una imagen lisa**, y que todos los temas del temario se construyen
+  sin errores.
 
 ---
 

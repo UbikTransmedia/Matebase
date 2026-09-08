@@ -236,6 +236,70 @@ Opciones comunes: `color` (número 0-5 de la paleta, o `'ink'`/`'axis'`/`'ok'`/`
 
 ---
 
+## El visor de shaders (`W.shader`)
+
+Solo lo usa el bloque 13, pero está en el núcleo y sirve para cualquier tema que
+quiera enseñar algo con una imagen calculada por fórmula.
+
+```js
+W.shader(host, {
+  id: 'gfx-xxx-1',     // para recordar las ediciones del alumno entre visitas
+  alto: 320,           // alto del lienzo
+  aria: 'Descripción de lo que se ve, para quien no lo ve.',
+  mandos: [            // cada uno se convierte en un `uniform float`
+    { n: 'k', label: 'suavidad', min: 0, max: 1, step: 0.01, value: 0.5, dec: 2 }
+  ],
+  codigo: '...',       // el shader, con la firma de Shadertoy
+  nota: 'Qué mirar.'   // aparece debajo, en el cuadro de pista
+});
+```
+
+Cuatro decisiones que conviene conocer antes de escribir uno:
+
+- **Solo fragment shaders.** La firma es la de Shadertoy —`void mainImage(out
+  vec4 color, in vec2 fragCoord)`— y el preámbulo declara `iResolution`,
+  `iTime`, `iMouse`, `iFrame`, `PI` y `TAU`. Lo que se escriba aquí se pega en
+  Shadertoy y funciona, y al revés.
+- **GLSL ES 1.00** (WebGL 1). Los bucles necesitan un límite constante —
+  `for (int i = 0; i < 64; i++)`, con `break` dentro si hace falta parar antes—
+  y no existe `round`: se usa `floor(x + 0.5)`. Las derivadas (`dFdx`, `dFdy`,
+  `fwidth`) sí están: el preámbulo pide la extensión.
+- **El contexto se crea al hacerse visible** y se para al salir de pantalla. Los
+  navegadores permiten unos dieciséis contextos WebGL vivos, y un bloque de
+  veinte temas los agotaría.
+- **Los errores se traducen al editor**: el número de línea que da el
+  compilador se corrige restando el preámbulo, así que apunta a la línea que el
+  alumno ve.
+
+### Corregir un ejercicio de código
+
+`W.glslIguales(respuesta, referencia, { tam, tol, valores, t })` compila los dos
+shaders, los pinta fuera de pantalla y compara los píxeles. Devuelve
+`{ ok, distancia }`, o `motivo: 'la respuesta no compila'`.
+
+Esto es lo que permite aceptar **cualquier solución equivalente**: da igual que
+el alumno escriba `vec3(uv.x)` o `vec3(uv.x, uv.x, uv.x)`, porque se compara lo
+que sale, no el texto. El patrón es siempre el mismo: una función `env(x)` que
+mete la expresión del alumno en un shader completo, y la misma función con la
+respuesta de referencia.
+
+```js
+check: function (v, d) {
+  var texto = String(v.raw.d || '').trim().replace(/;\s*$/, '');
+  if (!texto) return { ok: false, msg: 'Escribe la expresión.' };
+  function env(x) { return '... ' + x + ' ...'; }
+  var r = W.glslIguales(env(texto), env(d.ref), { tam: 48, tol: 8 });
+  if (r.motivo === 'la respuesta no compila') return { ok: false, msg: '...' };
+  if (!r.ok) return { ok: false, msg: 'Compila, pero no es lo pedido: ...' };
+  return { ok: true };
+}
+```
+
+Una tolerancia de 6 a 12 va bien: por debajo, dos formas legítimas de escribir
+lo mismo pueden diferir por redondeo; por encima, entra cualquier cosa.
+
+---
+
 ## Matemáticas de apoyo (`ML`) y utilidades (`U`)
 
 `ML.gcd` `ML.lcm` `ML.isPrime` `ML.factorize` `ML.factorTex` `ML.divisors`
@@ -282,3 +346,7 @@ Abre **`tests.html`**. Comprueba:
    solución declarada pasa su propio corrector, que nada lanza excepciones, que
    no hay fórmulas mal escritas, que ninguna gráfica 1:1 recorta su encuadre y
    que ninguna fórmula se sale de su caja.
+4. Si el tema lleva shaders, la auditoría también los compila y comprueba que
+   ninguno pinta una imagen lisa. Un shader que compila y sale de un solo color
+   es un fallo mudo que no se ve de ninguna otra manera.
+5. Ningún enlace `[[tema|texto]]` apunta a un tema que no existe.

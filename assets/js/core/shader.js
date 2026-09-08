@@ -105,7 +105,7 @@
   };
 
   /* ---------------- pintar en el contexto auxiliar ---------------- */
-  function pintaEnAux(codigo, mandos, valores, tam) {
+  function pintaEnAux(codigo, mandos, valores, tam, t) {
     var gl = auxGL();
     if (!gl) return null;
     var c = gl.canvas;
@@ -126,7 +126,7 @@
     gl.enableVertexAttribArray(loc);
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     gl.uniform3f(gl.getUniformLocation(pr, 'iResolution'), tam, tam, 1);
-    gl.uniform1f(gl.getUniformLocation(pr, 'iTime'), 0);
+    gl.uniform1f(gl.getUniformLocation(pr, 'iTime'), t || 0);
     gl.uniform1f(gl.getUniformLocation(pr, 'iFrame'), 0);
     gl.uniform4f(gl.getUniformLocation(pr, 'iMouse'), 0, 0, 0, 0);
     (mandos || []).forEach(function (m) {
@@ -147,8 +147,8 @@
   function iguales(codigoA, codigoB, o) {
     o = o || {};
     var tam = o.tam || 48, tol = o.tol === undefined ? 10 : o.tol;
-    var a = pintaEnAux(codigoA, o.mandos, o.valores, tam);
-    var b = pintaEnAux(codigoB, o.mandos, o.valores, tam);
+    var a = pintaEnAux(codigoA, o.mandos, o.valores, tam, o.t);
+    var b = pintaEnAux(codigoB, o.mandos, o.valores, tam, o.t);
     if (!a) return { ok: false, motivo: 'la respuesta no compila' };
     if (!b) return { ok: false, motivo: 'la referencia no compila' };
     var suma = 0, n = tam * tam;
@@ -473,6 +473,31 @@
   /* ---------------- la puerta ---------------- */
   W.shader = function (host, o) { return new Visor(host, o); };
   W.glslCompila = glslCompila;
+  /** Estadisticas de lo que pinta un shader. Sirve para una prueba que
+      no se puede hacer compilando: una imagen puede compilar de maravilla
+      y salir completamente lisa, que en un tema es un error mudo. */
+  W.glslEstadisticas = function (codigo, mandos, o) {
+    o = o || {};
+    var tam = o.tam || 32;
+    var px = pintaEnAux(codigo, mandos, o.valores, tam, o.t === undefined ? 1.7 : o.t);
+    if (!px) return null;
+    var n = tam * tam, ch, i, v, suma, media, acum;
+    var desv = 0, medias = [];
+    /* La desviacion se mide DENTRO de cada canal, no mezclandolos: una
+       imagen de un solo color plano tiene variacion entre canales pero
+       ninguna dentro de uno, que es justo lo que queremos detectar. */
+    for (ch = 0; ch < 3; ch++) {
+      suma = 0;
+      for (i = 0; i < n; i++) suma += px[i * 4 + ch];
+      media = suma / n;
+      acum = 0;
+      for (i = 0; i < n; i++) { v = px[i * 4 + ch] - media; acum += v * v; }
+      medias.push(media);
+      desv = Math.max(desv, Math.sqrt(acum / n));
+    }
+    return { medias: medias, desv: desv };
+  };
+
   W.glslIguales = iguales;
   W.glslPreambulo = PREAMBULO;
 
