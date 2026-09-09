@@ -196,7 +196,10 @@
       if (location.hash.replace('#/', '') !== id) return;   // el alumno ya se movio
       if (!ok) { placeholder(body, t); paintIndex(); return; }
       var p = new Page(body, t);
-      try { Course.reg[id](p); }
+      try {
+        Course.reg[id](p);
+        if (W.pintaBloques) W.pintaBloques(body);
+      }
       catch (e) {
         console.error('Error en el tema ' + id, e);
         body.appendChild(U.el('div.note.note--warn', {

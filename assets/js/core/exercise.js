@@ -181,6 +181,8 @@
     do { this.data = s.gen ? s.gen(r) : {}; } while (this.data === null && ++guard < 40);
 
     this.qEl.innerHTML = '<span class="qn">' + this.index + '.</span>' + MathX.inline(s.ask ? s.ask(this.data) : '');
+    // Si el enunciado trae un recuadro de codigo, colorearlo como el editor.
+    if (window.W && W.pintaBloques) W.pintaBloques(this.qEl);
     U.clear(this.showEl);
     if (s.show) s.show(this.data, this.showEl);
 

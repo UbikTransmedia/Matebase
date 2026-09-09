@@ -160,6 +160,104 @@
     return { ok: media <= tol, distancia: media };
   }
 
+
+  /* ================== coloreado del codigo ==================
+     Un lexico de GLSL suficientemente bueno para leer, que no es lo mismo
+     que un compilador: no valida nada, solo reparte cada trozo en uno de
+     ocho papeles. Se ejecuta en cada pulsacion de tecla, asi que es una
+     sola pasada con una expresion regular y nada mas. */
+
+  var LEXICO = {};
+  (function () {
+    var grupos = {
+      key: 'if else for while do break continue return discard void struct ' +
+           'const uniform attribute varying in out inout precision highp ' +
+           'mediump lowp invariant true false',
+      typ: 'float int bool vec2 vec3 vec4 ivec2 ivec3 ivec4 bvec2 bvec3 ' +
+           'bvec4 mat2 mat3 mat4 sampler2D samplerCube',
+      fun: 'radians degrees sin cos tan asin acos atan sinh cosh tanh pow ' +
+           'exp log exp2 log2 sqrt inversesqrt abs sign floor ceil fract ' +
+           'mod min max clamp mix step smoothstep length distance dot cross ' +
+           'normalize faceforward reflect refract matrixCompMult lessThan ' +
+           'lessThanEqual greaterThan greaterThanEqual equal notEqual any ' +
+           'all not texture2D textureCube dFdx dFdy fwidth',
+      uni: 'iResolution iTime iMouse iFrame PI TAU gl_FragCoord gl_FragColor ' +
+           'gl_Position gl_PointSize gl_PointCoord gl_FrontFacing'
+    };
+    Object.keys(grupos).forEach(function (clase) {
+      grupos[clase].split(' ').forEach(function (w) { if (w) LEXICO[w] = clase; });
+    });
+  })();
+
+  /* El orden de las alternativas importa: los comentarios van delante para
+     que una barra de division no se coma un bloque, y los numeros delante de
+     los identificadores para que 2.0 no se parta en dos. */
+  var RE_TOK = /\/\*[\s\S]*?(?:\*\/|$)|\/\/[^\n]*|#[A-Za-z_]+|\b\d+\.?\d*(?:[eE][-+]?\d+)?|\.\d+(?:[eE][-+]?\d+)?|[A-Za-z_][A-Za-z0-9_]*|[^\sA-Za-z0-9_]+|\s+/g;
+
+  function escapa(t) {
+    return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  /** El texto de un shader convertido en HTML con un <span> por trozo.
+      `extra` es la lista de mandos: sus nombres se pintan como lo que son,
+      valores que llegan de fuera, para que el alumno los distinga de sus
+      propias variables de un vistazo. */
+  function pintaGLSL(texto, extra) {
+    var propios = {};
+    (extra || []).forEach(function (m) { propios[m.n || m] = 1; });
+
+    var out = '', m, t, c;
+    RE_TOK.lastIndex = 0;
+    while ((m = RE_TOK.exec(String(texto))) !== null) {
+      t = m[0];
+      c = null;
+      if (t.charAt(0) === '#') c = 'pre';
+      else if (t.slice(0, 2) === '//' || t.slice(0, 2) === '/*') c = 'com';
+      else if (/^\.?\d/.test(t)) c = 'num';   // el punto suelto de p.xy no lo es
+      else if (/^[A-Za-z_]/.test(t)) {
+        if (propios[t]) c = 'uni';
+        else if (LEXICO[t]) c = LEXICO[t];
+        else {
+          // un identificador con un parentesis detras es una llamada
+          var resto = RE_TOK.lastIndex;
+          var sig = /^\s*\(/.test(String(texto).slice(resto));
+          c = sig ? 'fun' : null;
+        }
+      } else if (/^\s/.test(t)) c = null;
+      else c = 'pun';
+
+      out += c ? '<span class="cod-' + c + '">' + escapa(t) + '</span>' : escapa(t);
+    }
+    return out;
+  }
+
+  /** Colorea los recuadros de codigo de los enunciados. Recorre los nodos de
+      texto y deja en paz los elementos que ya haya dentro -el <strong> que
+      marca el hueco que el alumno tiene que rellenar, por ejemplo-, que es lo
+      que permite colorear sin romper el enunciado. */
+  function pintaBloques(raiz) {
+    if (!raiz || !raiz.querySelectorAll) return;
+    [].forEach.call(raiz.querySelectorAll('.shd__mini'), function (pre) {
+      if (pre.getAttribute('data-pintado')) return;
+      pre.setAttribute('data-pintado', '1');
+      var textos = [];
+      (function anda(n) {
+        for (var i = 0; i < n.childNodes.length; i++) {
+          var h = n.childNodes[i];
+          if (h.nodeType === 3) textos.push(h);
+          else if (h.nodeType === 1) anda(h);
+        }
+      })(pre);
+      textos.forEach(function (nodo) {
+        var html = pintaGLSL(nodo.data, null);
+        if (html === escapa(nodo.data)) return;      // nada que colorear
+        var caja = document.createElement('span');
+        caja.innerHTML = html;
+        nodo.parentNode.replaceChild(caja, nodo);
+      });
+    });
+  }
+
   /* ========================= el visor ========================= */
 
   function Visor(host, o) {
@@ -217,18 +315,42 @@
         'for': idEd,
         html: 'Código del shader &nbsp;<span class="shd__pista">se recompila solo al escribir</span>'
       }));
+      /* Dos capas: debajo un <pre> con el codigo coloreado y encima el
+         textarea con la letra transparente y el cursor visible. Es la unica
+         manera de tener colores en un campo editable sin traerse un editor
+         entero, y funciona mientras las dos midan exactamente igual. */
+      this.caja = U.el('div.shd__caja');
+      this.capa = U.el('pre.shd__pinta', { 'aria-hidden': 'true' });
+      this.caja.appendChild(this.capa);
+
       this.ed = U.el('textarea.shd__ed', {
         id: idEd, spellcheck: 'false', autocapitalize: 'off',
         autocorrect: 'off', autocomplete: 'off', wrap: 'off',
         rows: String(Math.max(6, Math.min(22, this.original.split('\n').length + 1)))
       });
       this.ed.value = this.original;
-      this.el.appendChild(this.ed);
+      this.caja.appendChild(this.ed);
+      this.el.appendChild(this.caja);
+
       var espera = null;
       this.ed.addEventListener('input', function () {
+        self.repintaCodigo();                 // el color, al momento
         clearTimeout(espera);
-        espera = setTimeout(function () { self.recompila(); self.guarda(); }, 420);
+        espera = setTimeout(function () {     // compilar, con calma
+          self.recompila(); self.guarda();
+        }, 420);
       });
+      /* La capa de abajo no tiene barras: se la lleva a rastras. */
+      this.ed.addEventListener('scroll', function () {
+        self.capa.scrollTop = self.ed.scrollTop;
+        self.capa.scrollLeft = self.ed.scrollLeft;
+      });
+      /* El editor se puede estirar con el raton, y al estirarlo cambia cuanto
+         recorrido le sobra: hay que volver a medir. */
+      if (global.ResizeObserver) {
+        this.ro = new ResizeObserver(function () { self.ajustaCapa(); });
+        this.ro.observe(this.ed);
+      }
     }
 
     this.err = U.el('div.shd__err', { role: 'status', 'aria-live': 'polite' });
@@ -260,6 +382,7 @@
       var g = Progress.pref('shd:' + o.id);
       if (g) this.ed.value = g;
     }
+    this.repintaCodigo();
 
     /* --- el contexto no se crea hasta que se ve --- */
     if (global.IntersectionObserver) {
@@ -271,6 +394,34 @@
       this.io.observe(this.stage);
     } else {
       this.despierta();
+    }
+  };
+
+  /** Rehace la capa coloreada a partir de lo que hay escrito. El salto de
+      linea del final es necesario: sin el, un <pre> se come la ultima linea
+      vacia y el texto se descuadra del cursor al llegar abajo. */
+  Visor.prototype.repintaCodigo = function () {
+    if (!this.capa || !this.ed) return;
+    this.capa.innerHTML = pintaGLSL(this.ed.value, this.mandos) + '\n';
+    this.ajustaCapa();
+    this.capa.scrollTop = this.ed.scrollTop;
+    this.capa.scrollLeft = this.ed.scrollLeft;
+  };
+
+  /** El textarea reserva sitio para su barra de desplazamiento horizontal y la
+      capa de color no, asi que la capa tiene menos recorrido y se queda corta
+      justo al llegar al final del codigo: media linea de desfase donde mas se
+      nota. En vez de suponer cuanto ocupa esa barra -que depende del navegador
+      y del sistema-, se mide la diferencia de recorrido y se compensa con
+      relleno por abajo, que es lo unico que no mueve ni una letra de sitio. */
+  Visor.prototype.ajustaCapa = function () {
+    if (!this.capa || !this.ed) return;
+    this.capa.style.paddingBottom = '';
+    var falta = (this.ed.scrollHeight - this.ed.clientHeight) -
+                (this.capa.scrollHeight - this.capa.clientHeight);
+    if (falta > 0) {
+      var base = parseFloat(getComputedStyle(this.capa).paddingBottom) || 0;
+      this.capa.style.paddingBottom = (base + falta) + 'px';
     }
   };
 
@@ -458,7 +609,7 @@
   };
 
   Visor.prototype.reinicia = function () {
-    if (this.ed) this.ed.value = this.original;
+    if (this.ed) { this.ed.value = this.original; this.repintaCodigo(); }
     if (this.o.id) Progress.pref('shd:' + this.o.id, '');
     this.acumulado = 0; this.frame = 0; this.t0 = performance.now();
     // «Volver al original» es literal: también los mandos.
@@ -498,6 +649,8 @@
     return { medias: medias, desv: desv };
   };
 
+  W.glslPinta = pintaGLSL;
+  W.pintaBloques = pintaBloques;
   W.glslIguales = iguales;
   W.glslPreambulo = PREAMBULO;
 

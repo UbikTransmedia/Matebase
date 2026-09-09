@@ -259,6 +259,17 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       ['--tip-ink', '--tip', 'globo de ayuda'],
       ['--on-accent', '--accent', 'texto del botón principal']
     ];
+    /* El coloreado del código se lee sobre dos fondos: el del editor y el de
+       los recuadros de los enunciados. Los dos tienen que pasar, o habrá un
+       tema en el que los comentarios se pierdan. */
+    [['--cod-com', 'comentarios'], ['--cod-key', 'palabras clave'],
+     ['--cod-typ', 'tipos'], ['--cod-num', 'números'],
+     ['--cod-fun', 'funciones'], ['--cod-uni', 'valores de fuera'],
+     ['--cod-pre', 'preprocesador'], ['--cod-pun', 'signos']
+    ].forEach(function (c) {
+      parejas.push([c[0], '--bg-alt', 'código · ' + c[1] + ' en el editor']);
+      parejas.push([c[0], '--panel-2', 'código · ' + c[1] + ' en el enunciado']);
+    });
     var raiz = document.documentElement;
     var previo = raiz.getAttribute('data-theme');
     ['light', 'dark', 'monokai'].forEach(function (tema) {
@@ -556,6 +567,46 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
                 r.errores.slice(0, 2).map(function (e) {
                   return 'línea ' + e.linea + ', ' + e.msg;
                 }).join(' · '));
+            }
+          });
+          // El coloreado es una capa DEBAJO del textarea: si las dos dejan de
+          // medir igual, el cursor se separa de la letra y escribir se vuelve
+          // imposible. Aqui se comparan las propiedades que deciden esa medida.
+          // paddingBottom no esta en la lista a proposito: el visor lo ajusta
+          // para compensar la barra de desplazamiento del textarea, y eso no
+          // mueve ninguna letra. Lo que si importa es que la capa llegue tan
+          // abajo como el texto, y eso se comprueba justo despues.
+          var METRICAS = ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight',
+            'letterSpacing', 'wordSpacing', 'paddingTop', 'paddingLeft',
+            'borderTopWidth', 'borderLeftWidth', 'whiteSpace', 'tabSize',
+            'textIndent'];
+          [].forEach.call(h.querySelectorAll('.shd__caja'), function (caja, i) {
+            var cp = caja.querySelector('.shd__pinta'), ce = caja.querySelector('.shd__ed');
+            if (!cp || !ce) { aud.push('editor ' + (i + 1) + ' sin capa de color'); return; }
+            var a = getComputedStyle(cp), b = getComputedStyle(ce), mal = [];
+            METRICAS.forEach(function (k) { if (a[k] !== b[k]) mal.push(k); });
+            if (mal.length) {
+              aud.push('editor ' + (i + 1) + ': la capa de color no mide igual que el ' +
+                'textarea (' + mal.join(', ') + ')');
+            }
+            // Si la capa tiene menos recorrido que el textarea, al llegar al
+            // final del codigo el color se separa de la letra.
+            var recTa = ce.scrollHeight - ce.clientHeight;
+            var recCp = cp.scrollHeight - cp.clientHeight;
+            if (recCp + 0.5 < recTa) {
+              aud.push('editor ' + (i + 1) + ': la capa de color se queda ' +
+                (recTa - recCp).toFixed(0) + ' px corta al final del texto');
+            }
+          });
+          // El coloreado no puede perder ni cambiar un solo caracter: es la
+          // letra que el alumno ve mientras escribe.
+          [].forEach.call(h.querySelectorAll('.shd'), function (sh, i) {
+            var v = sh.__shd;
+            if (!v || !W.glslPinta) return;
+            var caja = document.createElement('div');
+            caja.innerHTML = W.glslPinta(v.original, v.mandos);
+            if (caja.textContent !== v.original) {
+              aud.push('el coloreado del shader ' + (i + 1) + ' altera el texto');
             }
           });
           // Un shader puede compilar perfectamente y pintar un rectangulo de

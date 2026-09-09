@@ -142,13 +142,20 @@ Los detalles están en **`GUIA-AUTOR.md`**.
   también con el teclado; los tamaños de letra están en `rem` y hay un control
   propio de tamaño de lectura; los marcadores y veredictos se anuncian por
   `aria-live`; hay enlace para saltarse el índice; se respeta
-  `prefers-reduced-motion`; y las 48 combinaciones de color de los tres temas
+  `prefers-reduced-motion`; y las 78 combinaciones de color de los tres temas
+  —incluidos los ocho colores del coloreado de código sobre sus dos fondos—
   pasan el contraste AA, comprobado en cada ejecución de las pruebas.
+- El código GLSL sale **coloreado**, con un esquema propio por tema: el editor
+  es un `<textarea>` de letra transparente sobre una capa que repinta el código
+  en cada tecla, que es la manera de tener colores en un campo editable sin
+  traerse un editor entero. Los nombres de los mandos se pintan como lo que
+  son, valores que llegan de fuera, para distinguirlos de las variables
+  propias.
 - El bloque 13 usa **WebGL 1.0**, que llevan todos los navegadores desde hace más
   de una década. Si falta, el visor lo dice y el código sigue leyéndose. Las
   texturas se generan por fórmula y no se carga ninguna imagen, que es
   precisamente lo que permite que funcione desde `file://`.
-- `tests.html` comprueba el núcleo (147 verificaciones) y **audita los 422
+- `tests.html` comprueba el núcleo (195 verificaciones) y **audita los 422
   ejercicios**: genera cada uno 40 veces y verifica que la solución declarada
   pasa su propio corrector, que nada lanza excepciones, que no queda ninguna
   fórmula con comandos LaTeX inexistentes, que ninguna gráfica de escala 1:1
@@ -156,8 +163,9 @@ Los detalles están en **`GUIA-AUTOR.md`**.
   gráfica se queda sin nombre accesible ni fuera del alcance del teclado, que
   ningún enlace entre capítulos apunta a un tema inexistente, que el glosario
   carga y apunta a temas que existen, que **los 41 shaders del curso compilan y
-  no pintan una imagen lisa**, y que todos los temas del temario se construyen
-  sin errores.
+  no pintan una imagen lisa**, que el coloreado del código no altera ni un
+  carácter y que su capa mide exactamente igual que el campo de texto que tiene
+  encima, y que todos los temas del temario se construyen sin errores.
 
 ---
 

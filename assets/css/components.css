@@ -427,15 +427,51 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
   color:var(--ink-faint); font-weight:700;
 }
 .shd__pista{text-transform:none; letter-spacing:0; font-weight:500; opacity:.85}
-.shd__ed{
-  display:block; width:100%; box-sizing:border-box;
-  font-family:var(--mono); font-size:0.8125rem; line-height:1.55;
-  padding:12px 14px; border:1.5px solid var(--line); border-radius:10px;
-  background:var(--bg-alt); color:var(--ink);
-  resize:vertical; tab-size:2; white-space:pre; overflow:auto;
+.shd__caja{
+  position:relative; overflow:hidden;
+  border:1.5px solid var(--line); border-radius:10px; background:var(--bg-alt);
 }
-.shd__ed:focus{border-color:var(--gfx); outline:none; box-shadow:0 0 0 3px var(--gfx-soft)}
-.shd--roto .shd__ed{border-color:var(--bad)}
+.shd__caja:focus-within{border-color:var(--gfx); box-shadow:0 0 0 3px var(--gfx-soft)}
+.shd--roto .shd__caja{border-color:var(--bad)}
+
+/* El coloreado va en un <pre> DEBAJO y el textarea encima con la letra
+   transparente. Las dos capas tienen que medir exactamente igual: misma
+   fuente, mismo tamano, mismo interlineado, mismo relleno y misma tabulacion.
+   Tocar una sin tocar la otra descuadra el cursor. */
+.shd__pinta, .shd__ed{
+  margin:0; border:0;
+  font-family:var(--mono); font-size:0.8125rem; line-height:1.55;
+  letter-spacing:normal; word-spacing:normal; tab-size:2;
+  padding:12px 14px; white-space:pre;
+}
+.shd__pinta{
+  position:absolute; inset:0; overflow:hidden;
+  pointer-events:none; color:var(--ink);
+}
+.shd__ed{
+  position:relative; display:block; width:100%; box-sizing:border-box;
+  background:transparent; color:transparent; caret-color:var(--ink);
+  resize:vertical; overflow:auto; outline:none;
+}
+.shd__ed::selection{background:var(--cod-sel)}
+.shd__ed::-moz-selection{background:var(--cod-sel)}
+
+/* Los ocho papeles del codigo. Los colores viven en base.css, uno por tema. */
+.cod-com{color:var(--cod-com); font-style:italic}
+.cod-key{color:var(--cod-key); font-weight:600}
+.cod-typ{color:var(--cod-typ)}
+.cod-num{color:var(--cod-num)}
+.cod-fun{color:var(--cod-fun)}
+.cod-uni{color:var(--cod-uni)}
+.cod-pre{color:var(--cod-pre); font-weight:600}
+.cod-pun{color:var(--cod-pun)}
+
+/* En alto contraste el sistema impone sus colores: la capa de abajo estorbaria
+   mas que ayudar, asi que se quita y el textarea recupera su letra. */
+@media (forced-colors: active){
+  .shd__pinta{display:none}
+  .shd__ed{color:CanvasText; background:Canvas}
+}
 
 .shd__err{
   margin-top:7px; padding:8px 12px; border-radius:8px;
@@ -465,3 +501,4 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
   overflow-x:auto; white-space:pre; color:var(--ink);
 }
 .shd__mini strong{color:var(--gfx); font-weight:700}
+.shd__mini .cod-com{font-style:italic}
