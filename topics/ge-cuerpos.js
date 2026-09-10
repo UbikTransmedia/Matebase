@@ -64,7 +64,8 @@ Course.topic('ge-cuerpos', function (p) {
     'y hoy eso significa <strong>escáneres médicos</strong>: un TAC o una resonancia producen un ' +
     'montón de secciones transversales, y el volumen de un tumor o de un órgano se obtiene midiendo ' +
     'el área de cada corte y sumando. Nadie calcula la fórmula de la forma; se cuenta loncha a ' +
-    'loncha. Es también como funciona el cálculo de volúmenes por integración que verás en el bloque 5.');
+    'loncha. Es también como funciona el cálculo de volúmenes por integración que verás en ' +
+    '[[fn-integral-def|el tema de la integral definida]].');
 
   p.hist('Cavalieri era discípulo de Galileo y llamó a sus lonchas <em>indivisibles</em>. Su método ' +
     'levantó una polémica considerable, porque trataba un volumen como una suma de infinitas ' +

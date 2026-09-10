@@ -5,11 +5,12 @@ Course.topic('fn-integral-racional', function (p) {
   function pa(n) { return n < 0 ? '(' + n + ')' : String(n); }
   function menos(a) { return a === 0 ? 'x' : (a > 0 ? 'x - ' + a : 'x + ' + (-a)); }
 
-  p.text('Una función racional es un cociente de polinomios, como $\\frac{3x + 1}{x^2 - 1}$. Casi ' +
+  p.puente('Una función racional es un cociente de polinomios, como $\\frac{3x + 1}{x^2 - 1}$. Casi ' +
     'ninguna es inmediata, y sin embargo <strong>todas se pueden integrar</strong>: hay un método que ' +
     'funciona siempre, y consiste en partir la fracción en trozos que sí se saben integrar. Es el ' +
     'mismo tipo de trabajo que las [[al-fracciones-alg|fracciones algebraicas]], hecho al revés: en ' +
-    'vez de sumar fracciones, se descompone una.');
+    'vez de sumar fracciones, se descompone una. Y la división de polinomios y Ruffini vuelven a ' +
+    'hacer falta.');
 
   p.text('Antes de la receta, conviene tener a mano las cuatro primitivas en las que termina siempre:');
 
@@ -36,6 +37,12 @@ Course.topic('fn-integral-racional', function (p) {
       '$\\frac{17}{5} = 3 + \\frac{2}{5}$.<br><br>Ejemplo: $\\frac{x^2 + 1}{x - 1} = x + 1 + \\frac{2}{x - 1}$, ' +
       'así que su integral es $\\frac{x^2}{2} + x + 2\\ln|x - 1| + C$.');
 
+  p.comprueba('Para $\\displaystyle\\int \\frac{x^2 + 1}{x - 1}\\,dx$, ¿qué se hace primero?', [
+    { t: 'Descomponer en fracciones simples', ok: false, por: 'Todavía no: el grado de arriba (2) es mayor que el de abajo (1). La descomposición solo funciona cuando el numerador tiene menos grado.' },
+    { t: 'Dividir, porque el grado de arriba es mayor o igual', ok: true, por: '$\\frac{x^2 + 1}{x - 1} = x + 1 + \\frac{2}{x - 1}$. Lo que queda ya se integra: $\\frac{x^2}{2} + x + 2\\ln|x - 1| + C$.' },
+    { t: 'Es inmediata: sale un logaritmo', ok: false, por: 'Sería inmediata si el numerador fuera la derivada del denominador, que es 1. Y $x^2 + 1$ no lo es.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.section('Segundo paso: descomponer en fracciones simples');
 
@@ -59,9 +66,24 @@ Course.topic('fn-integral-racional', function (p) {
       '2\\ln|x - 1| + \\ln|x + 1| + C$.<br><br>Comprobarlo es fácil y conviene hacerlo: $\\frac{2}{x-1} + ' +
       '\\frac{1}{x+1}$ con denominador común vuelve a dar la fracción de partida.');
 
+  p.ejemplo({
+    title: 'Una integral racional, de principio a fin',
+    enunciado: 'Calcular $\\displaystyle\\int \\frac{x + 5}{x^2 - x - 2}\\,dx$.',
+    pasos: [
+      { t: '<strong>¿Hay que dividir?</strong> Grado 1 arriba, grado 2 abajo: no. Se pasa directamente a descomponer.', antes: 'Compara los grados. ¿Toca dividir?' },
+      { t: '<strong>Factorizar el denominador.</strong> $x^2 - x - 2 = (x - 2)(x + 1)$: dos raíces reales simples, 2 y $-1$.', antes: 'Resuelve $x^2 - x - 2 = 0$.' },
+      { t: '<strong>Plantear.</strong> $\\dfrac{x + 5}{(x - 2)(x + 1)} = \\dfrac{A}{x - 2} + \\dfrac{B}{x + 1}$. Quitando denominadores: $x + 5 = A(x + 1) + B(x - 2)$.' },
+      { t: '<strong>Hallar $A$ y $B$ con las raíces.</strong> Con $x = 2$: $7 = 3A \\Rightarrow A = \\dfrac{7}{3}$. Con $x = -1$: $4 = -3B \\Rightarrow B = -\\dfrac{4}{3}$.', antes: 'Sustituye $x = 2$: ¿qué término desaparece? ¿Qué queda?' },
+      { t: '<strong>Integrar cada trozo.</strong> $\\dfrac{7}{3}\\ln|x - 2| - \\dfrac{4}{3}\\ln|x + 1| + C$.' },
+      { t: '<strong>Comprobar la descomposición.</strong> $\\dfrac{7}{3}(x + 1) - \\dfrac{4}{3}(x - 2) = \\dfrac{7x + 7 - 4x + 8}{3} = \\dfrac{3x + 15}{3} = x + 5$ ✓.', antes: 'Vuelve a juntar las dos fracciones. ¿Sale el numerador original?' }
+    ],
+    cierre: 'El único paso con riesgo de error es el de los coeficientes, y tiene comprobación inmediata: sumar las fracciones y ver que reaparece el numerador de partida.'
+  });
+
   p.demo({
     title: 'Dos fracciones simples que suman una',
     intro: 'La curva gruesa es f(x) = (px + q) / ((x − a)(x − b)). Las dos de trazos son A/(x − a) y B/(x − b). Cambia los números: los coeficientes se recalculan y la suma de las dos de trazos coincide siempre con la gruesa.',
+    predice: 'Pon $p = 0$ y $q = 3$: el numerador es una constante. ¿Crees que $A$ y $B$ tendrán el mismo signo o signos opuestos? Piensa en que la fracción vale cero «en el infinito».',
     build: function (host) {
       var a = 1, b = -2, pp = 3, q = 1;
       var out = W.readout(host, '');
@@ -138,6 +160,13 @@ Course.topic('fn-integral-racional', function (p) {
     'real se descompone en fracciones simples: cada raíz del denominador es un modo de comportamiento, ' +
     'que se apaga o se dispara según su signo. En biología, la ecuación logística del crecimiento de ' +
     'una población se resuelve exactamente con esta descomposición.');
+
+  p.trampas([
+    { e: 'Descomponer sin dividir cuando el grado de arriba es mayor', por: 'La descomposición en fracciones simples exige numerador de menor grado. Primero la división; el cociente se integra aparte.' },
+    { e: '$\\int \\dfrac{dx}{x^2 + 4} = \\arctan\\dfrac{x}{2}$', por: 'Falta el $\\frac{1}{k}$: es $\\frac{1}{2}\\arctan\\frac{x}{2}$. Compruébalo derivando: sin el $\\frac{1}{2}$ sale el doble.' },
+    { e: 'Sustituir la raíz antes de quitar denominadores', por: 'En la igualdad con fracciones, $x = 2$ haría cero un denominador. Se sustituye en la igualdad de numeradores, ya sin fracciones.' },
+    { e: 'Raíz doble con un solo sumando $\\frac{A}{(x - a)^2}$', por: 'Hacen falta los dos: $\\frac{A}{x - a} + \\frac{B}{(x - a)^2}$. Con uno solo, el sistema de coeficientes no tiene solución.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

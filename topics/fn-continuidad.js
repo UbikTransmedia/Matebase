@@ -3,11 +3,11 @@ Course.topic('fn-continuidad', function (p) {
 
   function pa(n) { return n < 0 ? '(' + n + ')' : String(n); }
 
-  p.text('En [[fn-limites]] se vio qué significa que una función sea continua: que se pueda dibujar sin ' +
+  p.puente('En [[fn-limites]] se vio qué significa que una función sea continua: que se pueda dibujar sin ' +
     'levantar el lápiz. Dicho así parece poca cosa, pero de esa propiedad se deducen tres teoremas ' +
     'con un poder sorprendente: aseguran que algo existe —una raíz, un valor, un máximo— <strong>sin ' +
-    'calcularlo</strong>. Son teoremas de existencia, y su gracia está en que dicen que algo está ahí ' +
-    'aunque no digan dónde.');
+    'calcularlo</strong>. Son teoremas de existencia, del mismo tipo que los de [[lg-demostracion|la ' +
+    'lógica]], y su gracia está en que dicen que algo está ahí aunque no digan dónde.');
 
   p.text('Y tienen un punto débil que el examen pregunta siempre: las <strong>hipótesis</strong>. Si ' +
     'falla una sola, la conclusión deja de estar garantizada. Casi toda la dificultad del tema es ' +
@@ -35,9 +35,29 @@ Course.topic('fn-continuidad', function (p) {
     'Y si además $h$ es estrictamente creciente o decreciente en el intervalo, la solución es ' +
     '<strong>única</strong>, porque una función así solo puede cruzar el cero una vez.');
 
+  p.comprueba('$f(x) = x^2 - 2$ cumple $f(0) = -2 < 0$ y $f(2) = 2 > 0$. ¿Qué garantiza Bolzano?', [
+    { t: 'Que la raíz es $\\sqrt 2 \\approx 1{,}41$', ok: false, por: 'Bolzano no localiza: solo dice que hay al menos una raíz en $(0, 2)$. Que sea $\\sqrt 2$ lo sabes por otro camino.' },
+    { t: 'Que hay al menos una raíz en $(0, 2)$', ok: true, por: 'Función continua, signos contrarios en los extremos: existe $c$ con $f(c) = 0$. Ni cuántas ni dónde; solo que está.' },
+    { t: 'Que hay exactamente una raíz', ok: false, por: 'Aquí solo hay una, pero Bolzano no lo dice: el teorema garantiza «al menos una». La unicidad sale de que $f$ es creciente en $(0, 2)$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Demostrar que una ecuación tiene solución, y que es única',
+    enunciado: 'Probar que $x^3 + x = 5$ tiene exactamente una solución real, y encerrarla entre dos enteros.',
+    pasos: [
+      { t: '<strong>Pasar todo a un lado.</strong> Se define $h(x) = x^3 + x - 5$. Las soluciones de la ecuación son las raíces de $h$.', antes: '¿A qué función hay que aplicar Bolzano?' },
+      { t: '<strong>Hipótesis de continuidad.</strong> $h$ es un polinomio: continua en todo $\\mathbb{R}$. Primera hipótesis cumplida.' },
+      { t: '<strong>Buscar un cambio de signo.</strong> $h(1) = 1 + 1 - 5 = -3 < 0$ y $h(2) = 8 + 2 - 5 = 5 > 0$. Por Bolzano, hay al menos una raíz en $(1, 2)$.', antes: 'Prueba enteros pequeños hasta que $h$ cambie de signo.' },
+      { t: '<strong>Unicidad.</strong> $h\'(x) = 3x^2 + 1 > 0$ siempre: $h$ es estrictamente creciente en todo $\\mathbb{R}$, así que solo puede cruzar el cero una vez. No hay más raíces, ni en $(1, 2)$ ni fuera.', antes: '¿Por qué no puede haber una segunda solución? Mira si $h$ crece siempre.' },
+      { t: '<strong>Afinar, si se pide.</strong> $h(1{,}5) = 3{,}375 + 1{,}5 - 5 = -0{,}125 < 0$: la raíz está en $(1{,}5;\\ 2)$. Un paso más de bisección la deja en $(1{,}5;\\ 1{,}75)$.' }
+    ],
+    cierre: 'Existencia (Bolzano) y unicidad (monotonía) son dos argumentos distintos y el examen pide los dos. Bolzano por sí solo nunca da «exactamente una».'
+  });
+
   p.demo({
     title: 'Acorralar una raíz partiendo por la mitad',
     intro: 'f(x) = x³ − x − 1 es continua, negativa en 1 y positiva en 2: Bolzano asegura una raíz en medio. Pulsa para partir el intervalo por la mitad y quedarte con la mitad donde sigue habiendo cambio de signo. Es el método de bisección.',
+    predice: 'El punto medio de $[1, 2]$ es $1{,}5$, y $f(1{,}5) = 3{,}375 - 1{,}5 - 1 = 0{,}875 > 0$. ¿Con qué mitad hay que quedarse: $[1;\\ 1{,}5]$ o $[1{,}5;\\ 2]$?',
     build: function (host) {
       var f = function (x) { return x * x * x - x - 1; };
       var a, b, pasos;
@@ -87,6 +107,7 @@ Course.topic('fn-continuidad', function (p) {
   p.demo({
     title: 'Hipótesis que fallan y conclusiones que se caen',
     intro: 'Cuatro funciones en el intervalo marcado. Mira en cada una si se cumplen las dos hipótesis de Bolzano y si hay raíz.',
+    predice: 'Antes de pulsar «mismo signo en los extremos»: si $f(a)$ y $f(b)$ son los dos positivos, ¿es imposible que haya raíz, o solo que Bolzano no la garantiza?',
     build: function (host) {
       var CASOS = {
         bien: { t: 'continua, cambia de signo', f: function (x) { return 0.5 * x * x * x - 1; }, a: -1, b: 2, txt: 'Las dos hipótesis se cumplen: hay raíz, como promete el teorema.' },
@@ -148,6 +169,7 @@ Course.topic('fn-continuidad', function (p) {
   p.demo({
     title: 'Cerrado o abierto: el máximo que falta',
     intro: 'La misma función f(x) = x² en tres intervalos. Solo en el cerrado se alcanzan el máximo y el mínimo. En el abierto los valores se acercan todo lo que quieras a 4, pero ninguno llega.',
+    predice: 'En el intervalo abierto $(0{,}5;\\ 2)$, ¿cuál sería el máximo de $x^2$? Intenta dar un número: ¿$3{,}99$? ¿$3{,}999$? ¿Hay alguno que no se pueda superar?',
     build: function (host) {
       var cual = 'cerrado';
       var out = W.readout(host, '');
@@ -181,6 +203,13 @@ Course.topic('fn-continuidad', function (p) {
       pinta();
     }
   });
+
+  p.trampas([
+    { e: 'Aplicar Bolzano a $\\frac{1}{x}$ en $[-1, 1]$', por: '$f(-1) = -1$ y $f(1) = 1$ cambian de signo, pero la función no es continua en 0. No hay raíz: $\\frac{1}{x}$ nunca vale 0.' },
+    { e: '«Mismo signo en los extremos, luego no hay raíz»', por: 'Bolzano no dice nada en ese caso. $x^2 - 1$ en $[-2, 2]$ tiene los dos extremos positivos y dos raíces dentro.' },
+    { e: '«Bolzano garantiza que la raíz es única»', por: 'Garantiza <em>al menos una</em>. Para la unicidad hace falta que la función sea monótona.' },
+    { e: 'Weierstrass en un intervalo abierto', por: 'Sin los extremos puede no haber máximo: $x^2$ en $(0, 2)$ se acerca a 4 sin alcanzarlo. El intervalo tiene que ser cerrado.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

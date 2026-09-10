@@ -5,7 +5,7 @@ Course.topic('fn-lhopital', function (p) {
   function pa(n) { return n < 0 ? '(' + n + ')' : String(n); }
   function k(n) { return n === 1 ? '' : (n === -1 ? '-' : String(n)); }
 
-  p.text('En [[fn-limites]] las indeterminaciones se deshacían con álgebra: factorizar, multiplicar por ' +
+  p.puente('En [[fn-limites]] las indeterminaciones se deshacían con álgebra: factorizar, multiplicar por ' +
     'el conjugado, dividir por la potencia mayor. Pero hay límites que no ceden a ningún truco ' +
     'algebraico, porque mezclan funciones de familias distintas: $\\frac{\\operatorname{sen} x}{x}$, ' +
     '$\\frac{e^x - 1}{x}$, $\\frac{\\ln x}{x}$. Para ellos está la herramienta más potente del cálculo ' +
@@ -32,6 +32,7 @@ Course.topic('fn-lhopital', function (p) {
   p.demo({
     title: 'De cerca, dos curvas que se anulan son dos rectas',
     intro: 'Numerador e^x − 1 y denominador x, los dos valen 0 en x = 0. Acércate: las dos curvas se vuelven rectas por el origen, con pendientes 1 y 1. Su cociente se acerca al cociente de las pendientes.',
+    predice: 'Elige «sen 3x / x». Cerca de 0, $\\operatorname{sen}(3x)$ se parece a la recta $3x$. ¿A qué número se acercará el cociente al hacer zoom?',
     build: function (host) {
       var CASOS = {
         exp: { t: '(eˣ − 1) / x', f: function (x) { return Math.exp(x) - 1; }, g: function (x) { return x; }, df: 1, dg: 1 },
@@ -67,6 +68,24 @@ Course.topic('fn-lhopital', function (p) {
     '$\\frac{1}{1} = 1$. Y si el límite del cociente de derivadas no existe, la regla no dice nada: ' +
     '$\\lim_{x \\to \\infty} \\frac{x + \\operatorname{sen} x}{x} = 1$, aunque $\\frac{1 + \\cos x}{1}$ ' +
     'oscile sin límite.', 'warn', 'Las dos maneras de usarla mal');
+
+  p.comprueba('Para $\\lim_{x\\to 0}\\dfrac{e^x - 1}{x}$, ¿qué se deriva?', [
+    { t: 'El cociente entero, con la regla del cociente', ok: false, por: 'L\'Hôpital no deriva la fracción: deriva arriba y abajo <em>por separado</em>. Con la regla del cociente saldría otra cosa (y otra indeterminación).' },
+    { t: 'Numerador y denominador por separado: $\\dfrac{e^x}{1}$', ok: true, por: '$(e^x - 1)\' = e^x$ y $(x)\' = 1$. El nuevo cociente en $x = 0$ vale $\\frac{1}{1} = 1$: ese es el límite.' },
+    { t: 'Nada: sustituyendo sale $\\frac{0}{0}$, así que el límite es 0', ok: false, por: '$\\frac{0}{0}$ es una indeterminación, no un resultado. Precisamente por eso hace falta la regla.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un $0\\cdot\\infty$ que hay que convertir antes',
+    enunciado: 'Calcular $\\displaystyle\\lim_{x\\to 0^+} x\\ln x$.',
+    pasos: [
+      { t: '<strong>Reconocer el tipo.</strong> $x \\to 0$ y $\\ln x \\to -\\infty$: es $0\\cdot\\infty$. L\'Hôpital no se aplica a productos; primero hay que escribirlo como cociente.', antes: 'Sustituye: ¿qué tipo de indeterminación aparece? ¿Se puede aplicar la regla tal cual?' },
+      { t: '<strong>Convertir en cociente.</strong> Se baja un factor al denominador como inverso: $x\\ln x = \\dfrac{\\ln x}{1/x}$. Ahora es $\\dfrac{-\\infty}{\\infty}$. Se elige bajar la $x$ y no el logaritmo porque $\\frac{1}{\\ln x}$ se deriva peor.', antes: 'Hay dos formas de escribirlo como cociente: $\\frac{\\ln x}{1/x}$ o $\\frac{x}{1/\\ln x}$. ¿Cuál será más cómoda de derivar?' },
+      { t: '<strong>L\'Hôpital.</strong> $\\lim\\dfrac{(\\ln x)\'}{(1/x)\'} = \\lim\\dfrac{1/x}{-1/x^2} = \\lim(-x) = 0$.', antes: 'Deriva arriba y abajo por separado y simplifica.' },
+      { t: '<strong>Comprobar con un número.</strong> $x = 0{,}001$: $0{,}001\\cdot\\ln 0{,}001 = 0{,}001\\cdot(-6{,}9) = -0{,}0069$. Cerca de 0, y negativo, como corresponde a acercarse desde valores negativos.' }
+    ],
+    cierre: 'El resultado dice que $x$ gana a $\\ln x$: la potencia, por pequeña que sea, aplasta al logaritmo. Es la jerarquía del final del tema: exponencial > potencia > logaritmo.'
+  });
 
   p.hist('La regla lleva el nombre de quien la publicó, no de quien la descubrió. Guillaume de l\'Hôpital, ' +
     'un marqués francés aficionado a las matemáticas, firmó en 1694 un contrato con el joven Johann ' +
@@ -112,6 +131,7 @@ Course.topic('fn-lhopital', function (p) {
   p.demo({
     title: 'Uno elevado a infinito no es uno',
     intro: 'La base (1 + a/x) se acerca a 1 y el exponente x crece sin parar. ¿Quién gana? Ninguno: el resultado se estabiliza en eᵃ.',
+    predice: 'Con $a = 1$ el límite es $e \\approx 2{,}72$. Si pones $a = 2$, ¿el límite será el doble, $5{,}44$, o algo distinto?',
     build: function (host) {
       var a = 1;
       var out = W.readout(host, '');
@@ -139,6 +159,13 @@ Course.topic('fn-lhopital', function (p) {
     'la aproximación de ángulo pequeño que permite resolver el péndulo y diseñar lentes, y la función ' +
     '$\\frac{\\operatorname{sen} x}{x}$ es la forma de la onda de difracción que se ve al pasar luz por una ' +
     'rendija.');
+
+  p.trampas([
+    { e: 'Aplicar L\'Hôpital sin indeterminación', por: '$\\lim_{x\\to 1}\\frac{x + 1}{x} = 2$, pero derivando saldría 1. Sin $\\frac{0}{0}$ o $\\frac{\\infty}{\\infty}$ la regla da resultados falsos.' },
+    { e: 'Derivar con la regla del cociente', por: 'Se derivan numerador y denominador cada uno por su lado. La regla del cociente es para derivar una función, no para calcular un límite.' },
+    { e: 'Aplicarla a $0\\cdot\\infty$ o a $1^\\infty$ directamente', por: 'Solo trabaja con cocientes. El producto se convierte en $\\frac{f}{1/g}$ y la potencia se pasa por logaritmos.' },
+    { e: 'Olvidar deshacer el logaritmo', por: 'Si se calcula $\\ln L = 2$, el límite es $L = e^2$, no 2.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

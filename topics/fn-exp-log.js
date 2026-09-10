@@ -1,6 +1,12 @@
 /* Tema: Funciones exponenciales y logarítmicas */
 Course.topic('fn-exp-log', function (p) {
 
+  p.puente('Las potencias y el logaritmo ya se conocen como operaciones: $2^3 = 8$ y $\\log_2 8 = 3$. ' +
+    'Aquí se convierten en funciones, con la $x$ en el exponente o dentro del logaritmo, y la novedad ' +
+    'es su forma de crecer: la exponencial acaba ganando a cualquier polinomio, y el logaritmo, su ' +
+    'inversa, crece más despacio que cualquiera. Son las dos funciones de todo lo que se multiplica ' +
+    'con el tiempo.');
+
   p.text('En una función <em>polinómica</em> la variable está en la base. En una ' +
     '<strong>exponencial</strong> está en el <strong>exponente</strong>, y eso cambia radicalmente ' +
     'la velocidad a la que crece.');
@@ -14,6 +20,12 @@ Course.topic('fn-exp-log', function (p) {
     'Siempre es positiva: nunca corta al eje X. El eje X es su asíntota horizontal.'
   ]);
 
+  p.comprueba('¿Cómo es la función $f(x) = 0{,}5^x$?', [
+    { t: 'Decrece y nunca corta al eje X', ok: true, por: 'Base entre 0 y 1: cada paso multiplica por $0{,}5$, la mitad. Se acerca a 0 sin llegar: $0{,}5^{10} \\approx 0{,}001$, pero positivo.' },
+    { t: 'Decrece y corta al eje X en $x = 1$', ok: false, por: '$0{,}5^1 = 0{,}5$, no 0. Una potencia de base positiva nunca vale 0.' },
+    { t: 'Crece, porque es una exponencial', ok: false, por: 'Solo crece si la base es mayor que 1. Con $0{,}5$ cada paso reduce a la mitad.' }
+  ]);
+
   p.note('La diferencia entre crecimiento lineal y exponencial es la más difícil de intuir y la más ' +
     'importante de entender. Un folio doblado 42 veces —si se pudiera— llegaría a la Luna. Un interés ' +
     'del 7 % duplica el capital cada diez años. Una epidemia que crece un 30 % diario multiplica por ' +
@@ -23,6 +35,7 @@ Course.topic('fn-exp-log', function (p) {
   p.demo({
     title: 'Lineal contra exponencial',
     intro: 'Compara una recta empinada con una exponencial suave. Aleja la vista y verás que la exponencial siempre acaba ganando, por mucha ventaja que le des a la recta.',
+    predice: 'La recta sube 20 por unidad; la exponencial empieza en 1 y solo se multiplica por 1,3 cada paso. ¿Crees que la exponencial la adelanta antes o después de $x = 20$? Aleja la vista y compruébalo.',
     build: function (host, d) {
       var m = 20, a = 1.3, zoom = 10;
       var out = W.readout(host, '');
@@ -76,6 +89,7 @@ Course.topic('fn-exp-log', function (p) {
   p.demo({
     title: 'De dónde sale e',
     intro: 'Reparte el interés anual del 100 % en más y más plazos. El capital final no crece sin límite: se acerca a e.',
+    predice: 'Con un plazo el capital se duplica (2). Con 12 plazos sale 2,61. ¿Con 50 plazos pasará de 3? ¿Y con un millón?',
     build: function (host, d) {
       var n = 1;
       var out = W.readout(host, '');
@@ -161,6 +175,25 @@ Course.topic('fn-exp-log', function (p) {
     'sangre y la descarga de un condensador siguen todos la misma ecuación. Es uno de los patrones ' +
     'más repetidos de la naturaleza, y en el bloque de ecuaciones diferenciales, verás por ' +
     'qué: todos salen de la misma ecuación.');
+
+  p.ejemplo({
+    title: '¿Cuánto tarda en duplicarse?',
+    enunciado: 'Un capital crece un 5 % anual. ¿Cuántos años tarda en duplicarse?',
+    pasos: [
+      { t: '<strong>El modelo.</strong> Cada año se multiplica por $1{,}05$: al cabo de $t$ años, $C(t) = C_0\\cdot 1{,}05^t$. Duplicarse es $1{,}05^t = 2$; el capital inicial se va, da igual cuánto sea.', antes: '¿Qué ecuación dice «se ha duplicado»? ¿Importa el capital inicial?' },
+      { t: '<strong>La incógnita está en el exponente.</strong> Para bajarla, logaritmos en los dos lados: $t\\cdot\\ln 1{,}05 = \\ln 2$.', antes: 'La $t$ está arriba. ¿Con qué herramienta se baja?' },
+      { t: '<strong>Despejar.</strong> $t = \\dfrac{\\ln 2}{\\ln 1{,}05} = \\dfrac{0{,}6931}{0{,}0488} \\approx 14{,}2$ años.' },
+      { t: '<strong>Comprobar.</strong> $1{,}05^{14} = 1{,}98$ y $1{,}05^{15} = 2{,}08$: se duplica entre el año 14 y el 15 ✓.', antes: 'Calcula $1{,}05^{14}$. ¿Está cerca de 2?' }
+    ],
+    cierre: 'La «regla del 70» que usan los economistas es esta cuenta hecha de una vez: años para duplicar $\\approx 70 / (\\text{porcentaje})$. Con el 5 %, $70/5 = 14$. Sale de que $\\ln 2 \\approx 0{,}70$.'
+  });
+
+  p.trampas([
+    { e: 'Crecer un 5 % durante 10 años es crecer un 50 %', por: 'Es $1{,}05^{10} = 1{,}63$: un 63 %. El interés se acumula sobre lo acumulado; eso es lo exponencial.' },
+    { e: '$2^x = 0$ para algún $x$ muy negativo', por: '$2^{-100}$ es diminuto pero positivo. La exponencial se acerca al eje X sin tocarlo nunca.' },
+    { e: '$\\ln(-2)$ es un número negativo', por: 'No existe: ninguna potencia de $e$ da un negativo. El dominio del logaritmo es $(0, +\\infty)$.' },
+    { e: 'Semivida de 10 años: a los 20 años no queda nada', por: 'A los 20 años queda la mitad de la mitad: un cuarto. Nunca llega a cero.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('La intuición humana no está preparada para lo exponencial, y esa es su lección más importante. ' +

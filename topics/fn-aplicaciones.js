@@ -1,9 +1,11 @@
 /* Tema: Estudio de funciones y optimización */
 Course.topic('fn-aplicaciones', function (p) {
 
-  p.text('Ya sabes derivar. Ahora viene para qué sirve: la derivada permite <strong>dibujar una ' +
-    'función sin dar valores</strong> y <strong>encontrar el mejor valor posible</strong> de una ' +
-    'cantidad. Son las dos aplicaciones que justifican todo el cálculo diferencial.');
+  p.puente('Ya sabes derivar, y sabes que la derivada es la pendiente de la tangente. Con las ' +
+    'parábolas encontrabas el máximo o el mínimo con el vértice; ahora la derivada hace lo mismo con ' +
+    'cualquier función: donde la pendiente vale cero, la curva está llana. Este tema saca de esa ' +
+    'idea las dos aplicaciones que justifican todo el cálculo diferencial: <strong>dibujar una ' +
+    'función sin dar valores</strong> y <strong>encontrar el mejor valor posible</strong> de una cantidad.');
 
   p.section('La primera derivada: crecimiento y extremos');
 
@@ -31,6 +33,12 @@ Course.topic('fn-aplicaciones', function (p) {
   p.note('Ojo con el «posible». Que la derivada se anule no garantiza que haya un extremo: en ' +
     '$f(x)=x^3$ se cumple $f\'(0)=0$ y sin embargo la función sigue subiendo. Lo que decide es si la ' +
     'derivada <strong>cambia de signo</strong> al pasar por ese punto.', 'warn');
+
+  p.comprueba('La derivada de una función es $f\'(x) = (x - 2)(x + 1)$. ¿Dónde crece $f$?', [
+    { t: 'En $(-1, 2)$', ok: false, por: 'Entre las raíces la parábola $f\'$ (que sonríe) es <em>negativa</em>: ahí $f$ decrece. Prueba $x = 0$: $f\'(0) = -2$.' },
+    { t: 'En $x < -1$ y en $x > 2$', ok: true, por: 'Fuera de las raíces $f\' > 0$ (por ejemplo $f\'(3) = 4$). $f$ sube, baja entre $-1$ y $2$, y vuelve a subir: máximo en $-1$, mínimo en $2$.' },
+    { t: 'En todas partes: es un polinomio', ok: false, por: 'Que $f$ sea un polinomio no dice nada de su crecimiento. Lo dice el signo de $f\'$, que aquí es negativo entre $-1$ y $2$.' }
+  ]);
 
   p.section('La segunda derivada: curvatura');
 
@@ -70,9 +78,23 @@ Course.topic('fn-aplicaciones', function (p) {
     'el signo de $f\'$. Es justo lo que pasa en $f(x)=x^3$ en el origen, donde las dos derivadas se ' +
     'anulan y no hay ni máximo ni mínimo.', 'warn', 'Cuando el atajo no sirve');
 
+  p.ejemplo({
+    title: 'Un estudio completo con las dos derivadas',
+    enunciado: 'Estudiar crecimiento, extremos, curvatura e inflexión de $f(x) = x^3 - 3x$.',
+    pasos: [
+      { t: '<strong>Primera derivada y puntos críticos.</strong> $f\'(x) = 3x^2 - 3 = 3(x - 1)(x + 1)$. Se anula en $x = -1$ y $x = 1$.', antes: 'Deriva y resuelve $f\'(x) = 0$.' },
+      { t: '<strong>Signo de $f\'$.</strong> Positiva para $x < -1$, negativa en $(-1, 1)$, positiva para $x > 1$. Así que $f$ crece, decrece y vuelve a crecer: máximo en $x = -1$ y mínimo en $x = 1$.', antes: 'Prueba $x = -2$, $x = 0$ y $x = 2$ en $f\'$. ¿Qué signos salen?' },
+      { t: '<strong>Valores en los extremos.</strong> $f(-1) = -1 + 3 = 2$ y $f(1) = 1 - 3 = -2$. Máximo relativo $(-1, 2)$, mínimo relativo $(1, -2)$.' },
+      { t: '<strong>Segunda derivada.</strong> $f\'\'(x) = 6x$: negativa para $x < 0$ (cara triste), positiva para $x > 0$ (sonríe). Cambia de signo en $x = 0$: punto de inflexión $(0, 0)$.', antes: '¿Dónde cambia la curvatura? ¿Se anula $f\'\'$ y cambia de signo?' },
+      { t: '<strong>Comprobación cruzada.</strong> $f\'\'(-1) = -6 < 0$ confirma el máximo; $f\'\'(1) = 6 > 0$ confirma el mínimo. Los dos métodos cuentan la misma historia.', antes: 'Usa el criterio rápido en $x = -1$ y $x = 1$. ¿Coincide con el estudio del signo?' }
+    ],
+    cierre: 'Dos derivadas, tres puntos especiales, y la gráfica queda determinada: sube hasta $(-1, 2)$, baja pasando por el origen cambiando de curvatura, y vuelve a subir desde $(1, -2)$.'
+  });
+
   p.demo({
     title: 'La función, su derivada y su segunda derivada',
     intro: 'Las tres gráficas a la vez. Donde la primera derivada corta el eje, la función tiene un pico o un valle. Donde lo corta la segunda, la curva cambia de curvatura.',
+    predice: 'Con $a = 0{,}2$, $b = -0{,}4$ y $c = -2$: $f\' = 0{,}6x^2 - 0{,}8x - 2$. ¿Cuántas veces cortará $f\'$ al eje? ¿Y el corte de $f\'\'$ estará entre los dos extremos o fuera?',
     build: function (host, d) {
       var a = 0.2, b = -0.4, c = -2;
       var out = W.readout(host, '');
@@ -171,9 +193,23 @@ Course.topic('fn-aplicaciones', function (p) {
   p.note('El paso 3 es donde se falla. Si al final te queda una función con dos variables, no puedes ' +
     'derivar: te falta usar la condición del enunciado.', 'warn', 'El paso crítico');
 
+  p.ejemplo({
+    title: 'Un problema de optimización, siguiendo la receta',
+    enunciado: 'Dos números positivos suman 20. ¿Cuáles hacen máximo el producto $x\\cdot y^2$?',
+    pasos: [
+      { t: '<strong>Qué se optimiza.</strong> El producto $P = x\\,y^2$. Tiene dos variables: todavía no se puede derivar.', antes: '¿Qué cantidad hay que hacer máxima? ¿Cuántas variables tiene?' },
+      { t: '<strong>La condición.</strong> $x + y = 20$, así que $x = 20 - y$. Se sustituye y queda una sola variable: $P(y) = (20 - y)\\,y^2 = 20y^2 - y^3$, con $0 < y < 20$.', antes: '¿Qué relación del enunciado permite eliminar una variable? ¿Cuál conviene eliminar?' },
+      { t: '<strong>Derivar e igualar a cero.</strong> $P\'(y) = 40y - 3y^2 = y(40 - 3y) = 0 \\Rightarrow y = 0$ (descartado, producto nulo) o $y = \\dfrac{40}{3}$.' },
+      { t: '<strong>Comprobar que es máximo.</strong> $P\'\'(y) = 40 - 6y$, y en $y = \\frac{40}{3}$ vale $40 - 80 = -40 < 0$: máximo.', antes: '¿Cómo te aseguras de que es un máximo y no un mínimo?' },
+      { t: '<strong>Volver al enunciado.</strong> $y = \\dfrac{40}{3} \\approx 13{,}33$ y $x = 20 - \\dfrac{40}{3} = \\dfrac{20}{3} \\approx 6{,}67$. El producto máximo es $\\dfrac{20}{3}\\cdot\\dfrac{1600}{9} \\approx 1185$.' }
+    ],
+    cierre: 'Fíjate en que la respuesta no es «los dos iguales»: como $y$ va al cuadrado, conviene que sea el doble de $x$. La receta no presupone la respuesta; la encuentra.'
+  });
+
   p.demo({
     title: 'La lata que gasta menos aluminio',
     intro: 'Con un volumen fijo, ¿qué proporción de radio y altura minimiza la superficie? Mueve el radio y busca el mínimo.',
+    predice: 'Con 330 cm³ y radio 3 cm, la lata mide 11,7 cm de alto. ¿Crees que la lata óptima será más alta que ancha, más ancha que alta, o con la altura igual al diámetro?',
     build: function (host, d) {
       var V = 330;   // cm3, una lata normal
       var r0 = 3;
@@ -207,6 +243,13 @@ Course.topic('fn-aplicaciones', function (p) {
     }
   });
 
+  p.trampas([
+    { e: '«$f\'(a) = 0$, luego hay un extremo en $a$»', por: 'Es necesario, no suficiente. $x^3$ tiene $f\'(0) = 0$ y no tiene extremo: la derivada no cambia de signo.' },
+    { e: '«$f\'\'(a) > 0$, luego máximo»', por: 'Al revés: $f\'\' > 0$ significa que la curva sonríe, y el punto llano es el fondo del cuenco, un <em>mínimo</em>.' },
+    { e: 'Derivar una función con dos variables', por: 'Antes hay que usar la condición del enunciado para dejar una sola. Si quedan $x$ e $y$, falta un paso.' },
+    { e: 'Dar $x = 0$ o $x = 20$ como solución de un problema de optimización', por: 'Suelen anular la derivada o ser extremos del dominio, pero dan producto cero, área cero, etc. Hay que comprobar el sentido en el enunciado.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Optimizar es lo que hace que las cosas cuesten menos, y está por todas partes. La forma de una ' +
     'lata de refresco que gasta menos aluminio para un volumen dado, la ruta de reparto más corta, ' +
@@ -222,6 +265,37 @@ Course.topic('fn-aplicaciones', function (p) {
     'mínimos son mucho más viejos que el cálculo que los resuelve.');
 
   p.section('Practica');
+
+  p.exercise({
+    title: 'Leer el signo de las derivadas',
+    level: 'basico',
+    gen: function (r) {
+      var tipo = r.int(0, 1), a = r.pm(0, 5);
+      if (tipo === 0) {
+        var v = r.nz(-6, 6);
+        return { tipo: 0, a: a, v: v, res: v > 0 ? 'crece' : 'decrece' };
+      }
+      var w = r.nz(-6, 6);
+      return { tipo: 1, a: a, w: w, res: w > 0 ? 'min' : 'max' };
+    },
+    ask: function (d) {
+      if (d.tipo === 0) return 'Se sabe que $f\'(' + d.a + ') = ' + d.v + '$. En $x = ' + d.a + '$, ¿la función crece o decrece?';
+      return 'Se sabe que $f\'(' + d.a + ') = 0$ y $f\'\'(' + d.a + ') = ' + d.w + '$. ¿Qué hay en $x = ' + d.a + '$?';
+    },
+    fields: function (d) {
+      return [{ name: 'r', label: 'Respuesta', opts: d.tipo === 0
+        ? [{ t: 'crece', v: 'crece' }, { t: 'decrece', v: 'decrece' }]
+        : [{ t: 'un máximo relativo', v: 'max' }, { t: 'un mínimo relativo', v: 'min' }] }];
+    },
+    sol: function (d) { return { r: d.res }; },
+    hint: function (d) { return d.tipo === 0 ? 'Derivada positiva: la tangente apunta hacia arriba.' : 'Pendiente cero y curva que sonríe ($f\'\' > 0$) es el fondo de un cuenco.'; },
+    steps: function (d) {
+      if (d.tipo === 0) return ['$f\'(' + d.a + ') = ' + d.v + (d.v > 0 ? ' > 0$: la pendiente es positiva, la función <strong>crece</strong>.' : ' < 0$: la pendiente es negativa, la función <strong>decrece</strong>.')];
+      return ['$f\'(' + d.a + ') = 0$: punto crítico, tangente horizontal.',
+        '$f\'\'(' + d.a + ') = ' + d.w + (d.w > 0 ? ' > 0$: la curva sonríe, el punto llano es un <strong>mínimo</strong>.' : ' < 0$: la curva pone cara triste, el punto llano es un <strong>máximo</strong>.')];
+    },
+    answer: function (d) { return { crece: 'Crece', decrece: 'Decrece', max: 'Máximo relativo', min: 'Mínimo relativo' }[d.res]; }
+  });
 
   p.exercise({
     title: 'Máximos y mínimos de un polinomio',

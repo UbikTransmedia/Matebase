@@ -1,6 +1,11 @@
 /* Tema: Funciones cuadráticas */
 Course.topic('fn-cuadraticas', function (p) {
 
+  p.puente('De la ecuación de segundo grado ya sabes que sus soluciones son los cortes de la parábola ' +
+    'con el eje X, y que el discriminante dice cuántos hay. Aquí la parábola pasa a ser la ' +
+    'protagonista: se lee entera a partir de sus coeficientes, y su vértice resuelve la primera ' +
+    'familia de problemas de máximos y mínimos del curso, sin necesidad de derivar.');
+
   p.text('Después de la recta, la curva más importante: la <strong>parábola</strong>. Es la gráfica ' +
     'de cualquier función de segundo grado.');
 
@@ -34,9 +39,29 @@ Course.topic('fn-cuadraticas', function (p) {
     'en medio, y el punto medio de $\\frac{-b\\pm\\sqrt{\\Delta}}{2a}$ es $\\frac{-b}{2a}$ porque las ' +
     'raíces se van. Y si no hay raíces, la fórmula sigue valiendo.', null, 'Por qué esa fórmula');
 
+  p.comprueba('¿Cuál es la abscisa del vértice de $f(x) = x^2 - 6x + 5$?', [
+    { t: '$3$', ok: true, por: '$x_v = -\\dfrac{b}{2a} = -\\dfrac{-6}{2} = 3$. Las raíces son 1 y 5, y 3 está justo en medio.' },
+    { t: '$-3$', ok: false, por: 'Cuidado con el signo: $b = -6$, así que $-\\frac{b}{2a} = -\\frac{-6}{2} = +3$.' },
+    { t: '$6$', ok: false, por: 'Falta dividir entre $2a = 2$. Es $\\frac{6}{2} = 3$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Dibujar una parábola sin dar valores',
+    enunciado: 'Representar $f(x) = -x^2 + 4x - 3$.',
+    pasos: [
+      { t: '<strong>Orientación.</strong> $a = -1 < 0$: se abre hacia abajo. El vértice será un máximo.', antes: '¿Hacia dónde se abre? ¿Qué será el vértice?' },
+      { t: '<strong>Vértice.</strong> $x_v = -\\dfrac{4}{2\\cdot(-1)} = 2$, $y_v = -4 + 8 - 3 = 1$. Vértice $(2, 1)$ y eje de simetría $x = 2$.' },
+      { t: '<strong>Corte con el eje Y.</strong> $f(0) = -3$: el punto $(0, -3)$. Por simetría respecto de $x = 2$, también pasa por $(4, -3)$.', antes: 'Ya tienes $(0, -3)$. ¿Qué otro punto sale gratis por la simetría?' },
+      { t: '<strong>Cortes con el eje X.</strong> $-x^2 + 4x - 3 = 0 \\Rightarrow x^2 - 4x + 3 = 0 \\Rightarrow x = 1$ y $x = 3$. Cuadra: equidistan del eje $x = 2$.' },
+      { t: '<strong>Trazar.</strong> Con el vértice $(2, 1)$, los cortes $(1, 0)$ y $(3, 0)$, y los puntos $(0, -3)$ y $(4, -3)$, la curva se dibuja sola.', antes: 'Cinco puntos y la orientación. ¿Necesitas algún valor más?' }
+    ],
+    cierre: 'Orientación, vértice, corte con Y y su simétrico, cortes con X: con esa lista se dibuja cualquier parábola. La tabla de valores solo hace falta para comprobar.'
+  });
+
   p.demo({
     title: 'Los tres coeficientes',
     intro: 'Mueve a, b y c por separado y descubre qué controla cada uno. Fíjate en que c sube y baja la curva sin deformarla, pero b la desplaza en diagonal.',
+    predice: 'Mueve solo $b$, sin tocar $a$ ni $c$. ¿El vértice se desplazará en horizontal, en vertical o en diagonal? ¿Y el corte con el eje Y se moverá?',
     build: function (host, d) {
       var a = 1, b = -2, c = -3;
       var out = W.readout(host, '');
@@ -86,6 +111,7 @@ Course.topic('fn-cuadraticas', function (p) {
   p.demo({
     title: 'El corral más grande con la valla que tengo',
     intro: 'Con una longitud fija de valla, ¿qué forma da más superficie? Mueve la base y observa el área. El máximo está en el vértice de la parábola.',
+    predice: 'Con 40 m de valla, ¿qué rectángulo crees que encierra más: uno alargado de $15\\times 5$ o uno de $10\\times 10$? Calcula las dos áreas antes de mover la base.',
     build: function (host, d) {
       var P = 40;
       var x = 8;
@@ -119,6 +145,13 @@ Course.topic('fn-cuadraticas', function (p) {
     }
   });
 
+  p.trampas([
+    { e: '$x_v = \\dfrac{b}{2a}$', por: 'Lleva signo menos: $x_v = -\\frac{b}{2a}$. Con $b$ negativo el vértice queda a la derecha.' },
+    { e: '«$a > 0$, luego tiene máximo»', por: 'Con $a > 0$ la parábola sonríe: el vértice es el punto más <em>bajo</em>, un mínimo.' },
+    { e: 'El vértice es una de las raíces', por: 'El vértice está en medio de las raíces (si las hay), no en ellas. Solo coincide cuando la raíz es doble.' },
+    { e: '$c$ es el corte con el eje X', por: '$c = f(0)$ es el corte con el eje <em>Y</em>. Los cortes con X salen de resolver $f(x) = 0$.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('El vértice es «lo mejor posible», y por eso esta es la primera optimización que aprende ' +
     'cualquier estudiante. Con una longitud fija de valla, el rectángulo de área máxima es el ' +
@@ -147,15 +180,14 @@ Course.topic('fn-cuadraticas', function (p) {
     },
     ask: function (d) {
       return 'Halla el vértice de $f(x) = ' + ML.polyTex([d.a, d.b, d.c]) + '$ y di si es un máximo ' +
-        'o un mínimo.<br><span style="font-size:0.875rem;color:var(--ink-faint)">Para lo último escribe ' +
-        '<code>1</code> si es mínimo o <code>2</code> si es máximo.</span>';
+        'o un mínimo.';
     },
     fields: [
       { name: 'x', label: 'x del vértice', w: 'tiny' },
       { name: 'y', label: 'y del vértice', w: 'tiny' },
-      { name: 't', label: 'Tipo (1 o 2)', w: 'tiny' }
+      { name: 't', label: 'El vértice es', opts: [{ t: 'un mínimo', v: '1' }, { t: 'un máximo', v: '2' }] }
     ],
-    sol: function (d) { return { x: d.xv, y: d.yv, t: d.a > 0 ? 1 : 2 }; },
+    sol: function (d) { return { x: d.xv, y: d.yv, t: d.a > 0 ? '1' : '2' }; },
     tol: 1e-6,
     hint: function (d) { return '$x_v = -\\frac{b}{2a}$. Y el signo de $a$ decide: positivo abre hacia arriba (mínimo).'; },
     steps: function (d) {

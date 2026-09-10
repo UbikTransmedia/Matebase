@@ -4,7 +4,7 @@ Course.topic('fn-representacion', function (p) {
   var F = ML.F;
   function pa(n) { return n < 0 ? '(' + n + ')' : String(n); }
 
-  p.text('Dibujar una función haciendo una tabla de valores es una lotería: entre dos puntos calculados ' +
+  p.puente('Dibujar una función haciendo una tabla de valores es una lotería: entre dos puntos calculados ' +
     'puede esconderse una asíntota, un máximo o un cambio de curvatura. Con lo aprendido en ' +
     '[[fn-limites]], [[fn-derivadas]] y [[fn-aplicaciones]] se puede hacer algo mucho mejor: deducir la ' +
     'forma entera de la gráfica <strong>antes de dibujar un solo punto</strong>, y después solo hay que ' +
@@ -38,9 +38,30 @@ Course.topic('fn-representacion', function (p) {
       'una función no puede tener a la vez asíntota horizontal y oblicua. En las racionales, la oblicua ' +
       'es directamente el cociente de dividir los polinomios.');
 
+  p.comprueba('¿Qué asíntota tiene $f(x) = \\dfrac{2x^2 + 1}{x}$ en el infinito?', [
+    { t: 'Horizontal $y = 2$', ok: false, por: 'El grado de arriba supera en uno al de abajo: no hay horizontal. $\\frac{2x^2 + 1}{x} = 2x + \\frac{1}{x}$, y lo que sobra tiende a 0.' },
+    { t: 'Oblicua $y = 2x$', ok: true, por: 'Dividiendo, $f(x) = 2x + \\frac{1}{x}$: lejos, la gráfica se pega a la recta $y = 2x$. Además, vertical en $x = 0$.' },
+    { t: 'No tiene: se va a infinito', ok: false, por: 'Irse a infinito no impide tener asíntota oblicua: se va a infinito <em>pegada</em> a la recta $y = 2x$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un estudio completo de una racional',
+    enunciado: 'Representar $f(x) = \\dfrac{x^2 - 1}{x}$.',
+    pasos: [
+      { t: '<strong>Dominio y simetría.</strong> $\\mathbb{R}\\setminus\\{0\\}$. Y $f(-x) = \\dfrac{x^2 - 1}{-x} = -f(x)$: impar, simétrica respecto del origen. Basta estudiar $x > 0$ y reflejar.', antes: '¿Qué le pasa a $f$ al cambiar $x$ por $-x$?' },
+      { t: '<strong>Cortes y signo.</strong> $f(x) = 0 \\iff x^2 = 1 \\iff x = \\pm 1$. No corta al eje $y$ (el 0 no está en el dominio). Para $x > 1$ es positiva; en $(0, 1)$, negativa.' },
+      { t: '<strong>Asíntotas.</strong> Vertical $x = 0$ (el numerador vale $-1$, no se anula). Oblicua: $f(x) = x - \\dfrac{1}{x}$, así que $y = x$.', antes: 'Divide $x^2 - 1$ entre $x$. ¿Cuál es la oblicua?' },
+      { t: '<strong>Monotonía.</strong> $f\'(x) = 1 + \\dfrac{1}{x^2} > 0$ siempre: creciente en cada trozo del dominio, sin extremos.', antes: 'Deriva $x - \\frac{1}{x}$. ¿Puede anularse?' },
+      { t: '<strong>Curvatura.</strong> $f\'\'(x) = -\\dfrac{2}{x^3}$: positiva para $x < 0$ (sonríe), negativa para $x > 0$ (cara triste). No hay inflexión, porque en $x = 0$ no existe.' },
+      { t: '<strong>Dibujo.</strong> Para $x > 0$: sale de $-\\infty$ pegada a $x = 0$, cruza en $(1, 0)$ y se acerca a $y = x$ por debajo, siempre subiendo. Para $x < 0$, la imagen girada media vuelta.', antes: 'Con asíntotas, cortes, monotonía y curvatura, ¿por dónde puede pasar la curva a la derecha del eje?' }
+    ],
+    cierre: 'Sin una sola tabla de valores. La simetría impar ahorró la mitad del trabajo, y la oblicua salió de una división de un solo paso.'
+  });
+
   p.demo({
     title: 'Construir la gráfica paso a paso',
     intro: 'f(x) = x² / (x − 1). Pulsa «Siguiente» y cada paso de la lista añade lo que aporta. La curva aparece al final, cuando ya no queda nada que adivinar.',
+    predice: 'Antes de empezar: $\\frac{x^2}{x - 1}$ tiene grado 2 arriba y 1 abajo. ¿Tendrá asíntota horizontal u oblicua? ¿Y dónde estará la vertical?',
     build: function (host) {
       var paso = 0;
       var f = function (x) { return x * x / (x - 1); };
@@ -92,6 +113,7 @@ Course.topic('fn-representacion', function (p) {
   p.demo({
     title: 'Cinco gráficas que conviene reconocer',
     intro: 'Elige una función. Los puntos marcados son los extremos y las inflexiones que salen de sus derivadas; debajo, el resumen que se escribiría en un examen.',
+    predice: 'Antes de pulsar «ln x / x»: ¿dónde corta al eje $x$? ¿Hacia dónde va cuando $x \\to 0^+$? ¿Y cuando $x \\to +\\infty$, quién gana, el logaritmo o la $x$?',
     build: function (host) {
       var CASOS = {
         xe: { t: 'x·e⁻ˣ', f: function (x) { return x * Math.exp(-x); }, v: [-1.5, 6, -1.5, 1], ext: [[1, Math.exp(-1), 'máx']], inf: [[2, 2 * Math.exp(-2)]], txt: 'Dominio $\\mathbb{R}$. Corta en el origen. Asíntota horizontal $y = 0$ solo hacia $+\\infty$. Máximo en $(1, 1/e)$, inflexión en $(2, 2/e^2)$.' },
@@ -152,8 +174,37 @@ Course.topic('fn-representacion', function (p) {
     'siguiente dosis. En economía, las curvas de coste se leen igual: el mínimo del coste medio es el ' +
     'tamaño de producción más eficiente.');
 
+  p.trampas([
+    { e: 'Asíntota horizontal y oblicua por el mismo lado', por: 'Son excluyentes: si $f(x)/x$ tiende a un número distinto de cero hay oblicua; si $f$ tiende a un número, horizontal. Nunca las dos.' },
+    { e: 'Dar por hecho que la asíntota horizontal vale por los dos lados', por: '$x e^{-x}$ tiene $y = 0$ hacia $+\\infty$ y se va a $-\\infty$ hacia la izquierda. Hay que mirar los dos límites.' },
+    { e: 'Estudiar simetrías antes que el dominio', por: 'Si el dominio no es simétrico (por ejemplo $(0, +\\infty)$ para $\\ln x$), la función no puede ser par ni impar, y el cálculo sobra.' },
+    { e: '«$f\'(x_0) = 0$ en un problema inverso, luego ya hay extremo»', por: 'La condición sirve para plantear la ecuación; al final hay que comprobar con $f\'\'$ o con el cambio de signo de $f\'$.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
+
+  p.exercise({
+    title: 'Horizontal, oblicua o ninguna',
+    level: 'basico',
+    gen: function (r) {
+      var casos = [
+        { f: '\\dfrac{3x + 1}{x - 2}', t: 'h', por: 'los grados son iguales: horizontal $y = 3$' },
+        { f: '\\dfrac{x^2 + 4}{x + 1}', t: 'o', por: 'el grado de arriba supera en uno al de abajo: oblicua $y = x - 1$' },
+        { f: '\\dfrac{5}{x^2 + 1}', t: 'h', por: 'el grado de abajo es mayor: horizontal $y = 0$' },
+        { f: '\\dfrac{x^3}{x + 1}', t: 'n', por: 'el grado de arriba supera en dos: ni horizontal ni oblicua, se va a infinito como una parábola' },
+        { f: '\\dfrac{2x^2 - x}{x^2 + 3}', t: 'h', por: 'grados iguales: horizontal $y = 2$' },
+        { f: '\\dfrac{x^2 - 1}{2x}', t: 'o', por: 'un grado más arriba: oblicua $y = \\frac{x}{2}$' }
+      ];
+      return r.pick(casos);
+    },
+    ask: function (d) { return 'En el infinito, $f(x) = ' + d.f + '$ tiene…'; },
+    fields: [{ name: 't', label: 'Asíntota', opts: [{ t: 'horizontal', v: 'h' }, { t: 'oblicua', v: 'o' }, { t: 'ninguna de las dos', v: 'n' }] }],
+    sol: function (d) { return { t: d.t }; },
+    hint: function () { return 'Compara los grados: iguales o mayor abajo, horizontal; exactamente uno más arriba, oblicua; dos o más, ninguna.'; },
+    steps: function (d) { return ['Se observa que ' + d.por + '.']; },
+    answer: function (d) { return { h: 'Horizontal', o: 'Oblicua', n: 'Ninguna' }[d.t]; }
+  });
 
   p.exercise({
     title: 'La asíntota oblicua de una racional',

@@ -1,8 +1,10 @@
 /* Tema: Integral indefinida */
 Course.topic('fn-integral-indef', function (p) {
 
-  p.text('Toda operación matemática tiene su inversa: sumar y restar, multiplicar y dividir, elevar y ' +
-    'extraer raíces. La derivada también tiene la suya, y se llama <strong>integración</strong>.');
+  p.puente('Toda operación matemática tiene su inversa: sumar y restar, multiplicar y dividir, elevar y ' +
+    'extraer raíces. La derivada también tiene la suya, y se llama <strong>integración</strong>. Toda ' +
+    'la tabla de derivadas vale aquí leída al revés, y las dos reglas que más costaron —la de la ' +
+    'cadena y la del producto— reaparecen como los dos métodos de integración.');
 
   p.text('Una <strong>primitiva</strong> de $f$ es una función $F$ cuya derivada es $f$. El conjunto de ' +
     'todas ellas es la <strong>integral indefinida</strong>.');
@@ -17,6 +19,7 @@ Course.topic('fn-integral-indef', function (p) {
   p.demo({
     title: 'La familia de primitivas',
     intro: 'Todas estas curvas tienen exactamente la misma derivada. Cambia C y verás que la forma no cambia: solo sube o baja.',
+    predice: 'Todas las curvas $x^2 + C$ tienen la misma derivada. Si te piden la primitiva de $2x$ que pasa por $(1, 5)$, ¿cuánto tiene que valer $C$? Busca esa curva con el deslizador.',
     build: function (host, d) {
       var C = 0;
       var out = W.readout(host, '');
@@ -65,6 +68,12 @@ Course.topic('fn-integral-indef', function (p) {
     'tapa el logaritmo: $\\int x^{-1}dx = \\ln|x|+C$. Es una de esas casualidades preciosas que ' +
     'conectan dos mundos aparentemente distintos.', null, 'El agujero de la regla de la potencia');
 
+  p.comprueba('¿Cuánto vale $\\displaystyle\\int \\frac{1}{x^2}\\,dx$?', [
+    { t: '$\\ln|x| + C$', ok: false, por: 'El logaritmo es la primitiva de $\\frac{1}{x}$, no de $\\frac{1}{x^2}$. Aquí el exponente es $-2$, no $-1$, y la regla de la potencia sí vale.' },
+    { t: '$-\\dfrac{1}{x} + C$', ok: true, por: '$\\int x^{-2}\\,dx = \\dfrac{x^{-1}}{-1} = -\\dfrac{1}{x}$. Comprobación: la derivada de $-\\frac{1}{x}$ es $\\frac{1}{x^2}$ ✓.' },
+    { t: '$\\dfrac{1}{x} + C$', ok: false, por: 'Deriva para comprobar: $\\left(\\frac{1}{x}\\right)\' = -\\frac{1}{x^2}$, con signo menos. Falta cambiar el signo.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.util('Integrar es deshacer una derivada, y eso responde a la pregunta inversa de la del tema ' +
     'anterior: si sé el ritmo, ¿cuánto se ha acumulado? Un caudalímetro mide litros por segundo e ' +
@@ -88,6 +97,18 @@ Course.topic('fn-integral-indef', function (p) {
       'es la derivada del denominador, así que sale $\\ln(x^2 + 1) + C$ sin más.<br><br>Si la derivada ' +
       'está pero le falta una constante, se ajusta multiplicando y dividiendo: ' +
       '$\\int x\\,e^{x^2}dx = \\frac{1}{2}\\int 2x\\,e^{x^2}dx = \\frac{1}{2}e^{x^2} + C$.');
+
+  p.ejemplo({
+    title: 'Ajustar la constante que falta',
+    enunciado: 'Calcular $\\displaystyle\\int \\frac{x}{x^2 + 1}\\,dx$.',
+    pasos: [
+      { t: '<strong>Buscar el patrón.</strong> El denominador es $x^2 + 1$ y su derivada es $2x$. En el numerador hay $x$: la derivada está, pero le falta un 2.', antes: '¿Cuál es la derivada del denominador? ¿Aparece en el numerador?' },
+      { t: '<strong>Ajustar.</strong> Se multiplica y se divide por 2, sacando fuera el que divide: $\\displaystyle\\frac{1}{2}\\int\\frac{2x}{x^2 + 1}\\,dx$. Ahora el numerador es exactamente la derivada del denominador.', antes: 'Se puede meter un 2 dentro si se compensa fuera. ¿Con qué?' },
+      { t: '<strong>Integrar.</strong> $\\dfrac{1}{2}\\ln|x^2 + 1| + C = \\dfrac{1}{2}\\ln(x^2 + 1) + C$. El valor absoluto sobra porque $x^2 + 1$ es siempre positivo.' },
+      { t: '<strong>Comprobar derivando.</strong> $\\left(\\dfrac{1}{2}\\ln(x^2 + 1)\\right)\' = \\dfrac{1}{2}\\cdot\\dfrac{2x}{x^2 + 1} = \\dfrac{x}{x^2 + 1}$ ✓.', antes: 'Deriva el resultado. ¿Vuelve a salir el integrando?' }
+    ],
+    cierre: 'Comprobar derivando tarda diez segundos y es la única garantía. Integrar es reconocer patrones; derivar es mecánico, así que la comprobación siempre es más fiable que el cálculo.'
+  });
 
   p.section('Cambio de variable');
 
@@ -137,12 +158,25 @@ Course.topic('fn-integral-indef', function (p) {
     'Arcos, Logaritmos, Polinomios, Exponenciales, Senos. Se elige como $u$ el que aparezca antes en ' +
     'esa lista, porque es el que más se simplifica al derivarlo.', 'ok', 'Cómo elegir u');
 
+  p.comprueba('Para $\\displaystyle\\int x\\cos x\\,dx$ por partes, ¿qué conviene tomar como $u$?', [
+    { t: '$u = x$', ok: true, por: 'Por ALPES, el polinomio va antes que el seno/coseno. Al derivarlo desaparece ($du = dx$) y la integral que queda, $\\int \\operatorname{sen} x\\,dx$, es inmediata.' },
+    { t: '$u = \\cos x$', ok: false, por: 'Entonces $dv = x\\,dx$ y $v = \\frac{x^2}{2}$: la nueva integral, $\\int \\frac{x^2}{2}\\operatorname{sen} x\\,dx$, es <em>peor</em> que la original. La elección va al revés.' },
+    { t: 'Da igual: por partes sale siempre', ok: false, por: 'Sale siempre una igualdad válida, pero solo con la elección buena la integral nueva es más fácil. Con la mala, se complica en cada vuelta.' }
+  ]);
+
   p.formula('\\int x\\,e^x dx = x\\,e^x - \\int e^x dx = x\\,e^x - e^x + C = e^x(x-1)+C');
 
   p.text('Integrar es mucho más difícil que derivar. Derivar es mecánico: cualquier función elemental ' +
     'se deriva siguiendo reglas. Integrar requiere reconocer patrones y a veces ni siquiera es ' +
     'posible: $\\int e^{-x^2}dx$ no tiene ninguna expresión con funciones elementales, y sin embargo ' +
     'es la integral más importante de toda la estadística.');
+
+  p.trampas([
+    { e: 'Olvidar el $+C$', por: 'Sin él se está dando una sola primitiva de las infinitas. Y en un problema con condición inicial, el $C$ es justo lo que hay que calcular.' },
+    { e: '$\\int f\\cdot g = \\int f\\cdot\\int g$', por: 'Falso, igual que la derivada del producto no era el producto de derivadas. $\\int x\\cdot x\\,dx = \\frac{x^3}{3}$, pero $\\frac{x^2}{2}\\cdot\\frac{x^2}{2} = \\frac{x^4}{4}$.' },
+    { e: '$\\int \\dfrac{1}{x}\\,dx = -\\dfrac{1}{x^2}$', por: 'Eso es la <em>derivada</em> de $\\frac{1}{x}$, en sentido contrario. La primitiva es $\\ln|x|$.' },
+    { e: 'Dejar la respuesta en $t$ tras un cambio de variable', por: 'La pregunta estaba en $x$: el último paso es deshacer el cambio. $e^t + C$ no es respuesta; $e^{x^2} + C$ sí.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('La constante de integración, esa $+C$ que tanto se olvida, es lo que hace falta un dato más: ' +

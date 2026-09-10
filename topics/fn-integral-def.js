@@ -1,6 +1,11 @@
 /* Tema: Integral definida y áreas */
 Course.topic('fn-integral-def', function (p) {
 
+  p.puente('En geometría, las áreas salían de contar cuadraditos y de recortar figuras hasta llegar ' +
+    'al rectángulo. Con una curva no se puede recortar, pero sí rellenar con rectángulos finísimos y ' +
+    'pasar al límite, que es la herramienta del bloque. Y la sorpresa es que ese límite se calcula ' +
+    'con la primitiva del tema anterior: el área y la derivada resultan ser inversas.');
+
   p.text('¿Cuánta superficie hay debajo de una curva? Para un rectángulo o un triángulo es fácil. ' +
     'Para una curva cualquiera, la idea que funciona es de una sencillez brutal: <strong>rellenarla ' +
     'con rectángulos</strong> y hacerlos cada vez más finos.');
@@ -8,6 +13,7 @@ Course.topic('fn-integral-def', function (p) {
   p.demo({
     title: 'Sumas de Riemann',
     intro: 'Aumenta el número de rectángulos y mira cómo el error se desploma. En el límite, la suma de infinitos rectángulos infinitamente finos es exactamente el área.',
+    predice: 'La función es creciente. Con 6 rectángulos tomando la altura por la izquierda, ¿la suma quedará por encima o por debajo del área real? ¿Y por la derecha?',
     build: function (host, d) {
       var n = 6, modo = 'medio';
       var f = function (x) { return 0.35 * x * x + 0.4; };
@@ -79,6 +85,12 @@ Course.topic('fn-integral-def', function (p) {
 
   p.formula('\\int_0^2 x^2\\,dx = \\left[\\frac{x^3}{3}\\right]_0^2 = \\frac{8}{3} - 0 = \\frac{8}{3}');
 
+  p.comprueba('¿Cuánto vale $\\displaystyle\\int_0^3 2x\\,dx$?', [
+    { t: '$6$', ok: false, por: '$6$ es $f(3)$, la altura en el extremo. La integral es el área: $[x^2]_0^3 = 9 - 0 = 9$. Es el triángulo de base 3 y altura 6: $\\frac{3\\cdot 6}{2} = 9$ ✓.' },
+    { t: '$9$', ok: true, por: 'Primitiva $x^2$; Barrow: $3^2 - 0^2 = 9$. Y geométricamente es un triángulo de base 3 y altura 6: $\\frac{18}{2} = 9$. Las dos cuentas coinciden.' },
+    { t: '$3$', ok: false, por: 'Es $F(3) - F(0)$ con $F = x^2$: $9 - 0 = 9$. Comprueba con el triángulo de base 3 y altura $f(3) = 6$.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.util('La regla de Barrow es probablemente el atajo más rentable de las matemáticas: convierte «sumar ' +
     'infinitos trocitos» en «restar dos valores». Gracias a ella se calculan volúmenes de depósitos ' +
@@ -96,9 +108,23 @@ Course.topic('fn-integral-def', function (p) {
   p.text('La integral definida no es exactamente «el área»: es un <strong>área con signo</strong>. Lo ' +
     'que queda por debajo del eje X cuenta en negativo.');
 
+  p.ejemplo({
+    title: 'Integral y área no son lo mismo',
+    enunciado: 'Para $f(x) = x^2 - 4$ en $[0, 3]$, calcular la integral definida y el área encerrada con el eje X.',
+    pasos: [
+      { t: '<strong>Dónde corta al eje.</strong> $x^2 - 4 = 0 \\Rightarrow x = \\pm 2$. Dentro de $[0, 3]$ está el 2: la función es negativa en $[0, 2]$ y positiva en $[2, 3]$.', antes: '¿Cambia de signo la función dentro del intervalo? ¿Dónde?' },
+      { t: '<strong>La integral entera.</strong> $\\displaystyle\\int_0^3 (x^2 - 4)\\,dx = \\left[\\frac{x^3}{3} - 4x\\right]_0^3 = (9 - 12) - 0 = -3$. Sale negativa: la parte de abajo pesa más.' },
+      { t: '<strong>Trozo a trozo.</strong> $\\displaystyle\\int_0^2 = \\left(\\frac{8}{3} - 8\\right) - 0 = -\\frac{16}{3}$ y $\\displaystyle\\int_2^3 = (9 - 12) - \\left(\\frac{8}{3} - 8\\right) = -3 + \\frac{16}{3} = \\frac{7}{3}$.', antes: 'Calcula la integral en $[0, 2]$ y en $[2, 3]$ por separado. ¿Qué signo tiene cada una?' },
+      { t: '<strong>El área.</strong> Se suman los valores absolutos: $\\dfrac{16}{3} + \\dfrac{7}{3} = \\dfrac{23}{3} \\approx 7{,}67$.', antes: 'Para el área geométrica, ¿qué se hace con el trozo negativo?' },
+      { t: '<strong>Comprobar la coherencia.</strong> $-\\dfrac{16}{3} + \\dfrac{7}{3} = -3$, la integral entera ✓. Integral $-3$, área $\\frac{23}{3}$: dos números distintos para dos preguntas distintas.' }
+    ],
+    cierre: 'Si la pregunta dice «área», hay que buscar los cortes con el eje y partir. Si dice «integral», se aplica Barrow de un tirón. Leer bien el enunciado vale tanto como saber integrar.'
+  });
+
   p.demo({
     title: 'Área con signo',
     intro: 'Mueve los límites de integración. Cuando el tramo cruza el eje, las dos partes se restan entre sí.',
+    predice: 'La función $\\frac{x^3}{3} - x$ es impar. Si pones los límites simétricos, $a = -2$ y $b = 2$, ¿cuánto crees que dará la integral? ¿Y el área?',
     build: function (host, d) {
       var a = -1, b = 2.5;
       var f = function (x) { return x * x * x / 3 - x; };
@@ -179,6 +205,13 @@ Course.topic('fn-integral-def', function (p) {
       '$x = \\pm k$, la recta va por encima, y la integral de la diferencia da $\\frac{4k^3}{3}$. Si se ' +
       'pide que el área valga 36, basta resolver la ecuación.');
 
+  p.trampas([
+    { e: '«La integral ha salido negativa: el área es negativa»', por: 'Un área nunca es negativa. El signo dice que el tramo está bajo el eje; el área es el valor absoluto.' },
+    { e: 'Integrar de un tirón cuando piden área y la función cruza el eje', por: 'Las partes positivas y negativas se cancelan. Hay que partir por los cortes con el eje y sumar valores absolutos.' },
+    { e: 'Escribir $F(b)$ y olvidar restar $F(a)$', por: 'Barrow es $F(b) - F(a)$. Solo cuando $F(a) = 0$ se puede omitir, y hay que decirlo.' },
+    { e: 'Área entre dos curvas sin saber cuál va arriba', por: 'Si se integra $g - f$ con $f$ por encima, sale negativo. Se localizan los cortes y se comprueba con un punto intermedio quién está arriba.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('El área entre dos curvas es una medida de diferencia acumulada, y con ese nombre aparece en ' +
     'economía: entre la curva de ingresos y la de costes está el beneficio total del periodo; entre ' +
@@ -187,6 +220,44 @@ Course.topic('fn-integral-def', function (p) {
     'largo de un trayecto.');
 
   p.section('Practica');
+
+  p.exercise({
+    title: 'La integral de una recta es un trapecio',
+    level: 'basico',
+    gen: function (r) {
+      var m = r.nz(-3, 3), n = r.int(1, 8), a = r.int(0, 3), b = a + r.int(1, 5);
+      var ya = m * a + n, yb = m * b + n;
+      if (ya <= 0 || yb <= 0) return null;
+      var val = (ya + yb) * (b - a) / 2;
+      return { m: m, n: n, a: a, b: b, ya: ya, yb: yb, val: val };
+    },
+    ask: function (d) {
+      return 'Calcula $\\displaystyle\\int_{' + d.a + '}^{' + d.b + '} (' + ML.polyTex([d.m, d.n]) + ')\\,dx$ con Barrow, y comprueba el resultado con la fórmula del trapecio.';
+    },
+    show: function (d, host) {
+      W.plot(host, {
+        xmin: d.a - 1, xmax: d.b + 1, ymin: 0, ymax: Math.max(d.ya, d.yb) + 2, height: 200,
+        draw: function (g) {
+          var f = function (x) { return d.m * x + d.n; };
+          g.area(f, d.a, d.b, { fill: 2, fillAlpha: .3 });
+          g.fn(f, { color: 0, w: 2.4 });
+          g.point(d.a, d.ya, { color: 1, r: 4.5 });
+          g.point(d.b, d.yb, { color: 1, r: 4.5 });
+        }
+      });
+    },
+    fields: [{ name: 'v', label: 'Valor', w: 'tiny' }],
+    sol: function (d) { return { v: d.val }; },
+    tol: 1e-6,
+    hint: function () { return 'Primitiva de $mx + n$: $\\frac{m x^2}{2} + nx$. O directamente: el trapecio tiene bases $f(a)$ y $f(b)$ y altura $b - a$.'; },
+    steps: function (d) {
+      var F = function (x) { return d.m * x * x / 2 + d.n * x; };
+      return ['Barrow: $\\left[\\frac{' + d.m + 'x^2}{2} + ' + d.n + 'x\\right]_{' + d.a + '}^{' + d.b + '} = ' + U.fmt(F(d.b), 3) + ' - ' + U.fmt(F(d.a), 3) + ' = ' + U.fmt(d.val, 3) + '$.',
+        'Trapecio: bases $f(' + d.a + ') = ' + d.ya + '$ y $f(' + d.b + ') = ' + d.yb + '$, altura $' + (d.b - d.a) + '$: $\\frac{(' + d.ya + ' + ' + d.yb + ')\\cdot ' + (d.b - d.a) + '}{2} = ' + U.fmt(d.val, 3) + '$ ✓.',
+        'Los dos caminos coinciden: la integral definida es, de verdad, el área.'];
+    },
+    answer: function (d) { return U.fmt(d.val, 3); }
+  });
 
   p.exercise({
     title: 'Integral definida de un polinomio',

@@ -1,6 +1,11 @@
 /* Tema: Programación lineal */
 Course.topic('fn-prog-lineal', function (p) {
 
+  p.puente('Una inecuación con dos incógnitas, $x + 2y \\le 14$, no tiene por solución un intervalo ' +
+    'sino medio plano. Varias a la vez recortan una región, y sobre esa región se pregunta dónde una ' +
+    'función lineal $Z = ax + by$ vale más. Rectas, sistemas de inecuaciones y funciones lineales, que ' +
+    'ya conoces por separado, se juntan aquí en un método que usan las empresas a diario.');
+
   p.text('Hasta ahora, optimizar era buscar el máximo o el mínimo de una función sin más. Pero en el ' +
     'mundo real casi nunca se puede elegir libremente: hay <strong>restricciones</strong>. Solo tengo ' +
     'tantas horas de máquina, tanto material, tanto presupuesto.');
@@ -26,6 +31,7 @@ Course.topic('fn-prog-lineal', function (p) {
   p.demo({
     title: 'Construir la región factible',
     intro: 'Añade restricciones una a una y mira cómo se va recortando el plano. Los puntos gordos son los vértices.',
+    predice: 'Con dos restricciones hay un vértice en $(4{,}4;\\ 4{,}8)$. La tercera es $x + y \\le 8$: ¿cumple ese vértice la nueva condición? ¿Recortará la región o no cambiará nada?',
     build: function (host, d) {
       var activas = 2;
       var restr = [
@@ -105,6 +111,12 @@ Course.topic('fn-prog-lineal', function (p) {
     'entre sí. Al ir aumentando $Z$, la recta se desplaza sin girar, y el último punto de la región ' +
     'que toca antes de salirse es forzosamente una esquina.');
 
+  p.comprueba('Una región tiene vértices $(0,0)$, $(4,0)$, $(2,3)$ y $(0,4)$. ¿Cuál es el máximo de $Z = 2x + 3y$?', [
+    { t: '$12$', ok: false, por: '$12$ es $Z(0, 4)$. Pero en $(2, 3)$ sale $4 + 9 = 13$, más. Hay que evaluar en <em>todos</em> los vértices.' },
+    { t: '$13$', ok: true, por: '$Z$ vale $0$, $8$, $13$ y $12$ en los cuatro vértices. El mayor es $13$, en $(2, 3)$.' },
+    { t: '$8$', ok: false, por: '$8$ es $Z(4, 0)$; el vértice $(2, 3)$ da $13$.' }
+  ]);
+
   p.text('Y de ahí sale un método que es casi un algoritmo de cocina:');
 
   p.list([
@@ -114,9 +126,23 @@ Course.topic('fn-prog-lineal', function (p) {
     'Quedarse con el mayor (o el menor, si se minimiza).'
   ], true);
 
+  p.ejemplo({
+    title: 'Un problema entero, del enunciado al vértice',
+    enunciado: 'Maximizar $Z = 3x + 4y$ con $x + y \\le 4$, $x + 3y \\le 6$, $x \\ge 0$, $y \\ge 0$.',
+    pasos: [
+      { t: '<strong>Región.</strong> Las dos rectas $x + y = 4$ y $x + 3y = 6$ más los ejes. La región queda en el primer cuadrante, por debajo de las dos rectas.' },
+      { t: '<strong>Vértices en los ejes.</strong> El origen $(0, 0)$. Sobre el eje X ($y = 0$): $x = 4$ y $x = 6$; manda el más restrictivo, $(4, 0)$. Sobre el eje Y ($x = 0$): $y = 4$ e $y = 2$; manda $(0, 2)$.', antes: 'En el eje X, $x + y \\le 4$ permite hasta $x = 4$ y $x + 3y \\le 6$ hasta $x = 6$. ¿Cuál de los dos manda?' },
+      { t: '<strong>El vértice interior.</strong> Corte de las dos rectas: restando, $2y = 2 \\Rightarrow y = 1$, $x = 3$. El punto $(3, 1)$ cumple las cuatro restricciones.', antes: '¿Qué sistema hay que resolver para el vértice donde se cruzan las dos rectas?' },
+      { t: '<strong>Evaluar.</strong> $Z(0,0) = 0$, $Z(4,0) = 12$, $Z(3,1) = 13$, $Z(0,2) = 8$.' },
+      { t: '<strong>Decidir.</strong> Máximo $Z = 13$ en $(3, 1)$. Ningún punto interior puede superarlo: el teorema lo garantiza.', antes: '¿Podría haber un punto dentro de la región con $Z$ mayor que 13?' }
+    ],
+    cierre: 'Cuatro vértices, cuatro cuentas, una respuesta. La parte que se hace mal es la de los vértices en los ejes: hay que elegir el más restrictivo, no el primero que aparece.'
+  });
+
   p.demo({
     title: 'La recta de nivel deslizándose',
     intro: 'Sube el valor de Z y mira cómo la recta se desplaza sin girar. El último vértice que toca antes de abandonar la región es el óptimo.',
+    predice: 'Con $Z = 3x + 5y$, evalúa de cabeza en $(6, 0)$, $(4{,}4;\\ 4{,}8)$ y $(0, 7)$. ¿Qué vértice ganará? Después cambia $b$ a 1: ¿seguirá ganando el mismo?',
     build: function (host, d) {
       var a = 3, b = 5, Z = 10;
       var restr = [
@@ -205,6 +231,13 @@ Course.topic('fn-prog-lineal', function (p) {
     'programación entera es un problema NP-difícil, del mismo club que el viajante de comercio.',
     'warn');
 
+  p.trampas([
+    { e: 'Buscar el óptimo «en el centro» de la región', por: 'Una función lineal no tiene máximos en el interior: crece en una dirección hasta chocar con el borde, y el borde acaba en un vértice.' },
+    { e: 'Evaluar solo los vértices «que parecen buenos»', por: 'Se evalúan todos. En la comprobación de arriba, $(2, 3)$ no era el más alejado del origen y aun así ganaba.' },
+    { e: 'Olvidar $x \\ge 0$, $y \\ge 0$', por: 'Sin ellas la región puede no estar acotada y aparecen vértices con cantidades negativas de sillas.' },
+    { e: 'Redondear el óptimo cuando las variables son enteras', por: 'El redondeo puede salirse de la región o no ser el mejor punto entero. Hay que revisar los enteros cercanos.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -233,16 +266,10 @@ Course.topic('fn-prog-lineal', function (p) {
     ask: function (d) {
       return '¿Pertenece el punto $(' + d.x + ', ' + d.y + ')$ a la región factible definida por<br>' +
         '$\\begin{cases}' + d.p1 + 'x + ' + d.q1 + 'y \\le ' + d.r1 + ' \\\\ ' +
-        d.p2 + 'x + ' + d.q2 + 'y \\le ' + d.r2 + ' \\\\ x \\ge 0,\\ y \\ge 0\\end{cases}$?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
+        d.p2 + 'x + ' + d.q2 + 'y \\le ' + d.r2 + ' \\\\ x \\ge 0,\\ y \\ge 0\\end{cases}$?';
     },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'Sí, es factible', v: 'si' }, { t: 'No', v: 'no' }] }],
     sol: function (d) { return { r: d.ok ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var t = v.raw.r.trim().toLowerCase().replace(/[íÍ]/g, 'i');
-      if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe <code>si</code> o <code>no</code>.' };
-      return (t === 'si') === d.ok;
-    },
     hint: function () { return 'Sustituye el punto en cada inecuación. Basta con que falle una para que quede fuera.'; },
     steps: function (d) {
       var v1 = d.p1 * d.x + d.q1 * d.y, v2 = d.p2 * d.x + d.q2 * d.y;

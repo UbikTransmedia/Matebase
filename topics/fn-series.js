@@ -1,11 +1,11 @@
 /* Tema: Series numéricas y convergencia */
 Course.topic('fn-series', function (p) {
 
-  p.text('En el tema anterior apareció una frase que merece pararse a mirarla: <em>se pueden sumar ' +
+  p.puente('En el tema anterior apareció una frase que merece pararse a mirarla: <em>se pueden sumar ' +
     'infinitos números y obtener un resultado finito</em>. Se dijo, se usó y no se demostró. Este ' +
     'tema va de eso, porque es la idea sobre la que descansan la mitad de las cosas que vienen ' +
     'después: los polinomios de Taylor, las series de Fourier, la compresión de un MP3 y hasta la ' +
-    'existencia del número $e$.');
+    'existencia del número $e$. La herramienta es la que ya tienes: el límite de una sucesión.');
 
   p.text('Y va también de lo contrario, que es todavía más interesante. Hay sumas infinitas cuyos ' +
     'términos se hacen tan pequeños como se quiera y que, aun así, <strong>no dan un número: se ' +
@@ -57,9 +57,16 @@ Course.topic('fn-series', function (p) {
     '¿se acerca a algún sitio? Cuando decimos que «vale 1» estamos diciendo que esa sucesión tiene ' +
     'límite 1, ni más ni menos.');
 
+  p.comprueba('Para la serie $\\frac{1}{2} + \\frac{1}{4} + \\frac{1}{8} + \\cdots$, ¿cuánto vale la suma parcial $S_3$?', [
+    { t: '$\\dfrac{1}{8}$', ok: false, por: 'Ese es el tercer <em>término</em>, $a_3$. La suma parcial acumula: $S_3 = a_1 + a_2 + a_3$.' },
+    { t: '$\\dfrac{7}{8}$', ok: true, por: '$\\frac{1}{2} + \\frac{1}{4} + \\frac{1}{8} = \\frac{4 + 2 + 1}{8} = \\frac{7}{8}$. Le falta $\\frac{1}{8}$ para llegar a 1, justo el siguiente término.' },
+    { t: '$1$', ok: false, por: '$1$ es el límite de las sumas parciales, la suma de la serie entera. Con tres términos aún falta $\\frac{1}{8}$.' }
+  ]);
+
   p.demo({
     title: 'La escalera de las sumas parciales',
     intro: 'Cada punto es una suma parcial: lo que llevas sumado. Mueve el número de términos y mira si la escalera se estabiliza a una altura o si sigue subiendo sin techo. Es toda la diferencia entre converger y divergir.',
+    predice: 'Antes de elegir «armónica»: sus términos $1, \\frac{1}{2}, \\frac{1}{3}, \\ldots$ se hacen pequeñísimos. ¿Crees que la escalera encontrará techo como la geométrica, o seguirá subiendo?',
     build: function (host) {
       var n = 12, cual = 'geo';
       var series = {
@@ -139,7 +146,7 @@ Course.topic('fn-series', function (p) {
     'condición necesaria',
     'Se dice: <em>«si el sumatorio de a sub ene converge, entonces el límite cuando ene tiende a ' +
       'infinito de a sub ene es cero»</em>.<br><br>La flecha doble $\\Longrightarrow$ es la ' +
-      'implicación de la lógica del bloque 0: «si pasa lo de la izquierda, entonces pasa lo de la ' +
+      'implicación de [[lg-proposiciones|la lógica]]: «si pasa lo de la izquierda, entonces pasa lo de la ' +
       'derecha». Y como allí se insistió, <strong>una implicación no se puede dar la vuelta</strong>. ' +
       'Aquí eso importa muchísimo, como se ve enseguida.');
 
@@ -192,9 +199,23 @@ Course.topic('fn-series', function (p) {
     'y esos ocho juntos vuelven a sumar medio. La pequeñez de cada término y la abundancia de ' +
     'términos se compensan exactamente, y el empate lo gana la abundancia.');
 
+  p.ejemplo({
+    title: 'El bloque de ocho, con las cuentas a la vista',
+    enunciado: 'Comprobar que $\\frac{1}{9} + \\frac{1}{10} + \\cdots + \\frac{1}{16}$ suma más de $\\frac{1}{2}$, y deducir por qué la armónica no tiene techo.',
+    pasos: [
+      { t: '<strong>Cuántos términos hay.</strong> Del 9 al 16 van ocho términos. El más pequeño de todos es el último, $\\frac{1}{16}$.', antes: '¿Cuántos sumandos hay entre $\\frac{1}{9}$ y $\\frac{1}{16}$? ¿Cuál es el menor?' },
+      { t: '<strong>Cambiar todos por el menor.</strong> Cada uno de los ocho es mayor o igual que $\\frac{1}{16}$, así que la suma es mayor que $8\\cdot\\frac{1}{16} = \\frac{1}{2}$.', antes: 'Si sustituyes los ocho por $\\frac{1}{16}$, ¿la suma sube o baja? ¿Cuánto da?' },
+      { t: '<strong>Comprobar con números.</strong> Sumando de verdad: $0{,}111 + 0{,}100 + 0{,}091 + 0{,}083 + 0{,}077 + 0{,}071 + 0{,}067 + 0{,}063 = 0{,}663$. Más de medio, como se había previsto.' },
+      { t: '<strong>Lo que vale para todos los bloques.</strong> El siguiente bloque va del 17 al 32: dieciséis términos, todos mayores o iguales que $\\frac{1}{32}$, suma mayor que $\\frac{16}{32} = \\frac{1}{2}$. Y así siempre: el bloque $k$ tiene $2^{k-1}$ términos y el menor vale $\\frac{1}{2^k}$.', antes: 'El bloque siguiente va del 17 al 32. ¿Cuántos términos tiene y cuál es el menor? ¿Pasa lo mismo?' },
+      { t: '<strong>Conclusión.</strong> Cada bloque añade más de $\\frac{1}{2}$, hay infinitos bloques, y $\\frac{1}{2} + \\frac{1}{2} + \\frac{1}{2} + \\cdots$ no tiene techo. La armónica diverge. ∎' }
+    ],
+    cierre: 'Fíjate en lo lento que es: para pasar de 10 hacen falta más de doce mil términos. Diverge, pero sin ninguna prisa. Eso es lo que engaña a la intuición.'
+  });
+
   p.demo({
     title: 'El truco de Oresme, bloque a bloque',
     intro: 'Cada color es un bloque: 1, luego 2 términos, luego 4, luego 8… Todos los bloques suman más de un medio, por pequeños que sean sus términos. Añade bloques y mira crecer el total sin prisa pero sin pausa.',
+    predice: 'Con 4 bloques la cota garantizada es $1 + 3\\cdot\\frac{1}{2} = 2{,}5$. ¿Cuántos bloques hacen falta para garantizar que la suma pasa de 5? ¿Y cuántos términos son eso?',
     build: function (host) {
       var b = 4;
       var out = W.readout(host, '');
@@ -322,9 +343,16 @@ Course.topic('fn-series', function (p) {
     'al que se hacen pequeños los términos importa más que el hecho de que se hagan pequeños.',
     null, 'Lo que se compara es la velocidad');
 
+  p.comprueba('$\\displaystyle\\sum \\frac{n + 1}{n^3}$: ¿converge o diverge?', [
+    { t: 'Diverge: el numerador crece', ok: false, por: 'El numerador crece como $n$, pero el denominador como $n^3$. Lo que importa es el cociente: se comporta como $\\frac{n}{n^3} = \\frac{1}{n^2}$.' },
+    { t: 'Converge: se comporta como $\\sum \\frac{1}{n^2}$', ok: true, por: 'Término dominante arriba, $n$; abajo, $n^3$. Es una $p$-serie disfrazada con $p = 2 > 1$.' },
+    { t: 'Converge porque los términos tienden a cero', ok: false, por: 'Que tiendan a cero no basta: los de la armónica también. Converge por <em>cómo</em> de deprisa: como $\\frac{1}{n^2}$.' }
+  ]);
+
   p.demo({
     title: 'Dónde está la frontera: la p-serie',
     intro: 'Mueve el exponente p y mira las sumas parciales. Por encima de 1 la escalera se aplana y encuentra techo; en 1 y por debajo, sigue subiendo. La frontera está en un sitio exacto y es sorprendentemente fina.',
+    predice: 'Pon $p = 1{,}05$ y luego $p = 0{,}95$. Los términos son casi idénticos. ¿Crees que la escalera se comportará casi igual en los dos casos, o de forma opuesta?',
     build: function (host) {
       var pe = 2, n = 60;
       var out = W.readout(host, '');
@@ -405,6 +433,13 @@ Course.topic('fn-series', function (p) {
     'Riemann. La propiedad conmutativa de la suma, que parece intocable, deja de valer en cuanto hay ' +
     'infinitos sumandos y no todos son del mismo signo.', 'warn', 'El infinito no respeta la propiedad conmutativa');
 
+  p.trampas([
+    { e: '«Los términos tienden a cero, luego la serie converge»', por: 'Es la recíproca de la condición necesaria, y es falsa. La armónica tiene términos que tienden a cero y diverge.' },
+    { e: 'Confundir el término $a_n$ con la suma parcial $S_n$', por: '$a_n$ es un sumando; $S_n$ es lo acumulado hasta $n$. La serie converge si $S_n$ tiene límite, no si lo tiene $a_n$.' },
+    { e: 'Sumar una geométrica con $|r| \\ge 1$ usando $\\frac{a}{1 - r}$', por: 'La fórmula solo vale si $|r| < 1$. Con $r = 2$ daría $-a$: un disparate que delata el error.' },
+    { e: '«$\\sum \\frac{1}{n^{0{,}9}}$ converge porque es casi la de cuadrados»', por: 'La frontera es $p = 1$: por debajo diverge, aunque sea por poco. $0{,}9 < 1$.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -427,20 +462,10 @@ Course.topic('fn-series', function (p) {
       return r.pick(casos);
     },
     ask: function (d) {
-      return '¿Converge o diverge la serie $\\displaystyle ' + d.tex + '$?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>converge</code> o ' +
-        '<code>diverge</code>.</span>';
+      return '¿Converge o diverge la serie $\\displaystyle ' + d.tex + '$?';
     },
-    fields: [{ name: 'q', label: 'Respuesta', w: 'wide', ph: 'converge / diverge' }],
+    fields: [{ name: 'q', label: 'La serie', opts: [{ t: 'converge', v: 'converge' }, { t: 'diverge', v: 'diverge' }] }],
     sol: function (d) { return { q: d.conv ? 'converge' : 'diverge' }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        converge: /converge|convergente|finita|suma finita/,
-        diverge: /diverge|divergente|infinit|no converge/
-      });
-      if (!q) return { ok: false, msg: 'Responde <strong>converge</strong> o <strong>diverge</strong>.' };
-      return { ok: (q === 'converge') === d.conv };
-    },
     hint: function () {
       return 'Mira primero si los términos tienden a cero. Si tienden, compárala con una $p$-serie ' +
         '$\\sum \\frac{1}{n^p}$: converge solo si $p > 1$.';

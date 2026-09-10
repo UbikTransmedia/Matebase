@@ -1,6 +1,11 @@
 /* Tema: Sucesiones y progresiones */
 Course.topic('fn-sucesiones', function (p) {
 
+  p.puente('Una función con dominio los números naturales es una lista: primer término, segundo, ' +
+    'tercero… Las dos familias de este tema ya las conoces con otra cara: la aritmética es la función ' +
+    'lineal contada de uno en uno, y la geométrica es la exponencial contada de uno en uno. La novedad ' +
+    'es sumar términos, y descubrir que a veces se pueden sumar infinitos.');
+
   p.text('Una <strong>sucesión</strong> es una lista ordenada e infinita de números. Es una función ' +
     'cuyo dominio son los naturales: a cada posición $n$ le corresponde un término $a_n$.');
 
@@ -19,6 +24,12 @@ Course.topic('fn-sucesiones', function (p) {
     'S_n = \\frac{(a_1 + a_n)\\,n}{2}'
   ], 'término general y suma de los n primeros');
 
+  p.comprueba('En la sucesión $5, 9, 13, 17, \\ldots$, ¿cuánto vale $a_{20}$?', [
+    { t: '$85$', ok: false, por: 'Has sumado 20 veces la diferencia. Del primer término al vigésimo hay 19 saltos: $5 + 19\\cdot 4 = 81$.' },
+    { t: '$81$', ok: true, por: '$a_1 = 5$, $d = 4$: $a_{20} = 5 + (20 - 1)\\cdot 4 = 81$. Del término 1 al 20 se dan 19 pasos.' },
+    { t: '$80$', ok: false, por: '$20\\cdot 4 = 80$ olvida el primer término. Es $5 + 19\\cdot 4 = 81$.' }
+  ]);
+
   p.hist('Cuenta la anécdota que a Gauss, con nueve años, le mandaron sumar los números del 1 al 100 ' +
     'para tenerlo entretenido. Respondió en segundos: 5050. Se había dado cuenta de que emparejando ' +
     '1+100, 2+99, 3+98… salen 50 parejas que suman 101 cada una. De ahí sale exactamente la fórmula ' +
@@ -26,7 +37,7 @@ Course.topic('fn-sucesiones', function (p) {
 
   p.note('Ese emparejamiento convence, pero no es una demostración: solo enseña que funciona en un ' +
     'caso. La herramienta para demostrar de verdad una fórmula que afirma algo sobre <em>todos</em> ' +
-    'los naturales es la <strong>inducción</strong>, que viste en el bloque 0. Todas las fórmulas de ' +
+    'los naturales es la <strong>inducción</strong>, que viste en [[lg-demostracion|el tema de demostración]]. Todas las fórmulas de ' +
     'este tema se demuestran así, y merece la pena volver allí y rehacer el ejemplo de la suma de los ' +
     '$n$ primeros naturales con lo que ya sabes de progresiones.', null, 'Cómo se demuestran estas fórmulas');
 
@@ -55,9 +66,23 @@ Course.topic('fn-sucesiones', function (p) {
     'fórmula; allí se justifica.',
     null, 'Esto se demuestra en el tema siguiente');
 
+  p.ejemplo({
+    title: '¿Es el 100 un término de la sucesión?',
+    enunciado: 'Dada la sucesión $7, 10, 13, 16, \\ldots$, decidir si el 100 es uno de sus términos y, si lo es, cuál.',
+    pasos: [
+      { t: '<strong>Reconocer el tipo.</strong> $10 - 7 = 3$, $13 - 10 = 3$, $16 - 13 = 3$: se suma siempre lo mismo. Aritmética con $a_1 = 7$ y $d = 3$.', antes: '¿Se suma o se multiplica para pasar de un término al siguiente?' },
+      { t: '<strong>Término general.</strong> $a_n = 7 + (n - 1)\\cdot 3 = 3n + 4$.' },
+      { t: '<strong>Plantear.</strong> Que el 100 sea un término significa que existe un $n$ natural con $3n + 4 = 100$.', antes: '¿Qué ecuación traduce «el 100 está en la lista»?' },
+      { t: '<strong>Resolver y decidir.</strong> $3n = 96 \\Rightarrow n = 32$. Es un número natural: <strong>sí</strong>, el 100 es el término 32.', antes: 'Si $n$ hubiera salido $31{,}5$, ¿qué habrías concluido?' },
+      { t: '<strong>Comprobar.</strong> $a_{32} = 3\\cdot 32 + 4 = 100$ ✓. Y el 101, por ejemplo, no está: $3n = 97$ no tiene solución entera.' }
+    ],
+    cierre: 'La pregunta «¿está este número en la sucesión?» siempre se responde igual: término general, ecuación, y mirar si la $n$ sale natural.'
+  });
+
   p.demo({
     title: 'Aritmética o geométrica',
     intro: 'Compara las dos: una sube en escalones iguales, la otra se multiplica. Al principio se parecen; al cabo de pocos términos, no tienen nada que ver.',
+    predice: 'Las dos empiezan en 2; la aritmética suma 3 y la geométrica multiplica por 1,5. Al principio gana la aritmética. ¿En qué término crees que la geométrica la adelanta?',
     build: function (host, d) {
       var a1 = 2, dif = 3, raz = 1.5;
       var out = W.readout(host, '');
@@ -100,6 +125,7 @@ Course.topic('fn-sucesiones', function (p) {
   p.demo({
     title: 'Sumar infinitos términos',
     intro: 'Cada barra es la mitad de la anterior. Añade términos y verás que la suma nunca supera el 1: se acerca sin llegar.',
+    predice: 'Con $r = 0{,}5$ la suma se acerca a 1. Si cambias $r$ a $0{,}8$, ¿el total será mayor, menor o el mismo? Fíjate en cómo está construido el primer término antes de responder.',
     build: function (host, d) {
       var n = 5, r0 = 0.5;
       var out = W.readout(host, '');
@@ -161,6 +187,13 @@ Course.topic('fn-sucesiones', function (p) {
       'alcance.');
 
   p.text('Se calculan igual que los límites en el infinito de las funciones: comparando grados.');
+
+  p.trampas([
+    { e: '$a_n = a_1 + n\\cdot d$', por: 'Del término 1 al $n$ hay $n - 1$ saltos, no $n$: $a_n = a_1 + (n-1)d$. Con $n = 1$ tiene que salir $a_1$.' },
+    { e: 'Sumar infinitos términos de una geométrica con $r = 2$', por: '$1 + 2 + 4 + 8 + \\cdots$ se va al infinito. La fórmula $\\frac{a_1}{1 - r}$ solo vale con $|r| < 1$; con $r = 2$ daría $-1$, un disparate.' },
+    { e: '«$\\frac{1}{n}$ llega a cero para $n$ grande»', por: 'Nunca vale cero. El límite es a lo que se acerca, no un valor que alcance.' },
+    { e: 'Usar $S_n$ con $n$ en vez de $a_n$', por: 'En $S_n = \\frac{(a_1 + a_n)\\,n}{2}$ hace falta el <em>último término</em> $a_n$, no el número de términos en su lugar.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Que una suma de infinitos términos pueda dar un número finito es lo que hace posible la ' +

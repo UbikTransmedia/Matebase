@@ -1,6 +1,11 @@
 /* Tema: Racionales, radicales y funciones a trozos */
 Course.topic('fn-racionales', function (p) {
 
+  p.puente('Los valores prohibidos de las fracciones algebraicas y las inecuaciones que daban el ' +
+    'dominio de una raíz vuelven aquí, ahora con gráfica: un valor prohibido se ve como una recta a ' +
+    'la que la curva se pega sin tocarla, y una inecuación se ve como un trozo de eje donde no hay ' +
+    'nada dibujado. Las funciones a trozos añaden un tercer fenómeno, el salto.');
+
   p.text('Hasta ahora las funciones se podían dibujar sin levantar el lápiz y existían para cualquier ' +
     '$x$. Aquí llegan las tres familias que rompen eso: las que tienen <strong>agujeros</strong>, las ' +
     'que tienen <strong>zonas prohibidas</strong> y las que dan <strong>saltos</strong>.');
@@ -26,9 +31,28 @@ Course.topic('fn-racionales', function (p) {
   p.note('Nunca hay asíntota horizontal <em>y</em> oblicua a la vez: o el numerador gana por un grado ' +
     '(oblicua) o no gana (horizontal). Son excluyentes.', null);
 
+  p.comprueba('¿Qué asíntotas tiene $f(x) = \\dfrac{2x + 1}{x - 3}$?', [
+    { t: '$x = 3$ e $y = 2$', ok: true, por: 'Vertical donde el denominador se anula, $x = 3$. Horizontal: mismo grado arriba y abajo, cociente de coeficientes principales, $y = 2$.' },
+    { t: '$x = -3$ e $y = 2$', ok: false, por: 'El denominador $x - 3$ se anula en $x = 3$, no en $-3$.' },
+    { t: '$x = 3$ e $y = 0$', ok: false, por: '$y = 0$ sería si el grado de abajo fuera mayor. Aquí son iguales: $y = \\frac{2}{1} = 2$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Cuando el denominador se anula pero no hay asíntota',
+    enunciado: 'Estudiar $f(x) = \\dfrac{x^2 - 1}{x - 1}$.',
+    pasos: [
+      { t: '<strong>Dominio.</strong> El denominador se anula en $x = 1$: $\\operatorname{Dom} f = \\mathbb{R} - \\{1\\}$. Hasta aquí, como siempre.' },
+      { t: '<strong>¿Asíntota vertical?</strong> La tabla decía «donde se anula el denominador <em>y no el numerador</em>». El numerador en $x = 1$ vale $1 - 1 = 0$: también se anula. Hay que mirar más de cerca.', antes: '¿Vale cero el numerador en $x = 1$? ¿Qué decía la tabla sobre ese caso?' },
+      { t: '<strong>Factorizar y simplificar.</strong> $\\dfrac{(x-1)(x+1)}{x-1} = x + 1$ para todo $x \\ne 1$. Lejos del 1, la función es la recta $y = x + 1$.', antes: 'Factoriza el numerador. ¿Qué queda al simplificar?' },
+      { t: '<strong>La gráfica.</strong> Es la recta $y = x + 1$ con un <strong>agujero</strong> en el punto $(1, 2)$: la función no se dispara en $x = 1$, simplemente no existe ahí. No hay asíntota.', antes: '¿Qué le pasa a $f(x)$ cuando $x$ se acerca a 1: se dispara o se acerca a un número?' }
+    ],
+    cierre: 'Denominador cero no siempre significa asíntota. Si el numerador también se anula, puede ser un agujero: se factoriza y se mira qué queda. Es exactamente la discontinuidad evitable que aparecerá en límites.'
+  });
+
   p.demo({
     title: 'La función más famosa con asíntotas',
     intro: 'Mueve los parámetros de una hipérbola desplazada y observa dónde quedan las dos asíntotas.',
+    predice: 'Si pones $a = 2$ y $b = -1$, ¿dónde quedarán las dos asíntotas? Decide antes de mover: ¿la vertical es $x = 2$ o $x = -2$?',
     build: function (host, d) {
       var k = 1, a = 0, b = 0;
       var out = W.readout(host, '');
@@ -94,6 +118,7 @@ Course.topic('fn-racionales', function (p) {
   p.demo({
     title: 'El salto en el empalme',
     intro: 'Mueve el segundo trozo hasta que encaje con el primero. Cuando los dos valores coinciden, la función es continua.',
+    predice: 'El primer trozo vale $2\\cdot 1 + 1 = 3$ en el empalme. El segundo vale $1^2 + k$. ¿Qué $k$ hará que encajen? Calcúlalo antes de mover el deslizador.',
     build: function (host, d) {
       var k = 0;
       var corte = 1;
@@ -126,6 +151,13 @@ Course.topic('fn-racionales', function (p) {
     }
   });
 
+  p.trampas([
+    { e: 'Asíntota vertical en todo cero del denominador', por: 'Si el numerador también se anula ahí, puede ser un agujero. Se factoriza y se simplifica antes de decidir.' },
+    { e: 'Asíntota horizontal y oblicua a la vez', por: 'Son excluyentes: o el grado de arriba supera en uno al de abajo (oblicua) o no lo supera (horizontal).' },
+    { e: 'Dominio de $\\sqrt[3]{x - 2}$: $x \\ge 2$', por: 'La raíz cúbica admite negativos: $\\sqrt[3]{-8} = -2$. Dominio: todo $\\mathbb{R}$. La restricción es solo para índice par.' },
+    { e: 'Evaluar el trozo equivocado en el empalme', por: 'En $x = 1$ manda el trozo que lleva el «$\\le$» o el «$\\ge$». El otro solo da el límite lateral.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Casi todas las tarifas del mundo son funciones a trozos: el IRPF por tramos, la factura de la ' +
     'luz por franjas, el precio de un envío por peso, el aparcamiento por horas. Entender el punto ' +
@@ -140,6 +172,36 @@ Course.topic('fn-racionales', function (p) {
     'perfectamente legítima. Aquello obligó a redefinir qué es una función.');
 
   p.section('Practica');
+
+  p.exercise({
+    title: 'Evaluar una función a trozos',
+    level: 'basico',
+    gen: function (r) {
+      var c = r.pm(0, 4), m = r.nz(-3, 3), n = r.pm(0, 6), k = r.pm(0, 5);
+      var x = r.pick([c - 2, c - 1, c, c + 1, c + 2]);
+      var usaPrimero = x <= c;
+      return { c: c, m: m, n: n, k: k, x: x, usaPrimero: usaPrimero, val: usaPrimero ? m * x + n : x * x + k };
+    },
+    ask: function (d) {
+      return 'Sea $f(x) = \\begin{cases}' + ML.termTex(d.m, 'x', 1, true) + ML.termTex(d.n, '', 0, false) +
+        ' & \\text{si } x \\le ' + d.c + ' \\\\ x^2' + ML.termTex(d.k, '', 0, false) + ' & \\text{si } x > ' + d.c +
+        '\\end{cases}$. Calcula $f(' + d.x + ')$.';
+    },
+    fields: function (d) { return [{ name: 'v', label: 'f(' + d.x + ') =', w: 'tiny' }]; },
+    sol: function (d) { return { v: d.val }; },
+    errores: [{
+      si: function (v, d) { var otro = d.usaPrimero ? d.x * d.x + d.k : d.m * d.x + d.n; return otro !== d.val && v.v === otro; },
+      msg: 'Has usado el trozo equivocado. Mira en qué tramo cae $x$: ¿cumple $x \\le c$ o $x > c$?'
+    }],
+    hint: function (d) { return 'Primero decide qué trozo toca: ¿es $' + d.x + ' \\le ' + d.c + '$ o $' + d.x + ' > ' + d.c + '$? Después sustituye solo en ese.'; },
+    steps: function (d) {
+      return ['$x = ' + d.x + '$ cumple $' + d.x + (d.usaPrimero ? ' \\le ' : ' > ') + d.c + '$: toca el ' + (d.usaPrimero ? 'primer' : 'segundo') + ' trozo.',
+        d.usaPrimero ? '$f(' + d.x + ') = ' + d.m + '\\cdot(' + d.x + ')' + ML.termTex(d.n, '', 0, false) + ' = ' + d.val + '$'
+          : '$f(' + d.x + ') = (' + d.x + ')^2' + ML.termTex(d.k, '', 0, false) + ' = ' + d.val + '$',
+        d.x === d.c ? 'En el empalme manda el trozo con el $\\le$: por eso se usa el primero.' : ''].filter(function (s) { return s; });
+    },
+    answer: function (d) { return 'f(' + d.x + ') = ' + d.val; }
+  });
 
   p.exercise({
     title: 'Asíntota vertical y horizontal',

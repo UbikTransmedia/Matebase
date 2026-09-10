@@ -1,6 +1,11 @@
 /* Tema: Funciones lineales y afines */
 Course.topic('fn-lineales', function (p) {
 
+  p.puente('La recta ya apareció en geometría con cinco formas de escribirla. Aquí se toma solo una, ' +
+    'la explícita, y se mira como función: a cada $x$, una $y$. La proporcionalidad directa de ' +
+    'aritmética es el caso en que la recta pasa por el origen, y la pendiente es la primera versión de ' +
+    'una idea que dominará el bloque, el ritmo al que cambia una cosa respecto de otra.');
+
   p.text('La función más sencilla que existe, y también la más útil: aquella cuya gráfica es una ' +
     '<strong>recta</strong>. Se escribe siempre igual:');
 
@@ -17,6 +22,7 @@ Course.topic('fn-lineales', function (p) {
   p.demo({
     title: 'Qué hacen la pendiente y la ordenada',
     intro: 'Mueve los dos parámetros. La pendiente inclina la recta; la ordenada la sube y la baja sin cambiar su inclinación.',
+    predice: 'Pon la pendiente en 0: ¿qué recta sale? Y con pendiente $-2$ y ordenada $4$: ¿en qué punto cortará al eje X? Calcúlalo antes de mirar.',
     build: function (host, d) {
       var m = 1, n = 0;
       var out = W.readout(host, '');
@@ -60,6 +66,25 @@ Course.topic('fn-lineales', function (p) {
 
   p.formula('m = \\frac{\\Delta y}{\\Delta x} = \\frac{y_2 - y_1}{x_2 - x_1}');
 
+  p.comprueba('Una recta pasa por $(1, 2)$ y $(3, 8)$. ¿Cuál es su pendiente?', [
+    { t: '$6$', ok: false, por: '$6$ es lo que sube ($8 - 2$), pero avanza $2$ unidades, no una. Pendiente: $\\frac{6}{2} = 3$.' },
+    { t: '$3$', ok: true, por: '$\\dfrac{8 - 2}{3 - 1} = \\dfrac{6}{2} = 3$: sube 3 por cada unidad que avanza.' },
+    { t: '$\\dfrac{1}{3}$', ok: false, por: 'Es $\\Delta y$ arriba y $\\Delta x$ abajo: $\\frac{6}{2}$, no $\\frac{2}{6}$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'De dos datos a la función, y de ahí a cualquier valor',
+    enunciado: 'Un fontanero cobra 40 € por un trabajo de 1 hora y 70 € por uno de 2 horas. Suponiendo tarifa lineal, ¿cuánto cobrará por 3,5 horas?',
+    pasos: [
+      { t: '<strong>Ver los puntos.</strong> Los datos son dos puntos de la recta: $(1, 40)$ y $(2, 70)$, con las horas en el eje $x$ y los euros en el $y$.', antes: '¿Qué dos puntos de la recta dan los datos del enunciado?' },
+      { t: '<strong>Pendiente.</strong> $m = \\dfrac{70 - 40}{2 - 1} = 30$ €/hora. Es lo que cuesta cada hora de trabajo.' },
+      { t: '<strong>Ordenada.</strong> $40 = 30\\cdot 1 + n \\Rightarrow n = 10$. Es lo que cobra por presentarse, aunque no trabaje: $P(x) = 30x + 10$.', antes: 'Sustituye uno de los puntos en $y = 30x + n$. ¿Qué significa el valor de $n$ en euros?' },
+      { t: '<strong>Comprobar con el otro punto.</strong> $P(2) = 60 + 10 = 70$ ✓.' },
+      { t: '<strong>Responder.</strong> $P(3{,}5) = 30\\cdot 3{,}5 + 10 = 115$ €.', antes: 'Ya tienes la función. ¿Cuánto cuestan 3,5 horas?' }
+    ],
+    cierre: 'Dos puntos determinan la recta, y la recta responde a cualquier pregunta. Pendiente y ordenada tienen aquí nombres de la vida real: precio por hora y coste fijo.'
+  });
+
   p.note('La pendiente es la primera aparición de una idea enorme: mide <strong>el ritmo al que cambia ' +
     'una cosa respecto de otra</strong>. Cuando esa idea se aplique a curvas y no solo a rectas, se ' +
     'llamará <em>derivada</em>, y es el corazón del bloque de análisis.', 'ok', 'Hacia dónde lleva esto');
@@ -71,6 +96,7 @@ Course.topic('fn-lineales', function (p) {
   p.demo({
     title: 'La recta que pasa por dos puntos',
     intro: 'Arrastra los dos puntos y observa cómo cambian la pendiente y la ecuación.',
+    predice: 'Si colocas $B$ justo encima de $A$ (misma $x$), $\\Delta x$ vale cero. ¿Qué le pasa a la pendiente? ¿Se puede escribir esa recta como $y = mx + n$?',
     build: function (host, d) {
       var out = W.readout(host, '');
       W.plot(host, {
@@ -128,6 +154,13 @@ Course.topic('fn-lineales', function (p) {
 
   p.text('Lo de las perpendiculares tiene sentido: si una recta sube 2 por cada 1 que avanza, la ' +
     'perpendicular tiene que avanzar 2 por cada 1 que baja. Se intercambian los papeles y cambia el signo.');
+
+  p.trampas([
+    { e: '$m = \\dfrac{\\Delta x}{\\Delta y}$', por: 'La pendiente es lo que <em>sube</em> entre lo que avanza: $\\frac{\\Delta y}{\\Delta x}$. Al revés sale la de la perpendicular, con el signo cambiado.' },
+    { e: 'La perpendicular a $y = 2x$ tiene pendiente $-2$', por: 'Se invierte y se cambia el signo: $-\\frac{1}{2}$. Comprobación: $2\\cdot\\left(-\\frac{1}{2}\\right) = -1$.' },
+    { e: '$n$ es donde la recta corta al eje X', por: '$n$ es el corte con el eje <em>Y</em> (lo que vale $y$ cuando $x = 0$). El corte con X es $-\\frac{n}{m}$.' },
+    { e: 'Pendiente 3 significa «sube 3 y avanza 3»', por: 'Significa «sube 3 por cada <em>1</em> que avanza». Subir 3 y avanzar 3 sería pendiente 1.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Que dos rectas perpendiculares tengan pendientes cuyo producto es $-1$ es lo que permite a un ' +

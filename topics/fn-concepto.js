@@ -1,6 +1,11 @@
 /* Tema: Concepto de función */
 Course.topic('fn-concepto', function (p) {
 
+  p.puente('En álgebra, una expresión con $x$ era una máquina: entraba un número y salía otro. En ' +
+    'geometría, una ecuación en $x$ e $y$ era un dibujo. Este bloque junta las dos cosas bajo un ' +
+    'nombre, <strong>función</strong>, y las mira a la vez: la fórmula y su gráfica. Casi todo lo que ' +
+    'sigue —límites, derivadas, integrales— son preguntas sobre esa gráfica.', 'Por dónde empezamos');
+
   p.text('Una <strong>función</strong> es una regla que asigna a cada valor de entrada ' +
     '<strong>un único</strong> valor de salida. Es una máquina: metes un número, sale otro, y siempre ' +
     'el mismo para la misma entrada.');
@@ -12,6 +17,11 @@ Course.topic('fn-concepto', function (p) {
 
   p.note('<strong>Prueba de la recta vertical</strong>: si alguna recta vertical corta a la gráfica en ' +
     'más de un punto, eso no es una función. Por eso una circunferencia no lo es.', null, 'Cómo reconocer una función de un vistazo');
+
+  p.comprueba('¿Define $y^2 = x$ una función $y$ de $x$?', [
+    { t: 'Sí: es una ecuación con $x$ e $y$', ok: false, por: 'Tener ecuación no basta. Para $x = 4$ salen dos valores, $y = 2$ e $y = -2$: dos salidas para una entrada.' },
+    { t: 'No: a $x = 4$ le corresponden dos valores de $y$', ok: true, por: 'La recta vertical $x = 4$ corta la curva en $(4, 2)$ y $(4, -2)$. Sí sería función $y = \\sqrt{x}$, quedándose con una sola rama.' }
+  ]);
 
   p.hist('La idea de función tardó siglos en cuajar. Leibniz usó la palabra en 1673 para hablar de ' +
     'segmentos asociados a una curva; Euler la escribió como $f(x)$ en 1734 y la entendía como una ' +
@@ -40,9 +50,22 @@ Course.topic('fn-concepto', function (p) {
      ['Raíz par de un negativo', 'raíces cuadradas', '$f(x)=\\sqrt{x-3}$ → $x \\ge 3$'],
      ['Logaritmo de cero o negativo', 'logaritmos', '$f(x)=\\ln(x)$ → $x > 0$']]);
 
+  p.ejemplo({
+    title: 'Un dominio con dos prohibiciones a la vez',
+    enunciado: 'Hallar el dominio de $f(x) = \\dfrac{\\sqrt{x + 2}}{x - 3}$.',
+    pasos: [
+      { t: '<strong>Localizar las prohibiciones.</strong> Hay una raíz cuadrada (el radicando no puede ser negativo) y un denominador (no puede ser cero). Dos condiciones, y las dos tienen que cumplirse.', antes: '¿Cuántas cosas prohibidas ves en la fórmula?' },
+      { t: '<strong>La raíz.</strong> $x + 2 \\ge 0 \\Rightarrow x \\ge -2$. El $-2$ sí vale: $\\sqrt 0 = 0$ existe.', antes: '¿Vale $x = -2$? ¿Qué sale en la raíz?' },
+      { t: '<strong>El denominador.</strong> $x - 3 \\ne 0 \\Rightarrow x \\ne 3$.' },
+      { t: '<strong>Juntar.</strong> Desde $-2$ (incluido) en adelante, quitando el 3: $\\operatorname{Dom} f = [-2, 3)\\cup(3, +\\infty)$.', antes: 'Escribe en forma de intervalo «$x \\ge -2$ pero $x \\ne 3$».' }
+    ],
+    cierre: 'Corchete en $-2$ porque la raíz admite el cero; paréntesis en 3 porque el denominador no. Los dos símbolos dicen cosas distintas y ninguno es un adorno.'
+  });
+
   p.demo({
     title: 'Leer una gráfica',
     intro: 'Arrastra el punto por la curva. La gráfica es un retrato completo de la función: cada altura es un valor.',
+    predice: 'Elige $1/x$ y arrastra el punto hacia $x = 0$. Antes de hacerlo: ¿qué le pasará a la altura? ¿Y habrá algún valor exactamente en $x = 0$?',
     build: function (host, d) {
       var tipo = 'cubica';
       var fns = {
@@ -112,6 +135,7 @@ Course.topic('fn-concepto', function (p) {
   p.demo({
     title: 'Par, impar o ninguna de las dos',
     intro: 'Compara la curva con su reflejo. Si coinciden reflejando en el eje Y es par; si coinciden girando media vuelta alrededor del origen es impar.',
+    predice: 'Antes de pulsar «ninguna»: $f(x) = 0{,}2x^2 + 0{,}8x - 1$ mezcla un exponente par y uno impar. ¿Coincidirá con su reflejo? ¿Por qué no?',
     build: function (host, d) {
       var cual = 'par';
       var fns = {
@@ -160,6 +184,12 @@ Course.topic('fn-concepto', function (p) {
       'calcetines y luego los zapatos no es lo mismo que al revés.<br><br>$f^{-1}$ se lee «efe inversa» ' +
       '—no «efe elevado a menos uno», y no es $\\frac{1}{f}$— y es la función que deshace lo que hace $f$.');
 
+  p.comprueba('Con $f(x) = x + 1$ y $g(x) = x^2$, ¿cuánto vale $(g\\circ f)(2)$?', [
+    { t: '$5$', ok: false, por: 'Eso es $f(g(2)) = 4 + 1$: primero el cuadrado y luego sumar. En $g\\circ f$ se aplica <em>primero</em> $f$.' },
+    { t: '$9$', ok: true, por: 'Primero $f(2) = 3$, después $g(3) = 9$. La función de la derecha actúa primero.' },
+    { t: '$3$', ok: false, por: '$3$ es solo $f(2)$. Falta aplicar $g$ al resultado.' }
+  ]);
+
   p.text('Para calcular la inversa se escribe $y = f(x)$, se <strong>intercambian</strong> $x$ e $y$ y se ' +
     'despeja la $y$. Solo existe si $f$ no repite valores (si es [[lg-conjuntos|inyectiva]]): si dos entradas ' +
     'dieran la misma salida, la inversa no sabría a cuál volver. Y su gráfica es la de $f$ reflejada en la ' +
@@ -201,6 +231,13 @@ Course.topic('fn-concepto', function (p) {
       pinta();
     }
   });
+
+  p.trampas([
+    { e: 'Usar la recta <em>horizontal</em> para decidir si es función', por: 'Una horizontal puede cortar muchas veces (el seno la corta infinitas) y sigue siendo función. La prueba es con verticales.' },
+    { e: 'Confundir dominio y recorrido', por: 'Dominio: valores de $x$ que entran. Recorrido: valores de $y$ que salen. $f(x) = x^2$ tiene dominio $\\mathbb{R}$ y recorrido $[0, +\\infty)$.' },
+    { e: '$f^{-1}(x) = \\dfrac{1}{f(x)}$', por: 'La inversa deshace la función. Para $f(x) = 2x$, $f^{-1}(x) = \\frac{x}{2}$, no $\\frac{1}{2x}$.' },
+    { e: '$g\\circ f = f\\circ g$', por: 'Con $f(x) = x + 1$ y $g(x) = x^2$: $g(f(2)) = 9$ y $f(g(2)) = 5$. El orden cambia el resultado.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Saber leer una gráfica es una defensa ciudadana. La mayoría de los gráficos engañosos que ' +
@@ -289,19 +326,10 @@ Course.topic('fn-concepto', function (p) {
     },
     ask: function (d) {
       var tex = d.t === 1 ? ML.termTex(d.c[0], 'x', 3, true) : ML.polyTex(d.c);
-      return '¿Es $f(x) = ' + tex + '$ par, impar o ninguna de las dos cosas?' +
-        '<br><span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>par</code>, ' +
-        '<code>impar</code> o <code>ninguna</code>.</span>';
+      return '¿Es $f(x) = ' + tex + '$ par, impar o ninguna de las dos cosas?';
     },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny' }],
+    fields: [{ name: 'r', label: 'La función es', opts: [{ t: 'par', v: 'par' }, { t: 'impar', v: 'impar' }, { t: 'ninguna de las dos', v: 'ninguna' }] }],
     sol: function (d) { return { r: ['par', 'impar', 'ninguna'][d.t] }; },
-    check: function (v, d) {
-      var t = v.raw.r.trim().toLowerCase();
-      if (['par', 'impar', 'ninguna'].indexOf(t) < 0) {
-        return { ok: false, msg: 'Escribe <code>par</code>, <code>impar</code> o <code>ninguna</code>.' };
-      }
-      return t === ['par', 'impar', 'ninguna'][d.t];
-    },
     hint: function () { return 'Sustituye $x$ por $-x$. Si sale lo mismo es par; si sale todo cambiado de signo, impar.'; },
     steps: function (d) {
       if (d.t === 0) return ['Al cambiar $x$ por $-x$, el término $x^2$ no cambia (el exponente es par) y la constante tampoco.',

@@ -4,10 +4,11 @@ Course.topic('fn-funcion-integral', function (p) {
   var F = ML.F;
   function pa(n) { return n < 0 ? '(' + n + ')' : String(n); }
 
-  p.text('En [[fn-integral-def]] la integral definida era un número: el área entre $a$ y $b$. Aquí se ' +
+  p.puente('En [[fn-integral-def]] la integral definida era un número: el área entre $a$ y $b$. Aquí se ' +
     'da un paso que parece pequeño y lo cambia todo: se deja fijo el extremo de la izquierda y se ' +
     'deja <strong>moverse</strong> el de la derecha. El área deja de ser un número y se convierte en una ' +
-    'función, que va acumulando superficie a medida que avanza.');
+    'función, que va acumulando superficie a medida que avanza. Y a una función se le puede aplicar ' +
+    'todo lo del bloque: derivarla, buscar sus extremos, meterla en un límite.');
 
   p.text('Con esa función se entiende por fin por qué la regla de Barrow funciona, y aparece un tipo de ' +
     'pregunta de examen que desconcierta la primera vez: derivar algo que está escrito como una ' +
@@ -27,6 +28,7 @@ Course.topic('fn-funcion-integral', function (p) {
   p.demo({
     title: 'El área que se va acumulando',
     intro: 'Arriba, f(t) y el área entre 0 y x. Abajo, F(x), la cantidad de área acumulada. Mueve x: cuando el trozo que añades es positivo, F sube; cuando es negativo, baja; y donde f corta el eje, F tiene un máximo o un mínimo.',
+    predice: 'Cerca de $x \\approx 3{,}3$ la curva de arriba cruza el eje bajando (de positiva a negativa). ¿Qué tendrá $F$ en ese punto: un máximo o un mínimo? Muévete hasta allí y compruébalo.',
     build: function (host) {
       var x = 1.5;
       var f = function (t) { return 1.5 * Math.sin(t) + 0.2 * t; };
@@ -74,6 +76,12 @@ Course.topic('fn-funcion-integral', function (p) {
       'es exactamente $f(x)$.<br><br>Dicho de otro modo: integrar y derivar son operaciones inversas. ' +
       'La función integral es una primitiva de $f$, y de ahí sale Barrow: $\\int_a^b f = F(b) - F(a)$.');
 
+  p.comprueba('Si $F(x) = \\displaystyle\\int_0^x \\cos t\\,dt$, ¿cuánto vale $F\'(x)$?', [
+    { t: '$\\cos x$', ok: true, por: 'Teorema fundamental: la derivada de la función integral es la función de dentro, evaluada en el extremo. Sin necesidad de calcular la integral (que aquí sería $\\operatorname{sen} x$, cuya derivada es, en efecto, $\\cos x$).' },
+    { t: '$\\operatorname{sen} x$', ok: false, por: '$\\operatorname{sen} x$ es $F(x)$, la integral. Su <em>derivada</em> es $\\cos x$: derivar deshace la integral.' },
+    { t: '$\\cos x - 1$', ok: false, por: 'El $-1$ vendría de restar $F(0)$, pero eso afecta a $F$, no a $F\'$: una constante desaparece al derivar.' }
+  ]);
+
   p.text('Cuando el extremo superior no es $x$ sino una función de $x$, se añade la regla de la cadena. ' +
     'Y si los dos extremos se mueven, se resta lo que aporta el de abajo:');
 
@@ -90,6 +98,19 @@ Course.topic('fn-funcion-integral', function (p) {
     'Otra: <strong>límites con una integral dentro</strong>, como $\\lim_{x\\to 0}\\frac{1}{x^3}\\int_0^x ' +
     '\\operatorname{sen}(t^2)\\,dt$, que es $\\frac{0}{0}$ y se resuelve con [[fn-lhopital|L\'Hôpital]] ' +
     'derivando la integral con el teorema.', 'ok', 'Lo que se pregunta con esto');
+
+  p.ejemplo({
+    title: 'Los extremos de una función integral, sin integrar',
+    enunciado: 'Hallar los extremos relativos de $F(x) = \\displaystyle\\int_1^x (t^2 - 4)\\,dt$.',
+    pasos: [
+      { t: '<strong>Derivar con el teorema fundamental.</strong> $F\'(x) = x^2 - 4$. No hace falta calcular la integral: la derivada es la función de dentro con $x$ en lugar de $t$.', antes: '¿Qué vale $F\'(x)$? ¿Hace falta integrar para saberlo?' },
+      { t: '<strong>Puntos críticos.</strong> $x^2 - 4 = 0 \\Rightarrow x = \\pm 2$.' },
+      { t: '<strong>Clasificar.</strong> $F\'\'(x) = 2x$: en $x = -2$ vale $-4 < 0$, máximo; en $x = 2$ vale $4 > 0$, mínimo. También se ve con el signo de $F\'$: positiva, negativa entre $-2$ y $2$, positiva.', antes: '¿Con qué segunda derivada se decide? Es la derivada de $x^2 - 4$.' },
+      { t: '<strong>Los valores, ahora sí integrando.</strong> $F(x) = \\left[\\frac{t^3}{3} - 4t\\right]_1^x = \\frac{x^3}{3} - 4x + \\frac{11}{3}$. Así que $F(2) = \\frac{8}{3} - 8 + \\frac{11}{3} = -\\frac{5}{3}$ y $F(-2) = -\\frac{8}{3} + 8 + \\frac{11}{3} = 9$.', antes: 'Para dar las coordenadas de los extremos sí hace falta $F$. Calcúlala con Barrow.' },
+      { t: '<strong>Comprobar.</strong> Derivando la $F$ obtenida: $x^2 - 4$ ✓, la misma que dio el teorema. Y $F(1) = \\frac{1}{3} - 4 + \\frac{11}{3} = 0$ ✓, como debe ser en el extremo inferior.' }
+    ],
+    cierre: 'Para saber <em>dónde</em> están los extremos basta el teorema fundamental; para saber <em>cuánto valen</em> hay que integrar. El examen suele pedir solo lo primero.'
+  });
 
   p.hist('La idea de que el área y la tangente son problemas inversos la intuyeron varios matemáticos ' +
     'del siglo XVII —James Gregory y el propio Isaac Barrow la dejaron escrita en forma geométrica—, ' +
@@ -113,6 +134,7 @@ Course.topic('fn-funcion-integral', function (p) {
   p.demo({
     title: 'Allanar la curva',
     intro: 'La curva y un rectángulo con la misma área. Mueve el extremo b: la altura del rectángulo es el valor medio de f, y siempre hay algún punto c donde la curva pasa exactamente por esa altura.',
+    predice: 'En $[0, 3]$ la función va de $f(0) = 0{,}5$ a $f(3) = 3{,}2$. El valor medio estará entre los dos: ¿más cerca de $0{,}5$, de $3{,}2$ o de la mitad, $1{,}85$? La curva es cóncava hacia arriba.',
     build: function (host) {
       var b = 3;
       var f = function (x) { return 0.3 * x * x + 0.5; };
@@ -201,6 +223,13 @@ Course.topic('fn-funcion-integral', function (p) {
     'pero no pintar por fuera. El resultado escandalizó a los filósofos de la época, porque parecía ' +
     'demostrar que algo infinito cabe en algo finito, y todavía se usa como ejemplo de lo contraria a la ' +
     'intuición que puede ser una integral.', 'La trompeta de Torricelli');
+
+  p.trampas([
+    { e: '$F\'(x) = f(t)$', por: 'La $t$ es la variable muda de dentro y desaparece al integrar. La derivada es $f(x)$: la función de dentro evaluada en el extremo.' },
+    { e: 'Olvidar $g\'(x)$ cuando el extremo es $g(x)$', por: 'Es la regla de la cadena: $\\frac{d}{dx}\\int_0^{x^2} f = f(x^2)\\cdot 2x$. Sin el $2x$ el resultado es incorrecto.' },
+    { e: 'Dar la integral como valor medio', por: 'El valor medio es la integral <em>dividida</em> por la longitud del intervalo. Una función que vale 2 en todo $[0, 5]$ tiene integral 10 y valor medio 2.' },
+    { e: 'Volumen de revolución sin el cuadrado o sin $\\pi$', por: 'Cada rodaja es un disco de área $\\pi f(x)^2$. Los dos errores dan volúmenes de otro cuerpo.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

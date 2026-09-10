@@ -4,10 +4,11 @@ Course.topic('fn-derivabilidad', function (p) {
   function pa(n) { return n < 0 ? '(' + n + ')' : String(n); }
   function polTex(c) { return ML.polyTex(c); }
 
-  p.text('En [[fn-derivadas]] se derivaba sin preguntar si se podía. Casi siempre se puede: los ' +
+  p.puente('En [[fn-derivadas]] se derivaba sin preguntar si se podía. Casi siempre se puede: los ' +
     'polinomios, las exponenciales, los senos y los logaritmos son derivables en todo su dominio. ' +
     'Pero hay puntos donde la derivada no existe, y no por un problema de cálculo, sino porque la ' +
-    'gráfica tiene un <strong>pico</strong>: llega con una pendiente y sale con otra.');
+    'gráfica tiene un <strong>pico</strong>: llega con una pendiente y sale con otra. La herramienta ' +
+    'para detectarlo es la de los límites laterales, ahora aplicada al cociente incremental.');
 
   p.text('Donde más se ve es en las funciones <strong>definidas a trozos</strong>, que es donde cae ' +
     'la pregunta de examen: <em>«halla $a$ y $b$ para que la función sea derivable»</em>. Este tema ' +
@@ -34,6 +35,7 @@ Course.topic('fn-derivabilidad', function (p) {
   p.demo({
     title: 'Un empalme con pico o sin pico',
     intro: 'A la izquierda de x = 1 la función es x²; a la derecha, una recta que sale del mismo punto con la pendiente m que elijas. Siempre es continua. Solo es derivable cuando la pendiente de salida coincide con la de llegada.',
+    predice: 'La parábola $x^2$ llega a $x = 1$ con pendiente $2\\cdot 1 = 2$. ¿Qué valor de $m$ hará que el empalme sea suave? ¿Y con $m = 0$, qué se verá?',
     build: function (host) {
       var m = 0.5;
       var out = W.readout(host, '');
@@ -80,6 +82,11 @@ Course.topic('fn-derivabilidad', function (p) {
     '<strong>Salto o asíntota</strong>: ni siquiera es continua, así que tampoco derivable.'
   ]);
 
+  p.comprueba('$f(x) = \\begin{cases} x^2 & x \\le 1 \\\\ 2x + 3 & x > 1 \\end{cases}$. Las derivadas de los trozos en $x = 1$ valen 2 y 2. ¿Es derivable en $x = 1$?', [
+    { t: 'Sí: las derivadas laterales coinciden', ok: false, por: 'Antes de mirar derivadas hay que mirar la continuidad: por la izquierda vale $1$ y por la derecha $5$. Hay un salto, y con salto no hay derivada, aunque los trozos tengan la misma pendiente.' },
+    { t: 'No: no es continua en $x = 1$', ok: true, por: 'Izquierda $1^2 = 1$, derecha $2 + 3 = 5$: salto. Derivable implica continua, así que no puede ser derivable. Las pendientes iguales de los trozos no significan nada si no se tocan.' }
+  ]);
+
   p.hist('Durante siglos se dio por hecho que una curva continua tenía que ser derivable salvo en unos ' +
     'pocos picos sueltos: nadie sabía dibujar otra cosa. En 1872 Karl Weierstrass presentó en la ' +
     'Academia de Berlín una función, hecha con una suma infinita de cosenos cada vez más apretados, que ' +
@@ -107,9 +114,23 @@ Course.topic('fn-derivabilidad', function (p) {
     'de los trozos pueden coincidir y la función no ser derivable, porque hay un salto. Por eso la ' +
     'continuidad va siempre primero.', 'warn', 'Continuidad antes que derivabilidad, siempre');
 
+  p.ejemplo({
+    title: 'La receta, aplicada entera',
+    enunciado: 'Hallar $a$ y $b$ para que $f(x) = \\begin{cases} ax^2 + b & x < 2 \\\\ 3x - 1 & x \\ge 2 \\end{cases}$ sea derivable en $x = 2$.',
+    pasos: [
+      { t: '<strong>Continuidad en $x = 2$.</strong> Izquierda: $4a + b$. Derecha: $3\\cdot 2 - 1 = 5$. Primera ecuación: $4a + b = 5$.', antes: '¿Qué tienen que valer los dos trozos en $x = 2$ para que no haya salto?' },
+      { t: '<strong>Derivadas de los trozos.</strong> $(ax^2 + b)\' = 2ax$ y $(3x - 1)\' = 3$.' },
+      { t: '<strong>Derivadas laterales.</strong> Como vamos a exigir continuidad, se pueden evaluar los trozos derivados: $f\'(2^-) = 4a$ y $f\'(2^+) = 3$. Segunda ecuación: $4a = 3$.', antes: '¿Con qué condición es legítimo sustituir $x = 2$ en las derivadas de los trozos?' },
+      { t: '<strong>Resolver.</strong> $a = \\dfrac{3}{4}$, y entonces $b = 5 - 4\\cdot\\dfrac{3}{4} = 2$.', antes: 'Resuelve el sistema $4a + b = 5$, $4a = 3$.' },
+      { t: '<strong>Comprobar.</strong> Con $a = \\frac{3}{4}$, $b = 2$: en $x = 2$ el trozo izquierdo vale $3 + 2 = 5$ ✓ y su pendiente $2\\cdot\\frac{3}{4}\\cdot 2 = 3$ ✓. Los trozos se tocan y con la misma inclinación.' }
+    ],
+    cierre: 'Dos condiciones, dos ecuaciones, dos incógnitas. El orden importa: la continuidad primero, porque es la que autoriza a usar las derivadas de los trozos en el segundo paso.'
+  });
+
   p.demo({
     title: 'Encontrar los parámetros que sueldan los trozos',
     intro: 'f(x) = ax² + 1 si x ≤ 1, y bx − 1 si x > 1. Mueve a y b. La continuidad pide que los dos trozos lleguen al mismo punto; la derivabilidad, que lleguen con la misma pendiente. Solo un par de valores consigue las dos cosas.',
+    predice: 'Con $a = 1$ y $b = 2$: ¿son continuos los trozos en $x = 1$? Calcula $a + 1$ y $b - 1$. ¿Y qué $b$ haría falta para la continuidad si $a = 2$?',
     build: function (host) {
       var a = 1, b = 2;
       var out = W.readout(host, '');
@@ -144,6 +165,13 @@ Course.topic('fn-derivabilidad', function (p) {
     'el diseño de carrocerías y de tipografías: las curvas se construyen a trozos, con polinomios, y se ' +
     'exige que en cada empalme coincidan el valor y la derivada, a veces también la segunda, para que ' +
     'el reflejo de la luz no se quiebre.');
+
+  p.trampas([
+    { e: 'Igualar las derivadas de los trozos sin comprobar la continuidad', por: 'Si hay un salto, la función no es derivable aunque los trozos tengan la misma pendiente. La continuidad va primero.' },
+    { e: '«Continua, luego derivable»', por: 'Es la implicación al revés. $|x|$ es continua en 0 y tiene un pico. Derivable ⟹ continua, no al contrario.' },
+    { e: 'Derivar $|x^2 - 4|$ como $2x$', por: 'El valor absoluto cambia el signo por tramos: entre $-2$ y $2$ la función es $4 - x^2$, con derivada $-2x$. Hay que quitar el valor absoluto tramo a tramo.' },
+    { e: 'Olvidar que $\\sqrt[3]{x}$ no es derivable en 0', por: 'Es continua, pero su derivada $\\frac{1}{3\\sqrt[3]{x^2}}$ se dispara: tangente vertical.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

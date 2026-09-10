@@ -1,9 +1,11 @@
 /* Tema: Derivadas */
 Course.topic('fn-derivadas', function (p) {
 
-  p.text('Ya sabes calcular la pendiente de una recta: $m = \\frac{\\Delta y}{\\Delta x}$. Pero una ' +
-    'curva no tiene una pendiente, tiene una <em>distinta en cada punto</em>. La <strong>derivada</strong> ' +
-    'es la respuesta a la pregunta: ¿cuál es la pendiente exacta <em>aquí</em>?');
+  p.puente('Ya sabes calcular la pendiente de una recta: $m = \\frac{\\Delta y}{\\Delta x}$. Y sabes ' +
+    'resolver la indeterminación $\\frac{0}{0}$ simplificando un factor. Las dos cosas se juntan ' +
+    'aquí: una curva no tiene una pendiente, tiene una <em>distinta en cada punto</em>, y para ' +
+    'calcularla hay que hacer un cociente de incrementos con los dos incrementos tendiendo a cero. La ' +
+    '<strong>derivada</strong> es la respuesta a la pregunta: ¿cuál es la pendiente exacta <em>aquí</em>?');
 
   p.section('De la secante a la tangente');
 
@@ -56,6 +58,7 @@ Course.topic('fn-derivadas', function (p) {
   p.demo({
     title: 'La secante se convierte en tangente',
     intro: 'Acerca el segundo punto al primero con el deslizador. Mira cómo la recta secante gira hasta apoyarse en la curva.',
+    predice: 'Con $f(x) = \\frac{1}{2}x^2$, $a = 1$ y $h = 2$: la secante une $(1, 0{,}5)$ con $(3, 4{,}5)$. Calcula su pendiente. Al reducir $h$, ¿bajará hacia 1 o subirá?',
     build: function (host, d) {
       var h = 2, a = 1;
       var f = function (x) { return 0.5 * x * x; };
@@ -162,6 +165,12 @@ Course.topic('fn-derivadas', function (p) {
     'con $f=g=x$: $(x\\cdot x)\' = (x^2)\' = 2x$, mientras que $1\\cdot 1 = 1$. La regla del producto ' +
     'tiene esos dos sumandos por una razón.', 'warn');
 
+  p.comprueba('¿Cuál es la derivada de $f(x) = x^2\\cdot e^x$?', [
+    { t: '$2x\\cdot e^x$', ok: false, por: 'Es el producto de las derivadas, y eso no vale. Faltan los dos sumandos de la regla del producto.' },
+    { t: '$2x\\,e^x + x^2 e^x$', ok: true, por: '$u\'v + uv\'$ con $u = x^2$ y $v = e^x$: $2x\\cdot e^x + x^2\\cdot e^x$. Se puede sacar factor común: $e^x(2x + x^2)$.' },
+    { t: '$2x + e^x$', ok: false, por: 'Eso sería derivar una <em>suma</em>. Aquí hay un producto: cada factor aporta un sumando en el que solo él está derivado.' }
+  ]);
+
   p.text('La razón se ve con un rectángulo. Imagina uno cuyos lados miden $f$ y $g$ y que va ' +
     'creciendo con el tiempo; su área es $f\\cdot g$. Si en un instante el lado $f$ se estira un ' +
     'poquito, el área gana una tira de altura $g$; si el que se estira es $g$, gana una tira de ' +
@@ -197,9 +206,22 @@ Course.topic('fn-derivadas', function (p) {
     'hay factor que multiplicar. Por eso $(\\operatorname{sen} x)\' = \\cos x$ pero ' +
     '$(\\operatorname{sen} 2x)\' = 2\\cos 2x$.', 'ok', 'Cómo no olvidarse');
 
+  p.ejemplo({
+    title: 'Una derivada con tres reglas a la vez',
+    enunciado: 'Derivar $f(x) = \\dfrac{\\operatorname{sen}(3x)}{x^2 + 1}$.',
+    pasos: [
+      { t: '<strong>Ver la estructura.</strong> Por fuera es un <em>cociente</em>: $u = \\operatorname{sen}(3x)$ arriba y $v = x^2 + 1$ abajo. Y $u$ es a su vez una composición: seno de algo que no es $x$.', antes: '¿Qué es lo último que se hace al calcular $f(x)$: una suma, un producto, un cociente?' },
+      { t: '<strong>Derivar las piezas.</strong> $u\' = \\cos(3x)\\cdot 3$ por la regla de la cadena (lo de dentro es $3x$, no $x$). $v\' = 2x$.', antes: 'Deriva $\\operatorname{sen}(3x)$. ¿Por qué factor hay que multiplicar?' },
+      { t: '<strong>Regla del cociente.</strong> $f\' = \\dfrac{u\'v - uv\'}{v^2} = \\dfrac{3\\cos(3x)\\,(x^2 + 1) - \\operatorname{sen}(3x)\\cdot 2x}{(x^2 + 1)^2}$.', antes: 'Monta $\\frac{u\'v - uv\'}{v^2}$: ¿qué va restando a qué?' },
+      { t: '<strong>Comprobar en un punto.</strong> En $x = 0$: $f\'(0) = \\dfrac{3\\cdot 1\\cdot 1 - 0}{1} = 3$. Tiene sentido: cerca de 0, $\\operatorname{sen}(3x) \\approx 3x$ y el denominador vale casi 1, así que $f$ se parece a $3x$, de pendiente 3.' }
+    ],
+    cierre: 'Se trabaja de fuera hacia dentro: primero se reconoce la operación exterior (aquí el cociente), y cada pieza se deriva con su propia regla. No hay que hacerlo todo de golpe.'
+  });
+
   p.demo({
     title: 'Una función y su derivada, a la vez',
     intro: 'Arriba la función, abajo su derivada. Fíjate en la relación: donde la función tiene un máximo o un mínimo, la derivada vale cero.',
+    predice: 'Elige «parábola», $f(x) = 0{,}4x^2 - 1$. Antes de arrastrar: ¿en qué $x$ estará plana? ¿Y a la izquierda de ese punto, la derivada será positiva o negativa?',
     build: function (host, d) {
       var cual = 'cubica';
       var fns = {
@@ -308,7 +330,7 @@ Course.topic('fn-derivadas', function (p) {
     'teorema de Rolle',
     'Se dice: <em>«si efe de a es igual a efe de be, entonces existe un ce, perteneciente al ' +
       'intervalo abierto a be, tal que efe prima de ce es igual a cero»</em>.<br><br>El símbolo ' +
-      '$\\exists$ es el cuantificador existencial del bloque 0: «existe al menos un». Los dos puntos ' +
+      '$\\exists$ es el cuantificador existencial de [[lg-proposiciones|la lógica]]: «existe al menos un». Los dos puntos ' +
       'se leen «tal que».<br><br>Fíjate en lo que <strong>no</strong> dice: no dice cuántos hay, ni ' +
       'dónde están, ni cómo encontrarlos. Solo que hay al menos uno. Es un teorema de existencia, y ' +
       'aun así resuelve muchas cosas.');
@@ -336,6 +358,7 @@ Course.topic('fn-derivadas', function (p) {
   p.demo({
     title: 'La tangente paralela a la cuerda',
     intro: 'La recta gris une los dos extremos. Mueve los extremos y busca dónde la tangente (en color) queda paralela a ella: el teorema garantiza que ese punto existe siempre.',
+    predice: 'Si colocas los dos extremos a la misma altura, la cuerda queda horizontal. ¿Qué pendiente tendrá entonces la tangente paralela? ¿De qué teorema es eso?',
     build: function (host, d) {
       var f = function (x) { return 0.35 * x * x * x - 1.6 * x + 0.5; };
       var fp = function (x) { return 1.05 * x * x - 1.6; };
@@ -404,6 +427,13 @@ Course.topic('fn-derivadas', function (p) {
   p.note('Estos dos resultados vuelven en [[fn-taylor|el tema de <em>polinomios de Taylor</em>]], donde el valor ' +
     'medio es lo que produce el punto misterioso $c$ que aparece en la fórmula del error. Si allí te ' +
     'preguntas de dónde sale ese $c$, la respuesta está aquí.', null, 'Dónde se usa esto');
+
+  p.trampas([
+    { e: '$(f\\cdot g)\' = f\'\\cdot g\'$', por: 'Con $f = g = x$: $(x^2)\' = 2x$, pero $1\\cdot 1 = 1$. Hacen falta los dos sumandos $f\'g + fg\'$.' },
+    { e: '$(\\operatorname{sen} 5x)\' = \\cos 5x$', por: 'Falta la derivada de lo de dentro: $5\\cos 5x$. Lo de dentro no es $x$.' },
+    { e: '$(e^{x^2})\' = e^{x^2}$', por: '«La exponencial es su propia derivada» solo si el exponente es $x$. Aquí es $x^2$: $(e^{x^2})\' = 2x\\,e^{x^2}$.' },
+    { e: '$(x^n)\' = n\\,x^n$', por: 'El exponente baja <em>y disminuye en uno</em>: $n\\,x^{n-1}$. $(x^3)\' = 3x^2$, no $3x^3$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

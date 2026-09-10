@@ -1,6 +1,11 @@
 /* Tema: Polinomios de Taylor */
 Course.topic('fn-taylor', function (p) {
 
+  p.puente('La recta tangente de [[fn-derivadas]] sustituía una curva por una recta cerca de un ' +
+    'punto. Las series de [[fn-series]] enseñaron cuándo una suma infinita converge. Este tema junta ' +
+    'las dos cosas: sustituye una función por un polinomio cada vez mejor, y pregunta hasta dónde se ' +
+    'puede confiar en él.');
+
   p.text('Coge una calculadora y pide $\\operatorname{sen}(0{,}3)$. Responde en un parpadeo: ' +
     '$0{,}29552020666\\dots$ Ahora piensa qué acaba de hacer. No tiene dentro un triángulo que medir, ' +
     'ni una tabla con todos los senos posibles —son infinitos—. Lo único que una máquina sabe hacer ' +
@@ -86,6 +91,12 @@ Course.topic('fn-taylor', function (p) {
     'es exactamente el factorial, y por eso la fórmula general lleva un $n!$ debajo: está ' +
     'deshaciendo lo que la derivada acaba de multiplicar.', 'ok', 'De dónde sale el factorial');
 
+  p.comprueba('Para $f(x) = e^x$ en $a = 0$, ¿cuánto vale el coeficiente $c_2$ del término en $x^2$?', [
+    { t: '$1$', ok: false, por: '$f\'\'(0) = e^0 = 1$, sí, pero el coeficiente lleva el $2!$ debajo: $c_2 = \\frac{1}{2}$. El 2 deshace lo que la derivada multiplicó.' },
+    { t: '$\\dfrac{1}{2}$', ok: true, por: '$c_2 = \\dfrac{f\'\'(0)}{2!} = \\dfrac{1}{2}$. Por eso $e^x \\approx 1 + x + \\frac{x^2}{2}$.' },
+    { t: '$2$', ok: false, por: 'El 2 divide, no multiplica: al derivar dos veces $c_2 x^2$ sale $2c_2$, y eso tiene que valer $f\'\'(0) = 1$.' }
+  ]);
+
   p.text('Repitiendo el mismo razonamiento para cada grado —derivar $k$ veces, sustituir en $a$, ' +
     'despejar— sale la fórmula general, que ya no debería sorprender:');
 
@@ -107,9 +118,23 @@ Course.topic('fn-taylor', function (p) {
   p.formula('P_n(x) = f(0) + f\'(0)\\,x + \\frac{f\'\'(0)}{2!}x^2 + \\frac{f\'\'\'(0)}{3!}x^3 + \\dots + \\frac{f^{(n)}(0)}{n!}x^n',
     'el caso a = 0');
 
+  p.ejemplo({
+    title: 'Un polinomio de Taylor de grado 3, con sus factoriales',
+    enunciado: 'Hallar el polinomio de Taylor de grado 3 de $f(x) = \\ln(1 + x)$ en $a = 0$ y usarlo para aproximar $\\ln(1{,}1)$.',
+    pasos: [
+      { t: '<strong>Las derivadas en 0.</strong> $f(x) = \\ln(1+x) \\Rightarrow f(0) = 0$. $f\'(x) = \\dfrac{1}{1+x} \\Rightarrow f\'(0) = 1$. $f\'\'(x) = -\\dfrac{1}{(1+x)^2} \\Rightarrow f\'\'(0) = -1$. $f\'\'\'(x) = \\dfrac{2}{(1+x)^3} \\Rightarrow f\'\'\'(0) = 2$.', antes: 'Deriva tres veces y sustituye $x = 0$ en cada una.' },
+      { t: '<strong>Los coeficientes, con el factorial.</strong> $c_0 = 0$, $c_1 = 1$, $c_2 = \\dfrac{-1}{2!} = -\\dfrac{1}{2}$, $c_3 = \\dfrac{2}{3!} = \\dfrac{2}{6} = \\dfrac{1}{3}$.', antes: '$f\'\'\'(0) = 2$. ¿Por qué el coeficiente del $x^3$ no es 2 sino $\\frac{1}{3}$?' },
+      { t: '<strong>El polinomio.</strong> $P_3(x) = x - \\dfrac{x^2}{2} + \\dfrac{x^3}{3}$. Fíjate en el patrón: los signos se alternan y los denominadores son $1, 2, 3$, no factoriales, porque las derivadas ya traían $(k-1)!$ que se cancela con el $k!$.' },
+      { t: '<strong>Aproximar.</strong> $\\ln(1{,}1) = f(0{,}1) \\approx 0{,}1 - \\dfrac{0{,}01}{2} + \\dfrac{0{,}001}{3} = 0{,}1 - 0{,}005 + 0{,}000333 = 0{,}095333$.', antes: 'Sustituye $x = 0{,}1$. ¿Cuántas cifras esperas acertar?' },
+      { t: '<strong>Comparar.</strong> El valor real es $\\ln(1{,}1) = 0{,}095310$. Error: $0{,}000023$, menor que el siguiente término, $\\dfrac{0{,}1^4}{4} = 0{,}000025$.' }
+    ],
+    cierre: 'Cuatro cifras correctas con tres términos, a una décima del punto de apoyo. Y la cota del error salió gratis: el primer término omitido, porque la serie alterna.'
+  });
+
   p.demo({
     title: 'El polinomio abrazando a la función',
     intro: 'La curva negra es la función; la de color, su polinomio de Taylor. Sube el grado y mira cómo el polinomio se va pegando a la curva, primero cerquita del punto y luego cada vez más lejos. Mueve también el punto donde se apoya.',
+    predice: 'Con $\\operatorname{sen} x$ y grado 3, el polinomio es $x - \\frac{x^3}{6}$. ¿Hasta qué $x$ crees que se mantendrá pegado a la curva: hasta 1, hasta 2, hasta 3?',
     build: function (host) {
       var grado = 1, a = 0, cual = 'sen';
       var fns = {
@@ -215,6 +240,7 @@ Course.topic('fn-taylor', function (p) {
   p.demo({
     title: 'Tu calculadora por dentro',
     intro: 'Esto es, literalmente, lo que ocurre cuando pides un seno. Elige el ángulo, añade términos y mira cómo el resultado se clava en el valor real mientras la cota del error se desploma.',
+    predice: 'Con $x = 0{,}3$ y dos términos, el primer término omitido es $\\frac{0{,}3^5}{120} \\approx 2\\cdot 10^{-5}$. ¿Cuántos términos crees que hacen falta para diez cifras correctas: 3, 5 u 8?',
     build: function (host) {
       var x = 0.3, n = 1;
       var out = W.readout(host, '');
@@ -340,6 +366,13 @@ Course.topic('fn-taylor', function (p) {
     'i\\operatorname{sen}\\theta$, y con $\\theta = \\pi$ sale la identidad famosa. La conexión entre ' +
     'la exponencial y la trigonometría, que parecía una coincidencia, es que sus tres series están ' +
     'hechas de las mismas piezas.');
+
+  p.trampas([
+    { e: '$c_k = f^{(k)}(a)$, sin el factorial', por: 'Al derivar $k$ veces $x^k$ sale $k!$; para compensarlo, $c_k = \\frac{f^{(k)}(a)}{k!}$. Sin él, el polinomio de $e^x$ sería $1 + x + x^2 + \\cdots$, que crece mucho más deprisa.' },
+    { e: 'Usar la serie de $\\frac{1}{1-x}$ en $x = 2$', por: 'Fuera del radio de convergencia (aquí $|x| < 1$) la serie no aproxima mal: no converge a nada. $1 + 2 + 4 + \\cdots$ no es $-1$.' },
+    { e: '«Grado 5 del seno son cinco términos»', por: 'El seno solo tiene potencias impares: el polinomio de grado 5 es $x - \\frac{x^3}{6} + \\frac{x^5}{120}$, tres términos.' },
+    { e: 'Creer que lejos del punto de apoyo la aproximación es igual de buena', por: 'El error crece como $|x - a|^{n+1}$. A distancia 3 es $3^{n+1}$ veces peor que a distancia 1.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

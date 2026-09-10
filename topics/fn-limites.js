@@ -1,8 +1,12 @@
 /* Tema: Límites y continuidad */
 Course.topic('fn-limites', function (p) {
 
-  p.text('Aquí empieza el <strong>cálculo infinitesimal</strong>, y con él la parte de las matemáticas ' +
-    'que describe el cambio. Todo se apoya en una sola idea: qué le pasa a una función cuando su ' +
+  p.puente('Ya has visto límites sin llamarlos así: la sucesión $\\frac{1}{n}$ que se acerca a cero, la ' +
+    'asíntota a la que una función racional se pega sin tocarla, el agujero de $\\frac{x^2 - 1}{x - 1}$. ' +
+    'Este tema les da nombre y reglas, y con ellas empieza el <strong>cálculo infinitesimal</strong>, la ' +
+    'parte de las matemáticas que describe el cambio.');
+
+  p.text('Todo se apoya en una sola idea: qué le pasa a una función cuando su ' +
     'entrada <em>se acerca</em> a un valor, sin llegar nunca a él.');
 
   p.formula('\\lim_{x \\to a} f(x) = L', 'se lee: el límite de f(x) cuando x tiende a a es L',
@@ -29,6 +33,7 @@ Course.topic('fn-limites', function (p) {
   p.demo({
     title: 'Acercarse a un punto que no existe',
     intro: 'Esta función no está definida en x = 2: hay un agujero. Pero al acercarse por los dos lados, los valores se aproximan claramente a un número. Ese número es el límite.',
+    predice: 'En $x = 2$ la fórmula da $\\frac{0}{0}$. Calcula a mano $f(1{,}9)$ y $f(2{,}1)$: ¿a qué número parecen apuntar? ¿Coincide con lo que da $x + 2$?',
     build: function (host, d) {
       var dist = 1;
       var f = function (x) { return (x * x - 4) / (x - 2); };   // = x+2 salvo en x=2
@@ -94,6 +99,12 @@ Course.topic('fn-limites', function (p) {
   p.text('Si no coinciden, la función pega un salto y el límite no existe. Es lo que pasa, por ' +
     'ejemplo, con las tarifas por tramos o con la función parte entera.');
 
+  p.comprueba('$f(x) = \\begin{cases} x + 1 & x < 2 \\\\ 5 & x = 2 \\\\ x + 1 & x > 2 \\end{cases}$. ¿Cuánto vale $\\lim_{x\\to 2} f(x)$?', [
+    { t: '$5$', ok: false, por: '$5$ es $f(2)$, el valor <em>en</em> el punto. El límite mira a dónde se dirige la función al acercarse, y por los dos lados se acerca a $2 + 1 = 3$.' },
+    { t: '$3$', ok: true, por: 'Por la izquierda y por la derecha la función es $x + 1$, que tiende a 3. Que en el punto valga 5 no cambia el límite: es un punto suelto fuera de sitio.' },
+    { t: 'No existe', ok: false, por: 'Los dos laterales coinciden (los dos dan 3), así que el límite existe. Lo que no coincide es el límite con $f(2)$: la función no es continua, pero el límite sí existe.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.section('Cómo se calculan');
 
@@ -114,6 +125,19 @@ Course.topic('fn-limites', function (p) {
      ['$\\infty - \\infty$', 'operar (denominador común o conjugado) hasta convertirlo en un cociente'],
      ['$0\\cdot\\infty$', 'escribir el producto como un cociente'],
      ['$1^{\\infty}$', 'usar el número $e$: $\\lim f^{\\,g} = e^{\\lim g\\,(f - 1)}$']]);
+
+  p.ejemplo({
+    title: 'Un $\\frac{0}{0}$ con raíz: el conjugado',
+    enunciado: 'Calcular $\\displaystyle\\lim_{x\\to 4}\\frac{\\sqrt{x} - 2}{x - 4}$.',
+    pasos: [
+      { t: '<strong>Sustituir.</strong> $\\dfrac{\\sqrt 4 - 2}{4 - 4} = \\dfrac{0}{0}$: indeterminación. Hay que transformar.', antes: 'Sustituye $x = 4$. ¿Qué sale?' },
+      { t: '<strong>Multiplicar por el conjugado.</strong> Arriba y abajo por $\\sqrt x + 2$: el numerador se convierte en $(\\sqrt x - 2)(\\sqrt x + 2) = x - 4$, una suma por diferencia.', antes: 'Aquí no se puede factorizar un polinomio. ¿Qué identidad notable hace desaparecer una raíz?' },
+      { t: '<strong>Simplificar.</strong> $\\dfrac{x - 4}{(x - 4)(\\sqrt x + 2)} = \\dfrac{1}{\\sqrt x + 2}$ para $x \\ne 4$. El factor que daba el cero se ha ido.' },
+      { t: '<strong>Sustituir ahora sí.</strong> $\\dfrac{1}{\\sqrt 4 + 2} = \\dfrac{1}{4}$.', antes: 'Ya no hay indeterminación. ¿Cuánto vale?' },
+      { t: '<strong>Comprobar con un valor cercano.</strong> $x = 4{,}01$: $\\dfrac{2{,}0025 - 2}{0{,}01} = 0{,}2498 \\approx \\dfrac{1}{4}$ ✓.' }
+    ],
+    cierre: 'Con polinomios se factoriza; con raíces se multiplica por el conjugado. Las dos cosas hacen lo mismo: sacar a la vista el factor $(x - a)$ que produce el cero, para poder cancelarlo.'
+  });
 
   p.sub('La indeterminación $1^\\infty$ y el número $e$');
 
@@ -176,6 +200,7 @@ Course.topic('fn-limites', function (p) {
   p.demo({
     title: 'Comportamiento en el infinito',
     intro: 'Aleja la ventana y observa hacia dónde tiende cada función. La comparación de grados se ve directamente en el dibujo.',
+    predice: 'Con grados iguales, $\\frac{3x^2 - 1}{2x^2 + x + 5}$: en $x = 10$ vale $1{,}39$ y en $x = 100$, $1{,}49$. ¿Hacia qué número va? Decide antes de alejar la vista.',
     build: function (host, d) {
       var cual = 'igual';
       var fns = {
@@ -246,6 +271,13 @@ Course.topic('fn-limites', function (p) {
     [['Evitable', 'el límite existe pero $f(a)$ no, o no coincide', 'un agujero en la gráfica'],
      ['De salto', 'los laterales existen pero son distintos', 'un escalón'],
      ['Asintótica', 'algún lateral es infinito', 'la curva se dispara']]);
+
+  p.trampas([
+    { e: '«Sale $\\frac{0}{0}$, luego el límite no existe»', por: '$\\frac{0}{0}$ no es una respuesta: es una señal de que hay que trabajar más. El límite puede valer cualquier cosa.' },
+    { e: '«Sale $\\frac{0}{0}$, luego el límite vale 0» (o 1)', por: 'Mismo error con otra cara. $\\frac{x^2 - 4}{x - 2}$ da $\\frac{0}{0}$ en 2 y su límite es 4.' },
+    { e: 'Dar $f(a)$ como límite cuando hay un salto', por: 'Si los laterales no coinciden, el límite no existe, valga lo que valga $f(a)$.' },
+    { e: '$\\lim_{x\\to\\infty}\\dfrac{2x + 100}{x} = $ «algo grande por el 100»', por: 'En el infinito manda el término de mayor grado. El 100 es ruido: el límite es 2.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Una función discontinua es un salto, y en ingeniería los saltos rompen cosas. El perfil de una ' +

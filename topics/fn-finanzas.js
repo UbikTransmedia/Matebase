@@ -1,11 +1,11 @@
 /* Tema: Matemática financiera */
 Course.topic('fn-finanzas', function (p) {
 
-  p.text('Este tema no introduce ninguna matemática nueva. Usa la progresión geométrica que acabas ' +
-    'de ver y poco más. Lo que sí hace es contestar preguntas que te vas a encontrar de verdad: por ' +
-    'qué dos préstamos con el mismo interés cuestan distinto, qué significa exactamente el número ' +
-    'grande del anuncio, y por qué alargar la hipoteca cinco años parece buena idea y cuesta ' +
-    'veinte mil euros.');
+  p.puente('Este tema no introduce ninguna matemática nueva. Usa la progresión geométrica que acabas ' +
+    'de ver, los porcentajes de aritmética y la exponencial, y poco más. Lo que sí hace es contestar ' +
+    'preguntas que te vas a encontrar de verdad: por qué dos préstamos con el mismo interés cuestan ' +
+    'distinto, qué significa exactamente el número grande del anuncio, y por qué alargar la hipoteca ' +
+    'cinco años parece buena idea y cuesta veinte mil euros.');
 
   p.text('Merece la pena decirlo sin rodeos: la asimetría entre quien firma un préstamo y quien lo ' +
     'concede es sobre todo <strong>una asimetría de cálculo</strong>. El banco sabe hacer estas ' +
@@ -37,6 +37,12 @@ Course.topic('fn-finanzas', function (p) {
       'que habría generado si la tuvieras ya. Es la capitalización al revés.<br><br>Ejemplo con ' +
       'números: al 4 %, mil euros dentro de diez años valen hoy $1000/1{,}04^{10} = 675{,}56$ €. Si ' +
       'te ofrecen 650 € ahora o 1000 € en diez años, lo segundo es mejor trato.');
+
+  p.comprueba('Al 5 % anual, ¿qué vale más hoy: 1000 € dentro de un año o 950 € ahora mismo?', [
+    { t: 'Los 1000 € dentro de un año', ok: false, por: 'Descontados valen $\\frac{1000}{1{,}05} = 952{,}38$ €. Es más que 950, pero por muy poco: la intuición de «mil es más que novecientos cincuenta» no cuenta la fecha.' },
+    { t: 'Casi lo mismo: 1000 € dentro de un año son 952,38 € hoy', ok: true, por: '$VA = \\frac{1000}{1{,}05} = 952{,}38$. La promesa futura gana por 2,38 €. Con un 6 % de interés ya perdería.' },
+    { t: 'Los 950 € ahora, con diferencia', ok: false, por: 'Descontando, los 1000 € futuros valen 952,38 € hoy: ligeramente más que 950. No es «con diferencia»; es casi un empate.' }
+  ]);
 
   p.util('El valor actual es la herramienta con la que se decide si una inversión merece la pena, y ' +
     'se usa exactamente igual en una empresa que en tu casa. Una placa solar que ahorra 400 € al año ' +
@@ -74,6 +80,7 @@ Course.topic('fn-finanzas', function (p) {
   p.demo({
     title: 'El mismo tipo, distinta frecuencia',
     intro: 'Un mismo tipo nominal cuesta más cuanto más a menudo se liquide. Mueve la frecuencia y mira separarse la TAE del TIN. Al final la curva se aplana: hay un límite, y es e.',
+    predice: 'Con TIN del 12 % y pagos mensuales la TAE es 12,68 %. Si el banco cobrara cada día, ¿crees que la TAE pasaría del 13 %? ¿Y del 14 %? Sube los pagos al año y mira dónde se aplana.',
     build: function (host) {
       var tin = 12, m = 1;
       var out = W.readout(host, '');
@@ -153,9 +160,22 @@ Course.topic('fn-finanzas', function (p) {
     'hipoteca es cosa de iniciados, ya no: cabe en un renglón y la acabas de deducir.',
     'ok', 'Lo que hay dentro de la calculadora del banco');
 
+  p.ejemplo({
+    title: 'Una cuota calculada a mano, y las trampas de unidades',
+    enunciado: 'Se piden 12 000 € a devolver en 2 años con cuotas mensuales, al 6 % anual. Calcular la cuota y el total de intereses.',
+    pasos: [
+      { t: '<strong>Pasar todo a meses.</strong> Las cuotas son mensuales, así que $i$ tiene que ser el interés <em>mensual</em>: $\\frac{0{,}06}{12} = 0{,}005$. Y $n$ el número de <em>meses</em>: $2\\cdot 12 = 24$.', antes: '¿Qué $i$ y qué $n$ van en la fórmula: los anuales o los mensuales?' },
+      { t: '<strong>La potencia.</strong> $(1 + i)^{-n} = 1{,}005^{-24} = \\dfrac{1}{1{,}005^{24}} = \\dfrac{1}{1{,}1272} = 0{,}8872$.' },
+      { t: '<strong>La cuota.</strong> $c = 12\\,000\\cdot\\dfrac{0{,}005}{1 - 0{,}8872} = 12\\,000\\cdot\\dfrac{0{,}005}{0{,}1128} = 531{,}85$ €.', antes: 'Sustituye en $c = P\\frac{i}{1 - (1+i)^{-n}}$.' },
+      { t: '<strong>Total e intereses.</strong> $24\\cdot 531{,}85 = 12\\,764{,}40$ € devueltos; intereses: $764{,}40$ €. Un 6,4 % del capital en dos años, no un 12 %: a medida que se devuelve, se paga interés sobre cada vez menos.', antes: 'Dos años al 6 %: ¿esperas pagar un 12 % de intereses? Calcula y compara.' }
+    ],
+    cierre: 'Si se hubiera usado $i = 0{,}06$ con $n = 24$, la cuota habría salido 956 €: un disparate que se detecta porque $24\\cdot 956$ casi duplica el préstamo. Las unidades de $i$ y de $n$ tienen que ser las de la cuota.'
+  });
+
   p.demo({
     title: 'Una hipoteca por dentro',
     intro: 'Mueve el capital, el tipo y el plazo. Fíjate sobre todo en la barra de abajo: la parte de cada cuota que se va en intereses es enorme al principio y casi nula al final. Por eso amortizar pronto compensa tanto.',
+    predice: '150 000 € al 3 % a 25 años. Antes de mirar: ¿qué parte de la primera cuota crees que son intereses, más o menos de la mitad? ¿Y del total devuelto, cuánto crees que serán intereses: un 10 %, un 40 %?',
     build: function (host) {
       var P = 150000, tae = 3, anios = 25;
       var out = W.readout(host, '');
@@ -255,6 +275,13 @@ Course.topic('fn-finanzas', function (p) {
     '$r_{\\text{real}} = \\frac{1+r}{1+f}-1$, pero para tipos pequeños las dos coinciden casi ' +
     'perfectamente —y por una razón que ya conoces: es el polinomio de Taylor de grado 1 de la ' +
     'expresión exacta.', null, 'De dónde sale esa resta');
+
+  p.trampas([
+    { e: 'Poner $i = 3$ en vez de $i = 0{,}03$', por: 'El interés va en tanto por uno. Con $i = 3$ el capital se cuadruplicaría cada año.' },
+    { e: 'Cuotas mensuales con $i$ anual y $n$ en años', por: '$i$ y $n$ van en la unidad de la cuota: interés mensual y número de meses. Mezclar unidades multiplica la cuota por 10.' },
+    { e: '«Al 4 % durante 10 años pago un 40 % de intereses»', por: 'El interés se aplica cada mes sobre el capital <em>pendiente</em>, que baja. Con la fórmula sale bastante menos.' },
+    { e: 'Comparar préstamos por el TIN', por: 'Dos TIN iguales con distinta frecuencia de cobro o distintas comisiones cuestan distinto. Se compara la TAE.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
