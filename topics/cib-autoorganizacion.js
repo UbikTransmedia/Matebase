@@ -445,6 +445,33 @@ Course.topic('cib-autoorganizacion', function (p) {
   });
 
   p.exercise({
+    title: '¿Dónde estará el planeador?',
+    level: 'basico',
+    gen: function (r) {
+      var x = r.int(0, 20), y = r.int(3, 20), k = r.int(2, 12);
+      var dd = r.pick([['derecha', 'abajo', 1, 1], ['izquierda', 'abajo', -1, 1], ['derecha', 'arriba', 1, -1], ['izquierda', 'arriba', -1, -1]]);
+      if (x - k < 0 && dd[2] < 0) return null;
+      if (y - k < 0 && dd[3] < 0) return null;
+      return { x: x, y: y, k: k, g: 4 * k, dx: dd[2], dy: dd[3], txt: dd[1] + ' y a la ' + dd[0] };
+    },
+    ask: function (d) {
+      return 'Un planeador del Juego de la Vida recupera su forma cada 4 generaciones, desplazado una celda en diagonal. Uno que avanza ' +
+        'hacia ' + d.txt + ' ocupa ahora un cuadro de 3×3 cuya esquina superior izquierda está en la columna $' + d.x + '$ y la fila $' + d.y +
+        '$ (las filas crecen hacia abajo). ¿Dónde estará esa esquina dentro de ' + d.g + ' generaciones?';
+    },
+    fields: [{ name: 'c', label: 'columna', w: 'tiny' }, { name: 'f', label: 'fila', w: 'tiny' }],
+    sol: function (d) { return { c: d.x + d.k * d.dx, f: d.y + d.k * d.dy }; },
+    errores: [{ si: function (v, d) { return v.c === d.x + d.g * d.dx && v.f === d.y + d.g * d.dy; }, msg: 'El planeador no avanza una celda por generación: tarda 4 generaciones en recorrer una.' }],
+    hint: function () { return ['¿Cuántas veces completa su ciclo de 4 generaciones?', 'En cada ciclo se mueve una columna y una fila.']; },
+    steps: function (d) {
+      return ['$' + d.g + ' : 4 = ' + d.k + '$ ciclos completos.',
+        'Columna: $' + d.x + (d.dx > 0 ? ' + ' : ' - ') + d.k + ' = ' + (d.x + d.k * d.dx) + '$; fila: $' + d.y + (d.dy > 0 ? ' + ' : ' - ') + d.k + ' = ' + (d.y + d.k * d.dy) + '$.',
+        'Por eso se dice que el planeador viaja a «$c/4$»: la velocidad máxima posible en el tablero, la «velocidad de la luz» $c$, es una celda por generación.'];
+    },
+    answer: function (d) { return 'columna ' + (d.x + d.k * d.dx) + ', fila ' + (d.y + d.k * d.dy); }
+  });
+
+  p.exercise({
     title: 'Descifra una regla elemental',
     level: 'medio',
     gen: function (r) {
@@ -503,33 +530,6 @@ Course.topic('cib-autoorganizacion', function (p) {
         d.s === 2 && d.m === 3 ? 'Es el caso de los autómatas elementales: $2^8 = 256$.' : 'Con vecindades algo mayores ya no se pueden explorar todas: $' + d.s + '^{' + d.vec + '}$ es un número astronómico.'];
     },
     answer: function (d) { return d.vec + ' vecindades, ' + d.s + '^' + d.vec + ' reglas'; }
-  });
-
-  p.exercise({
-    title: '¿Dónde estará el planeador?',
-    level: 'basico',
-    gen: function (r) {
-      var x = r.int(0, 20), y = r.int(3, 20), k = r.int(2, 12);
-      var dd = r.pick([['derecha', 'abajo', 1, 1], ['izquierda', 'abajo', -1, 1], ['derecha', 'arriba', 1, -1], ['izquierda', 'arriba', -1, -1]]);
-      if (x - k < 0 && dd[2] < 0) return null;
-      if (y - k < 0 && dd[3] < 0) return null;
-      return { x: x, y: y, k: k, g: 4 * k, dx: dd[2], dy: dd[3], txt: dd[1] + ' y a la ' + dd[0] };
-    },
-    ask: function (d) {
-      return 'Un planeador del Juego de la Vida recupera su forma cada 4 generaciones, desplazado una celda en diagonal. Uno que avanza ' +
-        'hacia ' + d.txt + ' ocupa ahora un cuadro de 3×3 cuya esquina superior izquierda está en la columna $' + d.x + '$ y la fila $' + d.y +
-        '$ (las filas crecen hacia abajo). ¿Dónde estará esa esquina dentro de ' + d.g + ' generaciones?';
-    },
-    fields: [{ name: 'c', label: 'columna', w: 'tiny' }, { name: 'f', label: 'fila', w: 'tiny' }],
-    sol: function (d) { return { c: d.x + d.k * d.dx, f: d.y + d.k * d.dy }; },
-    errores: [{ si: function (v, d) { return v.c === d.x + d.g * d.dx && v.f === d.y + d.g * d.dy; }, msg: 'El planeador no avanza una celda por generación: tarda 4 generaciones en recorrer una.' }],
-    hint: function () { return ['¿Cuántas veces completa su ciclo de 4 generaciones?', 'En cada ciclo se mueve una columna y una fila.']; },
-    steps: function (d) {
-      return ['$' + d.g + ' : 4 = ' + d.k + '$ ciclos completos.',
-        'Columna: $' + d.x + (d.dx > 0 ? ' + ' : ' - ') + d.k + ' = ' + (d.x + d.k * d.dx) + '$; fila: $' + d.y + (d.dy > 0 ? ' + ' : ' - ') + d.k + ' = ' + (d.y + d.k * d.dy) + '$.',
-        'Por eso se dice que el planeador viaja a «$c/4$»: la velocidad máxima posible en el tablero, la «velocidad de la luz» $c$, es una celda por generación.'];
-    },
-    answer: function (d) { return 'columna ' + (d.x + d.k * d.dx) + ', fila ' + (d.y + d.k * d.dy); }
   });
 
   p.keys([

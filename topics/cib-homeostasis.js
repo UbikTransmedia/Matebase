@@ -269,6 +269,33 @@ Course.topic('cib-homeostasis', function (p) {
   });
 
   p.exercise({
+    title: '¿Corregir o reorganizarse?',
+    level: 'basico',
+    gen: function (r) {
+      return r.pick([
+        { t: 'En un día de calor, el cuerpo empieza a sudar para bajar la temperatura.', q: 'uno' },
+        { t: 'Un animal cuya presa habitual ha desaparecido de la zona aprende a alimentarse de otra cosa.', q: 'dos' },
+        { t: 'Un termostato enciende la calefacción porque la temperatura ha bajado de la consigna.', q: 'uno' },
+        { t: 'Una empresa cuyo sector se hunde cambia por completo de producto y de clientes.', q: 'dos' },
+        { t: 'La pupila se contrae al salir a la calle en un día soleado.', q: 'uno' },
+        { t: 'Tras una lesión, una persona aprende a caminar de otra manera, con muletas.', q: 'dos' },
+        { t: 'El homeostato de Ashby vuelve a sortear sus conexiones porque una aguja se ha salido de sus límites.', q: 'dos' },
+        { t: 'El control de crucero acelera al empezar una cuesta para mantener la velocidad.', q: 'uno' }
+      ]);
+    },
+    ask: function (d) { return '<em>«' + d.t + '»</em><br>¿Es una corrección dentro de las reglas de siempre o una reorganización de las propias reglas?'; },
+    fields: [{ name: 'q', label: 'Es', opts: [{ t: 'una corrección de primer nivel: la misma regla, aplicada', v: 'uno' }, { t: 'una reorganización de segundo nivel: se cambia la regla', v: 'dos' }] }],
+    sol: function (d) { return { q: d.q }; },
+    hint: function () { return ['¿El sistema hace lo que siempre hace ante esa desviación, o cambia su forma de responder?', 'La reorganización llega cuando las correcciones habituales ya no bastan para mantener las variables esenciales.']; },
+    steps: function (d) {
+      return [d.q === 'uno'
+        ? 'Es la respuesta de siempre ante una desviación de siempre: un bucle de realimentación que ya existía. <strong>Primer nivel.</strong>'
+        : 'Las respuestas habituales ya no mantienen las variables esenciales, y el sistema cambia su propia forma de responder. <strong>Segundo nivel</strong>: ultraestabilidad.'];
+    },
+    answer: function (d) { return d.q === 'uno' ? 'Corrección de primer nivel' : 'Reorganización de segundo nivel'; }
+  });
+
+  p.exercise({
     title: 'Cuánto tarda en encontrar una configuración buena',
     level: 'medio',
     gen: function (r) {
@@ -330,33 +357,6 @@ Course.topic('cib-homeostasis', function (p) {
         'Acertar al menos una vez: $1 - ' + U.fmt(d.fallar, 4) + ' \\approx ' + U.fmt(d.v, 4) + '$. Es la regla del [[pe-probabilidad|suceso contrario]].'];
     },
     answer: function (d) { return U.fmt(d.v, 4); }
-  });
-
-  p.exercise({
-    title: '¿Corregir o reorganizarse?',
-    level: 'basico',
-    gen: function (r) {
-      return r.pick([
-        { t: 'En un día de calor, el cuerpo empieza a sudar para bajar la temperatura.', q: 'uno' },
-        { t: 'Un animal cuya presa habitual ha desaparecido de la zona aprende a alimentarse de otra cosa.', q: 'dos' },
-        { t: 'Un termostato enciende la calefacción porque la temperatura ha bajado de la consigna.', q: 'uno' },
-        { t: 'Una empresa cuyo sector se hunde cambia por completo de producto y de clientes.', q: 'dos' },
-        { t: 'La pupila se contrae al salir a la calle en un día soleado.', q: 'uno' },
-        { t: 'Tras una lesión, una persona aprende a caminar de otra manera, con muletas.', q: 'dos' },
-        { t: 'El homeostato de Ashby vuelve a sortear sus conexiones porque una aguja se ha salido de sus límites.', q: 'dos' },
-        { t: 'El control de crucero acelera al empezar una cuesta para mantener la velocidad.', q: 'uno' }
-      ]);
-    },
-    ask: function (d) { return '<em>«' + d.t + '»</em><br>¿Es una corrección dentro de las reglas de siempre o una reorganización de las propias reglas?'; },
-    fields: [{ name: 'q', label: 'Es', opts: [{ t: 'una corrección de primer nivel: la misma regla, aplicada', v: 'uno' }, { t: 'una reorganización de segundo nivel: se cambia la regla', v: 'dos' }] }],
-    sol: function (d) { return { q: d.q }; },
-    hint: function () { return ['¿El sistema hace lo que siempre hace ante esa desviación, o cambia su forma de responder?', 'La reorganización llega cuando las correcciones habituales ya no bastan para mantener las variables esenciales.']; },
-    steps: function (d) {
-      return [d.q === 'uno'
-        ? 'Es la respuesta de siempre ante una desviación de siempre: un bucle de realimentación que ya existía. <strong>Primer nivel.</strong>'
-        : 'Las respuestas habituales ya no mantienen las variables esenciales, y el sistema cambia su propia forma de responder. <strong>Segundo nivel</strong>: ultraestabilidad.'];
-    },
-    answer: function (d) { return d.q === 'uno' ? 'Corrección de primer nivel' : 'Reorganización de segundo nivel'; }
   });
 
   p.keys([

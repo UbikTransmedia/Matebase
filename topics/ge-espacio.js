@@ -369,6 +369,39 @@ Course.topic('ge-espacio', function (p) {
   });
 
   p.exercise({
+    title: 'Posición de dos planos',
+    level: 'basico',
+    gen: function (r) {
+      var n1 = [r.pm(0, 3), r.pm(0, 3), r.pm(0, 3)];
+      if (nulo(n1)) return null;
+      var D1 = r.pm(0, 6), tipo = r.pick(['cortan', 'paralelos', 'coincidentes']), k = r.pick([-2, 2, 3, -1]);
+      var n2, D2;
+      if (tipo === 'cortan') {
+        n2 = [r.pm(0, 3), r.pm(0, 3), r.pm(0, 3)];
+        if (nulo(n2) || proporcional(n1, n2)) return null;
+        D2 = r.pm(0, 6);
+      } else {
+        n2 = por(k, n1);
+        D2 = k * D1 + (tipo === 'paralelos' ? r.pm(1, 4) : 0);
+      }
+      return { n1: n1, D1: D1, n2: n2, D2: D2, tipo: tipo, k: k };
+    },
+    ask: function (d) {
+      return '¿Cómo están colocados $\\pi_1:\\ ' + planoTex(d.n1, d.D1) + '$ y $\\pi_2:\\ ' + planoTex(d.n2, d.D2) + '$?';
+    },
+    fields: [{ name: 't', label: 'Los planos', opts: [{ t: 'Se cortan en una recta', v: 'cortan' }, { t: 'Son paralelos', v: 'paralelos' }, { t: 'Son coincidentes', v: 'coincidentes' }] }],
+    sol: function (d) { return { t: d.tipo }; },
+    hint: function () { return ['Mira primero si las normales son proporcionales.', 'Si lo son, mira si también lo es el término independiente.']; },
+    steps: function (d) {
+      if (d.tipo === 'cortan') return ['Las normales $' + vt(d.n1) + '$ y $' + vt(d.n2) + '$ no son proporcionales: $\\operatorname{rg} M = 2$, los planos <strong>se cortan en una recta</strong>.'];
+      return ['La normal de $\\pi_2$ es $' + d.k + '$ veces la de $\\pi_1$: $\\operatorname{rg} M = 1$.',
+        d.tipo === 'coincidentes' ? 'Y el término independiente también está multiplicado por $' + d.k + '$: son la misma ecuación, <strong>coincidentes</strong>.'
+          : 'Pero el término independiente no guarda esa proporción: $\\operatorname{rg} M^* = 2$, <strong>paralelos</strong>.'];
+    },
+    answer: function (d) { return { cortan: 'Se cortan en una recta', paralelos: 'Paralelos', coincidentes: 'Coincidentes' }[d.tipo]; }
+  });
+
+  p.exercise({
     title: 'El plano que pasa por tres puntos',
     level: 'medio',
     gen: function (r) {
@@ -482,39 +515,6 @@ Course.topic('ge-espacio', function (p) {
       return s;
     },
     answer: function (d) { return { corta: 'Se cortan en un punto', paralela: 'Paralela', contenida: 'Contenida' }[d.tipo]; }
-  });
-
-  p.exercise({
-    title: 'Posición de dos planos',
-    level: 'basico',
-    gen: function (r) {
-      var n1 = [r.pm(0, 3), r.pm(0, 3), r.pm(0, 3)];
-      if (nulo(n1)) return null;
-      var D1 = r.pm(0, 6), tipo = r.pick(['cortan', 'paralelos', 'coincidentes']), k = r.pick([-2, 2, 3, -1]);
-      var n2, D2;
-      if (tipo === 'cortan') {
-        n2 = [r.pm(0, 3), r.pm(0, 3), r.pm(0, 3)];
-        if (nulo(n2) || proporcional(n1, n2)) return null;
-        D2 = r.pm(0, 6);
-      } else {
-        n2 = por(k, n1);
-        D2 = k * D1 + (tipo === 'paralelos' ? r.pm(1, 4) : 0);
-      }
-      return { n1: n1, D1: D1, n2: n2, D2: D2, tipo: tipo, k: k };
-    },
-    ask: function (d) {
-      return '¿Cómo están colocados $\\pi_1:\\ ' + planoTex(d.n1, d.D1) + '$ y $\\pi_2:\\ ' + planoTex(d.n2, d.D2) + '$?';
-    },
-    fields: [{ name: 't', label: 'Los planos', opts: [{ t: 'Se cortan en una recta', v: 'cortan' }, { t: 'Son paralelos', v: 'paralelos' }, { t: 'Son coincidentes', v: 'coincidentes' }] }],
-    sol: function (d) { return { t: d.tipo }; },
-    hint: function () { return ['Mira primero si las normales son proporcionales.', 'Si lo son, mira si también lo es el término independiente.']; },
-    steps: function (d) {
-      if (d.tipo === 'cortan') return ['Las normales $' + vt(d.n1) + '$ y $' + vt(d.n2) + '$ no son proporcionales: $\\operatorname{rg} M = 2$, los planos <strong>se cortan en una recta</strong>.'];
-      return ['La normal de $\\pi_2$ es $' + d.k + '$ veces la de $\\pi_1$: $\\operatorname{rg} M = 1$.',
-        d.tipo === 'coincidentes' ? 'Y el término independiente también está multiplicado por $' + d.k + '$: son la misma ecuación, <strong>coincidentes</strong>.'
-          : 'Pero el término independiente no guarda esa proporción: $\\operatorname{rg} M^* = 2$, <strong>paralelos</strong>.'];
-    },
-    answer: function (d) { return { cortan: 'Se cortan en una recta', paralelos: 'Paralelos', coincidentes: 'Coincidentes' }[d.tipo]; }
   });
 
   p.problem({

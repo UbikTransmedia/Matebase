@@ -148,6 +148,30 @@ Course.topic('al-lenguaje', function (p) {
   });
 
   p.exercise({
+    title: 'Valor numérico de un polinomio',
+    level: 'basico',
+    gen: function (r) {
+      var c = [r.pm(1, 4), r.pm(1, 6), r.pm(1, 9)];
+      var x = r.pm(1, 5);
+      return { c: c, x: x, val: ML.polyEval(c, x) };
+    },
+    ask: function (d) {
+      return 'Si $P(x) = ' + ML.polyTex(d.c) + '$, calcula $P(' + d.x + ')$.';
+    },
+    fields: function (d) { return [{ name: 'v', label: 'P(' + d.x + ') =', w: 'tiny' }]; },
+    sol: function (d) { return { v: d.val }; },
+    hint: function (d) { return 'Sustituye $x$ por $' + (d.x < 0 ? '(' + d.x + ')' : d.x) + '$ — con paréntesis si es negativo — y opera.'; },
+    steps: function (d) {
+      var xx = d.x < 0 ? '(' + d.x + ')' : String(d.x);
+      return ['Sustituimos: $' + d.c[0] + '\\cdot' + xx + '^2 ' + ML.termTex(d.c[1], xx, 1, false) + ML.termTex(d.c[2], '', 0, false) + '$',
+        'Primero la potencia: $' + xx + '^2 = ' + (d.x * d.x) + '$.',
+        'Después los productos y por último las sumas.',
+        '$P(' + d.x + ') = ' + d.val + '$'];
+    },
+    answer: function (d) { return 'P(' + d.x + ') = ' + d.val; }
+  });
+
+  p.exercise({
     title: 'Reduce los términos semejantes',
     level: 'medio',
     gen: function (r) {
@@ -207,30 +231,6 @@ Course.topic('al-lenguaje', function (p) {
     answer: function (d) {
       return 'Coeficiente ' + d.c + ', grado ' + (d.a + d.b) + '.';
     }
-  });
-
-  p.exercise({
-    title: 'Valor numérico de un polinomio',
-    level: 'basico',
-    gen: function (r) {
-      var c = [r.pm(1, 4), r.pm(1, 6), r.pm(1, 9)];
-      var x = r.pm(1, 5);
-      return { c: c, x: x, val: ML.polyEval(c, x) };
-    },
-    ask: function (d) {
-      return 'Si $P(x) = ' + ML.polyTex(d.c) + '$, calcula $P(' + d.x + ')$.';
-    },
-    fields: function (d) { return [{ name: 'v', label: 'P(' + d.x + ') =', w: 'tiny' }]; },
-    sol: function (d) { return { v: d.val }; },
-    hint: function (d) { return 'Sustituye $x$ por $' + (d.x < 0 ? '(' + d.x + ')' : d.x) + '$ — con paréntesis si es negativo — y opera.'; },
-    steps: function (d) {
-      var xx = d.x < 0 ? '(' + d.x + ')' : String(d.x);
-      return ['Sustituimos: $' + d.c[0] + '\\cdot' + xx + '^2 ' + ML.termTex(d.c[1], xx, 1, false) + ML.termTex(d.c[2], '', 0, false) + '$',
-        'Primero la potencia: $' + xx + '^2 = ' + (d.x * d.x) + '$.',
-        'Después los productos y por último las sumas.',
-        '$P(' + d.x + ') = ' + d.val + '$'];
-    },
-    answer: function (d) { return 'P(' + d.x + ') = ' + d.val; }
   });
 
   p.keys([

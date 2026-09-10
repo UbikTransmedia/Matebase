@@ -210,43 +210,6 @@ Course.topic('cib-retardos', function (p) {
   p.section('Practica');
 
   p.exercise({
-    title: 'Un bucle con memoria',
-    level: 'medio',
-    gen: function (r) {
-      var ref = r.int(10, 24);
-      var y0 = ref - r.int(6, 14);
-      var K = r.pick([0.4, 0.5, 0.6]);
-      var pasos = r.int(3, 5);
-      return { ref: ref, y0: y0, K: K, pasos: pasos };
-    },
-    ask: function (d) {
-      return 'Un bucle con <strong>retardo de 1 paso</strong> sigue la regla ' +
-        '$y_{n+1} = y_n + K\\,(r - y_{n-1})$, con $K = ' + U.fmt(d.K, 1) + '$ y $r = ' + d.ref + '$.<br><br>' +
-        'Empieza en $y_0 = y_1 = ' + d.y0 + '$ (los dos primeros valores son iguales). ' +
-        '¿Cuánto vale $y_{' + (d.pasos + 1) + '}$?';
-    },
-    fields: [{ name: 'y', label: 'y =', w: 'tiny' }],
-    sol: function (d) {
-      var y = [d.y0, d.y0];
-      for (var n = 1; n <= d.pasos; n++) y.push(y[n] + d.K * (d.ref - y[n - 1]));
-      return { y: y[d.pasos + 1] };
-    },
-    tol: 1e-6,
-    hint: function () { return 'En cada paso, el error se calcula con el valor de <strong>dos posiciones atrás</strong> en la lista, no con el último.'; },
-    steps: function (d) {
-      var y = [d.y0, d.y0], l = ['Arrancamos con $y_0 = y_1 = ' + d.y0 + '$.'];
-      for (var n = 1; n <= d.pasos; n++) {
-        var nuevo = y[n] + d.K * (d.ref - y[n - 1]);
-        l.push('$y_{' + (n + 1) + '} = ' + U.fmt(y[n], 3) + ' + ' + U.fmt(d.K, 1) + '\\,(' + d.ref +
-          ' - ' + U.fmt(y[n - 1], 3) + ') = ' + U.fmt(nuevo, 3) + '$');
-        y.push(nuevo);
-      }
-      l.push('Fíjate en que sigue corrigiendo con fuerza aunque ya se esté acercando: está mirando información vieja.');
-      return l;
-    }
-  });
-
-  p.exercise({
     title: 'Diagnostica el sistema',
     level: 'basico',
     gen: function (r) {
@@ -296,6 +259,43 @@ Course.topic('cib-retardos', function (p) {
       return m[d.q];
     },
     answer: function (d) { return d.q; }
+  });
+
+  p.exercise({
+    title: 'Un bucle con memoria',
+    level: 'medio',
+    gen: function (r) {
+      var ref = r.int(10, 24);
+      var y0 = ref - r.int(6, 14);
+      var K = r.pick([0.4, 0.5, 0.6]);
+      var pasos = r.int(3, 5);
+      return { ref: ref, y0: y0, K: K, pasos: pasos };
+    },
+    ask: function (d) {
+      return 'Un bucle con <strong>retardo de 1 paso</strong> sigue la regla ' +
+        '$y_{n+1} = y_n + K\\,(r - y_{n-1})$, con $K = ' + U.fmt(d.K, 1) + '$ y $r = ' + d.ref + '$.<br><br>' +
+        'Empieza en $y_0 = y_1 = ' + d.y0 + '$ (los dos primeros valores son iguales). ' +
+        '¿Cuánto vale $y_{' + (d.pasos + 1) + '}$?';
+    },
+    fields: [{ name: 'y', label: 'y =', w: 'tiny' }],
+    sol: function (d) {
+      var y = [d.y0, d.y0];
+      for (var n = 1; n <= d.pasos; n++) y.push(y[n] + d.K * (d.ref - y[n - 1]));
+      return { y: y[d.pasos + 1] };
+    },
+    tol: 1e-6,
+    hint: function () { return 'En cada paso, el error se calcula con el valor de <strong>dos posiciones atrás</strong> en la lista, no con el último.'; },
+    steps: function (d) {
+      var y = [d.y0, d.y0], l = ['Arrancamos con $y_0 = y_1 = ' + d.y0 + '$.'];
+      for (var n = 1; n <= d.pasos; n++) {
+        var nuevo = y[n] + d.K * (d.ref - y[n - 1]);
+        l.push('$y_{' + (n + 1) + '} = ' + U.fmt(y[n], 3) + ' + ' + U.fmt(d.K, 1) + '\\,(' + d.ref +
+          ' - ' + U.fmt(y[n - 1], 3) + ') = ' + U.fmt(nuevo, 3) + '$');
+        y.push(nuevo);
+      }
+      l.push('Fíjate en que sigue corrigiendo con fuerza aunque ya se esté acercando: está mirando información vieja.');
+      return l;
+    }
   });
 
   p.exercise({

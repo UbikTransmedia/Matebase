@@ -191,6 +191,33 @@ Course.topic('tr-funciones', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Valor de la función',
+    level: 'basico',
+    gen: function (r) {
+      var A = r.int(1, 5), B = r.pick([1, 2, 3]);
+      var grados = r.pick([0, 30, 45, 60, 90, 120, 135, 150, 180]);
+      var x = grados * Math.PI / 180;
+      var cual = r.bool();
+      return { A: A, B: B, grados: grados, cual: cual, val: A * (cual ? Math.sin(B * x) : Math.cos(B * x)) };
+    },
+    ask: function (d) {
+      return 'Calcula $y$ cuando $x = ' + d.grados + '^\\circ$ en la función $y = ' + d.A +
+        (d.cual ? '\\operatorname{sen}' : '\\cos') + '(' + d.B + 'x)$ (cuatro decimales).';
+    },
+    fields: [{ name: 'v', label: 'y', w: 'tiny' }],
+    sol: function (d) { return { v: U.round(d.val, 4) }; },
+    tol: 3e-4,
+    hint: function (d) { return 'Primero multiplica el ángulo por $' + d.B + '$; después aplica la razón y multiplica por $' + d.A + '$.'; },
+    steps: function (d) {
+      return ['El argumento es $' + d.B + ' \\cdot ' + d.grados + '^\\circ = ' + (d.B * d.grados) + '^\\circ$.',
+        '$' + (d.cual ? '\\operatorname{sen}' : '\\cos') + ' ' + (d.B * d.grados) + '^\\circ = ' +
+        U.fmt(d.val / d.A, 4) + '$',
+        'Multiplicamos por la amplitud: $' + d.A + ' \\cdot ' + U.fmt(d.val / d.A, 4) + ' = ' + U.fmt(d.val, 4) + '$'];
+    },
+    answer: function (d) { return U.fmt(d.val, 4); }
+  });
+
+  p.exercise({
     title: 'Amplitud, periodo y recorrido',
     level: 'medio',
     gen: function (r) {
@@ -222,30 +249,27 @@ Course.topic('tr-funciones', function (p) {
   });
 
   p.exercise({
-    title: 'Valor de la función',
-    level: 'basico',
+    title: 'Dominio de la tangente',
+    level: 'medio',
     gen: function (r) {
-      var A = r.int(1, 5), B = r.pick([1, 2, 3]);
-      var grados = r.pick([0, 30, 45, 60, 90, 120, 135, 150, 180]);
-      var x = grados * Math.PI / 180;
-      var cual = r.bool();
-      return { A: A, B: B, grados: grados, cual: cual, val: A * (cual ? Math.sin(B * x) : Math.cos(B * x)) };
+      var k = r.int(-3, 3);
+      return { k: k, grados: 90 + 180 * k };
     },
     ask: function (d) {
-      return 'Calcula $y$ cuando $x = ' + d.grados + '^\\circ$ en la función $y = ' + d.A +
-        (d.cual ? '\\operatorname{sen}' : '\\cos') + '(' + d.B + 'x)$ (cuatro decimales).';
+      return 'La función $\\operatorname{tg} x$ no está definida en ciertos puntos. ' +
+        'Escribe en grados el valor prohibido que corresponde a $k = ' + d.k + '$ en la ' +
+        'expresión $x = 90^\\circ + 180^\\circ k$.';
     },
-    fields: [{ name: 'v', label: 'y', w: 'tiny' }],
-    sol: function (d) { return { v: U.round(d.val, 4) }; },
-    tol: 3e-4,
-    hint: function (d) { return 'Primero multiplica el ángulo por $' + d.B + '$; después aplica la razón y multiplica por $' + d.A + '$.'; },
+    fields: [{ name: 'v', label: 'Grados', w: 'tiny' }],
+    sol: function (d) { return { v: d.grados }; },
+    hint: function () { return 'La tangente es $\\frac{\\operatorname{sen}x}{\\cos x}$: falla donde el coseno vale cero.'; },
     steps: function (d) {
-      return ['El argumento es $' + d.B + ' \\cdot ' + d.grados + '^\\circ = ' + (d.B * d.grados) + '^\\circ$.',
-        '$' + (d.cual ? '\\operatorname{sen}' : '\\cos') + ' ' + (d.B * d.grados) + '^\\circ = ' +
-        U.fmt(d.val / d.A, 4) + '$',
-        'Multiplicamos por la amplitud: $' + d.A + ' \\cdot ' + U.fmt(d.val / d.A, 4) + ' = ' + U.fmt(d.val, 4) + '$'];
+      return ['La tangente no existe donde $\\cos x = 0$.',
+        'Eso ocurre en $90^\\circ$ y cada $180^\\circ$ a partir de ahí.',
+        '$90 + 180 \\cdot (' + d.k + ') = ' + d.grados + '^\\circ$',
+        'En ese punto la gráfica tiene una <strong>asíntota vertical</strong>.'];
     },
-    answer: function (d) { return U.fmt(d.val, 4); }
+    answer: function (d) { return d.grados + '°'; }
   });
 
   p.exercise({
@@ -276,30 +300,6 @@ Course.topic('tr-funciones', function (p) {
         (d.media - d.amp) + '$ y $' + (d.media + d.amp) + '$ metros.'];
     },
     answer: function (d) { return U.fmt(d.val, 4) + ' m'; }
-  });
-
-  p.exercise({
-    title: 'Dominio de la tangente',
-    level: 'medio',
-    gen: function (r) {
-      var k = r.int(-3, 3);
-      return { k: k, grados: 90 + 180 * k };
-    },
-    ask: function (d) {
-      return 'La función $\\operatorname{tg} x$ no está definida en ciertos puntos. ' +
-        'Escribe en grados el valor prohibido que corresponde a $k = ' + d.k + '$ en la ' +
-        'expresión $x = 90^\\circ + 180^\\circ k$.';
-    },
-    fields: [{ name: 'v', label: 'Grados', w: 'tiny' }],
-    sol: function (d) { return { v: d.grados }; },
-    hint: function () { return 'La tangente es $\\frac{\\operatorname{sen}x}{\\cos x}$: falla donde el coseno vale cero.'; },
-    steps: function (d) {
-      return ['La tangente no existe donde $\\cos x = 0$.',
-        'Eso ocurre en $90^\\circ$ y cada $180^\\circ$ a partir de ahí.',
-        '$90 + 180 \\cdot (' + d.k + ') = ' + d.grados + '^\\circ$',
-        'En ese punto la gráfica tiene una <strong>asíntota vertical</strong>.'];
-    },
-    answer: function (d) { return d.grados + '°'; }
   });
 
   p.keys([

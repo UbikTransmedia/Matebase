@@ -291,6 +291,35 @@ Course.topic('gfx-simetria', function (p) {
   });
 
   p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { c: 'p.x = abs(p.x);\nfloat v = step(length(p - vec2(0.3, 0.0)), 0.1);',
+          o: ['Dos círculos iguales, uno a cada lado del centro', 'Un solo círculo a la derecha', 'Un círculo en el centro', 'Cuatro círculos'],
+          por: 'Tras el <code>abs</code>, los píxeles de la izquierda preguntan como si estuvieran a la derecha: el círculo de la derecha aparece reflejado en la izquierda.' },
+        { c: 'p = abs(p);\nfloat v = step(length(p - vec2(0.3, 0.2)), 0.08);',
+          o: ['Cuatro círculos, uno en cada cuadrante, simétricos respecto a los dos ejes', 'Dos círculos', 'Un círculo', 'Ocho círculos'],
+          por: 'Dos espejos, uno por eje: cada cuadrante recibe una copia del círculo del primero.' },
+        { c: 'float a = mod(atan(p.y, p.x), TAU / 6.0);\nvec2 q = length(p) * vec2(cos(a), sin(a));\nfloat v = step(length(q - vec2(0.3, 0.1)), 0.05);',
+          o: ['El mismo círculo repetido seis veces alrededor del centro, girado', 'Seis círculos en fila', 'Un único círculo', 'Doce círculos, en parejas reflejadas'],
+          por: 'El ángulo se reduce a un sector de $60^\\circ$: cada sector recibe una copia girada del mismo dibujo, sin espejos.' },
+        { c: 'float a = abs(mod(atan(p.y, p.x), TAU / 6.0) - TAU / 12.0);\nvec2 q = length(p) * vec2(cos(a), sin(a));\nfloat v = step(length(q - vec2(0.3, 0.1)), 0.05);',
+          o: ['Doce círculos: seis sectores, y en cada uno el círculo reflejado a los dos lados de su eje', 'Seis círculos girados, sin espejos', 'Un único círculo', 'Tres círculos'],
+          por: 'Primero se reduce el ángulo a un sector y después se dobla ese sector por la mitad con un <code>abs</code>: cada sector tiene dos copias simétricas.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'Con <code>p</code> centrada y el color final <code>vec3(v)</code>, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['Cada <code>abs</code> es un espejo; cada <code>mod</code> del ángulo, una repetición girada.', 'Cuenta cuántas copias recibe el dibujo.']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
+  });
+
+  p.exercise({
     title: 'Escribe el pliegue',
     level: 'avanzado',
     gen: function (r) {
@@ -351,35 +380,6 @@ Course.topic('gfx-simetria', function (p) {
         'Una línea, y el motivo que hubiera debajo se convierte en una roseta.'];
     },
     answer: function (d) { return d.ref; }
-  });
-
-  p.exercise({
-    title: 'Predice la imagen',
-    level: 'medio',
-    gen: function (r) {
-      var casos = [
-        { c: 'p.x = abs(p.x);\nfloat v = step(length(p - vec2(0.3, 0.0)), 0.1);',
-          o: ['Dos círculos iguales, uno a cada lado del centro', 'Un solo círculo a la derecha', 'Un círculo en el centro', 'Cuatro círculos'],
-          por: 'Tras el <code>abs</code>, los píxeles de la izquierda preguntan como si estuvieran a la derecha: el círculo de la derecha aparece reflejado en la izquierda.' },
-        { c: 'p = abs(p);\nfloat v = step(length(p - vec2(0.3, 0.2)), 0.08);',
-          o: ['Cuatro círculos, uno en cada cuadrante, simétricos respecto a los dos ejes', 'Dos círculos', 'Un círculo', 'Ocho círculos'],
-          por: 'Dos espejos, uno por eje: cada cuadrante recibe una copia del círculo del primero.' },
-        { c: 'float a = mod(atan(p.y, p.x), TAU / 6.0);\nvec2 q = length(p) * vec2(cos(a), sin(a));\nfloat v = step(length(q - vec2(0.3, 0.1)), 0.05);',
-          o: ['El mismo círculo repetido seis veces alrededor del centro, girado', 'Seis círculos en fila', 'Un único círculo', 'Doce círculos, en parejas reflejadas'],
-          por: 'El ángulo se reduce a un sector de $60^\\circ$: cada sector recibe una copia girada del mismo dibujo, sin espejos.' },
-        { c: 'float a = abs(mod(atan(p.y, p.x), TAU / 6.0) - TAU / 12.0);\nvec2 q = length(p) * vec2(cos(a), sin(a));\nfloat v = step(length(q - vec2(0.3, 0.1)), 0.05);',
-          o: ['Doce círculos: seis sectores, y en cada uno el círculo reflejado a los dos lados de su eje', 'Seis círculos girados, sin espejos', 'Un único círculo', 'Tres círculos'],
-          por: 'Primero se reduce el ángulo a un sector y después se dobla ese sector por la mitad con un <code>abs</code>: cada sector tiene dos copias simétricas.' }
-      ];
-      var c = r.pick(casos);
-      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
-    },
-    ask: function (d) { return 'Con <code>p</code> centrada y el color final <code>vec3(v)</code>, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
-    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
-    sol: function () { return { q: '0' }; },
-    hint: function () { return ['Cada <code>abs</code> es un espejo; cada <code>mod</code> del ángulo, una repetición girada.', 'Cuenta cuántas copias recibe el dibujo.']; },
-    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
-    answer: function (d) { return d.textos[0]; }
   });
 
   p.keys([

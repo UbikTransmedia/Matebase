@@ -1,6 +1,11 @@
 /* Tema: Operaciones y jerarquía */
 Course.topic('ar-operaciones', function (p) {
 
+  p.puente('Ya sabes escribir y comparar números. Ahora toca operar con ellos, y sobre todo saber en ' +
+    'qué orden: una expresión con varias operaciones tiene un único resultado solo porque todo el ' +
+    'mundo respeta el mismo convenio. Ese convenio, y tres propiedades de la suma y el producto, son ' +
+    'lo que el álgebra usará sin parar unos temas más adelante.');
+
   p.text('Con los números se pueden hacer cuatro cosas básicas. Conviene saber qué significa cada una, ' +
     'porque más adelante todo el álgebra consiste en manipularlas sin miedo.');
 
@@ -24,9 +29,15 @@ Course.topic('ar-operaciones', function (p) {
   p.note('La resta y la división <strong>no</strong> son conmutativas: $7-3 \\ne 3-7$ y $10:2 \\ne 2:10$. ' +
     'Es el error más repetido de toda la ESO.', 'warn', 'Ojo');
 
+  p.text('La distributiva es la que más rendimiento da, y la que más se aplica mal. Dice que ' +
+    'multiplicar por una suma es lo mismo que multiplicar por cada sumando y sumar después: ' +
+    '$5\\cdot(10 + 2) = 5\\cdot 10 + 5\\cdot 2 = 60$. Léela también de derecha a izquierda, que es como ' +
+    'se usa para <em>sacar factor común</em>: $5\\cdot 10 + 5\\cdot 2 = 5\\cdot(10 + 2)$.');
+
   p.demo({
     title: 'La propiedad distributiva, vista',
     intro: 'Un rectángulo de base $b+c$ y altura $a$ se puede medir de dos maneras: entera, o partida en dos trozos. Mueve los deslizadores.',
+    predice: 'Con $a = 3$, $b = 4$ y $c = 2$: ¿cuánto mide el rectángulo entero? ¿Y la suma de los dos trozos? Calcula las dos cosas antes de mirar.',
     build: function (host, d) {
       var a = 3, b = 4, c = 2;
       var out = W.readout(host, '');
@@ -76,6 +87,23 @@ Course.topic('ar-operaciones', function (p) {
 
   p.note('«De izquierda a derecha» importa: $12 : 3 \\cdot 2$ vale $8$, no $2$. Primero se divide ' +
     'porque está antes.', 'warn');
+
+  p.comprueba('¿Cuánto vale $2 + 3\\cdot 4$?', [
+    { t: '20', ok: false, por: 'Has sumado antes de multiplicar, leyendo de izquierda a derecha. La multiplicación va primero aunque esté después.' },
+    { t: '14', ok: true, por: 'Primero $3\\cdot 4 = 12$, y después $2 + 12 = 14$. Para que salga 20 habría que escribir $(2 + 3)\\cdot 4$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Una expresión con todo',
+    enunciado: 'Calcular $36 : (2 + 4) \\cdot 3 - 2^2$.',
+    pasos: [
+      { t: 'Paréntesis primero: $2 + 4 = 6$. Queda $36 : 6 \\cdot 3 - 2^2$.', antes: '¿Qué se hace antes que nada?' },
+      { t: 'Después las potencias: $2^2 = 4$. Queda $36 : 6 \\cdot 3 - 4$.', antes: 'Ya no hay paréntesis. ¿Qué toca ahora, la división o la potencia?' },
+      { t: 'Multiplicaciones y divisiones, de izquierda a derecha: primero $36 : 6 = 6$, y después $6 \\cdot 3 = 18$. Queda $18 - 4$.', antes: 'Hay una división y una multiplicación seguidas. ¿Cuál va primero?' },
+      { t: 'Por último la resta: $18 - 4 = 14$.' }
+    ],
+    cierre: 'El error típico está en el paso 3: hacer primero $6\\cdot 3 = 18$ y luego $36 : 18 = 2$. A igual nivel se va de izquierda a derecha, y el resultado cambia de 14 a $-2$.'
+  });
 
   p.demo({
     title: 'Desmontar una expresión paso a paso',
@@ -128,6 +156,12 @@ Course.topic('ar-operaciones', function (p) {
     'necesidad de paréntesis. Es decir, la jerarquía que hoy se enseña como si fuera una ley natural ' +
     'es en realidad un convenio de impresores que se quedó.');
 
+  p.trampas([
+    { e: 'Leer de izquierda a derecha sin mirar la jerarquía.', por: '$2 + 3\\cdot 4$ no es 20: la multiplicación va antes, aunque esté escrita después.' },
+    { e: 'Darle la vuelta a una resta o a una división.', por: '$7 - 3$ y $3 - 7$ no son lo mismo; tampoco $10 : 2$ y $2 : 10$. Solo la suma y el producto se pueden voltear.' },
+    { e: 'Multiplicar solo el primer sumando del paréntesis.', por: '$3\\cdot(4 + 5)$ es $3\\cdot 4 + 3\\cdot 5 = 27$, no $12 + 5$. El factor reparte a los dos.' }
+  ]);
+
   p.section('Practica');
 
   p.exercise({
@@ -156,6 +190,26 @@ Course.topic('ar-operaciones', function (p) {
         'Resultado: $' + d.val + '$.'];
     },
     answer: function (d) { return 'El resultado es ' + d.val + '.'; }
+  });
+
+  p.exercise({
+    title: 'División entera: cociente y resto',
+    level: 'basico',
+    gen: function (r) {
+      var b = r.int(3, 19), q = r.int(4, 40), rr = r.int(0, b - 1);
+      return { a: b * q + rr, b: b, q: q, r: rr };
+    },
+    ask: function (d) { return 'Divide $' + d.a + '$ entre $' + d.b + '$ y da el cociente y el resto.'; },
+    fields: [{ name: 'q', label: 'Cociente', w: 'tiny' }, { name: 'r', label: 'Resto', w: 'tiny' }],
+    sol: function (d) { return { q: d.q, r: d.r }; },
+    hint: function (d) { return 'Se cumple siempre $D = d\\cdot c + r$ con $0 \\le r < d$.'; },
+    steps: function (d) {
+      return ['Buscamos el mayor múltiplo de $' + d.b + '$ que no pase de $' + d.a + '$.',
+        'Es $' + d.b + '\\cdot ' + d.q + ' = ' + (d.b * d.q) + '$.',
+        'Lo que sobra es el resto: $' + d.a + ' - ' + (d.b * d.q) + ' = ' + d.r + '$.',
+        'Comprobación: $' + d.b + '\\cdot' + d.q + ' + ' + d.r + ' = ' + d.a + '$ ✓'];
+    },
+    answer: function (d) { return 'Cociente ' + d.q + ', resto ' + d.r + '.'; }
   });
 
   p.exercise({
@@ -203,26 +257,6 @@ Course.topic('ar-operaciones', function (p) {
         '$= ' + (d.a * d.b) + (d.c < 0 ? ' - ' + (d.a * -d.c) : ' + ' + (d.a * d.c)) + ' = ' + d.val + '$'];
     },
     answer: function (d) { return String(d.val); }
-  });
-
-  p.exercise({
-    title: 'División entera: cociente y resto',
-    level: 'basico',
-    gen: function (r) {
-      var b = r.int(3, 19), q = r.int(4, 40), rr = r.int(0, b - 1);
-      return { a: b * q + rr, b: b, q: q, r: rr };
-    },
-    ask: function (d) { return 'Divide $' + d.a + '$ entre $' + d.b + '$ y da el cociente y el resto.'; },
-    fields: [{ name: 'q', label: 'Cociente', w: 'tiny' }, { name: 'r', label: 'Resto', w: 'tiny' }],
-    sol: function (d) { return { q: d.q, r: d.r }; },
-    hint: function (d) { return 'Se cumple siempre $D = d\\cdot c + r$ con $0 \\le r < d$.'; },
-    steps: function (d) {
-      return ['Buscamos el mayor múltiplo de $' + d.b + '$ que no pase de $' + d.a + '$.',
-        'Es $' + d.b + '\\cdot ' + d.q + ' = ' + (d.b * d.q) + '$.',
-        'Lo que sobra es el resto: $' + d.a + ' - ' + (d.b * d.q) + ' = ' + d.r + '$.',
-        'Comprobación: $' + d.b + '\\cdot' + d.q + ' + ' + d.r + ' = ' + d.a + '$ ✓'];
-    },
-    answer: function (d) { return 'Cociente ' + d.q + ', resto ' + d.r + '.'; }
   });
 
   p.keys([

@@ -121,43 +121,6 @@ Course.topic('al-ec2', function (p) {
   p.section('Practica');
 
   p.exercise({
-    title: 'Ecuación completa con la fórmula',
-    level: 'medio',
-    gen: function (r) {
-      var x1 = r.pm(1, 8), x2 = r.pm(1, 8);
-      var a = r.pick([1, 1, 1, 2]);
-      var b = -a * (x1 + x2), c = a * x1 * x2;
-      if (Math.abs(b) > 40 || Math.abs(c) > 90) return null;
-      return { a: a, b: b, c: c, x1: Math.min(x1, x2), x2: Math.max(x1, x2) };
-    },
-    ask: function (d) {
-      return 'Resuelve $' + ML.polyTex([d.a, d.b, d.c]) + ' = 0$.' +
-        '<br><span style="font-size:0.875rem;color:var(--ink-faint)">Escribe las dos soluciones ' +
-        'separadas por punto y coma, en cualquier orden.</span>';
-    },
-    fields: [{ name: 's', label: 'Soluciones', w: 'wide', ph: '2; -3' }],
-    sol: function (d) { return { s: d.x1 + '; ' + d.x2 }; },
-    check: function (v, d) {
-      if (Ex.sameSet(v.raw.s, [d.x1, d.x2], 1e-6)) return true;
-      if (Ex.same(ML.tryEval(v.raw.s), d.x1) || Ex.same(ML.tryEval(v.raw.s), d.x2)) {
-        return { ok: false, msg: 'Esa solución está bien, pero <strong>falta la otra</strong>. Escribe las dos separadas por punto y coma.' };
-      }
-      return false;
-    },
-    hint: function (d) { return 'Discriminante: $\\Delta = ' + d.b + '^2 - 4\\cdot' + d.a + '\\cdot(' + d.c + ') = ' + (d.b * d.b - 4 * d.a * d.c) + '$.'; },
-    steps: function (d) {
-      var D = d.b * d.b - 4 * d.a * d.c;
-      return ['Identificamos $a = ' + d.a + '$, $b = ' + d.b + '$, $c = ' + d.c + '$.',
-        '$\\Delta = b^2-4ac = ' + (d.b * d.b) + ' - ' + (4 * d.a * d.c) + ' = ' + D + '$',
-        'Como $\\Delta > 0$ hay dos soluciones distintas.',
-        '$x = \\dfrac{' + (-d.b) + ' \\pm \\sqrt{' + D + '}}{' + (2 * d.a) + '} = \\dfrac{' + (-d.b) + ' \\pm ' + U.fmt(Math.sqrt(D), 4) + '}{' + (2 * d.a) + '}$',
-        '$x_1 = ' + d.x1 + '$ &nbsp;y&nbsp; $x_2 = ' + d.x2 + '$',
-        'Comprobación: suman $' + (d.x1 + d.x2) + ' = -b/a$ y multiplican $' + (d.x1 * d.x2) + ' = c/a$ ✓'];
-    },
-    answer: function (d) { return '$x_1 = ' + d.x1 + '$, &nbsp; $x_2 = ' + d.x2 + '$'; }
-  });
-
-  p.exercise({
     title: 'Ecuación incompleta',
     level: 'basico',
     gen: function (r) {
@@ -195,6 +158,43 @@ Course.topic('al-ec2', function (p) {
         'Segundo factor: $' + ML.termTex(d.a, 'x', 1, true) + ML.termTex(d.b, '', 0, false) + ' = 0 \\Rightarrow x = ' + U.fmt(-d.b / d.a, 4) + '$.'];
     },
     answer: function (d) { return d.sols.map(function (s) { return U.fmt(s, 4); }).join(' y '); }
+  });
+
+  p.exercise({
+    title: 'Ecuación completa con la fórmula',
+    level: 'medio',
+    gen: function (r) {
+      var x1 = r.pm(1, 8), x2 = r.pm(1, 8);
+      var a = r.pick([1, 1, 1, 2]);
+      var b = -a * (x1 + x2), c = a * x1 * x2;
+      if (Math.abs(b) > 40 || Math.abs(c) > 90) return null;
+      return { a: a, b: b, c: c, x1: Math.min(x1, x2), x2: Math.max(x1, x2) };
+    },
+    ask: function (d) {
+      return 'Resuelve $' + ML.polyTex([d.a, d.b, d.c]) + ' = 0$.' +
+        '<br><span style="font-size:0.875rem;color:var(--ink-faint)">Escribe las dos soluciones ' +
+        'separadas por punto y coma, en cualquier orden.</span>';
+    },
+    fields: [{ name: 's', label: 'Soluciones', w: 'wide', ph: '2; -3' }],
+    sol: function (d) { return { s: d.x1 + '; ' + d.x2 }; },
+    check: function (v, d) {
+      if (Ex.sameSet(v.raw.s, [d.x1, d.x2], 1e-6)) return true;
+      if (Ex.same(ML.tryEval(v.raw.s), d.x1) || Ex.same(ML.tryEval(v.raw.s), d.x2)) {
+        return { ok: false, msg: 'Esa solución está bien, pero <strong>falta la otra</strong>. Escribe las dos separadas por punto y coma.' };
+      }
+      return false;
+    },
+    hint: function (d) { return 'Discriminante: $\\Delta = ' + d.b + '^2 - 4\\cdot' + d.a + '\\cdot(' + d.c + ') = ' + (d.b * d.b - 4 * d.a * d.c) + '$.'; },
+    steps: function (d) {
+      var D = d.b * d.b - 4 * d.a * d.c;
+      return ['Identificamos $a = ' + d.a + '$, $b = ' + d.b + '$, $c = ' + d.c + '$.',
+        '$\\Delta = b^2-4ac = ' + (d.b * d.b) + ' - ' + (4 * d.a * d.c) + ' = ' + D + '$',
+        'Como $\\Delta > 0$ hay dos soluciones distintas.',
+        '$x = \\dfrac{' + (-d.b) + ' \\pm \\sqrt{' + D + '}}{' + (2 * d.a) + '} = \\dfrac{' + (-d.b) + ' \\pm ' + U.fmt(Math.sqrt(D), 4) + '}{' + (2 * d.a) + '}$',
+        '$x_1 = ' + d.x1 + '$ &nbsp;y&nbsp; $x_2 = ' + d.x2 + '$',
+        'Comprobación: suman $' + (d.x1 + d.x2) + ' = -b/a$ y multiplican $' + (d.x1 * d.x2) + ' = c/a$ ✓'];
+    },
+    answer: function (d) { return '$x_1 = ' + d.x1 + '$, &nbsp; $x_2 = ' + d.x2 + '$'; }
   });
 
   p.exercise({

@@ -449,6 +449,32 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     rec.section('S'); rec.formula('x', 'etq'); rec.exercise({ title: 'a' }); rec.problem({ title: 'b' }); rec.keys(['k']);
     truthy('el recolector numera ejercicios y problemas con el mismo contador',
       rec.items.length === 2 && rec.items[1].n === 2 && rec.vistas.length === 1 && rec.claves.length === 1);
+    rec.puente('p'); rec.ejemplo({ pasos: ['a'] }); rec.comprueba('q', [{ t: 'a', ok: true }]); rec.trampas(['t']);
+    ok('el recolector ignora puentes, ejemplos resueltos, comprobaciones y trampas');
+
+    /* --- ejemplo resuelto, comprueba, puente, predicción e índice --- */
+    var pg2 = new Page(h2, { id: '__pg' });
+    pg2.section('Uno'); pg2.section('Dos'); pg2.section('Tres');
+    truthy('cada sección recibe un ancla para el índice del tema',
+      pg2.secciones.length === 3 && pg2.secciones[2].el.id === 'sec-3' && pg2.secciones[0].el.tabIndex === -1);
+    var res = pg2.ejemplo({ title: 'r', enunciado: 'e', pasos: ['uno', { t: 'dos', antes: '¿y ahora?' }, 'tres'], cierre: 'fin' });
+    var lis = res.querySelectorAll('.res__paso');
+    truthy('un ejemplo resuelto empieza con solo el primer paso a la vista', lis.length === 3 && !lis[0].hidden && lis[1].hidden && lis[2].hidden);
+    truthy('y pregunta antes de destapar el siguiente', res.querySelector('.res__antes').textContent.indexOf('¿y ahora?') >= 0);
+    res.__res.bSig.click();
+    truthy('cada clic destapa un paso', !lis[1].hidden && lis[2].hidden);
+    res.__res.bSig.click();
+    truthy('al destapar el último aparece el cierre y se esconden los botones',
+      !lis[2].hidden && !res.querySelector('.res__cierre').hidden && res.__res.bSig.hidden);
+    var chk = pg2.comprueba('¿2+2?', [{ t: '4', ok: true, por: 'claro' }, { t: '5', ok: false, por: 'te has pasado' }]);
+    chk.__chk.botones[1].click();
+    truthy('una comprobación explica la opción equivocada', chk.classList.contains('is-bad') && chk.__chk.fb.textContent.indexOf('te has pasado') >= 0);
+    chk.__chk.botones[0].click();
+    truthy('y confirma la buena', chk.classList.contains('is-ok') && !chk.classList.contains('is-bad'));
+    truthy('el puente es un aviso con su título', pg2.puente('hilo').className.indexOf('note--puente') >= 0);
+    var dm = pg2.demo({ title: 'd', predice: '¿subirá o bajará?', build: function () {} });
+    truthy('una demo con predicción la pliega antes de los mandos', !!dm.querySelector('details.predice summary'));
+    truthy('las trampas se listan con su porqué', pg2.trampas([{ e: 'x', por: 'y' }]).querySelectorAll('li').length === 1);
 
     var v3 = W.space3d(h2, { rango: 4, aria: 'Prueba del visor', draw: function (g) { g.punto([1, 2, 3]); } });
     var c3 = v3.plot.canvas;
@@ -668,6 +694,27 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           var pg = new Page(h, t);
           reg[t.id](pg);
           var aud = auditar(pg.specs);
+          // Una comprobación sin opción correcta, o con una opción sin
+          // explicación, deja al alumno sin saber por qué. Y un ejemplo
+          // resuelto de un solo paso no es un ejemplo resuelto.
+          pg.checks.forEach(function (c, i) {
+            var buenas = c.opts.filter(function (o) { return o.ok; }).length;
+            if (!buenas) aud.push('comprobación ' + (i + 1) + ' sin opción correcta');
+            if (c.opts.length < 2) aud.push('comprobación ' + (i + 1) + ' con una sola opción');
+            if (c.opts.some(function (o) { return !o.por; })) aud.push('comprobación ' + (i + 1) + ' con opciones sin explicación');
+          });
+          pg.ejemplos.forEach(function (e, i) {
+            if (e.pasos.length < 2) aud.push('ejemplo resuelto ' + (i + 1) + ' con menos de dos pasos');
+          });
+          // Los ejercicios se ordenan de básico a avanzado: un salto atrás
+          // en la dificultad descoloca, y uno hacia delante sin escalón, también.
+          var NIV = { basico: 1, medio: 2, avanzado: 3 }, ant = 0, desorden = false;
+          pg.specs.forEach(function (s) {
+            var n = NIV[s.level] || 2;
+            if (n < ant) desorden = true;
+            ant = n;
+          });
+          if (desorden) aud.push('los ejercicios no van de básico a avanzado');
           // Ninguna gráfica de escala 1:1 puede recortar la ventana que pidió
           // su autor: si lo hiciera, se comería parte del dibujo.
           var recortadas = [];
@@ -821,6 +868,8 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           } else {
             html += '<div class="ok">✓ ' + t.id + ' — ' +
               h.querySelectorAll('.card--demo').length + ' ejemplos, ' +
+              h.querySelectorAll('.card--res').length + ' resueltos, ' +
+              h.querySelectorAll('.chk').length + ' comprobaciones, ' +
               h.querySelectorAll('.card--ex').length + ' ejercicios (auditados), ' +
               h.querySelectorAll('canvas').length + ' gráficas</div>';
           }

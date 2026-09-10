@@ -214,6 +214,40 @@ Course.topic('fn-integral-indef', function (p) {
   });
 
   p.exercise({
+    title: 'Inmediata de tipo compuesto',
+    level: 'medio',
+    gen: function (r) {
+      var fam = r.int(0, 2), a = r.pm(1, 4), b = r.pm(1, 6), m = r.pick([1, 2, 3, -1]);
+      var x = r.int(0, 2), g = a * x * x + b, v;
+      if (fam === 0) { if (g <= 0) return null; v = m * Math.log(g) / 1; }
+      else if (fam === 1) { v = m * Math.exp(a * x * x) / 1; if (Math.abs(v) > 1e5) return null; }
+      else { v = m * Math.sin(a * x * x + b); }
+      return { fam: fam, a: a, b: b, m: m, x: x, g: g, v: v };
+    },
+    ask: function (d) {
+      var num = ML.termTex(d.m * 2 * d.a, 'x', 1, true);
+      var tex = [
+        '\\dfrac{' + num + '}{' + ML.polyTex([d.a, 0, d.b]) + '}',
+        num + '\\,e^{' + ML.termTex(d.a, 'x', 2, true) + '}',
+        num + '\\cos(' + ML.polyTex([d.a, 0, d.b]) + ')'
+      ][d.fam];
+      return 'Calcula $\\displaystyle\\int ' + tex + '\\,dx$ tomando $C = 0$ y evalúa la primitiva en $x = ' + d.x + '$ (cuatro decimales).';
+    },
+    fields: [{ name: 'v', label: 'valor', w: 'wide' }],
+    sol: function (d) { return { v: U.round(d.v, 6) }; },
+    tol: 3e-4,
+    hint: function (d) {
+      return ['Busca una función cuya derivada esté también en el integrando.',
+        ['El numerador es ' + d.m + ' veces la derivada del denominador: sale un logaritmo.', 'Lo que multiplica es ' + d.m + ' veces la derivada del exponente: sale la misma exponencial.', 'Lo que multiplica es ' + d.m + ' veces la derivada de lo de dentro del coseno: sale un seno.'][d.fam]];
+    },
+    steps: function (d) {
+      var prim = [d.m + '\\ln|' + ML.polyTex([d.a, 0, d.b]) + '|', d.m + 'e^{' + ML.termTex(d.a, 'x', 2, true) + '}', d.m + '\\operatorname{sen}(' + ML.polyTex([d.a, 0, d.b]) + ')'][d.fam];
+      return ['Es de tipo compuesto: la primitiva es $' + prim + ' + C$.', 'En $x = ' + d.x + '$ vale $' + U.fmt(d.v, 4) + '$.', 'Comprobación: derivando $' + prim + '$ con la regla de la cadena vuelve a salir el integrando ✓'];
+    },
+    answer: function (d) { return U.fmt(d.v, 4); }
+  });
+
+  p.exercise({
     title: 'Cambio de variable',
     level: 'avanzado',
     gen: function (r) {
@@ -272,40 +306,6 @@ Course.topic('fn-integral-indef', function (p) {
         'Fíjate en que hemos elegido $u=x$ para que al derivarlo <em>desaparezca</em>: esa es toda la gracia del método.'];
     },
     answer: function (d) { return U.fmt(d.val, 4); }
-  });
-
-  p.exercise({
-    title: 'Inmediata de tipo compuesto',
-    level: 'medio',
-    gen: function (r) {
-      var fam = r.int(0, 2), a = r.pm(1, 4), b = r.pm(1, 6), m = r.pick([1, 2, 3, -1]);
-      var x = r.int(0, 2), g = a * x * x + b, v;
-      if (fam === 0) { if (g <= 0) return null; v = m * Math.log(g) / 1; }
-      else if (fam === 1) { v = m * Math.exp(a * x * x) / 1; if (Math.abs(v) > 1e5) return null; }
-      else { v = m * Math.sin(a * x * x + b); }
-      return { fam: fam, a: a, b: b, m: m, x: x, g: g, v: v };
-    },
-    ask: function (d) {
-      var num = ML.termTex(d.m * 2 * d.a, 'x', 1, true);
-      var tex = [
-        '\\dfrac{' + num + '}{' + ML.polyTex([d.a, 0, d.b]) + '}',
-        num + '\\,e^{' + ML.termTex(d.a, 'x', 2, true) + '}',
-        num + '\\cos(' + ML.polyTex([d.a, 0, d.b]) + ')'
-      ][d.fam];
-      return 'Calcula $\\displaystyle\\int ' + tex + '\\,dx$ tomando $C = 0$ y evalúa la primitiva en $x = ' + d.x + '$ (cuatro decimales).';
-    },
-    fields: [{ name: 'v', label: 'valor', w: 'wide' }],
-    sol: function (d) { return { v: U.round(d.v, 6) }; },
-    tol: 3e-4,
-    hint: function (d) {
-      return ['Busca una función cuya derivada esté también en el integrando.',
-        ['El numerador es ' + d.m + ' veces la derivada del denominador: sale un logaritmo.', 'Lo que multiplica es ' + d.m + ' veces la derivada del exponente: sale la misma exponencial.', 'Lo que multiplica es ' + d.m + ' veces la derivada de lo de dentro del coseno: sale un seno.'][d.fam]];
-    },
-    steps: function (d) {
-      var prim = [d.m + '\\ln|' + ML.polyTex([d.a, 0, d.b]) + '|', d.m + 'e^{' + ML.termTex(d.a, 'x', 2, true) + '}', d.m + '\\operatorname{sen}(' + ML.polyTex([d.a, 0, d.b]) + ')'][d.fam];
-      return ['Es de tipo compuesto: la primitiva es $' + prim + ' + C$.', 'En $x = ' + d.x + '$ vale $' + U.fmt(d.v, 4) + '$.', 'Comprobación: derivando $' + prim + '$ con la regla de la cadena vuelve a salir el integrando ✓'];
-    },
-    answer: function (d) { return U.fmt(d.v, 4); }
   });
 
   p.keys([

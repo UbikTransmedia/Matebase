@@ -403,6 +403,40 @@ Course.topic('gfx-ruido', function (p) {
   });
 
   p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { c: 'float v = hash(floor(p * 8.0));',
+          o: ['Una cuadrícula de cuadrados, cada uno de un gris al azar', 'Nubes suaves', 'Estática que cambia de un píxel a otro', 'Un degradado'],
+          por: 'Todos los píxeles de una misma celda tienen el mismo <code>floor</code>, así que reciben el mismo número al azar: bloques de gris uniforme.' },
+        { c: 'float v = hash(fragCoord);',
+          o: ['Estática: cada píxel con un gris al azar, como una tele sin señal', 'Cuadrados grandes de grises', 'Nubes suaves', 'Una pantalla gris uniforme'],
+          por: 'Cada píxel tiene una coordenada distinta, así que cada uno recibe su propio número al azar, sin relación con el vecino.' },
+        { c: 'float v = ruido(p * 4.0);',
+          o: ['Manchas suaves y borrosas, todas de un tamaño parecido', 'Estática', 'Nubes con detalle a muchas escalas', 'Rayas regulares'],
+          por: 'El ruido interpola suavemente entre los valores de las esquinas de una rejilla: sale una sola escala de manchas, sin detalle fino.' },
+        { c: 'float v = 0.5 * ruido(p * 4.0) + 0.25 * ruido(p * 8.0) + 0.125 * ruido(p * 16.0);',
+          o: ['Nubes con detalle a varias escalas: manchas grandes de borde rugoso', 'Manchas suaves de un solo tamaño', 'Estática', 'Cuadrados de grises'],
+          por: 'Cada octava dobla la frecuencia y reduce a la mitad la amplitud: las manchas grandes llevan encima detalles cada vez más pequeños.' },
+        { c: 'float v = hash(floor(p * 8.0) + floor(iTime));',
+          o: ['Cuadrados de grises al azar que cambian todos de golpe una vez por segundo', 'Cuadrados que cambian de gris suavemente', 'Estática que cambia en cada fotograma', 'Una imagen quieta'],
+          por: '<code>floor(iTime)</code> solo cambia al empezar cada segundo; entre tanto, el hash recibe los mismos números y la imagen no se mueve.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) {
+      return 'Con <code>p</code> centrada, <code>hash</code> y <code>ruido</code> como en el tema y el color final <code>vec3(v)</code>, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>';
+    },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['¿El número al azar cambia de un píxel a otro, de una celda a otra o de forma continua?', '¿Hay una sola escala de detalle o varias sumadas?']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
+  });
+
+  p.exercise({
     title: 'Escribe el paso de la octava',
     level: 'avanzado',
     gen: function (r) {
@@ -461,40 +495,6 @@ Course.topic('gfx-ruido', function (p) {
         'rebajada y el resultado sale más apagado.'];
     },
     answer: function (d) { return d.ref; }
-  });
-
-  p.exercise({
-    title: 'Predice la imagen',
-    level: 'medio',
-    gen: function (r) {
-      var casos = [
-        { c: 'float v = hash(floor(p * 8.0));',
-          o: ['Una cuadrícula de cuadrados, cada uno de un gris al azar', 'Nubes suaves', 'Estática que cambia de un píxel a otro', 'Un degradado'],
-          por: 'Todos los píxeles de una misma celda tienen el mismo <code>floor</code>, así que reciben el mismo número al azar: bloques de gris uniforme.' },
-        { c: 'float v = hash(fragCoord);',
-          o: ['Estática: cada píxel con un gris al azar, como una tele sin señal', 'Cuadrados grandes de grises', 'Nubes suaves', 'Una pantalla gris uniforme'],
-          por: 'Cada píxel tiene una coordenada distinta, así que cada uno recibe su propio número al azar, sin relación con el vecino.' },
-        { c: 'float v = ruido(p * 4.0);',
-          o: ['Manchas suaves y borrosas, todas de un tamaño parecido', 'Estática', 'Nubes con detalle a muchas escalas', 'Rayas regulares'],
-          por: 'El ruido interpola suavemente entre los valores de las esquinas de una rejilla: sale una sola escala de manchas, sin detalle fino.' },
-        { c: 'float v = 0.5 * ruido(p * 4.0) + 0.25 * ruido(p * 8.0) + 0.125 * ruido(p * 16.0);',
-          o: ['Nubes con detalle a varias escalas: manchas grandes de borde rugoso', 'Manchas suaves de un solo tamaño', 'Estática', 'Cuadrados de grises'],
-          por: 'Cada octava dobla la frecuencia y reduce a la mitad la amplitud: las manchas grandes llevan encima detalles cada vez más pequeños.' },
-        { c: 'float v = hash(floor(p * 8.0) + floor(iTime));',
-          o: ['Cuadrados de grises al azar que cambian todos de golpe una vez por segundo', 'Cuadrados que cambian de gris suavemente', 'Estática que cambia en cada fotograma', 'Una imagen quieta'],
-          por: '<code>floor(iTime)</code> solo cambia al empezar cada segundo; entre tanto, el hash recibe los mismos números y la imagen no se mueve.' }
-      ];
-      var c = r.pick(casos);
-      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
-    },
-    ask: function (d) {
-      return 'Con <code>p</code> centrada, <code>hash</code> y <code>ruido</code> como en el tema y el color final <code>vec3(v)</code>, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>';
-    },
-    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
-    sol: function () { return { q: '0' }; },
-    hint: function () { return ['¿El número al azar cambia de un píxel a otro, de una celda a otra o de forma continua?', '¿Hay una sola escala de detalle o varias sumadas?']; },
-    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
-    answer: function (d) { return d.textos[0]; }
   });
 
   p.keys([

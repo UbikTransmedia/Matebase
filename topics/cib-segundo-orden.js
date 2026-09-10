@@ -189,6 +189,83 @@ Course.topic('cib-segundo-orden', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Ley de Goodhart',
+    level: 'basico',
+    gen: function (r) {
+      var casos = [
+        { t: 'Se evalúa a un centro de salud por el tiempo medio de espera, y empieza a citar a los pacientes complicados en otra lista.', g: true },
+        { t: 'Se mide la temperatura de un horno con un termómetro para regularlo, y el termómetro no altera el horno.', g: false },
+        { t: 'Se paga a los programadores por líneas de código escritas y el código se vuelve mucho más largo.', g: true },
+        { t: 'Un pluviómetro registra la lluvia caída y la medición no influye en el tiempo.', g: false },
+        { t: 'Se premia a los colegios por su nota media en un examen y empiezan a preparar solo ese examen.', g: true },
+        { t: 'Se cuenta el número de coches que pasan por un puente para dimensionar una obra futura.', g: false }
+      ];
+      var c = r.pick(casos);
+      return { texto: c.t, goodhart: c.g };
+    },
+    ask: function (d) {
+      return '<em>«' + d.texto + '»</em><br><br>¿Se está produciendo el efecto de la ley de Goodhart ' +
+        '—la medida se ha convertido en objetivo y ha dejado de medir lo que medía— o se trata de una ' +
+        'medición que no altera lo medido?<br><br>Responde <strong>sí</strong> o <strong>no</strong>.';
+    },
+    fields: [{ name: 'q', label: '¿Goodhart?', w: 'tiny' }],
+    sol: function (d) { return { q: d.goodhart ? 'sí' : 'no' }; },
+    check: function (v, d) {
+      var s = U.llano(v.raw.q).trim();
+      // «no lo sé» empieza por «no» y no es una respuesta: no puede acertar.
+      if (/^(no lo se|no se|ni idea|no sabria|no estoy seguro)/.test(s)) {
+        return { ok: false, msg: 'Decide: ¿se produce el efecto o no?' };
+      }
+      if (/^(no|n)\b/.test(s)) return { ok: !d.goodhart };   // «no», «no se produce»…
+      if (/^(si|s|yes)\b/.test(s)) return { ok: d.goodhart };
+      var q = U.eligeOpcion(s, {
+        si: /se produce|hay goodhart|es goodhart|goodhart/,
+        no: /no se produce|no altera|medicion normal|no hay/
+      });
+      if (!q) return { ok: false, msg: 'Responde «sí» o «no».' };
+      return { ok: d.goodhart ? q === 'si' : q === 'no' };
+    },
+    hint: function () {
+      return '¿Hay alguien con un incentivo para cambiar su conducta <em>a causa</em> de que le midan? Un termómetro no tiene incentivos.';
+    },
+    steps: function (d) {
+      return d.goodhart
+        ? ['La medida se ha convertido en objetivo de alguien que puede modificar su conducta.',
+           'Y esa conducta cambia de manera que mejora el indicador sin mejorar lo que el indicador pretendía representar.',
+           '<strong>Sí</strong> es un caso de la ley de Goodhart: el sistema medido y el que mide están acoplados.']
+        : ['Aquí lo medido no tiene manera de reaccionar al hecho de ser medido.',
+           'El acoplamiento entre observador y observado es despreciable.',
+           '<strong>No</strong> es un caso de Goodhart: es una medición corriente.'];
+    },
+    answer: function (d) { return d.goodhart ? 'sí' : 'no'; }
+  });
+
+  p.exercise({
+    title: '¿Primer o segundo orden?',
+    level: 'basico',
+    gen: function (r) {
+      return r.pick([
+        { t: 'Una ingeniera ajusta el termostato de un edificio tratando el edificio como algo externo que se mide y se controla.', q: 'uno' },
+        { t: 'Un profesor se da cuenta de que el examen que diseña cambia la forma en que sus alumnos estudian, y rediseña el examen teniéndolo en cuenta.', q: 'dos' },
+        { t: 'Un ornitólogo cuenta aves desde un escondite sin que ellas lo detecten.', q: 'uno' },
+        { t: 'Una empresa de sondeos estudia cómo la publicación de sus propias encuestas modifica la intención de voto.', q: 'dos' },
+        { t: 'Una terapeuta familiar analiza cómo su propia presencia en las sesiones cambia la manera de hablar de la familia.', q: 'dos' },
+        { t: 'Un técnico mide con un calibre el grosor de una pieza metálica.', q: 'uno' }
+      ]);
+    },
+    ask: function (d) { return '<em>«' + d.t + '»</em><br>¿Es una mirada de cibernética de primer orden o de segundo orden?'; },
+    fields: [{ name: 'q', label: 'Es de', opts: [{ t: 'primer orden: el observador queda fuera del sistema', v: 'uno' }, { t: 'segundo orden: el observador forma parte del sistema', v: 'dos' }] }],
+    sol: function (d) { return { q: d.q }; },
+    hint: function () { return '¿Se tiene en cuenta que quien observa o regula está influyendo en lo observado?'; },
+    steps: function (d) {
+      return [d.q === 'uno'
+        ? 'El observador mide y actúa desde fuera, y su presencia no cambia lo medido, o se considera despreciable. <strong>Primer orden.</strong>'
+        : 'Quien observa se incluye en el cuadro: reconoce que su medida o su presencia forman parte del sistema que estudia. <strong>Segundo orden.</strong>'];
+    },
+    answer: function (d) { return d.q === 'uno' ? 'Primer orden' : 'Segundo orden'; }
+  });
+
+  p.exercise({
     title: '¿Qué distinciones le faltan al regulador?',
     level: 'medio',
     gen: function (r) {
@@ -246,58 +323,6 @@ Course.topic('cib-segundo-orden', function (p) {
   });
 
   p.exercise({
-    title: 'Ley de Goodhart',
-    level: 'basico',
-    gen: function (r) {
-      var casos = [
-        { t: 'Se evalúa a un centro de salud por el tiempo medio de espera, y empieza a citar a los pacientes complicados en otra lista.', g: true },
-        { t: 'Se mide la temperatura de un horno con un termómetro para regularlo, y el termómetro no altera el horno.', g: false },
-        { t: 'Se paga a los programadores por líneas de código escritas y el código se vuelve mucho más largo.', g: true },
-        { t: 'Un pluviómetro registra la lluvia caída y la medición no influye en el tiempo.', g: false },
-        { t: 'Se premia a los colegios por su nota media en un examen y empiezan a preparar solo ese examen.', g: true },
-        { t: 'Se cuenta el número de coches que pasan por un puente para dimensionar una obra futura.', g: false }
-      ];
-      var c = r.pick(casos);
-      return { texto: c.t, goodhart: c.g };
-    },
-    ask: function (d) {
-      return '<em>«' + d.texto + '»</em><br><br>¿Se está produciendo el efecto de la ley de Goodhart ' +
-        '—la medida se ha convertido en objetivo y ha dejado de medir lo que medía— o se trata de una ' +
-        'medición que no altera lo medido?<br><br>Responde <strong>sí</strong> o <strong>no</strong>.';
-    },
-    fields: [{ name: 'q', label: '¿Goodhart?', w: 'tiny' }],
-    sol: function (d) { return { q: d.goodhart ? 'sí' : 'no' }; },
-    check: function (v, d) {
-      var s = U.llano(v.raw.q).trim();
-      // «no lo sé» empieza por «no» y no es una respuesta: no puede acertar.
-      if (/^(no lo se|no se|ni idea|no sabria|no estoy seguro)/.test(s)) {
-        return { ok: false, msg: 'Decide: ¿se produce el efecto o no?' };
-      }
-      if (/^(no|n)\b/.test(s)) return { ok: !d.goodhart };   // «no», «no se produce»…
-      if (/^(si|s|yes)\b/.test(s)) return { ok: d.goodhart };
-      var q = U.eligeOpcion(s, {
-        si: /se produce|hay goodhart|es goodhart|goodhart/,
-        no: /no se produce|no altera|medicion normal|no hay/
-      });
-      if (!q) return { ok: false, msg: 'Responde «sí» o «no».' };
-      return { ok: d.goodhart ? q === 'si' : q === 'no' };
-    },
-    hint: function () {
-      return '¿Hay alguien con un incentivo para cambiar su conducta <em>a causa</em> de que le midan? Un termómetro no tiene incentivos.';
-    },
-    steps: function (d) {
-      return d.goodhart
-        ? ['La medida se ha convertido en objetivo de alguien que puede modificar su conducta.',
-           'Y esa conducta cambia de manera que mejora el indicador sin mejorar lo que el indicador pretendía representar.',
-           '<strong>Sí</strong> es un caso de la ley de Goodhart: el sistema medido y el que mide están acoplados.']
-        : ['Aquí lo medido no tiene manera de reaccionar al hecho de ser medido.',
-           'El acoplamiento entre observador y observado es despreciable.',
-           '<strong>No</strong> es un caso de Goodhart: es una medición corriente.'];
-    },
-    answer: function (d) { return d.goodhart ? 'sí' : 'no'; }
-  });
-
-  p.exercise({
     title: 'Cuántos modelos puede tener un regulador',
     level: 'medio',
     gen: function (r) {
@@ -324,31 +349,6 @@ Course.topic('cib-segundo-orden', function (p) {
         'El número crece exponencialmente con las perturbaciones. Por eso un buen regulador no puede dar con su modelo sorteando: tiene que construirlo distinguiendo las situaciones, que es lo que exige el teorema.'];
     },
     answer: function (d) { return d.n + ' estrategias, probabilidad 1/' + d.n; }
-  });
-
-  p.exercise({
-    title: '¿Primer o segundo orden?',
-    level: 'basico',
-    gen: function (r) {
-      return r.pick([
-        { t: 'Una ingeniera ajusta el termostato de un edificio tratando el edificio como algo externo que se mide y se controla.', q: 'uno' },
-        { t: 'Un profesor se da cuenta de que el examen que diseña cambia la forma en que sus alumnos estudian, y rediseña el examen teniéndolo en cuenta.', q: 'dos' },
-        { t: 'Un ornitólogo cuenta aves desde un escondite sin que ellas lo detecten.', q: 'uno' },
-        { t: 'Una empresa de sondeos estudia cómo la publicación de sus propias encuestas modifica la intención de voto.', q: 'dos' },
-        { t: 'Una terapeuta familiar analiza cómo su propia presencia en las sesiones cambia la manera de hablar de la familia.', q: 'dos' },
-        { t: 'Un técnico mide con un calibre el grosor de una pieza metálica.', q: 'uno' }
-      ]);
-    },
-    ask: function (d) { return '<em>«' + d.t + '»</em><br>¿Es una mirada de cibernética de primer orden o de segundo orden?'; },
-    fields: [{ name: 'q', label: 'Es de', opts: [{ t: 'primer orden: el observador queda fuera del sistema', v: 'uno' }, { t: 'segundo orden: el observador forma parte del sistema', v: 'dos' }] }],
-    sol: function (d) { return { q: d.q }; },
-    hint: function () { return '¿Se tiene en cuenta que quien observa o regula está influyendo en lo observado?'; },
-    steps: function (d) {
-      return [d.q === 'uno'
-        ? 'El observador mide y actúa desde fuera, y su presencia no cambia lo medido, o se considera despreciable. <strong>Primer orden.</strong>'
-        : 'Quien observa se incluye en el cuadro: reconoce que su medida o su presencia forman parte del sistema que estudia. <strong>Segundo orden.</strong>'];
-    },
-    answer: function (d) { return d.q === 'uno' ? 'Primer orden' : 'Segundo orden'; }
   });
 
   p.keys([

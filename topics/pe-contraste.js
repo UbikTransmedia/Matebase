@@ -174,6 +174,28 @@ Course.topic('pe-contraste', function (p) {
     answer: function (d) { return String(d.z).replace('.', ','); }
   });
 
+  p.exercise({
+    title: '¿Qué tipo de error?',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { t: 'Un test concluye que un fármaco funciona, cuando en realidad no tiene ningún efecto.', ok: 'I' },
+        { t: 'Un control de calidad no detecta que la máquina está desajustada, y la deja funcionando.', ok: 'II' },
+        { t: 'Un juez condena a un acusado que era inocente.', ok: 'I' },
+        { t: 'Un análisis no rechaza que la moneda sea legal, y efectivamente lo es.', ok: 'ok' },
+        { t: 'Se concluye que una nueva web no vende más que la antigua, cuando en realidad sí vende más.', ok: 'II' },
+        { t: 'Se rechaza que el dado esté equilibrado y, en efecto, estaba trucado.', ok: 'ok' }
+      ];
+      return r.pick(casos);
+    },
+    ask: function (d) { return d.t; },
+    fields: [{ name: 't', label: 'Es', opts: [{ t: 'un error de tipo I', v: 'I' }, { t: 'un error de tipo II', v: 'II' }, { t: 'una decisión correcta', v: 'ok' }] }],
+    sol: function (d) { return { t: d.ok }; },
+    hint: function () { return ['Identifica primero cuál es $H_0$ (lo que se da por bueno: «no funciona», «está bien ajustada», «es inocente»).', 'Tipo I: rechazar $H_0$ siendo cierta. Tipo II: no rechazarla siendo falsa.']; },
+    steps: function (d) { return [{ I: 'Se ha rechazado una $H_0$ que era cierta: <strong>error de tipo I</strong>.', II: 'No se ha rechazado una $H_0$ que era falsa: <strong>error de tipo II</strong>.', ok: 'La decisión coincide con la realidad: <strong>no hay error</strong>.' }[d.ok]]; },
+    answer: function (d) { return { I: 'Error de tipo I', II: 'Error de tipo II', ok: 'Decisión correcta' }[d.ok]; }
+  });
+
   p.problem({
     title: 'Contraste para la media',
     level: 'avanzado',
@@ -278,28 +300,6 @@ Course.topic('pe-contraste', function (p) {
         answer: function (d) { return d.dec === 'rechaza' ? 'Sí' : 'No'; }
       }
     ]
-  });
-
-  p.exercise({
-    title: '¿Qué tipo de error?',
-    level: 'medio',
-    gen: function (r) {
-      var casos = [
-        { t: 'Un test concluye que un fármaco funciona, cuando en realidad no tiene ningún efecto.', ok: 'I' },
-        { t: 'Un control de calidad no detecta que la máquina está desajustada, y la deja funcionando.', ok: 'II' },
-        { t: 'Un juez condena a un acusado que era inocente.', ok: 'I' },
-        { t: 'Un análisis no rechaza que la moneda sea legal, y efectivamente lo es.', ok: 'ok' },
-        { t: 'Se concluye que una nueva web no vende más que la antigua, cuando en realidad sí vende más.', ok: 'II' },
-        { t: 'Se rechaza que el dado esté equilibrado y, en efecto, estaba trucado.', ok: 'ok' }
-      ];
-      return r.pick(casos);
-    },
-    ask: function (d) { return d.t; },
-    fields: [{ name: 't', label: 'Es', opts: [{ t: 'un error de tipo I', v: 'I' }, { t: 'un error de tipo II', v: 'II' }, { t: 'una decisión correcta', v: 'ok' }] }],
-    sol: function (d) { return { t: d.ok }; },
-    hint: function () { return ['Identifica primero cuál es $H_0$ (lo que se da por bueno: «no funciona», «está bien ajustada», «es inocente»).', 'Tipo I: rechazar $H_0$ siendo cierta. Tipo II: no rechazarla siendo falsa.']; },
-    steps: function (d) { return [{ I: 'Se ha rechazado una $H_0$ que era cierta: <strong>error de tipo I</strong>.', II: 'No se ha rechazado una $H_0$ que era falsa: <strong>error de tipo II</strong>.', ok: 'La decisión coincide con la realidad: <strong>no hay error</strong>.' }[d.ok]]; },
-    answer: function (d) { return { I: 'Error de tipo I', II: 'Error de tipo II', ok: 'Decisión correcta' }[d.ok]; }
   });
 
   p.keys([

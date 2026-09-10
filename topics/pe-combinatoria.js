@@ -159,6 +159,31 @@ Course.topic('pe-combinatoria', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Número combinatorio',
+    level: 'basico',
+    gen: function (r) {
+      var m = r.int(4, 14), n = r.int(1, m - 1);
+      return { m: m, n: n, val: ML.comb(m, n) };
+    },
+    ask: function (d) { return 'Calcula $\\dbinom{' + d.m + '}{' + d.n + '}$'; },
+    fields: [{ name: 'v', label: 'Valor', w: 'wide' }],
+    sol: function (d) { return { v: d.val }; },
+    hint: function (d) {
+      return '$\\binom{m}{n} = \\frac{m!}{n!(m-n)!}$. Y recuerda que $\\binom{' + d.m + '}{' + d.n +
+        '} = \\binom{' + d.m + '}{' + (d.m - d.n) + '}$: usa el que tenga el número más pequeño abajo.';
+    },
+    steps: function (d) {
+      var k = Math.min(d.n, d.m - d.n);
+      var nums = [], dens = [];
+      for (var i = 0; i < k; i++) { nums.push(d.m - i); dens.push(i + 1); }
+      return ['Usamos la simetría para simplificar: $\\dbinom{' + d.m + '}{' + d.n + '} = \\dbinom{' + d.m + '}{' + k + '}$.',
+        '$= \\dfrac{' + nums.join(' \\cdot ') + '}{' + dens.join(' \\cdot ') + '}$',
+        '$= ' + d.val + '$'];
+    },
+    answer: function (d) { return String(d.val); }
+  });
+
+  p.exercise({
     title: '¿Cuántas maneras hay?',
     level: 'medio',
     gen: function (r) {
@@ -195,31 +220,6 @@ Course.topic('pe-combinatoria', function (p) {
       return ['Como el orden no importa, cada equipo se cuenta una sola vez.',
         '$\\dbinom{' + d.m + '}{' + d.n + '} = \\dfrac{' + d.m + '!}{' + d.n + '!\\,' + (d.m - d.n) + '!} = ' + d.val + '$',
         'Fíjate: si importara el orden saldrían $' + ML.perm(d.m, d.n) + '$, que es $' + d.n + '!$ veces más.'];
-    },
-    answer: function (d) { return String(d.val); }
-  });
-
-  p.exercise({
-    title: 'Número combinatorio',
-    level: 'basico',
-    gen: function (r) {
-      var m = r.int(4, 14), n = r.int(1, m - 1);
-      return { m: m, n: n, val: ML.comb(m, n) };
-    },
-    ask: function (d) { return 'Calcula $\\dbinom{' + d.m + '}{' + d.n + '}$'; },
-    fields: [{ name: 'v', label: 'Valor', w: 'wide' }],
-    sol: function (d) { return { v: d.val }; },
-    hint: function (d) {
-      return '$\\binom{m}{n} = \\frac{m!}{n!(m-n)!}$. Y recuerda que $\\binom{' + d.m + '}{' + d.n +
-        '} = \\binom{' + d.m + '}{' + (d.m - d.n) + '}$: usa el que tenga el número más pequeño abajo.';
-    },
-    steps: function (d) {
-      var k = Math.min(d.n, d.m - d.n);
-      var nums = [], dens = [];
-      for (var i = 0; i < k; i++) { nums.push(d.m - i); dens.push(i + 1); }
-      return ['Usamos la simetría para simplificar: $\\dbinom{' + d.m + '}{' + d.n + '} = \\dbinom{' + d.m + '}{' + k + '}$.',
-        '$= \\dfrac{' + nums.join(' \\cdot ') + '}{' + dens.join(' \\cdot ') + '}$',
-        '$= ' + d.val + '$'];
     },
     answer: function (d) { return String(d.val); }
   });

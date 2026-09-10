@@ -169,6 +169,30 @@ Course.topic('av-lineal', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Traza y determinante',
+    level: 'basico',
+    gen: function (r) {
+      var l1 = r.pm(1, 8), l2 = r.pm(1, 8);
+      return { l1: l1, l2: l2, tr: l1 + l2, det: l1 * l2 };
+    },
+    ask: function (d) {
+      return 'Una matriz $2\\times2$ tiene autovalores $' + d.l1 + '$ y $' + d.l2 + '$. ¿Cuánto valen ' +
+        'su traza y su determinante?';
+    },
+    fields: [{ name: 't', label: 'Traza', w: 'tiny' }, { name: 'd', label: 'Determinante', w: 'tiny' }],
+    sol: function (d) { return { t: d.tr, d: d.det }; },
+    tol: 1e-6,
+    hint: function () { return 'La traza es la suma de los autovalores y el determinante su producto.'; },
+    steps: function (d) {
+      return ['$\\operatorname{tr}A = \\lambda_1 + \\lambda_2 = ' + d.l1 + ' + (' + d.l2 + ') = ' + d.tr + '$',
+        '$\\det A = \\lambda_1 \\cdot \\lambda_2 = ' + d.l1 + ' \\cdot (' + d.l2 + ') = ' + d.det + '$',
+        d.det === 0 ? 'Determinante nulo: hay un autovalor cero, así que la matriz <strong>aplasta</strong> el plano sobre una recta y no tiene inversa.'
+          : 'Como el determinante no es cero, la matriz es inversible.'];
+    },
+    answer: function (d) { return 'Traza ' + d.tr + ', determinante ' + d.det + '.'; }
+  });
+
+  p.exercise({
     title: 'Autovalores de una matriz 2×2',
     level: 'medio',
     gen: function (r) {
@@ -234,27 +258,30 @@ Course.topic('av-lineal', function (p) {
   });
 
   p.exercise({
-    title: 'Traza y determinante',
-    level: 'basico',
+    title: 'Un giro con escala',
+    level: 'medio',
     gen: function (r) {
-      var l1 = r.pm(1, 8), l2 = r.pm(1, 8);
-      return { l1: l1, l2: l2, tr: l1 + l2, det: l1 * l2 };
+      var par = r.pick([[1, 1], [-1, 1], [0, 2], [1, -1], [-1, -1], [0, -3], [2, 2], [-2, 0], [3, 3]]);
+      var a = par[0], b = par[1];
+      if (b === 0) return null;
+      var ang = Math.atan2(b, a) * 180 / Math.PI;
+      return { a: a, b: b, r: Math.hypot(a, b), ang: ang, malAng: a !== 0 ? Math.atan(b / a) * 180 / Math.PI : ang };
     },
     ask: function (d) {
-      return 'Una matriz $2\\times2$ tiene autovalores $' + d.l1 + '$ y $' + d.l2 + '$. ¿Cuánto valen ' +
-        'su traza y su determinante?';
+      return 'La matriz $A = \\begin{pmatrix} ' + d.a + ' & ' + (-d.b) + ' \\\\ ' + d.b + ' & ' + d.a + ' \\end{pmatrix}$ tiene autovalores $\\lambda = ' + d.a + ' \\pm ' + Math.abs(d.b) +
+        'i$. ¿Cuánto estira y cuánto gira? Da el módulo y el ángulo de giro en grados, entre $-180^\\circ$ y $180^\\circ$, del autovalor $' + d.a + (d.b < 0 ? ' - ' : ' + ') + Math.abs(d.b) + 'i$. (Tres decimales.)';
     },
-    fields: [{ name: 't', label: 'Traza', w: 'tiny' }, { name: 'd', label: 'Determinante', w: 'tiny' }],
-    sol: function (d) { return { t: d.tr, d: d.det }; },
-    tol: 1e-6,
-    hint: function () { return 'La traza es la suma de los autovalores y el determinante su producto.'; },
+    fields: [{ name: 'r', label: 'módulo', w: 'tiny' }, { name: 'a', label: 'ángulo (°)', w: 'tiny' }],
+    sol: function (d) { return { r: U.round(d.r, 6), a: U.round(d.ang, 6) }; },
+    tol: 1e-3,
+    errores: [{ si: function (v, d) { return Math.abs(d.malAng - d.ang) > 1e-3 && Math.abs(v.a - d.malAng) < 5e-4; }, msg: 'La arcotangente de $\\frac{b}{a}$ no distingue cuadrantes: con $a < 0$ el complejo está a la izquierda, y hay que sumar o restar $180^\\circ$.' }],
+    hint: function () { return ['Módulo: $\\sqrt{a^2 + b^2}$.', 'Ángulo: el argumento del complejo $a + bi$. Dibújalo para ver en qué cuadrante está.']; },
     steps: function (d) {
-      return ['$\\operatorname{tr}A = \\lambda_1 + \\lambda_2 = ' + d.l1 + ' + (' + d.l2 + ') = ' + d.tr + '$',
-        '$\\det A = \\lambda_1 \\cdot \\lambda_2 = ' + d.l1 + ' \\cdot (' + d.l2 + ') = ' + d.det + '$',
-        d.det === 0 ? 'Determinante nulo: hay un autovalor cero, así que la matriz <strong>aplasta</strong> el plano sobre una recta y no tiene inversa.'
-          : 'Como el determinante no es cero, la matriz es inversible.'];
+      return ['$r = \\sqrt{' + d.a + '^2 + ' + (d.b < 0 ? '(' + d.b + ')' : d.b) + '^2} = \\sqrt{' + (d.a * d.a + d.b * d.b) + '} \\approx ' + U.fmt(d.r, 3) + '$',
+        'El complejo $' + d.a + (d.b < 0 ? ' - ' : ' + ') + Math.abs(d.b) + 'i$ tiene argumento $' + U.fmt(d.ang, 3) + '^\\circ$.',
+        'Cada aplicación de $A$ estira por ' + U.fmt(d.r, 3) + ' y gira ' + U.fmt(d.ang, 3) + '°.'];
     },
-    answer: function (d) { return 'Traza ' + d.tr + ', determinante ' + d.det + '.'; }
+    answer: function (d) { return 'r ≈ ' + U.fmt(d.r, 3) + ', ' + U.fmt(d.ang, 3) + '°'; }
   });
 
   p.exercise({
@@ -285,33 +312,6 @@ Course.topic('av-lineal', function (p) {
           : 'Como los dos módulos son menores o iguales que 1, al elevar la matriz todo se encoge hacia el origen.'];
     },
     answer: function (d) { return U.fmt(d.a, 4) + ' y ' + U.fmt(d.b, 4); }
-  });
-
-  p.exercise({
-    title: 'Un giro con escala',
-    level: 'medio',
-    gen: function (r) {
-      var par = r.pick([[1, 1], [-1, 1], [0, 2], [1, -1], [-1, -1], [0, -3], [2, 2], [-2, 0], [3, 3]]);
-      var a = par[0], b = par[1];
-      if (b === 0) return null;
-      var ang = Math.atan2(b, a) * 180 / Math.PI;
-      return { a: a, b: b, r: Math.hypot(a, b), ang: ang, malAng: a !== 0 ? Math.atan(b / a) * 180 / Math.PI : ang };
-    },
-    ask: function (d) {
-      return 'La matriz $A = \\begin{pmatrix} ' + d.a + ' & ' + (-d.b) + ' \\\\ ' + d.b + ' & ' + d.a + ' \\end{pmatrix}$ tiene autovalores $\\lambda = ' + d.a + ' \\pm ' + Math.abs(d.b) +
-        'i$. ¿Cuánto estira y cuánto gira? Da el módulo y el ángulo de giro en grados, entre $-180^\\circ$ y $180^\\circ$, del autovalor $' + d.a + (d.b < 0 ? ' - ' : ' + ') + Math.abs(d.b) + 'i$. (Tres decimales.)';
-    },
-    fields: [{ name: 'r', label: 'módulo', w: 'tiny' }, { name: 'a', label: 'ángulo (°)', w: 'tiny' }],
-    sol: function (d) { return { r: U.round(d.r, 6), a: U.round(d.ang, 6) }; },
-    tol: 1e-3,
-    errores: [{ si: function (v, d) { return Math.abs(d.malAng - d.ang) > 1e-3 && Math.abs(v.a - d.malAng) < 5e-4; }, msg: 'La arcotangente de $\\frac{b}{a}$ no distingue cuadrantes: con $a < 0$ el complejo está a la izquierda, y hay que sumar o restar $180^\\circ$.' }],
-    hint: function () { return ['Módulo: $\\sqrt{a^2 + b^2}$.', 'Ángulo: el argumento del complejo $a + bi$. Dibújalo para ver en qué cuadrante está.']; },
-    steps: function (d) {
-      return ['$r = \\sqrt{' + d.a + '^2 + ' + (d.b < 0 ? '(' + d.b + ')' : d.b) + '^2} = \\sqrt{' + (d.a * d.a + d.b * d.b) + '} \\approx ' + U.fmt(d.r, 3) + '$',
-        'El complejo $' + d.a + (d.b < 0 ? ' - ' : ' + ') + Math.abs(d.b) + 'i$ tiene argumento $' + U.fmt(d.ang, 3) + '^\\circ$.',
-        'Cada aplicación de $A$ estira por ' + U.fmt(d.r, 3) + ' y gira ' + U.fmt(d.ang, 3) + '°.'];
-    },
-    answer: function (d) { return 'r ≈ ' + U.fmt(d.r, 3) + ', ' + U.fmt(d.ang, 3) + '°'; }
   });
 
   p.keys([

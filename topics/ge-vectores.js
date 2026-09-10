@@ -322,6 +322,29 @@ Course.topic('ge-vectores', function (p) {
   });
 
   p.exercise({
+    title: 'Proyección de un vector sobre otro',
+    level: 'medio',
+    gen: function (r) {
+      var u = [r.pm(0, 5), r.pm(0, 5)], v = [r.pm(0, 5), r.pm(0, 5)];
+      var vv = v[0] * v[0] + v[1] * v[1];
+      if (!vv || (!u[0] && !u[1])) return null;
+      var ue = u[0] * v[0] + u[1] * v[1];
+      return { u: u, v: v, vv: vv, ue: ue, val: ue / Math.sqrt(vv) };
+    },
+    ask: function (d) { return 'Calcula la proyección (con signo) de $\\vec u = (' + d.u.join(',\\ ') + ')$ sobre la dirección de $\\vec v = (' + d.v.join(',\\ ') + ')$ (cuatro decimales).'; },
+    fields: [{ name: 'p', label: 'proyección', w: 'wide' }],
+    sol: function (d) { return { p: U.round(d.val, 6) }; },
+    tol: 3e-4,
+    errores: [
+      { si: function (v, d) { return d.vv !== 1 && d.ue !== 0 && Math.abs(v.p - d.ue) < 1e-6; }, msg: 'Eso es el producto escalar. La sombra se obtiene dividiéndolo por el <strong>módulo</strong> de $\\vec v$.' },
+      { si: function (v, d) { return d.vv !== 1 && d.ue !== 0 && Math.abs(v.p - d.ue / d.vv) < 1e-4; }, msg: 'Has dividido por el módulo al cuadrado: eso da el coeficiente del vector proyección, no la longitud de la sombra.' }
+    ],
+    hint: function () { return 'Proyección de $\\vec u$ sobre $\\vec v$: $\\frac{\\vec u\\cdot\\vec v}{|\\vec v|}$.'; },
+    steps: function (d) { return ['$\\vec u\\cdot\\vec v = ' + d.ue + '$ y $|\\vec v| = \\sqrt{' + d.vv + '}$.', 'Proyección: $\\dfrac{' + d.ue + '}{\\sqrt{' + d.vv + '}} \\approx ' + U.fmt(d.val, 4) + '$' + (d.ue < 0 ? ' (negativa: el ángulo es obtuso).' : '.')]; },
+    answer: function (d) { return U.fmt(d.val, 4); }
+  });
+
+  p.exercise({
     title: 'Ángulo entre dos vectores',
     level: 'avanzado',
     gen: function (r) {
@@ -346,29 +369,6 @@ Course.topic('ge-vectores', function (p) {
         '$\\alpha = \\arccos(' + U.fmt(d.pe / (d.mu * d.mv), 4) + ') \\approx ' + U.fmt(d.ang, 1) + '^\\circ$'];
     },
     answer: function (d) { return U.fmt(d.ang, 1) + '°'; }
-  });
-
-  p.exercise({
-    title: 'Proyección de un vector sobre otro',
-    level: 'medio',
-    gen: function (r) {
-      var u = [r.pm(0, 5), r.pm(0, 5)], v = [r.pm(0, 5), r.pm(0, 5)];
-      var vv = v[0] * v[0] + v[1] * v[1];
-      if (!vv || (!u[0] && !u[1])) return null;
-      var ue = u[0] * v[0] + u[1] * v[1];
-      return { u: u, v: v, vv: vv, ue: ue, val: ue / Math.sqrt(vv) };
-    },
-    ask: function (d) { return 'Calcula la proyección (con signo) de $\\vec u = (' + d.u.join(',\\ ') + ')$ sobre la dirección de $\\vec v = (' + d.v.join(',\\ ') + ')$ (cuatro decimales).'; },
-    fields: [{ name: 'p', label: 'proyección', w: 'wide' }],
-    sol: function (d) { return { p: U.round(d.val, 6) }; },
-    tol: 3e-4,
-    errores: [
-      { si: function (v, d) { return d.vv !== 1 && d.ue !== 0 && Math.abs(v.p - d.ue) < 1e-6; }, msg: 'Eso es el producto escalar. La sombra se obtiene dividiéndolo por el <strong>módulo</strong> de $\\vec v$.' },
-      { si: function (v, d) { return d.vv !== 1 && d.ue !== 0 && Math.abs(v.p - d.ue / d.vv) < 1e-4; }, msg: 'Has dividido por el módulo al cuadrado: eso da el coeficiente del vector proyección, no la longitud de la sombra.' }
-    ],
-    hint: function () { return 'Proyección de $\\vec u$ sobre $\\vec v$: $\\frac{\\vec u\\cdot\\vec v}{|\\vec v|}$.'; },
-    steps: function (d) { return ['$\\vec u\\cdot\\vec v = ' + d.ue + '$ y $|\\vec v| = \\sqrt{' + d.vv + '}$.', 'Proyección: $\\dfrac{' + d.ue + '}{\\sqrt{' + d.vv + '}} \\approx ' + U.fmt(d.val, 4) + '$' + (d.ue < 0 ? ' (negativa: el ángulo es obtuso).' : '.')]; },
-    answer: function (d) { return U.fmt(d.val, 4); }
   });
 
   p.exercise({

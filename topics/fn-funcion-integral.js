@@ -268,6 +268,26 @@ Course.topic('fn-funcion-integral', function (p) {
   });
 
   p.exercise({
+    title: 'Valor medio y el punto donde se alcanza',
+    level: 'medio',
+    gen: function (r) {
+      var b = r.int(1, 6);
+      return { b: b, media: F(b * b, 3), c: b / Math.sqrt(3) };
+    },
+    ask: function (d) { return 'Halla el valor medio de $f(x) = x^2$ en $[0,\\ ' + d.b + ']$ y el punto $c$ de ese intervalo en el que se alcanza (cuatro decimales).'; },
+    fields: [{ name: 'm', label: 'valor medio', w: 'tiny' }, { name: 'c', label: 'c =', w: 'wide' }],
+    sol: function (d) { return { m: d.media.val(), c: U.round(d.c, 6) }; },
+    tol: 3e-4,
+    errores: [{ si: function (v, d) { return d.b !== 1 && Math.abs(v.m - Math.pow(d.b, 3) / 3) < 1e-6; }, msg: 'Eso es la integral. El valor medio es la integral <strong>dividida por la longitud</strong> del intervalo.' }],
+    hint: function (d) { return ['Valor medio $= \\frac{1}{b - a}\\int_a^b f$.', 'Luego resuelve $c^2 = $ valor medio, con $c$ en $[0, ' + d.b + ']$.']; },
+    steps: function (d) {
+      return ['$\\int_0^{' + d.b + '} x^2\\,dx = \\frac{' + (d.b * d.b * d.b) + '}{3}$', 'Valor medio: $\\frac{1}{' + d.b + '}\\cdot\\frac{' + (d.b * d.b * d.b) + '}{3} = ' + d.media.tex() + '$',
+        '$c^2 = ' + d.media.tex() + ' \\Rightarrow c = \\frac{' + d.b + '}{\\sqrt{3}} \\approx ' + U.fmt(d.c, 4) + '$'];
+    },
+    answer: function (d) { return 'media ' + d.media.toString() + ', c ≈ ' + U.fmt(d.c, 4); }
+  });
+
+  p.exercise({
     title: 'Un límite con una integral dentro',
     level: 'avanzado',
     gen: function (r) {
@@ -289,26 +309,6 @@ Course.topic('fn-funcion-integral', function (p) {
         '$\\overset{0/0}{=} \\lim_{x \\to 0} \\dfrac{' + (2 * d.k) + 'x\\cos(' + d.k + 'x^2)}{6x} = \\dfrac{' + (2 * d.k) + '}{6} = ' + d.v.tex() + '$'];
     },
     answer: function (d) { return '$' + d.v.tex() + '$'; }
-  });
-
-  p.exercise({
-    title: 'Valor medio y el punto donde se alcanza',
-    level: 'medio',
-    gen: function (r) {
-      var b = r.int(1, 6);
-      return { b: b, media: F(b * b, 3), c: b / Math.sqrt(3) };
-    },
-    ask: function (d) { return 'Halla el valor medio de $f(x) = x^2$ en $[0,\\ ' + d.b + ']$ y el punto $c$ de ese intervalo en el que se alcanza (cuatro decimales).'; },
-    fields: [{ name: 'm', label: 'valor medio', w: 'tiny' }, { name: 'c', label: 'c =', w: 'wide' }],
-    sol: function (d) { return { m: d.media.val(), c: U.round(d.c, 6) }; },
-    tol: 3e-4,
-    errores: [{ si: function (v, d) { return d.b !== 1 && Math.abs(v.m - Math.pow(d.b, 3) / 3) < 1e-6; }, msg: 'Eso es la integral. El valor medio es la integral <strong>dividida por la longitud</strong> del intervalo.' }],
-    hint: function (d) { return ['Valor medio $= \\frac{1}{b - a}\\int_a^b f$.', 'Luego resuelve $c^2 = $ valor medio, con $c$ en $[0, ' + d.b + ']$.']; },
-    steps: function (d) {
-      return ['$\\int_0^{' + d.b + '} x^2\\,dx = \\frac{' + (d.b * d.b * d.b) + '}{3}$', 'Valor medio: $\\frac{1}{' + d.b + '}\\cdot\\frac{' + (d.b * d.b * d.b) + '}{3} = ' + d.media.tex() + '$',
-        '$c^2 = ' + d.media.tex() + ' \\Rightarrow c = \\frac{' + d.b + '}{\\sqrt{3}} \\approx ' + U.fmt(d.c, 4) + '$'];
-    },
-    answer: function (d) { return 'media ' + d.media.toString() + ', c ≈ ' + U.fmt(d.c, 4); }
   });
 
   p.exercise({

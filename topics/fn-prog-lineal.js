@@ -330,6 +330,33 @@ Course.topic('fn-prog-lineal', function (p) {
   });
 
   p.exercise({
+    title: '¿Cuántas soluciones óptimas?',
+    level: 'medio',
+    gen: function (r) {
+      var R1 = '\\begin{cases} x \\ge 0,\\ y \\ge 0 \\\\ 2x + y \\le 12 \\\\ x + 4y \\le 20 \\end{cases}';
+      var R2 = '\\begin{cases} x \\ge 0,\\ y \\ge 0 \\\\ x + y \\ge 4 \\\\ x - y \\le 2 \\end{cases}';
+      var casos = [
+        { reg: R1, z: [1, 2], op: 'máximo', ok: 'unica', por: 'Los vértices son $(0,0)$, $(6,0)$, $(4,4)$ y $(0,5)$; $Z$ vale 0, 6, 12 y 10: un único máximo, en $(4,4)$.' },
+        { reg: R1, z: [2, 1], op: 'máximo', ok: 'infinitas', por: 'En $(6,0)$ y en $(4,4)$ vale lo mismo, 12: la función objetivo es paralela a ese lado, y todo él es óptimo.' },
+        { reg: R1, z: [1, 4], op: 'máximo', ok: 'infinitas', por: 'En $(4,4)$ y en $(0,5)$ vale 20: $Z$ es paralela al lado $x + 4y = 20$, que es entero óptimo.' },
+        { reg: R2, z: [1, 1], op: 'máximo', ok: 'noacotada', por: 'La región no está acotada hacia arriba: $Z$ crece sin límite y no hay máximo.' },
+        { reg: R2, z: [1, 1], op: 'mínimo', ok: 'infinitas', por: 'Los vértices son $(0,4)$ y $(3,1)$, y en los dos $Z$ vale 4: todo el lado $x + y = 4$ es óptimo.' },
+        { reg: R2, z: [1, 2], op: 'mínimo', ok: 'unica', por: 'En $(0,4)$ vale 8 y en $(3,1)$ vale 5: un único mínimo, en $(3,1)$.' }
+      ];
+      var c = r.pick(casos);
+      return { c: c, z: c.z };
+    },
+    ask: function (d) {
+      return 'Para la región $' + d.c.reg + '$, ¿cuántas soluciones tiene el <strong>' + d.c.op + '</strong> de $Z = ' + ML.termTex(d.z[0], 'x', 1, true) + ML.termTex(d.z[1], 'y', 1, false) + '$?';
+    },
+    fields: [{ name: 't', label: 'Respuesta', opts: [{ t: 'Una única solución', v: 'unica' }, { t: 'Infinitas: todo un lado', v: 'infinitas' }, { t: 'Ninguna: la región no está acotada en esa dirección', v: 'noacotada' }] }],
+    sol: function (d) { return { t: d.c.ok }; },
+    hint: function () { return ['Dibuja la región y halla sus vértices.', 'Evalúa $Z$ en cada uno: si el mejor valor se repite en dos vértices seguidos, todo el lado es óptimo. Y mira si la región se escapa hacia el infinito.']; },
+    steps: function (d) { return [d.c.por]; },
+    answer: function (d) { return { unica: 'Única', infinitas: 'Infinitas', noacotada: 'No hay' }[d.c.ok]; }
+  });
+
+  p.exercise({
     title: 'Problema de producción',
     level: 'avanzado',
     gen: function (r) {
@@ -385,33 +412,6 @@ Course.topic('fn-prog-lineal', function (p) {
       return s;
     },
     answer: function (d) { return U.fmt(d.mx, 4) + ' €'; }
-  });
-
-  p.exercise({
-    title: '¿Cuántas soluciones óptimas?',
-    level: 'medio',
-    gen: function (r) {
-      var R1 = '\\begin{cases} x \\ge 0,\\ y \\ge 0 \\\\ 2x + y \\le 12 \\\\ x + 4y \\le 20 \\end{cases}';
-      var R2 = '\\begin{cases} x \\ge 0,\\ y \\ge 0 \\\\ x + y \\ge 4 \\\\ x - y \\le 2 \\end{cases}';
-      var casos = [
-        { reg: R1, z: [1, 2], op: 'máximo', ok: 'unica', por: 'Los vértices son $(0,0)$, $(6,0)$, $(4,4)$ y $(0,5)$; $Z$ vale 0, 6, 12 y 10: un único máximo, en $(4,4)$.' },
-        { reg: R1, z: [2, 1], op: 'máximo', ok: 'infinitas', por: 'En $(6,0)$ y en $(4,4)$ vale lo mismo, 12: la función objetivo es paralela a ese lado, y todo él es óptimo.' },
-        { reg: R1, z: [1, 4], op: 'máximo', ok: 'infinitas', por: 'En $(4,4)$ y en $(0,5)$ vale 20: $Z$ es paralela al lado $x + 4y = 20$, que es entero óptimo.' },
-        { reg: R2, z: [1, 1], op: 'máximo', ok: 'noacotada', por: 'La región no está acotada hacia arriba: $Z$ crece sin límite y no hay máximo.' },
-        { reg: R2, z: [1, 1], op: 'mínimo', ok: 'infinitas', por: 'Los vértices son $(0,4)$ y $(3,1)$, y en los dos $Z$ vale 4: todo el lado $x + y = 4$ es óptimo.' },
-        { reg: R2, z: [1, 2], op: 'mínimo', ok: 'unica', por: 'En $(0,4)$ vale 8 y en $(3,1)$ vale 5: un único mínimo, en $(3,1)$.' }
-      ];
-      var c = r.pick(casos);
-      return { c: c, z: c.z };
-    },
-    ask: function (d) {
-      return 'Para la región $' + d.c.reg + '$, ¿cuántas soluciones tiene el <strong>' + d.c.op + '</strong> de $Z = ' + ML.termTex(d.z[0], 'x', 1, true) + ML.termTex(d.z[1], 'y', 1, false) + '$?';
-    },
-    fields: [{ name: 't', label: 'Respuesta', opts: [{ t: 'Una única solución', v: 'unica' }, { t: 'Infinitas: todo un lado', v: 'infinitas' }, { t: 'Ninguna: la región no está acotada en esa dirección', v: 'noacotada' }] }],
-    sol: function (d) { return { t: d.c.ok }; },
-    hint: function () { return ['Dibuja la región y halla sus vértices.', 'Evalúa $Z$ en cada uno: si el mejor valor se repite en dos vértices seguidos, todo el lado es óptimo. Y mira si la región se escapa hacia el infinito.']; },
-    steps: function (d) { return [d.c.por]; },
-    answer: function (d) { return { unica: 'Única', infinitas: 'Infinitas', noacotada: 'No hay' }[d.c.ok]; }
   });
 
   p.exercise({

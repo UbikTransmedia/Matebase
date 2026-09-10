@@ -156,6 +156,33 @@ Course.topic('gfx-camara', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Foco y campo de visión',
+    level: 'basico',
+    gen: function (r) {
+      var modo = r.pick(['campo', 'foco']);
+      if (modo === 'campo') { var z = r.pick([0.5, 1, 1.5, 2, 3]); return { modo: modo, z: z, v: 2 * Math.atan(0.5 / z) * 180 / Math.PI, mal: Math.atan(0.5 / z) * 180 / Math.PI }; }
+      var c = r.pick([30, 45, 60, 90, 120]);
+      return { modo: modo, c: c, v: 0.5 / Math.tan(c * Math.PI / 360), mal: 0.5 / Math.tan(c * Math.PI / 180) };
+    },
+    ask: function (d) {
+      return d.modo === 'campo'
+        ? 'Una cámara usa un foco $z = ' + U.fmt(d.z, 1) + '$ y la pantalla va de $p_y = -0{,}5$ a $p_y = 0{,}5$. ¿Cuál es su campo de visión vertical, en grados? (Dos decimales.)'
+        : 'Se quiere un campo de visión vertical de $' + d.c + '^\\circ$, con la pantalla de $p_y = -0{,}5$ a $p_y = 0{,}5$. ¿Qué foco $z$ hay que usar? (Tres decimales.)';
+    },
+    fields: function (d) { return [{ name: 'v', label: d.modo === 'campo' ? 'campo (°)' : 'foco z', w: 'wide' }]; },
+    sol: function (d) { return { v: U.round(d.v, 6) }; },
+    tol: 0.006,
+    errores: [{ si: function (v, d) { return Math.abs(d.mal - d.v) > 0.01 && Math.abs(v.v - d.mal) < 0.006; }, msg: 'La tangente da la mitad del campo, el ángulo entre el rayo del borde y el centro: hay que usar el ángulo mitad.' }],
+    hint: function () { return ['El rayo del borde superior forma con el eje de la cámara un ángulo de tangente $\\frac{0{,}5}{z}$.', 'Ese ángulo es la mitad del campo de visión.']; },
+    steps: function (d) {
+      return d.modo === 'campo'
+        ? ['Mitad del campo: $\\operatorname{arctg}\\dfrac{0{,}5}{' + U.fmt(d.z, 1) + '} \\approx ' + U.fmt(d.mal, 2) + '^\\circ$', 'Campo: el doble, $\\approx ' + U.fmt(d.v, 2) + '^\\circ$']
+        : ['Mitad del campo: $' + (d.c / 2) + '^\\circ$', '$z = \\dfrac{0{,}5}{\\operatorname{tg} ' + (d.c / 2) + '^\\circ} \\approx ' + U.fmt(d.v, 3) + '$'];
+    },
+    answer: function (d) { return d.modo === 'campo' ? U.fmt(d.v, 2) + '°' : 'z ≈ ' + U.fmt(d.v, 3); }
+  });
+
+  p.exercise({
     title: 'La base de la cámara',
     level: 'medio',
     gen: function (r) {
@@ -182,33 +209,6 @@ Course.topic('gfx-camara', function (p) {
         'Comprobación: $\\vec f\\cdot\\vec r = 0$ y $|\\vec r| = 1$.'];
     },
     answer: function (d) { return 'f = (' + U.fmt(d.fx, 3) + ', 0, ' + U.fmt(d.fz, 3) + '), r = (' + U.fmt(d.rx, 3) + ', 0, ' + U.fmt(d.rz, 3) + ')'; }
-  });
-
-  p.exercise({
-    title: 'Foco y campo de visión',
-    level: 'basico',
-    gen: function (r) {
-      var modo = r.pick(['campo', 'foco']);
-      if (modo === 'campo') { var z = r.pick([0.5, 1, 1.5, 2, 3]); return { modo: modo, z: z, v: 2 * Math.atan(0.5 / z) * 180 / Math.PI, mal: Math.atan(0.5 / z) * 180 / Math.PI }; }
-      var c = r.pick([30, 45, 60, 90, 120]);
-      return { modo: modo, c: c, v: 0.5 / Math.tan(c * Math.PI / 360), mal: 0.5 / Math.tan(c * Math.PI / 180) };
-    },
-    ask: function (d) {
-      return d.modo === 'campo'
-        ? 'Una cámara usa un foco $z = ' + U.fmt(d.z, 1) + '$ y la pantalla va de $p_y = -0{,}5$ a $p_y = 0{,}5$. ¿Cuál es su campo de visión vertical, en grados? (Dos decimales.)'
-        : 'Se quiere un campo de visión vertical de $' + d.c + '^\\circ$, con la pantalla de $p_y = -0{,}5$ a $p_y = 0{,}5$. ¿Qué foco $z$ hay que usar? (Tres decimales.)';
-    },
-    fields: function (d) { return [{ name: 'v', label: d.modo === 'campo' ? 'campo (°)' : 'foco z', w: 'wide' }]; },
-    sol: function (d) { return { v: U.round(d.v, 6) }; },
-    tol: 0.006,
-    errores: [{ si: function (v, d) { return Math.abs(d.mal - d.v) > 0.01 && Math.abs(v.v - d.mal) < 0.006; }, msg: 'La tangente da la mitad del campo, el ángulo entre el rayo del borde y el centro: hay que usar el ángulo mitad.' }],
-    hint: function () { return ['El rayo del borde superior forma con el eje de la cámara un ángulo de tangente $\\frac{0{,}5}{z}$.', 'Ese ángulo es la mitad del campo de visión.']; },
-    steps: function (d) {
-      return d.modo === 'campo'
-        ? ['Mitad del campo: $\\operatorname{arctg}\\dfrac{0{,}5}{' + U.fmt(d.z, 1) + '} \\approx ' + U.fmt(d.mal, 2) + '^\\circ$', 'Campo: el doble, $\\approx ' + U.fmt(d.v, 2) + '^\\circ$']
-        : ['Mitad del campo: $' + (d.c / 2) + '^\\circ$', '$z = \\dfrac{0{,}5}{\\operatorname{tg} ' + (d.c / 2) + '^\\circ} \\approx ' + U.fmt(d.v, 3) + '$'];
-    },
-    answer: function (d) { return d.modo === 'campo' ? U.fmt(d.v, 2) + '°' : 'z ≈ ' + U.fmt(d.v, 3); }
   });
 
   p.exercise({

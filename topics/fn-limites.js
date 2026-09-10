@@ -355,6 +355,26 @@ Course.topic('fn-limites', function (p) {
   });
 
   p.exercise({
+    title: 'Infinito menos infinito con raíces',
+    level: 'medio',
+    gen: function (r) { var a = r.pm(1, 9); return { a: a, v: ML.F(a, 2) }; },
+    ask: function (d) { return 'Calcula $\\displaystyle\\lim_{x \\to \\infty}\\left(\\sqrt{x^2 ' + (d.a < 0 ? '- ' + (-d.a) : '+ ' + d.a) + 'x} - x\\right)$. (Vale una fracción.)'; },
+    fields: [{ name: 'v', label: 'límite', w: 'tiny' }],
+    sol: function (d) { return { v: d.v.val() }; },
+    tol: 1e-9,
+    errores: [
+      { si: function (v) { return v.v === 0; }, msg: 'Los dos términos crecen igual de deprisa, pero su diferencia no se va a cero: multiplica y divide por el conjugado.' },
+      { si: function (v, d) { return v.v === d.a; }, msg: 'Casi: al dividir por el conjugado, el denominador $\\sqrt{x^2 + ax} + x$ se comporta como $2x$, no como $x$.' }
+    ],
+    hint: function () { return ['Es $\\infty - \\infty$: multiplica y divide por el conjugado $\\sqrt{x^2 + ax} + x$.', 'Arriba queda $ax$; abajo, algo que se comporta como $2x$.']; },
+    steps: function (d) {
+      return ['$\\left(\\sqrt{x^2 + ' + d.a + 'x} - x\\right)\\dfrac{\\sqrt{x^2 + ' + d.a + 'x} + x}{\\sqrt{x^2 + ' + d.a + 'x} + x} = \\dfrac{' + d.a + 'x}{\\sqrt{x^2 + ' + d.a + 'x} + x}$',
+        'Dividiendo arriba y abajo por $x$: $\\dfrac{' + d.a + '}{\\sqrt{1 + ' + d.a + '/x} + 1} \\to \\dfrac{' + d.a + '}{2} = ' + d.v.tex() + '$'];
+    },
+    answer: function (d) { return '$' + d.v.tex() + '$'; }
+  });
+
+  p.exercise({
     title: 'Continuidad de una función a trozos',
     level: 'avanzado',
     gen: function (r) {
@@ -426,26 +446,6 @@ Course.topic('fn-limites', function (p) {
         'El límite es $e^{' + d.k + '} \\approx ' + U.fmt(d.v, 4) + '$'];
     },
     answer: function (d) { return '$e^{' + d.k + '}$'; }
-  });
-
-  p.exercise({
-    title: 'Infinito menos infinito con raíces',
-    level: 'medio',
-    gen: function (r) { var a = r.pm(1, 9); return { a: a, v: ML.F(a, 2) }; },
-    ask: function (d) { return 'Calcula $\\displaystyle\\lim_{x \\to \\infty}\\left(\\sqrt{x^2 ' + (d.a < 0 ? '- ' + (-d.a) : '+ ' + d.a) + 'x} - x\\right)$. (Vale una fracción.)'; },
-    fields: [{ name: 'v', label: 'límite', w: 'tiny' }],
-    sol: function (d) { return { v: d.v.val() }; },
-    tol: 1e-9,
-    errores: [
-      { si: function (v) { return v.v === 0; }, msg: 'Los dos términos crecen igual de deprisa, pero su diferencia no se va a cero: multiplica y divide por el conjugado.' },
-      { si: function (v, d) { return v.v === d.a; }, msg: 'Casi: al dividir por el conjugado, el denominador $\\sqrt{x^2 + ax} + x$ se comporta como $2x$, no como $x$.' }
-    ],
-    hint: function () { return ['Es $\\infty - \\infty$: multiplica y divide por el conjugado $\\sqrt{x^2 + ax} + x$.', 'Arriba queda $ax$; abajo, algo que se comporta como $2x$.']; },
-    steps: function (d) {
-      return ['$\\left(\\sqrt{x^2 + ' + d.a + 'x} - x\\right)\\dfrac{\\sqrt{x^2 + ' + d.a + 'x} + x}{\\sqrt{x^2 + ' + d.a + 'x} + x} = \\dfrac{' + d.a + 'x}{\\sqrt{x^2 + ' + d.a + 'x} + x}$',
-        'Dividiendo arriba y abajo por $x$: $\\dfrac{' + d.a + '}{\\sqrt{1 + ' + d.a + '/x} + 1} \\to \\dfrac{' + d.a + '}{2} = ' + d.v.tex() + '$'];
-    },
-    answer: function (d) { return '$' + d.v.tex() + '$'; }
   });
 
   p.keys([

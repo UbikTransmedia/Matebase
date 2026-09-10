@@ -1,6 +1,11 @@
 /* Tema: Números naturales y sistema decimal */
 Course.topic('ar-naturales', function (p) {
 
+  p.puente('El bloque anterior enseñó a decir con precisión qué es cierto y qué es un conjunto. Este ' +
+    'bloque construye los números, uno detrás de otro: primero los que sirven para contar, y a cada ' +
+    'tema se añade un tipo nuevo cuando el anterior se queda corto. Empezamos por cómo se escriben y ' +
+    'se comparan los naturales, que parece trivial y es la idea que hace funcionar una calculadora.');
+
   p.text('Todo empieza aquí. Los <strong>números naturales</strong> son los que sirven para contar ' +
     'objetos: $1, 2, 3, 4, \\dots$ No se acaban nunca: por muy grande que sea uno, siempre puedes ' +
     'sumarle 1 y obtener otro mayor. Ese conjunto infinito se llama $\\mathbb{N}$.');
@@ -41,6 +46,7 @@ Course.topic('ar-naturales', function (p) {
   p.demo({
     title: 'La máquina de posición',
     intro: 'Mueve cada rueda y observa cómo cada cifra aporta su valor según el sitio que ocupa.',
+    predice: 'Si subes la rueda de las centenas de 0 a 1, ¿cuánto crece el número? ¿Y si subes la de las decenas de millar en uno?',
     build: function (host, d) {
       var dig = [2, 4, 0, 7, 3];                    // DM UM C D U
       var names = ['decenas de millar', 'unidades de millar', 'centenas', 'decenas', 'unidades'];
@@ -92,6 +98,11 @@ Course.topic('ar-naturales', function (p) {
     'cuántas cifras tiene cada uno</strong> (el que tenga más, es mayor); si tienen las mismas, ' +
     'compara cifra a cifra empezando por la izquierda.');
 
+  p.comprueba('¿Cuál es mayor, $9\\,876$ o $10\\,234$?', [
+    { t: '$9\\,876$, porque empieza por 9 y el otro por 1', ok: false, por: 'La primera cifra solo decide cuando los dos números tienen las mismas cifras. Antes hay que contar cifras.' },
+    { t: '$10\\,234$, porque tiene cinco cifras y el otro cuatro', ok: true, por: 'Cualquier número de cinco cifras es mayor que cualquiera de cuatro: el más pequeño de cinco cifras, $10\\,000$, ya supera al mayor de cuatro, $9\\,999$.' }
+  ]);
+
   p.demo({
     title: 'La recta numérica',
     intro: 'Arrastra el punto azul. Fíjate en que entre dos naturales consecutivos no hay ningún otro natural: los naturales son un rosario de cuentas separadas.',
@@ -128,6 +139,18 @@ Course.topic('ar-naturales', function (p) {
     [['4 372', '4 370', '4 400', '4 000'],
      ['8 651', '8 650', '8 700', '9 000'],
      ['2 950', '2 950', '3 000', '3 000']], { num: [0, 1, 2, 3] });
+
+  p.ejemplo({
+    title: 'Redondear a la centena',
+    enunciado: 'Redondear $47\\,362$ a la centena más próxima.',
+    pasos: [
+      { t: 'Localizar la cifra de las centenas: en $47\\,\\underline{3}62$ es el 3. Todo lo que está a su derecha, el 62, va a desaparecer.', antes: '¿Qué cifra ocupa el lugar de las centenas?' },
+      { t: 'Mirar la cifra que viene justo después, la de las decenas: es un 6.', antes: '¿Qué cifra decide si se sube o se baja?' },
+      { t: 'Como $6 \\ge 5$, la centena sube una unidad: el 3 pasa a 4. Las cifras de la derecha se sustituyen por ceros.', antes: 'Con un 6, ¿se sube o se deja como está?' },
+      { t: 'Resultado: $47\\,400$. Comprobación: $47\\,362$ está más cerca de $47\\,400$ (a 38) que de $47\\,300$ (a 62). ✓' }
+    ],
+    cierre: 'El caso que despista es el 9: redondear $2\\,951$ a la decena sube el 5 a 6 sin problema, pero redondear $2\\,995$ a la decena convierte el 99 en 100 y da $3\\,000$. Se arrastra igual que en una suma.'
+  });
 
   /* ================= EJERCICIOS ================= */
   p.util('Redondear no es «hacer trampa»: es una decisión con consecuencias. Un supermercado que redondea ' +

@@ -302,6 +302,27 @@ Course.topic('al-matrices', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Determinante de orden 2',
+    level: 'basico',
+    gen: function (r) {
+      var m = [[r.pm(0, 9), r.pm(0, 9)], [r.pm(0, 9), r.pm(0, 9)]];
+      return { m: m, det: ML.det2(m) };
+    },
+    ask: function (d) { return 'Calcula $\\det ' + ML.matTex(d.m) + '$'; },
+    fields: [{ name: 'v', label: 'Determinante', w: 'tiny' }],
+    sol: function (d) { return { v: d.det }; },
+    hint: function () { return 'Producto de la diagonal principal menos producto de la secundaria.'; },
+    steps: function (d) {
+      return ['$\\det = ad - bc$',
+        '$= ' + d.m[0][0] + '\\cdot(' + d.m[1][1] + ') - (' + d.m[0][1] + ')\\cdot(' + d.m[1][0] + ')$',
+        '$= ' + (d.m[0][0] * d.m[1][1]) + ' - (' + (d.m[0][1] * d.m[1][0]) + ') = ' + d.det + '$',
+        d.det === 0 ? 'Es cero: la matriz <strong>no tiene inversa</strong>.'
+          : 'No es cero, así que la matriz sí tiene inversa.'];
+    },
+    answer: function (d) { return String(d.det); }
+  });
+
+  p.exercise({
     title: 'Un elemento del producto',
     level: 'medio',
     gen: function (r) {
@@ -324,27 +345,6 @@ Course.topic('al-matrices', function (p) {
         d.A[d.i][1] + '\\cdot(' + d.B[1][d.j] + ') = ' + d.val + '$'];
     },
     answer: function (d) { return String(d.val); }
-  });
-
-  p.exercise({
-    title: 'Determinante de orden 2',
-    level: 'basico',
-    gen: function (r) {
-      var m = [[r.pm(0, 9), r.pm(0, 9)], [r.pm(0, 9), r.pm(0, 9)]];
-      return { m: m, det: ML.det2(m) };
-    },
-    ask: function (d) { return 'Calcula $\\det ' + ML.matTex(d.m) + '$'; },
-    fields: [{ name: 'v', label: 'Determinante', w: 'tiny' }],
-    sol: function (d) { return { v: d.det }; },
-    hint: function () { return 'Producto de la diagonal principal menos producto de la secundaria.'; },
-    steps: function (d) {
-      return ['$\\det = ad - bc$',
-        '$= ' + d.m[0][0] + '\\cdot(' + d.m[1][1] + ') - (' + d.m[0][1] + ')\\cdot(' + d.m[1][0] + ')$',
-        '$= ' + (d.m[0][0] * d.m[1][1]) + ' - (' + (d.m[0][1] * d.m[1][0]) + ') = ' + d.det + '$',
-        d.det === 0 ? 'Es cero: la matriz <strong>no tiene inversa</strong>.'
-          : 'No es cero, así que la matriz sí tiene inversa.'];
-    },
-    answer: function (d) { return String(d.det); }
   });
 
   p.exercise({
@@ -374,6 +374,34 @@ Course.topic('al-matrices', function (p) {
         '$\\det = ' + pos + ' - (' + neg + ') = ' + d.det + '$'];
     },
     answer: function (d) { return String(d.det); }
+  });
+
+  p.exercise({
+    title: 'Un producto completo',
+    level: 'medio',
+    gen: function (r) {
+      var A = [[r.pm(0, 4), r.pm(0, 4), r.pm(0, 4)], [r.pm(0, 4), r.pm(0, 4), r.pm(0, 4)]];
+      var B = [[r.pm(0, 3), r.pm(0, 3)], [r.pm(0, 3), r.pm(0, 3)], [r.pm(0, 3), r.pm(0, 3)]];
+      var C = A.map(function (f) { return [0, 1].map(function (j) { return f[0] * B[0][j] + f[1] * B[1][j] + f[2] * B[2][j]; }); });
+      return { A: A, B: B, C: C };
+    },
+    ask: function (d) {
+      return 'Calcula $A\\cdot B$ siendo $A = ' + ML.matTex(d.A) + '$ y $B = ' + ML.matTex(d.B) + '$. ¿Qué dimensión tiene el resultado?';
+    },
+    fields: [{ name: 'a', label: '$c_{11}$', w: 'tiny' }, { name: 'b', label: '$c_{12}$', w: 'tiny' }, { name: 'c', label: '$c_{21}$', w: 'tiny' }, { name: 'd', label: '$c_{22}$', w: 'tiny' }],
+    sol: function (d) { return { a: d.C[0][0], b: d.C[0][1], c: d.C[1][0], d: d.C[1][1] }; },
+    hint: function () {
+      return ['$A$ es 2×3 y $B$ es 3×2: se pueden multiplicar (3 = 3) y el resultado es 2×2.',
+        'Cada casilla $c_{ij}$ es la fila $i$ de $A$ por la columna $j$ de $B$: tres productos sumados.'];
+    },
+    steps: function (d) {
+      var s = ['Dimensiones: $(2\\times 3)\\cdot(3\\times 2) = 2\\times 2$.'];
+      for (var i = 0; i < 2; i++) for (var j = 0; j < 2; j++) {
+        s.push('$c_{' + (i + 1) + (j + 1) + '} = ' + [0, 1, 2].map(function (k) { return d.A[i][k] + '\\cdot' + (d.B[k][j] < 0 ? '(' + d.B[k][j] + ')' : d.B[k][j]); }).join(' + ') + ' = ' + d.C[i][j] + '$');
+      }
+      return s;
+    },
+    answer: function (d) { return '$' + ML.matTex(d.C) + '$'; }
   });
 
   p.exercise({
@@ -417,34 +445,6 @@ Course.topic('al-matrices', function (p) {
       return '$A^{-1} = ' + ML.matTex([[U.fmt(d.inv[0][0], 4), U.fmt(d.inv[0][1], 4)],
         [U.fmt(d.inv[1][0], 4), U.fmt(d.inv[1][1], 4)]]) + '$';
     }
-  });
-
-  p.exercise({
-    title: 'Un producto completo',
-    level: 'medio',
-    gen: function (r) {
-      var A = [[r.pm(0, 4), r.pm(0, 4), r.pm(0, 4)], [r.pm(0, 4), r.pm(0, 4), r.pm(0, 4)]];
-      var B = [[r.pm(0, 3), r.pm(0, 3)], [r.pm(0, 3), r.pm(0, 3)], [r.pm(0, 3), r.pm(0, 3)]];
-      var C = A.map(function (f) { return [0, 1].map(function (j) { return f[0] * B[0][j] + f[1] * B[1][j] + f[2] * B[2][j]; }); });
-      return { A: A, B: B, C: C };
-    },
-    ask: function (d) {
-      return 'Calcula $A\\cdot B$ siendo $A = ' + ML.matTex(d.A) + '$ y $B = ' + ML.matTex(d.B) + '$. ¿Qué dimensión tiene el resultado?';
-    },
-    fields: [{ name: 'a', label: '$c_{11}$', w: 'tiny' }, { name: 'b', label: '$c_{12}$', w: 'tiny' }, { name: 'c', label: '$c_{21}$', w: 'tiny' }, { name: 'd', label: '$c_{22}$', w: 'tiny' }],
-    sol: function (d) { return { a: d.C[0][0], b: d.C[0][1], c: d.C[1][0], d: d.C[1][1] }; },
-    hint: function () {
-      return ['$A$ es 2×3 y $B$ es 3×2: se pueden multiplicar (3 = 3) y el resultado es 2×2.',
-        'Cada casilla $c_{ij}$ es la fila $i$ de $A$ por la columna $j$ de $B$: tres productos sumados.'];
-    },
-    steps: function (d) {
-      var s = ['Dimensiones: $(2\\times 3)\\cdot(3\\times 2) = 2\\times 2$.'];
-      for (var i = 0; i < 2; i++) for (var j = 0; j < 2; j++) {
-        s.push('$c_{' + (i + 1) + (j + 1) + '} = ' + [0, 1, 2].map(function (k) { return d.A[i][k] + '\\cdot' + (d.B[k][j] < 0 ? '(' + d.B[k][j] + ')' : d.B[k][j]); }).join(' + ') + ' = ' + d.C[i][j] + '$');
-      }
-      return s;
-    },
-    answer: function (d) { return '$' + ML.matTex(d.C) + '$'; }
   });
 
   p.exercise({

@@ -1,6 +1,11 @@
 /* Tema: Fracciones */
 Course.topic('ar-fracciones', function (p) {
 
+  p.puente('Con los naturales se cuenta y se reparte en partes enteras, y el tema anterior enseñó a ' +
+    'descomponerlos en primos. Ahora se reparte lo que no cabe en partes enteras, y para eso hacen ' +
+    'falta números nuevos. El m.c.d. y el m.c.m. que acabas de aprender son las dos herramientas que ' +
+    'este tema usa sin parar: uno para simplificar, otro para sumar.');
+
   p.text('Con los naturales no se puede repartir una pizza entre tres. Hace falta un número nuevo: ' +
     'la <strong>fracción</strong>. El de abajo (<em>denominador</em>) dice en cuántas partes iguales ' +
     'se divide la unidad; el de arriba (<em>numerador</em>), cuántas de esas partes tomamos.');
@@ -19,6 +24,7 @@ Course.topic('ar-fracciones', function (p) {
   p.demo({
     title: 'Ver una fracción',
     intro: 'Mueve el numerador y el denominador. Fíjate en qué pasa cuando el numerador supera al denominador.',
+    predice: 'Si dejas el numerador en 3 y subes el denominador de 4 a 8, ¿la fracción se hace más grande o más pequeña? ¿Y si es el numerador el que sube?',
     build: function (host, d) {
       var n = 3, den = 4;
       var out = W.readout(host, '');
@@ -74,6 +80,12 @@ Course.topic('ar-fracciones', function (p) {
   p.note('Dos fracciones son equivalentes si sus <em>productos cruzados</em> coinciden: ' +
     '$\\frac{a}{b}=\\frac{c}{d} \\iff a\\cdot d = b\\cdot c$. Es la forma más rápida de comprobarlo.', null, 'Atajo');
 
+  p.comprueba('¿Cuál es mayor, $\\frac{2}{3}$ o $\\frac{3}{5}$?', [
+    { t: '$\\frac{3}{5}$, porque 3 y 5 son mayores que 2 y 3', ok: false, por: 'Números más grandes arriba y abajo no hacen la fracción más grande: $\\frac{50}{100}$ es menos que $\\frac{2}{3}$.' },
+    { t: '$\\frac{2}{3}$, porque en cruz $2\\cdot 5 = 10$ supera a $3\\cdot 3 = 9$', ok: true, por: 'Con el mismo denominador, 15, serían $\\frac{10}{15}$ y $\\frac{9}{15}$. Los productos cruzados hacen esa comparación sin escribir el denominador común.' },
+    { t: 'Son iguales', ok: false, por: 'Serían iguales si los productos cruzados coincidieran, y $10 \\ne 9$.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.util('Una pantalla 16:9 y otra de 1920×1080 tienen la misma forma porque $\\frac{1920}{1080}$ ' +
     'simplifica a $\\frac{16}{9}$. Toda la maquetación de páginas web, el recorte de fotos y el ' +
@@ -86,7 +98,23 @@ Course.topic('ar-fracciones', function (p) {
   p.text('Solo se pueden sumar trozos <em>del mismo tamaño</em>. Por eso hay que poner el mismo ' +
     'denominador antes de sumar: se usa el m.c.m. de los denominadores.');
 
-  p.formula('\\frac{a}{b} \\pm \\frac{c}{d} = \\frac{a\\cdot d \\pm c\\cdot b}{b\\cdot d}');
+  p.formula('\\frac{a}{b} \\pm \\frac{c}{d} = \\frac{a\\cdot d \\pm c\\cdot b}{b\\cdot d}', 'con el producto de los denominadores',
+    'Esta fórmula usa como denominador común el producto $b\\cdot d$, que siempre sirve pero no ' +
+    'siempre es el más pequeño. En la práctica se usa el m.c.m. de los denominadores, que da números ' +
+    'más manejables y menos que simplificar al final: para $\\frac{5}{6} + \\frac{3}{4}$, el producto ' +
+    'es 24 y el m.c.m. es 12.');
+
+  p.ejemplo({
+    title: 'Sumar con el mínimo común múltiplo',
+    enunciado: 'Calcular $\\dfrac{5}{6} + \\dfrac{3}{4}$ y dar el resultado simplificado.',
+    pasos: [
+      { t: 'Denominador común: $\\operatorname{mcm}(6, 4) = 12$, porque $6 = 2\\cdot 3$ y $4 = 2^2$, y se toman todos los primos con el mayor exponente: $2^2\\cdot 3$.', antes: '¿Qué denominador común conviene, y cómo se calcula?' },
+      { t: 'Se convierte cada fracción: $\\frac{5}{6} = \\frac{5\\cdot 2}{12} = \\frac{10}{12}$ (el 6 cabe 2 veces en 12) y $\\frac{3}{4} = \\frac{3\\cdot 3}{12} = \\frac{9}{12}$ (el 4 cabe 3 veces).', antes: '¿Por qué número hay que multiplicar arriba y abajo cada fracción?' },
+      { t: 'Ahora los trozos son del mismo tamaño y se pueden juntar: $\\frac{10}{12} + \\frac{9}{12} = \\frac{19}{12}$.' },
+      { t: '¿Se puede simplificar? $\\operatorname{mcd}(19, 12) = 1$, así que no: $\\frac{19}{12}$ es irreducible. Es mayor que 1 (fracción impropia): vale $1 + \\frac{7}{12}$.', antes: '¿Está ya simplificada?' }
+    ],
+    cierre: 'Con el producto 24 habría salido $\\frac{38}{24}$, que hay que simplificar hasta el mismo $\\frac{19}{12}$. El m.c.m. ahorra ese paso.'
+  });
 
   p.sub('Producto y cociente');
   p.text('Aquí es al revés: son <em>más fáciles</em> que la suma. El producto se hace en línea recta; ' +
@@ -148,6 +176,13 @@ Course.topic('ar-fracciones', function (p) {
     'caen exactamente en siete octavas —$(3/2)^{12}$ no es $2^7$—; ese desajuste, la coma ' +
     'pitagórica, es la razón de que los pianos se afinen con un pequeño apaño en cada nota.');
 
+  p.trampas([
+    { e: 'Sumar numeradores con numeradores y denominadores con denominadores.', por: '$\\frac{1}{2} + \\frac{1}{3}$ no es $\\frac{2}{5}$: eso sería menos que $\\frac{1}{2}$, y estamos sumando algo positivo. Primero el denominador común.' },
+    { e: 'Poner denominador común también para multiplicar.', por: 'No hace falta: el producto va en línea recta, $\\frac{a}{b}\\cdot\\frac{c}{d} = \\frac{ac}{bd}$.' },
+    { e: 'Dar la vuelta a la fracción equivocada al dividir.', por: 'Se invierte la <em>segunda</em>, la que divide: $\\frac{a}{b} : \\frac{c}{d} = \\frac{a}{b}\\cdot\\frac{d}{c}$.' },
+    { e: 'Dejar el resultado sin simplificar.', por: '$\\frac{6}{8}$ es correcto pero no está terminado: la respuesta es $\\frac{3}{4}$.' }
+  ]);
+
   p.section('Practica');
 
   /* corrector reutilizable: exige la fraccion irreducible */
@@ -190,6 +225,30 @@ Course.topic('ar-fracciones', function (p) {
         'Dividimos arriba y abajo: $\\dfrac{' + d.n + ':' + g + '}{' + d.d + ':' + g + '} = \\dfrac{' + d.rn + '}{' + d.rd + '}$.'];
     },
     answer: function (d) { return '$\\dfrac{' + d.rn + '}{' + d.rd + '}$'; }
+  });
+
+  p.exercise({
+    title: 'Fracción de una cantidad',
+    level: 'basico',
+    gen: function (r) {
+      var b = r.pick([2, 3, 4, 5, 6, 8]);
+      var a = r.int(1, b - 1);
+      var total = b * r.int(3, 30);
+      return { a: a, b: b, total: total, res: total * a / b };
+    },
+    ask: function (d) {
+      return 'En una clase hay $' + d.total + '$ alumnos y $\\dfrac{' + d.a + '}{' + d.b +
+        '}$ de ellos han ido de excursión. ¿Cuántos han ido?';
+    },
+    fields: [{ name: 'r', label: 'Alumnos', w: 'tiny' }],
+    sol: function (d) { return { r: d.res }; },
+    hint: function (d) { return 'Divide entre $' + d.b + '$ (una parte) y multiplica por $' + d.a + '$.'; },
+    steps: function (d) {
+      return ['Partimos el total en $' + d.b + '$ partes: $' + d.total + ' : ' + d.b + ' = ' + (d.total / d.b) + '$.',
+        'Tomamos $' + d.a + '$ de esas partes: $' + (d.total / d.b) + ' \\cdot ' + d.a + ' = ' + d.res + '$.',
+        'En una sola operación: $\\dfrac{' + d.a + '}{' + d.b + '}\\cdot ' + d.total + ' = ' + d.res + '$.'];
+    },
+    answer: function (d) { return d.res + ' alumnos.'; }
   });
 
   p.exercise({
@@ -256,30 +315,6 @@ Course.topic('ar-fracciones', function (p) {
   });
 
   p.exercise({
-    title: 'Fracción de una cantidad',
-    level: 'basico',
-    gen: function (r) {
-      var b = r.pick([2, 3, 4, 5, 6, 8]);
-      var a = r.int(1, b - 1);
-      var total = b * r.int(3, 30);
-      return { a: a, b: b, total: total, res: total * a / b };
-    },
-    ask: function (d) {
-      return 'En una clase hay $' + d.total + '$ alumnos y $\\dfrac{' + d.a + '}{' + d.b +
-        '}$ de ellos han ido de excursión. ¿Cuántos han ido?';
-    },
-    fields: [{ name: 'r', label: 'Alumnos', w: 'tiny' }],
-    sol: function (d) { return { r: d.res }; },
-    hint: function (d) { return 'Divide entre $' + d.b + '$ (una parte) y multiplica por $' + d.a + '$.'; },
-    steps: function (d) {
-      return ['Partimos el total en $' + d.b + '$ partes: $' + d.total + ' : ' + d.b + ' = ' + (d.total / d.b) + '$.',
-        'Tomamos $' + d.a + '$ de esas partes: $' + (d.total / d.b) + ' \\cdot ' + d.a + ' = ' + d.res + '$.',
-        'En una sola operación: $\\dfrac{' + d.a + '}{' + d.b + '}\\cdot ' + d.total + ' = ' + d.res + '$.'];
-    },
-    answer: function (d) { return d.res + ' alumnos.'; }
-  });
-
-  p.exercise({
     title: 'Comparar dos fracciones',
     level: 'medio',
     gen: function (r) {
@@ -288,12 +323,11 @@ Course.topic('ar-fracciones', function (p) {
       if (a * e === c * b) return null;
       return { a: a, b: b, c: c, e: e, mayor: (a / b > c / e) ? 1 : 2 };
     },
-    ask: function (d) {
-      return '¿Cuál es mayor, $\\dfrac{' + d.a + '}{' + d.b + '}$ (la <strong>1</strong>) o ' +
-        '$\\dfrac{' + d.c + '}{' + d.e + '}$ (la <strong>2</strong>)? Escribe 1 o 2.';
+    ask: function (d) { return '¿Cuál de las dos fracciones es mayor?'; },
+    fields: function (d) {
+      return [{ name: 'm', label: 'La mayor es', opts: [{ t: '$\\frac{' + d.a + '}{' + d.b + '}$', v: '1' }, { t: '$\\frac{' + d.c + '}{' + d.e + '}$', v: '2' }] }];
     },
-    fields: [{ name: 'm', label: 'La mayor es la', w: 'tiny' }],
-    sol: function (d) { return { m: d.mayor }; },
+    sol: function (d) { return { m: String(d.mayor) }; },
     hint: function () { return 'Multiplica en cruz: compara $a\\cdot d$ con $c\\cdot b$.'; },
     steps: function (d) {
       return ['Multiplicamos en cruz: $' + d.a + '\\cdot' + d.e + ' = ' + (d.a * d.e) +

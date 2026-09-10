@@ -162,6 +162,32 @@ Course.topic('pe-proporcion', function (p) {
   });
 
   p.exercise({
+    title: 'Cómo cambia el margen',
+    level: 'basico',
+    gen: function (r) {
+      var casos = [
+        { t: 'Si se multiplica por 4 el número de entrevistas, manteniendo la confianza, el margen de error…', ok: 'mitad' },
+        { t: 'Si se pasa de una confianza del 95 % a una del 99 %, con la misma muestra, el intervalo…', ok: 'ancho' },
+        { t: 'Si en vez de 1000 entrevistas se hacen 250, el margen de error…', ok: 'doble' },
+        { t: 'Con la misma muestra, el margen de error es mayor cuando $\\hat{p}$ vale…', ok: 'medio' }
+      ];
+      return r.pick(casos);
+    },
+    ask: function (d) { return d.t; },
+    fields: [{
+      name: 't', label: 'Respuesta', opts: [
+        { t: 'se reduce a la mitad', v: 'mitad' }, { t: 'se duplica', v: 'doble' },
+        { t: 'se hace más ancho', v: 'ancho' }, { t: '0,5', v: 'medio' }]
+    }],
+    sol: function (d) { return { t: d.ok }; },
+    hint: function () { return 'El margen es $z\\sqrt{\\hat{p}(1-\\hat{p})/n}$: mira qué pasa con cada pieza.'; },
+    steps: function (d) {
+      return [{ mitad: 'Multiplicar $n$ por 4 divide la raíz entre $\\sqrt{4} = 2$.', ancho: 'Más confianza exige un $z$ mayor (2,575 en vez de 1,96): más margen.', doble: 'Dividir $n$ entre 4 multiplica la raíz por 2.', medio: '$\\hat{p}(1-\\hat{p})$ es máximo en $\\hat{p} = 0{,}5$.' }[d.ok]];
+    },
+    answer: function (d) { return { mitad: 'se reduce a la mitad', doble: 'se duplica', ancho: 'se hace más ancho', medio: '0,5' }[d.ok]; }
+  });
+
+  p.exercise({
     title: 'Intervalo de confianza para una proporción',
     level: 'medio',
     gen: function (r) {
@@ -274,32 +300,6 @@ Course.topic('pe-proporcion', function (p) {
         answer: function (d) { return { mas: 'Sí', nada: 'No se puede afirmar', menos: 'La mayoría está en contra' }[d.dec]; }
       }
     ]
-  });
-
-  p.exercise({
-    title: 'Cómo cambia el margen',
-    level: 'basico',
-    gen: function (r) {
-      var casos = [
-        { t: 'Si se multiplica por 4 el número de entrevistas, manteniendo la confianza, el margen de error…', ok: 'mitad' },
-        { t: 'Si se pasa de una confianza del 95 % a una del 99 %, con la misma muestra, el intervalo…', ok: 'ancho' },
-        { t: 'Si en vez de 1000 entrevistas se hacen 250, el margen de error…', ok: 'doble' },
-        { t: 'Con la misma muestra, el margen de error es mayor cuando $\\hat{p}$ vale…', ok: 'medio' }
-      ];
-      return r.pick(casos);
-    },
-    ask: function (d) { return d.t; },
-    fields: [{
-      name: 't', label: 'Respuesta', opts: [
-        { t: 'se reduce a la mitad', v: 'mitad' }, { t: 'se duplica', v: 'doble' },
-        { t: 'se hace más ancho', v: 'ancho' }, { t: '0,5', v: 'medio' }]
-    }],
-    sol: function (d) { return { t: d.ok }; },
-    hint: function () { return 'El margen es $z\\sqrt{\\hat{p}(1-\\hat{p})/n}$: mira qué pasa con cada pieza.'; },
-    steps: function (d) {
-      return [{ mitad: 'Multiplicar $n$ por 4 divide la raíz entre $\\sqrt{4} = 2$.', ancho: 'Más confianza exige un $z$ mayor (2,575 en vez de 1,96): más margen.', doble: 'Dividir $n$ entre 4 multiplica la raíz por 2.', medio: '$\\hat{p}(1-\\hat{p})$ es máximo en $\\hat{p} = 0{,}5$.' }[d.ok]];
-    },
-    answer: function (d) { return { mitad: 'se reduce a la mitad', doble: 'se duplica', ancho: 'se hace más ancho', medio: '0,5' }[d.ok]; }
   });
 
   p.keys([

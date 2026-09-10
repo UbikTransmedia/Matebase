@@ -284,6 +284,35 @@ Course.topic('gfx-tunel', function (p) {
   });
 
   p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { c: 'float r = length(p);\nfloat v = step(0.5, fract(4.0 * (0.3 / r + iTime)));',
+          o: ['Anillos que nacen en el centro y se ensanchan hacia fuera, cada vez más separados: parece que avanzas por un túnel', 'Anillos igual de separados que se mueven hacia el centro', 'Rayas verticales que se desplazan', 'Sectores que giran'],
+          por: 'Con $\\frac{0{,}3}{r}$ los anillos se apiñan cerca del centro y se espacian lejos, como la profundidad. Al crecer el tiempo, cada anillo necesita un $r$ mayor: salen hacia fuera.' },
+        { c: 'float a = atan(p.y, p.x);\nfloat v = step(0.5, fract(8.0 * a / TAU));',
+          o: ['Ocho franjas claras y ocho oscuras que salen del centro, como las paredes del túnel en tiras', 'Anillos concéntricos', 'Rayas horizontales', 'Un círculo en el centro'],
+          por: 'El valor solo depende del ángulo, repetido ocho veces por vuelta: sectores, que en el túnel parecen tiras a lo largo de la pared.' },
+        { c: 'float r = length(p);\nvec3 col = vec3(v) * r * 2.0;',
+          o: ['El centro oscuro, como el fondo lejano del túnel, y los bordes más claros', 'El centro claro y los bordes oscuros', 'Brillo uniforme', 'Solo el centro visible'],
+          por: 'Multiplicar por $r$ oscurece cerca del centro, que en el túnel representa lo más lejano: es una niebla barata.' },
+        { c: 'p += 0.2 * vec2(sin(iTime), cos(iTime));\nfloat r = length(p);\nfloat a = atan(p.y, p.x);',
+          o: ['El fondo del túnel se mueve describiendo círculos, como si el túnel se curvara', 'El túnel gira sobre sí mismo sin moverse el fondo', 'El túnel se queda quieto', 'El túnel se estira a lo ancho'],
+          por: 'Desplazar <code>p</code> mueve el centro de las polares, que es el fondo del túnel; al desplazarlo con un seno y un coseno, recorre una circunferencia.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'En el túnel del tema, con <code>p</code> centrada y <code>v</code> el dibujo de la pared, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['En el túnel, $\\frac{1}{r}$ hace de profundidad y el ángulo, de posición alrededor de la pared.']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
+  });
+
+  p.exercise({
     title: 'Escribe el mapa',
     level: 'avanzado',
     gen: function (r) {
@@ -336,35 +365,6 @@ Course.topic('gfx-tunel', function (p) {
         'Cambiar el denominador cambia la superficie entera: cilindro, embudo o suelo.'];
     },
     answer: function (d) { return d.ref; }
-  });
-
-  p.exercise({
-    title: 'Predice la imagen',
-    level: 'medio',
-    gen: function (r) {
-      var casos = [
-        { c: 'float r = length(p);\nfloat v = step(0.5, fract(4.0 * (0.3 / r + iTime)));',
-          o: ['Anillos que nacen en el centro y se ensanchan hacia fuera, cada vez más separados: parece que avanzas por un túnel', 'Anillos igual de separados que se mueven hacia el centro', 'Rayas verticales que se desplazan', 'Sectores que giran'],
-          por: 'Con $\\frac{0{,}3}{r}$ los anillos se apiñan cerca del centro y se espacian lejos, como la profundidad. Al crecer el tiempo, cada anillo necesita un $r$ mayor: salen hacia fuera.' },
-        { c: 'float a = atan(p.y, p.x);\nfloat v = step(0.5, fract(8.0 * a / TAU));',
-          o: ['Ocho franjas claras y ocho oscuras que salen del centro, como las paredes del túnel en tiras', 'Anillos concéntricos', 'Rayas horizontales', 'Un círculo en el centro'],
-          por: 'El valor solo depende del ángulo, repetido ocho veces por vuelta: sectores, que en el túnel parecen tiras a lo largo de la pared.' },
-        { c: 'float r = length(p);\nvec3 col = vec3(v) * r * 2.0;',
-          o: ['El centro oscuro, como el fondo lejano del túnel, y los bordes más claros', 'El centro claro y los bordes oscuros', 'Brillo uniforme', 'Solo el centro visible'],
-          por: 'Multiplicar por $r$ oscurece cerca del centro, que en el túnel representa lo más lejano: es una niebla barata.' },
-        { c: 'p += 0.2 * vec2(sin(iTime), cos(iTime));\nfloat r = length(p);\nfloat a = atan(p.y, p.x);',
-          o: ['El fondo del túnel se mueve describiendo círculos, como si el túnel se curvara', 'El túnel gira sobre sí mismo sin moverse el fondo', 'El túnel se queda quieto', 'El túnel se estira a lo ancho'],
-          por: 'Desplazar <code>p</code> mueve el centro de las polares, que es el fondo del túnel; al desplazarlo con un seno y un coseno, recorre una circunferencia.' }
-      ];
-      var c = r.pick(casos);
-      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
-    },
-    ask: function (d) { return 'En el túnel del tema, con <code>p</code> centrada y <code>v</code> el dibujo de la pared, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
-    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
-    sol: function () { return { q: '0' }; },
-    hint: function () { return ['En el túnel, $\\frac{1}{r}$ hace de profundidad y el ángulo, de posición alrededor de la pared.']; },
-    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
-    answer: function (d) { return d.textos[0]; }
   });
 
   p.keys([

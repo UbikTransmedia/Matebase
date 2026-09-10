@@ -660,12 +660,83 @@ a.btn:hover{text-decoration:none}
 .stage--3d canvas{cursor:grab}
 .stage--3d canvas:active{cursor:grabbing}
 
+/* ================= HILO, TRAMPAS, EJEMPLO RESUELTO Y COMPRUEBA =================
+   Las piezas pedagogicas que van entre la explicacion y el ejercicio. */
+
+/* De donde venimos: un organizador previo, discreto, al principio del tema. */
+.note--puente{border-left:3px solid var(--ink-faint); background:var(--panel-2)}
+.note--puente .note__t{opacity:.6}
+/* Trampas habituales: color de aviso, con el error en negrita y el porque detras. */
+.note--trampa{border-color:var(--warn); background:var(--warn-soft)}
+.note--trampa ul{margin:0; padding-left:18px}
+.note--trampa li{margin:.4em 0}
+
+/* Ejemplo resuelto: mismo esqueleto que una tarjeta, color de acento. */
+.card--res{border-color:color-mix(in srgb,var(--accent) 34%, var(--line))}
+.card--res .card__head{background:var(--accent-soft)}
+.card--res .card__kind{background:var(--accent); color:var(--on-accent)}
+.res__enun p:last-child{margin-bottom:.6em}
+.res__pasos{margin:0; padding-left:1.6em; counter-reset:paso}
+.res__paso{margin:.55em 0; padding-left:.2em}
+.res__paso::marker{color:var(--accent); font-weight:700}
+.res__antes{
+  margin:12px 0 4px; padding:9px 12px; border-radius:9px; font-size:0.9rem;
+  background:var(--tip); color:var(--tip-ink); border:1px solid var(--tip-line);
+}
+.res__antes[hidden]{display:none}
+.res__q{font-weight:700; color:var(--tip-strong)}
+.res__pie{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+.res__cierre{margin-top:12px; padding-top:10px; border-top:1px dashed var(--line)}
+.res__cierre p:last-child{margin-bottom:0}
+.card--res.is-completo .res__pasos{opacity:1}
+
+/* Comprueba: una pregunta, un clic, una explicacion. */
+.chk{
+  margin:18px 0; padding:12px 15px 13px; border:1px solid var(--line); border-radius:var(--radius);
+  background:var(--bg-alt); border-left:4px solid var(--ok);
+}
+.chk__t{display:block; font-size:0.7188rem; text-transform:uppercase; letter-spacing:.1em;
+  font-weight:700; color:var(--ok); margin-bottom:5px}
+.chk__q{font-size:0.9625rem; margin-bottom:9px}
+.chk__opc{margin:0}
+.chk__fb{margin-top:10px; padding:9px 12px; border-radius:9px; font-size:0.9rem; background:var(--panel-2)}
+.chk__fb[hidden]{display:none}
+.chk.is-ok .opc__b.is-on{border-color:var(--ok); background:var(--ok-soft); color:var(--ok); box-shadow:inset 0 0 0 1px var(--ok)}
+.chk.is-bad .opc__b.is-on{border-color:var(--bad); background:var(--bad-soft); color:var(--bad); box-shadow:inset 0 0 0 1px var(--bad)}
+.chk.is-ok .chk__fb{background:var(--ok-soft)}
+.chk.is-bad .chk__fb{background:var(--bad-soft)}
+
+/* Predecir antes de tocar una demo: plegado, para no estorbar a quien ya sabe. */
+.predice{
+  margin:0 0 12px; padding:8px 12px; border:1px dashed var(--demo); border-radius:9px;
+  background:color-mix(in srgb, var(--demo-soft) 60%, transparent); font-size:0.9rem;
+}
+.predice summary{cursor:pointer; font-weight:650; color:var(--demo)}
+.predice[open] summary{margin-bottom:6px}
+.predice p:last-child{margin-bottom:0}
+
+/* Indice del tema: una linea de enlaces, al principio. */
+.toc{margin:0 0 22px; font-size:0.8438rem; color:var(--ink-soft)}
+.toc__t{text-transform:uppercase; letter-spacing:.1em; font-size:0.6875rem; font-weight:700; color:var(--ink-faint); margin-right:8px}
+.toc__l{display:inline; margin:0; padding:0; list-style:none}
+.toc__l li{display:inline}
+.toc__l li + li::before{content:"·"; margin:0 7px; color:var(--ink-faint)}
+.toc__l a{color:var(--ink-soft); text-decoration:none; border-bottom:1px dotted var(--line)}
+.toc__l a:hover{color:var(--accent-ink); border-bottom-color:var(--accent)}
+.sec h2:focus-visible{outline:2px solid var(--accent); outline-offset:4px; border-radius:4px}
+
 /* ================= IMPRESIÓN =================
    El formulario, y cualquier tema, se imprimen sin índice, sin barras y
    sin botones: solo lo que se lee. */
 @media print{
   .side, .topbar, .glos, .pager, .scrim, .saltar, .card__foot, .parte__pie,
-  .formu__barra, .fbox__help, .fbox__tip, .ans__como, .stage__teclas, .prereq{display:none !important}
+  .formu__barra, .fbox__help, .fbox__tip, .ans__como, .stage__teclas, .prereq,
+  .res__pie, .res__antes, .toc{display:none !important}
+  /* Impreso, un ejemplo resuelto se lee entero. */
+  .res__paso[hidden], .res__cierre[hidden]{display:list-item !important}
+  .res__cierre[hidden]{display:block !important}
+  .predice{display:block}
+  .predice summary{list-style:none}
   html, body, .app, .main{height:auto !important; overflow:visible !important; display:block !important}
   .wrap{max-width:none; padding:0}
   body{background:#fff}

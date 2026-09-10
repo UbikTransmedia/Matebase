@@ -1,6 +1,10 @@
 /* Tema: Números decimales y aproximación */
 Course.topic('ar-decimales', function (p) {
 
+  p.puente('Una fracción es una división sin terminar. Este tema la termina: al dividir salen los ' +
+    'decimales, y resulta que solo pueden salir de tres formas. Después se hace el camino de vuelta, ' +
+    'del decimal a la fracción, y se aprende a decir cuánto se pierde al redondear.');
+
   p.text('Un número decimal es lo que se obtiene al extender el valor posicional <em>hacia la ' +
     'derecha</em>: después de las unidades vienen las décimas, las centésimas, las milésimas… ' +
     'cada posición vale diez veces menos que la anterior.');
@@ -35,6 +39,7 @@ Course.topic('ar-decimales', function (p) {
   p.demo({
     title: 'La división que se muerde la cola',
     intro: 'Elige una fracción y mira los restos que van saliendo. En cuanto un resto se repite, el periodo queda cerrado.',
+    predice: 'Al dividir entre 7 solo hay 6 restos posibles distintos de cero. ¿Cuántas cifras como mucho puede tener el periodo de $\\frac{1}{7}$? Apuesta antes de pulsar.',
     build: function (host, d) {
       var n = 4, den = 11;
       var out = W.readout(host, '');
@@ -108,9 +113,27 @@ Course.topic('ar-decimales', function (p) {
     'Sea $x = 0{,}\\overline{36}$. Entonces $100x = 36{,}\\overline{36}$. Restando, las colas infinitas ' +
     'se cancelan: $99x = 36$, luego $x = \\frac{36}{99}$.');
 
+  p.ejemplo({
+    title: 'La generatriz de un periódico mixto, desde cero',
+    enunciado: 'Escribir $x = 0{,}2\\overline{3} = 0{,}2333\\ldots$ como fracción, sin usar la regla de memoria.',
+    pasos: [
+      { t: 'Primero se aparta el anteperiodo multiplicando por 10: $10x = 2{,}\\overline{3} = 2{,}333\\ldots$ Ahora la cola infinita empieza justo después de la coma.', antes: 'El 2 no se repite. ¿Por cuánto hay que multiplicar para que lo que queda tras la coma sea solo periodo?' },
+      { t: 'Se multiplica otra vez por 10, una posición por cada cifra del periodo: $100x = 23{,}\\overline{3} = 23{,}333\\ldots$', antes: '¿Cuánto hay que desplazar la coma para que las dos colas infinitas queden alineadas?' },
+      { t: 'Se restan las dos: $100x - 10x = 23{,}333\\ldots - 2{,}333\\ldots$. Las colas son idénticas y se cancelan: $90x = 21$.', antes: '¿Qué pasa con los infinitos treses al restar?' },
+      { t: '$x = \\dfrac{21}{90} = \\dfrac{7}{30}$, simplificando entre 3.' }
+    ],
+    cierre: 'La regla «periodo con anteperiodo, menos anteperiodo, partido por nueves y ceros» es exactamente este cálculo: $\\frac{23 - 2}{90}$. Si entiendes de dónde sale, no hace falta memorizarla.'
+  });
+
   p.note('De ahí sale el famoso $0{,}\\overline{9} = 1$. Si $x = 0{,}\\overline{9}$, entonces ' +
     '$10x = 9{,}\\overline{9}$ y restando $9x = 9$, o sea $x = 1$. No es una aproximación ni una ' +
     'trampa: son dos formas de escribir el mismo número.', 'warn', 'El resultado que nadie se cree');
+
+  p.comprueba('Sin dividir: ¿qué tipo de decimal da $\\frac{7}{12}$?', [
+    { t: 'Exacto', ok: false, por: '$12 = 2^2\\cdot 3$: ese 3 impide que la división termine.' },
+    { t: 'Periódico puro', ok: false, por: 'Hay un factor 2 en el denominador, y eso produce cifras antes del periodo.' },
+    { t: 'Periódico mixto', ok: true, por: '$12 = 2^2\\cdot 3$ mezcla un 2 con otro factor: $\\frac{7}{12} = 0{,}58\\overline{3}$.' }
+  ]);
 
   /* ---------------------------------------------------------------- */
   p.section('Aproximar y medir el error');
@@ -126,6 +149,11 @@ Course.topic('ar-decimales', function (p) {
   p.text('Equivocarse en 1 cm midiendo un lápiz es un desastre; equivocarse en 1 cm midiendo un ' +
     'campo de fútbol da igual. El error absoluto es el mismo; el relativo, no. Por eso el relativo ' +
     'es el que informa de verdad, y se suele dar en porcentaje.');
+
+  p.comprueba('Una báscula se equivoca en 2 kg al pesar un coche de 1500 kg, y otra en 200 g al pesar un bebé de 4 kg. ¿Cuál es peor?', [
+    { t: 'La del coche: 2 kg es más que 200 g', ok: false, por: 'Ese es el error absoluto, que no tiene en cuenta el tamaño de lo que se mide. 2 kg sobre 1500 kg es un 0,13 %.' },
+    { t: 'La del bebé: 200 g sobre 4 kg es un 5 %', ok: true, por: 'El error relativo del bebé es $\\frac{0{,}2}{4} = 5\\,\\%$, casi cuarenta veces mayor que el del coche. Es el que dice si la medida sirve.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('El error relativo es lo que decide si una medida sirve. Equivocarse en un centímetro midiendo ' +
@@ -149,13 +177,9 @@ Course.topic('ar-decimales', function (p) {
       var tipo = (d2 === 1) ? 1 : (den === d2 ? 2 : 3);
       return { n: n, den: den, tipo: tipo };
     },
-    ask: function (d) {
-      return '¿Qué tipo de número decimal es $\\dfrac{' + d.n + '}{' + d.den + '}$?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> si es exacto, ' +
-        '<code>2</code> si es periódico puro, <code>3</code> si es periódico mixto.</span>';
-    },
-    fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],
-    sol: function (d) { return { t: d.tipo }; },
+    ask: function (d) { return '¿Qué tipo de número decimal es $\\dfrac{' + d.n + '}{' + d.den + '}$? Decídelo mirando el denominador.'; },
+    fields: [{ name: 't', label: 'Es', opts: [{ t: 'exacto', v: '1' }, { t: 'periódico puro', v: '2' }, { t: 'periódico mixto', v: '3' }] }],
+    sol: function (d) { return { t: String(d.tipo) }; },
     hint: function (d) { return 'Factoriza el denominador: $' + d.den + ' = ' + ML.factorTex(d.den) + '$. ¿Solo hay doses y cincos?'; },
     steps: function (d) {
       return ['La fracción ya es irreducible, así que miramos el denominador: $' + d.den + ' = ' + ML.factorTex(d.den) + '$.',
@@ -165,6 +189,40 @@ Course.topic('ar-decimales', function (p) {
         'Comprobación: $\\dfrac{' + d.n + '}{' + d.den + '} = ' + U.fmt(d.n / d.den, 8) + '\\dots$'];
     },
     answer: function (d) { return ['', 'Exacto', 'Periódico puro', 'Periódico mixto'][d.tipo]; }
+  });
+
+  p.exercise({
+    title: 'Operar con decimales',
+    level: 'basico',
+    gen: function (r) {
+      var a = r.int(100, 9999) / 100, b = r.int(10, 999) / 100;
+      var op = r.pick(['+', '-', '\\cdot']);
+      var val = op === '+' ? a + b : (op === '-' ? a - b : a * b);
+      return { a: a, b: b, op: op, val: U.round(val, 4) };
+    },
+    ask: function (d) {
+      return 'Calcula $' + U.fmt(d.a, 2) + ' ' + d.op + ' ' + U.fmt(d.b, 2) + '$';
+    },
+    fields: [{ name: 'v', label: 'Resultado', w: 'wide' }],
+    sol: function (d) { return { v: d.val }; },
+    tol: 1e-5,
+    hint: function (d) {
+      return d.op === '\\cdot'
+        ? 'Multiplica como si no hubiera comas y después coloca tantos decimales como sumen los dos factores.'
+        : 'Coloca las comas una debajo de otra y opera como con enteros.';
+    },
+    steps: function (d) {
+      if (d.op === '\\cdot') {
+        return ['Quitamos las comas: $' + Math.round(d.a * 100) + ' \\cdot ' + Math.round(d.b * 100) + ' = ' +
+          Math.round(d.a * 100) * Math.round(d.b * 100) + '$.',
+          'Los dos factores tenían 2 decimales cada uno, así que el resultado lleva 4.',
+          'Resultado: $' + U.fmt(d.val, 4) + '$'];
+      }
+      return ['Alineamos las comas y operamos cifra a cifra como si fueran enteros.',
+        'La coma del resultado va en la misma columna.',
+        'Resultado: $' + U.fmt(d.val, 2) + '$'];
+    },
+    answer: function (d) { return U.fmt(d.val, 4); }
   });
 
   p.exercise({
@@ -231,40 +289,6 @@ Course.topic('ar-decimales', function (p) {
         'Y el error relativo sería $E_r = ' + U.fmt(d.er, 5) + ' = ' + U.fmt(d.er * 100, 3) + '\\%$.'];
     },
     answer: function (d) { return 'Aproximación ' + U.fmt(d.apr, d.dec) + ', error absoluto ' + U.fmt(d.ea, 5) + '.'; }
-  });
-
-  p.exercise({
-    title: 'Operar con decimales',
-    level: 'basico',
-    gen: function (r) {
-      var a = r.int(100, 9999) / 100, b = r.int(10, 999) / 100;
-      var op = r.pick(['+', '-', '\\cdot']);
-      var val = op === '+' ? a + b : (op === '-' ? a - b : a * b);
-      return { a: a, b: b, op: op, val: U.round(val, 4) };
-    },
-    ask: function (d) {
-      return 'Calcula $' + U.fmt(d.a, 2) + ' ' + d.op + ' ' + U.fmt(d.b, 2) + '$';
-    },
-    fields: [{ name: 'v', label: 'Resultado', w: 'wide' }],
-    sol: function (d) { return { v: d.val }; },
-    tol: 1e-5,
-    hint: function (d) {
-      return d.op === '\\cdot'
-        ? 'Multiplica como si no hubiera comas y después coloca tantos decimales como sumen los dos factores.'
-        : 'Coloca las comas una debajo de otra y opera como con enteros.';
-    },
-    steps: function (d) {
-      if (d.op === '\\cdot') {
-        return ['Quitamos las comas: $' + Math.round(d.a * 100) + ' \\cdot ' + Math.round(d.b * 100) + ' = ' +
-          Math.round(d.a * 100) * Math.round(d.b * 100) + '$.',
-          'Los dos factores tenían 2 decimales cada uno, así que el resultado lleva 4.',
-          'Resultado: $' + U.fmt(d.val, 4) + '$'];
-      }
-      return ['Alineamos las comas y operamos cifra a cifra como si fueran enteros.',
-        'La coma del resultado va en la misma columna.',
-        'Resultado: $' + U.fmt(d.val, 2) + '$'];
-    },
-    answer: function (d) { return U.fmt(d.val, 4); }
   });
 
   p.keys([

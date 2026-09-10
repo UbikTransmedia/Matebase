@@ -1,6 +1,11 @@
 /* Tema: Proposiciones y cuantificadores */
 Course.topic('lg-proposiciones', function (p) {
 
+  p.puente('Este es el primer tema del curso y no da nada por sabido. En él se aprende a decir con ' +
+    'precisión cuándo una frase es cierta, a combinar frases con «y», «o», «no» y «si… entonces», y a ' +
+    'negarlas sin equivocarse. Todo lo que viene después —conjuntos, demostraciones, y hasta la ' +
+    'probabilidad— usa exactamente estas piezas.', 'Por dónde empezamos');
+
   p.text('Antes de contar, antes de sumar, antes de cualquier número: ¿qué significa que algo sea ' +
     '<strong>cierto</strong>? Las matemáticas no son un montón de fórmulas, son un edificio de ' +
     'afirmaciones que se sostienen unas a otras. Este bloque trata del cemento.');
@@ -36,9 +41,16 @@ Course.topic('lg-proposiciones', function (p) {
     'cuando se cumplen las dos. En castellano decimos «o café o té» excluyendo, pero en lógica hay que ' +
     'decirlo explícitamente.', 'warn');
 
+  p.text('Una <strong>tabla de verdad</strong> recorre todas las combinaciones posibles de las ' +
+    'proposiciones simples —con $p$ y $q$ son cuatro filas— y dice qué sale en cada una. Según lo que ' +
+    'salga, la fórmula recibe un nombre: si es verdadera en <em>todas</em> las filas es una ' +
+    '<strong>tautología</strong> (una ley lógica), si es falsa en todas es una ' +
+    '<strong>contradicción</strong>, y si depende de la fila es una <strong>contingencia</strong>.');
+
   p.demo({
     title: 'Constructor de tablas de verdad',
     intro: 'Elige una fórmula y mira su tabla completa. Las filas verdaderas se marcan en verde: si lo son todas, la fórmula es una tautología.',
+    predice: 'De las cuatro filas de $p \\to q$, ¿cuántas crees que saldrán verdaderas? ¿Y de $p \\lor \\neg p$? Apuesta un número antes de mirar.',
     build: function (host, d) {
       var idx = 0;
       var fs = [
@@ -102,6 +114,12 @@ Course.topic('lg-proposiciones', function (p) {
     'hace frío»</em>. Al negar, la «y» se convierte en «o» y viceversa. Es de las reglas más útiles ' +
     'que existen, y volverá a aparecer en conjuntos y en probabilidad.');
 
+  p.comprueba('¿Cuál es la negación de «he aprobado matemáticas <strong>y</strong> he aprobado física»?', [
+    { t: 'He suspendido matemáticas y he suspendido física', ok: false, por: 'Eso es más de lo necesario. Para que la frase original sea mentira basta con que falle <em>una</em> de las dos asignaturas.' },
+    { t: 'He suspendido matemáticas o he suspendido física', ok: true, por: 'De Morgan: al negar una «y» sale una «o». Con un solo suspenso la frase original ya es falsa.' },
+    { t: 'No he aprobado ninguna de las dos', ok: false, por: 'Es lo mismo que la primera opción, dicho de otra forma: exige dos suspensos, cuando con uno basta.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.util('Una tabla de verdad no es un ejercicio de clase: es el plano de un circuito. Dentro de ' +
     'cualquier procesador hay miles de millones de puertas <strong>Y</strong>, <strong>O</strong> y ' +
@@ -119,6 +137,7 @@ Course.topic('lg-proposiciones', function (p) {
   p.demo({
     title: '¿Cuándo miente una promesa?',
     intro: '«Si apruebas, te regalo la bici». Cambia lo que ha pasado de verdad y decide si la promesa se ha roto.',
+    predice: 'Si <em>no</em> aprueba y aun así le regalan la bici, ¿se ha roto la promesa? Decide antes de pulsar.',
     build: function (host, d) {
       var apruebo = true, regalo = true;
       var out = W.readout(host, '');
@@ -163,6 +182,23 @@ Course.topic('lg-proposiciones', function (p) {
     'contrarrecíproco, «si la calle no está mojada, no llueve», es <strong>necesariamente</strong> ' +
     'cierto. Esa equivalencia es lo que hace posible el método de demostración por contrarrecíproco.',
     'ok', 'Confundir una implicación con su recíproca es el error lógico más común');
+
+  p.ejemplo({
+    title: 'Evaluar una fórmula compuesta',
+    enunciado: 'Con $p$ verdadera y $q$ falsa, ¿qué valor tiene $(p \\to q) \\lor \\neg p$? Se resuelve de dentro afuera, una conectiva cada vez.',
+    pasos: [
+      'Primero lo de dentro del paréntesis: $p \\to q$ con $p = V$ y $q = F$. Es justo el único caso en que una implicación falla: $p \\to q = F$.',
+      { t: 'Después la negación: $\\neg p$ con $p = V$ da $F$.', antes: '¿Qué vale $\\neg p$ si $p$ es verdadera?' },
+      { t: 'Por último, la conectiva de fuera: $F \\lor F$. Una disyunción solo es verdadera si al menos una parte lo es, así que da $F$.', antes: 'Ya tienes $F \\lor F$. ¿Verdadero o falso?' }
+    ],
+    cierre: 'El orden importa: se evalúa lo más interior primero, como en una operación con paréntesis. Con $p = F$ el resultado habría sido $V$, porque $\\neg p$ sería verdadera.'
+  });
+
+  p.comprueba('«Si un número es múltiplo de 4, entonces es par.» ¿Cuál de estas frases equivale a ella?', [
+    { t: 'Si un número es par, entonces es múltiplo de 4', ok: false, por: 'Es la recíproca, y aquí es falsa: el 6 es par y no es múltiplo de 4.' },
+    { t: 'Si un número no es par, entonces no es múltiplo de 4', ok: true, por: 'Es la contrarrecíproca: se niegan las dos partes <em>y</em> se intercambian. Siempre equivale a la original.' },
+    { t: 'Si un número no es múltiplo de 4, entonces no es par', ok: false, por: 'Es la contraria: se niegan las dos partes sin intercambiarlas. No equivale, y de hecho es falsa (el 6).' }
+  ]);
 
   /* ---------------------------------------------------------------- */
   p.util('Confundir una implicación con su recíproca es el error que más caro sale fuera del aula. Una ' +
@@ -255,17 +291,11 @@ Course.topic('lg-proposiciones', function (p) {
     },
     ask: function (d) {
       return 'Si $p$ es <strong>' + (d.pv ? 'verdadera' : 'falsa') + '</strong> y $q$ es ' +
-        '<strong>' + (d.qv ? 'verdadera' : 'falsa') + '</strong>, ¿qué valor tiene $' + d.t + '$?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>V</code> o <code>F</code>.</span>';
+        '<strong>' + (d.qv ? 'verdadera' : 'falsa') + '</strong>, ¿qué valor tiene $' + d.t + '$?';
     },
-    fields: [{ name: 'v', label: 'Valor', w: 'tiny', ph: 'V / F' }],
+    fields: [{ name: 'v', label: 'Valor', opts: [{ t: 'Verdadera', v: 'V' }, { t: 'Falsa', v: 'F' }] }],
     sol: function (d) { return { v: d.val ? 'V' : 'F' }; },
-    check: function (v, d) {
-      var t = v.raw.v.trim().toUpperCase();
-      if (t !== 'V' && t !== 'F') return { ok: false, msg: 'Escribe <code>V</code> o <code>F</code>.' };
-      return (t === 'V') === d.val;
-    },
-    hint: function () { return 'Recuerda que la implicación solo es falsa cuando la premisa es verdadera y la conclusión falsa.'; },
+    hint: function () { return ['Evalúa primero lo de dentro de los paréntesis y las negaciones, y al final la conectiva de fuera.', 'La implicación solo es falsa cuando la premisa es verdadera y la conclusión falsa.']; },
     steps: function (d) {
       return ['$p$ vale ' + (d.pv ? 'V' : 'F') + ' y $q$ vale ' + (d.qv ? 'V' : 'F') + '.',
         'Sustituimos en la fórmula y aplicamos las reglas de cada conectiva.',
@@ -292,23 +322,23 @@ Course.topic('lg-proposiciones', function (p) {
     },
     ask: function (d) {
       var nom = ['<strong>recíproca</strong>', '<strong>contraria</strong>', '<strong>contrarrecíproca</strong>'][d.cual];
-      return 'Dada la implicación «si ' + d.p + ', entonces ' + d.q + '», ¿cuál es su ' + nom + '?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">' +
-        '<code>1</code> si ' + d.q + ', entonces ' + d.p + '<br>' +
-        '<code>2</code> si no ' + d.p + ', entonces no ' + d.q + '<br>' +
-        '<code>3</code> si no ' + d.q + ', entonces no ' + d.p + '</span>';
+      return 'Dada la implicación «si ' + d.p + ', entonces ' + d.q + '», ¿cuál es su ' + nom + '?';
     },
-    fields: [{ name: 'r', label: 'Opción', w: 'tiny' }],
-    sol: function (d) { return { r: d.cual + 1 }; },
-    hint: function () { return 'Recíproca: se le da la vuelta. Contraria: se niegan las dos partes. Contrarrecíproca: se niegan Y se le da la vuelta.'; },
+    fields: function (d) {
+      return [{ name: 'r', label: 'Es', opts: [
+        { t: 'si ' + d.q + ', entonces ' + d.p, v: '1' },
+        { t: 'si no ' + d.p + ', entonces no ' + d.q, v: '2' },
+        { t: 'si no ' + d.q + ', entonces no ' + d.p, v: '3' }] }];
+    },
+    sol: function (d) { return { r: String(d.cual + 1) }; },
+    hint: function () { return ['Recíproca: se le da la vuelta. Contraria: se niegan las dos partes.', 'Contrarrecíproca: se niegan las dos partes <em>y</em> se le da la vuelta.']; },
     steps: function (d) {
-      return ['Recíproca: se intercambian premisa y conclusión → opción 1.',
-        'Contraria: se niegan las dos, sin intercambiar → opción 2.',
-        'Contrarrecíproca: se niegan las dos <em>y</em> se intercambian → opción 3.',
-        'La respuesta es la <strong>' + (d.cual + 1) + '</strong>.',
+      return ['Recíproca: se intercambian premisa y conclusión → «si ' + d.q + ', entonces ' + d.p + '».',
+        'Contraria: se niegan las dos, sin intercambiar → «si no ' + d.p + ', entonces no ' + d.q + '».',
+        'Contrarrecíproca: se niegan las dos <em>y</em> se intercambian → «si no ' + d.q + ', entonces no ' + d.p + '».',
         'Recuerda: solo la <strong>contrarrecíproca</strong> equivale siempre a la original.'];
     },
-    answer: function (d) { return 'Opción ' + (d.cual + 1); }
+    answer: function (d) { return [ 'si ' + d.q + ', entonces ' + d.p, 'si no ' + d.p + ', entonces no ' + d.q, 'si no ' + d.q + ', entonces no ' + d.p][d.cual]; }
   });
 
   p.exercise({
@@ -327,15 +357,14 @@ Course.topic('lg-proposiciones', function (p) {
       var correcta = r.bool() ? 1 : 2;
       return { t: c.t, n: c.n, mal: c.mal, tipo: c.tipo, correcta: correcta };
     },
-    ask: function (d) {
+    ask: function (d) { return '¿Cuál es la negación de «<em>' + d.t + '</em>»?'; },
+    fields: function (d) {
       var op1 = d.correcta === 1 ? d.n : d.mal;
       var op2 = d.correcta === 1 ? d.mal : d.n;
-      return '¿Cuál es la negación de «<em>' + d.t + '</em>»?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">' +
-        '<code>1</code> ' + op1 + '<br><code>2</code> ' + op2 + '</span>';
+      return [{ name: 'r', label: 'Negación', opts: [{ t: op1, v: '1' }, { t: op2, v: '2' }] }];
     },
-    fields: [{ name: 'r', label: 'Opción', w: 'tiny' }],
-    sol: function (d) { return { r: d.correcta }; },
+    sol: function (d) { return { r: String(d.correcta) }; },
+    errores: [{ si: function (v, d) { return v.raw.r && v.raw.r !== String(d.correcta); }, msg: 'Esa es la trampa habitual: negar «todos» con «ninguno», o «alguno» con «alguno no». La negación de «todos» es «alguno no»; la de «alguno» es «ninguno».' }],
     hint: function (d) {
       return d.tipo === 0
         ? 'Para negar un «para todo» basta con <strong>un</strong> contraejemplo: se convierte en «existe alguno que no».'
@@ -346,7 +375,7 @@ Course.topic('lg-proposiciones', function (p) {
         d.tipo === 0
           ? 'La frase es un «para todo», así que su negación es un «existe alguno que no».'
           : 'La frase es un «existe», así que su negación es un «ninguno», es decir, «todos cumplen lo contrario».',
-        'Negación correcta: <strong>' + d.n + '</strong> (opción ' + d.correcta + ').',
+        'Negación correcta: <strong>' + d.n + '</strong>.',
         'Fíjate en que la negación de «todos aprueban» <em>no</em> es «todos suspenden»: con uno basta.'];
     },
     answer: function (d) { return d.n; }
@@ -374,13 +403,9 @@ Course.topic('lg-proposiciones', function (p) {
       });
       return { t: F.t, n: n, tipo: n === 4 ? 1 : (n === 0 ? 2 : 3) };
     },
-    ask: function (d) {
-      return 'Clasifica la fórmula $' + d.t + '$ construyendo su tabla de verdad.<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> tautología (siempre V) · ' +
-        '<code>2</code> contradicción (siempre F) · <code>3</code> contingencia (depende)</span>';
-    },
-    fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],
-    sol: function (d) { return { t: d.tipo }; },
+    ask: function (d) { return 'Clasifica la fórmula $' + d.t + '$ construyendo su tabla de verdad.'; },
+    fields: [{ name: 't', label: 'Es una', opts: [{ t: 'tautología (siempre V)', v: '1' }, { t: 'contradicción (siempre F)', v: '2' }, { t: 'contingencia (depende)', v: '3' }] }],
+    sol: function (d) { return { t: String(d.tipo) }; },
     hint: function () { return 'Hay 4 combinaciones posibles de $p$ y $q$. Evalúa la fórmula en cada una y cuenta cuántas dan verdadero.'; },
     steps: function (d) {
       return ['Construimos la tabla con las 4 combinaciones de $p$ y $q$.',

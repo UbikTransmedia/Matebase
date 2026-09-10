@@ -1,6 +1,11 @@
 /* Tema: Números enteros */
 Course.topic('ar-enteros', function (p) {
 
+  p.puente('Hasta ahora todos los números eran positivos: se contaba, se repartía, se redondeaba. ' +
+    'Este tema añade los negativos, que son los que hacen que cualquier resta tenga respuesta. Lo ' +
+    'que cuesta no es entenderlos —una deuda, una temperatura bajo cero— sino operar con los signos ' +
+    'sin equivocarse, y a eso se dedica la mayor parte del tema.');
+
   p.text('Si solo tienes naturales, la resta $3 - 7$ no tiene respuesta. Y sin embargo tiene sentido ' +
     'preguntarla: son siete grados menos que tres, o deber cuatro euros. Los <strong>números enteros</strong> ' +
     'son la solución: se añaden los negativos y el cero.');
@@ -32,6 +37,11 @@ Course.topic('ar-enteros', function (p) {
     'Siempre es positivo o cero.');
 
   p.formula('|{-7}| = 7 \\qquad |7| = 7 \\qquad |0| = 0');
+
+  p.comprueba('¿Cuál de estos números es el menor: $-9$, $-2$ o $1$?', [
+    { t: '$-2$, porque es el más pequeño en tamaño', ok: false, por: 'En tamaño (valor absoluto) sí, pero el orden se mira en la recta: $-9$ está más a la izquierda que $-2$.' },
+    { t: '$-9$, porque está más a la izquierda en la recta', ok: true, por: 'Una deuda de 9 es peor que una de 2: $-9 < -2 < 1$.' }
+  ]);
 
   p.demo({
     title: 'La recta de los enteros',
@@ -97,6 +107,7 @@ Course.topic('ar-enteros', function (p) {
   p.demo({
     title: 'Multiplicar es girar y estirar',
     intro: 'Multiplicar por un número negativo lleva el punto al otro lado del cero. Multiplicar dos veces por negativo lo devuelve al lado de partida.',
+    predice: 'Pon $a = -3$ y $b = -2$. Antes de mirar: ¿el resultado quedará a la derecha o a la izquierda del cero?',
     build: function (host, d) {
       var a = 3, b = -2;
       var out = W.readout(host, '');
@@ -121,6 +132,23 @@ Course.topic('ar-enteros', function (p) {
       paint();
     }
   });
+
+  p.ejemplo({
+    title: 'Una operación combinada con signos',
+    enunciado: 'Calcular $-4 - (-6)\\cdot(2 - 5)$.',
+    pasos: [
+      { t: 'Paréntesis primero: $2 - 5 = -3$. Queda $-4 - (-6)\\cdot(-3)$.', antes: '¿Qué se calcula antes que nada?' },
+      { t: 'Después la multiplicación: $(-6)\\cdot(-3)$. Sin signos, $6\\cdot 3 = 18$; los signos son iguales, así que el resultado es positivo: $+18$. Queda $-4 - 18$.', antes: 'Menos por menos, ¿qué signo da?' },
+      { t: 'Por último la resta: $-4 - 18$. Son dos deudas que se acumulan: $-22$.', antes: 'Debes 4 y te cargan 18 más. ¿Cuánto debes?' }
+    ],
+    cierre: 'El error típico está en el último paso: ver el $+18$ del producto y sumarlo, $-4 + 18 = 14$. El signo que había delante del producto, el menos de «$-4 - \\ldots$», sigue ahí.'
+  });
+
+  p.trampas([
+    { e: 'Creer que $-7$ es mayor que $-3$ «porque 7 es más grande».', por: 'Mayor es más a la derecha en la recta. $-7$ está más a la izquierda: $-7 < -3$.' },
+    { e: 'Aplicar la regla de los signos a la suma.', por: '«Menos y menos da más» es para multiplicar. $(-5) + (-3) = -8$: dos deudas se suman, no se cancelan.' },
+    { e: 'Perder el signo que había delante de un paréntesis.', por: '$5 - (3 - 8)$ es $5 - (-5) = 10$, no $5 - 3 - 8$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
@@ -175,31 +203,6 @@ Course.topic('ar-enteros', function (p) {
   });
 
   p.exercise({
-    title: 'Operación combinada con paréntesis',
-    level: 'medio',
-    gen: function (r) {
-      var a = r.pm(2, 9), b = r.pm(2, 9), c = r.pm(2, 6), e = r.pm(2, 8);
-      var val = a - b * (c + e);
-      if (Math.abs(val) > 300) return null;
-      return {
-        a: a, b: b, c: c, e: e, val: val,
-        tex: a + ' - ' + (b < 0 ? '(' + b + ')' : b) + '\\cdot\\left(' + c +
-          (e < 0 ? ' + (' + e + ')' : ' + ' + e) + '\\right)'
-      };
-    },
-    ask: function (d) { return 'Calcula: $' + d.tex + '$'; },
-    fields: [{ name: 'v', label: 'Resultado', w: 'tiny' }],
-    sol: function (d) { return { v: d.val }; },
-    hint: function (d) { return 'Empieza por el paréntesis: vale $' + (d.c + d.e) + '$.'; },
-    steps: function (d) {
-      return ['Paréntesis: $' + d.c + ' + (' + d.e + ') = ' + (d.c + d.e) + '$.',
-        'Multiplicación: $' + d.b + '\\cdot(' + (d.c + d.e) + ') = ' + (d.b * (d.c + d.e)) + '$.',
-        'Resta final: $' + d.a + ' - (' + (d.b * (d.c + d.e)) + ') = ' + d.val + '$.'];
-    },
-    answer: function (d) { return String(d.val); }
-  });
-
-  p.exercise({
     title: 'Ordenar de menor a mayor',
     level: 'basico',
     gen: function (r) {
@@ -231,6 +234,31 @@ Course.topic('ar-enteros', function (p) {
         'Orden correcto: $' + d.orden.join(' < ') + '$.'];
     },
     answer: function (d) { return d.orden.join(' ; '); }
+  });
+
+  p.exercise({
+    title: 'Operación combinada con paréntesis',
+    level: 'medio',
+    gen: function (r) {
+      var a = r.pm(2, 9), b = r.pm(2, 9), c = r.pm(2, 6), e = r.pm(2, 8);
+      var val = a - b * (c + e);
+      if (Math.abs(val) > 300) return null;
+      return {
+        a: a, b: b, c: c, e: e, val: val,
+        tex: a + ' - ' + (b < 0 ? '(' + b + ')' : b) + '\\cdot\\left(' + c +
+          (e < 0 ? ' + (' + e + ')' : ' + ' + e) + '\\right)'
+      };
+    },
+    ask: function (d) { return 'Calcula: $' + d.tex + '$'; },
+    fields: [{ name: 'v', label: 'Resultado', w: 'tiny' }],
+    sol: function (d) { return { v: d.val }; },
+    hint: function (d) { return 'Empieza por el paréntesis: vale $' + (d.c + d.e) + '$.'; },
+    steps: function (d) {
+      return ['Paréntesis: $' + d.c + ' + (' + d.e + ') = ' + (d.c + d.e) + '$.',
+        'Multiplicación: $' + d.b + '\\cdot(' + (d.c + d.e) + ') = ' + (d.b * (d.c + d.e)) + '$.',
+        'Resta final: $' + d.a + ' - (' + (d.b * (d.c + d.e)) + ') = ' + d.val + '$.'];
+    },
+    answer: function (d) { return String(d.val); }
   });
 
   p.keys([

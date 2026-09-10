@@ -268,6 +268,43 @@ Course.topic('av-juegos', function (p) {
   });
 
   p.exercise({
+    title: 'El dilema en la práctica',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { s: 'Dos países deciden si aumentar su gasto militar', t: 1 },
+        { s: 'Dos coches se cruzan y deciden por qué lado pasar', t: 2 },
+        { s: 'Dos empresas deciden si bajar precios en una guerra comercial', t: 1 },
+        { s: 'Dos flotas pesqueras deciden cuánto pescar en un caladero común', t: 1 },
+        { s: 'Dos amigos eligen a qué bar ir, prefiriendo estar juntos', t: 2 },
+        { s: 'Dos ciclistas deciden si doparse', t: 1 },
+        { s: 'Dos programadores acuerdan qué formato de archivo usar', t: 2 }
+      ];
+      var c = r.pick(casos);
+      return { s: c.s, t: c.t };
+    },
+    ask: function (d) {
+      return '<em>' + d.s + '</em><br>¿Qué tipo de juego es?<br>' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> dilema del prisionero ' +
+        '(lo racional individual perjudica a todos) · <code>2</code> juego de coordinación ' +
+        '(lo importante es ponerse de acuerdo, da igual en qué)</span>';
+    },
+    fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],
+    sol: function (d) { return { t: d.t }; },
+    hint: function () { return 'Pregúntate: ¿hay tentación de traicionar al otro para salir ganando, o simplemente hace falta coincidir?'; },
+    steps: function (d) {
+      return ['En un <strong>dilema del prisionero</strong> cada uno tiene incentivo para traicionar, ' +
+        'y si los dos lo hacen todos pierden.',
+        'En un <strong>juego de coordinación</strong> no hay traición posible: el problema es solo ' +
+        'ponerse de acuerdo, y hay varios equilibrios igual de buenos.',
+        'Aquí es un <strong>' + (d.t === 1 ? 'dilema del prisionero' : 'juego de coordinación') + '</strong>.',
+        d.t === 1 ? 'La solución real pasa por cambiar los pagos: acuerdos vinculantes, sanciones o repetición del juego.'
+          : 'Aquí basta con una convención, una señal o una norma que fije cuál de los equilibrios se elige.'];
+    },
+    answer: function (d) { return d.t === 1 ? 'Dilema del prisionero' : 'Juego de coordinación'; }
+  });
+
+  p.exercise({
     title: 'Encuentra el equilibrio de Nash',
     level: 'avanzado',
     gen: function (r) {
@@ -310,43 +347,6 @@ Course.topic('av-juegos', function (p) {
       return s;
     },
     answer: function (d) { return d.n + ' equilibrio(s)'; }
-  });
-
-  p.exercise({
-    title: 'El dilema en la práctica',
-    level: 'medio',
-    gen: function (r) {
-      var casos = [
-        { s: 'Dos países deciden si aumentar su gasto militar', t: 1 },
-        { s: 'Dos coches se cruzan y deciden por qué lado pasar', t: 2 },
-        { s: 'Dos empresas deciden si bajar precios en una guerra comercial', t: 1 },
-        { s: 'Dos flotas pesqueras deciden cuánto pescar en un caladero común', t: 1 },
-        { s: 'Dos amigos eligen a qué bar ir, prefiriendo estar juntos', t: 2 },
-        { s: 'Dos ciclistas deciden si doparse', t: 1 },
-        { s: 'Dos programadores acuerdan qué formato de archivo usar', t: 2 }
-      ];
-      var c = r.pick(casos);
-      return { s: c.s, t: c.t };
-    },
-    ask: function (d) {
-      return '<em>' + d.s + '</em><br>¿Qué tipo de juego es?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> dilema del prisionero ' +
-        '(lo racional individual perjudica a todos) · <code>2</code> juego de coordinación ' +
-        '(lo importante es ponerse de acuerdo, da igual en qué)</span>';
-    },
-    fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],
-    sol: function (d) { return { t: d.t }; },
-    hint: function () { return 'Pregúntate: ¿hay tentación de traicionar al otro para salir ganando, o simplemente hace falta coincidir?'; },
-    steps: function (d) {
-      return ['En un <strong>dilema del prisionero</strong> cada uno tiene incentivo para traicionar, ' +
-        'y si los dos lo hacen todos pierden.',
-        'En un <strong>juego de coordinación</strong> no hay traición posible: el problema es solo ' +
-        'ponerse de acuerdo, y hay varios equilibrios igual de buenos.',
-        'Aquí es un <strong>' + (d.t === 1 ? 'dilema del prisionero' : 'juego de coordinación') + '</strong>.',
-        d.t === 1 ? 'La solución real pasa por cambiar los pagos: acuerdos vinculantes, sanciones o repetición del juego.'
-          : 'Aquí basta con una convención, una señal o una norma que fije cuál de los equilibrios se elige.'];
-    },
-    answer: function (d) { return d.t === 1 ? 'Dilema del prisionero' : 'Juego de coordinación'; }
   });
 
   p.exercise({

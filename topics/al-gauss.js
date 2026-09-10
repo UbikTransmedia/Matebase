@@ -252,42 +252,6 @@ Course.topic('al-gauss', function (p) {
   });
 
   p.exercise({
-    title: 'Problema con tres incógnitas',
-    level: 'avanzado',
-    gen: function (r) {
-      var a = r.int(2, 9), b = r.int(2, 9), c = r.int(2, 9);
-      var p1 = r.int(2, 6), p2 = r.int(2, 6), p3 = r.int(2, 6);
-      if (p1 === p2 || p2 === p3 || p1 === p3) return null;
-      return {
-        a: a, b: b, c: c, p1: p1, p2: p2, p3: p3,
-        total: a + b + c, coste: a * p1 + b * p2 + c * p3, dif: a - b
-      };
-    },
-    ask: function (d) {
-      return 'En una tienda he comprado $' + d.total + '$ artículos entre bolígrafos ($' + d.p1 +
-        '$ €), cuadernos ($' + d.p2 + '$ €) y gomas ($' + d.p3 + '$ €), y he pagado $' + d.coste +
-        '$ €. Además, he comprado $' + Math.abs(d.dif) + '$ ' +
-        (d.dif >= 0 ? 'bolígrafos más que cuadernos' : 'cuadernos más que bolígrafos') +
-        '. ¿Cuántos <strong>bolígrafos</strong> he comprado?';
-    },
-    fields: [{ name: 'v', label: 'Bolígrafos', w: 'tiny' }],
-    sol: function (d) { return { v: d.a }; },
-    hint: function (d) {
-      return 'Llama $x$, $y$, $z$ a las tres cantidades: $x+y+z = ' + d.total + '$, ' +
-        '$' + d.p1 + 'x + ' + d.p2 + 'y + ' + d.p3 + 'z = ' + d.coste + '$ y $x - y = ' + d.dif + '$.';
-    },
-    steps: function (d) {
-      return ['Incógnitas: $x$ bolígrafos, $y$ cuadernos, $z$ gomas.',
-        'Cantidad total: $x + y + z = ' + d.total + '$.',
-        'Dinero: $' + d.p1 + 'x + ' + d.p2 + 'y + ' + d.p3 + 'z = ' + d.coste + '$.',
-        'Diferencia: $x - y = ' + d.dif + '$.',
-        'Escalonando el sistema se obtiene $x = ' + d.a + '$, $y = ' + d.b + '$, $z = ' + d.c + '$.',
-        'Comprobación: $' + d.a + '+' + d.b + '+' + d.c + ' = ' + d.total + '$ ✓'];
-    },
-    answer: function (d) { return d.a + ' bolígrafos (y ' + d.b + ' cuadernos, ' + d.c + ' gomas).'; }
-  });
-
-  p.exercise({
     title: 'Clasificar un sistema 3×3',
     level: 'medio',
     gen: function (r) {
@@ -326,6 +290,42 @@ Course.topic('al-gauss', function (p) {
       }[d.tipo]];
     },
     answer: function (d) { return { SCD: 'Compatible determinado', SCI: 'Compatible indeterminado', SI: 'Incompatible' }[d.tipo]; }
+  });
+
+  p.exercise({
+    title: 'Problema con tres incógnitas',
+    level: 'avanzado',
+    gen: function (r) {
+      var a = r.int(2, 9), b = r.int(2, 9), c = r.int(2, 9);
+      var p1 = r.int(2, 6), p2 = r.int(2, 6), p3 = r.int(2, 6);
+      if (p1 === p2 || p2 === p3 || p1 === p3) return null;
+      return {
+        a: a, b: b, c: c, p1: p1, p2: p2, p3: p3,
+        total: a + b + c, coste: a * p1 + b * p2 + c * p3, dif: a - b
+      };
+    },
+    ask: function (d) {
+      return 'En una tienda he comprado $' + d.total + '$ artículos entre bolígrafos ($' + d.p1 +
+        '$ €), cuadernos ($' + d.p2 + '$ €) y gomas ($' + d.p3 + '$ €), y he pagado $' + d.coste +
+        '$ €. Además, he comprado $' + Math.abs(d.dif) + '$ ' +
+        (d.dif >= 0 ? 'bolígrafos más que cuadernos' : 'cuadernos más que bolígrafos') +
+        '. ¿Cuántos <strong>bolígrafos</strong> he comprado?';
+    },
+    fields: [{ name: 'v', label: 'Bolígrafos', w: 'tiny' }],
+    sol: function (d) { return { v: d.a }; },
+    hint: function (d) {
+      return 'Llama $x$, $y$, $z$ a las tres cantidades: $x+y+z = ' + d.total + '$, ' +
+        '$' + d.p1 + 'x + ' + d.p2 + 'y + ' + d.p3 + 'z = ' + d.coste + '$ y $x - y = ' + d.dif + '$.';
+    },
+    steps: function (d) {
+      return ['Incógnitas: $x$ bolígrafos, $y$ cuadernos, $z$ gomas.',
+        'Cantidad total: $x + y + z = ' + d.total + '$.',
+        'Dinero: $' + d.p1 + 'x + ' + d.p2 + 'y + ' + d.p3 + 'z = ' + d.coste + '$.',
+        'Diferencia: $x - y = ' + d.dif + '$.',
+        'Escalonando el sistema se obtiene $x = ' + d.a + '$, $y = ' + d.b + '$, $z = ' + d.c + '$.',
+        'Comprobación: $' + d.a + '+' + d.b + '+' + d.c + ' = ' + d.total + '$ ✓'];
+    },
+    answer: function (d) { return d.a + ' bolígrafos (y ' + d.b + ' cuadernos, ' + d.c + ' gomas).'; }
   });
 
   p.problem({

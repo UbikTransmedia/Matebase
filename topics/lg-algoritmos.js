@@ -7,6 +7,11 @@ Course.topic('lg-algoritmos', function (p) {
     return { mcd: a, pasos: pasos };
   }
 
+  p.puente('En [[lg-problemas]] se buscaba un plan para resolver un problema nuevo. Un algoritmo es lo ' +
+    'que queda cuando ese plan se afina tanto que ya no hace falta pensar para ejecutarlo: sirve para ' +
+    'todos los problemas del mismo tipo, y lo puede seguir una máquina. Aquí se aprende a leerlos, a ' +
+    'ejecutarlos a mano y a compararlos.');
+
   p.text('Un <strong>algoritmo</strong> es una receta tan precisa que la puede seguir alguien —o algo— ' +
     'que no entiende lo que está haciendo. La división larga que aprendiste en primaria es un algoritmo: ' +
     'se sigue paso a paso sin pensar y siempre da el cociente. El método de [[al-gauss|Gauss]] para ' +
@@ -41,6 +46,25 @@ Course.topic('lg-algoritmos', function (p) {
       'de cada variable en cada vuelta. Con $n = 4$: $s$ vale 0, 1, 3, 6 y 10. Es la forma de entender un ' +
       'algoritmo, y la forma de encontrar sus errores.');
 
+  p.ejemplo({
+    title: 'Seguir una traza con una tabla',
+    enunciado: '¿Qué devuelve este algoritmo? $\\begin{aligned} &s \\leftarrow 1 \\\\ &\\textbf{para } i \\textbf{ desde } 1 \\textbf{ hasta } 3: \\\\ &\\quad s \\leftarrow 2s + i \\\\ &\\textbf{devolver } s \\end{aligned}$',
+    pasos: [
+      { t: 'Se hace una tabla con una columna por variable, $i$ y $s$, y una fila por vuelta. Antes de empezar el bucle, $s = 1$.', antes: '¿Cuánto vale $s$ antes de la primera vuelta?' },
+      { t: 'Vuelta $i = 1$: $s \\leftarrow 2\\cdot 1 + 1 = 3$. Se calcula con el $s$ viejo y se guarda el nuevo.', antes: 'Con $s = 1$ e $i = 1$, ¿qué valor se guarda en $s$?' },
+      { t: 'Vuelta $i = 2$: $s \\leftarrow 2\\cdot 3 + 2 = 8$.', antes: 'Ahora $s = 3$ e $i = 2$. ¿Qué sale?' },
+      { t: 'Vuelta $i = 3$: $s \\leftarrow 2\\cdot 8 + 3 = 19$. El bucle termina porque $i$ ha llegado a 3.' },
+      { t: 'Se ejecuta «devolver $s$»: el algoritmo devuelve <strong>19</strong>.' }
+    ],
+    cierre: 'La tabla es el método: nunca «adivines» qué hace un bucle sin seguir un par de vueltas. Y fíjate en que $s \\leftarrow 2s + i$ no es una ecuación, es una orden: «calcula $2s + i$ con lo que hay y guárdalo en $s$».'
+  });
+
+  p.comprueba('En un pseudocódigo aparece la línea $x \\leftarrow x + 1$. ¿Qué significa?', [
+    { t: 'Que $x$ es igual a $x + 1$, lo cual es imposible', ok: false, por: 'La flecha no es un igual. Nadie afirma que $x$ sea igual a $x + 1$.' },
+    { t: 'Que se calcula $x + 1$ y el resultado se guarda en $x$: $x$ aumenta en uno', ok: true, por: 'Eso es. Es una instrucción, no una ecuación: después de ejecutarla, $x$ vale uno más que antes.' },
+    { t: 'Que hay que resolver la ecuación $x = x + 1$', ok: false, por: 'No hay nada que resolver: la flecha ordena, no pregunta.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.section('El algoritmo de Euclides');
 
@@ -60,6 +84,7 @@ Course.topic('lg-algoritmos', function (p) {
   p.demo({
     title: 'La traza de Euclides',
     intro: 'Elige dos números y mira cada vuelta del bucle. Fíjate en lo pocas que hacen falta incluso con números grandes.',
+    predice: 'Para $a = 1071$ y $b = 462$, ¿cuántas vueltas crees que da el bucle: unas 3, unas 30 o unas 300?',
     build: function (host) {
       var a = 1071, b = 462;
       var caja = U.el('div');
@@ -81,6 +106,12 @@ Course.topic('lg-algoritmos', function (p) {
       pinta();
     }
   });
+
+  p.comprueba('¿Por qué es seguro que el algoritmo de Euclides termina, sean cuales sean $a$ y $b$?', [
+    { t: 'Porque el resto de cada división es menor que el divisor, así que $b$ baja en cada vuelta y no puede bajar para siempre', ok: true, por: 'Un número natural que decrece estrictamente llega a 0 en un número finito de pasos. Ese es todo el argumento.' },
+    { t: 'Porque siempre da como mucho tres vueltas', ok: false, por: 'No hay un tope fijo: con dos números de Fibonacci seguidos da muchas vueltas. Lo que garantiza que termina es que $b$ baja siempre.' },
+    { t: 'Porque se ha probado con muchos números', ok: false, por: 'Probar casos no demuestra que termine con todos. Hace falta el argumento de que $b$ decrece.' }
+  ]);
 
   p.hist('La palabra <em>algoritmo</em> es el nombre de una persona. Muhammad ibn Musa al-Juarismi fue ' +
     'un matemático persa que trabajó en la Casa de la Sabiduría de Bagdad hacia el año 820. Escribió un ' +

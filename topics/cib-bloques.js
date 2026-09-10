@@ -179,6 +179,33 @@ Course.topic('cib-bloques', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: '¿Positiva o negativa?',
+    level: 'basico',
+    gen: function (r) {
+      return r.pick([
+        { t: 'Un termostato enciende la calefacción cuando la temperatura baja de la consigna y la apaga cuando la supera.', q: 'neg' },
+        { t: 'Un micrófono capta el sonido de su propio altavoz, lo amplifica y lo vuelve a emitir, hasta que suena un pitido.', q: 'pos' },
+        { t: 'La pupila se cierra cuando entra mucha luz y se abre cuando entra poca.', q: 'neg' },
+        { t: 'Un vídeo con muchas visitas aparece más en las recomendaciones, y eso le da todavía más visitas.', q: 'pos' },
+        { t: 'Los intereses de una cuenta se suman al saldo, y un saldo mayor genera más intereses.', q: 'pos' },
+        { t: 'Cuando sube el azúcar en sangre, el páncreas segrega insulina, que lo hace bajar.', q: 'neg' },
+        { t: 'El rumor de que un banco va a quebrar hace que la gente saque su dinero, y eso debilita al banco y hace más creíble el rumor.', q: 'pos' },
+        { t: 'Un ciclista que se inclina hacia un lado gira el manillar hacia ese mismo lado y recupera el equilibrio.', q: 'neg' }
+      ]);
+    },
+    ask: function (d) { return '<em>«' + d.t + '»</em><br>¿Qué tipo de realimentación hay en este bucle?'; },
+    fields: [{ name: 'q', label: 'Realimentación', opts: [{ t: 'Negativa: tiende a corregir la desviación', v: 'neg' }, { t: 'Positiva: amplifica la desviación', v: 'pos' }] }],
+    sol: function (d) { return { q: d.q }; },
+    hint: function () { return ['Imagina que la variable se desvía un poco hacia arriba.', 'Sigue el bucle: ¿lo que ocurre después la empuja de vuelta o todavía más arriba?']; },
+    steps: function (d) {
+      return [d.q === 'neg'
+        ? 'Una desviación provoca una reacción que la contrarresta: <strong>realimentación negativa</strong>. Estabiliza.'
+        : 'Una desviación provoca una reacción que la agranda: <strong>realimentación positiva</strong>. Amplifica, y sin un límite acaba en crecimiento desbocado o en colapso.'];
+    },
+    answer: function (d) { return d.q === 'neg' ? 'Negativa' : 'Positiva'; }
+  });
+
+  p.exercise({
     title: 'Reduce el diagrama',
     level: 'medio',
     gen: function (r) {
@@ -264,33 +291,6 @@ Course.topic('cib-bloques', function (p) {
         'Caída: $100\\left(1 - \\dfrac{' + U.fmt(d.T2, 4) + '}{' + U.fmt(d.T1, 4) + '}\\right) \\approx ' + U.fmt(d.caida, 2) + '$ %, frente al ' + d.pc + ' % sin realimentación.'];
     },
     answer: function (d) { return U.fmt(d.caida, 2) + ' %'; }
-  });
-
-  p.exercise({
-    title: '¿Positiva o negativa?',
-    level: 'basico',
-    gen: function (r) {
-      return r.pick([
-        { t: 'Un termostato enciende la calefacción cuando la temperatura baja de la consigna y la apaga cuando la supera.', q: 'neg' },
-        { t: 'Un micrófono capta el sonido de su propio altavoz, lo amplifica y lo vuelve a emitir, hasta que suena un pitido.', q: 'pos' },
-        { t: 'La pupila se cierra cuando entra mucha luz y se abre cuando entra poca.', q: 'neg' },
-        { t: 'Un vídeo con muchas visitas aparece más en las recomendaciones, y eso le da todavía más visitas.', q: 'pos' },
-        { t: 'Los intereses de una cuenta se suman al saldo, y un saldo mayor genera más intereses.', q: 'pos' },
-        { t: 'Cuando sube el azúcar en sangre, el páncreas segrega insulina, que lo hace bajar.', q: 'neg' },
-        { t: 'El rumor de que un banco va a quebrar hace que la gente saque su dinero, y eso debilita al banco y hace más creíble el rumor.', q: 'pos' },
-        { t: 'Un ciclista que se inclina hacia un lado gira el manillar hacia ese mismo lado y recupera el equilibrio.', q: 'neg' }
-      ]);
-    },
-    ask: function (d) { return '<em>«' + d.t + '»</em><br>¿Qué tipo de realimentación hay en este bucle?'; },
-    fields: [{ name: 'q', label: 'Realimentación', opts: [{ t: 'Negativa: tiende a corregir la desviación', v: 'neg' }, { t: 'Positiva: amplifica la desviación', v: 'pos' }] }],
-    sol: function (d) { return { q: d.q }; },
-    hint: function () { return ['Imagina que la variable se desvía un poco hacia arriba.', 'Sigue el bucle: ¿lo que ocurre después la empuja de vuelta o todavía más arriba?']; },
-    steps: function (d) {
-      return [d.q === 'neg'
-        ? 'Una desviación provoca una reacción que la contrarresta: <strong>realimentación negativa</strong>. Estabiliza.'
-        : 'Una desviación provoca una reacción que la agranda: <strong>realimentación positiva</strong>. Amplifica, y sin un límite acaba en crecimiento desbocado o en colapso.'];
-    },
-    answer: function (d) { return d.q === 'neg' ? 'Negativa' : 'Positiva'; }
   });
 
   p.keys([

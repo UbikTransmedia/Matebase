@@ -196,6 +196,69 @@ Course.topic('cib-dinamica', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'El nivel de equilibrio',
+    level: 'basico',
+    gen: function (r) {
+      var e = r.int(1, 12), k = r.pick([0.05, 0.1, 0.2, 0.25, 0.5]);
+      return { e: e, k: k, S: e / k, t: 3 / k };
+    },
+    ask: function (d) {
+      return 'A un depósito entran $' + d.e + '$ litros por hora y salen $' + U.fmt(d.k, 2) + '\\cdot S$ litros por hora, donde $S$ son los litros que ' +
+        'contiene. ¿En qué nivel se estabiliza? ¿Cuántas horas tarda, aproximadamente, en recorrer el 95 % del camino hacia ese nivel?';
+    },
+    fields: [{ name: 's', label: 'nivel (L)', w: 'tiny' }, { name: 't', label: 'tiempo (h)', w: 'tiny' }],
+    sol: function (d) { return { s: d.S, t: d.t }; },
+    tol: 1e-6,
+    errores: [
+      { si: function (v, d) { return Math.abs(v.s - d.e * d.k) < 1e-6; }, msg: 'En el equilibrio la salida iguala a la entrada: $k\\,S = e$, así que $S = \\frac{e}{k}$, no $e\\cdot k$.' },
+      { si: function (v, d) { return Math.abs(v.t - 3 * d.k) < 1e-6; }, msg: 'La constante de tiempo es $\\tau = \\frac{1}{k}$, y el 95 % se alcanza hacia $3\\tau$.' }
+    ],
+    hint: function () { return ['Equilibrio: el flujo neto es cero, $e - kS = 0$.', 'El 95 % del camino se recorre en unas tres constantes de tiempo, $3\\tau = \\frac{3}{k}$.']; },
+    steps: function (d) {
+      return ['$e - kS = 0 \\Rightarrow S^* = \\dfrac{' + d.e + '}{' + U.fmt(d.k, 2) + '} = ' + U.fmt(d.S, 2) + '$ litros.',
+        '$\\tau = \\dfrac{1}{' + U.fmt(d.k, 2) + '} = ' + U.fmt(1 / d.k, 2) + '$ h, y $3\\tau = ' + U.fmt(d.t, 2) + '$ h (porque $e^{-3} \\approx 0{,}05$).'];
+    },
+    answer: function (d) { return U.fmt(d.S, 2) + ' L, ' + U.fmt(d.t, 2) + ' h'; }
+  });
+
+  p.exercise({
+    title: '¿Qué estructura es?',
+    level: 'basico',
+    gen: function (r) {
+      return r.pick([
+        { t: 'Una aplicación nueva crece muy deprisa porque cada usuario invita a sus amigos, pero al llegar a buena parte de su público posible el crecimiento se frena casi de golpe.', q: 'limites' },
+        { t: 'Varios pueblos sacan agua del mismo acuífero. A cada uno le conviene sacar un poco más, y entre todos lo agotan.', q: 'comunes' },
+        { t: 'Un café que se deja en la mesa se enfría cada vez más despacio hasta quedarse a la temperatura de la habitación.', q: 'equilibrio' },
+        { t: 'Una deuda que no se paga genera intereses, que se suman a la deuda y generan todavía más intereses.', q: 'refuerzo' },
+        { t: 'Las empresas que faenan en un mismo caladero aumentan cada una su flota para no quedarse atrás, hasta que el caladero se agota.', q: 'comunes' },
+        { t: 'Una plaga de insectos se multiplica en un campo hasta que la comida empieza a escasear, y la población se estanca.', q: 'limites' },
+        { t: 'El cuerpo suda cuando la temperatura sube, y el sudor, al evaporarse, la hace bajar.', q: 'equilibrio' },
+        { t: 'Un rumor se extiende porque cada persona que lo conoce se lo cuenta a otras dos.', q: 'refuerzo' }
+      ]);
+    },
+    ask: function (d) { return '<em>«' + d.t + '»</em><br>¿Qué estructura de dinámica de sistemas describe mejor la situación?'; },
+    fields: [{
+      name: 'q', label: 'Estructura', opts: [
+        { t: 'Bucle de refuerzo: crecimiento que se acelera', v: 'refuerzo' },
+        { t: 'Bucle de equilibrio: acercamiento a un objetivo', v: 'equilibrio' },
+        { t: 'Límites al crecimiento', v: 'limites' },
+        { t: 'Tragedia de los comunes', v: 'comunes' }
+      ]
+    }],
+    sol: function (d) { return { q: d.q }; },
+    hint: function () { return ['¿Hay un solo bucle o dos que se turnan el mando?', '¿El recurso es de uno o de muchos?']; },
+    steps: function (d) {
+      return [{
+        refuerzo: 'Cuanto más stock, más flujo de entrada, y nada lo frena: <strong>bucle de refuerzo</strong>.',
+        equilibrio: 'El sistema se acerca a un valor objetivo cada vez más despacio: <strong>bucle de equilibrio</strong>.',
+        limites: 'Primero manda un bucle de refuerzo y después uno de equilibrio que se hace más fuerte al crecer: <strong>límites al crecimiento</strong>.',
+        comunes: 'Muchos usuarios de un recurso compartido, cada uno con incentivo a tomar un poco más: <strong>tragedia de los comunes</strong>.'
+      }[d.q]];
+    },
+    answer: function (d) { return { refuerzo: 'Refuerzo', equilibrio: 'Equilibrio', limites: 'Límites al crecimiento', comunes: 'Tragedia de los comunes' }[d.q]; }
+  });
+
+  p.exercise({
     title: 'Dos pasos de Euler',
     level: 'medio',
     gen: function (r) {
@@ -224,32 +287,6 @@ Course.topic('cib-dinamica', function (p) {
         '$S_2 = ' + U.fmt(d.S1, 4) + ' + ' + U.fmt(d.dt, 1) + '\\cdot(' + U.fmt(f1, 4) + ') = ' + U.fmt(d.S2, 4) + '$'];
     },
     answer: function (d) { return 'S₁ = ' + U.fmt(d.S1, 4) + ', S₂ = ' + U.fmt(d.S2, 4); }
-  });
-
-  p.exercise({
-    title: 'El nivel de equilibrio',
-    level: 'basico',
-    gen: function (r) {
-      var e = r.int(1, 12), k = r.pick([0.05, 0.1, 0.2, 0.25, 0.5]);
-      return { e: e, k: k, S: e / k, t: 3 / k };
-    },
-    ask: function (d) {
-      return 'A un depósito entran $' + d.e + '$ litros por hora y salen $' + U.fmt(d.k, 2) + '\\cdot S$ litros por hora, donde $S$ son los litros que ' +
-        'contiene. ¿En qué nivel se estabiliza? ¿Cuántas horas tarda, aproximadamente, en recorrer el 95 % del camino hacia ese nivel?';
-    },
-    fields: [{ name: 's', label: 'nivel (L)', w: 'tiny' }, { name: 't', label: 'tiempo (h)', w: 'tiny' }],
-    sol: function (d) { return { s: d.S, t: d.t }; },
-    tol: 1e-6,
-    errores: [
-      { si: function (v, d) { return Math.abs(v.s - d.e * d.k) < 1e-6; }, msg: 'En el equilibrio la salida iguala a la entrada: $k\\,S = e$, así que $S = \\frac{e}{k}$, no $e\\cdot k$.' },
-      { si: function (v, d) { return Math.abs(v.t - 3 * d.k) < 1e-6; }, msg: 'La constante de tiempo es $\\tau = \\frac{1}{k}$, y el 95 % se alcanza hacia $3\\tau$.' }
-    ],
-    hint: function () { return ['Equilibrio: el flujo neto es cero, $e - kS = 0$.', 'El 95 % del camino se recorre en unas tres constantes de tiempo, $3\\tau = \\frac{3}{k}$.']; },
-    steps: function (d) {
-      return ['$e - kS = 0 \\Rightarrow S^* = \\dfrac{' + d.e + '}{' + U.fmt(d.k, 2) + '} = ' + U.fmt(d.S, 2) + '$ litros.',
-        '$\\tau = \\dfrac{1}{' + U.fmt(d.k, 2) + '} = ' + U.fmt(1 / d.k, 2) + '$ h, y $3\\tau = ' + U.fmt(d.t, 2) + '$ h (porque $e^{-3} \\approx 0{,}05$).'];
-    },
-    answer: function (d) { return U.fmt(d.S, 2) + ' L, ' + U.fmt(d.t, 2) + ' h'; }
   });
 
   p.problem({
@@ -297,43 +334,6 @@ Course.topic('cib-dinamica', function (p) {
         answer: function (d) { return d.ok === 'si' ? 'Sí' : 'No'; }
       }
     ]
-  });
-
-  p.exercise({
-    title: '¿Qué estructura es?',
-    level: 'basico',
-    gen: function (r) {
-      return r.pick([
-        { t: 'Una aplicación nueva crece muy deprisa porque cada usuario invita a sus amigos, pero al llegar a buena parte de su público posible el crecimiento se frena casi de golpe.', q: 'limites' },
-        { t: 'Varios pueblos sacan agua del mismo acuífero. A cada uno le conviene sacar un poco más, y entre todos lo agotan.', q: 'comunes' },
-        { t: 'Un café que se deja en la mesa se enfría cada vez más despacio hasta quedarse a la temperatura de la habitación.', q: 'equilibrio' },
-        { t: 'Una deuda que no se paga genera intereses, que se suman a la deuda y generan todavía más intereses.', q: 'refuerzo' },
-        { t: 'Las empresas que faenan en un mismo caladero aumentan cada una su flota para no quedarse atrás, hasta que el caladero se agota.', q: 'comunes' },
-        { t: 'Una plaga de insectos se multiplica en un campo hasta que la comida empieza a escasear, y la población se estanca.', q: 'limites' },
-        { t: 'El cuerpo suda cuando la temperatura sube, y el sudor, al evaporarse, la hace bajar.', q: 'equilibrio' },
-        { t: 'Un rumor se extiende porque cada persona que lo conoce se lo cuenta a otras dos.', q: 'refuerzo' }
-      ]);
-    },
-    ask: function (d) { return '<em>«' + d.t + '»</em><br>¿Qué estructura de dinámica de sistemas describe mejor la situación?'; },
-    fields: [{
-      name: 'q', label: 'Estructura', opts: [
-        { t: 'Bucle de refuerzo: crecimiento que se acelera', v: 'refuerzo' },
-        { t: 'Bucle de equilibrio: acercamiento a un objetivo', v: 'equilibrio' },
-        { t: 'Límites al crecimiento', v: 'limites' },
-        { t: 'Tragedia de los comunes', v: 'comunes' }
-      ]
-    }],
-    sol: function (d) { return { q: d.q }; },
-    hint: function () { return ['¿Hay un solo bucle o dos que se turnan el mando?', '¿El recurso es de uno o de muchos?']; },
-    steps: function (d) {
-      return [{
-        refuerzo: 'Cuanto más stock, más flujo de entrada, y nada lo frena: <strong>bucle de refuerzo</strong>.',
-        equilibrio: 'El sistema se acerca a un valor objetivo cada vez más despacio: <strong>bucle de equilibrio</strong>.',
-        limites: 'Primero manda un bucle de refuerzo y después uno de equilibrio que se hace más fuerte al crecer: <strong>límites al crecimiento</strong>.',
-        comunes: 'Muchos usuarios de un recurso compartido, cada uno con incentivo a tomar un poco más: <strong>tragedia de los comunes</strong>.'
-      }[d.q]];
-    },
-    answer: function (d) { return { refuerzo: 'Refuerzo', equilibrio: 'Equilibrio', limites: 'Límites al crecimiento', comunes: 'Tragedia de los comunes' }[d.q]; }
   });
 
   p.keys([

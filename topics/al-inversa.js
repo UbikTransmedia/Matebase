@@ -294,6 +294,34 @@ Course.topic('al-inversa', function (p) {
     answer: function (d) { return '$' + d.bien.tex() + '$'; }
   });
 
+  p.exercise({
+    title: '¿Para qué valores hay inversa?',
+    level: 'medio',
+    gen: function (r) {
+      var a = r.pm(1, 4), b = r.pm(1, 4);
+      if (a === b) return null;
+      // det(M(k)) = (k - a)(k - b), con M(k) = [[k, s], [t, k]] y s·t = ... se fabrica ajustando
+      var suma = a + b, prod = a * b;
+      // [[k - suma, -prod], [1, k]]: det = k(k - suma) + prod = k^2 - suma k + prod
+      return { a: a, b: b, suma: suma, prod: prod };
+    },
+    ask: function (d) {
+      return 'Halla los valores de $k$ para los que la matriz $A = \\begin{pmatrix} ' + ML.polyTex([1, -d.suma], 'k') + ' & ' + (-d.prod) + ' \\\\ 1 & k \\end{pmatrix}$ <strong>no</strong> tiene inversa. Sepáralos con punto y coma.';
+    },
+    fields: [{ name: 'k', label: 'valores de k', w: 'wide' }],
+    sol: function (d) { return { k: d.a + '; ' + d.b }; },
+    check: function (v, d) {
+      if (!String(v.raw.k || '').trim()) return { ok: false, msg: 'Escribe los valores separados por punto y coma.' };
+      return Ex.sameSet(v.raw.k, [d.a, d.b]);
+    },
+    hint: function () { return ['No tiene inversa exactamente cuando el determinante vale cero.', 'Calcula $\\det A$ en función de $k$: sale una ecuación de segundo grado.']; },
+    steps: function (d) {
+      return ['$\\det A = k(' + ML.polyTex([1, -d.suma], 'k') + ') - (' + (-d.prod) + ')\\cdot 1 = ' + ML.polyTex([1, -d.suma, d.prod], 'k') + '$',
+        'Se anula en $k = ' + d.a + '$ y $k = ' + d.b + '$: para esos valores no hay inversa.'];
+    },
+    answer: function (d) { return 'k = ' + d.a + ' y k = ' + d.b; }
+  });
+
   p.problem({
     title: 'Una ecuación matricial completa',
     level: 'avanzado',
@@ -380,34 +408,6 @@ Course.topic('al-inversa', function (p) {
         '$A^{' + d.n + '} = ' + ML.matTex(d.An) + '$', 'El elemento pedido vale $' + d.v + '$.'];
     },
     answer: function (d) { return String(d.v); }
-  });
-
-  p.exercise({
-    title: '¿Para qué valores hay inversa?',
-    level: 'medio',
-    gen: function (r) {
-      var a = r.pm(1, 4), b = r.pm(1, 4);
-      if (a === b) return null;
-      // det(M(k)) = (k - a)(k - b), con M(k) = [[k, s], [t, k]] y s·t = ... se fabrica ajustando
-      var suma = a + b, prod = a * b;
-      // [[k - suma, -prod], [1, k]]: det = k(k - suma) + prod = k^2 - suma k + prod
-      return { a: a, b: b, suma: suma, prod: prod };
-    },
-    ask: function (d) {
-      return 'Halla los valores de $k$ para los que la matriz $A = \\begin{pmatrix} ' + ML.polyTex([1, -d.suma], 'k') + ' & ' + (-d.prod) + ' \\\\ 1 & k \\end{pmatrix}$ <strong>no</strong> tiene inversa. Sepáralos con punto y coma.';
-    },
-    fields: [{ name: 'k', label: 'valores de k', w: 'wide' }],
-    sol: function (d) { return { k: d.a + '; ' + d.b }; },
-    check: function (v, d) {
-      if (!String(v.raw.k || '').trim()) return { ok: false, msg: 'Escribe los valores separados por punto y coma.' };
-      return Ex.sameSet(v.raw.k, [d.a, d.b]);
-    },
-    hint: function () { return ['No tiene inversa exactamente cuando el determinante vale cero.', 'Calcula $\\det A$ en función de $k$: sale una ecuación de segundo grado.']; },
-    steps: function (d) {
-      return ['$\\det A = k(' + ML.polyTex([1, -d.suma], 'k') + ') - (' + (-d.prod) + ')\\cdot 1 = ' + ML.polyTex([1, -d.suma, d.prod], 'k') + '$',
-        'Se anula en $k = ' + d.a + '$ y $k = ' + d.b + '$: para esos valores no hay inversa.'];
-    },
-    answer: function (d) { return 'k = ' + d.a + ' y k = ' + d.b; }
   });
 
   p.keys([

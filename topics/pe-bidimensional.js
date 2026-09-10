@@ -230,6 +230,42 @@ Course.topic('pe-bidimensional', function (p) {
   });
 
   p.exercise({
+    title: '¿Qué se puede concluir?',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { t: 'El número de bomberos enviados a un incendio y los daños causados están fuertemente correlacionados.', ok: 3 },
+        { t: 'Las horas de estudio y la nota del examen tienen $r = 0{,}85$.', ok: 1 },
+        { t: 'La talla de zapato y la nota en lengua de los niños de un colegio tienen $r = 0{,}7$.', ok: 3 },
+        { t: 'Los datos de una parábola perfecta $y = x^2$ dan $r \\approx 0$.', ok: 2 },
+        { t: 'El precio de un producto y su demanda tienen $r = -0{,}9$.', ok: 1 }
+      ];
+      var c = r.pick(casos);
+      return { t: c.t, ok: c.ok };
+    },
+    ask: function (d) {
+      return d.t + '<br><span style="font-size:0.875rem;color:var(--ink-faint)">¿Qué conclusión es la ' +
+        'correcta? <code>1</code>: hay relación lineal fuerte y tiene sentido usar la regresión. ' +
+        '<code>2</code>: hay relación, pero no lineal, así que $r$ engaña. ' +
+        '<code>3</code>: hay correlación pero seguramente por una tercera variable oculta.</span>';
+    },
+    fields: [{ name: 'c', label: 'Conclusión', w: 'tiny' }],
+    sol: function (d) { return { c: d.ok }; },
+    hint: function () { return 'Pregúntate siempre: ¿tiene sentido que una cause la otra, o hay algo detrás que explique las dos?'; },
+    steps: function (d) {
+      return ['La correlación mide asociación <strong>lineal</strong>, nada más.',
+        'Que dos cosas vayan juntas puede deberse a causalidad, a azar o a una <em>variable de confusión</em> que afecta a las dos.',
+        d.ok === 1 ? 'Aquí la relación lineal es fuerte y la explicación causal es razonable.'
+          : (d.ok === 2 ? 'Aquí sí hay relación, pero no lineal: $r$ no la detecta.'
+            : 'Aquí hay una tercera variable detrás (el tamaño del incendio, la edad…): correlación sin causalidad directa.')];
+    },
+    answer: function (d) {
+      return ['', 'Relación lineal fuerte y regresión razonable',
+        'Hay relación pero no lineal', 'Tercera variable oculta'][d.ok];
+    }
+  });
+
+  p.exercise({
     title: 'Recta de regresión y predicción',
     level: 'avanzado',
     gen: function (r) {
@@ -267,42 +303,6 @@ Course.topic('pe-bidimensional', function (p) {
     },
     answer: function (d) {
       return 'y = ' + U.fmt(d.b, 4) + 'x + ' + U.fmt(d.a, 4) + '; predicción ' + U.fmt(d.pred, 4);
-    }
-  });
-
-  p.exercise({
-    title: '¿Qué se puede concluir?',
-    level: 'medio',
-    gen: function (r) {
-      var casos = [
-        { t: 'El número de bomberos enviados a un incendio y los daños causados están fuertemente correlacionados.', ok: 3 },
-        { t: 'Las horas de estudio y la nota del examen tienen $r = 0{,}85$.', ok: 1 },
-        { t: 'La talla de zapato y la nota en lengua de los niños de un colegio tienen $r = 0{,}7$.', ok: 3 },
-        { t: 'Los datos de una parábola perfecta $y = x^2$ dan $r \\approx 0$.', ok: 2 },
-        { t: 'El precio de un producto y su demanda tienen $r = -0{,}9$.', ok: 1 }
-      ];
-      var c = r.pick(casos);
-      return { t: c.t, ok: c.ok };
-    },
-    ask: function (d) {
-      return d.t + '<br><span style="font-size:0.875rem;color:var(--ink-faint)">¿Qué conclusión es la ' +
-        'correcta? <code>1</code>: hay relación lineal fuerte y tiene sentido usar la regresión. ' +
-        '<code>2</code>: hay relación, pero no lineal, así que $r$ engaña. ' +
-        '<code>3</code>: hay correlación pero seguramente por una tercera variable oculta.</span>';
-    },
-    fields: [{ name: 'c', label: 'Conclusión', w: 'tiny' }],
-    sol: function (d) { return { c: d.ok }; },
-    hint: function () { return 'Pregúntate siempre: ¿tiene sentido que una cause la otra, o hay algo detrás que explique las dos?'; },
-    steps: function (d) {
-      return ['La correlación mide asociación <strong>lineal</strong>, nada más.',
-        'Que dos cosas vayan juntas puede deberse a causalidad, a azar o a una <em>variable de confusión</em> que afecta a las dos.',
-        d.ok === 1 ? 'Aquí la relación lineal es fuerte y la explicación causal es razonable.'
-          : (d.ok === 2 ? 'Aquí sí hay relación, pero no lineal: $r$ no la detecta.'
-            : 'Aquí hay una tercera variable detrás (el tamaño del incendio, la edad…): correlación sin causalidad directa.')];
-    },
-    answer: function (d) {
-      return ['', 'Relación lineal fuerte y regresión razonable',
-        'Hay relación pero no lineal', 'Tercera variable oculta'][d.ok];
     }
   });
 

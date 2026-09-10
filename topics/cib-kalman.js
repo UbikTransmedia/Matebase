@@ -187,6 +187,54 @@ Course.topic('cib-kalman', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'La ganancia de Kalman',
+    level: 'basico',
+    gen: function (r) {
+      var vp = r.pick([1, 2, 4, 9]), vm = r.pick([1, 2, 4, 9]);
+      return { vp: vp, vm: vm, K: ML.F(vp, vp + vm), lado: vp > vm ? 'medida' : (vp < vm ? 'prediccion' : 'medio') };
+    },
+    ask: function (d) {
+      return 'La predicción tiene varianza $\\sigma_p^2 = ' + d.vp + '$ y la medida, $\\sigma_m^2 = ' + d.vm + '$. Calcula la ganancia de Kalman $K$ ' +
+        '(fracción o tres decimales). ¿La estimación quedará más cerca de la predicción, de la medida o justo en medio?';
+    },
+    fields: [
+      { name: 'k', label: 'K =', w: 'tiny' },
+      { name: 'l', label: 'La estimación queda', opts: [{ t: 'más cerca de la predicción', v: 'prediccion' }, { t: 'más cerca de la medida', v: 'medida' }, { t: 'justo en medio', v: 'medio' }] }
+    ],
+    sol: function (d) { return { k: d.K.val(), l: d.lado }; },
+    tol: 1e-3,
+    errores: [{ si: function (v, d) { return d.vp !== d.vm && Math.abs(v.k - d.vm / (d.vp + d.vm)) < 5e-4; }, msg: 'Está al revés: $K$ es la parte de la varianza total que corresponde a la <strong>predicción</strong>. Si la predicción es mala, $K$ es grande y se hace más caso a la medida.' }],
+    hint: function () { return ['$K = \\dfrac{\\sigma_p^2}{\\sigma_p^2 + \\sigma_m^2}$.', 'La estimación recorre una fracción $K$ del camino desde la predicción hasta la medida.']; },
+    steps: function (d) {
+      return ['$K = \\dfrac{' + d.vp + '}{' + d.vp + ' + ' + d.vm + '} = ' + d.K.tex() + ' \\approx ' + U.fmt(d.K.val(), 3) + '$',
+        { medida: 'Como $K > \\frac{1}{2}$, se recorre más de la mitad del camino: la estimación queda más cerca de la medida, que es la fuente más fiable.',
+          prediccion: 'Como $K < \\frac{1}{2}$, se recorre menos de la mitad del camino: la estimación queda más cerca de la predicción, que es la fuente más fiable.',
+          medio: 'Con $K = \\frac{1}{2}$ las dos fuentes valen lo mismo y la estimación queda justo en medio.' }[d.lado]];
+    },
+    answer: function (d) { return 'K = ' + U.fmt(d.K.val(), 3); }
+  });
+
+  p.exercise({
+    title: '¿En quién confía el filtro?',
+    level: 'basico',
+    gen: function (r) {
+      return r.pick([
+        { t: 'El sensor se estropea y empieza a dar medidas con muchísimo ruido, y el filtro está configurado con ese ruido enorme.', q: 'prediccion', por: 'Con $\\sigma_m$ enorme, $K = \\frac{\\sigma_p^2}{\\sigma_p^2 + \\sigma_m^2}$ se acerca a 0.' },
+        { t: 'El objeto cambia de dirección de forma imprevisible a cada instante, y el filtro lo sabe: su ruido de proceso $q$ es muy grande.', q: 'medida', por: 'Con $q$ muy grande, la predicción es muy incierta: $\\sigma_p^2$ crece y $K$ se acerca a 1.' },
+        { t: 'Se instala un sensor casi perfecto, con una varianza diminuta.', q: 'medida', por: 'Con $\\sigma_m^2 \\approx 0$, $K \\approx 1$: la medida manda.' },
+        { t: 'El objeto está quieto, el filtro lo sabe ($q = 0$) y ya ha procesado cientos de medidas.', q: 'prediccion', por: 'Cada corrección reduce $\\sigma_e^2$ y, sin ruido de proceso, nada la vuelve a aumentar: la predicción se vuelve muy precisa y $K$ tiende a 0.' },
+        { t: 'La predicción y la medida tienen exactamente la misma varianza.', q: 'medio', por: 'Con varianzas iguales, $K = \\frac{1}{2}$.' }
+      ]);
+    },
+    ask: function (d) { return '<em>«' + d.t + '»</em><br>¿Cómo será la ganancia de Kalman?'; },
+    fields: [{ name: 'q', label: 'El filtro se fía', opts: [{ t: 'casi solo de la predicción (K cerca de 0)', v: 'prediccion' }, { t: 'casi solo de la medida (K cerca de 1)', v: 'medida' }, { t: 'de las dos por igual (K = 0,5)', v: 'medio' }] }],
+    sol: function (d) { return { q: d.q }; },
+    hint: function () { return ['¿Qué fuente tiene menos varianza en esa situación?', 'La ganancia se acerca a 1 cuando la predicción es la que peor está.']; },
+    steps: function (d) { return [d.por]; },
+    answer: function (d) { return { prediccion: 'K cerca de 0', medida: 'K cerca de 1', medio: 'K = 0,5' }[d.q]; }
+  });
+
+  p.exercise({
     title: 'Fundir predicción y medida',
     level: 'medio',
     gen: function (r) {
@@ -221,34 +269,6 @@ Course.topic('cib-kalman', function (p) {
         '$\\sigma_e^2 = \\dfrac{' + d.vp + '\\cdot ' + d.vm + '}{' + (d.vp + d.vm) + '} = ' + d.ve.tex() + ' \\approx ' + U.fmt(d.ve.val(), 3) + '$, menor que ' + Math.min(d.vp, d.vm) + '.'];
     },
     answer: function (d) { return 'x_e = ' + U.fmt(d.xe.val(), 3) + ', σ_e² = ' + U.fmt(d.ve.val(), 3); }
-  });
-
-  p.exercise({
-    title: 'La ganancia de Kalman',
-    level: 'basico',
-    gen: function (r) {
-      var vp = r.pick([1, 2, 4, 9]), vm = r.pick([1, 2, 4, 9]);
-      return { vp: vp, vm: vm, K: ML.F(vp, vp + vm), lado: vp > vm ? 'medida' : (vp < vm ? 'prediccion' : 'medio') };
-    },
-    ask: function (d) {
-      return 'La predicción tiene varianza $\\sigma_p^2 = ' + d.vp + '$ y la medida, $\\sigma_m^2 = ' + d.vm + '$. Calcula la ganancia de Kalman $K$ ' +
-        '(fracción o tres decimales). ¿La estimación quedará más cerca de la predicción, de la medida o justo en medio?';
-    },
-    fields: [
-      { name: 'k', label: 'K =', w: 'tiny' },
-      { name: 'l', label: 'La estimación queda', opts: [{ t: 'más cerca de la predicción', v: 'prediccion' }, { t: 'más cerca de la medida', v: 'medida' }, { t: 'justo en medio', v: 'medio' }] }
-    ],
-    sol: function (d) { return { k: d.K.val(), l: d.lado }; },
-    tol: 1e-3,
-    errores: [{ si: function (v, d) { return d.vp !== d.vm && Math.abs(v.k - d.vm / (d.vp + d.vm)) < 5e-4; }, msg: 'Está al revés: $K$ es la parte de la varianza total que corresponde a la <strong>predicción</strong>. Si la predicción es mala, $K$ es grande y se hace más caso a la medida.' }],
-    hint: function () { return ['$K = \\dfrac{\\sigma_p^2}{\\sigma_p^2 + \\sigma_m^2}$.', 'La estimación recorre una fracción $K$ del camino desde la predicción hasta la medida.']; },
-    steps: function (d) {
-      return ['$K = \\dfrac{' + d.vp + '}{' + d.vp + ' + ' + d.vm + '} = ' + d.K.tex() + ' \\approx ' + U.fmt(d.K.val(), 3) + '$',
-        { medida: 'Como $K > \\frac{1}{2}$, se recorre más de la mitad del camino: la estimación queda más cerca de la medida, que es la fuente más fiable.',
-          prediccion: 'Como $K < \\frac{1}{2}$, se recorre menos de la mitad del camino: la estimación queda más cerca de la predicción, que es la fuente más fiable.',
-          medio: 'Con $K = \\frac{1}{2}$ las dos fuentes valen lo mismo y la estimación queda justo en medio.' }[d.lado]];
-    },
-    answer: function (d) { return 'K = ' + U.fmt(d.K.val(), 3); }
   });
 
   p.problem({
@@ -301,26 +321,6 @@ Course.topic('cib-kalman', function (p) {
         answer: function (d) { return 'x_e = ' + U.fmt(d.xe.val(), 3) + ', σ_e² = ' + U.fmt(d.ve.val(), 3); }
       }
     ]
-  });
-
-  p.exercise({
-    title: '¿En quién confía el filtro?',
-    level: 'basico',
-    gen: function (r) {
-      return r.pick([
-        { t: 'El sensor se estropea y empieza a dar medidas con muchísimo ruido, y el filtro está configurado con ese ruido enorme.', q: 'prediccion', por: 'Con $\\sigma_m$ enorme, $K = \\frac{\\sigma_p^2}{\\sigma_p^2 + \\sigma_m^2}$ se acerca a 0.' },
-        { t: 'El objeto cambia de dirección de forma imprevisible a cada instante, y el filtro lo sabe: su ruido de proceso $q$ es muy grande.', q: 'medida', por: 'Con $q$ muy grande, la predicción es muy incierta: $\\sigma_p^2$ crece y $K$ se acerca a 1.' },
-        { t: 'Se instala un sensor casi perfecto, con una varianza diminuta.', q: 'medida', por: 'Con $\\sigma_m^2 \\approx 0$, $K \\approx 1$: la medida manda.' },
-        { t: 'El objeto está quieto, el filtro lo sabe ($q = 0$) y ya ha procesado cientos de medidas.', q: 'prediccion', por: 'Cada corrección reduce $\\sigma_e^2$ y, sin ruido de proceso, nada la vuelve a aumentar: la predicción se vuelve muy precisa y $K$ tiende a 0.' },
-        { t: 'La predicción y la medida tienen exactamente la misma varianza.', q: 'medio', por: 'Con varianzas iguales, $K = \\frac{1}{2}$.' }
-      ]);
-    },
-    ask: function (d) { return '<em>«' + d.t + '»</em><br>¿Cómo será la ganancia de Kalman?'; },
-    fields: [{ name: 'q', label: 'El filtro se fía', opts: [{ t: 'casi solo de la predicción (K cerca de 0)', v: 'prediccion' }, { t: 'casi solo de la medida (K cerca de 1)', v: 'medida' }, { t: 'de las dos por igual (K = 0,5)', v: 'medio' }] }],
-    sol: function (d) { return { q: d.q }; },
-    hint: function () { return ['¿Qué fuente tiene menos varianza en esa situación?', 'La ganancia se acerca a 1 cuando la predicción es la que peor está.']; },
-    steps: function (d) { return [d.por]; },
-    answer: function (d) { return { prediccion: 'K cerca de 0', medida: 'K cerca de 1', medio: 'K = 0,5' }[d.q]; }
   });
 
   p.keys([

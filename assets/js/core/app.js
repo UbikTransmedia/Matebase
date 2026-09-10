@@ -331,6 +331,27 @@
     root.appendChild(box);
   }
 
+  /* El indice del tema: sus secciones, en una linea, antes de empezar a
+     leer. Sirve para saber cuanto queda y para volver a «Practica» sin
+     recorrerlo todo. Los enlaces no tocan el hash, que es la ruta. */
+  function indiceDelTema(p, body) {
+    if (!p.secciones || p.secciones.length < 3) return;
+    var nav = U.el('nav.toc', { 'aria-label': 'Secciones de este tema' });
+    nav.appendChild(U.el('span.toc__t', { text: 'En este tema' }));
+    var ol = U.el('ol.toc__l');
+    p.secciones.forEach(function (s) {
+      var a = U.el('a', { href: '#' + s.el.id, html: MathX.inline(s.t) });
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        s.el.scrollIntoView({ block: 'start' });
+        s.el.focus({ preventScroll: true });
+      });
+      ol.appendChild(U.el('li', null, a));
+    });
+    nav.appendChild(ol);
+    body.insertBefore(nav, body.firstChild);
+  }
+
   /** Abre el ejercicio que pide el enlace: con su semilla, si la trae. */
   function abreEjercicio(p, q) {
     if (!q || !q.e) return;
@@ -374,6 +395,7 @@
       var p = new Page(body, t);
       try {
         Course.reg[id](p);
+        indiceDelTema(p, body);
         if (W.pintaBloques) W.pintaBloques(body);
         Progress.tipos(id, p._ex);
         paintIndex();

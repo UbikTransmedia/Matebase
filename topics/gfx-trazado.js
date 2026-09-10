@@ -160,6 +160,30 @@ Course.topic('gfx-trazado', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Rayo contra el suelo',
+    level: 'basico',
+    gen: function (r) {
+      var oy = r.pick([1, 2, 3]), dx = r.pick([-2, -1, 1, 2]), dy = -r.pick([1, 2]), dz = -r.pick([1, 2, 3]);
+      var t = (-1 - oy) / dy;
+      return { oy: oy, dv: [dx, dy, dz], t: t, x: t * dx, z: t * dz };
+    },
+    ask: function (d) {
+      return 'Un rayo sale de $\\vec o = (0, ' + d.oy + ', 0)$ en la dirección $\\vec v = (' + d.dv.join(',\\ ') + ')$, sin normalizar, así que aquí $t$ no es una distancia. ' +
+        '¿Para qué $t$ corta al suelo $y = -1$, y en qué punto?';
+    },
+    fields: [{ name: 't', label: '$t$', w: 'tiny' }, { name: 'x', label: '$x$', w: 'tiny' }, { name: 'z', label: '$z$', w: 'tiny' }],
+    sol: function (d) { return { t: d.t, x: d.x, z: d.z }; },
+    tol: 1e-6,
+    errores: [{ si: function (v, d) { return Math.abs(v.t + d.t) < 1e-6; }, msg: 'Revisa el signo: el rayo baja ($v_y < 0$) desde una altura mayor que $-1$, así que tiene que llegar al suelo con $t > 0$.' }],
+    hint: function () { return ['La componente $y$ del rayo es $o_y + t\\,v_y$: iguálala a $-1$.', 'Con ese $t$, calcula $x = t\\,v_x$ y $z = t\\,v_z$.']; },
+    steps: function (d) {
+      return ['$' + d.oy + ' + t\\cdot(' + d.dv[1] + ') = -1 \\Rightarrow t = \\dfrac{-1 - ' + d.oy + '}{' + d.dv[1] + '} = ' + U.fmt(d.t, 3) + '$',
+        'Punto: $(' + U.fmt(d.t, 3) + '\\cdot ' + d.dv[0] + ',\\ -1,\\ ' + U.fmt(d.t, 3) + '\\cdot(' + d.dv[2] + ')) = (' + U.fmt(d.x, 3) + ',\\ -1,\\ ' + U.fmt(d.z, 3) + ')$'];
+    },
+    answer: function (d) { return 't = ' + U.fmt(d.t, 3) + ', punto (' + U.fmt(d.x, 3) + ', −1, ' + U.fmt(d.z, 3) + ')'; }
+  });
+
+  p.exercise({
     title: '¿Choca el rayo con la esfera?',
     level: 'medio',
     gen: function (r) {
@@ -184,30 +208,6 @@ Course.topic('gfx-trazado', function (p) {
       return l;
     },
     answer: function (d) { return d.choca === 'si' ? 'choca en t ≈ ' + U.fmt(d.t, 3) : 'no choca'; }
-  });
-
-  p.exercise({
-    title: 'Rayo contra el suelo',
-    level: 'basico',
-    gen: function (r) {
-      var oy = r.pick([1, 2, 3]), dx = r.pick([-2, -1, 1, 2]), dy = -r.pick([1, 2]), dz = -r.pick([1, 2, 3]);
-      var t = (-1 - oy) / dy;
-      return { oy: oy, dv: [dx, dy, dz], t: t, x: t * dx, z: t * dz };
-    },
-    ask: function (d) {
-      return 'Un rayo sale de $\\vec o = (0, ' + d.oy + ', 0)$ en la dirección $\\vec v = (' + d.dv.join(',\\ ') + ')$, sin normalizar, así que aquí $t$ no es una distancia. ' +
-        '¿Para qué $t$ corta al suelo $y = -1$, y en qué punto?';
-    },
-    fields: [{ name: 't', label: '$t$', w: 'tiny' }, { name: 'x', label: '$x$', w: 'tiny' }, { name: 'z', label: '$z$', w: 'tiny' }],
-    sol: function (d) { return { t: d.t, x: d.x, z: d.z }; },
-    tol: 1e-6,
-    errores: [{ si: function (v, d) { return Math.abs(v.t + d.t) < 1e-6; }, msg: 'Revisa el signo: el rayo baja ($v_y < 0$) desde una altura mayor que $-1$, así que tiene que llegar al suelo con $t > 0$.' }],
-    hint: function () { return ['La componente $y$ del rayo es $o_y + t\\,v_y$: iguálala a $-1$.', 'Con ese $t$, calcula $x = t\\,v_x$ y $z = t\\,v_z$.']; },
-    steps: function (d) {
-      return ['$' + d.oy + ' + t\\cdot(' + d.dv[1] + ') = -1 \\Rightarrow t = \\dfrac{-1 - ' + d.oy + '}{' + d.dv[1] + '} = ' + U.fmt(d.t, 3) + '$',
-        'Punto: $(' + U.fmt(d.t, 3) + '\\cdot ' + d.dv[0] + ',\\ -1,\\ ' + U.fmt(d.t, 3) + '\\cdot(' + d.dv[2] + ')) = (' + U.fmt(d.x, 3) + ',\\ -1,\\ ' + U.fmt(d.z, 3) + ')$'];
-    },
-    answer: function (d) { return 't = ' + U.fmt(d.t, 3) + ', punto (' + U.fmt(d.x, 3) + ', −1, ' + U.fmt(d.z, 3) + ')'; }
   });
 
   p.exercise({

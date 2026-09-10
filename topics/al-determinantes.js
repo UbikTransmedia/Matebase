@@ -324,40 +324,6 @@ Course.topic('al-determinantes', function (p) {
   });
 
   p.exercise({
-    title: 'Determinante de orden 4',
-    level: 'avanzado',
-    gen: function (r) {
-      var M = [];
-      for (var f = 0; f < 4; f++) M.push([r.pm(0, 3), r.pm(0, 3), r.pm(0, 3), r.pm(0, 3)]);
-      var col = r.int(0, 3), filas = r.sample([0, 1, 2, 3], 2);
-      filas.forEach(function (f) { M[f][col] = 0; });
-      return { M: M, col: col, d: det(M) };
-    },
-    ask: function (d) { return 'Calcula $' + mt(d.M) + '$'; },
-    fields: [{ name: 'v', label: 'determinante', w: 'tiny' }],
-    sol: function (d) { return { v: d.d }; },
-    hint: function (d) {
-      return ['Busca la fila o columna con más ceros: la columna ' + (d.col + 1) + ' tiene al menos dos.',
-        'Desarrolla por ella: solo hay que calcular los adjuntos de los elementos que no son cero.',
-        'Cada adjunto es un 3×3 con su signo del tablero $+ - + -$.'];
-    },
-    steps: function (d) {
-      var s = [], total = 0;
-      for (var i = 0; i < 4; i++) {
-        var a = d.M[i][d.col];
-        if (a === 0) continue;
-        var sg = (i + d.col) % 2 ? -1 : 1, m = det(menor(d.M, i, d.col));
-        total += a * sg * m;
-        s.push('Elemento $a_{' + (i + 1) + (d.col + 1) + '} = ' + a + '$, signo $' + (sg > 0 ? '+' : '-') + '$, menor $= ' + m + '$ → término $' + (a * sg * m) + '$');
-      }
-      s.unshift('Se desarrolla por la columna ' + (d.col + 1) + '.');
-      s.push('Suma: $' + total + '$');
-      return s;
-    },
-    answer: function (d) { return String(d.d); }
-  });
-
-  p.exercise({
     title: 'Rango de una matriz',
     level: 'medio',
     gen: function (r) {
@@ -395,6 +361,40 @@ Course.topic('al-determinantes', function (p) {
         '$\\operatorname{rg}(A) = ' + d.rg + '$'];
     },
     answer: function (d) { return 'rango ' + d.rg; }
+  });
+
+  p.exercise({
+    title: 'Determinante de orden 4',
+    level: 'avanzado',
+    gen: function (r) {
+      var M = [];
+      for (var f = 0; f < 4; f++) M.push([r.pm(0, 3), r.pm(0, 3), r.pm(0, 3), r.pm(0, 3)]);
+      var col = r.int(0, 3), filas = r.sample([0, 1, 2, 3], 2);
+      filas.forEach(function (f) { M[f][col] = 0; });
+      return { M: M, col: col, d: det(M) };
+    },
+    ask: function (d) { return 'Calcula $' + mt(d.M) + '$'; },
+    fields: [{ name: 'v', label: 'determinante', w: 'tiny' }],
+    sol: function (d) { return { v: d.d }; },
+    hint: function (d) {
+      return ['Busca la fila o columna con más ceros: la columna ' + (d.col + 1) + ' tiene al menos dos.',
+        'Desarrolla por ella: solo hay que calcular los adjuntos de los elementos que no son cero.',
+        'Cada adjunto es un 3×3 con su signo del tablero $+ - + -$.'];
+    },
+    steps: function (d) {
+      var s = [], total = 0;
+      for (var i = 0; i < 4; i++) {
+        var a = d.M[i][d.col];
+        if (a === 0) continue;
+        var sg = (i + d.col) % 2 ? -1 : 1, m = det(menor(d.M, i, d.col));
+        total += a * sg * m;
+        s.push('Elemento $a_{' + (i + 1) + (d.col + 1) + '} = ' + a + '$, signo $' + (sg > 0 ? '+' : '-') + '$, menor $= ' + m + '$ → término $' + (a * sg * m) + '$');
+      }
+      s.unshift('Se desarrolla por la columna ' + (d.col + 1) + '.');
+      s.push('Suma: $' + total + '$');
+      return s;
+    },
+    answer: function (d) { return String(d.d); }
   });
 
   p.problem({

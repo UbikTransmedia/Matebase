@@ -288,6 +288,25 @@ Course.topic('pe-descriptiva', function (p) {
   });
 
   p.exercise({
+    title: '¿Es un valor atípico?',
+    level: 'basico',
+    gen: function (r) {
+      var q1 = r.int(10, 40), ri = r.pick([4, 6, 8, 10, 12]), q3 = q1 + ri, lo = q1 - 1.5 * ri, hi = q3 + 1.5 * ri;
+      var tipo = r.pick(['arriba', 'abajo', 'no']), x;
+      if (tipo === 'arriba') x = Math.ceil(hi) + r.int(1, 6);
+      else if (tipo === 'abajo') x = Math.floor(lo) - r.int(1, 6);
+      else x = r.int(Math.ceil(lo) + 1, Math.floor(hi) - 1);
+      return { q1: q1, q3: q3, ri: ri, lo: lo, hi: hi, x: x, tipo: tipo };
+    },
+    ask: function (d) { return 'Un conjunto de datos tiene $Q_1 = ' + d.q1 + '$ y $Q_3 = ' + d.q3 + '$. ¿Es atípico el valor $' + d.x + '$?'; },
+    fields: [{ name: 't', label: 'El valor', opts: [{ t: 'es atípico por arriba', v: 'arriba' }, { t: 'es atípico por abajo', v: 'abajo' }, { t: 'no es atípico', v: 'no' }] }],
+    sol: function (d) { return { t: d.tipo }; },
+    hint: function () { return ['Calcula $RI = Q_3 - Q_1$.', 'Son atípicos los valores por debajo de $Q_1 - 1{,}5\\cdot RI$ o por encima de $Q_3 + 1{,}5\\cdot RI$.']; },
+    steps: function (d) { return ['$RI = ' + d.ri + '$. Límites: $' + d.q1 + ' - 1{,}5\\cdot' + d.ri + ' = ' + U.fmt(d.lo, 1) + '$ y $' + d.q3 + ' + 1{,}5\\cdot' + d.ri + ' = ' + U.fmt(d.hi, 1) + '$.', { arriba: '$' + d.x + '$ supera el límite superior: atípico por arriba.', abajo: '$' + d.x + '$ queda por debajo del límite inferior: atípico por abajo.', no: '$' + d.x + '$ está entre los dos límites: no es atípico.' }[d.tipo]]; },
+    answer: function (d) { return { arriba: 'Atípico por arriba', abajo: 'Atípico por abajo', no: 'No es atípico' }[d.tipo]; }
+  });
+
+  p.exercise({
     title: 'Desviación típica',
     level: 'medio',
     gen: function (r) {
@@ -358,6 +377,33 @@ Course.topic('pe-descriptiva', function (p) {
   });
 
   p.exercise({
+    title: 'Cuartiles',
+    level: 'medio',
+    gen: function (r) {
+      var N = r.int(8, 13), datos = datosAleatorios(r, N, 1, 50).sort(function (a, b) { return a - b; });
+      function cuartil(ord, k) {
+        var M = ord.length, pos = k * M / 4;
+        if (Math.abs(pos - Math.round(pos)) < 1e-9) { pos = Math.round(pos); return (ord[pos - 1] + ord[pos]) / 2; }
+        return ord[Math.ceil(pos) - 1];
+      }
+      var mezcla = r.shuffle(datos);
+      return { N: N, ord: datos, mezcla: mezcla, q1: cuartil(datos, 1), q3: cuartil(datos, 3) };
+    },
+    ask: function (d) { return 'Calcula el primer y el tercer cuartil de estos $' + d.N + '$ datos: $' + d.mezcla.join(',\\ ') + '$'; },
+    fields: [{ name: 'a', label: '$Q_1$', w: 'tiny' }, { name: 'b', label: '$Q_3$', w: 'tiny' }],
+    sol: function (d) { return { a: d.q1, b: d.q3 }; },
+    hint: function (d) {
+      return ['Ordena los datos primero.', '$\\frac{N}{4} = ' + U.fmt(d.N / 4, 2) + '$ y $\\frac{3N}{4} = ' + U.fmt(3 * d.N / 4, 2) + '$. Si no es entero, se toma la posición siguiente; si lo es, la media con el siguiente.'];
+    },
+    steps: function (d) {
+      var t = function (k) { var pos = k * d.N / 4; return Math.abs(pos - Math.round(pos)) < 1e-9 ? 'entero: media de las posiciones ' + pos + ' y ' + (pos + 1) : 'no entero: posición ' + Math.ceil(pos); };
+      return ['Ordenados: $' + d.ord.join(',\\ ') + '$', '$\\frac{N}{4} = ' + U.fmt(d.N / 4, 2) + '$, ' + t(1) + ' → $Q_1 = ' + U.fmt(d.q1, 2) + '$',
+        '$\\frac{3N}{4} = ' + U.fmt(3 * d.N / 4, 2) + '$, ' + t(3) + ' → $Q_3 = ' + U.fmt(d.q3, 2) + '$'];
+    },
+    answer: function (d) { return 'Q₁ = ' + U.fmt(d.q1, 2) + ', Q₃ = ' + U.fmt(d.q3, 2); }
+  });
+
+  p.exercise({
     title: 'Comparar dispersiones',
     level: 'avanzado',
     gen: function (r) {
@@ -396,52 +442,6 @@ Course.topic('pe-descriptiva', function (p) {
         'Gana el grupo <strong>' + d.mayor + '</strong>, con el CV más alto.'];
     },
     answer: function (d) { return 'El grupo ' + d.mayor + '.'; }
-  });
-
-  p.exercise({
-    title: 'Cuartiles',
-    level: 'medio',
-    gen: function (r) {
-      var N = r.int(8, 13), datos = datosAleatorios(r, N, 1, 50).sort(function (a, b) { return a - b; });
-      function cuartil(ord, k) {
-        var M = ord.length, pos = k * M / 4;
-        if (Math.abs(pos - Math.round(pos)) < 1e-9) { pos = Math.round(pos); return (ord[pos - 1] + ord[pos]) / 2; }
-        return ord[Math.ceil(pos) - 1];
-      }
-      var mezcla = r.shuffle(datos);
-      return { N: N, ord: datos, mezcla: mezcla, q1: cuartil(datos, 1), q3: cuartil(datos, 3) };
-    },
-    ask: function (d) { return 'Calcula el primer y el tercer cuartil de estos $' + d.N + '$ datos: $' + d.mezcla.join(',\\ ') + '$'; },
-    fields: [{ name: 'a', label: '$Q_1$', w: 'tiny' }, { name: 'b', label: '$Q_3$', w: 'tiny' }],
-    sol: function (d) { return { a: d.q1, b: d.q3 }; },
-    hint: function (d) {
-      return ['Ordena los datos primero.', '$\\frac{N}{4} = ' + U.fmt(d.N / 4, 2) + '$ y $\\frac{3N}{4} = ' + U.fmt(3 * d.N / 4, 2) + '$. Si no es entero, se toma la posición siguiente; si lo es, la media con el siguiente.'];
-    },
-    steps: function (d) {
-      var t = function (k) { var pos = k * d.N / 4; return Math.abs(pos - Math.round(pos)) < 1e-9 ? 'entero: media de las posiciones ' + pos + ' y ' + (pos + 1) : 'no entero: posición ' + Math.ceil(pos); };
-      return ['Ordenados: $' + d.ord.join(',\\ ') + '$', '$\\frac{N}{4} = ' + U.fmt(d.N / 4, 2) + '$, ' + t(1) + ' → $Q_1 = ' + U.fmt(d.q1, 2) + '$',
-        '$\\frac{3N}{4} = ' + U.fmt(3 * d.N / 4, 2) + '$, ' + t(3) + ' → $Q_3 = ' + U.fmt(d.q3, 2) + '$'];
-    },
-    answer: function (d) { return 'Q₁ = ' + U.fmt(d.q1, 2) + ', Q₃ = ' + U.fmt(d.q3, 2); }
-  });
-
-  p.exercise({
-    title: '¿Es un valor atípico?',
-    level: 'basico',
-    gen: function (r) {
-      var q1 = r.int(10, 40), ri = r.pick([4, 6, 8, 10, 12]), q3 = q1 + ri, lo = q1 - 1.5 * ri, hi = q3 + 1.5 * ri;
-      var tipo = r.pick(['arriba', 'abajo', 'no']), x;
-      if (tipo === 'arriba') x = Math.ceil(hi) + r.int(1, 6);
-      else if (tipo === 'abajo') x = Math.floor(lo) - r.int(1, 6);
-      else x = r.int(Math.ceil(lo) + 1, Math.floor(hi) - 1);
-      return { q1: q1, q3: q3, ri: ri, lo: lo, hi: hi, x: x, tipo: tipo };
-    },
-    ask: function (d) { return 'Un conjunto de datos tiene $Q_1 = ' + d.q1 + '$ y $Q_3 = ' + d.q3 + '$. ¿Es atípico el valor $' + d.x + '$?'; },
-    fields: [{ name: 't', label: 'El valor', opts: [{ t: 'es atípico por arriba', v: 'arriba' }, { t: 'es atípico por abajo', v: 'abajo' }, { t: 'no es atípico', v: 'no' }] }],
-    sol: function (d) { return { t: d.tipo }; },
-    hint: function () { return ['Calcula $RI = Q_3 - Q_1$.', 'Son atípicos los valores por debajo de $Q_1 - 1{,}5\\cdot RI$ o por encima de $Q_3 + 1{,}5\\cdot RI$.']; },
-    steps: function (d) { return ['$RI = ' + d.ri + '$. Límites: $' + d.q1 + ' - 1{,}5\\cdot' + d.ri + ' = ' + U.fmt(d.lo, 1) + '$ y $' + d.q3 + ' + 1{,}5\\cdot' + d.ri + ' = ' + U.fmt(d.hi, 1) + '$.', { arriba: '$' + d.x + '$ supera el límite superior: atípico por arriba.', abajo: '$' + d.x + '$ queda por debajo del límite inferior: atípico por abajo.', no: '$' + d.x + '$ está entre los dos límites: no es atípico.' }[d.tipo]]; },
-    answer: function (d) { return { arriba: 'Atípico por arriba', abajo: 'Atípico por abajo', no: 'No es atípico' }[d.tipo]; }
   });
 
   p.keys([

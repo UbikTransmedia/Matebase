@@ -27,6 +27,11 @@
     this.specs = [];
     /** Y las tarjetas, para poder abrir un ejercicio concreto desde un enlace. */
     this.cards = [];
+    /** Las secciones, para el indice del tema; las comprobaciones y los
+        ejemplos resueltos, para que tests.html los audite. */
+    this.secciones = [];
+    this.checks = [];
+    this.ejemplos = [];
   }
 
   Page.prototype._add = function (el) { this.root.appendChild(el); return el; };
@@ -34,7 +39,31 @@
   /* ---------- estructura ---------- */
 
   Page.prototype.section = function (t) {
-    return this._add(U.el('div.sec', null, U.el('h2', { html: MathX.inline(t) })));
+    var h = U.el('h2', { html: MathX.inline(t), tabindex: '-1' });
+    h.id = 'sec-' + (this.secciones.length + 1);
+    this.secciones.push({ t: t, el: h });
+    return this._add(U.el('div.sec', null, h));
+  };
+
+  /* El hilo del curso: de donde viene este tema y a donde va. Es un
+     organizador previo: el alumno sabe que va a mirar antes de mirarlo. */
+  Page.prototype.puente = function (html, title) {
+    return this.note(html, 'puente', title || 'De dónde venimos');
+  };
+
+  /* Trampas habituales: los errores que de verdad se cometen, con su
+     porque. Contrastar el error con lo correcto ensena mas que solo lo
+     correcto. */
+  Page.prototype.trampas = function (items, title) {
+    var box = U.el('div.note.note--trampa');
+    box.appendChild(U.el('span.note__t', { text: title || 'Trampas habituales' }));
+    var l = U.el('ul');
+    items.forEach(function (i) {
+      if (typeof i === 'string') l.appendChild(U.el('li', { html: MathX.inline(i) }));
+      else l.appendChild(U.el('li', { html: '<strong>' + MathX.inline(i.e) + '</strong> ' + MathX.inline(i.por || '') }));
+    });
+    box.appendChild(l);
+    return this._add(box);
   };
   Page.prototype.sub = function (t) {
     return this._add(U.el('h3.sub', { html: MathX.inline(t) }));
@@ -163,6 +192,105 @@
 
   Page.prototype.raw = function (el) { return this._add(el); };
 
+  /* ---------- EJEMPLO RESUELTO (paso a paso) ----------
+     Un ejercicio hecho delante del alumno, destapando un paso cada vez.
+     Antes de destapar un paso se le puede pedir que diga que haria: asi
+     el ejemplo se estudia en vez de leerse. Es el escalon entre la
+     explicacion y el ejercicio que se corrige.
+       p.ejemplo({ title, enunciado, pasos: ['paso', {t: 'paso', antes: '¿qué harías?'}], cierre }) */
+
+  Page.prototype.ejemplo = function (spec) {
+    var pasos = (spec.pasos || []).map(function (s) { return typeof s === 'string' ? { t: s } : s; });
+    this.ejemplos.push({ title: spec.title || '', enunciado: spec.enunciado || '', pasos: pasos, cierre: spec.cierre || '' });
+    var card = U.el('div.card.card--res');
+    card.appendChild(U.el('div.card__head', null, [
+      U.el('span.card__kind', { text: 'Ejemplo resuelto' }),
+      U.el('span.card__title', { html: MathX.inline(spec.title || '') })
+    ]));
+    var body = U.el('div.card__body');
+    if (spec.enunciado) body.appendChild(U.el('div.prose.res__enun', { html: '<p>' + MathX.inline(spec.enunciado) + '</p>' }));
+    var ol = U.el('ol.res__pasos');
+    var antes = U.el('div.res__antes', { role: 'status', 'aria-live': 'polite' });
+    var lis = pasos.map(function (s, i) {
+      var li = U.el('li.res__paso', { html: MathX.inline(s.t) });
+      if (i > 0) li.hidden = true;
+      ol.appendChild(li);
+      return li;
+    });
+    body.appendChild(ol);
+    var pie = U.el('div.res__pie');
+    var bSig = U.el('button.btn.btn--sm.btn--main', { type: 'button', text: 'Siguiente paso' });
+    var bTodo = U.el('button.btn.btn--sm', { type: 'button', text: 'Ver todos los pasos' });
+    var cierre = U.el('div.prose.res__cierre', { html: spec.cierre ? '<p>' + MathX.inline(spec.cierre) + '</p>' : '' });
+    cierre.hidden = true;
+    var visto = 1;
+    function pinta() {
+      var sig = pasos[visto];
+      antes.innerHTML = sig && sig.antes ? '<span class="res__q">Antes de destapar el paso ' + (visto + 1) + ':</span> ' + MathX.inline(sig.antes) : '';
+      antes.hidden = !antes.innerHTML;
+      var fin = visto >= pasos.length;
+      bSig.hidden = fin; bTodo.hidden = fin;
+      if (fin && spec.cierre) cierre.hidden = false;
+      if (fin) card.classList.add('is-completo');
+    }
+    bSig.addEventListener('click', function () {
+      if (visto < pasos.length) { lis[visto].hidden = false; visto++; }
+      pinta();
+      if (lis[visto - 1] && lis[visto - 1].scrollIntoView && visto > 1) lis[visto - 1].scrollIntoView({ block: 'nearest' });
+    });
+    bTodo.addEventListener('click', function () {
+      lis.forEach(function (li) { li.hidden = false; });
+      visto = pasos.length;
+      pinta();
+    });
+    pie.appendChild(bSig); pie.appendChild(bTodo);
+    body.appendChild(antes);
+    body.appendChild(pie);
+    body.appendChild(cierre);
+    card.appendChild(body);
+    pinta();
+    card.__res = { lis: lis, bSig: bSig, bTodo: bTodo };
+    return this._add(card);
+  };
+
+  /* ---------- COMPRUEBA (una pregunta, respuesta inmediata) ----------
+     Una sola pregunta de eleccion al final de una idea. Se contesta con un
+     clic y se explica la opcion elegida, sea buena o mala: recordar algo
+     recien leido lo fija mucho mas que volver a leerlo.
+       p.comprueba('¿pregunta?', [{t: 'opción', ok: true, por: 'por qué'}, ...]) */
+
+  Page.prototype.comprueba = function (pregunta, opts, o) {
+    o = o || {};
+    this.checks.push({ q: pregunta, opts: opts });
+    var box = U.el('div.chk', { role: 'group' });
+    var idQ = 'chk' + (++cuentaChk);
+    box.appendChild(U.el('span.chk__t', { text: o.title || 'Comprueba' }));
+    box.appendChild(U.el('div.chk__q', { id: idQ, html: MathX.inline(pregunta) }));
+    var fila = U.el('div.opc.chk__opc', { role: 'group', 'aria-labelledby': idQ });
+    var fb = U.el('div.chk__fb', { role: 'status', 'aria-live': 'polite' });
+    fb.hidden = true;
+    var botones = [];
+    opts.forEach(function (op, i) {
+      var b = U.el('button.opc__b', { type: 'button', html: MathX.inline(op.t) });
+      b.addEventListener('click', function () {
+        botones.forEach(function (x) { x.classList.remove('is-on'); });
+        b.classList.add('is-on');
+        box.classList.toggle('is-ok', !!op.ok);
+        box.classList.toggle('is-bad', !op.ok);
+        fb.innerHTML = (op.ok ? '<strong>✓ Eso es.</strong> ' : '<strong>✗ No.</strong> ') + MathX.inline(op.por || '') +
+          (op.ok ? '' : ' <em>Prueba otra vez.</em>');
+        fb.hidden = false;
+      });
+      botones.push(b);
+      fila.appendChild(b);
+    });
+    box.appendChild(fila);
+    box.appendChild(fb);
+    box.__chk = { botones: botones, fb: fb };
+    return this._add(box);
+  };
+  var cuentaChk = 0;
+
   /* ---------- EJEMPLO INTERACTIVO (fijo, explicativo) ---------- */
 
   Page.prototype.demo = function (spec) {
@@ -174,6 +302,14 @@
     ]));
     var body = U.el('div.card__body');
     if (spec.intro) body.appendChild(U.el('div.prose', { html: '<p>' + MathX.inline(spec.intro) + '</p>' }));
+    /* Predecir antes de tocar: quien apuesta por un resultado mira la
+       simulacion para comprobarlo, y se acuerda de lo que vio. */
+    if (spec.predice) {
+      var det = U.el('details.predice');
+      det.appendChild(U.el('summary', { text: 'Antes de tocar nada: ¿qué crees que pasará?' }));
+      det.appendChild(U.el('div.prose', { html: '<p>' + MathX.inline(spec.predice) + '</p>' }));
+      body.appendChild(det);
+    }
 
     var d = {
       text: function (h) { body.appendChild(U.el('div.prose', { html: '<p>' + MathX.inline(h) + '</p>' })); },
@@ -230,7 +366,8 @@
     this.claves = [];         // ideas clave (listas)
   }
   function nada() { return null; }
-  ['sub', 'text', 'list', 'note', 'hist', 'util', 'table', 'raw', 'demo'].forEach(function (m) {
+  ['sub', 'text', 'list', 'note', 'hist', 'util', 'table', 'raw', 'demo',
+   'puente', 'trampas', 'ejemplo', 'comprueba'].forEach(function (m) {
     Recolector.prototype[m] = nada;
   });
   Recolector.prototype.section = function (t) { this._sec = t; return null; };

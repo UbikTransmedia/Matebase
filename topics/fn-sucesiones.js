@@ -226,34 +226,6 @@ Course.topic('fn-sucesiones', function (p) {
   });
 
   p.exercise({
-    title: 'Suma de infinitos términos',
-    level: 'avanzado',
-    gen: function (r) {
-      var a1 = r.int(1, 12);
-      var den = r.pick([2, 3, 4, 5, 10]);
-      var raz = 1 / den;
-      return { a1: a1, den: den, r: raz, S: a1 / (1 - raz) };
-    },
-    ask: function (d) {
-      return 'Calcula la suma de <strong>todos</strong> los infinitos términos de la progresión ' +
-        'geométrica que empieza en $a_1 = ' + d.a1 + '$ y tiene razón $r = \\dfrac{1}{' + d.den +
-        '}$ (cuatro decimales).';
-    },
-    fields: [{ name: 'S', label: 'Suma total', w: 'wide' }],
-    sol: function (d) { return { S: U.round(d.S, 6) }; },
-    tol: 3e-5,
-    hint: function () { return 'Como $|r| < 1$, la suma infinita converge: $S_\\infty = \\frac{a_1}{1-r}$.'; },
-    steps: function (d) {
-      return ['La razón cumple $|r| = \\frac{1}{' + d.den + '} < 1$, así que la suma infinita existe.',
-        '$S_\\infty = \\dfrac{a_1}{1-r} = \\dfrac{' + d.a1 + '}{1 - \\frac{1}{' + d.den + '}} = ' +
-        '\\dfrac{' + d.a1 + '}{\\frac{' + (d.den - 1) + '}{' + d.den + '}}$',
-        '$= ' + U.fmt(d.S, 4) + '$',
-        'Los términos son cada vez más pequeños, así que aunque sean infinitos su suma es finita.'];
-    },
-    answer: function (d) { return U.fmt(d.S, 4); }
-  });
-
-  p.exercise({
     title: 'Límite de una sucesión',
     level: 'medio',
     gen: function (r) {
@@ -297,6 +269,34 @@ Course.topic('fn-sucesiones', function (p) {
     answer: function (d) {
       return d.val === Infinity ? '+∞' : (d.val === -Infinity ? '−∞' : U.fmt(d.val, 4));
     }
+  });
+
+  p.exercise({
+    title: 'Suma de infinitos términos',
+    level: 'avanzado',
+    gen: function (r) {
+      var a1 = r.int(1, 12);
+      var den = r.pick([2, 3, 4, 5, 10]);
+      var raz = 1 / den;
+      return { a1: a1, den: den, r: raz, S: a1 / (1 - raz) };
+    },
+    ask: function (d) {
+      return 'Calcula la suma de <strong>todos</strong> los infinitos términos de la progresión ' +
+        'geométrica que empieza en $a_1 = ' + d.a1 + '$ y tiene razón $r = \\dfrac{1}{' + d.den +
+        '}$ (cuatro decimales).';
+    },
+    fields: [{ name: 'S', label: 'Suma total', w: 'wide' }],
+    sol: function (d) { return { S: U.round(d.S, 6) }; },
+    tol: 3e-5,
+    hint: function () { return 'Como $|r| < 1$, la suma infinita converge: $S_\\infty = \\frac{a_1}{1-r}$.'; },
+    steps: function (d) {
+      return ['La razón cumple $|r| = \\frac{1}{' + d.den + '} < 1$, así que la suma infinita existe.',
+        '$S_\\infty = \\dfrac{a_1}{1-r} = \\dfrac{' + d.a1 + '}{1 - \\frac{1}{' + d.den + '}} = ' +
+        '\\dfrac{' + d.a1 + '}{\\frac{' + (d.den - 1) + '}{' + d.den + '}}$',
+        '$= ' + U.fmt(d.S, 4) + '$',
+        'Los términos son cada vez más pequeños, así que aunque sean infinitos su suma es finita.'];
+    },
+    answer: function (d) { return U.fmt(d.S, 4); }
   });
 
   p.keys([

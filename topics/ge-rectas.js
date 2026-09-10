@@ -241,34 +241,6 @@ Course.topic('ge-rectas', function (p) {
   });
 
   p.exercise({
-    title: 'Distancia de un punto a una recta',
-    level: 'avanzado',
-    gen: function (r) {
-      var A = r.nz(-5, 5), B = r.nz(-5, 5), C = r.pm(0, 9);
-      var P = [r.pm(0, 7), r.pm(0, 7)];
-      var dist = Math.abs(A * P[0] + B * P[1] + C) / Math.hypot(A, B);
-      return { A: A, B: B, C: C, P: P, dist: dist };
-    },
-    ask: function (d) {
-      return 'Calcula la distancia del punto $P(' + d.P + ')$ a la recta $' +
-        ML.termTex(d.A, 'x', 1, true) + ML.termTex(d.B, 'y', 1, false) + ML.termTex(d.C, '', 0, false) +
-        ' = 0$ (cuatro decimales).';
-    },
-    fields: [{ name: 'v', label: 'Distancia', w: 'wide' }],
-    sol: function (d) { return { v: U.round(d.dist, 4) }; },
-    tol: 3e-4,
-    hint: function () { return '$d = \\dfrac{|Ax_0+By_0+C|}{\\sqrt{A^2+B^2}}$. Cuidado con el valor absoluto.'; },
-    steps: function (d) {
-      var num = d.A * d.P[0] + d.B * d.P[1] + d.C;
-      return ['Numerador: $|' + d.A + '\\cdot(' + d.P[0] + ') + (' + d.B + ')\\cdot(' + d.P[1] + ') + (' + d.C + ')| = |' + num + '| = ' + Math.abs(num) + '$.',
-        'Denominador: $\\sqrt{' + d.A + '^2 + (' + d.B + ')^2} = \\sqrt{' + (d.A * d.A + d.B * d.B) + '} = ' + U.fmt(Math.hypot(d.A, d.B), 4) + '$.',
-        '$d = \\dfrac{' + Math.abs(num) + '}{' + U.fmt(Math.hypot(d.A, d.B), 4) + '} = ' + U.fmt(d.dist, 4) + '$',
-        d.dist === 0 ? 'La distancia es cero: el punto está sobre la recta.' : ''].filter(function (x) { return x; });
-    },
-    answer: function (d) { return U.fmt(d.dist, 4); }
-  });
-
-  p.exercise({
     title: 'Recta paralela o perpendicular',
     level: 'medio',
     gen: function (r) {
@@ -309,6 +281,34 @@ Course.topic('ge-rectas', function (p) {
     answer: function (d) {
       return '$' + ML.termTex(d.nA, 'x', 1, true) + ML.termTex(d.nB, 'y', 1, false) + ML.termTex(d.nC, '', 0, false) + ' = 0$';
     }
+  });
+
+  p.exercise({
+    title: 'Distancia de un punto a una recta',
+    level: 'avanzado',
+    gen: function (r) {
+      var A = r.nz(-5, 5), B = r.nz(-5, 5), C = r.pm(0, 9);
+      var P = [r.pm(0, 7), r.pm(0, 7)];
+      var dist = Math.abs(A * P[0] + B * P[1] + C) / Math.hypot(A, B);
+      return { A: A, B: B, C: C, P: P, dist: dist };
+    },
+    ask: function (d) {
+      return 'Calcula la distancia del punto $P(' + d.P + ')$ a la recta $' +
+        ML.termTex(d.A, 'x', 1, true) + ML.termTex(d.B, 'y', 1, false) + ML.termTex(d.C, '', 0, false) +
+        ' = 0$ (cuatro decimales).';
+    },
+    fields: [{ name: 'v', label: 'Distancia', w: 'wide' }],
+    sol: function (d) { return { v: U.round(d.dist, 4) }; },
+    tol: 3e-4,
+    hint: function () { return '$d = \\dfrac{|Ax_0+By_0+C|}{\\sqrt{A^2+B^2}}$. Cuidado con el valor absoluto.'; },
+    steps: function (d) {
+      var num = d.A * d.P[0] + d.B * d.P[1] + d.C;
+      return ['Numerador: $|' + d.A + '\\cdot(' + d.P[0] + ') + (' + d.B + ')\\cdot(' + d.P[1] + ') + (' + d.C + ')| = |' + num + '| = ' + Math.abs(num) + '$.',
+        'Denominador: $\\sqrt{' + d.A + '^2 + (' + d.B + ')^2} = \\sqrt{' + (d.A * d.A + d.B * d.B) + '} = ' + U.fmt(Math.hypot(d.A, d.B), 4) + '$.',
+        '$d = \\dfrac{' + Math.abs(num) + '}{' + U.fmt(Math.hypot(d.A, d.B), 4) + '} = ' + U.fmt(d.dist, 4) + '$',
+        d.dist === 0 ? 'La distancia es cero: el punto está sobre la recta.' : ''].filter(function (x) { return x; });
+    },
+    answer: function (d) { return U.fmt(d.dist, 4); }
   });
 
   p.keys([

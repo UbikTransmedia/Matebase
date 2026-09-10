@@ -212,6 +212,36 @@ Course.topic('av-grupos', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Orden de un grupo de simetrías',
+    level: 'basico',
+    gen: function (r) {
+      var n = r.int(3, 12);
+      var soloGiros = r.bool();
+      return { n: n, soloGiros: soloGiros, res: soloGiros ? n : 2 * n };
+    },
+    ask: function (d) {
+      var nombres = { 3: 'triángulo equilátero', 4: 'cuadrado', 5: 'pentágono regular', 6: 'hexágono regular' };
+      var nom = nombres[d.n] || ('polígono regular de ' + d.n + ' lados');
+      return '¿Cuántas ' + (d.soloGiros ? '<strong>rotaciones</strong>' : '<strong>simetrías en total</strong> (giros y reflexiones)') +
+        ' tiene un ' + nom + '?';
+    },
+    fields: [{ name: 'n', label: 'Cantidad', w: 'tiny' }],
+    sol: function (d) { return { n: d.res }; },
+    hint: function (d) {
+      return d.soloGiros ? 'Hay una rotación por cada vértice al que se puede llevar el primero, incluida la de 0°.'
+        : 'El grupo diédrico $D_n$ tiene $n$ giros y $n$ reflexiones.';
+    },
+    steps: function (d) {
+      return ['Un polígono regular de $' + d.n + '$ lados admite $' + d.n + '$ giros distintos ' +
+        '(de $0^\\circ$, $' + U.fmt(360 / d.n, 2) + '^\\circ$, y así hasta dar la vuelta).',
+        'Y además $' + d.n + '$ reflexiones, una por cada eje de simetría.',
+        d.soloGiros ? 'Solo rotaciones: <strong>' + d.n + '</strong> (es el grupo cíclico $C_{' + d.n + '}$).'
+          : 'En total: $2 \\cdot ' + d.n + ' = ' + d.res + '$ (es el grupo diédrico $D_{' + d.n + '}$).'];
+    },
+    answer: function (d) { return String(d.res); }
+  });
+
+  p.exercise({
     title: '¿Es un grupo?',
     level: 'medio',
     gen: function (r) {
@@ -247,36 +277,6 @@ Course.topic('av-grupos', function (p) {
         '<strong>' + (d.ok ? 'Sí es un grupo.' : 'No es un grupo.') + '</strong>'];
     },
     answer: function (d) { return (d.ok ? 'Sí' : 'No') + ': ' + d.por + '.'; }
-  });
-
-  p.exercise({
-    title: 'Orden de un grupo de simetrías',
-    level: 'basico',
-    gen: function (r) {
-      var n = r.int(3, 12);
-      var soloGiros = r.bool();
-      return { n: n, soloGiros: soloGiros, res: soloGiros ? n : 2 * n };
-    },
-    ask: function (d) {
-      var nombres = { 3: 'triángulo equilátero', 4: 'cuadrado', 5: 'pentágono regular', 6: 'hexágono regular' };
-      var nom = nombres[d.n] || ('polígono regular de ' + d.n + ' lados');
-      return '¿Cuántas ' + (d.soloGiros ? '<strong>rotaciones</strong>' : '<strong>simetrías en total</strong> (giros y reflexiones)') +
-        ' tiene un ' + nom + '?';
-    },
-    fields: [{ name: 'n', label: 'Cantidad', w: 'tiny' }],
-    sol: function (d) { return { n: d.res }; },
-    hint: function (d) {
-      return d.soloGiros ? 'Hay una rotación por cada vértice al que se puede llevar el primero, incluida la de 0°.'
-        : 'El grupo diédrico $D_n$ tiene $n$ giros y $n$ reflexiones.';
-    },
-    steps: function (d) {
-      return ['Un polígono regular de $' + d.n + '$ lados admite $' + d.n + '$ giros distintos ' +
-        '(de $0^\\circ$, $' + U.fmt(360 / d.n, 2) + '^\\circ$, y así hasta dar la vuelta).',
-        'Y además $' + d.n + '$ reflexiones, una por cada eje de simetría.',
-        d.soloGiros ? 'Solo rotaciones: <strong>' + d.n + '</strong> (es el grupo cíclico $C_{' + d.n + '}$).'
-          : 'En total: $2 \\cdot ' + d.n + ' = ' + d.res + '$ (es el grupo diédrico $D_{' + d.n + '}$).'];
-    },
-    answer: function (d) { return String(d.res); }
   });
 
   p.exercise({

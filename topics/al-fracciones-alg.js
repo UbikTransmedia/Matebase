@@ -127,6 +127,31 @@ Course.topic('al-fracciones-alg', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Valores prohibidos',
+    level: 'basico',
+    gen: function (r) {
+      var a = r.pm(1, 7), b = r.pm(1, 7);
+      if (a === b) return null;
+      var den = ML.polyMul([1, -a], [1, -b]);
+      return { a: Math.min(a, b), b: Math.max(a, b), den: den };
+    },
+    ask: function (d) {
+      return '¿Para qué valores de $x$ <strong>no existe</strong> la fracción ' +
+        '$\\dfrac{3x+1}{' + ML.polyTex(d.den) + '}$? Escríbelos en orden.';
+    },
+    fields: [{ name: 'a', label: 'Menor', w: 'tiny' }, { name: 'b', label: 'Mayor', w: 'tiny' }],
+    sol: function (d) { return { a: d.a, b: d.b }; },
+    hint: function () { return 'Los valores prohibidos son los que anulan el denominador: resuelve la ecuación de segundo grado.'; },
+    steps: function (d) {
+      return ['Igualamos el denominador a cero: $' + ML.polyTex(d.den) + ' = 0$.',
+        'Sus raíces son $' + d.a + '$ y $' + d.b + '$.',
+        'Ahí el denominador vale cero, así que la fracción no está definida.',
+        'Dominio: $\\mathbb{R} - \\{' + d.a + ', ' + d.b + '\\}$.'];
+    },
+    answer: function (d) { return 'x ≠ ' + d.a + ' y x ≠ ' + d.b; }
+  });
+
+  p.exercise({
     title: 'Simplifica la fracción algebraica',
     level: 'medio',
     gen: function (r) {
@@ -158,31 +183,6 @@ Course.topic('al-fracciones-alg', function (p) {
       var f = function (x) { return '(x' + (x >= 0 ? '-' + x : '+' + (-x)) + ')'; };
       return '$\\dfrac{' + f(d.a) + '}{' + f(d.c) + '}$';
     }
-  });
-
-  p.exercise({
-    title: 'Valores prohibidos',
-    level: 'basico',
-    gen: function (r) {
-      var a = r.pm(1, 7), b = r.pm(1, 7);
-      if (a === b) return null;
-      var den = ML.polyMul([1, -a], [1, -b]);
-      return { a: Math.min(a, b), b: Math.max(a, b), den: den };
-    },
-    ask: function (d) {
-      return '¿Para qué valores de $x$ <strong>no existe</strong> la fracción ' +
-        '$\\dfrac{3x+1}{' + ML.polyTex(d.den) + '}$? Escríbelos en orden.';
-    },
-    fields: [{ name: 'a', label: 'Menor', w: 'tiny' }, { name: 'b', label: 'Mayor', w: 'tiny' }],
-    sol: function (d) { return { a: d.a, b: d.b }; },
-    hint: function () { return 'Los valores prohibidos son los que anulan el denominador: resuelve la ecuación de segundo grado.'; },
-    steps: function (d) {
-      return ['Igualamos el denominador a cero: $' + ML.polyTex(d.den) + ' = 0$.',
-        'Sus raíces son $' + d.a + '$ y $' + d.b + '$.',
-        'Ahí el denominador vale cero, así que la fracción no está definida.',
-        'Dominio: $\\mathbb{R} - \\{' + d.a + ', ' + d.b + '\\}$.'];
-    },
-    answer: function (d) { return 'x ≠ ' + d.a + ' y x ≠ ' + d.b; }
   });
 
   p.exercise({

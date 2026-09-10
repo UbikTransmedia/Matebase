@@ -226,6 +226,28 @@ Course.topic('gfx-buffers', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'La Vida sin if',
+    level: 'basico',
+    gen: function (r) {
+      var n = r.int(0, 6), yo = r.int(0, 1);
+      var tres = n === 3 ? 1 : 0, dos = n === 2 ? 1 : 0;
+      return { n: n, yo: yo, tres: tres, dos: dos, sig: Math.max(tres, yo * dos) };
+    },
+    ask: function (d) {
+      return 'En el shader de la Vida, una celda con <code>yo = ' + d.yo + '.0</code> tiene <code>n = ' + d.n + '.0</code> vecinas vivas. ¿Qué valen <code>tres</code>, <code>dos</code> y <code>siguiente</code>?' +
+        '<pre class="shd__mini">float tres = 1.0 - step(0.5, abs(n - 3.0));\nfloat dos = 1.0 - step(0.5, abs(n - 2.0));\nfloat siguiente = max(tres, yo * dos);</pre>';
+    },
+    fields: [{ name: 'a', label: 'tres', w: 'tiny' }, { name: 'b', label: 'dos', w: 'tiny' }, { name: 'c', label: 'siguiente', w: 'tiny' }],
+    sol: function (d) { return { a: d.tres, b: d.dos, c: d.sig }; },
+    hint: function () { return ['<code>step(0.5, x)</code> vale 0 si $x < 0{,}5$ y 1 si no.', '<code>abs(n - 3.0)</code> es menor que 0,5 solo si $n = 3$.']; },
+    steps: function (d) {
+      return ['$|' + d.n + ' - 3| = ' + Math.abs(d.n - 3) + '$, así que <code>tres</code> $= ' + d.tres + '$.', '$|' + d.n + ' - 2| = ' + Math.abs(d.n - 2) + '$, así que <code>dos</code> $= ' + d.dos + '$.',
+        '<code>siguiente</code> $= \\max(' + d.tres + ',\\ ' + d.yo + '\\cdot ' + d.dos + ') = ' + d.sig + '$: la celda ' + (d.sig ? 'estará viva' : 'estará muerta') + '.'];
+    },
+    answer: function (d) { return d.tres + ', ' + d.dos + ', ' + d.sig; }
+  });
+
+  p.exercise({
     title: 'Un paso de la ecuación del calor',
     level: 'medio',
     gen: function (r) {
@@ -249,52 +271,6 @@ Course.topic('gfx-buffers', function (p) {
         d.lap > 0 ? 'Los vecinos están, en media, más calientes: el píxel se calienta.' : 'Los vecinos están, en media, más fríos: el píxel se enfría.'];
     },
     answer: function (d) { return 'laplaciano ' + U.fmt(d.lap, 2) + ', nueva ' + U.fmt(d.nuevo, 3); }
-  });
-
-  p.exercise({
-    title: '¿Estable o inestable?',
-    level: 'avanzado',
-    gen: function (r) {
-      var a = r.pick([0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.5]);
-      return { a: a, f: 1 - 8 * a, est: Math.abs(1 - 8 * a) <= 1 + 1e-12 ? 'si' : 'no' };
-    },
-    ask: function (d) {
-      return 'En el método explícito de la ecuación del calor, el patrón de tablero de ajedrez —valores $+1$ y $-1$ alternados— se multiplica en cada paso por un factor. ' +
-        'Con $\\alpha = ' + U.fmt(d.a, 2) + '$, ¿cuánto vale ese factor? ¿Es estable el método?';
-    },
-    fields: [{ name: 'f', label: 'factor', w: 'tiny' }, { name: 't', label: '¿Estable?', opts: [{ t: 'Sí: el tablero se apaga o se mantiene', v: 'si' }, { t: 'No: el tablero crece sin control', v: 'no' }] }],
-    sol: function (d) { return { f: U.round(d.f, 6), t: d.est }; },
-    tol: 1e-6,
-    errores: [{ si: function (v, d) { return Math.abs(v.f - (1 - 4 * d.a)) < 1e-6; }, msg: 'En un tablero, cada uno de los cuatro vecinos vale lo contrario que el píxel: su suma es $-4u$, y el laplaciano, $-4u - 4u = -8u$.' }],
-    hint: function () { return ['Si el píxel vale $u$, sus cuatro vecinos valen $-u$.', 'Laplaciano: $-4u - 4u$. El factor es $1 + \\alpha\\cdot(-8)$; es estable si su valor absoluto no pasa de 1.']; },
-    steps: function (d) {
-      return ['Laplaciano del tablero: $4\\cdot(-u) - 4u = -8u$, así que $u_{n+1} = (1 - 8\\alpha)\\,u_n$.',
-        'Factor: $1 - 8\\cdot ' + U.fmt(d.a, 2) + ' = ' + U.fmt(d.f, 2) + '$.',
-        d.est === 'si' ? '$|' + U.fmt(d.f, 2) + '| \\le 1$: <strong>estable</strong>.' : '$|' + U.fmt(d.f, 2) + '| > 1$: el tablero crece en cada paso. <strong>Inestable</strong>. La condición es $\\alpha \\le \\frac{1}{4}$.'];
-    },
-    answer: function (d) { return 'factor ' + U.fmt(d.f, 2) + ', ' + (d.est === 'si' ? 'estable' : 'inestable'); }
-  });
-
-  p.exercise({
-    title: 'La Vida sin if',
-    level: 'basico',
-    gen: function (r) {
-      var n = r.int(0, 6), yo = r.int(0, 1);
-      var tres = n === 3 ? 1 : 0, dos = n === 2 ? 1 : 0;
-      return { n: n, yo: yo, tres: tres, dos: dos, sig: Math.max(tres, yo * dos) };
-    },
-    ask: function (d) {
-      return 'En el shader de la Vida, una celda con <code>yo = ' + d.yo + '.0</code> tiene <code>n = ' + d.n + '.0</code> vecinas vivas. ¿Qué valen <code>tres</code>, <code>dos</code> y <code>siguiente</code>?' +
-        '<pre class="shd__mini">float tres = 1.0 - step(0.5, abs(n - 3.0));\nfloat dos = 1.0 - step(0.5, abs(n - 2.0));\nfloat siguiente = max(tres, yo * dos);</pre>';
-    },
-    fields: [{ name: 'a', label: 'tres', w: 'tiny' }, { name: 'b', label: 'dos', w: 'tiny' }, { name: 'c', label: 'siguiente', w: 'tiny' }],
-    sol: function (d) { return { a: d.tres, b: d.dos, c: d.sig }; },
-    hint: function () { return ['<code>step(0.5, x)</code> vale 0 si $x < 0{,}5$ y 1 si no.', '<code>abs(n - 3.0)</code> es menor que 0,5 solo si $n = 3$.']; },
-    steps: function (d) {
-      return ['$|' + d.n + ' - 3| = ' + Math.abs(d.n - 3) + '$, así que <code>tres</code> $= ' + d.tres + '$.', '$|' + d.n + ' - 2| = ' + Math.abs(d.n - 2) + '$, así que <code>dos</code> $= ' + d.dos + '$.',
-        '<code>siguiente</code> $= \\max(' + d.tres + ',\\ ' + d.yo + '\\cdot ' + d.dos + ') = ' + d.sig + '$: la celda ' + (d.sig ? 'estará viva' : 'estará muerta') + '.'];
-    },
-    answer: function (d) { return d.tres + ', ' + d.dos + ', ' + d.sig; }
   });
 
   p.exercise({
@@ -326,6 +302,30 @@ Course.topic('gfx-buffers', function (p) {
     hint: function () { return ['Piensa qué le pasa a un píxel después de muchos pasos: ¿qué lee y qué escribe?']; },
     steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
     answer: function (d) { return d.textos[0]; }
+  });
+
+  p.exercise({
+    title: '¿Estable o inestable?',
+    level: 'avanzado',
+    gen: function (r) {
+      var a = r.pick([0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.5]);
+      return { a: a, f: 1 - 8 * a, est: Math.abs(1 - 8 * a) <= 1 + 1e-12 ? 'si' : 'no' };
+    },
+    ask: function (d) {
+      return 'En el método explícito de la ecuación del calor, el patrón de tablero de ajedrez —valores $+1$ y $-1$ alternados— se multiplica en cada paso por un factor. ' +
+        'Con $\\alpha = ' + U.fmt(d.a, 2) + '$, ¿cuánto vale ese factor? ¿Es estable el método?';
+    },
+    fields: [{ name: 'f', label: 'factor', w: 'tiny' }, { name: 't', label: '¿Estable?', opts: [{ t: 'Sí: el tablero se apaga o se mantiene', v: 'si' }, { t: 'No: el tablero crece sin control', v: 'no' }] }],
+    sol: function (d) { return { f: U.round(d.f, 6), t: d.est }; },
+    tol: 1e-6,
+    errores: [{ si: function (v, d) { return Math.abs(v.f - (1 - 4 * d.a)) < 1e-6; }, msg: 'En un tablero, cada uno de los cuatro vecinos vale lo contrario que el píxel: su suma es $-4u$, y el laplaciano, $-4u - 4u = -8u$.' }],
+    hint: function () { return ['Si el píxel vale $u$, sus cuatro vecinos valen $-u$.', 'Laplaciano: $-4u - 4u$. El factor es $1 + \\alpha\\cdot(-8)$; es estable si su valor absoluto no pasa de 1.']; },
+    steps: function (d) {
+      return ['Laplaciano del tablero: $4\\cdot(-u) - 4u = -8u$, así que $u_{n+1} = (1 - 8\\alpha)\\,u_n$.',
+        'Factor: $1 - 8\\cdot ' + U.fmt(d.a, 2) + ' = ' + U.fmt(d.f, 2) + '$.',
+        d.est === 'si' ? '$|' + U.fmt(d.f, 2) + '| \\le 1$: <strong>estable</strong>.' : '$|' + U.fmt(d.f, 2) + '| > 1$: el tablero crece en cada paso. <strong>Inestable</strong>. La condición es $\\alpha \\le \\frac{1}{4}$.'];
+    },
+    answer: function (d) { return 'factor ' + U.fmt(d.f, 2) + ', ' + (d.est === 'si' ? 'estable' : 'inestable'); }
   });
 
   p.keys([

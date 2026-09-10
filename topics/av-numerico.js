@@ -320,6 +320,34 @@ Course.topic('av-numerico', function (p) {
   });
 
   p.exercise({
+    title: 'Cuántos pasos hacen falta',
+    level: 'medio',
+    gen: function (r) {
+      var a = 0, b = r.int(1, 8);
+      var dec = r.int(3, 10);
+      var tol = Math.pow(10, -dec);
+      var n = Math.ceil(Math.log((b - a) / tol) / Math.LN2);
+      return { a: a, b: b, dec: dec, n: n };
+    },
+    ask: function (d) {
+      return 'Con bisección en $[0, ' + d.b + ']$, ¿cuántos pasos hacen falta como mínimo para ' +
+        'garantizar un error menor que $10^{-' + d.dec + '}$?';
+    },
+    fields: [{ name: 'n', label: 'Pasos', w: 'tiny' }],
+    sol: function (d) { return { n: d.n }; },
+    hint: function (d) { return 'Hay que resolver $\\frac{' + d.b + '}{2^n} < 10^{-' + d.dec + '}$ tomando logaritmos, y redondear hacia arriba.'; },
+    steps: function (d) {
+      return ['Queremos $\\dfrac{' + d.b + '}{2^n} < 10^{-' + d.dec + '}$.',
+        'Es decir, $2^n > ' + d.b + ' \\cdot 10^{' + d.dec + '}$.',
+        'Tomando logaritmos: $n > \\dfrac{\\ln(' + d.b + ' \\cdot 10^{' + d.dec + '})}{\\ln 2} = ' +
+        U.fmt(Math.log(d.b * Math.pow(10, d.dec)) / Math.LN2, 4) + '$.',
+        'Redondeando hacia arriba: $n = ' + d.n + '$ pasos.',
+        'Con Newton bastarían unos ' + Math.max(3, Math.ceil(Math.log(d.dec) / Math.LN2) + 2) + '.'];
+    },
+    answer: function (d) { return d.n + ' pasos'; }
+  });
+
+  p.exercise({
     title: 'Regla de los trapecios',
     level: 'avanzado',
     gen: function (r) {
@@ -351,34 +379,6 @@ Course.topic('av-numerico', function (p) {
         '$, y los trapecios <strong>siempre sobrestiman</strong> una función convexa.'];
     },
     answer: function (d) { return U.fmt(d.T, 6); }
-  });
-
-  p.exercise({
-    title: 'Cuántos pasos hacen falta',
-    level: 'medio',
-    gen: function (r) {
-      var a = 0, b = r.int(1, 8);
-      var dec = r.int(3, 10);
-      var tol = Math.pow(10, -dec);
-      var n = Math.ceil(Math.log((b - a) / tol) / Math.LN2);
-      return { a: a, b: b, dec: dec, n: n };
-    },
-    ask: function (d) {
-      return 'Con bisección en $[0, ' + d.b + ']$, ¿cuántos pasos hacen falta como mínimo para ' +
-        'garantizar un error menor que $10^{-' + d.dec + '}$?';
-    },
-    fields: [{ name: 'n', label: 'Pasos', w: 'tiny' }],
-    sol: function (d) { return { n: d.n }; },
-    hint: function (d) { return 'Hay que resolver $\\frac{' + d.b + '}{2^n} < 10^{-' + d.dec + '}$ tomando logaritmos, y redondear hacia arriba.'; },
-    steps: function (d) {
-      return ['Queremos $\\dfrac{' + d.b + '}{2^n} < 10^{-' + d.dec + '}$.',
-        'Es decir, $2^n > ' + d.b + ' \\cdot 10^{' + d.dec + '}$.',
-        'Tomando logaritmos: $n > \\dfrac{\\ln(' + d.b + ' \\cdot 10^{' + d.dec + '})}{\\ln 2} = ' +
-        U.fmt(Math.log(d.b * Math.pow(10, d.dec)) / Math.LN2, 4) + '$.',
-        'Redondeando hacia arriba: $n = ' + d.n + '$ pasos.',
-        'Con Newton bastarían unos ' + Math.max(3, Math.ceil(Math.log(d.dec) / Math.LN2) + 2) + '.'];
-    },
-    answer: function (d) { return d.n + ' pasos'; }
   });
 
   p.keys([

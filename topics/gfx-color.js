@@ -340,6 +340,39 @@ Course.topic('gfx-color', function (p) {
   });
 
   p.exercise({
+    title: 'Del tono al color',
+    level: 'medio',
+    gen: function (r) {
+      var H = r.pick([0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330]), S = r.pick([1, 0.5]), V = r.pick([1, 0.8]);
+      function onda(h) {
+        return [0, 4, 2].map(function (k) { var x = ((h * 6 + k) % 6 + 6) % 6; return Math.max(0, Math.min(1, Math.abs(x - 3) - 1)); });
+      }
+      function mezcla(base) { return base.map(function (b) { return V * (1 + (b - 1) * S); }); }
+      var base = onda(H / 360), rgb = mezcla(base), mal = mezcla(onda(H));
+      return { H: H, S: S, V: V, base: base, rgb: rgb, mal: mal };
+    },
+    ask: function (d) {
+      return 'Con la función <code>hsv2rgb</code> del tema, ¿qué color RGB sale para un tono de $' + d.H + '^\\circ$, saturación $' + U.fmt(d.S, 1) + '$ y brillo $' + U.fmt(d.V, 1) +
+        '$? (Cada canal entre 0 y 1, tres decimales.)';
+    },
+    fields: [{ name: 'r', label: 'R', w: 'tiny' }, { name: 'g', label: 'G', w: 'tiny' }, { name: 'b', label: 'B', w: 'tiny' }],
+    sol: function (d) { return { r: U.round(d.rgb[0], 6), g: U.round(d.rgb[1], 6), b: U.round(d.rgb[2], 6) }; },
+    tol: 1e-3,
+    errores: [{ si: function (v, d) {
+      var distinto = d.mal.some(function (x, i) { return Math.abs(x - d.rgb[i]) > 2e-3; });
+      return distinto && Math.abs(v.r - d.mal[0]) < 5e-4 && Math.abs(v.g - d.mal[1]) < 5e-4 && Math.abs(v.b - d.mal[2]) < 5e-4;
+    }, msg: 'En la fórmula el tono va de 0 a 1: hay que dividir los grados entre 360 antes de multiplicar por 6.' }],
+    hint: function () { return ['Pasa el tono a fracción de vuelta: $H = \\frac{\\text{grados}}{360}$.', 'Calcula $|\\operatorname{mod}(6H + k, 6) - 3| - 1$ para $k = 0, 4, 2$, recórtalo a $[0, 1]$, mézclalo con 1 según $S$ y multiplica por $V$.']; },
+    steps: function (d) {
+      var h6 = d.H / 60;
+      return ['$H = \\frac{' + d.H + '}{360}$, así que $6H = ' + U.fmt(h6, 1) + '$.',
+        'Onda de cada canal (sumando 0, 4 y 2, módulo 6, menos 3, en valor absoluto, menos 1 y recortado): $(' + d.base.map(function (x) { return U.fmt(x, 3); }).join(',\\ ') + ')$',
+        'Con $S = ' + U.fmt(d.S, 1) + '$ y $V = ' + U.fmt(d.V, 1) + '$: $(' + d.rgb.map(function (x) { return U.fmt(x, 3); }).join(',\\ ') + ')$'];
+    },
+    answer: function (d) { return '(' + d.rgb.map(function (x) { return U.fmt(x, 3); }).join(', ') + ')'; }
+  });
+
+  p.exercise({
     title: 'Escribe la paleta',
     level: 'avanzado',
     gen: function (r) {
@@ -390,39 +423,6 @@ Course.topic('gfx-color', function (p) {
         'Doce números para una paleta entera, y ningún dato guardado en ninguna parte.'];
     },
     answer: function (d) { return d.ref; }
-  });
-
-  p.exercise({
-    title: 'Del tono al color',
-    level: 'medio',
-    gen: function (r) {
-      var H = r.pick([0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330]), S = r.pick([1, 0.5]), V = r.pick([1, 0.8]);
-      function onda(h) {
-        return [0, 4, 2].map(function (k) { var x = ((h * 6 + k) % 6 + 6) % 6; return Math.max(0, Math.min(1, Math.abs(x - 3) - 1)); });
-      }
-      function mezcla(base) { return base.map(function (b) { return V * (1 + (b - 1) * S); }); }
-      var base = onda(H / 360), rgb = mezcla(base), mal = mezcla(onda(H));
-      return { H: H, S: S, V: V, base: base, rgb: rgb, mal: mal };
-    },
-    ask: function (d) {
-      return 'Con la función <code>hsv2rgb</code> del tema, ¿qué color RGB sale para un tono de $' + d.H + '^\\circ$, saturación $' + U.fmt(d.S, 1) + '$ y brillo $' + U.fmt(d.V, 1) +
-        '$? (Cada canal entre 0 y 1, tres decimales.)';
-    },
-    fields: [{ name: 'r', label: 'R', w: 'tiny' }, { name: 'g', label: 'G', w: 'tiny' }, { name: 'b', label: 'B', w: 'tiny' }],
-    sol: function (d) { return { r: U.round(d.rgb[0], 6), g: U.round(d.rgb[1], 6), b: U.round(d.rgb[2], 6) }; },
-    tol: 1e-3,
-    errores: [{ si: function (v, d) {
-      var distinto = d.mal.some(function (x, i) { return Math.abs(x - d.rgb[i]) > 2e-3; });
-      return distinto && Math.abs(v.r - d.mal[0]) < 5e-4 && Math.abs(v.g - d.mal[1]) < 5e-4 && Math.abs(v.b - d.mal[2]) < 5e-4;
-    }, msg: 'En la fórmula el tono va de 0 a 1: hay que dividir los grados entre 360 antes de multiplicar por 6.' }],
-    hint: function () { return ['Pasa el tono a fracción de vuelta: $H = \\frac{\\text{grados}}{360}$.', 'Calcula $|\\operatorname{mod}(6H + k, 6) - 3| - 1$ para $k = 0, 4, 2$, recórtalo a $[0, 1]$, mézclalo con 1 según $S$ y multiplica por $V$.']; },
-    steps: function (d) {
-      var h6 = d.H / 60;
-      return ['$H = \\frac{' + d.H + '}{360}$, así que $6H = ' + U.fmt(h6, 1) + '$.',
-        'Onda de cada canal (sumando 0, 4 y 2, módulo 6, menos 3, en valor absoluto, menos 1 y recortado): $(' + d.base.map(function (x) { return U.fmt(x, 3); }).join(',\\ ') + ')$',
-        'Con $S = ' + U.fmt(d.S, 1) + '$ y $V = ' + U.fmt(d.V, 1) + '$: $(' + d.rgb.map(function (x) { return U.fmt(x, 3); }).join(',\\ ') + ')$'];
-    },
-    answer: function (d) { return '(' + d.rgb.map(function (x) { return U.fmt(x, 3); }).join(', ') + ')'; }
   });
 
   p.keys([

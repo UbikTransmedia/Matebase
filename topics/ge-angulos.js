@@ -217,6 +217,38 @@ Course.topic('ge-angulos', function (p) {
   });
 
   p.exercise({
+    title: '¿Se puede construir el triángulo?',
+    level: 'basico',
+    gen: function (r) {
+      var a = r.int(2, 15), b = r.int(2, 15);
+      var c = r.bool() ? r.int(Math.abs(a - b) + 1, a + b - 1) : r.int(a + b, a + b + 8);
+      if (c <= 0) return null;
+      var lados = [a, b, c].sort(function (x, y) { return x - y; });
+      return { a: a, b: b, c: c, ok: lados[0] + lados[1] > lados[2], l: lados };
+    },
+    ask: function (d) {
+      return '¿Existe un triángulo con lados $' + d.a + '$, $' + d.b + '$ y $' + d.c + '$?<br>' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
+    },
+    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
+    sol: function (d) { return { r: d.ok ? 'si' : 'no' }; },
+    check: function (v, d) {
+      var t = v.raw.r.trim().toLowerCase().replace(/[íÍ]/g, 'i');
+      if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe <code>si</code> o <code>no</code>.' };
+      return (t === 'si') === d.ok;
+    },
+    hint: function () { return 'Desigualdad triangular: el lado mayor tiene que ser menor que la suma de los otros dos.'; },
+    steps: function (d) {
+      return ['Ordenamos los lados: $' + d.l.join(' \\le ') + '$.',
+        'Basta comprobar el caso peor: ¿es el mayor menor que la suma de los otros dos?',
+        '$' + d.l[0] + ' + ' + d.l[1] + ' = ' + (d.l[0] + d.l[1]) + (d.ok ? ' > ' : ' \\le ') + d.l[2] + '$',
+        d.ok ? 'Sí se cumple: el triángulo <strong>existe</strong>.'
+          : 'No se cumple: los dos lados cortos no llegan a juntarse. <strong>No existe</strong>.'];
+    },
+    answer: function (d) { return d.ok ? 'Sí existe.' : 'No existe.'; }
+  });
+
+  p.exercise({
     title: 'Paralelas cortadas por una secante',
     level: 'medio',
     gen: function (r) {
@@ -272,38 +304,6 @@ Course.topic('ge-angulos', function (p) {
         U.fmt(d.cada, 4) + '^\\circ$.'];
     },
     answer: function (d) { return 'Suman ' + d.suma + '° y cada uno mide ' + U.fmt(d.cada, 2) + '°.'; }
-  });
-
-  p.exercise({
-    title: '¿Se puede construir el triángulo?',
-    level: 'basico',
-    gen: function (r) {
-      var a = r.int(2, 15), b = r.int(2, 15);
-      var c = r.bool() ? r.int(Math.abs(a - b) + 1, a + b - 1) : r.int(a + b, a + b + 8);
-      if (c <= 0) return null;
-      var lados = [a, b, c].sort(function (x, y) { return x - y; });
-      return { a: a, b: b, c: c, ok: lados[0] + lados[1] > lados[2], l: lados };
-    },
-    ask: function (d) {
-      return '¿Existe un triángulo con lados $' + d.a + '$, $' + d.b + '$ y $' + d.c + '$?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
-    },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
-    sol: function (d) { return { r: d.ok ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var t = v.raw.r.trim().toLowerCase().replace(/[íÍ]/g, 'i');
-      if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe <code>si</code> o <code>no</code>.' };
-      return (t === 'si') === d.ok;
-    },
-    hint: function () { return 'Desigualdad triangular: el lado mayor tiene que ser menor que la suma de los otros dos.'; },
-    steps: function (d) {
-      return ['Ordenamos los lados: $' + d.l.join(' \\le ') + '$.',
-        'Basta comprobar el caso peor: ¿es el mayor menor que la suma de los otros dos?',
-        '$' + d.l[0] + ' + ' + d.l[1] + ' = ' + (d.l[0] + d.l[1]) + (d.ok ? ' > ' : ' \\le ') + d.l[2] + '$',
-        d.ok ? 'Sí se cumple: el triángulo <strong>existe</strong>.'
-          : 'No se cumple: los dos lados cortos no llegan a juntarse. <strong>No existe</strong>.'];
-    },
-    answer: function (d) { return d.ok ? 'Sí existe.' : 'No existe.'; }
   });
 
   p.keys([

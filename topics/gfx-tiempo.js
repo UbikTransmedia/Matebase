@@ -198,6 +198,35 @@ Course.topic('gfx-tiempo', function (p) {
   });
 
   p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { c: 'float v = 0.5 + 0.5 * sin(iTime);',
+          o: ['Toda la pantalla parpadea suavemente entre negro y blanco, un ciclo cada 6,28 segundos', 'Toda la pantalla parpadea una vez por segundo', 'Rayas que se desplazan', 'Un círculo que late'],
+          por: 'No depende del píxel, así que toda la pantalla tiene el mismo valor; el seno de <code>iTime</code> completa un ciclo cada $2\\pi$ segundos.' },
+        { c: 'float v = 0.5 + 0.5 * sin(20.0 * p.x - 3.0 * iTime);',
+          o: ['Rayas verticales que se desplazan hacia la derecha', 'Rayas verticales que se desplazan hacia la izquierda', 'Rayas horizontales quietas', 'Anillos que salen del centro'],
+          por: 'Una cresta es un valor fijo de $20x - 3t$; para que siga igual al crecer $t$, $x$ tiene que crecer: las rayas avanzan hacia la derecha.' },
+        { c: 'float v = step(length(p - vec2(0.3 * sin(iTime), 0.0)), 0.1);',
+          o: ['Un círculo que va y viene de izquierda a derecha', 'Un círculo que sube y baja', 'Un círculo que da vueltas', 'Un círculo quieto que late'],
+          por: 'El centro del círculo es $(0{,}3\\operatorname{sen} t,\\ 0)$: solo cambia la $x$, que oscila entre $-0{,}3$ y $0{,}3$.' },
+        { c: 'float v = 0.5 + 0.5 * sin(20.0 * length(p) + 3.0 * iTime);',
+          o: ['Anillos que se mueven hacia el centro', 'Anillos que salen del centro', 'Rayas verticales', 'Sectores que giran'],
+          por: 'Para mantener fijo $20r + 3t$ al crecer $t$, el radio $r$ tiene que disminuir: los anillos convergen hacia el centro.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'Con <code>p</code> centrada y el color final <code>vec3(v)</code>, ¿qué se ve al pasar el tiempo?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['Sigue una cresta: ¿qué tiene que pasarle a la posición para que el argumento del seno no cambie cuando crece el tiempo?']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
+  });
+
+  p.exercise({
     title: 'Pon el tiempo en marcha',
     level: 'avanzado',
     gen: function (r) {
@@ -251,35 +280,6 @@ Course.topic('gfx-tiempo', function (p) {
         'donde viven los colores.'];
     },
     answer: function (d) { return d.ref; }
-  });
-
-  p.exercise({
-    title: 'Predice la imagen',
-    level: 'medio',
-    gen: function (r) {
-      var casos = [
-        { c: 'float v = 0.5 + 0.5 * sin(iTime);',
-          o: ['Toda la pantalla parpadea suavemente entre negro y blanco, un ciclo cada 6,28 segundos', 'Toda la pantalla parpadea una vez por segundo', 'Rayas que se desplazan', 'Un círculo que late'],
-          por: 'No depende del píxel, así que toda la pantalla tiene el mismo valor; el seno de <code>iTime</code> completa un ciclo cada $2\\pi$ segundos.' },
-        { c: 'float v = 0.5 + 0.5 * sin(20.0 * p.x - 3.0 * iTime);',
-          o: ['Rayas verticales que se desplazan hacia la derecha', 'Rayas verticales que se desplazan hacia la izquierda', 'Rayas horizontales quietas', 'Anillos que salen del centro'],
-          por: 'Una cresta es un valor fijo de $20x - 3t$; para que siga igual al crecer $t$, $x$ tiene que crecer: las rayas avanzan hacia la derecha.' },
-        { c: 'float v = step(length(p - vec2(0.3 * sin(iTime), 0.0)), 0.1);',
-          o: ['Un círculo que va y viene de izquierda a derecha', 'Un círculo que sube y baja', 'Un círculo que da vueltas', 'Un círculo quieto que late'],
-          por: 'El centro del círculo es $(0{,}3\\operatorname{sen} t,\\ 0)$: solo cambia la $x$, que oscila entre $-0{,}3$ y $0{,}3$.' },
-        { c: 'float v = 0.5 + 0.5 * sin(20.0 * length(p) + 3.0 * iTime);',
-          o: ['Anillos que se mueven hacia el centro', 'Anillos que salen del centro', 'Rayas verticales', 'Sectores que giran'],
-          por: 'Para mantener fijo $20r + 3t$ al crecer $t$, el radio $r$ tiene que disminuir: los anillos convergen hacia el centro.' }
-      ];
-      var c = r.pick(casos);
-      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
-    },
-    ask: function (d) { return 'Con <code>p</code> centrada y el color final <code>vec3(v)</code>, ¿qué se ve al pasar el tiempo?<pre class="shd__mini">' + d.codigo + '</pre>'; },
-    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
-    sol: function () { return { q: '0' }; },
-    hint: function () { return ['Sigue una cresta: ¿qué tiene que pasarle a la posición para que el argumento del seno no cambie cuando crece el tiempo?']; },
-    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
-    answer: function (d) { return d.textos[0]; }
   });
 
   p.keys([

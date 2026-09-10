@@ -298,6 +298,35 @@ Course.topic('gfx-post', function (p) {
   });
 
   p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { c: 'vec2 q = uv - 0.5;\ncol *= 1.0 - 1.5 * dot(q, q);',
+          o: ['La imagen se oscurece suavemente hacia las esquinas: una viñeta', 'La imagen se aclara hacia las esquinas', 'Se oscurece el centro', 'Aparece un marco negro de borde duro'],
+          por: '$|\\vec q|^2$ vale 0 en el centro y crece hacia las esquinas, así que el factor baja de 1 poco a poco al alejarse del centro.' },
+        { c: 'col.r = escena(uv + vec2(0.003, 0.0)).r;\ncol.b = escena(uv - vec2(0.003, 0.0)).b;',
+          o: ['Los bordes de los objetos aparecen con franjas rojas y azules, como en una lente barata', 'La imagen se ve más nítida', 'La imagen entera se vuelve roja', 'La imagen se desplaza sin cambiar de color'],
+          por: 'El rojo y el azul se toman de posiciones un poco desplazadas en sentidos opuestos: donde hay un borde, los canales no coinciden y asoman franjas de color.' },
+        { c: 'col += 0.08 * (hash(fragCoord + iTime) - 0.5);',
+          o: ['Un grano fino que bulle por toda la imagen, como en una película antigua', 'Rayas horizontales fijas', 'La imagen entera parpadea', 'La imagen se desenfoca'],
+          por: 'Cada píxel recibe un pequeño número al azar, distinto en cada instante porque el tiempo entra en el hash: ruido que cambia sin parar.' },
+        { c: 'col *= 0.9 + 0.1 * sin(3.14159 * fragCoord.y);',
+          o: ['Líneas horizontales finas, como las de un monitor antiguo', 'Líneas verticales', 'Un tablero de ajedrez', 'Grano'],
+          por: 'El factor solo depende de la fila de píxeles, <code>fragCoord.y</code>, y alterna a escala de un par de píxeles: líneas de barrido horizontales.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'En la última pasada, con <code>uv</code> de 0 a 1, <code>col</code> el color ya calculado y <code>escena</code> la imagen de partida, ¿qué hace esta línea?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Hace', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['¿De qué depende el efecto: de la distancia al centro, de la fila del píxel, del azar o de un desplazamiento entre canales?']; },
+    steps: function (d) { return [d.por, 'Hace: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
+  });
+
+  p.exercise({
     title: 'Escribe la última pasada',
     level: 'avanzado',
     gen: function (r) {
@@ -355,35 +384,6 @@ Course.topic('gfx-post', function (p) {
         'Ni una línea de la escena se ha tocado: la última pasada solo ve un color y una posición.'];
     },
     answer: function (d) { return d.ref; }
-  });
-
-  p.exercise({
-    title: 'Predice la imagen',
-    level: 'medio',
-    gen: function (r) {
-      var casos = [
-        { c: 'vec2 q = uv - 0.5;\ncol *= 1.0 - 1.5 * dot(q, q);',
-          o: ['La imagen se oscurece suavemente hacia las esquinas: una viñeta', 'La imagen se aclara hacia las esquinas', 'Se oscurece el centro', 'Aparece un marco negro de borde duro'],
-          por: '$|\\vec q|^2$ vale 0 en el centro y crece hacia las esquinas, así que el factor baja de 1 poco a poco al alejarse del centro.' },
-        { c: 'col.r = escena(uv + vec2(0.003, 0.0)).r;\ncol.b = escena(uv - vec2(0.003, 0.0)).b;',
-          o: ['Los bordes de los objetos aparecen con franjas rojas y azules, como en una lente barata', 'La imagen se ve más nítida', 'La imagen entera se vuelve roja', 'La imagen se desplaza sin cambiar de color'],
-          por: 'El rojo y el azul se toman de posiciones un poco desplazadas en sentidos opuestos: donde hay un borde, los canales no coinciden y asoman franjas de color.' },
-        { c: 'col += 0.08 * (hash(fragCoord + iTime) - 0.5);',
-          o: ['Un grano fino que bulle por toda la imagen, como en una película antigua', 'Rayas horizontales fijas', 'La imagen entera parpadea', 'La imagen se desenfoca'],
-          por: 'Cada píxel recibe un pequeño número al azar, distinto en cada instante porque el tiempo entra en el hash: ruido que cambia sin parar.' },
-        { c: 'col *= 0.9 + 0.1 * sin(3.14159 * fragCoord.y);',
-          o: ['Líneas horizontales finas, como las de un monitor antiguo', 'Líneas verticales', 'Un tablero de ajedrez', 'Grano'],
-          por: 'El factor solo depende de la fila de píxeles, <code>fragCoord.y</code>, y alterna a escala de un par de píxeles: líneas de barrido horizontales.' }
-      ];
-      var c = r.pick(casos);
-      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
-    },
-    ask: function (d) { return 'En la última pasada, con <code>uv</code> de 0 a 1, <code>col</code> el color ya calculado y <code>escena</code> la imagen de partida, ¿qué hace esta línea?<pre class="shd__mini">' + d.codigo + '</pre>'; },
-    fields: function (d) { return [{ name: 'q', label: 'Hace', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
-    sol: function () { return { q: '0' }; },
-    hint: function () { return ['¿De qué depende el efecto: de la distancia al centro, de la fila del píxel, del azar o de un desplazamiento entre canales?']; },
-    steps: function (d) { return [d.por, 'Hace: <strong>' + d.textos[0] + '</strong>.']; },
-    answer: function (d) { return d.textos[0]; }
   });
 
   p.keys([

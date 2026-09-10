@@ -1,6 +1,11 @@
 /* Tema: Divisibilidad, primos, m.c.d. y m.c.m. */
 Course.topic('ar-divisibilidad', function (p) {
 
+  p.puente('En el tema anterior apareció la división con resto: $D = d\\cdot c + r$. Este tema se ' +
+    'ocupa del caso en que el resto es cero, que es más rico de lo que parece: de ahí salen los ' +
+    'primos, la descomposición de cualquier número en primos y dos herramientas, el m.c.d. y el ' +
+    'm.c.m., que volverán en cuanto haya que sumar fracciones.');
+
   p.text('Decimos que $12$ es <strong>divisible</strong> entre $3$ porque la división es exacta: ' +
     'el resto vale cero. Se dice también que $3$ es <em>divisor</em> de $12$, y que $12$ es ' +
     '<em>múltiplo</em> de $3$. Son tres formas de decir lo mismo.');
@@ -50,6 +55,7 @@ Course.topic('ar-divisibilidad', function (p) {
   p.demo({
     title: 'La criba de Eratóstenes',
     intro: 'Ve tachando los múltiplos de cada primo. Lo que quede en pie son todos los primos hasta 100.',
+    predice: '¿Cuántos primos crees que hay entre 1 y 100: unos 10, unos 25 o unos 50? Y otra apuesta: ¿hará falta tachar los múltiplos del 11, o con los del 2, 3, 5 y 7 bastará?',
     build: function (host, d) {
       var N = 100;
       var estado = new Array(N + 1).fill(0);   // 0 vivo, 1 primo confirmado, 2 tachado
@@ -142,6 +148,18 @@ Course.topic('ar-divisibilidad', function (p) {
 
   p.formula('360 = 2^3 \\cdot 3^2 \\cdot 5', 'única descomposición de 360');
 
+  p.ejemplo({
+    title: 'Descomponer un número en primos',
+    enunciado: 'Descomponer $360$ en factores primos, dividiendo siempre por el primo más pequeño que se pueda.',
+    pasos: [
+      { t: '$360$ es par: se divide entre 2 y queda $180$. Sigue siendo par: entre 2, queda $90$. Otra vez: entre 2, queda $45$. Ya van tres doses.', antes: '¿Por qué primo se empieza a dividir un número par?' },
+      { t: '$45$ no es par. Sus cifras suman 9, así que es divisible entre 3: queda $15$. Y $15$ también: queda $5$. Van dos treses.', antes: '$45$ no es par. ¿Cuál es el siguiente primo que hay que probar, y cómo se sabe rápido si divide?' },
+      { t: '$5$ es primo: se divide entre 5 y queda $1$. Se acabó.' },
+      { t: 'Se juntan los primos que se han usado: $360 = 2\\cdot 2\\cdot 2\\cdot 3\\cdot 3\\cdot 5 = 2^3\\cdot 3^2\\cdot 5$.', antes: '¿Cómo se escribe el resultado con potencias?' }
+    ],
+    cierre: 'Da igual el orden en que dividas: si empiezas por el 5 y luego por el 3, acabas con los mismos primos y los mismos exponentes. Eso es lo que dice el teorema fundamental de la aritmética.'
+  });
+
   p.demo({
     title: 'Fábrica de descomposiciones',
     intro: 'Elige un número y mira de qué primos está hecho, cuántos divisores tiene y por qué.',
@@ -202,6 +220,12 @@ Course.topic('ar-divisibilidad', function (p) {
     'trozos iguales lo más grandes posible</em>, es m.c.d. Si habla de <em>coincidir, repetirse o ' +
     'volver a encontrarse</em>, es m.c.m.');
 
+  p.comprueba('Un faro emite un destello cada 12 segundos y otro cada 20. Los dos acaban de destellar a la vez. ¿Cuándo volverán a coincidir?', [
+    { t: 'A los 4 segundos, el m.c.d.', ok: false, por: 'A los 4 segundos no ha destellado ninguno de los dos. «Volver a coincidir» pide un múltiplo común, no un divisor.' },
+    { t: 'A los 60 segundos, el m.c.m.', ok: true, por: '60 es el primer número que es múltiplo de 12 y de 20 a la vez: el primero destella en el 12, 24, 36, 48, 60 y el segundo en el 20, 40, 60.' },
+    { t: 'A los 240 segundos, el producto', ok: false, por: 'A los 240 también coinciden, pero ya lo han hecho antes, a los 60. El producto solo es el primer encuentro cuando los dos números no tienen factores comunes.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('El mínimo común múltiplo es la respuesta a «¿cuándo volverá a coincidir?»: dos autobuses que ' +
     'salen cada 12 y cada 18 minutos vuelven a coincidir a los 36; dos engranajes de 8 y 12 dientes ' +
@@ -222,15 +246,10 @@ Course.topic('ar-divisibilidad', function (p) {
       return { n: n, div: div, si: n % div === 0 };
     },
     ask: function (d) {
-      return '¿Es $' + U.miles(d.n) + '$ divisible entre $' + d.div + '$? Responde <code>si</code> o <code>no</code>.';
+      return '¿Es $' + U.miles(d.n) + '$ divisible entre $' + d.div + '$? Decídelo con el criterio, sin hacer la división.';
     },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'Sí', v: 'si' }, { t: 'No', v: 'no' }] }],
     sol: function (d) { return { r: d.si ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var t = v.raw.r.toLowerCase().replace(/[íÍ]/g, 'i');
-      if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe exactamente <code>si</code> o <code>no</code>.' };
-      return (t === 'si') === d.si;
-    },
     hint: function (d) {
       var h = {
         2: 'Mira solo la última cifra.', 5: 'Mira solo la última cifra.',

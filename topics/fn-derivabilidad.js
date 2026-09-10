@@ -198,6 +198,41 @@ Course.topic('fn-derivabilidad', function (p) {
     answer: function (d) { return { derivable: 'Continua y derivable', pico: 'Continua, con pico', vertical: 'Continua, tangente vertical', discontinua: 'No continua' }[d.t]; }
   });
 
+  p.exercise({
+    title: 'Un valor absoluto que no deja derivar',
+    level: 'medio',
+    gen: function (r) {
+      var c = r.int(1, 4), lado = r.pick([1, -1]);
+      return { c: c, x0: lado * c, lado: lado };
+    },
+    ask: function (d) {
+      return 'Calcula las derivadas laterales de $f(x) = |x^2 - ' + (d.c * d.c) + '|$ en $x = ' + d.x0 + '$.';
+    },
+    fields: [{ name: 'i', label: "f'(a⁻)", w: 'tiny' }, { name: 'd', label: "f'(a⁺)", w: 'tiny' }],
+    sol: function (d) {
+      // en x = c: a la izquierda (−c<x<c) f = c²−x², derivada −2x → −2c; a la derecha f = x²−c² → 2c
+      // en x = −c: a la izquierda (x<−c) f = x²−c², derivada 2x → −2c; a la derecha f = c²−x² → 2c
+      return { i: -2 * d.c, d: 2 * d.c };
+    },
+    errores: [{
+      si: function (v, d) { return v.i === 2 * d.c && v.d === -2 * d.c; },
+      msg: function (v, d) { return 'Están cambiadas de lado: estudia el signo de $x^2 - ' + (d.c * d.c) + '$ a la izquierda y a la derecha del punto antes de quitar el valor absoluto.'; }
+    }],
+    hint: function (d) {
+      return ['Quita el valor absoluto: $x^2 - ' + (d.c * d.c) + '$ es negativo entre $-' + d.c + '$ y $' + d.c + '$ y positivo fuera.',
+        'Donde es negativo, $f(x) = ' + (d.c * d.c) + ' - x^2$; donde es positivo, $f(x) = x^2 - ' + (d.c * d.c) + '$. Deriva cada uno.'];
+    },
+    steps: function (d) {
+      if (d.lado > 0) {
+        return ['A la izquierda de $' + d.c + '$ (dentro del intervalo) $f(x) = ' + (d.c * d.c) + ' - x^2$ y $f\'(x) = -2x$: $f\'(' + d.c + '^-) = ' + (-2 * d.c) + '$.',
+          'A la derecha, $f(x) = x^2 - ' + (d.c * d.c) + '$ y $f\'(x) = 2x$: $f\'(' + d.c + '^+) = ' + (2 * d.c) + '$.', 'Distintas: no es derivable en $x = ' + d.c + '$ (hay un pico).'];
+      }
+      return ['A la izquierda de $-' + d.c + '$ (fuera) $f(x) = x^2 - ' + (d.c * d.c) + '$ y $f\'(x) = 2x$: $f\'(-' + d.c + '^-) = ' + (-2 * d.c) + '$.',
+        'A la derecha (dentro), $f(x) = ' + (d.c * d.c) + ' - x^2$ y $f\'(x) = -2x$: $f\'(-' + d.c + '^+) = ' + (2 * d.c) + '$.', 'Distintas: no es derivable en $x = -' + d.c + '$.'];
+    },
+    answer: function (d) { return "f'(a⁻) = " + (-2 * d.c) + ", f'(a⁺) = " + (2 * d.c); }
+  });
+
   p.problem({
     title: 'Los parámetros que hacen derivable la función',
     level: 'avanzado',
@@ -246,41 +281,6 @@ Course.topic('fn-derivabilidad', function (p) {
         answer: function (d) { return String(d.der); }
       }
     ]
-  });
-
-  p.exercise({
-    title: 'Un valor absoluto que no deja derivar',
-    level: 'medio',
-    gen: function (r) {
-      var c = r.int(1, 4), lado = r.pick([1, -1]);
-      return { c: c, x0: lado * c, lado: lado };
-    },
-    ask: function (d) {
-      return 'Calcula las derivadas laterales de $f(x) = |x^2 - ' + (d.c * d.c) + '|$ en $x = ' + d.x0 + '$.';
-    },
-    fields: [{ name: 'i', label: "f'(a⁻)", w: 'tiny' }, { name: 'd', label: "f'(a⁺)", w: 'tiny' }],
-    sol: function (d) {
-      // en x = c: a la izquierda (−c<x<c) f = c²−x², derivada −2x → −2c; a la derecha f = x²−c² → 2c
-      // en x = −c: a la izquierda (x<−c) f = x²−c², derivada 2x → −2c; a la derecha f = c²−x² → 2c
-      return { i: -2 * d.c, d: 2 * d.c };
-    },
-    errores: [{
-      si: function (v, d) { return v.i === 2 * d.c && v.d === -2 * d.c; },
-      msg: function (v, d) { return 'Están cambiadas de lado: estudia el signo de $x^2 - ' + (d.c * d.c) + '$ a la izquierda y a la derecha del punto antes de quitar el valor absoluto.'; }
-    }],
-    hint: function (d) {
-      return ['Quita el valor absoluto: $x^2 - ' + (d.c * d.c) + '$ es negativo entre $-' + d.c + '$ y $' + d.c + '$ y positivo fuera.',
-        'Donde es negativo, $f(x) = ' + (d.c * d.c) + ' - x^2$; donde es positivo, $f(x) = x^2 - ' + (d.c * d.c) + '$. Deriva cada uno.'];
-    },
-    steps: function (d) {
-      if (d.lado > 0) {
-        return ['A la izquierda de $' + d.c + '$ (dentro del intervalo) $f(x) = ' + (d.c * d.c) + ' - x^2$ y $f\'(x) = -2x$: $f\'(' + d.c + '^-) = ' + (-2 * d.c) + '$.',
-          'A la derecha, $f(x) = x^2 - ' + (d.c * d.c) + '$ y $f\'(x) = 2x$: $f\'(' + d.c + '^+) = ' + (2 * d.c) + '$.', 'Distintas: no es derivable en $x = ' + d.c + '$ (hay un pico).'];
-      }
-      return ['A la izquierda de $-' + d.c + '$ (fuera) $f(x) = x^2 - ' + (d.c * d.c) + '$ y $f\'(x) = 2x$: $f\'(-' + d.c + '^-) = ' + (-2 * d.c) + '$.',
-        'A la derecha (dentro), $f(x) = ' + (d.c * d.c) + ' - x^2$ y $f\'(x) = -2x$: $f\'(-' + d.c + '^+) = ' + (2 * d.c) + '$.', 'Distintas: no es derivable en $x = -' + d.c + '$.'];
-    },
-    answer: function (d) { return "f'(a⁻) = " + (-2 * d.c) + ", f'(a⁺) = " + (2 * d.c); }
   });
 
   p.keys([

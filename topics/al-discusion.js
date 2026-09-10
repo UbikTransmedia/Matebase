@@ -228,6 +228,37 @@ Course.topic('al-discusion', function (p) {
     answer: function (d) { return 'x = ' + d.sol[0] + ', y = ' + d.sol[1] + ', z = ' + d.sol[2]; }
   });
 
+  p.exercise({
+    title: 'El homogéneo con soluciones no triviales',
+    level: 'medio',
+    gen: function (r) {
+      var a = r.pm(0, 3), b = r.pm(0, 3), c = r.pm(0, 3), d0 = r.pm(0, 3), f = r.pm(0, 3), g = r.pm(0, 3), h = r.pm(0, 3), i = r.pm(0, 3);
+      // A = [[a,b,c],[d0,k,f],[g,h,i]]: det = k(a i - c g) + resto
+      var coef = a * i - c * g;
+      if (!coef) return null;
+      var resto = ML.det3([[a, b, c], [d0, 0, f], [g, h, i]]);
+      return { M: [[a, b, c], [d0, 'k', f], [g, h, i]], coef: coef, resto: resto, k: F(-resto, coef), filas: [[a, b, c], [d0, null, f], [g, h, i]] };
+    },
+    ask: function (d) {
+      var eq = function (f, i) {
+        var s = ML.termTex(f[0], 'x', 1, true);
+        s += i === 1 ? (s ? ' + ky' : 'ky') : ML.termTex(f[1], 'y', 1, s === '');
+        s += ML.termTex(f[2], 'z', 1, s === '');
+        return (s || '0') + ' = 0';
+      };
+      return 'Halla $k$ para que el sistema homogéneo $\\begin{cases}' + d.filas.map(eq).join(' \\\\ ') + '\\end{cases}$ tenga soluciones distintas de la trivial. (Vale una fracción.)';
+    },
+    fields: [{ name: 'k', label: 'k =', w: 'tiny' }],
+    sol: function (d) { return { k: d.k.val() }; },
+    tol: 1e-9,
+    hint: function () { return ['Un homogéneo tiene soluciones no triviales solo si $\\det A = 0$.', 'El determinante es de primer grado en $k$: iguálalo a cero y despeja.']; },
+    steps: function (d) {
+      return ['$\\det A = ' + ML.matTex(d.M, 'vmatrix') + ' = ' + ML.termTex(d.coef, 'k', 1, true) + ML.termTex(d.resto, '', 0, false) + '$',
+        'Igualando a cero: $k = ' + d.k.tex() + '$. Para ese valor, el sistema es compatible indeterminado.'];
+    },
+    answer: function (d) { return '$k = ' + d.k.tex() + '$'; }
+  });
+
   p.problem({
     title: 'Discute y resuelve el sistema',
     level: 'avanzado',
@@ -316,37 +347,6 @@ Course.topic('al-discusion', function (p) {
         answer: function (d) { return '$x = ' + d.s0[0].tex() + '$, $y = ' + d.s0[1].tex() + '$, $z = ' + d.s0[2].tex() + '$'; }
       }
     ]
-  });
-
-  p.exercise({
-    title: 'El homogéneo con soluciones no triviales',
-    level: 'medio',
-    gen: function (r) {
-      var a = r.pm(0, 3), b = r.pm(0, 3), c = r.pm(0, 3), d0 = r.pm(0, 3), f = r.pm(0, 3), g = r.pm(0, 3), h = r.pm(0, 3), i = r.pm(0, 3);
-      // A = [[a,b,c],[d0,k,f],[g,h,i]]: det = k(a i - c g) + resto
-      var coef = a * i - c * g;
-      if (!coef) return null;
-      var resto = ML.det3([[a, b, c], [d0, 0, f], [g, h, i]]);
-      return { M: [[a, b, c], [d0, 'k', f], [g, h, i]], coef: coef, resto: resto, k: F(-resto, coef), filas: [[a, b, c], [d0, null, f], [g, h, i]] };
-    },
-    ask: function (d) {
-      var eq = function (f, i) {
-        var s = ML.termTex(f[0], 'x', 1, true);
-        s += i === 1 ? (s ? ' + ky' : 'ky') : ML.termTex(f[1], 'y', 1, s === '');
-        s += ML.termTex(f[2], 'z', 1, s === '');
-        return (s || '0') + ' = 0';
-      };
-      return 'Halla $k$ para que el sistema homogéneo $\\begin{cases}' + d.filas.map(eq).join(' \\\\ ') + '\\end{cases}$ tenga soluciones distintas de la trivial. (Vale una fracción.)';
-    },
-    fields: [{ name: 'k', label: 'k =', w: 'tiny' }],
-    sol: function (d) { return { k: d.k.val() }; },
-    tol: 1e-9,
-    hint: function () { return ['Un homogéneo tiene soluciones no triviales solo si $\\det A = 0$.', 'El determinante es de primer grado en $k$: iguálalo a cero y despeja.']; },
-    steps: function (d) {
-      return ['$\\det A = ' + ML.matTex(d.M, 'vmatrix') + ' = ' + ML.termTex(d.coef, 'k', 1, true) + ML.termTex(d.resto, '', 0, false) + '$',
-        'Igualando a cero: $k = ' + d.k.tex() + '$. Para ese valor, el sistema es compatible indeterminado.'];
-    },
-    answer: function (d) { return '$k = ' + d.k.tex() + '$'; }
   });
 
   p.keys([

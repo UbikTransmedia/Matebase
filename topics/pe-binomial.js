@@ -103,6 +103,30 @@ Course.topic('pe-binomial', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Media y desviación típica',
+    level: 'basico',
+    gen: function (r) {
+      var n = r.int(5, 200);
+      var prob = r.pick([0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8]);
+      return { n: n, p: prob, mu: n * prob, sd: Math.sqrt(n * prob * (1 - prob)) };
+    },
+    ask: function (d) {
+      return 'Para $X \\sim B(' + d.n + ',\\ ' + U.fmt(d.p, 2) + ')$, calcula la media y la ' +
+        'desviación típica (cuatro decimales).';
+    },
+    fields: [{ name: 'm', label: 'Media', w: 'wide' }, { name: 's', label: 'Desv. típica', w: 'wide' }],
+    sol: function (d) { return { m: U.round(d.mu, 6), s: U.round(d.sd, 6) }; },
+    tol: 3e-4,
+    hint: function () { return '$\\mu = np$ y $\\sigma = \\sqrt{np(1-p)}$.'; },
+    steps: function (d) {
+      return ['$\\mu = np = ' + d.n + ' \\cdot ' + U.fmt(d.p, 2) + ' = ' + U.fmt(d.mu, 4) + '$',
+        '$\\sigma = \\sqrt{np(1-p)} = \\sqrt{' + d.n + ' \\cdot ' + U.fmt(d.p, 2) + ' \\cdot ' + U.fmt(1 - d.p, 2) + '}$',
+        '$= \\sqrt{' + U.fmt(d.n * d.p * (1 - d.p), 4) + '} = ' + U.fmt(d.sd, 4) + '$'];
+    },
+    answer: function (d) { return 'μ = ' + U.fmt(d.mu, 4) + ', σ = ' + U.fmt(d.sd, 4); }
+  });
+
+  p.exercise({
     title: 'Probabilidad de un valor concreto',
     level: 'medio',
     gen: function (r) {
@@ -126,30 +150,6 @@ Course.topic('pe-binomial', function (p) {
         'Multiplicando los tres: $' + U.fmt(d.val, 4) + '$'];
     },
     answer: function (d) { return U.fmt(d.val, 4); }
-  });
-
-  p.exercise({
-    title: 'Media y desviación típica',
-    level: 'basico',
-    gen: function (r) {
-      var n = r.int(5, 200);
-      var prob = r.pick([0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8]);
-      return { n: n, p: prob, mu: n * prob, sd: Math.sqrt(n * prob * (1 - prob)) };
-    },
-    ask: function (d) {
-      return 'Para $X \\sim B(' + d.n + ',\\ ' + U.fmt(d.p, 2) + ')$, calcula la media y la ' +
-        'desviación típica (cuatro decimales).';
-    },
-    fields: [{ name: 'm', label: 'Media', w: 'wide' }, { name: 's', label: 'Desv. típica', w: 'wide' }],
-    sol: function (d) { return { m: U.round(d.mu, 6), s: U.round(d.sd, 6) }; },
-    tol: 3e-4,
-    hint: function () { return '$\\mu = np$ y $\\sigma = \\sqrt{np(1-p)}$.'; },
-    steps: function (d) {
-      return ['$\\mu = np = ' + d.n + ' \\cdot ' + U.fmt(d.p, 2) + ' = ' + U.fmt(d.mu, 4) + '$',
-        '$\\sigma = \\sqrt{np(1-p)} = \\sqrt{' + d.n + ' \\cdot ' + U.fmt(d.p, 2) + ' \\cdot ' + U.fmt(1 - d.p, 2) + '}$',
-        '$= \\sqrt{' + U.fmt(d.n * d.p * (1 - d.p), 4) + '} = ' + U.fmt(d.sd, 4) + '$'];
-    },
-    answer: function (d) { return 'μ = ' + U.fmt(d.mu, 4) + ', σ = ' + U.fmt(d.sd, 4); }
   });
 
   p.exercise({

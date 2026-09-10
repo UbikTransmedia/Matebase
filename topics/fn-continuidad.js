@@ -292,6 +292,34 @@ Course.topic('fn-continuidad', function (p) {
     answer: function (d) { return '[' + U.fmt(d.a, 3) + ', ' + U.fmt(d.b, 3) + ']'; }
   });
 
+  p.exercise({
+    title: '¿Garantiza Weierstrass máximo y mínimo?',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { f: 'x^2 - 4x', I: '[0,\\ 5]', ok: 'si', por: 'es un polinomio, continuo, en un intervalo cerrado' },
+        { f: 'x^2 - 4x', I: '(0,\\ 5)', ok: 'abierto', por: 'el intervalo es abierto' },
+        { f: '\\dfrac{1}{x}', I: '[-1,\\ 1]', ok: 'disc', por: 'no es continua en $x = 0$' },
+        { f: '\\operatorname{sen} x', I: '[0,\\ \\pi]', ok: 'si', por: 'el seno es continuo y el intervalo cerrado' },
+        { f: '\\ln x', I: '(0,\\ 1]', ok: 'abierto', por: 'el intervalo no es cerrado (le falta el 0)' },
+        { f: '\\dfrac{x}{x - 2}', I: '[1,\\ 3]', ok: 'disc', por: 'no es continua en $x = 2$' },
+        { f: 'e^{-x^2}', I: '[-3,\\ 3]', ok: 'si', por: 'es continua y el intervalo es cerrado' }
+      ];
+      return r.pick(casos);
+    },
+    ask: function (d) { return '¿Asegura el teorema de Weierstrass que $f(x) = ' + d.f + '$ alcanza un máximo y un mínimo absolutos en $' + d.I + '$?'; },
+    fields: [{
+      name: 't', label: 'Respuesta', opts: [
+        { t: 'Sí', v: 'si' },
+        { t: 'No se puede asegurar: el intervalo no es cerrado', v: 'abierto' },
+        { t: 'No se puede asegurar: la función no es continua en él', v: 'disc' }]
+    }],
+    sol: function (d) { return { t: d.ok }; },
+    hint: function () { return 'Dos hipótesis: función continua e intervalo cerrado, con los dos extremos incluidos.'; },
+    steps: function (d) { return ['Se observa que ' + d.por + '.', d.ok === 'si' ? 'Las hipótesis se cumplen: sí hay máximo y mínimo absolutos.' : 'Falla una hipótesis: el teorema no garantiza nada (puede haberlos o no).']; },
+    answer: function (d) { return { si: 'Sí', abierto: 'No: intervalo no cerrado', disc: 'No: no es continua' }[d.ok]; }
+  });
+
   p.problem({
     title: 'Demostrar que una ecuación tiene solución',
     level: 'avanzado',
@@ -346,34 +374,6 @@ Course.topic('fn-continuidad', function (p) {
         answer: function () { return 'Exactamente una'; }
       }
     ]
-  });
-
-  p.exercise({
-    title: '¿Garantiza Weierstrass máximo y mínimo?',
-    level: 'medio',
-    gen: function (r) {
-      var casos = [
-        { f: 'x^2 - 4x', I: '[0,\\ 5]', ok: 'si', por: 'es un polinomio, continuo, en un intervalo cerrado' },
-        { f: 'x^2 - 4x', I: '(0,\\ 5)', ok: 'abierto', por: 'el intervalo es abierto' },
-        { f: '\\dfrac{1}{x}', I: '[-1,\\ 1]', ok: 'disc', por: 'no es continua en $x = 0$' },
-        { f: '\\operatorname{sen} x', I: '[0,\\ \\pi]', ok: 'si', por: 'el seno es continuo y el intervalo cerrado' },
-        { f: '\\ln x', I: '(0,\\ 1]', ok: 'abierto', por: 'el intervalo no es cerrado (le falta el 0)' },
-        { f: '\\dfrac{x}{x - 2}', I: '[1,\\ 3]', ok: 'disc', por: 'no es continua en $x = 2$' },
-        { f: 'e^{-x^2}', I: '[-3,\\ 3]', ok: 'si', por: 'es continua y el intervalo es cerrado' }
-      ];
-      return r.pick(casos);
-    },
-    ask: function (d) { return '¿Asegura el teorema de Weierstrass que $f(x) = ' + d.f + '$ alcanza un máximo y un mínimo absolutos en $' + d.I + '$?'; },
-    fields: [{
-      name: 't', label: 'Respuesta', opts: [
-        { t: 'Sí', v: 'si' },
-        { t: 'No se puede asegurar: el intervalo no es cerrado', v: 'abierto' },
-        { t: 'No se puede asegurar: la función no es continua en él', v: 'disc' }]
-    }],
-    sol: function (d) { return { t: d.ok }; },
-    hint: function () { return 'Dos hipótesis: función continua e intervalo cerrado, con los dos extremos incluidos.'; },
-    steps: function (d) { return ['Se observa que ' + d.por + '.', d.ok === 'si' ? 'Las hipótesis se cumplen: sí hay máximo y mínimo absolutos.' : 'Falla una hipótesis: el teorema no garantiza nada (puede haberlos o no).']; },
-    answer: function (d) { return { si: 'Sí', abierto: 'No: intervalo no cerrado', disc: 'No: no es continua' }[d.ok]; }
   });
 
   p.keys([

@@ -1,12 +1,21 @@
 /* Tema: Proporcionalidad y porcentajes */
 Course.topic('ar-proporcionalidad', function (p) {
 
+  p.puente('Las fracciones equivalentes del tema de fracciones tenían una propiedad: los productos ' +
+    'cruzados coinciden. Ese detalle, aplicado a cantidades del mundo —kilos y euros, obreros y ' +
+    'días—, es toda la proporcionalidad. El tema añade después los porcentajes, que son fracciones ' +
+    'de denominador 100, y termina en el interés, que es un porcentaje aplicado muchas veces seguidas.');
+
   p.text('Una <strong>razón</strong> entre dos cantidades es su cociente: $\\frac{a}{b}$. Una ' +
     '<strong>proporción</strong> es la igualdad de dos razones. Y de ahí sale la herramienta más ' +
     'utilizada de todas las matemáticas escolares: la regla de tres.');
 
   p.formula('\\frac{a}{b} = \\frac{c}{d} \\quad\\Longleftrightarrow\\quad a\\cdot d = b\\cdot c',
-    'propiedad fundamental de las proporciones');
+    'propiedad fundamental de las proporciones',
+    'Se lee: <em>«a partido por b es igual a c partido por d si y solo si a por d es igual a b por ' +
+    'c»</em>.<br><br>Una <strong>regla de tres</strong> es exactamente esto con una de las cuatro ' +
+    'cantidades desconocida: si 3 kg cuestan 6 €, ¿cuánto cuestan 5 kg? Se escribe ' +
+    '$\\frac{3}{6} = \\frac{5}{x}$, se multiplica en cruz, $3x = 30$, y sale $x = 10$.');
 
   p.section('Directa o inversa');
 
@@ -24,6 +33,23 @@ Course.topic('ar-proporcionalidad', function (p) {
   p.note('Antes de aplicar ninguna regla, pregúntate: <em>si una magnitud aumenta, ¿la otra aumenta ' +
     'o disminuye?</em> Más kilos de fruta, más precio → directa. Más obreros, menos tiempo → inversa. ' +
     'Equivocarse aquí es equivocarse en todo el problema.', 'warn', 'El paso que hay que pensar');
+
+  p.comprueba('Un coche a 80 km/h tarda 3 horas en un viaje. ¿Qué tipo de proporcionalidad hay entre la velocidad y el tiempo?', [
+    { t: 'Directa: más velocidad, más tiempo', ok: false, por: 'Al ir más deprisa se tarda <em>menos</em>. Cuando una sube y la otra baja, es inversa.' },
+    { t: 'Inversa: más velocidad, menos tiempo', ok: true, por: 'Lo que se conserva es el producto velocidad × tiempo, que es la distancia: 240 km. A 120 km/h tardaría 2 horas.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Una regla de tres, pensada antes de calcular',
+    enunciado: 'Un grifo llena una piscina en 12 horas. Si se abren 3 grifos iguales, ¿cuánto tardan?',
+    pasos: [
+      { t: '<strong>Decidir el tipo.</strong> Más grifos, ¿más tiempo o menos? Menos: la proporcionalidad es <strong>inversa</strong>. Ya sabemos que la respuesta será menor que 12.', antes: 'Antes de cualquier cuenta: si hay más grifos, ¿el tiempo sube o baja?' },
+      { t: '<strong>Lo que se conserva.</strong> En la inversa, el producto es constante: $1\\cdot 12 = 12$ «grifos-hora» es el trabajo total de llenar la piscina.', antes: 'En una proporcionalidad inversa, ¿qué cantidad no cambia?' },
+      { t: '<strong>Calcular.</strong> Con 3 grifos: $3\\cdot t = 12$, así que $t = 4$ horas.' },
+      { t: '<strong>Comprobar.</strong> 4 es menor que 12, como se había previsto. Y si hubiéramos aplicado una regla de tres directa habría salido 36 horas: tres grifos tardando más que uno, un disparate que el primer paso ya descartaba.', antes: '¿Qué habría salido con una regla de tres directa? ¿Tiene sentido?' }
+    ],
+    cierre: 'El primer paso no es una formalidad: es el que decide si el resultado es 4 o 36.'
+  });
 
   p.demo({
     title: 'Directa frente a inversa',
@@ -94,6 +120,7 @@ Course.topic('ar-proporcionalidad', function (p) {
   p.demo({
     title: 'Subir un 20 % y bajar un 20 % no te deja igual',
     intro: 'Encadena dos variaciones y comprueba en qué acaba el precio. La sorpresa es que el orden da igual, pero el resultado nunca vuelve al punto de partida.',
+    predice: 'Un precio de 200 € sube un 20 % y después baja un 20 %. Antes de mirar: ¿acaba en 200 €, por encima o por debajo?',
     build: function (host, d) {
       var p0 = 200, v1 = 20, v2 = -20;
       var out = W.readout(host, '');
@@ -135,6 +162,12 @@ Course.topic('ar-proporcionalidad', function (p) {
     'necesita subir un 100 % para recuperarse. Y ojo con las noticias: pasar del 4 % al 6 % de paro ' +
     'es subir <em>dos puntos</em>, pero un 50 % en términos relativos; ambas cifras son ciertas y ' +
     'cuentan historias muy distintas.');
+
+  p.comprueba('Una camiseta de 40 € tiene un 25 % de descuento. ¿Qué operación da el precio final en un solo paso?', [
+    { t: '$40\\cdot 0{,}25$', ok: false, por: 'Eso es el descuento, 10 €, no lo que pagas. Habría que restarlo todavía.' },
+    { t: '$40\\cdot 0{,}75$', ok: true, por: 'Bajar un 25 % es quedarse con el 75 %: el índice de variación es $1 - 0{,}25 = 0{,}75$, y $40\\cdot 0{,}75 = 30$ €.' },
+    { t: '$40 - 25$', ok: false, por: 'El 25 es un porcentaje, no euros. Restarlo tal cual mezcla dos cosas distintas.' }
+  ]);
 
   p.section('Interés');
 
@@ -190,30 +223,6 @@ Course.topic('ar-proporcionalidad', function (p) {
   });
 
   p.exercise({
-    title: 'Regla de tres inversa',
-    level: 'medio',
-    gen: function (r) {
-      var k = r.pick([24, 36, 48, 60, 72, 120]);
-      var a = r.pick([2, 3, 4, 6]), c = r.pick([2, 3, 4, 5, 6, 8]);
-      if (a === c || k % a || k % c) return null;
-      return { a: a, ta: k / a, c: c, res: k / c, k: k };
-    },
-    ask: function (d) {
-      return '$' + d.a + '$ obreros tardan $' + d.ta + '$ días en hacer una obra. ' +
-        'Trabajando al mismo ritmo, ¿cuántos días tardarán $' + d.c + '$ obreros?';
-    },
-    fields: [{ name: 'v', label: 'Días', w: 'tiny' }],
-    sol: function (d) { return { v: d.res }; },
-    hint: function () { return 'Más obreros, menos días: es inversa. Lo que se conserva es el producto obreros × días.'; },
-    steps: function (d) {
-      return ['Más obreros significa menos días: la proporcionalidad es <strong>inversa</strong>.',
-        'Lo constante es el trabajo total: $' + d.a + ' \\cdot ' + d.ta + ' = ' + d.k + '$ jornadas.',
-        'Con $' + d.c + '$ obreros: $' + d.k + ' : ' + d.c + ' = ' + d.res + '$ días.'];
-    },
-    answer: function (d) { return d.res + ' días.'; }
-  });
-
-  p.exercise({
     title: 'Descuentos y subidas',
     level: 'basico',
     gen: function (r) {
@@ -240,6 +249,30 @@ Course.topic('ar-proporcionalidad', function (p) {
         ' €, que se ' + (d.sube ? 'suman' : 'restan') + '.'];
     },
     answer: function (d) { return U.fmt(d.res, 2) + ' €'; }
+  });
+
+  p.exercise({
+    title: 'Regla de tres inversa',
+    level: 'medio',
+    gen: function (r) {
+      var k = r.pick([24, 36, 48, 60, 72, 120]);
+      var a = r.pick([2, 3, 4, 6]), c = r.pick([2, 3, 4, 5, 6, 8]);
+      if (a === c || k % a || k % c) return null;
+      return { a: a, ta: k / a, c: c, res: k / c, k: k };
+    },
+    ask: function (d) {
+      return '$' + d.a + '$ obreros tardan $' + d.ta + '$ días en hacer una obra. ' +
+        'Trabajando al mismo ritmo, ¿cuántos días tardarán $' + d.c + '$ obreros?';
+    },
+    fields: [{ name: 'v', label: 'Días', w: 'tiny' }],
+    sol: function (d) { return { v: d.res }; },
+    hint: function () { return 'Más obreros, menos días: es inversa. Lo que se conserva es el producto obreros × días.'; },
+    steps: function (d) {
+      return ['Más obreros significa menos días: la proporcionalidad es <strong>inversa</strong>.',
+        'Lo constante es el trabajo total: $' + d.a + ' \\cdot ' + d.ta + ' = ' + d.k + '$ jornadas.',
+        'Con $' + d.c + '$ obreros: $' + d.k + ' : ' + d.c + ' = ' + d.res + '$ días.'];
+    },
+    answer: function (d) { return d.res + ' días.'; }
   });
 
   p.exercise({

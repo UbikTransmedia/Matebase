@@ -36,18 +36,28 @@ Course.topic('ar-conjuntos', function (p) {
   /* ---------------------------------------------------------------- */
   p.section('Por qué √2 no es una fracción');
 
-  p.text('Este argumento merece verse entero, porque es el primer ejemplo de una demostración por ' +
-    '<em>reducción al absurdo</em>: se supone lo contrario de lo que se quiere probar y se llega a ' +
-    'una contradicción.');
+  p.text('Este argumento merece verse entero, porque es el ejemplo clásico de una demostración por ' +
+    '<em>reducción al absurdo</em>, el método de [[lg-demostracion]]: se supone lo contrario de lo que ' +
+    'se quiere probar y se llega a una contradicción.');
 
-  p.list([
-    'Supongamos que $\\sqrt{2} = \\frac{a}{b}$, una fracción ya <strong>irreducible</strong>.',
-    'Elevando al cuadrado: $2 = \\frac{a^2}{b^2}$, o sea $a^2 = 2b^2$.',
-    'Entonces $a^2$ es par, y por tanto $a$ también es par (el cuadrado de un impar es impar).',
-    'Si $a = 2k$, entonces $4k^2 = 2b^2$, es decir $b^2 = 2k^2$: también $b$ es par.',
-    'Pero si $a$ y $b$ son los dos pares, la fracción <strong>no era irreducible</strong>. Contradicción.',
-    'Conclusión: no existe tal fracción. $\\sqrt{2}$ es irracional.'
-  ], true);
+  p.ejemplo({
+    title: 'La demostración, paso a paso',
+    enunciado: 'Demostrar que $\\sqrt{2}$ no es ninguna fracción de enteros.',
+    pasos: [
+      { t: 'Supongamos lo contrario: que $\\sqrt{2} = \\frac{a}{b}$ con $a$ y $b$ enteros, y que la fracción ya está <strong>simplificada</strong> (si no lo estuviera, se simplifica antes). Ese detalle será el que estalle al final.', antes: 'Para razonar por absurdo, ¿qué hay que suponer?' },
+      { t: 'Elevando al cuadrado: $2 = \\frac{a^2}{b^2}$, o sea $a^2 = 2b^2$. Así que $a^2$ es par.', antes: '¿Cómo quitarías la raíz de la igualdad?' },
+      { t: 'Si $a^2$ es par, $a$ es par, porque el cuadrado de un impar es impar (lo demostraste por contrarrecíproco en el tema de demostración). Escribimos $a = 2k$.', antes: '$a^2$ es par. ¿Qué se puede decir de $a$?' },
+      { t: 'Sustituyendo: $(2k)^2 = 2b^2$, es decir $4k^2 = 2b^2$, y dividiendo entre 2, $b^2 = 2k^2$. Con el mismo argumento, $b$ también es par.', antes: 'Sustituye $a = 2k$ en $a^2 = 2b^2$. ¿Qué sale sobre $b$?' },
+      { t: '<strong>Contradicción</strong>: $a$ y $b$ son los dos pares, así que la fracción se podía simplificar entre 2, y habíamos supuesto que ya estaba simplificada.' },
+      { t: 'La suposición era imposible: no existe esa fracción. $\\sqrt{2}$ es irracional. ∎' }
+    ],
+    cierre: 'Fíjate en dónde se usó cada hipótesis: la raíz, en el paso 2; que la fracción era irreducible, en el 5. Una demostración por absurdo funciona cuando la suposición falsa acaba chocando con algo que sí es cierto.'
+  });
+
+  p.comprueba('¿Es $0{,}\\overline{3} = 0{,}333\\ldots$ un número racional?', [
+    { t: 'No: tiene infinitas cifras decimales', ok: false, por: 'Tener infinitas cifras no basta para ser irracional. Lo que importa es si hay periodo, y aquí lo hay.' },
+    { t: 'Sí: es $\\frac{1}{3}$', ok: true, por: 'Todo decimal periódico es una fracción; la generatriz da $\\frac{3}{9} = \\frac{1}{3}$. Irracional es el que no tiene periodo, como $\\pi$.' }
+  ]);
 
   /* ---------------------------------------------------------------- */
   p.util('Tienes un número irracional en el bolsillo: el folio A4. Sus lados están en razón $\\sqrt{2}$ a ' +
@@ -65,6 +75,7 @@ Course.topic('ar-conjuntos', function (p) {
   p.demo({
     title: 'Localizar números en la recta',
     intro: 'Arrastra el punto y mira a qué familia pertenece el número más cercano de cada tipo. Fíjate en lo apretados que están los racionales y en que aun así no llegan a llenarlo todo.',
+    predice: 'Entre $\\frac{3}{4}$ y $\\frac{3}{2}$, ¿cuántos números racionales crees que hay: unos pocos, muchos o infinitos? ¿Y hay algún irracional entre ellos?',
     build: function (host, d) {
       var out = W.readout(host, '');
       var notables = [
@@ -194,14 +205,9 @@ Course.topic('ar-conjuntos', function (p) {
       var x = r.pick(casos);
       return { t: x.t, c: x.c };
     },
-    ask: function (d) {
-      return '¿Cuál es el conjunto <strong>más pequeño</strong> al que pertenece $' + d.t + '$?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> para $\\mathbb{N}$, ' +
-        '<code>2</code> para $\\mathbb{Z}$, <code>3</code> para $\\mathbb{Q}$, ' +
-        '<code>4</code> para irracional.</span>';
-    },
-    fields: [{ name: 'c', label: 'Conjunto', w: 'tiny' }],
-    sol: function (d) { return { c: d.c }; },
+    ask: function (d) { return '¿Cuál es el conjunto <strong>más pequeño</strong> al que pertenece $' + d.t + '$?'; },
+    fields: [{ name: 'c', label: 'Conjunto', opts: [{ t: '$\\mathbb{N}$, natural', v: '1' }, { t: '$\\mathbb{Z}$, entero', v: '2' }, { t: '$\\mathbb{Q}$, racional', v: '3' }, { t: 'irracional', v: '4' }] }],
+    sol: function (d) { return { c: String(d.c) }; },
     hint: function () { return 'Opera primero: muchas raíces son enteras disfrazadas. Y toda fracción que se simplifica a entero es entero.'; },
     steps: function (d) {
       var nom = ['', '$\\mathbb{N}$ (natural)', '$\\mathbb{Z}$ (entero negativo)', '$\\mathbb{Q}$ (racional no entero)', 'irracional'][d.c];
@@ -289,18 +295,9 @@ Course.topic('ar-conjuntos', function (p) {
       var x = r.pick(casos);
       return { t: x.t, irr: x.irr };
     },
-    ask: function (d) {
-      return '¿Es $' + d.t + '$ racional o irracional?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>r</code> si es racional ' +
-        'o <code>i</code> si es irracional.</span>';
-    },
-    fields: [{ name: 'x', label: 'Respuesta', w: 'tiny', ph: 'r / i' }],
+    ask: function (d) { return '¿Es $' + d.t + '$ racional o irracional?'; },
+    fields: [{ name: 'x', label: 'Es', opts: [{ t: 'racional', v: 'r' }, { t: 'irracional', v: 'i' }] }],
     sol: function (d) { return { x: d.irr ? 'i' : 'r' }; },
-    check: function (v, d) {
-      var t = v.raw.x.trim().toLowerCase();
-      if (t !== 'r' && t !== 'i') return { ok: false, msg: 'Escribe <code>r</code> o <code>i</code>.' };
-      return (t === 'i') === d.irr;
-    },
     hint: function () { return 'Cuidado con las raíces: $\\sqrt{16}$ es 4, un número perfectamente racional. Y todo decimal periódico es racional.'; },
     steps: function (d) {
       return ['Se opera y se simplifica todo lo posible.',

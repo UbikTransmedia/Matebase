@@ -139,6 +139,29 @@ Course.topic('fn-lineales', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Corte con los ejes',
+    level: 'basico',
+    gen: function (r) {
+      var m = r.nz(-6, 6), n = r.nz(-12, 12);
+      if (n % m !== 0) return null;
+      return { m: m, n: n, raiz: -n / m };
+    },
+    ask: function (d) {
+      return 'La recta $y = ' + ML.termTex(d.m, 'x', 1, true) + ML.termTex(d.n, '', 0, false) +
+        '$ corta al eje X en un punto. ¿Cuál es su abscisa?';
+    },
+    fields: [{ name: 'x', label: 'x =', w: 'tiny' }],
+    sol: function (d) { return { x: d.raiz }; },
+    hint: function () { return 'En el eje X la altura es cero: resuelve $mx+n = 0$.'; },
+    steps: function (d) {
+      return ['En el eje X se cumple $y = 0$.',
+        '$' + ML.termTex(d.m, 'x', 1, true) + ML.termTex(d.n, '', 0, false) + ' = 0$',
+        '$' + ML.termTex(d.m, 'x', 1, true) + ' = ' + (-d.n) + ' \\Rightarrow x = ' + d.raiz + '$'];
+    },
+    answer: function (d) { return 'x = ' + d.raiz; }
+  });
+
+  p.exercise({
     title: 'Pendiente y ordenada a partir de dos puntos',
     level: 'medio',
     gen: function (r) {
@@ -166,29 +189,6 @@ Course.topic('fn-lineales', function (p) {
         'La recta es $y = ' + U.fmt(d.m, 4) + 'x ' + (d.n >= 0 ? '+ ' + d.n : '- ' + (-d.n)) + '$.'];
     },
     answer: function (d) { return 'm = ' + U.fmt(d.m, 4) + ', n = ' + U.fmt(d.n, 4); }
-  });
-
-  p.exercise({
-    title: 'Corte con los ejes',
-    level: 'basico',
-    gen: function (r) {
-      var m = r.nz(-6, 6), n = r.nz(-12, 12);
-      if (n % m !== 0) return null;
-      return { m: m, n: n, raiz: -n / m };
-    },
-    ask: function (d) {
-      return 'La recta $y = ' + ML.termTex(d.m, 'x', 1, true) + ML.termTex(d.n, '', 0, false) +
-        '$ corta al eje X en un punto. ¿Cuál es su abscisa?';
-    },
-    fields: [{ name: 'x', label: 'x =', w: 'tiny' }],
-    sol: function (d) { return { x: d.raiz }; },
-    hint: function () { return 'En el eje X la altura es cero: resuelve $mx+n = 0$.'; },
-    steps: function (d) {
-      return ['En el eje X se cumple $y = 0$.',
-        '$' + ML.termTex(d.m, 'x', 1, true) + ML.termTex(d.n, '', 0, false) + ' = 0$',
-        '$' + ML.termTex(d.m, 'x', 1, true) + ' = ' + (-d.n) + ' \\Rightarrow x = ' + d.raiz + '$'];
-    },
-    answer: function (d) { return 'x = ' + d.raiz; }
   });
 
   p.exercise({

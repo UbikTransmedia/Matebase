@@ -169,32 +169,6 @@ Course.topic('av-complejidad', function (p) {
   p.section('Practica');
 
   p.exercise({
-    title: '¿Cuánto tardará con un problema más grande?',
-    level: 'medio',
-    gen: function (r) {
-      var tipo = r.pick(['n2', 'n3', '2n']), t0 = r.pick([1, 2, 5]);
-      if (tipo === '2n') { var extra = r.pick([5, 10, 20]); return { tipo: tipo, t0: t0, n0: 30, n1: 30 + extra, t1: t0 * Math.pow(2, extra), mal: t0 * (30 + extra) / 30 }; }
-      var k = r.pick([2, 3, 10]), e = tipo === 'n2' ? 2 : 3;
-      return { tipo: tipo, t0: t0, n0: 1000, n1: 1000 * k, t1: t0 * Math.pow(k, e), mal: t0 * k };
-    },
-    ask: function (d) {
-      var nombre = { n2: '$O(n^2)$', n3: '$O(n^3)$', '2n': '$O(2^n)$' }[d.tipo];
-      return 'Un algoritmo de coste ' + nombre + ' tarda ' + d.t0 + ' segundos con un problema de tamaño $n = ' + U.miles(d.n0) + '$. ¿Cuánto tardará, aproximadamente, con $n = ' + U.miles(d.n1) + '$? (En segundos.)';
-    },
-    fields: [{ name: 't', label: 'segundos', w: 'wide' }],
-    sol: function (d) { return { t: d.t1 }; },
-    tol: 1e-6,
-    errores: [{ si: function (v, d) { return Math.abs(d.mal - d.t1) > 1e-6 && Math.abs(v.t - d.mal) < 1e-6; }, msg: 'Eso sería si el coste creciera en proporción a $n$. Aquí el tiempo crece como ' + 'el coste del algoritmo.' }],
-    hint: function () { return ['Divide el coste con el tamaño nuevo entre el coste con el tamaño viejo.', 'Con $2^n$, sumar 10 al tamaño multiplica el tiempo por $2^{10}$.']; },
-    steps: function (d) {
-      if (d.tipo === '2n') return ['$\\dfrac{2^{' + d.n1 + '}}{2^{' + d.n0 + '}} = 2^{' + (d.n1 - d.n0) + '} = ' + U.miles(Math.pow(2, d.n1 - d.n0)) + '$', 'Tiempo: $' + d.t0 + '\\cdot ' + U.miles(Math.pow(2, d.n1 - d.n0)) + ' = ' + U.miles(d.t1) + '$ s.'];
-      var k = d.n1 / d.n0, e = d.tipo === 'n2' ? 2 : 3;
-      return ['El tamaño se multiplica por ' + k + ', así que el coste por $' + k + '^' + e + ' = ' + Math.pow(k, e) + '$.', 'Tiempo: $' + d.t0 + '\\cdot ' + Math.pow(k, e) + ' = ' + U.miles(d.t1) + '$ s.'];
-    },
-    answer: function (d) { return U.miles(d.t1) + ' s'; }
-  });
-
-  p.exercise({
     title: 'Subconjuntos y ordenaciones',
     level: 'basico',
     gen: function (r) { var n = r.int(3, 10); return { n: n, sub: Math.pow(2, n), ord: ML.factorial(n) }; },
@@ -247,6 +221,32 @@ Course.topic('av-complejidad', function (p) {
         'Comprobar ha costado unas pocas sumas. Encontrar una solución, en cambio, puede obligar a mirar hasta $2^7 = 128$ grupos, y con 100 números, $2^{100}$.'];
     },
     answer: function (d) { return d.s + '; ' + (d.ok === 'si' ? 'válida' : 'no válida'); }
+  });
+
+  p.exercise({
+    title: '¿Cuánto tardará con un problema más grande?',
+    level: 'medio',
+    gen: function (r) {
+      var tipo = r.pick(['n2', 'n3', '2n']), t0 = r.pick([1, 2, 5]);
+      if (tipo === '2n') { var extra = r.pick([5, 10, 20]); return { tipo: tipo, t0: t0, n0: 30, n1: 30 + extra, t1: t0 * Math.pow(2, extra), mal: t0 * (30 + extra) / 30 }; }
+      var k = r.pick([2, 3, 10]), e = tipo === 'n2' ? 2 : 3;
+      return { tipo: tipo, t0: t0, n0: 1000, n1: 1000 * k, t1: t0 * Math.pow(k, e), mal: t0 * k };
+    },
+    ask: function (d) {
+      var nombre = { n2: '$O(n^2)$', n3: '$O(n^3)$', '2n': '$O(2^n)$' }[d.tipo];
+      return 'Un algoritmo de coste ' + nombre + ' tarda ' + d.t0 + ' segundos con un problema de tamaño $n = ' + U.miles(d.n0) + '$. ¿Cuánto tardará, aproximadamente, con $n = ' + U.miles(d.n1) + '$? (En segundos.)';
+    },
+    fields: [{ name: 't', label: 'segundos', w: 'wide' }],
+    sol: function (d) { return { t: d.t1 }; },
+    tol: 1e-6,
+    errores: [{ si: function (v, d) { return Math.abs(d.mal - d.t1) > 1e-6 && Math.abs(v.t - d.mal) < 1e-6; }, msg: 'Eso sería si el coste creciera en proporción a $n$. Aquí el tiempo crece como ' + 'el coste del algoritmo.' }],
+    hint: function () { return ['Divide el coste con el tamaño nuevo entre el coste con el tamaño viejo.', 'Con $2^n$, sumar 10 al tamaño multiplica el tiempo por $2^{10}$.']; },
+    steps: function (d) {
+      if (d.tipo === '2n') return ['$\\dfrac{2^{' + d.n1 + '}}{2^{' + d.n0 + '}} = 2^{' + (d.n1 - d.n0) + '} = ' + U.miles(Math.pow(2, d.n1 - d.n0)) + '$', 'Tiempo: $' + d.t0 + '\\cdot ' + U.miles(Math.pow(2, d.n1 - d.n0)) + ' = ' + U.miles(d.t1) + '$ s.'];
+      var k = d.n1 / d.n0, e = d.tipo === 'n2' ? 2 : 3;
+      return ['El tamaño se multiplica por ' + k + ', así que el coste por $' + k + '^' + e + ' = ' + Math.pow(k, e) + '$.', 'Tiempo: $' + d.t0 + '\\cdot ' + Math.pow(k, e) + ' = ' + U.miles(d.t1) + '$ s.'];
+    },
+    answer: function (d) { return U.miles(d.t1) + ' s'; }
   });
 
   p.keys([

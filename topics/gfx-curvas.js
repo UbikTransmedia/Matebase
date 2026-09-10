@@ -244,6 +244,30 @@ Course.topic('gfx-curvas', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Calcula un smoothstep',
+    level: 'basico',
+    gen: function (r) {
+      var e0 = r.pick([0, 0.2, 0.3, 0.5]), e1 = U.round(e0 + r.pick([0.2, 0.4, 0.5]), 4), x = U.round(e0 + (e1 - e0) * r.pick([0.25, 0.5, 0.75]), 4);
+      var t = (x - e0) / (e1 - e0), s = t * t * (3 - 2 * t), m = Math.max(0, Math.min(1, x));
+      return { e0: e0, e1: e1, x: x, t: t, s: s, sinNormalizar: m * m * (3 - 2 * m) };
+    },
+    ask: function (d) { return '¿Cuánto vale <code>smoothstep(' + U.fmt(d.e0, 1) + ', ' + U.fmt(d.e1, 1) + ', ' + U.fmt(d.x, 2) + ')</code>? (Cuatro decimales; escribe los números con coma o con punto.)'; },
+    fields: [{ name: 's', label: 'resultado', w: 'wide' }],
+    sol: function (d) { return { s: U.round(d.s, 6) }; },
+    tol: 1e-4,
+    errores: [
+      { si: function (v, d) { return Math.abs(d.sinNormalizar - d.s) > 1e-4 && Math.abs(v.s - d.sinNormalizar) < 1e-4; }, msg: 'Antes del polinomio hay que llevar $x$ al intervalo $[0, 1]$: $t = \\frac{x - e_0}{e_1 - e_0}$.' },
+      { si: function (v, d) { return Math.abs(d.t - d.s) > 1e-4 && Math.abs(v.s - d.t) < 1e-4; }, msg: 'Eso es $t$, la interpolación lineal. smoothstep le aplica además el polinomio $3t^2 - 2t^3$.' }
+    ],
+    hint: function () { return ['Primero $t = \\operatorname{clamp}\\left(\\frac{x - e_0}{e_1 - e_0}, 0, 1\\right)$.', 'Después $3t^2 - 2t^3$.']; },
+    steps: function (d) {
+      return ['$t = \\dfrac{' + U.fmt(d.x, 2) + ' - ' + U.fmt(d.e0, 1) + '}{' + U.fmt(d.e1, 1) + ' - ' + U.fmt(d.e0, 1) + '} = ' + U.fmt(d.t, 2) + '$',
+        '$3\\cdot ' + U.fmt(d.t, 2) + '^2 - 2\\cdot ' + U.fmt(d.t, 2) + '^3 = ' + U.fmt(d.s, 5) + '$'];
+    },
+    answer: function (d) { return U.fmt(d.s, 4); }
+  });
+
+  p.exercise({
     title: 'El punto más cercano del segmento',
     level: 'medio',
     gen: function (r) {
@@ -302,30 +326,6 @@ Course.topic('gfx-curvas', function (p) {
         '$B = Q_0 + ' + U.fmt(t, 2) + '\\,(Q_1 - Q_0) = (' + U.fmt(d.B[0], 4) + ',\\ ' + U.fmt(d.B[1], 4) + ')$. Lo mismo sale con la fórmula $(1 - t)^2P_0 + 2(1 - t)tP_1 + t^2P_2$.'];
     },
     answer: function (d) { return '(' + U.fmt(d.B[0], 4) + ', ' + U.fmt(d.B[1], 4) + ')'; }
-  });
-
-  p.exercise({
-    title: 'Calcula un smoothstep',
-    level: 'basico',
-    gen: function (r) {
-      var e0 = r.pick([0, 0.2, 0.3, 0.5]), e1 = U.round(e0 + r.pick([0.2, 0.4, 0.5]), 4), x = U.round(e0 + (e1 - e0) * r.pick([0.25, 0.5, 0.75]), 4);
-      var t = (x - e0) / (e1 - e0), s = t * t * (3 - 2 * t), m = Math.max(0, Math.min(1, x));
-      return { e0: e0, e1: e1, x: x, t: t, s: s, sinNormalizar: m * m * (3 - 2 * m) };
-    },
-    ask: function (d) { return '¿Cuánto vale <code>smoothstep(' + U.fmt(d.e0, 1) + ', ' + U.fmt(d.e1, 1) + ', ' + U.fmt(d.x, 2) + ')</code>? (Cuatro decimales; escribe los números con coma o con punto.)'; },
-    fields: [{ name: 's', label: 'resultado', w: 'wide' }],
-    sol: function (d) { return { s: U.round(d.s, 6) }; },
-    tol: 1e-4,
-    errores: [
-      { si: function (v, d) { return Math.abs(d.sinNormalizar - d.s) > 1e-4 && Math.abs(v.s - d.sinNormalizar) < 1e-4; }, msg: 'Antes del polinomio hay que llevar $x$ al intervalo $[0, 1]$: $t = \\frac{x - e_0}{e_1 - e_0}$.' },
-      { si: function (v, d) { return Math.abs(d.t - d.s) > 1e-4 && Math.abs(v.s - d.t) < 1e-4; }, msg: 'Eso es $t$, la interpolación lineal. smoothstep le aplica además el polinomio $3t^2 - 2t^3$.' }
-    ],
-    hint: function () { return ['Primero $t = \\operatorname{clamp}\\left(\\frac{x - e_0}{e_1 - e_0}, 0, 1\\right)$.', 'Después $3t^2 - 2t^3$.']; },
-    steps: function (d) {
-      return ['$t = \\dfrac{' + U.fmt(d.x, 2) + ' - ' + U.fmt(d.e0, 1) + '}{' + U.fmt(d.e1, 1) + ' - ' + U.fmt(d.e0, 1) + '} = ' + U.fmt(d.t, 2) + '$',
-        '$3\\cdot ' + U.fmt(d.t, 2) + '^2 - 2\\cdot ' + U.fmt(d.t, 2) + '^3 = ' + U.fmt(d.s, 5) + '$'];
-    },
-    answer: function (d) { return U.fmt(d.s, 4); }
   });
 
   p.exercise({

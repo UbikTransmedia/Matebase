@@ -26,6 +26,18 @@ Course.topic('lg-problemas', function (p) {
     'segundos a mirar el resultado con sentido común es la comprobación más barata que existe. El ' +
     '[[ar-magnitudes|análisis dimensional]] es su versión con unidades.', 'warn', 'La cuarta fase caza errores');
 
+  p.ejemplo({
+    title: 'Las cuatro fases, aplicadas a un problema',
+    enunciado: 'Un depósito se llena en 3 horas con un grifo y en 6 horas con otro. ¿Cuánto tarda en llenarse con los dos abiertos a la vez?',
+    pasos: [
+      { t: '<strong>Comprender.</strong> Datos: un grifo tarda 3 h, el otro 6 h. Se pide: el tiempo con los dos. Una primera intuición: tiene que ser <em>menos</em> de 3 h, porque el segundo grifo ayuda. La tentación de sumar (9 h) o promediar (4,5 h) ya no cuadra con eso.', antes: 'Antes de calcular nada: ¿el resultado será mayor o menor que 3 horas?' },
+      { t: '<strong>Plan.</strong> Los tiempos no se suman, pero lo que llena cada grifo <em>por hora</em> sí. En una hora, el primero llena $\\frac{1}{3}$ del depósito y el segundo $\\frac{1}{6}$. Ponemos nombre a la incógnita: con los dos, se llena $\\frac{1}{t}$ por hora.', antes: '¿Qué cantidad sí se puede sumar entre los dos grifos?' },
+      { t: '<strong>Ejecutar.</strong> $\\frac{1}{3} + \\frac{1}{6} = \\frac{2}{6} + \\frac{1}{6} = \\frac{3}{6} = \\frac{1}{2}$. Así que $\\frac{1}{t} = \\frac{1}{2}$ y $t = 2$ horas.' },
+      { t: '<strong>Examinar.</strong> Dos horas es menos que 3, como se había previsto, y más que la mitad de 3 (si los dos grifos fueran iguales tardarían 1,5 h; el segundo es más lento, así que algo más). Cuadra. Comprobación directa: en 2 h el primero llena $\\frac{2}{3}$ y el segundo $\\frac{2}{6} = \\frac{1}{3}$; total, 1 depósito. ✓', antes: '¿Cómo comprobarías el resultado sin repetir el mismo cálculo?' }
+    ],
+    cierre: 'La cuarta fase no es un adorno: es la que habría cazado el 9 o el 4,5 si nos hubiéramos precipitado.'
+  });
+
   p.hist('Estas cuatro fases las escribió George Pólya, un matemático húngaro que enseñaba en Stanford, ' +
     'en un libro de 1945 titulado <em>Cómo plantear y resolver problemas</em>. Pólya había notado que sus ' +
     'alumnos sabían muchas técnicas pero no sabían cuándo usarlas, y que los buenos matemáticos se hacen ' +
@@ -50,6 +62,7 @@ Course.topic('lg-problemas', function (p) {
   p.demo({
     title: 'Un patrón que miente: las regiones del círculo',
     intro: 'Se colocan n puntos en una circunferencia y se unen todos con todos. ¿En cuántas regiones queda dividido el círculo? Sube n despacio y apunta los números antes de mirar el sexto.',
+    predice: 'Con 1, 2, 3, 4 y 5 puntos salen 1, 2, 4, 8 y 16 regiones. Apunta cuántas crees que saldrán con 6 puntos antes de mover el deslizador.',
     build: function (host) {
       var n = 3;
       var out = W.readout(host, '');
@@ -128,6 +141,12 @@ Course.topic('lg-problemas', function (p) {
       pinta();
     }
   });
+
+  p.comprueba('En una pizarra están escritos los números del 1 al 10. Se borran dos cualesquiera, $a$ y $b$, y se escribe su <em>diferencia</em> $a - b$. Se repite hasta que queda un solo número. ¿Qué no cambia en ningún paso?', [
+    { t: 'La suma de los números de la pizarra', ok: false, por: 'Cambia: se quitan $a + b$ y se pone $a - b$, así que la suma baja en $2b$.' },
+    { t: 'La paridad de la suma (si es par o impar)', ok: true, por: 'La suma baja en $2b$, que es par, así que su paridad no cambia nunca. Empieza en 55, impar: el último número será impar.' },
+    { t: 'El número de números impares que hay', ok: false, por: 'Puede cambiar: si $a$ y $b$ son impares, desaparecen dos impares y aparece un par.' }
+  ]);
 
   p.sub('El principio del palomar');
   p.text('Si hay más palomas que agujeros, algún agujero tiene al menos dos palomas. Parece una tontería ' +

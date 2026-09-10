@@ -189,6 +189,34 @@ Course.topic('al-identidades', function (p) {
   });
 
   p.exercise({
+    title: 'Saca factor común',
+    level: 'basico',
+    gen: function (r) {
+      var k = r.int(2, 9), e = r.int(1, 2);
+      var a = r.nz(-6, 6), b = r.nz(-6, 6), c = r.nz(-6, 6);
+      if (ML.gcd(ML.gcd(a, b), c) !== 1) return null;
+      return { k: k, e: e, a: a, b: b, c: c };
+    },
+    ask: function (d) {
+      var t = function (co, ex) { return ML.termTex(d.k * co, 'x', ex + d.e, false); };
+      var s = ML.termTex(d.k * d.a, 'x', 2 + d.e, true) + t(d.b, 1) + t(d.c, 0);
+      return 'Saca todo el factor común que puedas de $' + s + '$ e indica el coeficiente y el ' +
+        'exponente del factor extraído.';
+    },
+    fields: [{ name: 'c', label: 'Coeficiente', w: 'tiny' }, { name: 'e', label: 'Exponente de x', w: 'tiny' }],
+    sol: function (d) { return { c: d.k, e: d.e }; },
+    hint: function () { return 'El coeficiente es el m.c.d. de los tres números; el exponente, el menor de los tres.'; },
+    steps: function (d) {
+      return ['Coeficientes: $' + (d.k * d.a) + '$, $' + (d.k * d.b) + '$, $' + (d.k * d.c) + '$. Su m.c.d. es $' + d.k + '$.',
+        'Exponentes de $x$: $' + (2 + d.e) + '$, $' + (1 + d.e) + '$, $' + d.e + '$. El menor es $' + d.e + '$.',
+        'Se saca $' + d.k + 'x^{' + d.e + '}$ y dentro queda $(' + ML.polyTex([d.a, d.b, d.c]) + ')$.'];
+    },
+    answer: function (d) {
+      return '$' + d.k + 'x^{' + d.e + '}\\left(' + ML.polyTex([d.a, d.b, d.c]) + '\\right)$';
+    }
+  });
+
+  p.exercise({
     title: 'Reconoce la identidad al revés',
     level: 'medio',
     gen: function (r) {
@@ -234,34 +262,6 @@ Course.topic('al-identidades', function (p) {
       var A = (d.a === 1 ? '' : d.a) + 'x';
       if (d.t === 2) return '$(' + A + '+' + d.b + ')(' + A + '-' + d.b + ')$';
       return '$(' + A + (d.t === 0 ? '+' : '-') + d.b + ')^2$';
-    }
-  });
-
-  p.exercise({
-    title: 'Saca factor común',
-    level: 'basico',
-    gen: function (r) {
-      var k = r.int(2, 9), e = r.int(1, 2);
-      var a = r.nz(-6, 6), b = r.nz(-6, 6), c = r.nz(-6, 6);
-      if (ML.gcd(ML.gcd(a, b), c) !== 1) return null;
-      return { k: k, e: e, a: a, b: b, c: c };
-    },
-    ask: function (d) {
-      var t = function (co, ex) { return ML.termTex(d.k * co, 'x', ex + d.e, false); };
-      var s = ML.termTex(d.k * d.a, 'x', 2 + d.e, true) + t(d.b, 1) + t(d.c, 0);
-      return 'Saca todo el factor común que puedas de $' + s + '$ e indica el coeficiente y el ' +
-        'exponente del factor extraído.';
-    },
-    fields: [{ name: 'c', label: 'Coeficiente', w: 'tiny' }, { name: 'e', label: 'Exponente de x', w: 'tiny' }],
-    sol: function (d) { return { c: d.k, e: d.e }; },
-    hint: function () { return 'El coeficiente es el m.c.d. de los tres números; el exponente, el menor de los tres.'; },
-    steps: function (d) {
-      return ['Coeficientes: $' + (d.k * d.a) + '$, $' + (d.k * d.b) + '$, $' + (d.k * d.c) + '$. Su m.c.d. es $' + d.k + '$.',
-        'Exponentes de $x$: $' + (2 + d.e) + '$, $' + (1 + d.e) + '$, $' + d.e + '$. El menor es $' + d.e + '$.',
-        'Se saca $' + d.k + 'x^{' + d.e + '}$ y dentro queda $(' + ML.polyTex([d.a, d.b, d.c]) + ')$.'];
-    },
-    answer: function (d) {
-      return '$' + d.k + 'x^{' + d.e + '}\\left(' + ML.polyTex([d.a, d.b, d.c]) + '\\right)$';
     }
   });
 

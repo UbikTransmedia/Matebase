@@ -194,6 +194,30 @@ Course.topic('tr-teoremas', function (p) {
   });
 
   p.exercise({
+    title: 'Área de un triángulo cualquiera',
+    level: 'medio',
+    gen: function (r) {
+      var b = r.int(4, 20), c = r.int(4, 20), A = r.int(20, 160);
+      return { b: b, c: c, A: A, S: 0.5 * b * c * Math.sin(A * Math.PI / 180) };
+    },
+    ask: function (d) {
+      return 'Calcula el área de un triángulo con lados $b = ' + d.b + '$ y $c = ' + d.c +
+        '$ cm y un ángulo de $' + d.A + '^\\circ$ entre ellos (cuatro decimales).';
+    },
+    fields: [{ name: 'S', label: 'Área (cm²)', w: 'wide' }],
+    sol: function (d) { return { S: U.round(d.S, 4) }; },
+    tol: 3e-4,
+    hint: function () { return '$S = \\frac{1}{2}bc\\operatorname{sen}A$: es la fórmula de siempre con la altura escrita como $c\\operatorname{sen}A$.'; },
+    steps: function (d) {
+      return ['$S = \\dfrac{1}{2}\\,b\\,c\\,\\operatorname{sen} A$',
+        '$= \\dfrac{1}{2} \\cdot ' + d.b + ' \\cdot ' + d.c + ' \\cdot \\operatorname{sen} ' + d.A + '^\\circ$',
+        '$= ' + U.fmt(0.5 * d.b * d.c, 3) + ' \\cdot ' + U.fmt(Math.sin(d.A * Math.PI / 180), 4) + ' = ' + U.fmt(d.S, 4) + '$ cm²',
+        'Fíjate en que con $A = 90^\\circ$ saldría simplemente $\\frac{bc}{2}$: la fórmula del triángulo rectángulo.'];
+    },
+    answer: function (d) { return U.fmt(d.S, 4) + ' cm²'; }
+  });
+
+  p.exercise({
     title: 'Teorema del coseno: hallar un ángulo',
     level: 'avanzado',
     gen: function (r) {
@@ -222,30 +246,6 @@ Course.topic('tr-teoremas', function (p) {
           : 'El coseno sale positivo, así que el ángulo es agudo.'];
     },
     answer: function (d) { return U.fmt(d.A, 2) + '°'; }
-  });
-
-  p.exercise({
-    title: 'Área de un triángulo cualquiera',
-    level: 'medio',
-    gen: function (r) {
-      var b = r.int(4, 20), c = r.int(4, 20), A = r.int(20, 160);
-      return { b: b, c: c, A: A, S: 0.5 * b * c * Math.sin(A * Math.PI / 180) };
-    },
-    ask: function (d) {
-      return 'Calcula el área de un triángulo con lados $b = ' + d.b + '$ y $c = ' + d.c +
-        '$ cm y un ángulo de $' + d.A + '^\\circ$ entre ellos (cuatro decimales).';
-    },
-    fields: [{ name: 'S', label: 'Área (cm²)', w: 'wide' }],
-    sol: function (d) { return { S: U.round(d.S, 4) }; },
-    tol: 3e-4,
-    hint: function () { return '$S = \\frac{1}{2}bc\\operatorname{sen}A$: es la fórmula de siempre con la altura escrita como $c\\operatorname{sen}A$.'; },
-    steps: function (d) {
-      return ['$S = \\dfrac{1}{2}\\,b\\,c\\,\\operatorname{sen} A$',
-        '$= \\dfrac{1}{2} \\cdot ' + d.b + ' \\cdot ' + d.c + ' \\cdot \\operatorname{sen} ' + d.A + '^\\circ$',
-        '$= ' + U.fmt(0.5 * d.b * d.c, 3) + ' \\cdot ' + U.fmt(Math.sin(d.A * Math.PI / 180), 4) + ' = ' + U.fmt(d.S, 4) + '$ cm²',
-        'Fíjate en que con $A = 90^\\circ$ saldría simplemente $\\frac{bc}{2}$: la fórmula del triángulo rectángulo.'];
-    },
-    answer: function (d) { return U.fmt(d.S, 4) + ' cm²'; }
   });
 
   p.keys([

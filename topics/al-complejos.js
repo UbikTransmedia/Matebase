@@ -245,33 +245,6 @@ Course.topic('al-complejos', function (p) {
   p.section('Practica');
 
   p.exercise({
-    title: 'Producto en forma binómica',
-    level: 'medio',
-    gen: function (r) {
-      var a = r.pm(1, 7), b = r.pm(1, 7), c = r.pm(1, 7), e = r.pm(1, 7);
-      return { a: a, b: b, c: c, e: e, re: a * c - b * e, im: a * e + b * c };
-    },
-    ask: function (d) {
-      var f = function (x, y) {
-        return '(' + x + (y >= 0 ? '+' + y : y) + 'i)';
-      };
-      return 'Calcula $' + f(d.a, d.b) + f(d.c, d.e) + '$ y da su parte real y su parte imaginaria.';
-    },
-    fields: [{ name: 're', label: 'Parte real', w: 'tiny' }, { name: 'im', label: 'Parte imaginaria', w: 'tiny' }],
-    sol: function (d) { return { re: d.re, im: d.im }; },
-    hint: function () { return 'Multiplica como dos binomios y al final sustituye $i^2 = -1$.'; },
-    steps: function (d) {
-      return ['Aplicamos la distributiva: $' + d.a + '\\cdot' + d.c + ' + ' + d.a + '\\cdot' + d.e + 'i + ' +
-        d.b + '\\cdot' + d.c + 'i + ' + d.b + '\\cdot' + d.e + 'i^2$.',
-        'El último término lleva $i^2 = -1$, así que pasa a ser real: $' + (-d.b * d.e) + '$.',
-        'Parte real: $' + (d.a * d.c) + ' + (' + (-d.b * d.e) + ') = ' + d.re + '$.',
-        'Parte imaginaria: $' + (d.a * d.e) + ' + ' + (d.b * d.c) + ' = ' + d.im + '$.',
-        'Resultado: $' + d.re + (d.im >= 0 ? '+' + d.im : d.im) + 'i$'];
-    },
-    answer: function (d) { return '$' + d.re + (d.im >= 0 ? '+' + d.im : d.im) + 'i$'; }
-  });
-
-  p.exercise({
     title: 'Potencia de i',
     level: 'basico',
     gen: function (r) {
@@ -297,6 +270,33 @@ Course.topic('al-complejos', function (p) {
         'El resto es $' + d.res + '$, así que $i^{' + d.n + '} = i^{' + d.res + '} = ' + d.texto + '$.'];
     },
     answer: function (d) { return d.texto; }
+  });
+
+  p.exercise({
+    title: 'Producto en forma binómica',
+    level: 'medio',
+    gen: function (r) {
+      var a = r.pm(1, 7), b = r.pm(1, 7), c = r.pm(1, 7), e = r.pm(1, 7);
+      return { a: a, b: b, c: c, e: e, re: a * c - b * e, im: a * e + b * c };
+    },
+    ask: function (d) {
+      var f = function (x, y) {
+        return '(' + x + (y >= 0 ? '+' + y : y) + 'i)';
+      };
+      return 'Calcula $' + f(d.a, d.b) + f(d.c, d.e) + '$ y da su parte real y su parte imaginaria.';
+    },
+    fields: [{ name: 're', label: 'Parte real', w: 'tiny' }, { name: 'im', label: 'Parte imaginaria', w: 'tiny' }],
+    sol: function (d) { return { re: d.re, im: d.im }; },
+    hint: function () { return 'Multiplica como dos binomios y al final sustituye $i^2 = -1$.'; },
+    steps: function (d) {
+      return ['Aplicamos la distributiva: $' + d.a + '\\cdot' + d.c + ' + ' + d.a + '\\cdot' + d.e + 'i + ' +
+        d.b + '\\cdot' + d.c + 'i + ' + d.b + '\\cdot' + d.e + 'i^2$.',
+        'El último término lleva $i^2 = -1$, así que pasa a ser real: $' + (-d.b * d.e) + '$.',
+        'Parte real: $' + (d.a * d.c) + ' + (' + (-d.b * d.e) + ') = ' + d.re + '$.',
+        'Parte imaginaria: $' + (d.a * d.e) + ' + ' + (d.b * d.c) + ' = ' + d.im + '$.',
+        'Resultado: $' + d.re + (d.im >= 0 ? '+' + d.im : d.im) + 'i$'];
+    },
+    answer: function (d) { return '$' + d.re + (d.im >= 0 ? '+' + d.im : d.im) + 'i$'; }
   });
 
   p.exercise({

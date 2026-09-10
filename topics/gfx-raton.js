@@ -232,30 +232,6 @@ Course.topic('gfx-raton', function (p) {
   });
 
   p.exercise({
-    title: 'Dentro de la lupa',
-    level: 'avanzado',
-    gen: function (r) {
-      var mx = r.pick([-0.2, 0, 0.1]), dx = r.pick([0.05, 0.1, 0.15, 0.2]), rad = r.pick([0.1, 0.2]), k = r.pick([0.5, 0.8]);
-      var peso = Math.exp(-dx * dx / (rad * rad));
-      return { mx: mx, dx: dx, px: mx + dx, rad: rad, k: k, peso: peso, qx: mx + dx * (1 - k * peso) };
-    },
-    ask: function (d) {
-      return 'Una lupa está en <code>m = (' + U.fmt(d.mx, 1) + ', 0)</code>, con <code>radio = ' + U.fmt(d.rad, 1) + '</code> y <code>aumento = ' + U.fmt(d.k, 1) +
-        '</code>. ¿Qué coordenada <code>q.x</code> se usa para dibujar el píxel <code>p = (' + U.fmt(d.px, 2) + ', 0)</code>? (Tres decimales.)';
-    },
-    fields: [{ name: 'q', label: 'q.x', w: 'wide' }],
-    sol: function (d) { return { q: U.round(d.qx, 6) }; },
-    tol: 1e-3,
-    hint: function () { return ['$\\vec p - \\vec m$ y el peso $e^{-|\\vec p - \\vec m|^2 / r^2}$.', '$q_x = m_x + (p_x - m_x)\\,(1 - k\\cdot\\text{peso})$.']; },
-    steps: function (d) {
-      return ['$p_x - m_x = ' + U.fmt(d.dx, 2) + '$', '$\\text{peso} = e^{-' + U.fmt(d.dx, 2) + '^2 / ' + U.fmt(d.rad, 1) + '^2} \\approx ' + U.fmt(d.peso, 4) + '$',
-        '$q_x = ' + U.fmt(d.mx, 1) + ' + ' + U.fmt(d.dx, 2) + '\\cdot(1 - ' + U.fmt(d.k, 1) + '\\cdot ' + U.fmt(d.peso, 4) + ') \\approx ' + U.fmt(d.qx, 3) + '$',
-        '$q_x$ está más cerca de la lupa que $p_x$: se dibuja lo que hay más cerca del centro, y por eso se ve ampliado.'];
-    },
-    answer: function (d) { return U.fmt(d.qx, 3); }
-  });
-
-  p.exercise({
     title: 'Predice la imagen',
     level: 'medio',
     gen: function (r) {
@@ -284,6 +260,30 @@ Course.topic('gfx-raton', function (p) {
     hint: function () { return ['¿Se usa la posición actual (xy) o la del clic (zw)?', '¿El resultado depende de <code>p</code>, del ratón o de los dos?']; },
     steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
     answer: function (d) { return d.textos[0]; }
+  });
+
+  p.exercise({
+    title: 'Dentro de la lupa',
+    level: 'avanzado',
+    gen: function (r) {
+      var mx = r.pick([-0.2, 0, 0.1]), dx = r.pick([0.05, 0.1, 0.15, 0.2]), rad = r.pick([0.1, 0.2]), k = r.pick([0.5, 0.8]);
+      var peso = Math.exp(-dx * dx / (rad * rad));
+      return { mx: mx, dx: dx, px: mx + dx, rad: rad, k: k, peso: peso, qx: mx + dx * (1 - k * peso) };
+    },
+    ask: function (d) {
+      return 'Una lupa está en <code>m = (' + U.fmt(d.mx, 1) + ', 0)</code>, con <code>radio = ' + U.fmt(d.rad, 1) + '</code> y <code>aumento = ' + U.fmt(d.k, 1) +
+        '</code>. ¿Qué coordenada <code>q.x</code> se usa para dibujar el píxel <code>p = (' + U.fmt(d.px, 2) + ', 0)</code>? (Tres decimales.)';
+    },
+    fields: [{ name: 'q', label: 'q.x', w: 'wide' }],
+    sol: function (d) { return { q: U.round(d.qx, 6) }; },
+    tol: 1e-3,
+    hint: function () { return ['$\\vec p - \\vec m$ y el peso $e^{-|\\vec p - \\vec m|^2 / r^2}$.', '$q_x = m_x + (p_x - m_x)\\,(1 - k\\cdot\\text{peso})$.']; },
+    steps: function (d) {
+      return ['$p_x - m_x = ' + U.fmt(d.dx, 2) + '$', '$\\text{peso} = e^{-' + U.fmt(d.dx, 2) + '^2 / ' + U.fmt(d.rad, 1) + '^2} \\approx ' + U.fmt(d.peso, 4) + '$',
+        '$q_x = ' + U.fmt(d.mx, 1) + ' + ' + U.fmt(d.dx, 2) + '\\cdot(1 - ' + U.fmt(d.k, 1) + '\\cdot ' + U.fmt(d.peso, 4) + ') \\approx ' + U.fmt(d.qx, 3) + '$',
+        '$q_x$ está más cerca de la lupa que $p_x$: se dibuja lo que hay más cerca del centro, y por eso se ve ampliado.'];
+    },
+    answer: function (d) { return U.fmt(d.qx, 3); }
   });
 
   p.keys([

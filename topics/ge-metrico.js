@@ -274,6 +274,39 @@ Course.topic('ge-metrico', function (p) {
     answer: function (d) { return U.fmt(d.ang, 2) + '°'; }
   });
 
+  p.exercise({
+    title: 'Distancia entre dos planos paralelos',
+    level: 'medio',
+    gen: function (r) {
+      var n = [r.pm(0, 3), r.pm(0, 3), r.pm(0, 3)];
+      if (nulo(n)) return null;
+      var k = r.pick([2, 3, -2]), D1 = r.pm(0, 6), D2 = r.pm(0, 9);
+      if (k * D1 === D2) return null;
+      var dist = Math.abs(D1 - D2 / k) / mod(n);
+      return { n: n, k: k, D1: D1, D2: D2, n2: esc(n, n), dist: dist, malo: Math.abs(D1 - D2) / mod(n) };
+    },
+    ask: function (d) {
+      return 'Calcula la distancia entre los planos paralelos $\\pi_1:\\ ' + planoTex(d.n, d.D1) + '$ y $\\pi_2:\\ ' +
+        planoTex(por(d.k, d.n), d.D2) + '$ (cuatro decimales).';
+    },
+    fields: [{ name: 'v', label: 'Distancia', w: 'wide' }],
+    sol: function (d) { return { v: U.round(d.dist, 6) }; },
+    tol: 3e-4,
+    errores: [{
+      si: function (v, d) { return Math.abs(d.malo - d.dist) > 1e-3 && Math.abs(v.v - d.malo) < 1e-3; },
+      msg: 'Has restado los términos independientes sin <strong>igualar antes las normales</strong>: la segunda ecuación está multiplicada por un número.'
+    }],
+    hint: function () {
+      return ['Divide la ecuación de $\\pi_2$ para que tenga exactamente la misma normal que $\\pi_1$.',
+        'Entonces $d = \\frac{|D_1 - D_2|}{|\\vec n|}$.'];
+    },
+    steps: function (d) {
+      return ['Se divide $\\pi_2$ entre $' + d.k + '$: $' + planoTex(d.n, d.D2 / d.k) + '$',
+        'Ahora las dos tienen normal $(' + d.n.join(',\\ ') + ')$: $d = \\dfrac{|' + d.D1 + ' - (' + U.fmt(d.D2 / d.k, 4) + ')|}{\\sqrt{' + d.n2 + '}} \\approx ' + U.fmt(d.dist, 4) + '$'];
+    },
+    answer: function (d) { return U.fmt(d.dist, 4); }
+  });
+
   p.problem({
     title: 'Proyección y simétrico respecto de un plano',
     level: 'avanzado',
@@ -430,39 +463,6 @@ Course.topic('ge-metrico', function (p) {
         answer: function (d) { return U.fmt(d.dist, 4); }
       }
     ]
-  });
-
-  p.exercise({
-    title: 'Distancia entre dos planos paralelos',
-    level: 'medio',
-    gen: function (r) {
-      var n = [r.pm(0, 3), r.pm(0, 3), r.pm(0, 3)];
-      if (nulo(n)) return null;
-      var k = r.pick([2, 3, -2]), D1 = r.pm(0, 6), D2 = r.pm(0, 9);
-      if (k * D1 === D2) return null;
-      var dist = Math.abs(D1 - D2 / k) / mod(n);
-      return { n: n, k: k, D1: D1, D2: D2, n2: esc(n, n), dist: dist, malo: Math.abs(D1 - D2) / mod(n) };
-    },
-    ask: function (d) {
-      return 'Calcula la distancia entre los planos paralelos $\\pi_1:\\ ' + planoTex(d.n, d.D1) + '$ y $\\pi_2:\\ ' +
-        planoTex(por(d.k, d.n), d.D2) + '$ (cuatro decimales).';
-    },
-    fields: [{ name: 'v', label: 'Distancia', w: 'wide' }],
-    sol: function (d) { return { v: U.round(d.dist, 6) }; },
-    tol: 3e-4,
-    errores: [{
-      si: function (v, d) { return Math.abs(d.malo - d.dist) > 1e-3 && Math.abs(v.v - d.malo) < 1e-3; },
-      msg: 'Has restado los términos independientes sin <strong>igualar antes las normales</strong>: la segunda ecuación está multiplicada por un número.'
-    }],
-    hint: function () {
-      return ['Divide la ecuación de $\\pi_2$ para que tenga exactamente la misma normal que $\\pi_1$.',
-        'Entonces $d = \\frac{|D_1 - D_2|}{|\\vec n|}$.'];
-    },
-    steps: function (d) {
-      return ['Se divide $\\pi_2$ entre $' + d.k + '$: $' + planoTex(d.n, d.D2 / d.k) + '$',
-        'Ahora las dos tienen normal $(' + d.n.join(',\\ ') + ')$: $d = \\dfrac{|' + d.D1 + ' - (' + U.fmt(d.D2 / d.k, 4) + ')|}{\\sqrt{' + d.n2 + '}} \\approx ' + U.fmt(d.dist, 4) + '$'];
-    },
-    answer: function (d) { return U.fmt(d.dist, 4); }
   });
 
   p.keys([

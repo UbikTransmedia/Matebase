@@ -1,6 +1,12 @@
 /* Tema: Potencias, raíces y notación científica */
 Course.topic('ar-potencias', function (p) {
 
+  p.puente('Igual que la multiplicación abrevia una suma repetida, la potencia abrevia una ' +
+    'multiplicación repetida. Este tema aprende sus reglas <em>viéndolas</em>, no memorizándolas, y ' +
+    'después las estira en dos direcciones que parecen imposibles: exponentes negativos y ' +
+    'fraccionarios, que son las raíces. Todo el álgebra de los próximos bloques da por sabidas estas ' +
+    'cinco reglas.');
+
   p.text('Una <strong>potencia</strong> es una multiplicación abreviada: multiplicar un número por sí ' +
     'mismo varias veces. La <em>base</em> es lo que se repite y el <em>exponente</em>, cuántas veces.');
 
@@ -12,6 +18,7 @@ Course.topic('ar-potencias', function (p) {
   p.demo({
     title: 'Lo que significa realmente un exponente',
     intro: 'Compara cómo crece una multiplicación normal frente a una potencia. El eje vertical está en escala normal: por eso la potencia se sale de la pantalla enseguida.',
+    predice: '$2\\cdot 10 = 20$. ¿Cuánto crees que vale $2^{10}$: unos 20, unos 100 o unos 1000?',
     build: function (host, d) {
       var base = 2;
       var out = W.readout(host, '');
@@ -90,6 +97,23 @@ Course.topic('ar-potencias', function (p) {
     'mientras que $2^2+3^2 = 13$. El exponente se reparte entre factores, nunca entre sumandos.',
     'warn', 'La que no existe');
 
+  p.ejemplo({
+    title: 'Simplificar una expresión con varias propiedades',
+    enunciado: 'Escribir $\\dfrac{(a^3)^2\\cdot a^4}{a^5}$ como una sola potencia de $a$.',
+    pasos: [
+      { t: 'Primero la potencia de una potencia: $(a^3)^2 = a^{3\\cdot 2} = a^6$. Son dos grupos de tres aes. Queda $\\dfrac{a^6\\cdot a^4}{a^5}$.', antes: '$(a^3)^2$: ¿se suman los exponentes o se multiplican?' },
+      { t: 'Después el producto de arriba: $a^6\\cdot a^4 = a^{6 + 4} = a^{10}$. Seis aes seguidas de cuatro. Queda $\\dfrac{a^{10}}{a^5}$.', antes: 'Al multiplicar potencias de la misma base, ¿qué se hace con los exponentes?' },
+      { t: 'Y la división: $\\dfrac{a^{10}}{a^5} = a^{10 - 5} = a^5$. Cada $a$ de abajo cancela una de arriba y sobreviven cinco.', antes: '¿Y al dividir?' }
+    ],
+    cierre: 'Con $a = 2$ se puede comprobar: $\\frac{64\\cdot 16}{32} = 32 = 2^5$. ✓ Comprobar con un número pequeño es la manera más barata de cazar un exponente mal puesto.'
+  });
+
+  p.comprueba('¿Cuánto vale $2^3\\cdot 2^4$?', [
+    { t: '$2^{12}$', ok: false, por: 'Has multiplicado los exponentes. Eso se hace al elevar una potencia a otra, $(2^3)^4$. Al multiplicar potencias se suman.' },
+    { t: '$2^7$', ok: true, por: 'Tres doses seguidos de cuatro doses son siete doses: $2^{3 + 4} = 128$.' },
+    { t: '$4^7$', ok: false, por: 'La base no cambia: se juntan doses, no se convierten en cuatros.' }
+  ]);
+
   p.sub('Los dos casos raros');
   p.text('Quedan dos casos que chirrían la primera vez que se ven, porque parecen definiciones sacadas de ' +
     'la manga: ¿qué significa multiplicar algo <em>cero</em> veces, o <em>menos tres</em> veces? La ' +
@@ -154,6 +178,18 @@ Course.topic('ar-potencias', function (p) {
 
   p.formula('\\sqrt{72} = \\sqrt{2^3\\cdot 3^2} = \\sqrt{2^2\\cdot 3^2\\cdot 2} = 6\\sqrt{2}');
 
+  p.ejemplo({
+    title: 'Sacar factores de una raíz',
+    enunciado: 'Simplificar $\\sqrt{72}$ hasta la forma $a\\sqrt{b}$ con $b$ lo más pequeño posible.',
+    pasos: [
+      { t: 'Se descompone el radicando: $72 = 2^3\\cdot 3^2$.', antes: '¿Cuál es el primer paso para simplificar una raíz cuadrada?' },
+      { t: 'En una raíz cuadrada, cada <em>pareja</em> de factores iguales sale fuera como un solo factor. Se agrupan las parejas: $2^3\\cdot 3^2 = (2^2)\\cdot(3^2)\\cdot 2$. Hay una pareja de doses, una de treses, y un 2 suelto.', antes: '¿Cuántas parejas de doses hay en $2^3$? ¿Sobra alguno?' },
+      { t: 'Las parejas salen: $\\sqrt{2^2\\cdot 3^2\\cdot 2} = 2\\cdot 3\\cdot\\sqrt{2} = 6\\sqrt{2}$. El 2 suelto se queda dentro.' },
+      { t: 'Comprobación: $6\\sqrt{2} \\approx 6\\cdot 1{,}414 = 8{,}485$, y $\\sqrt{72} \\approx 8{,}485$. ✓', antes: '¿Cómo comprobarías el resultado con la calculadora?' }
+    ],
+    cierre: 'Con raíces cúbicas se sacan tríos en lugar de parejas, y en general con índice $n$ se sacan grupos de $n$. Es la traducción $\\sqrt[n]{a^n} = a$.'
+  });
+
   /* ---------------------------------------------------------------- */
   p.section('Notación científica');
 
@@ -207,6 +243,25 @@ Course.topic('ar-potencias', function (p) {
     'y hasta irracionales.');
 
   p.section('Practica');
+
+  p.exercise({
+    title: 'Calcular una potencia',
+    level: 'basico',
+    gen: function (r) {
+      var base = r.pick([2, 3, 4, 5, 10]), e = r.int(2, base === 2 ? 8 : (base === 10 ? 6 : 4));
+      return { base: base, e: e, val: Math.pow(base, e), mal: base * e };
+    },
+    ask: function (d) { return 'Calcula $' + d.base + '^{' + d.e + '}$.'; },
+    fields: [{ name: 'v', label: 'Resultado', w: 'tiny' }],
+    sol: function (d) { return { v: d.val }; },
+    errores: [{ si: function (v, d) { return d.mal !== d.val && v.v === d.mal; }, msg: 'Has multiplicado la base por el exponente. $' + '2^5$ no es $2\\cdot 5$: el exponente dice cuántas veces se multiplica la base por sí misma.' }],
+    hint: function (d) { return 'Escribe la base $' + d.e + '$ veces y multiplica: $' + d.base + '\\cdot ' + d.base + '\\cdots$'; },
+    steps: function (d) {
+      var f = []; for (var i = 0; i < d.e; i++) f.push(d.base);
+      return ['$' + d.base + '^{' + d.e + '} = ' + f.join('\\cdot ') + '$', '$= ' + U.miles(d.val) + '$'];
+    },
+    answer: function (d) { return U.miles(d.val); }
+  });
 
   p.exercise({
     title: 'Aplica las propiedades',

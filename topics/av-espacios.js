@@ -270,6 +270,31 @@ Course.topic('av-espacios', function (p) {
   });
 
   p.exercise({
+    title: 'Imagen de un vector',
+    level: 'basico',
+    gen: function (r) {
+      var m = [[r.pm(0, 5), r.pm(0, 5)], [r.pm(0, 5), r.pm(0, 5)]];
+      var v = [r.nz(-6, 6), r.nz(-6, 6)];
+      return { m: m, v: v, im: [m[0][0] * v[0] + m[0][1] * v[1], m[1][0] * v[0] + m[1][1] * v[1]] };
+    },
+    ask: function (d) {
+      return 'Si la aplicación lineal tiene matriz $A = ' + ML.matTex(d.m) + '$, halla la imagen del ' +
+        'vector $\\vec{v} = (' + d.v + ')$.';
+    },
+    fields: [{ name: 'x', label: '1.ª componente', w: 'tiny' }, { name: 'y', label: '2.ª componente', w: 'tiny' }],
+    sol: function (d) { return { x: d.im[0], y: d.im[1] }; },
+    tol: 1e-6,
+    hint: function () { return 'Es multiplicar la matriz por el vector: fila por columna.'; },
+    steps: function (d) {
+      return ['$f(\\vec{v}) = A\\vec{v}$',
+        'Primera componente: $' + d.m[0][0] + '\\cdot(' + d.v[0] + ') + ' + d.m[0][1] + '\\cdot(' + d.v[1] + ') = ' + d.im[0] + '$',
+        'Segunda componente: $' + d.m[1][0] + '\\cdot(' + d.v[0] + ') + ' + d.m[1][1] + '\\cdot(' + d.v[1] + ') = ' + d.im[1] + '$',
+        'Otra lectura: $\\vec{v} = ' + d.v[0] + '\\vec{e}_1 + ' + d.v[1] + '\\vec{e}_2$, así que su imagen es esa misma combinación de las columnas de $A$.'];
+    },
+    answer: function (d) { return '$(' + d.im + ')$'; }
+  });
+
+  p.exercise({
     title: 'Matriz de una aplicación lineal',
     level: 'medio',
     gen: function (r) {
@@ -295,31 +320,6 @@ Course.topic('av-espacios', function (p) {
         'Comprobación: $A\\cdot(1,0)^T$ devuelve efectivamente la primera columna.'];
     },
     answer: function (d) { return '$A = ' + ML.matTex(d.m) + '$'; }
-  });
-
-  p.exercise({
-    title: 'Imagen de un vector',
-    level: 'basico',
-    gen: function (r) {
-      var m = [[r.pm(0, 5), r.pm(0, 5)], [r.pm(0, 5), r.pm(0, 5)]];
-      var v = [r.nz(-6, 6), r.nz(-6, 6)];
-      return { m: m, v: v, im: [m[0][0] * v[0] + m[0][1] * v[1], m[1][0] * v[0] + m[1][1] * v[1]] };
-    },
-    ask: function (d) {
-      return 'Si la aplicación lineal tiene matriz $A = ' + ML.matTex(d.m) + '$, halla la imagen del ' +
-        'vector $\\vec{v} = (' + d.v + ')$.';
-    },
-    fields: [{ name: 'x', label: '1.ª componente', w: 'tiny' }, { name: 'y', label: '2.ª componente', w: 'tiny' }],
-    sol: function (d) { return { x: d.im[0], y: d.im[1] }; },
-    tol: 1e-6,
-    hint: function () { return 'Es multiplicar la matriz por el vector: fila por columna.'; },
-    steps: function (d) {
-      return ['$f(\\vec{v}) = A\\vec{v}$',
-        'Primera componente: $' + d.m[0][0] + '\\cdot(' + d.v[0] + ') + ' + d.m[0][1] + '\\cdot(' + d.v[1] + ') = ' + d.im[0] + '$',
-        'Segunda componente: $' + d.m[1][0] + '\\cdot(' + d.v[0] + ') + ' + d.m[1][1] + '\\cdot(' + d.v[1] + ') = ' + d.im[1] + '$',
-        'Otra lectura: $\\vec{v} = ' + d.v[0] + '\\vec{e}_1 + ' + d.v[1] + '\\vec{e}_2$, así que su imagen es esa misma combinación de las columnas de $A$.'];
-    },
-    answer: function (d) { return '$(' + d.im + ')$'; }
   });
 
   p.exercise({

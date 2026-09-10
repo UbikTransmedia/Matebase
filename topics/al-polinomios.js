@@ -198,6 +198,31 @@ Course.topic('al-polinomios', function (p) {
   });
 
   p.exercise({
+    title: 'Teorema del resto sin dividir',
+    level: 'basico',
+    gen: function (r) {
+      var c = [r.nz(-3, 3), r.pm(1, 6), r.pm(1, 7), r.pm(1, 9)];
+      var a = r.pm(1, 3);
+      return { c: c, a: a, val: ML.polyEval(c, a) };
+    },
+    ask: function (d) {
+      return '¿Qué resto da $' + ML.polyTex(d.c) + '$ al dividirlo entre $x' +
+        (d.a >= 0 ? '-' + d.a : '+' + (-d.a)) + '$? <em>No hagas la división.</em>';
+    },
+    fields: [{ name: 'r', label: 'Resto', w: 'tiny' }],
+    sol: function (d) { return { r: d.val }; },
+    hint: function (d) { return 'Teorema del resto: basta con calcular $P(' + d.a + ')$.'; },
+    steps: function (d) {
+      return ['El teorema del resto dice que el resto de dividir entre $x-a$ es $P(a)$.',
+        'Aquí $a = ' + d.a + '$, así que sustituimos.',
+        '$P(' + d.a + ') = ' + d.val + '$',
+        d.val === 0 ? 'Como da cero, $x' + (d.a >= 0 ? '-' + d.a : '+' + (-d.a)) + '$ es un factor del polinomio.'
+          : 'Como no da cero, la división no es exacta.'];
+    },
+    answer: function (d) { return String(d.val); }
+  });
+
+  p.exercise({
     title: 'Ruffini y teorema del resto',
     level: 'medio',
     gen: function (r) {
@@ -262,31 +287,6 @@ Course.topic('al-polinomios', function (p) {
         'La menor es $' + d.menor + '$.'];
     },
     answer: function (d) { return 'Raíces: ' + d.raices.join(', ') + '. La menor es ' + d.menor + '.'; }
-  });
-
-  p.exercise({
-    title: 'Teorema del resto sin dividir',
-    level: 'basico',
-    gen: function (r) {
-      var c = [r.nz(-3, 3), r.pm(1, 6), r.pm(1, 7), r.pm(1, 9)];
-      var a = r.pm(1, 3);
-      return { c: c, a: a, val: ML.polyEval(c, a) };
-    },
-    ask: function (d) {
-      return '¿Qué resto da $' + ML.polyTex(d.c) + '$ al dividirlo entre $x' +
-        (d.a >= 0 ? '-' + d.a : '+' + (-d.a)) + '$? <em>No hagas la división.</em>';
-    },
-    fields: [{ name: 'r', label: 'Resto', w: 'tiny' }],
-    sol: function (d) { return { r: d.val }; },
-    hint: function (d) { return 'Teorema del resto: basta con calcular $P(' + d.a + ')$.'; },
-    steps: function (d) {
-      return ['El teorema del resto dice que el resto de dividir entre $x-a$ es $P(a)$.',
-        'Aquí $a = ' + d.a + '$, así que sustituimos.',
-        '$P(' + d.a + ') = ' + d.val + '$',
-        d.val === 0 ? 'Como da cero, $x' + (d.a >= 0 ? '-' + d.a : '+' + (-d.a)) + '$ es un factor del polinomio.'
-          : 'Como no da cero, la división no es exacta.'];
-    },
-    answer: function (d) { return String(d.val); }
   });
 
   p.keys([

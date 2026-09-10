@@ -139,34 +139,6 @@ Course.topic('av-minimos-cuadrados', function (p) {
   });
 
   p.exercise({
-    title: '¿Es la solución de mínimos cuadrados?',
-    level: 'avanzado',
-    gen: function (r) {
-      var y = [r.int(-3, 4), r.int(-3, 4), r.int(-3, 4)];
-      var c1 = ML.F(y[2] - y[0], 2), c0 = ML.F(y[0] + y[1] + y[2], 3).sub(c1);
-      var buena = r.bool(0.5), x0 = buena ? c0 : c0.add(ML.F(r.pm(1, 2), 2)), x1 = buena ? c1 : c1;
-      if (!buena && r.bool(0.5)) { x0 = c0; x1 = c1.add(ML.F(r.pm(1, 2), 2)); }
-      var res = [0, 1, 2].map(function (t) { return ML.F(y[t]).sub(x0).sub(x1.mul(t)); });
-      var d1 = res[0].add(res[1]).add(res[2]), d2 = res[1].add(res[2].mul(2));
-      return { y: y, x0: x0, x1: x1, d1: d1, d2: d2, ok: d1.n === 0 && d2.n === 0 ? 'si' : 'no' };
-    },
-    ask: function (d) {
-      return 'Para los puntos $(0,\\ ' + d.y[0] + ')$, $(1,\\ ' + d.y[1] + ')$ y $(2,\\ ' + d.y[2] + ')$, alguien propone la recta $y = ' + d.x0.tex() + ' + ' + d.x1.texp() +
-        '\\,t$. Calcula los productos escalares del residuo con las dos columnas de $A$, $\\vec a_1 = (1, 1, 1)$ y $\\vec a_2 = (0, 1, 2)$. ¿Es la recta de mínimos cuadrados?';
-    },
-    fields: [{ name: 'd1', label: '$\\vec a_1\\cdot\\vec r$', w: 'tiny' }, { name: 'd2', label: '$\\vec a_2\\cdot\\vec r$', w: 'tiny' }, { name: 't', label: '¿Es la de mínimos cuadrados?', opts: [{ t: 'Sí', v: 'si' }, { t: 'No', v: 'no' }] }],
-    sol: function (d) { return { d1: d.d1.val(), d2: d.d2.val(), t: d.ok }; },
-    tol: 1e-9,
-    hint: function () { return ['Residuo: $r_i = y_i - (c_0 + c_1 t_i)$ para cada punto.', 'Es la recta de mínimos cuadrados si y solo si los dos productos escalares valen 0.']; },
-    steps: function (d) {
-      return ['Residuos: $' + [0, 1, 2].map(function (t) { return ML.F(d.y[t]).sub(d.x0).sub(d.x1.mul(t)).tex(); }).join(',\\ ') + '$',
-        '$\\vec a_1\\cdot\\vec r = ' + d.d1.tex() + '$, $\\vec a_2\\cdot\\vec r = ' + d.d2.tex() + '$',
-        d.ok === 'si' ? 'Los dos son 0: el residuo es perpendicular al espacio columna. <strong>Sí</strong> es la solución de mínimos cuadrados.' : 'Alguno no es 0: el residuo no es perpendicular a las columnas y hay rectas mejores. <strong>No</strong> es la solución.'];
-    },
-    answer: function (d) { return d.d1.toString() + ', ' + d.d2.toString() + '; ' + (d.ok === 'si' ? 'sí' : 'no'); }
-  });
-
-  p.exercise({
     title: 'Proyectar sobre una recta del espacio',
     level: 'medio',
     gen: function (r) {
@@ -209,6 +181,34 @@ Course.topic('av-minimos-cuadrados', function (p) {
         'El residuo es cero: con tantos coeficientes como datos, el ajuste deja de promediar y se limita a interpolar.'];
     },
     answer: function (d) { return 'c₀ = ' + d.c0.toString() + ', c₁ = ' + d.c1.toString() + ', c₂ = ' + d.c2.toString(); }
+  });
+
+  p.exercise({
+    title: '¿Es la solución de mínimos cuadrados?',
+    level: 'avanzado',
+    gen: function (r) {
+      var y = [r.int(-3, 4), r.int(-3, 4), r.int(-3, 4)];
+      var c1 = ML.F(y[2] - y[0], 2), c0 = ML.F(y[0] + y[1] + y[2], 3).sub(c1);
+      var buena = r.bool(0.5), x0 = buena ? c0 : c0.add(ML.F(r.pm(1, 2), 2)), x1 = buena ? c1 : c1;
+      if (!buena && r.bool(0.5)) { x0 = c0; x1 = c1.add(ML.F(r.pm(1, 2), 2)); }
+      var res = [0, 1, 2].map(function (t) { return ML.F(y[t]).sub(x0).sub(x1.mul(t)); });
+      var d1 = res[0].add(res[1]).add(res[2]), d2 = res[1].add(res[2].mul(2));
+      return { y: y, x0: x0, x1: x1, d1: d1, d2: d2, ok: d1.n === 0 && d2.n === 0 ? 'si' : 'no' };
+    },
+    ask: function (d) {
+      return 'Para los puntos $(0,\\ ' + d.y[0] + ')$, $(1,\\ ' + d.y[1] + ')$ y $(2,\\ ' + d.y[2] + ')$, alguien propone la recta $y = ' + d.x0.tex() + ' + ' + d.x1.texp() +
+        '\\,t$. Calcula los productos escalares del residuo con las dos columnas de $A$, $\\vec a_1 = (1, 1, 1)$ y $\\vec a_2 = (0, 1, 2)$. ¿Es la recta de mínimos cuadrados?';
+    },
+    fields: [{ name: 'd1', label: '$\\vec a_1\\cdot\\vec r$', w: 'tiny' }, { name: 'd2', label: '$\\vec a_2\\cdot\\vec r$', w: 'tiny' }, { name: 't', label: '¿Es la de mínimos cuadrados?', opts: [{ t: 'Sí', v: 'si' }, { t: 'No', v: 'no' }] }],
+    sol: function (d) { return { d1: d.d1.val(), d2: d.d2.val(), t: d.ok }; },
+    tol: 1e-9,
+    hint: function () { return ['Residuo: $r_i = y_i - (c_0 + c_1 t_i)$ para cada punto.', 'Es la recta de mínimos cuadrados si y solo si los dos productos escalares valen 0.']; },
+    steps: function (d) {
+      return ['Residuos: $' + [0, 1, 2].map(function (t) { return ML.F(d.y[t]).sub(d.x0).sub(d.x1.mul(t)).tex(); }).join(',\\ ') + '$',
+        '$\\vec a_1\\cdot\\vec r = ' + d.d1.tex() + '$, $\\vec a_2\\cdot\\vec r = ' + d.d2.tex() + '$',
+        d.ok === 'si' ? 'Los dos son 0: el residuo es perpendicular al espacio columna. <strong>Sí</strong> es la solución de mínimos cuadrados.' : 'Alguno no es 0: el residuo no es perpendicular a las columnas y hay rectas mejores. <strong>No</strong> es la solución.'];
+    },
+    answer: function (d) { return d.d1.toString() + ', ' + d.d2.toString() + '; ' + (d.ok === 'si' ? 'sí' : 'no'); }
   });
 
   p.keys([

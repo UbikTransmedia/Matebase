@@ -430,6 +430,57 @@ Course.topic('pe-causal', function (p) {
   });
 
   p.exercise({
+    title: '¿Qué le falta a este estudio?',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { txt: 'Se da un jarabe a 200 niños con tos y a los diez días el 90 % está mejor. Se concluye que el jarabe funciona.',
+          falta: 'control', por: 'Falta el <strong>grupo de control</strong>: casi toda la tos se cura sola en diez días. Sin comparación no hay conclusión.' },
+        { txt: 'Se compara un fármaco con no dar nada. Los que lo reciben mejoran más y saben que lo están recibiendo.',
+          falta: 'placebo', por: 'Falta el <strong>placebo</strong>: parte de la mejora puede venir de creerse tratado, que es un efecto real y medible.' },
+        { txt: 'Los pacientes reciben el fármaco o el placebo al azar, pero el médico que evalúa la mejoría sabe quién ha recibido qué.',
+          falta: 'ciego', por: 'Falta el <strong>doble ciego</strong>: quien evalúa puede sesgar la medición sin ninguna mala intención.' },
+        { txt: 'Se miden 30 variables de salud y se publica la única en la que hubo diferencia significativa.',
+          falta: 'registro', por: 'Falta el <strong>registro previo</strong>: con 30 pruebas al 5 %, una o dos salen significativas por puro azar.' },
+        { txt: 'Los pacientes eligen si quieren el tratamiento nuevo o el de siempre, y luego se comparan los dos grupos.',
+          falta: 'azar', por: 'Falta la <strong>aleatorización</strong>: quien elige lo nuevo puede ser sistemáticamente distinto (más joven, más informado, más grave).' }
+      ];
+      return r.pick(casos);
+    },
+    ask: function (d) {
+      return d.txt + '<br><br>¿Qué precaución falta?<br>' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Responde con una palabra: ' +
+        '<code>control</code>, <code>azar</code>, <code>placebo</code>, <code>ciego</code> o ' +
+        '<code>registro</code>.</span>';
+    },
+    fields: [{ name: 'q', label: 'Falta…', w: 'wide' }],
+    sol: function (d) { return { q: d.falta }; },
+    check: function (v, d) {
+      var q = U.eligeOpcion(v.raw.q, {
+        control: /control|comparaci|grupo de control|testigo/,
+        azar: /azar|aleatoriz|sorteo|al azar/,
+        placebo: /placebo/,
+        ciego: /ciego|cegamiento|enmascara/,
+        registro: /registro|preregistr|declarar|multiples pruebas|multiple/
+      });
+      if (!q) {
+        return { ok: false, msg: 'Responde con una de las cinco palabras: control, azar, placebo, ' +
+          'ciego o registro.' };
+      }
+      return { ok: q === d.falta };
+    },
+    hint: function () {
+      return 'Pregúntate qué habría pasado sin hacer nada, si los grupos son comparables, si alguien ' +
+        'sabe qué está recibiendo, y si se decidió antes qué se iba a medir.';
+    },
+    steps: function (d) { return [d.por]; },
+    answer: function (d) {
+      return { control: 'Grupo de control', azar: 'Aleatorización', placebo: 'Placebo',
+        ciego: 'Doble ciego', registro: 'Registro previo' }[d.falta];
+    }
+  });
+
+  p.exercise({
     title: 'Simpson con números nuevos',
     level: 'avanzado',
     gen: function (r) {
@@ -479,57 +530,6 @@ Course.topic('pe-causal', function (p) {
         'conclusión honrada es que <strong>A es mejor</strong>.'];
     },
     answer: function (d) { return 'A: ' + U.fmt(d.tA, 1) + ' % · B: ' + U.fmt(d.tB, 1) + ' %'; }
-  });
-
-  p.exercise({
-    title: '¿Qué le falta a este estudio?',
-    level: 'medio',
-    gen: function (r) {
-      var casos = [
-        { txt: 'Se da un jarabe a 200 niños con tos y a los diez días el 90 % está mejor. Se concluye que el jarabe funciona.',
-          falta: 'control', por: 'Falta el <strong>grupo de control</strong>: casi toda la tos se cura sola en diez días. Sin comparación no hay conclusión.' },
-        { txt: 'Se compara un fármaco con no dar nada. Los que lo reciben mejoran más y saben que lo están recibiendo.',
-          falta: 'placebo', por: 'Falta el <strong>placebo</strong>: parte de la mejora puede venir de creerse tratado, que es un efecto real y medible.' },
-        { txt: 'Los pacientes reciben el fármaco o el placebo al azar, pero el médico que evalúa la mejoría sabe quién ha recibido qué.',
-          falta: 'ciego', por: 'Falta el <strong>doble ciego</strong>: quien evalúa puede sesgar la medición sin ninguna mala intención.' },
-        { txt: 'Se miden 30 variables de salud y se publica la única en la que hubo diferencia significativa.',
-          falta: 'registro', por: 'Falta el <strong>registro previo</strong>: con 30 pruebas al 5 %, una o dos salen significativas por puro azar.' },
-        { txt: 'Los pacientes eligen si quieren el tratamiento nuevo o el de siempre, y luego se comparan los dos grupos.',
-          falta: 'azar', por: 'Falta la <strong>aleatorización</strong>: quien elige lo nuevo puede ser sistemáticamente distinto (más joven, más informado, más grave).' }
-      ];
-      return r.pick(casos);
-    },
-    ask: function (d) {
-      return d.txt + '<br><br>¿Qué precaución falta?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Responde con una palabra: ' +
-        '<code>control</code>, <code>azar</code>, <code>placebo</code>, <code>ciego</code> o ' +
-        '<code>registro</code>.</span>';
-    },
-    fields: [{ name: 'q', label: 'Falta…', w: 'wide' }],
-    sol: function (d) { return { q: d.falta }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        control: /control|comparaci|grupo de control|testigo/,
-        azar: /azar|aleatoriz|sorteo|al azar/,
-        placebo: /placebo/,
-        ciego: /ciego|cegamiento|enmascara/,
-        registro: /registro|preregistr|declarar|multiples pruebas|multiple/
-      });
-      if (!q) {
-        return { ok: false, msg: 'Responde con una de las cinco palabras: control, azar, placebo, ' +
-          'ciego o registro.' };
-      }
-      return { ok: q === d.falta };
-    },
-    hint: function () {
-      return 'Pregúntate qué habría pasado sin hacer nada, si los grupos son comparables, si alguien ' +
-        'sabe qué está recibiendo, y si se decidió antes qué se iba a medir.';
-    },
-    steps: function (d) { return [d.por]; },
-    answer: function (d) {
-      return { control: 'Grupo de control', azar: 'Aleatorización', placebo: 'Placebo',
-        ciego: 'Doble ciego', registro: 'Registro previo' }[d.falta];
-    }
   });
 
   p.keys([

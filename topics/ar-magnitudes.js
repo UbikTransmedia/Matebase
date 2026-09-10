@@ -1,6 +1,11 @@
 /* Tema: Magnitudes, unidades y análisis dimensional */
 Course.topic('ar-magnitudes', function (p) {
 
+  p.puente('Hasta aquí los números iban solos. En cuanto miden algo, llevan una unidad pegada, y esa ' +
+    'unidad se comporta como un factor más: se multiplica, se divide y se cancela. Este tema enseña a ' +
+    'cambiar de unidad sin equivocarse, a no escribir más cifras de las que se han medido y a usar ' +
+    'las unidades como detector de fórmulas mal recordadas.');
+
   p.text('Una <strong>magnitud</strong> es todo aquello que se puede medir: longitud, masa, tiempo, ' +
     'temperatura. Y medir es comparar con una unidad. Sin unidad, un número no significa nada: ' +
     '«pesa 3» no dice absolutamente nada.');
@@ -76,6 +81,23 @@ Course.topic('ar-magnitudes', function (p) {
     }
   });
 
+  p.ejemplo({
+    title: 'Una superficie, con el factor al cuadrado',
+    enunciado: 'Expresar $2{,}5\\ \\text{m}^2$ en $\\text{cm}^2$.',
+    pasos: [
+      { t: 'El factor lineal es $1\\ \\text{m} = 100\\ \\text{cm}$. Pero la unidad está al cuadrado, así que el factor de conversión también: $\\left(\\dfrac{100\\ \\text{cm}}{1\\ \\text{m}}\\right)^2 = \\dfrac{10\\,000\\ \\text{cm}^2}{1\\ \\text{m}^2}$.', antes: '¿Basta con multiplicar por 100?' },
+      { t: 'Se multiplica: $2{,}5\\ \\text{m}^2\\cdot\\dfrac{10\\,000\\ \\text{cm}^2}{1\\ \\text{m}^2} = 25\\,000\\ \\text{cm}^2$. Los $\\text{m}^2$ se tachan y queda la unidad buscada.' },
+      { t: 'Sentido común: un cuadrado de 1 m de lado contiene $100\\times 100 = 10\\,000$ cuadraditos de 1 cm. Dos y medio de esos metros cuadrados son 25 000 cuadraditos. ✓', antes: '¿Cómo comprobarías el resultado sin fórmulas?' }
+    ],
+    cierre: 'Con volúmenes el factor va al cubo: $1\\ \\text{m}^3 = 100^3\\ \\text{cm}^3 = 1\\,000\\,000\\ \\text{cm}^3$. Es el error más frecuente del tema, y las unidades escritas lo delatan.'
+  });
+
+  p.comprueba('¿Cuántos $\\text{cm}^2$ hay en $1\\ \\text{m}^2$?', [
+    { t: '100', ok: false, por: 'Eso son los centímetros que hay en un metro, en línea. Un metro cuadrado es un cuadrado de 100 cm de lado.' },
+    { t: '10 000', ok: true, por: '$100\\cdot 100 = 10\\,000$: cien filas de cien cuadraditos.' },
+    { t: '1000', ok: false, por: 'Ni el factor lineal ni el cúbico: el cuadrado de 100 es 10 000.' }
+  ]);
+
   p.note('El error más caro de la historia por un cambio de unidades: en 1999 la NASA perdió la sonda ' +
     '<em>Mars Climate Orbiter</em>, de 125 millones de dólares, porque un equipo trabajaba en libras-fuerza ' +
     'y otro en newtons. La nave se acercó demasiado a Marte y se desintegró. Nadie había comprobado ' +
@@ -127,6 +149,7 @@ Course.topic('ar-magnitudes', function (p) {
   p.demo({
     title: 'Cazar fórmulas imposibles',
     intro: 'Todas estas fórmulas parecen razonables. Comprueba sus dimensiones y descubre cuáles no pueden ser correctas.',
+    predice: 'Hay siete fórmulas y tres son imposibles. Antes de pulsar, intenta señalar cuáles: $e = \\frac{1}{2}at$ y $F = mv$ son buenas candidatas. ¿Por qué?',
     build: function (host, d) {
       var idx = 0;
       var casos = [
@@ -282,16 +305,11 @@ Course.topic('ar-magnitudes', function (p) {
     },
     ask: function (d) {
       return '¿Es dimensionalmente posible la fórmula $' + d.f + '$?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>. ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">' +
         'Recuerda: $[v] = L\\,T^{-1}$, $[a] = L\\,T^{-2}$, $[F] = M\\,L\\,T^{-2}$, $[E] = M\\,L^2\\,T^{-2}$.</span>';
     },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'Sí, las dimensiones cuadran', v: 'si' }, { t: 'No, es imposible', v: 'no' }] }],
     sol: function (d) { return { r: d.ok ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var t = v.raw.r.trim().toLowerCase().replace(/[íÍ]/g, 'i');
-      if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe <code>si</code> o <code>no</code>.' };
-      return (t === 'si') === !!d.ok;
-    },
     hint: function () { return 'Sustituye cada símbolo por su dimensión y comprueba que los dos lados coinciden.'; },
     steps: function (d) {
       return ['Se sustituye cada magnitud por su dimensión en función de $M$, $L$ y $T$.',

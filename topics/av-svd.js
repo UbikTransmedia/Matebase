@@ -208,6 +208,28 @@ Course.topic('av-svd', function (p) {
   });
 
   p.exercise({
+    title: 'Cuánto ocupa una imagen comprimida',
+    level: 'basico',
+    gen: function (r) {
+      var dim = r.pick([[100, 100], [480, 640], [1000, 1500]]), k = r.pick([5, 20, 50]);
+      var guarda = k * (dim[0] + dim[1] + 1);
+      return { m: dim[0], n: dim[1], k: k, guarda: guarda, pc: 100 * guarda / (dim[0] * dim[1]) };
+    },
+    ask: function (d) {
+      return 'Una imagen en escala de grises de ' + d.m + ' × ' + d.n + ' píxeles se guarda con solo sus ' + d.k + ' primeros términos $\\sigma_i\\,\\vec u_i\\vec v_i^t$. ¿Cuántos números hay que guardar? ¿Qué porcentaje del tamaño original es? (Dos decimales.)';
+    },
+    fields: [{ name: 'g', label: 'números', w: 'wide' }, { name: 'p', label: 'porcentaje', w: 'tiny' }],
+    sol: function (d) { return { g: d.guarda, p: U.round(d.pc, 4) }; },
+    tol: 0.006,
+    errores: [{ si: function (v, d) { return Math.abs(v.g - d.k * d.m * d.n) < 0.5; }, msg: 'No hace falta guardar cada matriz $\\vec u_i\\vec v_i^t$ entera: basta con los dos vectores y el número $\\sigma_i$.' }],
+    hint: function () { return ['Cada término necesita un vector $\\vec u_i$ de ' + 'tantos números como filas, un $\\vec v_i$ de tantos como columnas y un número $\\sigma_i$.']; },
+    steps: function (d) {
+      return ['Cada término: $' + d.m + ' + ' + d.n + ' + 1 = ' + (d.m + d.n + 1) + '$ números.', 'Con ' + d.k + ' términos: $' + U.miles(d.guarda) + '$ números, frente a $' + U.miles(d.m * d.n) + '$.', 'Porcentaje: $' + U.fmt(d.pc, 2) + '$ %.'];
+    },
+    answer: function (d) { return U.miles(d.guarda) + ' números, ' + U.fmt(d.pc, 2) + ' %'; }
+  });
+
+  p.exercise({
     title: 'Valores singulares con AᵗA',
     level: 'medio',
     gen: function (r) {
@@ -231,28 +253,6 @@ Course.topic('av-svd', function (p) {
       return ['$A^tA = ' + ML.matTex(d.AtA) + '$', 'Sus autovalores son $' + U.fmt(d.s1 * d.s1, 4) + '$ y $' + U.fmt(d.s2 * d.s2, 4) + '$.', 'Valores singulares: $\\sigma_1 \\approx ' + U.fmt(d.s1, 3) + '$ y $\\sigma_2 \\approx ' + U.fmt(d.s2, 3) + '$.'];
     },
     answer: function (d) { return U.fmt(d.s1, 3) + ' y ' + U.fmt(d.s2, 3); }
-  });
-
-  p.exercise({
-    title: 'Cuánto ocupa una imagen comprimida',
-    level: 'basico',
-    gen: function (r) {
-      var dim = r.pick([[100, 100], [480, 640], [1000, 1500]]), k = r.pick([5, 20, 50]);
-      var guarda = k * (dim[0] + dim[1] + 1);
-      return { m: dim[0], n: dim[1], k: k, guarda: guarda, pc: 100 * guarda / (dim[0] * dim[1]) };
-    },
-    ask: function (d) {
-      return 'Una imagen en escala de grises de ' + d.m + ' × ' + d.n + ' píxeles se guarda con solo sus ' + d.k + ' primeros términos $\\sigma_i\\,\\vec u_i\\vec v_i^t$. ¿Cuántos números hay que guardar? ¿Qué porcentaje del tamaño original es? (Dos decimales.)';
-    },
-    fields: [{ name: 'g', label: 'números', w: 'wide' }, { name: 'p', label: 'porcentaje', w: 'tiny' }],
-    sol: function (d) { return { g: d.guarda, p: U.round(d.pc, 4) }; },
-    tol: 0.006,
-    errores: [{ si: function (v, d) { return Math.abs(v.g - d.k * d.m * d.n) < 0.5; }, msg: 'No hace falta guardar cada matriz $\\vec u_i\\vec v_i^t$ entera: basta con los dos vectores y el número $\\sigma_i$.' }],
-    hint: function () { return ['Cada término necesita un vector $\\vec u_i$ de ' + 'tantos números como filas, un $\\vec v_i$ de tantos como columnas y un número $\\sigma_i$.']; },
-    steps: function (d) {
-      return ['Cada término: $' + d.m + ' + ' + d.n + ' + 1 = ' + (d.m + d.n + 1) + '$ números.', 'Con ' + d.k + ' términos: $' + U.miles(d.guarda) + '$ números, frente a $' + U.miles(d.m * d.n) + '$.', 'Porcentaje: $' + U.fmt(d.pc, 2) + '$ %.'];
-    },
-    answer: function (d) { return U.miles(d.guarda) + ' números, ' + U.fmt(d.pc, 2) + ' %'; }
   });
 
   p.exercise({

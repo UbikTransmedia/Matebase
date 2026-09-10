@@ -148,6 +148,27 @@ Course.topic('av-recurrencias', function (p) {
   });
 
   p.exercise({
+    title: 'Subir una escalera',
+    level: 'basico',
+    gen: function (r) {
+      var n = r.int(4, 14), a = 1, b = 2;
+      for (var i = 3; i <= n; i++) { var c = a + b; a = b; b = c; }
+      return { n: n, v: b, pot: Math.pow(2, n - 1) };
+    },
+    ask: function (d) { return '¿De cuántas maneras distintas se puede subir una escalera de ' + d.n + ' peldaños, si en cada paso se sube uno o dos peldaños?'; },
+    fields: [{ name: 'v', label: 'maneras', w: 'tiny' }],
+    sol: function (d) { return { v: d.v }; },
+    errores: [{ si: function (v, d) { return v.v === d.pot; }, msg: 'Eso contaría todas las formas de partir la escalera en tramos de cualquier longitud. Aquí los pasos solo pueden ser de 1 o de 2.' }],
+    hint: function () { return ['Para llegar al peldaño $n$, el último paso sale del $n - 1$ o del $n - 2$.', 'Así que $m_n = m_{n-1} + m_{n-2}$, con $m_1 = 1$ y $m_2 = 2$.']; },
+    steps: function (d) {
+      var s = [1, 2];
+      for (var i = 3; i <= d.n; i++) s.push(s[i - 2] + s[i - 3]);
+      return ['$m_n = m_{n-1} + m_{n-2}$, con $m_1 = 1$ y $m_2 = 2$.', 'Valores: $' + s.join(',\\ ') + '$.', 'Para ' + d.n + ' peldaños hay <strong>' + d.v + '</strong> maneras: el término $F_{' + (d.n + 1) + '}$ de Fibonacci.'];
+    },
+    answer: function (d) { return String(d.v); }
+  });
+
+  p.exercise({
     title: 'El término general',
     level: 'medio',
     gen: function (r) {
@@ -170,27 +191,6 @@ Course.topic('av-recurrencias', function (p) {
         'Así, $a_n = ' + d.A + '\\cdot(' + d.x1 + ')^n ' + (d.B < 0 ? '- ' + (-d.B) : '+ ' + d.B) + '\\cdot(' + d.x2 + ')^n$. Comprueba con $n = 2$: $' + (d.A * d.x1 * d.x1 + d.B * d.x2 * d.x2) + '$, que coincide con $' + d.p + '\\cdot ' + d.a1 + ' + (' + d.q + ')\\cdot ' + d.a0 + '$.'];
     },
     answer: function (d) { return 'A = ' + d.A + ', B = ' + d.B; }
-  });
-
-  p.exercise({
-    title: 'Subir una escalera',
-    level: 'basico',
-    gen: function (r) {
-      var n = r.int(4, 14), a = 1, b = 2;
-      for (var i = 3; i <= n; i++) { var c = a + b; a = b; b = c; }
-      return { n: n, v: b, pot: Math.pow(2, n - 1) };
-    },
-    ask: function (d) { return '¿De cuántas maneras distintas se puede subir una escalera de ' + d.n + ' peldaños, si en cada paso se sube uno o dos peldaños?'; },
-    fields: [{ name: 'v', label: 'maneras', w: 'tiny' }],
-    sol: function (d) { return { v: d.v }; },
-    errores: [{ si: function (v, d) { return v.v === d.pot; }, msg: 'Eso contaría todas las formas de partir la escalera en tramos de cualquier longitud. Aquí los pasos solo pueden ser de 1 o de 2.' }],
-    hint: function () { return ['Para llegar al peldaño $n$, el último paso sale del $n - 1$ o del $n - 2$.', 'Así que $m_n = m_{n-1} + m_{n-2}$, con $m_1 = 1$ y $m_2 = 2$.']; },
-    steps: function (d) {
-      var s = [1, 2];
-      for (var i = 3; i <= d.n; i++) s.push(s[i - 2] + s[i - 3]);
-      return ['$m_n = m_{n-1} + m_{n-2}$, con $m_1 = 1$ y $m_2 = 2$.', 'Valores: $' + s.join(',\\ ') + '$.', 'Para ' + d.n + ' peldaños hay <strong>' + d.v + '</strong> maneras: el término $F_{' + (d.n + 1) + '}$ de Fibonacci.'];
-    },
-    answer: function (d) { return String(d.v); }
   });
 
   p.exercise({

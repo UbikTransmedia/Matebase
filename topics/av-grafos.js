@@ -289,6 +289,27 @@ Course.topic('av-grafos', function (p) {
   });
 
   p.exercise({
+    title: 'Aristas de un árbol',
+    level: 'basico',
+    gen: function (r) {
+      var V = r.int(3, 40);
+      return { V: V, A: V - 1 };
+    },
+    ask: function (d) {
+      return 'Un árbol tiene $' + d.V + '$ vértices. ¿Cuántas aristas tiene?';
+    },
+    fields: [{ name: 'a', label: 'Aristas', w: 'tiny' }],
+    sol: function (d) { return { a: d.A }; },
+    hint: function () { return 'Un árbol siempre tiene una arista menos que vértices.'; },
+    steps: function (d) {
+      return ['Un árbol es conexo y no tiene ciclos.',
+        'Empezando por un vértice suelto, cada arista nueva añade exactamente un vértice nuevo (si no, cerraría un ciclo).',
+        '$A = V - 1 = ' + d.V + ' - 1 = ' + d.A + '$'];
+    },
+    answer: function (d) { return d.A + ' aristas'; }
+  });
+
+  p.exercise({
     title: '¿Se puede recorrer de un trazo?',
     level: 'medio',
     gen: function (r) {
@@ -319,27 +340,6 @@ Course.topic('av-grafos', function (p) {
     answer: function (d) {
       return ['', 'Sí, recorrido cerrado', 'Sí, recorrido abierto', 'No se puede'][d.ok];
     }
-  });
-
-  p.exercise({
-    title: 'Aristas de un árbol',
-    level: 'basico',
-    gen: function (r) {
-      var V = r.int(3, 40);
-      return { V: V, A: V - 1 };
-    },
-    ask: function (d) {
-      return 'Un árbol tiene $' + d.V + '$ vértices. ¿Cuántas aristas tiene?';
-    },
-    fields: [{ name: 'a', label: 'Aristas', w: 'tiny' }],
-    sol: function (d) { return { a: d.A }; },
-    hint: function () { return 'Un árbol siempre tiene una arista menos que vértices.'; },
-    steps: function (d) {
-      return ['Un árbol es conexo y no tiene ciclos.',
-        'Empezando por un vértice suelto, cada arista nueva añade exactamente un vértice nuevo (si no, cerraría un ciclo).',
-        '$A = V - 1 = ' + d.V + ' - 1 = ' + d.A + '$'];
-    },
-    answer: function (d) { return d.A + ' aristas'; }
   });
 
   p.exercise({

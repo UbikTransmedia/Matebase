@@ -230,6 +230,27 @@ Course.topic('cib-refuerzo', function (p) {
   });
 
   p.exercise({
+    title: 'Nim: la jugada ganadora',
+    level: 'basico',
+    gen: function (r) { var s = r.int(5, 30); return { s: s, a: s % 4 }; },
+    ask: function (d) {
+      return 'Quedan <strong>' + d.s + ' palillos</strong> y te toca. Cada jugador coge 1, 2 o 3, y gana quien coge el último. ¿Cuántos debes coger para asegurarte la victoria? ' +
+        '(Si no hay ninguna jugada que la asegure, escribe 0.)';
+    },
+    fields: [{ name: 'a', label: 'coger', w: 'tiny' }],
+    sol: function (d) { return { a: d.a }; },
+    errores: [{ si: function (v, d) { return d.a !== 0 && 4 - d.a !== d.a && v.a === 4 - d.a; }, msg: 'Así el rival recibe un número de palillos que no es múltiplo de 4, y puede ser él quien lo deje en múltiplo de 4. La clave es dejárselo tú.' }],
+    hint: function () { return ['Empieza por el final: si quedan 4 y te toca, pierdes, cojas lo que cojas.', 'Intenta dejar siempre al rival un múltiplo de 4.']; },
+    steps: function (d) {
+      return ['Si al rival le quedan 4, 8, 12… palillos, coja lo que coja (1, 2 o 3), tú puedes coger lo que falte hasta 4 y volver a dejarle un múltiplo de 4. Al final le dejas 0.',
+        d.a ? '$' + d.s + ' = 4\\cdot ' + Math.floor(d.s / 4) + ' + ' + d.a + '$: coge <strong>' + d.a + '</strong> y déjale ' + (d.s - d.a) + '.'
+          : d.s + ' ya es múltiplo de 4: no hay jugada que asegure la victoria. Te toca esperar a que el rival se equivoque.',
+        'Esto es lo que MENACE descubre solo, a fuerza de premios y castigos, en el ejemplo de arriba.'];
+    },
+    answer: function (d) { return String(d.a); }
+  });
+
+  p.exercise({
     title: '¿Crecerán sus cuentas?',
     level: 'medio',
     gen: function (r) {
@@ -278,27 +299,6 @@ Course.topic('cib-refuerzo', function (p) {
         'Comprobación: $' + U.fmt(d.pb, 4) + ' + ' + (d.n - 1) + '\\cdot ' + U.fmt(d.po, 4) + ' = 1$ ✓'];
     },
     answer: function (d) { return U.fmt(d.pb, 4) + ' y ' + U.fmt(d.po, 4); }
-  });
-
-  p.exercise({
-    title: 'Nim: la jugada ganadora',
-    level: 'basico',
-    gen: function (r) { var s = r.int(5, 30); return { s: s, a: s % 4 }; },
-    ask: function (d) {
-      return 'Quedan <strong>' + d.s + ' palillos</strong> y te toca. Cada jugador coge 1, 2 o 3, y gana quien coge el último. ¿Cuántos debes coger para asegurarte la victoria? ' +
-        '(Si no hay ninguna jugada que la asegure, escribe 0.)';
-    },
-    fields: [{ name: 'a', label: 'coger', w: 'tiny' }],
-    sol: function (d) { return { a: d.a }; },
-    errores: [{ si: function (v, d) { return d.a !== 0 && 4 - d.a !== d.a && v.a === 4 - d.a; }, msg: 'Así el rival recibe un número de palillos que no es múltiplo de 4, y puede ser él quien lo deje en múltiplo de 4. La clave es dejárselo tú.' }],
-    hint: function () { return ['Empieza por el final: si quedan 4 y te toca, pierdes, cojas lo que cojas.', 'Intenta dejar siempre al rival un múltiplo de 4.']; },
-    steps: function (d) {
-      return ['Si al rival le quedan 4, 8, 12… palillos, coja lo que coja (1, 2 o 3), tú puedes coger lo que falte hasta 4 y volver a dejarle un múltiplo de 4. Al final le dejas 0.',
-        d.a ? '$' + d.s + ' = 4\\cdot ' + Math.floor(d.s / 4) + ' + ' + d.a + '$: coge <strong>' + d.a + '</strong> y déjale ' + (d.s - d.a) + '.'
-          : d.s + ' ya es múltiplo de 4: no hay jugada que asegure la victoria. Te toca esperar a que el rival se equivoque.',
-        'Esto es lo que MENACE descubre solo, a fuerza de premios y castigos, en el ejemplo de arriba.'];
-    },
-    answer: function (d) { return String(d.a); }
   });
 
   p.keys([

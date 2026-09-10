@@ -76,6 +76,12 @@ Course.topic('lg-conjuntos', function (p) {
     'conjunto, y $\\subset$ relaciona dos <em>conjuntos</em>. Si $A=\\{1,2\\}$, entonces $1 \\in A$ ' +
     'y $\\{1\\} \\subset A$, pero $1 \\subset A$ no tiene sentido.', 'warn');
 
+  p.comprueba('Sea $A = \\{2, 4, 6\\}$. ¿Cuál de estas tres frases está bien escrita y es cierta?', [
+    { t: '$4 \\in A$', ok: true, por: 'El 4 es un elemento, y $\\in$ es justo la relación entre un elemento y un conjunto.' },
+    { t: '$4 \\subset A$', ok: false, por: '$\\subset$ compara dos conjuntos, y el 4 no es un conjunto: la frase no significa nada.' },
+    { t: '$\\{4\\} \\in A$', ok: false, por: '$\\{4\\}$ es un conjunto de un elemento, y $A$ no contiene conjuntos, contiene números. Lo correcto sería $\\{4\\} \\subset A$.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.section('Operaciones');
 
@@ -114,6 +120,7 @@ Course.topic('lg-conjuntos', function (p) {
   p.demo({
     title: 'Diagramas de Venn',
     intro: 'Elige una operación y mira qué región queda sombreada. Compara la última pareja: son la misma región, y eso es De Morgan.',
+    predice: 'Antes de pulsar $\\overline{A \\cap B}$: ¿qué zona del dibujo crees que quedará sombreada, mucha o poca? ¿Coincidirá con la de $\\overline{A} \\cup \\overline{B}$?',
     build: function (host, d) {
       var op = 'union';
       var ops = {
@@ -195,6 +202,12 @@ Course.topic('lg-conjuntos', function (p) {
   p.text('Con 18 y 15 sobre 30, el número de repetidos es $18+15-30=3$. Guarda esta idea de sumar y ' +
     'descontar lo repetido: reaparecerá tal cual cuando calcules la probabilidad de que ocurra una ' +
     'cosa <em>o</em> la otra.');
+
+  p.comprueba('En otra clase, 12 alumnos tocan un instrumento, 9 cantan en el coro y 4 hacen las dos cosas. ¿Cuántos hacen al menos una de las dos?', [
+    { t: '21', ok: false, por: 'Has sumado sin más: los 4 que hacen las dos cosas están contados dos veces.' },
+    { t: '17', ok: true, por: '$12 + 9 - 4 = 17$. Los 4 repetidos se descuentan una vez.' },
+    { t: '13', ok: false, por: 'Has descontado los 4 dos veces. Solo estaban contados de más una vez.' }
+  ]);
 
   p.sub('Combinar dos conjuntos en lugar de mezclarlos');
 
@@ -295,6 +308,18 @@ Course.topic('lg-conjuntos', function (p) {
       ], { value: 'bi', on: function (v) { tipo = v; paint(); } });
       paint();
     }
+  });
+
+  p.ejemplo({
+    title: 'Clasificar la misma fórmula con tres conjuntos finales',
+    enunciado: 'La regla $f(x) = x^2$ se puede plantear entre distintos conjuntos, y la clasificación cambia aunque la fórmula no. Vamos a mirar $f:\\mathbb{R}\\to\\mathbb{R}$, $f:\\mathbb{R}\\to[0,+\\infty)$ y $f:[0,+\\infty)\\to[0,+\\infty)$.',
+    pasos: [
+      { t: '<strong>Inyectiva?</strong> Buscamos dos originales distintos con la misma imagen. $f(2) = f(-2) = 4$: los hay. Con $\\mathbb{R}$ como conjunto inicial, <strong>no</strong> es inyectiva.', antes: '¿Se te ocurren dos números distintos con el mismo cuadrado?' },
+      { t: '<strong>Sobreyectiva?</strong> Con conjunto final $\\mathbb{R}$, ¿algún $x$ cumple $x^2 = -1$? No: los negativos se quedan sin origen. $f:\\mathbb{R}\\to\\mathbb{R}$ no es ni inyectiva ni sobreyectiva.', antes: '¿Hay algún número real cuyo cuadrado sea $-1$?' },
+      { t: 'Si el conjunto final es $[0,+\\infty)$, ya no sobra nadie: todo $y \\ge 0$ es $(\\sqrt{y})^2$. $f:\\mathbb{R}\\to[0,+\\infty)$ es sobreyectiva, pero sigue sin ser inyectiva por el paso 1.', antes: 'Si solo se permiten imágenes no negativas, ¿sigue sobrando algún destino?' },
+      { t: 'Si además el conjunto inicial es $[0,+\\infty)$, desaparece el $-2$ del paso 1: dos no negativos distintos tienen cuadrados distintos. $f:[0,+\\infty)\\to[0,+\\infty)$ es <strong>biyectiva</strong>, y su inversa es la raíz cuadrada.', antes: 'Si quitamos los negativos del conjunto inicial, ¿puede haber todavía dos originales con la misma imagen?' }
+    ],
+    cierre: 'Moraleja: una aplicación no es solo una fórmula, es una fórmula <em>entre dos conjuntos</em>. Cambiar los conjuntos cambia la clasificación.'
   });
 
   p.note('Las <strong>biyecciones</strong> van a ser importantísimas más adelante: son la herramienta ' +
@@ -442,14 +467,10 @@ Course.topic('lg-conjuntos', function (p) {
       var c = r.pick(casos);
       return { f: c.f, t: c.t, por: c.por };
     },
-    ask: function (d) {
-      return 'Clasifica la aplicación $' + d.f + '$.<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>0</code> ninguna de las dos · ' +
-        '<code>1</code> solo inyectiva · <code>2</code> solo sobreyectiva · <code>3</code> biyectiva</span>';
-    },
-    fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],
-    sol: function (d) { return { t: d.t }; },
-    hint: function () { return 'Inyectiva: ¿dos valores distintos pueden dar la misma imagen? Sobreyectiva: ¿se alcanzan todos los valores del conjunto final?'; },
+    ask: function (d) { return 'Clasifica la aplicación $' + d.f + '$.'; },
+    fields: [{ name: 't', label: 'Es', opts: [{ t: 'ninguna de las dos', v: '0' }, { t: 'solo inyectiva', v: '1' }, { t: 'solo sobreyectiva', v: '2' }, { t: 'biyectiva', v: '3' }] }],
+    sol: function (d) { return { t: String(d.t) }; },
+    hint: function () { return ['Inyectiva: ¿dos valores distintos pueden dar la misma imagen? Busca un par que la comparta.', 'Sobreyectiva: ¿se alcanzan <em>todos</em> los valores del conjunto final? Busca uno que quede sin origen.']; },
     steps: function (d) {
       return ['<strong>Inyectiva</strong> significa que no hay dos originales con la misma imagen.',
         '<strong>Sobreyectiva</strong> significa que no sobra ningún elemento del conjunto final.',

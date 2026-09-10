@@ -269,38 +269,6 @@ Course.topic('pe-inferencia', function (p) {
   });
 
   p.exercise({
-    title: 'Tamaño de muestra necesario',
-    level: 'avanzado',
-    gen: function (r) {
-      var sd = r.int(4, 30);
-      var E = r.pick([0.5, 1, 1.5, 2, 2.5, 3]);
-      var conf = r.pick([90, 95, 99]);
-      var z = { 90: 1.645, 95: 1.96, 99: 2.575 }[conf];
-      var n = Math.ceil(Math.pow(z * sd / E, 2));
-      if (n > 200000) return null;
-      return { sd: sd, E: E, conf: conf, z: z, n: n };
-    },
-    ask: function (d) {
-      return 'Queremos estimar la media de una población con $\\sigma = ' + d.sd + '$ cometiendo un ' +
-        'error máximo de $' + U.fmt(d.E, 1) + '$ con un $' + d.conf + '\\%$ de confianza. ' +
-        '¿Cuál es el tamaño mínimo de muestra?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Usa $z = ' + d.z + '$ y redondea hacia arriba.</span>';
-    },
-    fields: [{ name: 'n', label: 'n mínimo', w: 'wide' }],
-    sol: function (d) { return { n: d.n }; },
-    hint: function () { return 'Despeja $n$ de $E = z\\frac{\\sigma}{\\sqrt{n}}$: sale $n \\ge \\left(\\frac{z\\sigma}{E}\\right)^2$.'; },
-    steps: function (d) {
-      return ['Partimos de $E = z\\dfrac{\\sigma}{\\sqrt{n}}$ y despejamos $n$.',
-        '$n \\ge \\left(\\dfrac{z\\,\\sigma}{E}\\right)^2 = \\left(\\dfrac{' + d.z + ' \\cdot ' + d.sd +
-        '}{' + U.fmt(d.E, 1) + '}\\right)^2$',
-        '$= ' + U.fmt(Math.pow(d.z * d.sd / d.E, 2), 4) + '$',
-        'Como el tamaño de muestra tiene que ser entero y cumplir la desigualdad, se redondea ' +
-        '<strong>hacia arriba</strong>: $n = ' + d.n + '$.'];
-    },
-    answer: function (d) { return String(d.n); }
-  });
-
-  p.exercise({
     title: 'Interpretar el intervalo',
     level: 'medio',
     gen: function (r) {
@@ -331,6 +299,38 @@ Course.topic('pe-inferencia', function (p) {
         'La respuesta correcta aquí es la <strong>' + d.ok + '</strong>.'];
     },
     answer: function (d) { return 'Opción ' + d.ok; }
+  });
+
+  p.exercise({
+    title: 'Tamaño de muestra necesario',
+    level: 'avanzado',
+    gen: function (r) {
+      var sd = r.int(4, 30);
+      var E = r.pick([0.5, 1, 1.5, 2, 2.5, 3]);
+      var conf = r.pick([90, 95, 99]);
+      var z = { 90: 1.645, 95: 1.96, 99: 2.575 }[conf];
+      var n = Math.ceil(Math.pow(z * sd / E, 2));
+      if (n > 200000) return null;
+      return { sd: sd, E: E, conf: conf, z: z, n: n };
+    },
+    ask: function (d) {
+      return 'Queremos estimar la media de una población con $\\sigma = ' + d.sd + '$ cometiendo un ' +
+        'error máximo de $' + U.fmt(d.E, 1) + '$ con un $' + d.conf + '\\%$ de confianza. ' +
+        '¿Cuál es el tamaño mínimo de muestra?<br>' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">Usa $z = ' + d.z + '$ y redondea hacia arriba.</span>';
+    },
+    fields: [{ name: 'n', label: 'n mínimo', w: 'wide' }],
+    sol: function (d) { return { n: d.n }; },
+    hint: function () { return 'Despeja $n$ de $E = z\\frac{\\sigma}{\\sqrt{n}}$: sale $n \\ge \\left(\\frac{z\\sigma}{E}\\right)^2$.'; },
+    steps: function (d) {
+      return ['Partimos de $E = z\\dfrac{\\sigma}{\\sqrt{n}}$ y despejamos $n$.',
+        '$n \\ge \\left(\\dfrac{z\\,\\sigma}{E}\\right)^2 = \\left(\\dfrac{' + d.z + ' \\cdot ' + d.sd +
+        '}{' + U.fmt(d.E, 1) + '}\\right)^2$',
+        '$= ' + U.fmt(Math.pow(d.z * d.sd / d.E, 2), 4) + '$',
+        'Como el tamaño de muestra tiene que ser entero y cumplir la desigualdad, se redondea ' +
+        '<strong>hacia arriba</strong>: $n = ' + d.n + '$.'];
+    },
+    answer: function (d) { return String(d.n); }
   });
 
   p.keys([

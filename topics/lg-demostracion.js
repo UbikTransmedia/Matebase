@@ -95,6 +95,18 @@ Course.topic('lg-demostracion', function (p) {
     'tienen su tema propio más adelante. Lo asombroso —y lo que hace falta demostrar— es que sea ' +
     'imposible, no simplemente que nadie lo haya conseguido.', null, 'Qué significa «irracional»');
 
+  p.ejemplo({
+    title: 'Una reducción al absurdo entera: no hay un número natural mayor que todos',
+    enunciado: 'Queremos demostrar que <em>no existe un número natural que sea mayor o igual que todos los demás</em>. Es una afirmación negativa —«no existe»—, y esas son las favoritas del absurdo.',
+    pasos: [
+      { t: '<strong>Suponemos lo contrario</strong>: que sí existe un natural $M$ mayor o igual que todos los naturales.', antes: 'Para razonar por absurdo, ¿qué es exactamente lo que hay que suponer?' },
+      { t: 'Razonamos a partir de esa suposición: $M$ es natural, así que $M + 1$ también lo es, y es un número natural <strong>mayor</strong> que $M$.', antes: 'Si $M$ es natural, ¿qué otro natural puedes fabricar a partir de él?' },
+      { t: '<strong>Contradicción</strong>: $M$ tenía que ser mayor o igual que todos, y acabamos de encontrar uno mayor. Las dos cosas no pueden ser ciertas a la vez.' },
+      { t: 'Como la suposición lleva a un imposible, la suposición era falsa: no existe ese $M$. ∎', antes: '¿Qué se concluye cuando una suposición lleva a una contradicción?' }
+    ],
+    cierre: 'La estructura es siempre la misma: suponer lo contrario, razonar con normalidad, chocar con algo imposible, y concluir. Con $\\sqrt{2}$ el choque tarda unas líneas más en llegar, pero el esqueleto es este.'
+  });
+
   p.sub('Y el atajo: el contraejemplo');
 
   p.text('Para <strong>refutar</strong> una afirmación del tipo «para todo $x$…» no hace falta ningún ' +
@@ -212,17 +224,28 @@ Course.topic('lg-demostracion', function (p) {
 
   p.formula('1 + 2 + 3 + \\dots + n = \\frac{n(n+1)}{2}');
 
-  p.list([
-    '<strong>Caso base</strong> ($n=1$): la suma vale $1$, y la fórmula da $\\frac{1\\cdot2}{2}=1$. ✓',
-    '<strong>Hipótesis de inducción</strong>: suponemos cierto que $1+\\dots+k = \\frac{k(k+1)}{2}$.',
-    '<strong>Paso</strong>: hay que probarlo para $k+1$. Sumamos $k+1$ a los dos lados de la hipótesis:',
-    '$1+\\dots+k+(k+1) = \\frac{k(k+1)}{2} + (k+1) = (k+1)\\left(\\frac{k}{2}+1\\right) = \\frac{(k+1)(k+2)}{2}$',
-    'Y eso es exactamente la fórmula con $n = k+1$. ∎'
-  ], true);
+  p.ejemplo({
+    title: 'La demostración, paso a paso',
+    enunciado: 'Demostrar por inducción que $1 + 2 + \\dots + n = \\frac{n(n+1)}{2}$ para todo natural $n \\ge 1$.',
+    pasos: [
+      { t: '<strong>Caso base</strong> ($n = 1$): la suma vale $1$, y la fórmula da $\\frac{1\\cdot 2}{2} = 1$. ✓', antes: '¿Cuál es el primer valor de $n$ que hay que comprobar, y cuánto vale la suma ahí?' },
+      { t: '<strong>Hipótesis de inducción</strong>: suponemos que la fórmula vale para un $k$ cualquiera, $1 + \\dots + k = \\frac{k(k+1)}{2}$.', antes: '¿Qué se supone cierto en el paso inductivo?' },
+      { t: '<strong>Paso</strong>: queremos la suma hasta $k + 1$. Es la suma hasta $k$ más el término nuevo, así que sumamos $k + 1$ a los dos lados de la hipótesis: $1 + \\dots + k + (k + 1) = \\frac{k(k+1)}{2} + (k + 1)$.', antes: '¿Qué hay que añadir a la suma hasta $k$ para tener la suma hasta $k + 1$?' },
+      { t: 'Operamos sacando factor común $(k + 1)$: $\\frac{k(k+1)}{2} + (k + 1) = (k + 1)\\left(\\frac{k}{2} + 1\\right) = \\frac{(k+1)(k+2)}{2}$.', antes: 'Los dos sumandos tienen algo en común. ¿Qué factor puedes sacar?' },
+      { t: 'Y eso es exactamente la fórmula con $n = k + 1$, porque $\\frac{(k+1)((k+1)+1)}{2} = \\frac{(k+1)(k+2)}{2}$. ∎' }
+    ],
+    cierre: 'Fíjate en el paso 3: es el único sitio donde se <em>usa</em> la hipótesis. Sin ese uso, no hay inducción.'
+  });
 
   p.note('El paso clave es <em>usar la hipótesis</em>. Si en tu demostración por inducción no has ' +
     'utilizado en ningún momento que la fórmula vale para $k$, seguramente algo está mal.', null,
     'Dónde se falla');
+
+  p.comprueba('Alguien comprueba con el ordenador que una fórmula se cumple para $n = 1, 2, 3, \\dots, 1\\,000\\,000$. ¿Qué ha demostrado?', [
+    { t: 'Que la fórmula es cierta para todo $n$', ok: false, por: 'Un millón de casos siguen siendo casos. El patrón $n^2 + n + 41$ aguantaba 40 y se rompía; otros aguantan miles de millones.' },
+    { t: 'Solo que es cierta para esos valores', ok: true, por: 'Exacto. Para pasar de «muchos casos» a «todos» hace falta un argumento general, como el paso inductivo.' },
+    { t: 'Que es cierta para todo $n$ menor que un millón, y por tanto en general', ok: false, por: 'La primera parte sí; la segunda no se sigue. Un contraejemplo puede estar en el millón uno.' }
+  ]);
 
   p.sub('Inducción más allá de las sumas');
 
@@ -250,37 +273,14 @@ Course.topic('lg-demostracion', function (p) {
     'propiedad se conserva paso a paso. Un test encuentra errores; una demostración por inducción ' +
     'garantiza que no los hay.');
 
-  p.section('Practica');
+  p.trampas([
+    { e: 'Dar por demostrado lo que solo se ha comprobado.', por: 'Cien casos que funcionan no son una demostración; un solo caso que falla sí es una refutación.' },
+    { e: 'Olvidar el caso base.', por: 'Sin él, el paso inductivo es una cadena de fichas que nadie empuja: no cae ninguna.' },
+    { e: 'No usar la hipótesis en el paso inductivo.', por: 'Si demuestras $P(k + 1)$ sin apoyarte en $P(k)$, o la fórmula era obvia o algo se ha colado.' },
+    { e: 'Negar mal al empezar un absurdo.', por: 'Lo contrario de «para todo $x$ pasa $P$» es «existe un $x$ para el que no pasa $P$», no «para ningún $x$ pasa $P$».' }
+  ]);
 
-  p.exercise({
-    title: 'Encuentra el contraejemplo',
-    level: 'medio',
-    gen: function (r) {
-      var casos = [
-        { t: 'Todo número primo es impar', f: function (n) { return !(ML.isPrime(n) && n % 2 === 0); }, res: 2, dom: 'número primo' },
-        { t: 'Si $n$ es primo, entonces $2^n - 1$ también lo es', f: function (n) { return !(ML.isPrime(n) && !ML.isPrime(Math.pow(2, n) - 1)); }, res: 11, dom: 'número primo' },
-        { t: 'Todo número impar mayor que 1 es primo', f: function (n) { return !(n % 2 === 1 && n > 1 && !ML.isPrime(n)); }, res: 9, dom: 'número natural' },
-        { t: '$n^2 + n + 41$ es primo para todo natural $n$', f: function (n) { return ML.isPrime(n * n + n + 41); }, res: 40, dom: 'número natural' },
-        { t: 'Para todo $n \\ge 1$, el número $n^2 + n + 1$ es primo', f: null, res: 4, dom: 'número natural mayor o igual que 1' }
-      ];
-      var c = r.pick(casos);
-      return { t: c.t, res: c.res, dom: c.dom };
-    },
-    ask: function (d) {
-      return 'La afirmación «<em>' + d.t + '</em>» es <strong>falsa</strong>. Escribe el ' +
-        '<strong>menor</strong> ' + d.dom + ' que sirve de contraejemplo.';
-    },
-    fields: [{ name: 'n', label: 'Contraejemplo', w: 'tiny' }],
-    sol: function (d) { return { n: d.res }; },
-    hint: function () { return 'Ve probando valores pequeños uno a uno hasta que alguno rompa la afirmación. Un solo caso basta.'; },
-    steps: function (d) {
-      return ['Para refutar un «para todo» basta con <strong>un</strong> caso que falle.',
-        'Probando valores pequeños, el primero que rompe la afirmación es $' + d.res + '$.',
-        'Con ese único contraejemplo, la afirmación queda descartada definitivamente.',
-        'Fíjate en que no hace falta explicar <em>por qué</em> falla en general: basta con exhibir el caso.'];
-    },
-    answer: function (d) { return String(d.res); }
-  });
+  p.section('Practica');
 
   p.exercise({
     title: 'Verifica una fórmula de inducción',
@@ -316,6 +316,36 @@ Course.topic('lg-demostracion', function (p) {
   });
 
   p.exercise({
+    title: 'Encuentra el contraejemplo',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { t: 'Todo número primo es impar', f: function (n) { return !(ML.isPrime(n) && n % 2 === 0); }, res: 2, dom: 'número primo' },
+        { t: 'Si $n$ es primo, entonces $2^n - 1$ también lo es', f: function (n) { return !(ML.isPrime(n) && !ML.isPrime(Math.pow(2, n) - 1)); }, res: 11, dom: 'número primo' },
+        { t: 'Todo número impar mayor que 1 es primo', f: function (n) { return !(n % 2 === 1 && n > 1 && !ML.isPrime(n)); }, res: 9, dom: 'número natural' },
+        { t: '$n^2 + n + 41$ es primo para todo natural $n$', f: function (n) { return ML.isPrime(n * n + n + 41); }, res: 40, dom: 'número natural' },
+        { t: 'Para todo $n \\ge 1$, el número $n^2 + n + 1$ es primo', f: null, res: 4, dom: 'número natural mayor o igual que 1' }
+      ];
+      var c = r.pick(casos);
+      return { t: c.t, res: c.res, dom: c.dom };
+    },
+    ask: function (d) {
+      return 'La afirmación «<em>' + d.t + '</em>» es <strong>falsa</strong>. Escribe el ' +
+        '<strong>menor</strong> ' + d.dom + ' que sirve de contraejemplo.';
+    },
+    fields: [{ name: 'n', label: 'Contraejemplo', w: 'tiny' }],
+    sol: function (d) { return { n: d.res }; },
+    hint: function () { return 'Ve probando valores pequeños uno a uno hasta que alguno rompa la afirmación. Un solo caso basta.'; },
+    steps: function (d) {
+      return ['Para refutar un «para todo» basta con <strong>un</strong> caso que falle.',
+        'Probando valores pequeños, el primero que rompe la afirmación es $' + d.res + '$.',
+        'Con ese único contraejemplo, la afirmación queda descartada definitivamente.',
+        'Fíjate en que no hace falta explicar <em>por qué</em> falla en general: basta con exhibir el caso.'];
+    },
+    answer: function (d) { return String(d.res); }
+  });
+
+  p.exercise({
     title: 'El paso inductivo',
     level: 'medio',
     gen: function (r) {
@@ -345,45 +375,6 @@ Course.topic('lg-demostracion', function (p) {
         'Ahí está el paso inductivo: partiendo de que vale para $k$, hemos <em>deducido</em> que vale para $k+1$.'];
     },
     answer: function (d) { return String(d.val); }
-  });
-
-  p.exercise({
-    title: '¿Qué método conviene?',
-    level: 'avanzado',
-    gen: function (r) {
-      var casos = [
-        { t: 'Demostrar que $\\sqrt{3}$ es irracional', m: 3, por: 'no se puede construir la irracionalidad de frente: se supone que sí es fracción y se busca la contradicción' },
-        { t: 'Demostrar que $1+2+\\dots+n = \\frac{n(n+1)}{2}$ para todo $n$', m: 4, por: 'es una afirmación sobre todos los naturales encadenados: inducción' },
-        { t: 'Demostrar que si $n$ es par, $n^2$ también lo es', m: 1, por: 'de la hipótesis se llega directo a la conclusión escribiendo $n = 2k$' },
-        { t: 'Demostrar que si $n^2$ es impar, $n$ es impar', m: 2, por: 'de frente es incómodo, pero el contrarrecíproco («si $n$ es par, $n^2$ es par») sale en una línea' },
-        { t: 'Refutar que «todo número impar es primo»', m: 5, por: 'basta con exhibir el 9' },
-        { t: 'Demostrar que hay infinitos números primos', m: 3, por: 'se supone que son finitos y se construye uno nuevo: contradicción' },
-        { t: 'Demostrar que $2^n > n$ para todo natural $n$', m: 4, por: 'afirmación para todos los naturales, con el caso $n+1$ apoyado en el $n$' },
-        { t: 'Refutar que «$n^2+n+41$ siempre es primo»', m: 5, por: 'con $n = 40$ se rompe' }
-      ];
-      var c = r.pick(casos);
-      return { t: c.t, m: c.m, por: c.por };
-    },
-    ask: function (d) {
-      return '<em>' + d.t + '</em><br>¿Qué método es el más adecuado?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> demostración directa · ' +
-        '<code>2</code> contrarrecíproco · <code>3</code> reducción al absurdo · ' +
-        '<code>4</code> inducción · <code>5</code> contraejemplo</span>';
-    },
-    fields: [{ name: 'm', label: 'Método', w: 'tiny' }],
-    sol: function (d) { return { m: d.m }; },
-    hint: function () { return 'Si hay que <em>refutar</em>, contraejemplo. Si es «para todo n natural», inducción. Si la negación da más juego que la hipótesis, absurdo o contrarrecíproco.'; },
-    steps: function (d) {
-      return ['Primero: ¿hay que demostrar o refutar? Refutar un «para todo» se hace con un contraejemplo.',
-        'Si es una afirmación encadenada sobre los naturales, casi siempre es inducción.',
-        'Si la hipótesis directa no da juego, se prueba con el contrarrecíproco o con el absurdo.',
-        'Aquí: ' + d.por + '.',
-        'Método: <strong>' + ['', 'demostración directa', 'contrarrecíproco', 'reducción al absurdo',
-          'inducción', 'contraejemplo'][d.m] + '</strong>.'];
-    },
-    answer: function (d) {
-      return ['', 'Demostración directa', 'Contrarrecíproco', 'Reducción al absurdo', 'Inducción', 'Contraejemplo'][d.m];
-    }
   });
 
   p.exercise({
@@ -427,6 +418,40 @@ Course.topic('lg-demostracion', function (p) {
     hint: function () { return ['Una demostración por inducción empieza siempre por el caso base.', 'Después viene la hipótesis, y el paso la usa para llegar al caso siguiente.']; },
     steps: function (d) { return ['Orden correcto: ' + d.bien.split('').join(' → ') + '.', 'Caso base, hipótesis de inducción, uso de la hipótesis y conclusión para $k + 1$.']; },
     answer: function (d) { return d.bien.split('').join(' → '); }
+  });
+
+  p.exercise({
+    title: '¿Qué método conviene?',
+    level: 'avanzado',
+    gen: function (r) {
+      var casos = [
+        { t: 'Demostrar que $\\sqrt{3}$ es irracional', m: 3, por: 'no se puede construir la irracionalidad de frente: se supone que sí es fracción y se busca la contradicción' },
+        { t: 'Demostrar que $1+2+\\dots+n = \\frac{n(n+1)}{2}$ para todo $n$', m: 4, por: 'es una afirmación sobre todos los naturales encadenados: inducción' },
+        { t: 'Demostrar que si $n$ es par, $n^2$ también lo es', m: 1, por: 'de la hipótesis se llega directo a la conclusión escribiendo $n = 2k$' },
+        { t: 'Demostrar que si $n^2$ es impar, $n$ es impar', m: 2, por: 'de frente es incómodo, pero el contrarrecíproco («si $n$ es par, $n^2$ es par») sale en una línea' },
+        { t: 'Refutar que «todo número impar es primo»', m: 5, por: 'basta con exhibir el 9' },
+        { t: 'Demostrar que hay infinitos números primos', m: 3, por: 'se supone que son finitos y se construye uno nuevo: contradicción' },
+        { t: 'Demostrar que $2^n > n$ para todo natural $n$', m: 4, por: 'afirmación para todos los naturales, con el caso $n+1$ apoyado en el $n$' },
+        { t: 'Refutar que «$n^2+n+41$ siempre es primo»', m: 5, por: 'con $n = 40$ se rompe' }
+      ];
+      var c = r.pick(casos);
+      return { t: c.t, m: c.m, por: c.por };
+    },
+    ask: function (d) { return '<em>' + d.t + '</em><br>¿Qué método es el más adecuado?'; },
+    fields: [{ name: 'm', label: 'Método', opts: [{ t: 'demostración directa', v: '1' }, { t: 'contrarrecíproco', v: '2' }, { t: 'reducción al absurdo', v: '3' }, { t: 'inducción', v: '4' }, { t: 'contraejemplo', v: '5' }] }],
+    sol: function (d) { return { m: String(d.m) }; },
+    hint: function () { return 'Si hay que <em>refutar</em>, contraejemplo. Si es «para todo n natural», inducción. Si la negación da más juego que la hipótesis, absurdo o contrarrecíproco.'; },
+    steps: function (d) {
+      return ['Primero: ¿hay que demostrar o refutar? Refutar un «para todo» se hace con un contraejemplo.',
+        'Si es una afirmación encadenada sobre los naturales, casi siempre es inducción.',
+        'Si la hipótesis directa no da juego, se prueba con el contrarrecíproco o con el absurdo.',
+        'Aquí: ' + d.por + '.',
+        'Método: <strong>' + ['', 'demostración directa', 'contrarrecíproco', 'reducción al absurdo',
+          'inducción', 'contraejemplo'][d.m] + '</strong>.'];
+    },
+    answer: function (d) {
+      return ['', 'Demostración directa', 'Contrarrecíproco', 'Reducción al absurdo', 'Inducción', 'Contraejemplo'][d.m];
+    }
   });
 
   p.keys([

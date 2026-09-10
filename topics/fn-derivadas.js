@@ -462,42 +462,6 @@ Course.topic('fn-derivadas', function (p) {
   });
 
   p.exercise({
-    title: 'Regla de la cadena',
-    level: 'avanzado',
-    gen: function (r) {
-      // f = (ax^2 + b)^n  ->  f' = n(ax^2+b)^(n-1) * 2ax
-      var a = r.nz(-4, 4), b = r.pm(1, 6), n = r.int(2, 4);
-      var x = r.pm(1, 3);
-      var inner = a * x * x + b;
-      if (inner === 0) return null;
-      var val = n * Math.pow(inner, n - 1) * 2 * a * x;
-      if (Math.abs(val) > 1e7) return null;
-      return { a: a, b: b, n: n, x: x, inner: inner, val: val };
-    },
-    ask: function (d) {
-      return 'Sea $f(x) = \\left(' + ML.termTex(d.a, 'x', 2, true) + ML.termTex(d.b, '', 0, false) +
-        '\\right)^{' + d.n + '}$. Calcula $f\'(' + d.x + ')$.';
-    },
-    fields: function (d) { return [{ name: 'v', label: "f'(" + d.x + ') =', w: 'wide' }]; },
-    sol: function (d) { return { v: d.val }; },
-    hint: function (d) {
-      return 'Deriva la potencia dejando el paréntesis tal cual, y multiplica por la derivada de dentro, que es $' +
-        ML.termTex(2 * d.a, 'x', 1, true) + '$.';
-    },
-    steps: function (d) {
-      var dentro = ML.termTex(d.a, 'x', 2, true) + ML.termTex(d.b, '', 0, false);
-      return ['Función de fuera: elevar a $' + d.n + '$. Función de dentro: $' + dentro + '$.',
-        'Derivada de fuera dejando lo de dentro quieto: $' + d.n + '\\left(' + dentro + '\\right)^{' + (d.n - 1) + '}$.',
-        'Derivada de dentro: $' + ML.termTex(2 * d.a, 'x', 1, true) + '$.',
-        'Se multiplican: $f\'(x) = ' + d.n + '\\left(' + dentro + '\\right)^{' + (d.n - 1) + '} \\cdot ' +
-        ML.termTex(2 * d.a, 'x', 1, true) + '$.',
-        'En $x = ' + d.x + '$: el paréntesis vale $' + d.inner + '$, así que ' +
-        '$f\' = ' + d.n + '\\cdot ' + d.inner + '^{' + (d.n - 1) + '} \\cdot ' + (2 * d.a * d.x) + ' = ' + d.val + '$.'];
-    },
-    answer: function (d) { return String(d.val); }
-  });
-
-  p.exercise({
     title: 'Recta tangente',
     level: 'medio',
     gen: function (r) {
@@ -535,6 +499,64 @@ Course.topic('fn-derivadas', function (p) {
   });
 
   p.exercise({
+    title: 'Derivar funciones combinadas',
+    level: 'medio',
+    gen: function (r) {
+      var fam = r.int(0, 3), a = r.int(1, 4), b = r.int(1, 5);
+      var C = [
+        { tex: 'e^{' + (a === 1 ? '' : a) + 'x}\\operatorname{sen}(' + (b === 1 ? '' : b) + 'x)', en: 0, v: b, pasos: '$f\'(x) = e^{' + a + 'x}\\left(' + a + '\\operatorname{sen}(' + b + 'x) + ' + b + '\\cos(' + b + 'x)\\right)$, y en $0$: $1\\cdot(0 + ' + b + ') = ' + b + '$' },
+        { tex: '\\ln(x^2 + ' + a + ')', en: 1, v: 2 / (1 + a), pasos: '$f\'(x) = \\frac{2x}{x^2 + ' + a + '}$, y en $1$: $\\frac{2}{' + (1 + a) + '}$' },
+        { tex: '\\operatorname{arctg}(' + (a === 1 ? '' : a) + 'x)', en: 1, v: a / (1 + a * a), pasos: '$f\'(x) = \\frac{' + a + '}{1 + ' + (a * a) + 'x^2}$, y en $1$: $\\frac{' + a + '}{' + (1 + a * a) + '}$' },
+        { tex: 'x\\,e^{-' + (a === 1 ? '' : a) + 'x}', en: 1, v: Math.exp(-a) * (1 - a), pasos: '$f\'(x) = e^{-' + a + 'x}(1 - ' + a + 'x)$, y en $1$: $e^{-' + a + '}(1 - ' + a + ')$' }
+      ][fam];
+      return { fam: fam, c: C };
+    },
+    ask: function (d) { return 'Sea $f(x) = ' + d.c.tex + '$. Calcula $f\'(' + d.c.en + ')$ (cuatro decimales o fracción).'; },
+    fields: [{ name: 'v', label: "f'", w: 'wide' }],
+    sol: function (d) { return { v: U.round(d.c.v, 6) }; },
+    tol: 3e-4,
+    hint: function () { return ['Identifica si es un producto, una composición o las dos cosas.', 'Aplica la regla del producto y la de la cadena por partes, y sustituye al final.']; },
+    steps: function (d) { return [d.c.pasos + ' $\\approx ' + U.fmt(d.c.v, 4) + '$']; },
+    answer: function (d) { return U.fmt(d.c.v, 4); }
+  });
+
+  p.exercise({
+    title: 'Regla de la cadena',
+    level: 'avanzado',
+    gen: function (r) {
+      // f = (ax^2 + b)^n  ->  f' = n(ax^2+b)^(n-1) * 2ax
+      var a = r.nz(-4, 4), b = r.pm(1, 6), n = r.int(2, 4);
+      var x = r.pm(1, 3);
+      var inner = a * x * x + b;
+      if (inner === 0) return null;
+      var val = n * Math.pow(inner, n - 1) * 2 * a * x;
+      if (Math.abs(val) > 1e7) return null;
+      return { a: a, b: b, n: n, x: x, inner: inner, val: val };
+    },
+    ask: function (d) {
+      return 'Sea $f(x) = \\left(' + ML.termTex(d.a, 'x', 2, true) + ML.termTex(d.b, '', 0, false) +
+        '\\right)^{' + d.n + '}$. Calcula $f\'(' + d.x + ')$.';
+    },
+    fields: function (d) { return [{ name: 'v', label: "f'(" + d.x + ') =', w: 'wide' }]; },
+    sol: function (d) { return { v: d.val }; },
+    hint: function (d) {
+      return 'Deriva la potencia dejando el paréntesis tal cual, y multiplica por la derivada de dentro, que es $' +
+        ML.termTex(2 * d.a, 'x', 1, true) + '$.';
+    },
+    steps: function (d) {
+      var dentro = ML.termTex(d.a, 'x', 2, true) + ML.termTex(d.b, '', 0, false);
+      return ['Función de fuera: elevar a $' + d.n + '$. Función de dentro: $' + dentro + '$.',
+        'Derivada de fuera dejando lo de dentro quieto: $' + d.n + '\\left(' + dentro + '\\right)^{' + (d.n - 1) + '}$.',
+        'Derivada de dentro: $' + ML.termTex(2 * d.a, 'x', 1, true) + '$.',
+        'Se multiplican: $f\'(x) = ' + d.n + '\\left(' + dentro + '\\right)^{' + (d.n - 1) + '} \\cdot ' +
+        ML.termTex(2 * d.a, 'x', 1, true) + '$.',
+        'En $x = ' + d.x + '$: el paréntesis vale $' + d.inner + '$, así que ' +
+        '$f\' = ' + d.n + '\\cdot ' + d.inner + '^{' + (d.n - 1) + '} \\cdot ' + (2 * d.a * d.x) + ' = ' + d.val + '$.'];
+    },
+    answer: function (d) { return String(d.val); }
+  });
+
+  p.exercise({
     title: 'Derivación logarítmica',
     level: 'avanzado',
     gen: function (r) {
@@ -558,28 +580,6 @@ Course.topic('fn-derivadas', function (p) {
         : ['$\\ln y = (\\ln x)^2 \\Rightarrow \\frac{y\'}{y} = \\frac{2\\ln x}{x} \\Rightarrow y\' = x^{\\ln x}\\cdot\\frac{2\\ln x}{x}$', 'Sustituyendo: $\\approx ' + U.fmt(d.v, 4) + '$'];
     },
     answer: function (d) { return U.fmt(d.v, 4); }
-  });
-
-  p.exercise({
-    title: 'Derivar funciones combinadas',
-    level: 'medio',
-    gen: function (r) {
-      var fam = r.int(0, 3), a = r.int(1, 4), b = r.int(1, 5);
-      var C = [
-        { tex: 'e^{' + (a === 1 ? '' : a) + 'x}\\operatorname{sen}(' + (b === 1 ? '' : b) + 'x)', en: 0, v: b, pasos: '$f\'(x) = e^{' + a + 'x}\\left(' + a + '\\operatorname{sen}(' + b + 'x) + ' + b + '\\cos(' + b + 'x)\\right)$, y en $0$: $1\\cdot(0 + ' + b + ') = ' + b + '$' },
-        { tex: '\\ln(x^2 + ' + a + ')', en: 1, v: 2 / (1 + a), pasos: '$f\'(x) = \\frac{2x}{x^2 + ' + a + '}$, y en $1$: $\\frac{2}{' + (1 + a) + '}$' },
-        { tex: '\\operatorname{arctg}(' + (a === 1 ? '' : a) + 'x)', en: 1, v: a / (1 + a * a), pasos: '$f\'(x) = \\frac{' + a + '}{1 + ' + (a * a) + 'x^2}$, y en $1$: $\\frac{' + a + '}{' + (1 + a * a) + '}$' },
-        { tex: 'x\\,e^{-' + (a === 1 ? '' : a) + 'x}', en: 1, v: Math.exp(-a) * (1 - a), pasos: '$f\'(x) = e^{-' + a + 'x}(1 - ' + a + 'x)$, y en $1$: $e^{-' + a + '}(1 - ' + a + ')$' }
-      ][fam];
-      return { fam: fam, c: C };
-    },
-    ask: function (d) { return 'Sea $f(x) = ' + d.c.tex + '$. Calcula $f\'(' + d.c.en + ')$ (cuatro decimales o fracción).'; },
-    fields: [{ name: 'v', label: "f'", w: 'wide' }],
-    sol: function (d) { return { v: U.round(d.c.v, 6) }; },
-    tol: 3e-4,
-    hint: function () { return ['Identifica si es un producto, una composición o las dos cosas.', 'Aplica la regla del producto y la de la cadena por partes, y sustituye al final.']; },
-    steps: function (d) { return [d.c.pasos + ' $\\approx ' + U.fmt(d.c.v, 4) + '$']; },
-    answer: function (d) { return U.fmt(d.c.v, 4); }
   });
 
   p.keys([
