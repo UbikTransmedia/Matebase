@@ -1,6 +1,12 @@
 /* Tema: Circunferencia goniométrica */
 Course.topic('tr-circunferencia', function (p) {
 
+  p.puente('Las razones del tema anterior vivían dentro de un triángulo rectángulo, y eso las limita ' +
+    'a ángulos agudos. Al colocar el triángulo dentro de una circunferencia de radio 1 con centro en ' +
+    'el origen, el seno y el coseno pasan a ser las coordenadas de un punto, y las coordenadas pueden ' +
+    'ser negativas: eso libera las razones para cualquier ángulo. De paso aparece la unidad natural ' +
+    'del ángulo, el radián.');
+
   p.text('Con el triángulo rectángulo solo se pueden definir razones de ángulos entre $0^\\circ$ y ' +
     '$90^\\circ$. Pero un ángulo puede valer $150^\\circ$, o $400^\\circ$, o $-30^\\circ$. Para eso se ' +
     'cambia de escenario: la <strong>circunferencia goniométrica</strong>, de radio 1 y centro en el origen.');
@@ -13,9 +19,16 @@ Course.topic('tr-circunferencia', function (p) {
   p.text('Es la misma definición de antes (la hipotenusa vale 1, así que $\\operatorname{sen}\\alpha = ' +
     '\\frac{y}{1} = y$), pero ahora vale para cualquier ángulo, porque $x$ e $y$ pueden ser negativas.');
 
+  p.comprueba('¿Cuánto vale $\\cos 180^\\circ$?', [
+    { t: '$0$', ok: false, por: 'A $180^\\circ$ el punto está en $(-1, 0)$: la $x$ vale $-1$. El que vale 0 es el seno.' },
+    { t: '$-1$', ok: true, por: 'Media vuelta lleva el punto a $(-1, 0)$, y el coseno es la coordenada $x$.' },
+    { t: '$1$', ok: false, por: '$1$ es $\\cos 0^\\circ$, el punto $(1, 0)$. A $180^\\circ$ el punto está en el lado opuesto.' }
+  ]);
+
   p.demo({
     title: 'La circunferencia goniométrica',
     intro: 'Arrastra el punto por la circunferencia. Abajo se va dibujando el seno: la onda es literalmente la altura del punto según gira.',
+    predice: 'Lleva el punto al cuadrante II (arriba a la izquierda). Antes de hacerlo: ¿qué signo tendrá el coseno? ¿Y el seno? ¿Y la onda de la derecha, seguirá subiendo o empezará a bajar?',
     build: function (host, d) {
       var out = W.readout(host, '');
       W.plot(host, {
@@ -76,6 +89,12 @@ Course.topic('tr-circunferencia', function (p) {
   p.table(['Grados', '$0^\\circ$', '$30^\\circ$', '$45^\\circ$', '$60^\\circ$', '$90^\\circ$', '$180^\\circ$', '$270^\\circ$', '$360^\\circ$'],
     [['Radianes', '$0$', '$\\dfrac{\\pi}{6}$', '$\\dfrac{\\pi}{4}$', '$\\dfrac{\\pi}{3}$', '$\\dfrac{\\pi}{2}$', '$\\pi$', '$\\dfrac{3\\pi}{2}$', '$2\\pi$']]);
 
+  p.comprueba('¿Cuántos radianes son $135^\\circ$?', [
+    { t: '$\\dfrac{3\\pi}{4}$', ok: true, por: '$135\\cdot\\dfrac{\\pi}{180} = \\dfrac{135\\pi}{180} = \\dfrac{3\\pi}{4}$. Es $180^\\circ - 45^\\circ$: tres cuartos de media vuelta.' },
+    { t: '$\\dfrac{\\pi}{4}$', ok: false, por: '$\\dfrac{\\pi}{4}$ son $45^\\circ$. $135^\\circ$ es tres veces más: $\\dfrac{3\\pi}{4}$.' },
+    { t: '$135\\pi$', ok: false, por: 'Se multiplica por $\\dfrac{\\pi}{180}$, no solo por $\\pi$. $135\\pi$ rad serían más de 67 vueltas.' }
+  ]);
+
   p.note('En cálculo se usan <em>siempre</em> radianes. La razón se verá en [[fn-derivadas|el tema de derivadas]]: la ' +
     'derivada del seno solo vale $\\cos x$ si $x$ está en radianes. Con grados aparecerían factores ' +
     'de conversión por todas partes.', null, 'Por qué los matemáticos no usan grados');
@@ -115,9 +134,28 @@ Course.topic('tr-circunferencia', function (p) {
     '\\operatorname{sen}(-\\alpha) = -\\operatorname{sen}\\alpha \\qquad \\cos(-\\alpha) = \\cos\\alpha'
   ], 'reducción al primer cuadrante');
 
+  p.ejemplo({
+    title: 'Reducir al primer cuadrante, dos veces',
+    enunciado: 'Calcular $\\operatorname{sen} 210^\\circ$ y $\\cos 300^\\circ$ sin calculadora.',
+    pasos: [
+      { t: '<strong>$210^\\circ$: cuadrante y ángulo asociado.</strong> Está entre $180^\\circ$ y $270^\\circ$: cuadrante III. Se escribe $210^\\circ = 180^\\circ + 30^\\circ$, así que su ángulo asociado es $30^\\circ$.', antes: '¿En qué cuadrante cae $210^\\circ$? ¿Cuánto se pasa de $180^\\circ$?' },
+      { t: '<strong>Signo y valor.</strong> En el cuadrante III el punto está abajo: seno negativo. $\\operatorname{sen} 210^\\circ = -\\operatorname{sen} 30^\\circ = -\\dfrac{1}{2}$.', antes: 'En el cuadrante III, ¿el seno es positivo o negativo?' },
+      { t: '<strong>$300^\\circ$.</strong> Entre $270^\\circ$ y $360^\\circ$: cuadrante IV, y $300^\\circ = 360^\\circ - 60^\\circ$. Ángulo asociado: $60^\\circ$.' },
+      { t: '<strong>Signo y valor.</strong> En el cuadrante IV el punto está a la derecha: coseno positivo. $\\cos 300^\\circ = \\cos 60^\\circ = \\dfrac{1}{2}$.', antes: 'En el cuadrante IV, ¿el coseno es positivo o negativo? Piensa en la $x$ del punto.' }
+    ],
+    cierre: 'El método es siempre el mismo: cuadrante, ángulo asociado, signo por la posición del punto. Las fórmulas de arriba son ese método escrito; no hace falta memorizarlas si se tiene la circunferencia en la cabeza.'
+  });
+
   p.text('Y como al dar una vuelta entera se vuelve al mismo punto, las razones son ' +
     '<strong>periódicas</strong>: $\\operatorname{sen}(\\alpha + 360^\\circ) = \\operatorname{sen}\\alpha$. ' +
     'Por eso sirven para describir todo lo que se repite: mareas, sonido, corriente alterna, estaciones.');
+
+  p.trampas([
+    { e: '$\\operatorname{sen}(180^\\circ + \\alpha) = \\operatorname{sen}\\alpha$', por: 'Sumar $180^\\circ$ lleva el punto al lado opuesto: cambian los dos signos. $\\operatorname{sen}(180^\\circ + \\alpha) = -\\operatorname{sen}\\alpha$.' },
+    { e: '$\\pi$ radianes $= 360^\\circ$', por: '$\\pi$ es media vuelta, $180^\\circ$. La vuelta entera es $2\\pi$.' },
+    { e: '$\\operatorname{tg} 90^\\circ = 1$', por: 'En $90^\\circ$ el coseno vale 0 y la tangente, $\\frac{\\operatorname{sen}}{\\cos}$, no existe.' },
+    { e: 'Dar $\\operatorname{sen} 400^\\circ$ como imposible', por: 'Los ángulos mayores de $360^\\circ$ son vueltas de más: $400^\\circ$ es el mismo punto que $40^\\circ$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
@@ -163,15 +201,10 @@ Course.topic('tr-circunferencia', function (p) {
     },
     ask: function (d) {
       var nom = { sen: '\\operatorname{sen}', cos: '\\cos', tg: '\\operatorname{tg}' }[d.razon];
-      return '¿Qué signo tiene $' + nom + ' ' + d.g + '^\\circ$? Escribe <code>+</code> o <code>-</code>.';
+      return '¿Qué signo tiene $' + nom + ' ' + d.g + '^\\circ$?';
     },
-    fields: [{ name: 's', label: 'Signo', w: 'tiny', ph: '+ o -' }],
+    fields: [{ name: 's', label: 'Signo', opts: [{ t: 'positivo', v: '+' }, { t: 'negativo', v: '-' }] }],
     sol: function (d) { return { s: d.pos ? '+' : '-' }; },
-    check: function (v, d) {
-      var t = v.raw.s.trim();
-      if (t !== '+' && t !== '-') return { ok: false, msg: 'Escribe solo <code>+</code> o <code>-</code>.' };
-      return (t === '+') === d.pos;
-    },
     hint: function (d) {
       var c = d.g < 90 ? 1 : (d.g < 180 ? 2 : (d.g < 270 ? 3 : 4));
       return 'El ángulo está en el cuadrante ' + ['', 'I', 'II', 'III', 'IV'][c] +

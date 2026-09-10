@@ -1,6 +1,11 @@
 /* Tema: Funciones trigonométricas y ondas */
 Course.topic('tr-funciones', function (p) {
 
+  p.puente('En la circunferencia goniométrica, al girar el punto, la onda del seno se dibujaba sola a ' +
+    'la derecha. Ese dibujo es la gráfica de una función: a cada ángulo, su seno. Este tema mira esa ' +
+    'gráfica como se mira cualquier función —dominio, recorrido, periodo— y aprende a estirarla, ' +
+    'desplazarla y sumarla, que es lo que hace falta para describir cualquier cosa que oscile.');
+
   p.text('Si en vez de tratar $\\operatorname{sen}\\alpha$ como «una razón de un triángulo» lo tratamos ' +
     'como una <strong>función</strong> —le metes un número, te devuelve otro— aparece la herramienta ' +
     'con la que se describe todo lo que oscila: el sonido, la luz, las mareas, la corriente eléctrica, ' +
@@ -33,9 +38,28 @@ Course.topic('tr-funciones', function (p) {
      ['$C$', 'fase', 'desplaza la onda a la izquierda ($\\frac{C}{B}$ unidades)'],
      ['$D$', 'desplazamiento vertical', 'sube o baja el eje de la onda']]);
 
+  p.comprueba('¿Qué periodo tiene $y = 3\\operatorname{sen}(2x)$?', [
+    { t: '$2\\pi$', ok: false, por: 'Ese es el del seno normal. El 2 de dentro hace que la onda complete una vuelta en la mitad de sitio.' },
+    { t: '$\\pi$', ok: true, por: '$\\dfrac{2\\pi}{B} = \\dfrac{2\\pi}{2} = \\pi$. El 3 de fuera no toca el periodo: solo la altura.' },
+    { t: '$4\\pi$', ok: false, por: 'Multiplicar la $x$ por 2 <em>aprieta</em> la onda, no la estira. El periodo se divide entre 2.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Leer una onda de un vistazo',
+    enunciado: 'Describir la función $y = 2\\operatorname{sen}(3x - \\pi) + 1$: amplitud, periodo, desplazamiento, recorrido.',
+    pasos: [
+      { t: '<strong>Identificar los mandos.</strong> Comparando con $A\\operatorname{sen}(Bx + C) + D$: $A = 2$, $B = 3$, $C = -\\pi$, $D = 1$.', antes: '¿Cuánto vale cada una de las cuatro letras?' },
+      { t: '<strong>Amplitud y eje.</strong> La onda oscila $2$ arriba y $2$ abajo del eje $y = 1$: recorrido $[-1, 3]$.', antes: 'Si el eje está en $y = 1$ y la amplitud es 2, ¿entre qué valores se mueve $y$?' },
+      { t: '<strong>Periodo.</strong> $\\dfrac{2\\pi}{3}$: en el espacio en que el seno normal hace una onda, esta hace tres.' },
+      { t: '<strong>Fase.</strong> $C = -\\pi$ desplaza la onda $\\dfrac{C}{B} = -\\dfrac{\\pi}{3}$, es decir, $\\dfrac{\\pi}{3}$ hacia la <em>derecha</em>. Comprobación: en $x = \\frac{\\pi}{3}$ el argumento vale $0$ y $y = 1$, el punto de arranque de la onda.', antes: 'El desplazamiento no es $\\pi$: hay que dividir por $B$. ¿Cuánto es, y hacia qué lado?' }
+    ],
+    cierre: 'Con estos cuatro datos la gráfica se dibuja sin calcular ni un valor: eje en 1, de $-1$ a $3$, una onda cada $\\frac{2\\pi}{3}$, empezando a subir en $\\frac{\\pi}{3}$.'
+  });
+
   p.demo({
     title: 'Los cuatro mandos',
     intro: 'Mueve cada parámetro por separado y observa qué controla exactamente. La onda gris de fondo es el seno normal, para comparar.',
+    predice: 'Antes de tocar nada: ¿qué mando hará que quepan más ondas en el dibujo? ¿Cuál las hará más altas? ¿Cuál las moverá de lado sin cambiarles la forma?',
     build: function (host, d) {
       var A = 1, B = 1, C = 0, D = 0;
       var out = W.readout(host, '');
@@ -143,6 +167,7 @@ Course.topic('tr-funciones', function (p) {
   p.demo({
     title: 'Sumar dos ondas',
     intro: 'Ajusta las dos ondas y mira su suma. Con frecuencias parecidas aparecen «pulsaciones»; con frecuencia doble o triple, formas cada vez menos parecidas a un seno.',
+    predice: 'Pon las dos frecuencias en 1 y 1,1, con amplitudes iguales. ¿Qué forma tendrá la suma? Piensa en dos cuerdas de guitarra casi afinadas: ¿qué se oye?',
     build: function (host, d) {
       var A1 = 1, f1 = 1, A2 = 0.6, f2 = 3;
       var out = W.readout(host, '');
@@ -174,6 +199,13 @@ Course.topic('tr-funciones', function (p) {
       paint();
     }
   });
+
+  p.trampas([
+    { e: 'El periodo de $\\operatorname{sen}(Bx)$ es $B$', por: 'Es $\\dfrac{2\\pi}{B}$: cuanto mayor es $B$, más apretada la onda y <em>menor</em> el periodo.' },
+    { e: 'Amplitud $-3$', por: 'La amplitud es $|A|$, siempre positiva. El signo solo invierte la onda (empieza bajando).' },
+    { e: 'En $\\operatorname{sen}(2x + \\pi)$ el desplazamiento es $\\pi$', por: 'Es $\\dfrac{C}{B} = \\dfrac{\\pi}{2}$ hacia la izquierda. Se saca factor común: $\\operatorname{sen}\\left(2\\left(x + \\frac{\\pi}{2}\\right)\\right)$.' },
+    { e: 'La tangente tiene periodo $2\\pi$', por: 'Su periodo es $\\pi$: $\\operatorname{tg}(x + \\pi) = \\operatorname{tg} x$, porque seno y coseno cambian los dos de signo y el cociente no.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Sumar ondas explica dos cosas que se oyen. Una es el batido: dos notas casi iguales producen un ' +

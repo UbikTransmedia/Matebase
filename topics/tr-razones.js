@@ -1,6 +1,11 @@
 /* Tema: Razones trigonométricas */
 Course.topic('tr-razones', function (p) {
 
+  p.puente('Dos ideas del bloque de geometría se juntan aquí. De la semejanza: triángulos con los ' +
+    'mismos ángulos tienen los lados proporcionales. De Pitágoras: en un triángulo rectángulo los ' +
+    'lados están ligados por una relación exacta. La trigonometría pone nombre a esas proporciones ' +
+    '—seno, coseno, tangente— y con ellas mide alturas y distancias que no se pueden alcanzar.');
+
   p.text('La trigonometría nace de una observación: si dos triángulos rectángulos tienen el ' +
     '<strong>mismo ángulo agudo</strong>, son semejantes, y entonces las proporciones entre sus lados ' +
     'son idénticas aunque los triángulos sean de tamaños distintos.');
@@ -18,6 +23,12 @@ Course.topic('tr-razones', function (p) {
     'ángulo agudo, los catetos intercambian sus papeles. La hipotenusa, en cambio, es siempre la misma.',
     'warn', 'El punto que más confunde');
 
+  p.comprueba('Un triángulo rectángulo tiene catetos 3 y 4 e hipotenusa 5. El ángulo $\\alpha$ está enfrente del cateto 3. ¿Cuánto vale $\\cos\\alpha$?', [
+    { t: '$\\dfrac{3}{5}$', ok: false, por: 'Ese es el seno: el cateto <em>opuesto</em> entre la hipotenusa. El coseno usa el contiguo.' },
+    { t: '$\\dfrac{4}{5}$', ok: true, por: 'El contiguo a $\\alpha$ es el 4 (el que no está enfrente), y la hipotenusa es 5.' },
+    { t: '$\\dfrac{3}{4}$', ok: false, por: 'Opuesto entre contiguo es la tangente. El coseno lleva siempre la hipotenusa abajo.' }
+  ]);
+
   p.hist('La trigonometría se inventó mirando al cielo. Hiparco de Nicea (siglo II a.C.) construyó la ' +
     'primera tabla de cuerdas para calcular posiciones de astros, y Ptolomeo la perfeccionó en el ' +
     '<em>Almagesto</em>. La palabra <em>seno</em> es un accidente de traducción: los indios lo llamaron ' +
@@ -28,6 +39,7 @@ Course.topic('tr-razones', function (p) {
   p.demo({
     title: 'Las razones no dependen del tamaño',
     intro: 'Cambia el ángulo y también el tamaño del triángulo. El tamaño mueve los lados, pero las tres razones no se inmutan.',
+    predice: 'Pon el ángulo en $45^\\circ$. ¿Qué relación habrá entre los dos catetos? ¿Cuánto valdrá entonces la tangente? ¿Y cambiará algo al mover el tamaño?',
     build: function (host, d) {
       var ang = 35, esc = 4;
       var out = W.readout(host, '');
@@ -108,6 +120,25 @@ Course.topic('tr-razones', function (p) {
     'Despeja. Si la incógnita está en el denominador, multiplica en cruz.',
     'Para hallar un ángulo a partir de una razón, usa la tecla inversa: $\\arcsin$, $\\arccos$, $\\arctan$.'
   ], true);
+
+  p.ejemplo({
+    title: 'Resolver un triángulo rectángulo entero',
+    enunciado: 'Un triángulo rectángulo tiene hipotenusa de 10 cm y un ángulo agudo de $35^\\circ$. Hallar los otros dos lados y el otro ángulo.',
+    pasos: [
+      { t: '<strong>El otro ángulo, gratis.</strong> Los tres suman $180^\\circ$ y uno es recto: el que falta mide $90^\\circ - 35^\\circ = 55^\\circ$.', antes: '¿Qué dato sale sin trigonometría?' },
+      { t: '<strong>Cateto opuesto a $35^\\circ$.</strong> Tenemos la hipotenusa y buscamos el opuesto: seno. $\\operatorname{sen} 35^\\circ = \\dfrac{a}{10} \\Rightarrow a = 10\\cdot 0{,}5736 = 5{,}74$ cm.', antes: 'Para el cateto opuesto, con la hipotenusa conocida: ¿seno, coseno o tangente?' },
+      { t: '<strong>Cateto contiguo.</strong> Hipotenusa y contiguo: coseno. $b = 10\\cdot\\cos 35^\\circ = 10\\cdot 0{,}8192 = 8{,}19$ cm.' },
+      { t: '<strong>Comprobar con Pitágoras.</strong> $5{,}74^2 + 8{,}19^2 = 32{,}9 + 67{,}1 = 100 = 10^2$ ✓. Y los dos catetos son menores que la hipotenusa, como debe ser.', antes: '¿Cómo comprobarías que los tres lados encajan, sin trigonometría?' }
+    ],
+    cierre: 'El tercer paso podía hacerse también con la tangente a partir del opuesto, pero conviene usar siempre los datos originales del enunciado: así un error en un paso no arrastra a los siguientes.'
+  });
+
+  p.trampas([
+    { e: '$\\operatorname{sen}\\alpha = \\dfrac{\\text{opuesto}}{\\text{contiguo}}$', por: 'Eso es la tangente. Seno y coseno llevan la hipotenusa en el denominador, y por eso nunca pasan de 1.' },
+    { e: 'Un cateto es «el opuesto» siempre', por: 'Depende del ángulo que se mire. El opuesto de un ángulo agudo es el contiguo del otro.' },
+    { e: 'Calculadora en radianes', por: 'Si $\\operatorname{sen} 30$ no da $0{,}5$, la calculadora está en RAD. Es la causa más frecuente de resultados absurdos.' },
+    { e: '$\\operatorname{sen}^2\\alpha$ es el seno de $\\alpha^2$', por: 'Es $(\\operatorname{sen}\\alpha)^2$: primero el seno, luego el cuadrado.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Resolver triángulos es cómo se mide lo que no se puede alcanzar. Un topógrafo calcula la altura ' +

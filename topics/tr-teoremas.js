@@ -1,9 +1,10 @@
 /* Tema: Teoremas del seno y del coseno */
 Course.topic('tr-teoremas', function (p) {
 
-  p.text('Las razones trigonométricas se definieron en el triángulo <em>rectángulo</em>. ¿Y si el ' +
+  p.puente('Las razones trigonométricas se definieron en el triángulo <em>rectángulo</em>. ¿Y si el ' +
     'triángulo no tiene ningún ángulo recto? Hay dos teoremas que resuelven cualquier triángulo, ' +
-    'tenga la forma que tenga.');
+    'tenga la forma que tenga. Uno generaliza Pitágoras; el otro sale de la fórmula del área con el ' +
+    'seno. Y la regla de que los tres ángulos suman $180^\\circ$ vuelve a ser el dato gratis.');
 
   p.section('Teorema del seno');
   p.text('Hasta ahora todo lo que sabes de trigonometría exige un ángulo recto. El problema es que la ' +
@@ -20,6 +21,12 @@ Course.topic('tr-teoremas', function (p) {
   p.text('Cada lado es proporcional al seno de su ángulo opuesto, y la constante de proporcionalidad ' +
     'es el diámetro de la circunferencia que pasa por los tres vértices. Se usa cuando conoces ' +
     '<strong>un lado con su ángulo opuesto</strong>.');
+
+  p.comprueba('En un triángulo, $A = 30^\\circ$, $B = 90^\\circ$ y $a = 5$. ¿Cuánto mide $b$?', [
+    { t: '$2{,}5$', ok: false, por: 'Al revés: $b$ está frente al ángulo mayor, así que es el lado mayor. $b = \\dfrac{5\\cdot\\operatorname{sen} 90^\\circ}{\\operatorname{sen} 30^\\circ} = \\dfrac{5}{0{,}5} = 10$.' },
+    { t: '$10$', ok: true, por: '$\\dfrac{5}{\\operatorname{sen} 30^\\circ} = \\dfrac{b}{\\operatorname{sen} 90^\\circ} \\Rightarrow b = 10$. Es el triángulo rectángulo de $30^\\circ$: el cateto opuesto es la mitad de la hipotenusa.' },
+    { t: '$5$', ok: false, por: 'Lados iguales exigirían ángulos iguales. $B = 90^\\circ$ es mucho mayor que $A$, así que $b > a$.' }
+  ]);
 
   p.section('Teorema del coseno');
   p.text('El teorema del seno falla cuando no conoces ningún par «lado con su ángulo opuesto»; por ' +
@@ -39,6 +46,7 @@ Course.topic('tr-teoremas', function (p) {
   p.demo({
     title: 'Del triángulo rectángulo al general',
     intro: 'Cambia el ángulo A y mira cómo el teorema del coseno corrige a Pitágoras. Cuando A vale 90°, la corrección desaparece.',
+    predice: 'Con $b = 4$ y $c = 3$, Pitágoras daría $a = 5$. Si abres el ángulo $A$ por encima de $90^\\circ$, ¿el lado $a$ será mayor o menor que 5? ¿Qué signo tendrá $\\cos A$?',
     build: function (host, d) {
       var A = 90, b = 4, c = 3;
       var out = W.readout(host, '');
@@ -104,6 +112,19 @@ Course.topic('tr-teoremas', function (p) {
     'que comprobar si la segunda opción es compatible con que los tres ángulos sumen $180^\\circ$.',
     'warn', 'El caso ambiguo');
 
+  p.ejemplo({
+    title: 'Resolver un triángulo LAL de principio a fin',
+    enunciado: 'Un triángulo tiene $b = 5$, $c = 7$ y el ángulo entre ellos $A = 60^\\circ$. Hallar $a$, $B$ y $C$.',
+    pasos: [
+      { t: '<strong>Elegir teorema.</strong> Dos lados y el ángulo <em>entre</em> ellos: no hay ningún lado con su ángulo opuesto, así que empieza el del coseno.', antes: 'Con dos lados y el ángulo que forman, ¿seno o coseno?' },
+      { t: '<strong>El lado $a$.</strong> $a^2 = 25 + 49 - 2\\cdot 5\\cdot 7\\cdot\\cos 60^\\circ = 74 - 35 = 39$, luego $a = \\sqrt{39} \\approx 6{,}245$.' },
+      { t: '<strong>Un segundo ángulo.</strong> Ahora sí hay un lado con su opuesto ($a$ y $A$): teorema del seno. Conviene buscar el ángulo opuesto al lado <em>menor</em>, $b = 5$, porque seguro que es agudo y no hay ambigüedad: $\\operatorname{sen} B = \\dfrac{5\\cdot\\operatorname{sen} 60^\\circ}{6{,}245} = 0{,}6934 \\Rightarrow B \\approx 43{,}9^\\circ$.', antes: 'Para el segundo ángulo, ¿cuál conviene buscar primero para evitar el caso ambiguo: el opuesto al lado 5 o al lado 7?' },
+      { t: '<strong>El tercero, gratis.</strong> $C = 180^\\circ - 60^\\circ - 43{,}9^\\circ = 76{,}1^\\circ$.' },
+      { t: '<strong>Comprobar.</strong> $\\dfrac{c}{\\operatorname{sen} C} = \\dfrac{7}{0{,}9707} = 7{,}21$ y $\\dfrac{a}{\\operatorname{sen} A} = \\dfrac{6{,}245}{0{,}866} = 7{,}21$ ✓. El lado mayor ($c = 7$) está frente al ángulo mayor ($C$) ✓.', antes: '¿Cómo comprobarías el resultado con un dato que no hayas usado?' }
+    ],
+    cierre: 'El orden importa: coseno para el lado, seno para el ángulo opuesto al lado más corto, y la suma de $180^\\circ$ para el último. Así nunca aparece el caso ambiguo.'
+  });
+
   p.util('Estos dos teoremas son la triangulación, y la triangulación es cómo sabe tu móvil dónde está ' +
     'cuando no hay GPS: mide la señal de tres antenas y resuelve el triángulo. Es también como se ' +
     'localiza el epicentro de un terremoto con tres sismógrafos, como aterriza un avión guiado por ' +
@@ -130,6 +151,13 @@ Course.topic('tr-teoremas', function (p) {
     '$c\\operatorname{sen}A$. La segunda, de Herón de Alejandría (siglo I), es asombrosa: da el área ' +
     'sin necesidad de conocer ningún ángulo ni ninguna altura.');
 
+  p.trampas([
+    { e: 'Teorema del seno con un lado y un ángulo que no son opuestos', por: 'La proporción une cada lado con el ángulo de <em>enfrente</em>. Si no tienes ningún par así, toca el coseno.' },
+    { e: 'Con $A$ obtuso, restar $2bc\\cos A$ como si fuera positivo', por: '$\\cos A$ es negativo: $-2bc\\cos A$ se convierte en una suma y el lado $a$ sale <em>mayor</em> que con Pitágoras.' },
+    { e: '$S = \\frac{1}{2}bc\\operatorname{sen} A$ con un ángulo que no está entre $b$ y $c$', por: 'El ángulo de la fórmula es el que forman los dos lados que se multiplican. Si no, la altura no es $c\\operatorname{sen} A$.' },
+    { e: 'Dar por único el triángulo en el caso LLA', por: 'Un seno tiene dos ángulos posibles. Hay que probar $180^\\circ - \\alpha$ y ver si la suma de ángulos aún deja sitio.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('La fórmula del área con el seno es la que usan los programas de catastro y los GPS agrícolas ' +
     'para calcular la superficie de una finca de forma irregular: se descompone en triángulos a ' +
@@ -137,6 +165,26 @@ Course.topic('tr-teoremas', function (p) {
     'saber cuánta semilla cargar.');
 
   p.section('Practica');
+
+  p.exercise({
+    title: '¿Qué teorema toca?',
+    level: 'basico',
+    gen: function (r) {
+      var casos = [
+        { t: 'dos ángulos y un lado', v: 'seno', por: 'Con dos ángulos sale el tercero, y entonces hay un lado con su ángulo opuesto.' },
+        { t: 'dos lados y el ángulo que forman', v: 'coseno', por: 'No hay ningún lado con su ángulo opuesto: el coseno da el tercer lado.' },
+        { t: 'los tres lados', v: 'coseno', por: 'Sin ningún ángulo, solo el coseno puede empezar: se despeja $\\cos A$.' },
+        { t: 'dos lados y el ángulo opuesto a uno de ellos', v: 'seno', por: 'Hay un lado con su ángulo opuesto. Es el caso ambiguo: puede haber dos triángulos.' }
+      ];
+      return r.pick(casos);
+    },
+    ask: function (d) { return 'De un triángulo se conocen <strong>' + d.t + '</strong>. ¿Con qué teorema se empieza a resolverlo?'; },
+    fields: [{ name: 'r', label: 'Teorema', opts: [{ t: 'del seno', v: 'seno' }, { t: 'del coseno', v: 'coseno' }] }],
+    sol: function (d) { return { r: d.v }; },
+    hint: function () { return '¿Hay entre los datos un lado y el ángulo que tiene enfrente? Si sí, seno; si no, coseno.'; },
+    steps: function (d) { return [d.por, 'Teorema del <strong>' + d.v + '</strong>.']; },
+    answer: function (d) { return 'Teorema del ' + d.v + '.'; }
+  });
 
   p.exercise({
     title: 'Teorema del seno',

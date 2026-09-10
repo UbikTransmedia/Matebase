@@ -1,6 +1,12 @@
 /* Tema: Identidades y ecuaciones trigonométricas */
 Course.topic('tr-identidades', function (p) {
 
+  p.puente('En la circunferencia goniométrica, sumar dos ángulos es girar dos veces seguidas. Las ' +
+    'fórmulas de este tema dicen qué le pasa al seno y al coseno al encadenar giros, y son las mismas ' +
+    'que hacían funcionar la multiplicación de números complejos en forma polar. Al final, las ' +
+    'ecuaciones trigonométricas reutilizan la ecuación de segundo grado con una novedad: la ' +
+    'periodicidad multiplica las soluciones.');
+
   p.text('Ya sabes calcular las razones de un ángulo. La pregunta ahora es: si conoces las de ' +
     '$\\alpha$ y las de $\\beta$, ¿puedes obtener las de $\\alpha+\\beta$? La respuesta es que sí, ' +
     'pero <strong>no como uno esperaría</strong>.');
@@ -11,13 +17,10 @@ Course.topic('tr-identidades', function (p) {
     'no reparte sobre la suma.', 'warn', 'El error que hay que matar primero');
 
   p.section('Fórmulas de adición');
-  p.text('Empecemos por lo que <em>no</em> vale, porque es el error más frecuente: el seno ' +
-    '<strong>no</strong> se reparte entre sumandos. $\\operatorname{sen}(a+b)$ no es ' +
-    '$\\operatorname{sen} a + \\operatorname{sen} b$, igual que la raíz de una suma no es la suma de ' +
-    'las raíces. Compruébalo con $a=b=30°$: el primer miembro es $\\operatorname{sen} 60° \\approx ' +
-    '0{,}87$ y el segundo vale $0{,}5+0{,}5=1$. Lo que sí vale son estas fórmulas, que mezclan senos ' +
-    'y cosenos de una manera que al principio parece caprichosa y que sale de girar un punto en la ' +
-    'circunferencia.');
+  p.text('Lo que sí vale son estas fórmulas, que mezclan senos y cosenos de una manera que al ' +
+    'principio parece caprichosa y que sale de girar un punto en la circunferencia. Es la misma ' +
+    'situación que con la raíz de una suma: tampoco es la suma de las raíces, y también hay una ' +
+    'fórmula correcta que se parece poco a la ingenua.');
 
 
   p.formulas([
@@ -29,9 +32,28 @@ Course.topic('tr-identidades', function (p) {
   p.text('Fíjate en el detalle traicionero: en el coseno los signos van <strong>al revés</strong> ' +
     '(suma de ángulos → resta de productos). Es el fallo más habitual del tema.');
 
+  p.comprueba('¿Cuál es el desarrollo de $\\cos(\\alpha + \\beta)$?', [
+    { t: '$\\cos\\alpha\\cos\\beta + \\operatorname{sen}\\alpha\\operatorname{sen}\\beta$', ok: false, por: 'Ese es $\\cos(\\alpha - \\beta)$. En el coseno los signos van al revés: suma de ángulos, <em>resta</em> de productos.' },
+    { t: '$\\cos\\alpha\\cos\\beta - \\operatorname{sen}\\alpha\\operatorname{sen}\\beta$', ok: true, por: 'Compruébalo con $\\alpha = \\beta = 45^\\circ$: $\\cos 90^\\circ = 0$ y la fórmula da $\\frac{1}{2} - \\frac{1}{2} = 0$ ✓.' },
+    { t: '$\\cos\\alpha + \\cos\\beta$', ok: false, por: 'El coseno no reparte sobre la suma. Con $45^\\circ + 45^\\circ$ daría $1{,}41$, y $\\cos 90^\\circ = 0$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un valor exacto que no está en la tabla',
+    enunciado: 'Calcular $\\operatorname{sen} 75^\\circ$ de forma exacta.',
+    pasos: [
+      { t: '<strong>Descomponer.</strong> $75^\\circ$ no está en la tabla, pero $75^\\circ = 45^\\circ + 30^\\circ$, y esos dos sí.', antes: '¿Cómo escribirías $75^\\circ$ como suma de dos ángulos conocidos?' },
+      { t: '<strong>Fórmula de adición.</strong> $\\operatorname{sen}(45^\\circ + 30^\\circ) = \\operatorname{sen} 45^\\circ\\cos 30^\\circ + \\cos 45^\\circ\\operatorname{sen} 30^\\circ$.' },
+      { t: '<strong>Sustituir los valores exactos.</strong> $= \\dfrac{\\sqrt 2}{2}\\cdot\\dfrac{\\sqrt 3}{2} + \\dfrac{\\sqrt 2}{2}\\cdot\\dfrac{1}{2} = \\dfrac{\\sqrt 6 + \\sqrt 2}{4}$.', antes: 'Sustituye con los valores de la tabla. ¿Qué expresión queda?' },
+      { t: '<strong>Comprobar.</strong> $\\dfrac{2{,}449 + 1{,}414}{4} = 0{,}9659$, y la calculadora da $\\operatorname{sen} 75^\\circ = 0{,}9659$ ✓. De regalo, $\\cos 15^\\circ$ vale lo mismo, porque $15^\\circ$ y $75^\\circ$ son complementarios.', antes: '¿Cómo sabrías si la expresión con raíces es correcta?' }
+    ],
+    cierre: 'Con $75^\\circ = 45^\\circ + 30^\\circ$ o $75^\\circ = 135^\\circ - 60^\\circ$ el resultado es el mismo: cualquier descomposición en ángulos conocidos sirve.'
+  });
+
   p.demo({
     title: 'Comprobar la fórmula de adición',
     intro: 'Mueve los dos ángulos y compara: la fórmula da siempre el valor correcto, mientras que «sumar los senos» casi nunca acierta.',
+    predice: 'Con $\\alpha = 30^\\circ$ y $\\beta = 60^\\circ$, la suma es $90^\\circ$ y $\\operatorname{sen} 90^\\circ = 1$. ¿Cuánto da «sumar los senos»? ¿Se te ocurre algún par de ángulos en el que sumar los senos acierte?',
     build: function (host, d) {
       var a = 30, b = 45;
       var out = W.readout(host, '');
@@ -121,6 +143,12 @@ Course.topic('tr-identidades', function (p) {
       'hay <strong>dos</strong> ángulos en una vuelta cuyo seno vale $1/2$, y como la función se ' +
       'repite cada vuelta, cada uno de ellos genera infinitas soluciones sumando vueltas.');
 
+  p.comprueba('¿Qué soluciones tiene $\\cos x = \\dfrac{1}{2}$ en $[0^\\circ, 360^\\circ)$?', [
+    { t: 'Solo $60^\\circ$', ok: false, por: 'Falta la otra: en la circunferencia hay dos puntos con $x = \\frac{1}{2}$, uno arriba y otro abajo.' },
+    { t: '$60^\\circ$ y $120^\\circ$', ok: false, por: 'Ese par sería para el seno (simetría $180^\\circ - \\alpha$). $\\cos 120^\\circ = -\\frac{1}{2}$, negativo.' },
+    { t: '$60^\\circ$ y $300^\\circ$', ok: true, por: 'Para el coseno la simetría es $360^\\circ - \\alpha$: los puntos $(\\frac{1}{2}, \\pm\\frac{\\sqrt 3}{2})$ tienen la misma $x$.' }
+  ]);
+
   p.text('Cuando la ecuación mezcla senos y cosenos, la estrategia es <strong>dejar una sola razón</strong>: ' +
     'se usa la relación fundamental o las fórmulas del ángulo doble hasta que todo esté en función de ' +
     'la misma, y entonces suele quedar una ecuación de segundo grado.');
@@ -128,6 +156,7 @@ Course.topic('tr-identidades', function (p) {
   p.demo({
     title: 'Todas las soluciones de una ecuación',
     intro: 'Mueve el valor del seno y verás dónde corta la recta horizontal a la onda: cada corte es una solución.',
+    predice: 'Sube el valor del seno hasta 1: ¿cuántas soluciones habrá por vuelta? ¿Y si lo subes a 1,2?',
     build: function (host, d) {
       var k = 0.5;
       var out = W.readout(host, '');
@@ -167,6 +196,13 @@ Course.topic('tr-identidades', function (p) {
     }
   });
 
+  p.trampas([
+    { e: '$\\operatorname{sen}(\\alpha + \\beta) = \\operatorname{sen}\\alpha + \\operatorname{sen}\\beta$', por: '$\\operatorname{sen} 90^\\circ = 1$, pero $\\operatorname{sen} 30^\\circ + \\operatorname{sen} 60^\\circ = 1{,}37$.' },
+    { e: '$\\cos^2\\alpha = \\cos(\\alpha^2)$', por: 'Es $(\\cos\\alpha)^2$. Con $\\alpha = 60^\\circ$: $\\left(\\frac{1}{2}\\right)^2 = \\frac{1}{4}$, no $\\cos 3600^\\circ$.' },
+    { e: 'Dar una sola solución por vuelta', por: 'Salvo en los extremos ($\\pm 1$), cada valor del seno o del coseno lo alcanzan dos ángulos por vuelta.' },
+    { e: 'Olvidar el $+ 360^\\circ k$', por: 'Si no se pide un intervalo, la solución completa incluye todas las vueltas.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Que estas ecuaciones tengan infinitas soluciones no es una molestia, es lo que las hace útiles: ' +
     'describen cosas que se repiten. ¿A qué horas del año amanece antes de las siete? ¿Cuándo vuelve ' +
@@ -175,6 +211,33 @@ Course.topic('tr-identidades', function (p) {
     'que caen dentro de un intervalo concreto.');
 
   p.section('Practica');
+
+  p.exercise({
+    title: 'Comprueba el ángulo doble con un ángulo conocido',
+    level: 'basico',
+    gen: function (r) {
+      var a = r.pick([30, 45, 60]);
+      var ra = a * Math.PI / 180;
+      return { a: a, s: Math.sin(ra), c: Math.cos(ra), val: Math.sin(2 * ra) };
+    },
+    ask: function (d) {
+      return 'Calcula $\\operatorname{sen} ' + (2 * d.a) + '^\\circ$ con la fórmula del ángulo doble, a partir de $\\alpha = ' + d.a + '^\\circ$ (cuatro decimales).';
+    },
+    fields: [{ name: 'v', label: 'Valor', w: 'tiny' }],
+    sol: function (d) { return { v: U.round(d.val, 4) }; },
+    tol: 3e-4,
+    errores: [{
+      si: function (v, d) { return Math.abs(v.v - 2 * d.s) < 1e-3 && Math.abs(2 * d.s - d.val) > 1e-3; },
+      msg: 'Has hecho $2\\operatorname{sen}\\alpha$. La fórmula es $2\\operatorname{sen}\\alpha\\cos\\alpha$: falta multiplicar por el coseno.'
+    }],
+    hint: function () { return '$\\operatorname{sen} 2\\alpha = 2\\operatorname{sen}\\alpha\\cos\\alpha$. Los dos valores están en la tabla.'; },
+    steps: function (d) {
+      return ['$\\operatorname{sen} ' + d.a + '^\\circ = ' + U.fmt(d.s, 4) + '$ y $\\cos ' + d.a + '^\\circ = ' + U.fmt(d.c, 4) + '$.',
+        '$\\operatorname{sen} ' + (2 * d.a) + '^\\circ = 2\\cdot ' + U.fmt(d.s, 4) + '\\cdot ' + U.fmt(d.c, 4) + ' = ' + U.fmt(d.val, 4) + '$.',
+        'Comprobación con la tabla: $\\operatorname{sen} ' + (2 * d.a) + '^\\circ = ' + U.fmt(d.val, 4) + '$ ✓'];
+    },
+    answer: function (d) { return U.fmt(d.val, 4); }
+  });
 
   p.exercise({
     title: 'Fórmula de adición',
