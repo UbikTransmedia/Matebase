@@ -134,6 +134,61 @@ Course.topic('cib-retardos', function (p) {
     'amplifican a cada eslabón: cuanto más lejos del cliente, más violento el látigo. La pandemia de ' +
     '2020 hizo de esto un experimento a escala mundial.');
 
+  p.demo({
+    title: 'El efecto látigo en una cadena de cuatro eslabones',
+    intro: 'Una tienda, un mayorista, un distribuidor y una fábrica. Cada uno pide al siguiente lo que le piden a él, más una corrección para rehacer su almacén, y lo pedido tarda unas semanas en llegar. En la semana 5 la demanda de los clientes pasa de 4 a 8 cajas y ya no cambia más. Mira lo que hacen los pedidos río arriba; luego activa «contar lo que ya viene de camino».',
+    build: function (host) {
+      var L = 2, alfa = 0.5, cuenta = false, T = 40, OBJ = 12;
+      var NOM = ['tienda', 'mayorista', 'distribuidor', 'fábrica'];
+      var out = W.readout(host, '');
+      function cliente(t) { return t < 5 ? 4 : 8; }
+
+      function simula() {
+        var O = [[], [], [], []], I = [OBJ, OBJ, OBJ, OBJ], tubo = [];
+        for (var i = 0; i < 4; i++) { tubo.push([]); for (var j = 0; j < L; j++) tubo[i].push(4); }
+        for (var t = 0; t < T; t++) {
+          for (var k = 0; k < 4; k++) {
+            var dem = k === 0 ? cliente(t) : O[k - 1][t];
+            I[k] += tubo[k].shift() - dem;                    // llega lo pedido hace L semanas y se sirve lo pedido ahora
+            var enCamino = tubo[k].reduce(function (a, b) { return a + b; }, 0);
+            var pide = dem + alfa * (OBJ - I[k]) + (cuenta ? alfa * ((L - 1) * dem - enCamino) : 0);
+            pide = Math.max(0, pide);
+            tubo[k].push(pide);
+            O[k].push(pide);
+          }
+        }
+        return O;
+      }
+
+      var plot = W.plot(host, {
+        xmin: 0, xmax: T - 1, ymin: 0, ymax: 40, height: 300, xlabel: 'semanas', ylabel: 'cajas pedidas',
+        draw: function (g) {
+          var O = simula(), cl = [];
+          for (var t = 0; t < T; t++) cl.push([t, cliente(t)]);
+          g.path(cl, { color: 'ink', w: 1.6, dash: true });
+          for (var k = 0; k < 4; k++) g.path(O[k].map(function (v, t2) { return [t2, v]; }), { color: k, w: k === 3 ? 2.8 : 2 });
+        }
+      });
+
+      function pinta() {
+        var O = simula(), maxs = O.map(function (s) { return Math.max.apply(null, s); });
+        plot.view(0, T - 1, 0, Math.max(12, Math.max.apply(null, maxs) * 1.1));
+        out.set('Pedido máximo &nbsp;·&nbsp; clientes: <strong>8</strong>' + NOM.map(function (n, k) {
+          return ' &nbsp;·&nbsp; ' + n + ': <strong>' + U.fmt(maxs[k], 1) + '</strong>';
+        }).join('') + '<br>' + (cuenta
+          ? 'Contando lo que ya viene de camino, nadie pide dos veces lo mismo y el látigo se amansa.'
+          : 'Cuanto más lejos del cliente, más violento el vaivén, aunque la demanda real solo cambió una vez.'));
+      }
+
+      W.chips(host, [{ label: 'solo miran su almacén', value: false }, { label: 'contar lo que ya viene de camino', value: true }], { value: cuenta, on: function (v) { cuenta = v; pinta(); } });
+      var fila = W.row(host);
+      W.slider(fila, { label: 'semanas de retardo', min: 1, max: 4, step: 1, value: L, on: function (v) { L = v; pinta(); } });
+      W.slider(fila, { label: 'energía de la corrección', min: 0.1, max: 1, step: 0.05, value: alfa, on: function (v) { alfa = v; pinta(); } });
+      W.legend(host, [{ c: U.palette().ink, t: 'clientes' }, { c: 0, t: 'tienda' }, { c: 1, t: 'mayorista' }, { c: 2, t: 'distribuidor' }, { c: 3, t: 'fábrica' }]);
+      pinta();
+    }
+  });
+
   p.hist('El estudio sistemático de estos bucles con retardo lo empezó Jay Forrester en el MIT en los ' +
     'años cincuenta, y fundó lo que se llamó <em>dinámica de sistemas</em>. Venía de la ingeniería ' +
     'eléctrica —había dirigido el desarrollo de la memoria de núcleos magnéticos, que fue la memoria ' +
@@ -148,7 +203,8 @@ Course.topic('cib-retardos', function (p) {
     '<strong>acortar el retardo o predecir</strong>. Acortar: que la información viaje antes, que es ' +
     'la razón de que un supermercado comparta en tiempo real sus ventas con sus proveedores. Predecir: ' +
     'corregir según lo que <em>estimas</em> que estará pasando cuando llegue tu acción, en lugar de ' +
-    'según lo que veías. Esa segunda idea, llevada a las matemáticas, es el tema siguiente.');
+    'según lo que veías. Esa segunda idea, llevada a las matemáticas, es el asunto de ' +
+    '[[cib-filtrado|predicción y filtrado]] y del [[cib-kalman|filtro de Kalman]].');
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
@@ -242,7 +298,66 @@ Course.topic('cib-retardos', function (p) {
     answer: function (d) { return d.q; }
   });
 
+  p.exercise({
+    title: 'El látigo, eslabón a eslabón',
+    level: 'medio',
+    gen: function (r) {
+      var a = r.int(2, 6), f = r.pick([1.5, 2, 2.5, 3]), k = r.int(2, 4);
+      return { a: a, f: f, k: k, v: a * Math.pow(f, k) };
+    },
+    ask: function (d) {
+      return 'La demanda de los clientes de una tienda oscila $\\pm' + d.a + '$ cajas por semana alrededor de su media. En esta cadena, ' +
+        'cada eslabón multiplica por $' + U.fmt(d.f, 1) + '$ la oscilación de lo que le piden al hacer sus propios pedidos. La tienda es el ' +
+        'eslabón 1. ¿Cuántas cajas oscilan los pedidos del eslabón ' + d.k + '?';
+    },
+    fields: [{ name: 'v', label: '± cajas', w: 'tiny' }],
+    sol: function (d) { return { v: d.v }; },
+    tol: 1e-6,
+    errores: [
+      { si: function (v, d) { return Math.abs(d.a * d.f * d.k - d.v) > 1e-6 && Math.abs(v.v - d.a * d.f * d.k) < 1e-6; }, msg: 'La amplificación no se suma eslabón a eslabón: se <strong>multiplica</strong>. Cada eslabón amplifica lo que ya viene amplificado.' },
+      { si: function (v, d) { return Math.abs(v.v - d.a * Math.pow(d.f, d.k - 1)) < 1e-6; }, msg: 'Cuidado con la cuenta: la tienda, que es el eslabón 1, ya amplifica una vez.' }
+    ],
+    hint: function () { return ['La tienda pide con una oscilación $\\pm a\\cdot f$.', 'El eslabón siguiente vuelve a multiplicar por $f$ lo que recibe.']; },
+    steps: function (d) {
+      var l = [], v = d.a;
+      for (var i = 1; i <= d.k; i++) { v *= d.f; l.push('Eslabón ' + i + ': $\\pm' + U.fmt(v, 3) + '$'); }
+      l.push('En general: $\\pm a\\,f^k = ' + d.a + '\\cdot ' + U.fmt(d.f, 1) + '^{' + d.k + '} = ' + U.fmt(d.v, 3) + '$ cajas. El crecimiento es exponencial con la distancia al cliente.');
+      return l;
+    },
+    answer: function (d) { return '±' + U.fmt(d.v, 3); }
+  });
+
+  p.exercise({
+    title: '¿Se corrige, oscila o se descontrola?',
+    level: 'avanzado',
+    gen: function (r) {
+      var ret = r.int(0, 1);
+      var K = ret === 0 ? r.pick([0.3, 0.6, 0.9, 1.3, 1.6, 2.4]) : r.pick([0.1, 0.2, 0.4, 0.7, 1.3, 1.6]);
+      var q = ret === 0 ? (K < 1 ? 'suave' : (K < 2 ? 'oscila' : 'explota')) : (K <= 0.25 ? 'suave' : (K < 1 ? 'oscila' : 'explota'));
+      var y = [1, 1];                                     // y_{-1} e y_0, con r = 0
+      for (var i = 0; i < 8; i++) { var n = y.length - 1; y.push(y[n] - K * y[n - ret]); }
+      return { ret: ret, K: K, q: q, y: y };
+    },
+    ask: function (d) {
+      return 'En el bucle $y_{n+1} = y_n + K\\,(r - y_{n-d})$, con retardo $d = ' + d.ret + '$ y ganancia $K = ' + U.fmt(d.K, 1) +
+        '$, se produce una desviación respecto de la referencia. ¿Qué le pasa a esa desviación con el tiempo?';
+    },
+    fields: [{ name: 'q', label: 'La desviación', opts: [{ t: 'se corrige sin pasarse', v: 'suave' }, { t: 'oscila, pero se va apagando', v: 'oscila' }, { t: 'crece sin control', v: 'explota' }] }],
+    sol: function (d) { return { q: d.q }; },
+    hint: function () { return ['Pon $r = 0$, así $y$ es directamente la desviación. Empieza con $y = 1$ (y también 1 el valor anterior) y calcula cinco o seis pasos a mano.', '¿Cambia de signo? ¿Crece o mengua su tamaño?']; },
+    steps: function (d) {
+      return ['Con $r = 0$ y partiendo de $1$, los valores siguientes son: $' + d.y.slice(2).map(function (v) { return U.fmt(v, 3); }).join(',\\ ') + '$',
+        d.ret === 0
+          ? 'Sin retardo, cada paso multiplica la desviación por $1 - K = ' + U.fmt(1 - d.K, 1) + '$. Si ese número está entre 0 y 1 se corrige sin pasarse; entre −1 y 0, cambia de signo en cada paso pero mengua; por debajo de −1, crece.'
+          : 'Con retardo 1 la ganancia segura se reduce a la mitad: el bucle solo es estable si $K < 1$, y en cuanto $K > \\frac{1}{4}$ empieza a oscilar. Sin retardo, eso ocurría con $K < 2$ y $K > 1$.',
+        { suave: 'La desviación <strong>se corrige sin pasarse</strong>.', oscila: 'La desviación <strong>oscila y se apaga</strong>.', explota: 'La desviación <strong>crece sin control</strong>.' }[d.q]];
+    },
+    answer: function (d) { return { suave: 'Se corrige sin pasarse', oscila: 'Oscila y se apaga', explota: 'Se descontrola' }[d.q]; }
+  });
+
   p.keys([
+    'El <strong>efecto látigo</strong> crece de forma exponencial con la distancia al cliente; se amansa contando lo que ya viene de camino.',
+    'Con retardo, la ganancia que antes era segura empieza a oscilar o se vuelve inestable: el retardo consume margen de estabilidad.',
     'Un <strong>retardo</strong> es el tiempo entre una acción correctora y su efecto observable.',
     'Con retardo se corrige mirando información vieja, y por eso se acumulan correcciones que aún están en camino.',
     'El retardo consume margen de estabilidad: una ganancia segura sin demora puede oscilar o descontrolarse con ella.',

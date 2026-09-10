@@ -4,7 +4,7 @@ Course.topic('gfx-derivadas', function (p) {
   p.text('Hasta ahora hemos puesto los bordes suaves a mano: <code>smoothstep(0.0, 0.02, d)</code>, ' +
     'y ese <code>0.02</code> salió de probar hasta que quedó bien. Funciona en un tamaño y falla en ' +
     'todos los demás. Si haces zoom, el borde se vuelve una nube; si te alejas, vuelve a ser una ' +
-    'escalera. Este tema arregla eso de una vez, y de paso mete la derivada del bloque 6 dentro del ' +
+    'escalera. Este tema arregla eso de una vez, y de paso mete la [[fn-derivadas|derivada]] dentro del ' +
     'shader.');
 
   p.section('El píxel sí sabe algo de sus vecinos');
@@ -108,7 +108,7 @@ Course.topic('gfx-derivadas', function (p) {
 
   p.text('Y con la normal se ilumina: cuanto más de frente mire un trozo hacia la luz, más brilla. ' +
     'Ese producto escalar entre la normal y la dirección de la luz es toda la iluminación difusa ' +
-    'que necesitas, y es el mismo [[ge-vectores|producto escalar]] del bloque de geometría.');
+    'que necesitas, y es el mismo [[ge-vectores|producto escalar]] de la geometría del plano.');
 
   p.demo({
     title: 'Iluminar el ruido',
@@ -321,6 +321,35 @@ Course.topic('gfx-derivadas', function (p) {
         'Ni un número escogido a ojo: la anchura la pone la propia imagen.'];
     },
     answer: function (d) { return d.ref; }
+  });
+
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'avanzado',
+    gen: function (r) {
+      var casos = [
+        { c: 'float d = length(p) - 0.3;\nfloat w = fwidth(d);\nfloat v = 1.0 - smoothstep(-w, w, d);',
+          o: ['Un círculo con el borde suavizado justo lo que ocupa un píxel, sea cual sea el zoom', 'Un círculo con el borde duro, en escalones', 'Un círculo muy borroso', 'Un anillo'],
+          por: '<code>fwidth(d)</code> es cuánto cambia la distancia de un píxel al siguiente: la transición del <code>smoothstep</code> ocupa siempre alrededor de un píxel.' },
+        { c: 'vec2 p = (fragCoord - 0.5 * iResolution.xy) / iResolution.y;\nfloat v = fwidth(p.x) * iResolution.y;',
+          o: ['Toda la pantalla blanca, uniforme', 'Un degradado de izquierda a derecha', 'Toda la pantalla negra', 'Rayas verticales'],
+          por: 'De un píxel al vecino, <code>p.x</code> cambia exactamente $\\frac{1}{\\text{alto}}$ en horizontal y nada en vertical: al multiplicar por la altura sale 1 en todas partes.' },
+        { c: 'float h = ruido(p * 5.0);\nvec3 n = normalize(vec3(-dFdx(h), -dFdy(h), 0.01));\nfloat v = max(dot(n, normalize(vec3(1.0, 1.0, 1.0))), 0.0);',
+          o: ['Un relieve iluminado de lado, como un terreno visto desde arriba con el sol bajo', 'Las mismas nubes, planas y sin relieve', 'Estática', 'Un color liso'],
+          por: 'Las derivadas del ruido entre píxeles vecinos dan la inclinación del terreno, y con ella una normal: las laderas que miran a la luz se aclaran.' },
+        { c: 'float v = step(0.5, fract(p.x * 200.0));',
+          o: ['Rayas tan finas que se confunden y forman un muaré que parpadea', 'Rayas anchas y limpias', 'Toda la pantalla gris uniforme', 'Un degradado suave'],
+          por: 'Hay unas 200 rayas por unidad, cada una de un par de píxeles: el muestreo de un píxel por raya no alcanza y aparecen patrones falsos. Por eso hace falta suavizar con la derivada.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'Con <code>p</code> centrada, <code>ruido</code> como en el tema y el color final <code>vec3(v)</code>, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['<code>dFdx</code> y <code>dFdy</code> son lo que cambia una expresión al pasar al píxel vecino; <code>fwidth</code>, la suma de sus valores absolutos.']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
   });
 
   p.keys([

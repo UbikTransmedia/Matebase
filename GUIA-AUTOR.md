@@ -23,8 +23,16 @@ Course.topic('mi-id', function (p) {
 
 ```js
 { id: 'mi-id', t: 'Título del tema', r: 'Resumen de una línea.',
-  o: ['objetivo 1', 'objetivo 2'] }
+  o: ['objetivo 1', 'objetivo 2'],
+  req: ['otro-tema'],          // temas que da por sabidos: tienen que ir ANTES
+  curso: '2B',                 // 'ESO' | '1B' | '2B' | 'AMP' (si no, el del bloque)
+  itin: ['MII', 'MCS'] }       // solo los de 2.º: Matemáticas II, MACS II o las dos
 ```
+
+Los requisitos no son decoración: generan el cuadro «Antes de empezar» del tema,
+la última columna del mapa del temario, y `tests.html` comprueba que cada uno va
+antes en el temario. `itin` decide en qué itinerario, simulacro y formulario entra
+el tema.
 
 Recarga y ya está. El archivo se carga solo la primera vez que se abre el tema.
 Un tema que figura en el temario pero no tiene archivo **no rompe nada**: muestra
@@ -32,6 +40,12 @@ su ficha con los objetivos y la etiqueta «en preparación».
 
 Para **intercalar** un tema entre otros dos, basta con insertar el objeto en la
 posición que corresponda del array. El orden del array es el orden del curso.
+
+> **No cites bloques por su número.** Escribir «como viste en el bloque 7» deja la
+> referencia rota en cuanto el temario se reordena, y ha pasado. Nombra el bloque
+> («en el bloque de álgebra lineal») o, mejor, enlaza el tema concreto con
+> `[[av-espacios|álgebra lineal]]`: el enlace lleva al sitio y `tests.html`
+> comprueba que existe.
 
 ---
 
@@ -52,6 +66,10 @@ posición que corresponda del array. El orden del array es el orden del curso.
 | `p.keys([...])` | Caja de ideas clave (va al final del tema) |
 | `p.demo({...})` | **Ejemplo interactivo** (azul) |
 | `p.exercise({...})` | **Ejercicio práctico** (verde) |
+| `p.problem({...})` | **Problema por apartados**, como los de examen |
+| `p.mapa()` | Mapa del temario de 2.º con el estado del alumno (bloque de repaso) |
+| `p.simulacro({ titulo, itin, partes })` | Examen con preguntas sacadas de los temas (bloque de repaso) |
+| `p.formulario()` | Fórmulas e ideas clave del temario, para imprimir (bloque de repaso) |
 | `p.raw(elemento)` | Insertar un nodo DOM a pelo |
 
 Dentro de cualquier texto, `$...$` se renderiza como matemáticas.
@@ -161,6 +179,61 @@ p.exercise({
 > **Declara siempre `sol`, incluso si usas `check`.** No estorba (gana `check`)
 > y es lo que permite que `tests.html` audite el ejercicio automáticamente.
 
+### Respuestas de elección, errores típicos y pistas graduadas
+
+```js
+fields: [
+  { name: 'x', label: 'x =', w: 'tiny' },
+  { name: 't', label: 'El sistema es', opts: [          // grupo de opciones
+      { t: 'compatible determinado', v: 'scd' },
+      { t: 'incompatible', v: 'si' } ] }
+],
+sol: function (d) { return { x: 3, t: 'scd' }; },     // la opción, por su valor v
+
+errores: [                                            // se miran si la respuesta está mal
+  { si: function (v, d) { return Math.abs(v.x - d.sinRaiz) < 1e-6; },
+    msg: 'Falta dividir por el módulo del vector normal.' }
+],
+
+hint: function (d) { return ['primera pista, que orienta', 'segunda, que casi resuelve']; }
+```
+
+- En `errores`, `si(v, d)` recibe lo mismo que `check`. Cuando devuelve `true`, el
+  corrector enseña `msg` en lugar del «no es correcto» genérico. Pon nombre a los
+  errores que de verdad cometen los alumnos.
+- **Un error típico nunca debe coincidir con la respuesta correcta.** Si para
+  ciertos datos el cálculo equivocado da lo mismo que el bueno —$k\\cdot d$ y
+  $k^3 d$ cuando $k = 1$—, protege la regla con esa condición. `tests.html` lo
+  comprueba generando cada ejercicio 40 veces, y ya ha cazado unos cuantos.
+- Si `hint` devuelve un array, el botón de pista las va dando una a una.
+
+### Problemas por apartados — `p.problem`
+
+```js
+p.problem({
+  title: 'Contraste para una proporción',
+  level: 'avanzado',
+  gen: function (r) { ... },                 // unos datos para todo el problema
+  intro: function (d) { return 'enunciado común'; },
+  partes: [
+    { ask, fields, sol, tol, errores, hint, steps, answer },   // igual que un ejercicio
+    { ... }
+  ]
+});
+```
+
+Cada apartado se corrige por separado y se puede ver su solución sin destapar las
+demás. En los simulacros se prefieren los problemas por apartados, porque son los
+que más se parecen al examen.
+
+### Enlaces y modo examen
+
+Cada ejercicio tiene un botón para copiar un enlace de la forma
+`#/tema?e=2&s=123456`: abre el tema en ese ejercicio con esa semilla, es decir,
+con los mismos números. En los simulacros los ejercicios se montan en **modo
+examen**: sin pistas ni soluciones hasta entregar, con la nota de cada uno y la
+solución paso a paso al corregir.
+
 ### Temas de color
 
 El curso trae tres: **claro** (el de por defecto), **oscuro** y **monokai**
@@ -224,6 +297,29 @@ Opciones comunes: `color` (número 0-5 de la paleta, o `'ink'`/`'axis'`/`'ok'`/`
 
 **Controles:**
 
+**El visor 3D — `W.space3d`:**
+
+```js
+var v = W.space3d(host, {
+  rango: 5,                 // se dibuja el cubo [-5, 5]³
+  height: 340,
+  aria: 'Qué se ve, para quien no lo ve',
+  rejilla: true, ejes: true,
+  draw: function (v) {      // v es el propio visor
+    v.plano([1, 1, 1], -3, { color: 0 });          // x + y + z - 3 = 0, recortado al cubo
+    v.linea([0, 0, 0], [1, 2, 0], { color: 1 });   // punto y vector director
+    v.punto([1, 1, 1], { label: 'P' });
+    v.vec([0, 0, 0], [2, 1, 3], { color: 2, label: 'u' });
+    v.seg(a, b, o) · v.poli(pts, o) · v.camino(pts, o) · v.texto(p, 'txt', o)
+  }
+});
+v.render();
+```
+
+El eje z apunta hacia arriba y el sistema es dextrógiro, como en los libros. El
+alumno lo gira arrastrando o con las flechas, acerca con más y menos, y vuelve a la
+vista inicial con R.
+
 - `W.row(host)` — fila contenedora para los deslizadores.
 - `W.slider(fila, {label, min, max, step, value, dec, format, on})` — si el `step`
   **no es entero**, el deslizador mide una magnitud continua: se afina solo hasta
@@ -238,8 +334,8 @@ Opciones comunes: `color` (número 0-5 de la paleta, o `'ink'`/`'axis'`/`'ok'`/`
 
 ## El visor de shaders (`W.shader`)
 
-Solo lo usa el bloque 13, pero está en el núcleo y sirve para cualquier tema que
-quiera enseñar algo con una imagen calculada por fórmula.
+Lo usa sobre todo el bloque de programación gráfica, pero está en el núcleo y sirve
+para cualquier tema que quiera enseñar algo con una imagen calculada por fórmula.
 
 ```js
 W.shader(host, {
@@ -270,6 +366,27 @@ Cuatro decisiones que conviene conocer antes de escribir uno:
 - **Los errores se traducen al editor**: el número de línea que da el
   compilador se corrige restando el preámbulo, así que apunta a la línea que el
   alumno ve.
+
+### Shaders con memoria
+
+Con `buffer: true`, el shader lee en `iChannel0` lo que pintó en el fotograma
+anterior, y lo que devuelve es el estado nuevo. Es lo que convierte una fórmula en
+una simulación: autómatas celulares, difusión, reacción-difusión.
+
+```js
+W.shader(host, {
+  id: 'gfx-vida', buffer: true,
+  escala: 0.25,             // resolución del estado respecto a la del lienzo
+  pasos: 4,                 // pasos de simulación por fotograma
+  vista: 'vec3 vista(vec4 s) { return vec3(s.r); }',   // cómo se pinta el estado
+  codigo: '... texture2D(iChannel0, fragCoord / iResolution.xy) ...'
+});
+```
+
+- En la pasada de simulación, `iResolution` es el tamaño del estado, no el del lienzo.
+- **Siembra siempre en el primer fotograma** con `step(iFrame, 0.5)`. El estado
+  empieza a cero y, sin siembra, la auditoría lo detecta como imagen lisa.
+- «Volver al original» reinicia el contador de fotogramas y vuelve a sembrar.
 
 ### Corregir un ejercicio de código
 
@@ -325,7 +442,8 @@ curso tiene que funcionar sin internet.
 Soportado: `\frac` `\dfrac` `\sqrt[n]{}` `^` `_` `\left...\right` (con paréntesis
 que crecen solos) `\sum` `\prod` `\int` `\lim` `\begin{pmatrix|bmatrix|vmatrix|
 cases|aligned|array}` `\vec` `\overline` `\hat` `\text` `\mathbb` `\binom`
-`\pmod`, todo el alfabeto griego y los símbolos habituales de relación y operación.
+`\pmod` `\overset` `\stackrel`, todo el alfabeto griego y los símbolos habituales
+de relación y operación.
 
 Convenciones del curso:
 
@@ -350,3 +468,5 @@ Abre **`tests.html`**. Comprueba:
    ninguno pinta una imagen lisa. Un shader que compila y sale de un solo color
    es un fallo mudo que no se ve de ninguna otra manera.
 5. Ningún enlace `[[tema|texto]]` apunta a un tema que no existe.
+6. Ningún «error típico» salta con la respuesta correcta.
+7. Los requisitos del tema van antes que él en el temario.

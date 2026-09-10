@@ -415,6 +415,35 @@ Course.topic('gfx-escena', function (p) {
     answer: function (d) { return d.ref; }
   });
 
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'avanzado',
+    gen: function (r) {
+      var casos = [
+        { c: 'float sdf(vec3 q) {\n    return min(length(q - vec3(-0.6, 0.0, 0.0)) - 0.5,\n               length(q - vec3( 0.6, 0.0, 0.0)) - 0.5);\n}',
+          o: ['Dos esferas separadas por un pequeño hueco', 'Dos esferas fundidas en una forma blanda', 'Una sola esfera', 'Solo la zona común a las dos esferas'],
+          por: 'Los centros están a 1,2 de distancia y los radios suman 1: el <code>min</code> une las dos esferas, que no llegan a tocarse.' },
+        { c: 'float sdf(vec3 q) {\n    return smin(length(q - vec3(-0.4, 0.0, 0.0)) - 0.5,\n                length(q - vec3( 0.4, 0.0, 0.0)) - 0.5, 0.5);\n}',
+          o: ['Dos esferas fundidas con un cuello suave entre ellas, como dos gotas de mercurio', 'Dos esferas separadas', 'Solo la zona común a las dos, con aristas', 'Una esfera con un mordisco'],
+          por: '<code>smin</code> es una unión que redondea la zona de encuentro: donde las dos distancias son parecidas, la superficie se hincha y las funde.' },
+        { c: 'float sdf(vec3 q) {\n    q.xz = mod(q.xz + 2.0, 4.0) - 2.0;\n    return length(q) - 0.8;\n}',
+          o: ['Una rejilla infinita de esferas en el plano horizontal, que se pierde en el horizonte', 'Una sola esfera', 'Una fila de esferas en una sola dirección', 'Una columna vertical de esferas'],
+          por: 'El <code>mod</code> repite el espacio en $x$ y en $z$, cada 4 unidades; la $y$ no se toca: esferas repetidas en todo el plano horizontal.' },
+        { c: 'float sdf(vec3 q) {\n    q.xz = mat2(cos(q.y), sin(q.y), -sin(q.y), cos(q.y)) * q.xz;\n    return caja(q, vec3(0.4, 1.5, 0.4));\n}',
+          o: ['Una caja alta retorcida alrededor de su eje vertical, como un tornillo', 'Una caja inclinada', 'Una caja quieta sin deformar', 'Una esfera'],
+          por: 'Cada altura gira el plano horizontal un ángulo igual a su $y$: las secciones de la caja giran más cuanto más arriba, y se retuerce.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'Con las funciones del tema (<code>smin</code>, <code>caja</code>) y el raymarcher de siempre, ¿qué forma se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['<code>min</code> une, <code>smin</code> une suavizando, <code>mod</code> repite, y girar según la altura retuerce.']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
+  });
+
   p.keys([
     '<code>smin</code> funde dos cuerpos en vez de pegarlos: interpola y además <strong>resta un pellizco</strong>, que es lo que forma el cuello.',
     'El catálogo entero cabe en siete líneas: unir, cortar, vaciar, fundir, redondear, ahuecar y añadir relieve.',

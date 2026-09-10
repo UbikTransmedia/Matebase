@@ -103,7 +103,7 @@ Course.topic('cib-autoorganizacion', function (p) {
       var FAMOSAS = {
         0: 'Muere en el primer paso: la regla apaga todo.',
         30: 'Caos a partir de un solo punto. Wolfram la usó como generador de números aleatorios, y así se implementó en el software Mathematica.',
-        90: 'Dibuja el triángulo de Sierpinski, el mismo fractal del bloque 8, sin que nadie lo haya programado.',
+        90: 'Dibuja el triángulo de Sierpinski, el mismo fractal que aparece en el tema de caos y fractales, sin que nadie lo haya programado.',
         110: 'La más asombrosa: se demostró que es capaz de computar cualquier cosa que compute un ordenador. Con esta regla tonta.',
         150: 'Simetría intrincada, periódica en el tiempo.',
         184: 'Modela el tráfico de coches en una carretera de un carril: las celdas encendidas son vehículos.',
@@ -279,6 +279,112 @@ Course.topic('cib-autoorganizacion', function (p) {
     'buscar al culpable individual es un error de nivel: el fenómeno vive en el conjunto, no en las ' +
     'piezas.');
 
+  p.sub('Patrones de Turing: manchas y rayas sin plano');
+
+  p.text('En 1952, dos años antes de morir, Alan Turing publicó un artículo que no tenía nada que ver con ' +
+    'ordenadores: <em>Las bases químicas de la morfogénesis</em>. Se preguntaba cómo un embrión, que al ' +
+    'principio es una bola casi uniforme de células, llega a tener rayas, manchas o dedos. Su respuesta fue ' +
+    'que bastan dos sustancias que reaccionan entre sí y se <strong>difunden a velocidades distintas</strong>.');
+
+  p.text('Donde una de ellas gana un poco de terreno, se refuerza a sí misma: realimentación positiva, ' +
+    'local. Pero a la vez provoca un efecto contrario que se extiende más deprisa por los alrededores e ' +
+    'impide que allí aparezca otro foco: realimentación negativa, a distancia. El resultado es un reparto ' +
+    'regular de focos, un patrón, sin que ninguna célula conozca el dibujo. Es la misma lección del Juego ' +
+    'de la Vida, ahora con cantidades continuas en lugar de celdas encendidas y apagadas.');
+
+  p.formulas([
+    '\\frac{du}{dt} = D_u\\,\\Delta u - u\\,v^2 + F\\,(1 - u)',
+    '\\frac{dv}{dt} = D_v\\,\\Delta v + u\\,v^2 - (F + k)\\,v'
+  ], 'reacción y difusión (modelo de Gray-Scott)',
+    'Cada celda de una cuadrícula lleva dos cantidades, $u$ y $v$.<br><br>$\\Delta u$ mide cuánto se ' +
+    'diferencia $u$ de la media de sus vecinas: es la <strong>difusión</strong>, que tiende a igualarlo todo.<br><br>' +
+    'El término $u\\,v^2$ es la <strong>reacción</strong>: $v$ se fabrica a costa de $u$, y cuanto más $v$ hay, ' +
+    'más deprisa. $F$ repone $u$ desde fuera y $k$ retira $v$.<br><br>Con $v$ difundiéndose la mitad de rápido ' +
+    'que $u$, cambios pequeños en $F$ y $k$ dan laberintos, manchas o manchas que se dividen como células.');
+
+  p.demo({
+    title: 'Reacción y difusión',
+    intro: 'Cada píxel es una celda con dos sustancias que reaccionan y se difunden a sus vecinas. Nadie dibuja nada: las formas salen solas de unas gotas iniciales. Elige una receta, o mueve F y k con cuidado, y reinicia.',
+    build: function (host) {
+      var N = 110, u, v, u2, v2, F = 0.0545, K = 0.062, vivo = true, PASOS = 10, intentos = 0;
+      var RECETAS = { coral: [0.0545, 0.062], mitosis: [0.0367, 0.0649] };
+      var quieto = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      if (quieto) vivo = false;
+      var cv = U.el('canvas', { width: N, height: N, role: 'img', 'aria-label': 'Simulación de reacción-difusión: una cuadrícula en la que aparecen manchas y laberintos a partir de unas gotas iniciales' });
+      cv.style.cssText = 'width:min(100%,440px);aspect-ratio:1;image-rendering:pixelated;display:block;margin:0 auto;border-radius:6px';
+      var caja = U.el('div.stage');
+      caja.appendChild(cv);
+      host.appendChild(caja);
+      var ctx = cv.getContext('2d'), img = ctx.createImageData(N, N);
+      var out = W.readout(host, '');
+
+      function siembra() {
+        u = new Float32Array(N * N).fill(1); v = new Float32Array(N * N);
+        u2 = new Float32Array(N * N); v2 = new Float32Array(N * N);
+        var rng = U.rng(Date.now() % 100000);
+        for (var s = 0; s < 12; s++) {
+          var cx = rng.int(8, N - 9), cy = rng.int(8, N - 9);
+          for (var y = -3; y <= 3; y++) for (var x = -3; x <= 3; x++) {
+            var i = (cy + y) * N + cx + x;
+            u[i] = 0.5; v[i] = 0.25 + rng.real(0, 0.1);
+          }
+        }
+      }
+      function paso() {
+        for (var y = 0; y < N; y++) {
+          var ym = ((y - 1 + N) % N) * N, y0 = y * N, yp = ((y + 1) % N) * N;
+          for (var x = 0; x < N; x++) {
+            var xm = (x - 1 + N) % N, xp = (x + 1) % N, i = y0 + x;
+            var lu = 0.2 * (u[y0 + xm] + u[y0 + xp] + u[ym + x] + u[yp + x]) + 0.05 * (u[ym + xm] + u[ym + xp] + u[yp + xm] + u[yp + xp]) - u[i];
+            var lv = 0.2 * (v[y0 + xm] + v[y0 + xp] + v[ym + x] + v[yp + x]) + 0.05 * (v[ym + xm] + v[ym + xp] + v[yp + xm] + v[yp + xp]) - v[i];
+            var reac = u[i] * v[i] * v[i];
+            u2[i] = u[i] + (lu - reac + F * (1 - u[i]));
+            v2[i] = v[i] + (0.5 * lv + reac - (F + K) * v[i]);
+          }
+        }
+        var t = u; u = u2; u2 = t; t = v; v = v2; v2 = t;
+      }
+      function dibuja() {
+        var px = img.data;
+        for (var i = 0; i < N * N; i++) {
+          var c = Math.max(0, Math.min(1, u[i] - v[i]));
+          px[4 * i] = 24 + c * 220; px[4 * i + 1] = 32 + c * 200; px[4 * i + 2] = 70 + c * 150; px[4 * i + 3] = 255;
+        }
+        ctx.putImageData(img, 0, 0);
+      }
+      function bucle() {
+        if (!cv.isConnected) { if (++intentos > 300) return; }        // la pagina ya no esta: se para
+        else { intentos = 0; if (vivo) { for (var s = 0; s < PASOS; s++) paso(); dibuja(); } }
+        requestAnimationFrame(bucle);
+      }
+      function cuenta() {
+        out.set('$F = ' + U.fmt(F, 4) + '$, $k = ' + U.fmt(K, 4) + '$ &nbsp;·&nbsp; cada fotograma calcula ' + PASOS + ' pasos de ' + U.miles(N * N) + ' celdas' +
+          (vivo ? '' : ' &nbsp;·&nbsp; <strong>en pausa</strong>'));
+      }
+
+      W.chips(host, [{ label: 'laberinto de coral', value: 'coral' }, { label: 'manchas que se dividen', value: 'mitosis' }], {
+        value: 'coral', on: function (k) { F = RECETAS[k][0]; K = RECETAS[k][1]; sF.set(F); sK.set(K); siembra(); dibuja(); cuenta(); }
+      });
+      var fila = W.row(host);
+      var sF = W.slider(fila, { label: 'F (reposición)', min: 0.02, max: 0.07, step: 0.0005, value: F, dec: 4, on: function (x) { F = x; cuenta(); } });
+      var sK = W.slider(fila, { label: 'k (retirada)', min: 0.05, max: 0.07, step: 0.0005, value: K, dec: 4, on: function (x) { K = x; cuenta(); } });
+      var botones = W.buttons(host, [
+        { t: vivo ? 'Pausa' : 'Seguir', on: function () { vivo = !vivo; botones.children[0].textContent = vivo ? 'Pausa' : 'Seguir'; cuenta(); } },
+        { t: 'Reiniciar', on: function () { siembra(); dibuja(); } }
+      ]);
+      if (quieto) W.hint(host, 'Tu sistema pide reducir el movimiento, así que la simulación empieza en pausa. Pulsa «Seguir» para verla crecer.');
+      siembra(); dibuja(); cuenta();
+      requestAnimationFrame(bucle);
+    }
+  });
+
+  p.hist('Turing no llegó a ver confirmada su idea. Durante décadas se consideró una curiosidad matemática, ' +
+    'hasta que en 1990 un grupo de químicos de Burdeos obtuvo por primera vez manchas de Turing estables en ' +
+    'una reacción química real. En 1995, Shigeru Kondo mostró que las rayas del pez ángel <em>Pomacanthus</em> ' +
+    'se desplazan, se bifurcan y se reorganizan a medida que el pez crece, tal como predicen las ecuaciones ' +
+    'de reacción-difusión. Hoy se estudian con ellas las rayas de las cebras, la separación de los dedos en ' +
+    'el embrión y la disposición de los folículos del pelo.');
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -372,7 +478,62 @@ Course.topic('cib-autoorganizacion', function (p) {
     }
   });
 
+  p.exercise({
+    title: '¿Cuántas reglas hay?',
+    level: 'medio',
+    gen: function (r) {
+      var s = r.pick([2, 3]), m = s === 2 ? r.pick([3, 5, 7]) : r.pick([2, 3]);
+      return { s: s, m: m, vec: Math.pow(s, m) };
+    },
+    ask: function (d) {
+      return 'Un autómata celular de una dimensión tiene celdas con <strong>' + d.s + ' estados</strong> posibles, y cada celda decide su ' +
+        'estado siguiente mirando una vecindad de <strong>' + d.m + ' celdas</strong>, ella incluida.<br><br>¿Cuántas vecindades distintas ' +
+        'puede haber? El número de reglas posibles es $' + d.s + '$ elevado a un exponente: ¿cuál?';
+    },
+    fields: [{ name: 'n', label: 'vecindades', w: 'tiny' }, { name: 'e', label: 'exponente', w: 'tiny' }],
+    sol: function (d) { return { n: d.vec, e: d.vec }; },
+    errores: [
+      { si: function (v, d) { return Math.pow(d.m, d.s) !== d.vec && v.n === Math.pow(d.m, d.s); }, msg: 'Al revés: cada una de las ' + 'celdas de la vecindad puede estar en cualquiera de los estados, así que se multiplican tantos factores iguales al número de estados como celdas haya.' },
+      { si: function (v, d) { return v.e === d.m; }, msg: 'Ese exponente cuenta las celdas de la vecindad. Pero una regla tiene que decidir una salida para <strong>cada vecindad posible</strong>: el exponente es el número de vecindades.' }
+    ],
+    hint: function () { return ['Vecindades: cada celda de la vecindad puede estar en cualquiera de los estados, de forma independiente.', 'Una regla es una tabla con una fila por vecindad, y en cada fila se elige uno de los estados.']; },
+    steps: function (d) {
+      return ['Vecindades: $' + d.s + '^{' + d.m + '} = ' + d.vec + '$.',
+        'Una regla elige una salida entre ' + d.s + ' para cada una de las ' + d.vec + ' vecindades: $' + d.s + '^{' + d.vec + '}$ reglas.',
+        d.s === 2 && d.m === 3 ? 'Es el caso de los autómatas elementales: $2^8 = 256$.' : 'Con vecindades algo mayores ya no se pueden explorar todas: $' + d.s + '^{' + d.vec + '}$ es un número astronómico.'];
+    },
+    answer: function (d) { return d.vec + ' vecindades, ' + d.s + '^' + d.vec + ' reglas'; }
+  });
+
+  p.exercise({
+    title: '¿Dónde estará el planeador?',
+    level: 'basico',
+    gen: function (r) {
+      var x = r.int(0, 20), y = r.int(3, 20), k = r.int(2, 12);
+      var dd = r.pick([['derecha', 'abajo', 1, 1], ['izquierda', 'abajo', -1, 1], ['derecha', 'arriba', 1, -1], ['izquierda', 'arriba', -1, -1]]);
+      if (x - k < 0 && dd[2] < 0) return null;
+      if (y - k < 0 && dd[3] < 0) return null;
+      return { x: x, y: y, k: k, g: 4 * k, dx: dd[2], dy: dd[3], txt: dd[1] + ' y a la ' + dd[0] };
+    },
+    ask: function (d) {
+      return 'Un planeador del Juego de la Vida recupera su forma cada 4 generaciones, desplazado una celda en diagonal. Uno que avanza ' +
+        'hacia ' + d.txt + ' ocupa ahora un cuadro de 3×3 cuya esquina superior izquierda está en la columna $' + d.x + '$ y la fila $' + d.y +
+        '$ (las filas crecen hacia abajo). ¿Dónde estará esa esquina dentro de ' + d.g + ' generaciones?';
+    },
+    fields: [{ name: 'c', label: 'columna', w: 'tiny' }, { name: 'f', label: 'fila', w: 'tiny' }],
+    sol: function (d) { return { c: d.x + d.k * d.dx, f: d.y + d.k * d.dy }; },
+    errores: [{ si: function (v, d) { return v.c === d.x + d.g * d.dx && v.f === d.y + d.g * d.dy; }, msg: 'El planeador no avanza una celda por generación: tarda 4 generaciones en recorrer una.' }],
+    hint: function () { return ['¿Cuántas veces completa su ciclo de 4 generaciones?', 'En cada ciclo se mueve una columna y una fila.']; },
+    steps: function (d) {
+      return ['$' + d.g + ' : 4 = ' + d.k + '$ ciclos completos.',
+        'Columna: $' + d.x + (d.dx > 0 ? ' + ' : ' - ') + d.k + ' = ' + (d.x + d.k * d.dx) + '$; fila: $' + d.y + (d.dy > 0 ? ' + ' : ' - ') + d.k + ' = ' + (d.y + d.k * d.dy) + '$.',
+        'Por eso se dice que el planeador viaja a «$c/4$»: la velocidad máxima posible en el tablero, la «velocidad de la luz» $c$, es una celda por generación.'];
+    },
+    answer: function (d) { return 'columna ' + (d.x + d.k * d.dx) + ', fila ' + (d.y + d.k * d.dy); }
+  });
+
   p.keys([
+    'Los <strong>patrones de Turing</strong> salen de dos sustancias que reaccionan y se difunden a distinta velocidad: refuerzo local e inhibición a distancia.',
     '<strong>Autoorganización</strong>: aparece estructura global sin que ninguna pieza la conozca ni la dirija.',
     'Un <strong>autómata celular</strong> es una cuadrícula de celdas binarias con una regla que solo mira a las vecinas.',
     'Con vecindad de tres celdas hay exactamente $2^8 = 256$ reglas posibles, y se pueden explorar todas.',

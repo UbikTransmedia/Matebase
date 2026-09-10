@@ -139,7 +139,7 @@ Course.topic('ge-cuerpos', function (p) {
 
   p.note('Esta fórmula no habla de longitudes ni de ángulos: solo de cómo están conectadas las ' +
     'piezas. Es el primer resultado de <em>topología</em> de la historia, y volverá a aparecer con ' +
-    'toda su potencia en el bloque 9, donde la topología tiene tema propio.',
+    'toda su potencia en el bloque de geometría avanzada, donde la [[av-topologia|topología]] tiene tema propio.',
     null, 'Un aviso de lo que viene');
 
   /* ================= EJERCICIOS ================= */

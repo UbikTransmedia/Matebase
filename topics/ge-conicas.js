@@ -156,6 +156,13 @@ Course.topic('ge-conicas', function (p) {
     'miles de años son una de las causas de las glaciaciones. En los cometas, en cambio, la ' +
     'excentricidad ronda 0,97, y por eso pasan cerca del Sol una vez y desaparecen durante décadas.');
 
+  p.hist('La primera matemática de la que se conserva noticia segura es <strong>Hipatia de Alejandría</strong>, ' +
+    'que vivió entre los siglos IV y V. Dirigió una escuela de filosofía en Alejandría, enseñó astronomía y ' +
+    'matemáticas, y según las fuentes antiguas escribió comentarios a obras de Diofanto y de Ptolomeo y preparó una ' +
+    'edición de las <em>Cónicas</em> de Apolonio, el libro del que sale todo este tema. Fue asesinada en el año 415 por ' +
+    'una turba, en medio de los enfrentamientos religiosos y políticos de la ciudad, y con el tiempo se convirtió en ' +
+    'símbolo del saber perseguido.');
+
   p.section('Practica');
 
   p.exercise({

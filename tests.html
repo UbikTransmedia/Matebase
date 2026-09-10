@@ -49,7 +49,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   (function () {
     var t = '?t=' + Date.now();
     ['core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
-     'core/shader', 'core/exercise', 'core/page', 'curriculum',
+     'core/shader', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
      'glosario'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
@@ -185,7 +185,8 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     '3^{2x}-4\\cdot3^x+3=0 \\xrightarrow{t=3^x} t^2-4t+3=0',
     'f:\\mathbb{R}\\longmapsto\\mathbb{R}',
     '\\left(\\begin{array}{ccc|c} 1 & 2 & -1 & 3 \\\\ 0 & 1 & 2 & 4 \\end{array}\\right)',
-    '\\begin{aligned} 2x+y &= 7 \\\\ x-y &= 2 \\\\ \\hline 3x &= 9\\end{aligned}'
+    '\\begin{aligned} 2x+y &= 7 \\\\ x-y &= 2 \\\\ \\hline 3x &= 9\\end{aligned}',
+    '\\lim_{x \\to 0} \\frac{\\operatorname{sen} x}{x} \\overset{0/0}{=} \\lim_{x \\to 0} \\frac{\\cos x}{1} = 1'
   ];
   var errores = 0;
   TEX.forEach(function (t) { if (MathX.render(t).indexOf('mx-err') >= 0) { errores++; ko('comando desconocido', t, '—'); } });
@@ -378,6 +379,120 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   truthy('rechaza un conjunto incompleto', !Ex.sameSet('3', [3, -1]));
   host.remove();
 
+  /* ---------------- lo nuevo del motor ---------------- */
+  group('motor de ejercicios · elección, pistas, errores, semillas y apartados');
+  (function () {
+    var h2 = document.createElement('div');
+    document.body.appendChild(h2);
+    h2.style.cssText = 'position:absolute;left:-9999px;width:700px';
+    var nada = function () { return {}; };
+
+    var cOpc = Ex.card(h2, {
+      title: 'op', gen: nada, ask: function () { return 'elige'; },
+      fields: [{ name: 't', label: 'Tipo', opts: ['SCD', 'SCI', 'SI'] }],
+      sol: function () { return { t: 'SCI' }; }
+    }, '__test', 2);
+    eq('un campo de elección pinta un grupo de radio', cOpc.el.querySelectorAll('[role="radiogroup"] [role="radio"]').length, 3);
+    cOpc.inputs.t.input.value = 'SCI'; cOpc.check();
+    truthy('corrige una elección correcta', cOpc.verdict.className.indexOf('verdict--ok') >= 0);
+    cOpc.regen(); cOpc.inputs.t.input.value = 'SI'; cOpc.check();
+    truthy('y rechaza una elección incorrecta', cOpc.verdict.className.indexOf('verdict--bad') >= 0);
+    truthy('la opción elegida se anuncia marcada', cOpc.el.querySelector('[aria-checked="true"]') !== null);
+
+    var cPis = Ex.card(h2, {
+      title: 'p', gen: nada, fields: [{ name: 'v' }], sol: function () { return { v: 1 }; },
+      hint: function () { return ['uno', 'dos', 'tres']; }
+    }, '__test', 3);
+    cPis.showHint(); cPis.showHint();
+    eq('las pistas graduadas se descubren de una en una', cPis.verdict.querySelectorAll('ol.pistas li').length, 2);
+
+    var cErr = Ex.card(h2, {
+      title: 'e', gen: function () { return { a: 5 }; }, fields: [{ name: 'v' }],
+      sol: function (d) { return { v: d.a }; },
+      errores: [{ si: function (v) { return v.v === -5; }, msg: 'has cambiado el signo' }]
+    }, '__test', 4);
+    cErr.inputs.v.input.value = '-5'; cErr.check();
+    truthy('un error típico se dice por su nombre', cErr.verdict.textContent.indexOf('has cambiado el signo') >= 0);
+    cErr.inputs.v.input.value = '7'; cErr.check();
+    truthy('y no se inventa cuando el fallo es otro', cErr.verdict.textContent.indexOf('signo') < 0);
+
+    var cSem = Ex.card(h2, {
+      title: 's', gen: function (r) { return { a: r.int(1, 1e6) }; },
+      ask: function (d) { return String(d.a); }, fields: [{ name: 'v' }],
+      sol: function (d) { return { v: d.a }; }
+    }, '__test', 5);
+    cSem.regen(4242); var a1 = cSem.data.a; cSem.regen(); cSem.regen(4242);
+    truthy('la misma semilla da el mismo enunciado', cSem.data.a === a1 && cSem.seed === 4242);
+
+    var pr = Ex.problema(h2, {
+      title: 'pr', gen: function () { return { a: 2 }; }, intro: function () { return 'datos'; },
+      partes: [
+        { ask: function () { return 'a'; }, fields: [{ name: 'x' }], sol: function (d) { return { x: d.a }; } },
+        { ask: function () { return 'b'; }, fields: [{ name: 'y' }], sol: function (d) { return { y: 2 * d.a }; } }
+      ]
+    }, '__test', 6);
+    truthy('el segundo apartado empieza cerrado', pr.partes[1].caja.classList.contains('is-cerrada'));
+    pr.partes[0].preg.inputs.x.input.value = '2'; pr.partes[0].preg.check();
+    truthy('resolver un apartado abre el siguiente', !pr.partes[1].caja.classList.contains('is-cerrada'));
+    truthy('un problema cuenta como ejercicio práctico', pr.el.classList.contains('card--ex'));
+    var prE = Ex.problema(h2, {
+      title: 'pe', gen: function () { return { a: 3 }; },
+      partes: [
+        { fields: [{ name: 'x' }], sol: function (d) { return { x: d.a }; } },
+        { fields: [{ name: 'y' }], sol: function () { return { y: 1 }; } }
+      ]
+    }, '__test', 7, { examen: true });
+    prE.partes[0].preg.inputs.x.input.value = '3';
+    eq('en un examen, un problema a medias puntúa la parte acertada', prE.corregir(), 0.5);
+
+    var rec = new Page.Recolector({ id: '__rec' });
+    rec.section('S'); rec.formula('x', 'etq'); rec.exercise({ title: 'a' }); rec.problem({ title: 'b' }); rec.keys(['k']);
+    truthy('el recolector numera ejercicios y problemas con el mismo contador',
+      rec.items.length === 2 && rec.items[1].n === 2 && rec.vistas.length === 1 && rec.claves.length === 1);
+
+    var v3 = W.space3d(h2, { rango: 4, aria: 'Prueba del visor', draw: function (g) { g.punto([1, 2, 3]); } });
+    var c3 = v3.plot.canvas;
+    truthy('el visor 3D se puede enfocar y dice cómo se maneja',
+      c3.tabIndex === 0 && c3.getAttribute('role') === 'application' && /flechas/.test(c3.getAttribute('aria-label')));
+    var o3 = v3.proyecta([0, 0, 0]);
+    truthy('el origen se proyecta en el centro', Math.abs(o3.x) < 1e-9 && Math.abs(o3.y) < 1e-9);
+    var seg = W.recorta3([0, 0, 0], [1, 0, 0], 4);
+    truthy('una recta se recorta a la caja del dibujo', seg && Math.abs(seg[0][0] + 4) < 1e-9 && Math.abs(seg[1][0] - 4) < 1e-9);
+    eq('un plano oblicuo corta el cubo en un polígono', W.planoCubo([1, 1, 1], 0, 4).length, 6);
+    h2.remove();
+  })();
+
+  group('temario: cursos, asignaturas y requisitos');
+  (function () {
+    var orden = {}, k = 0, malos = [];
+    var CURS = { ESO: 1, '1B': 1, '2B': 1, AMP: 1 };
+    CURRICULUM.forEach(function (b) {
+      b.temas.forEach(function (t) {
+        if (orden[t.id] !== undefined) malos.push('id repetido: ' + t.id);
+        orden[t.id] = k++;
+      });
+    });
+    var sinItin = [];
+    CURRICULUM.forEach(function (b) {
+      b.temas.forEach(function (t) {
+        var c = t.curso || b.curso;
+        if (!CURS[c]) malos.push(t.id + ': curso «' + c + '»');
+        (t.itin || []).forEach(function (i) {
+          if (i !== 'MII' && i !== 'MCS') malos.push(t.id + ': asignatura «' + i + '»');
+        });
+        if ((t.itin || []).length && c !== '2B') malos.push(t.id + ': asignatura de 2.º en un tema de ' + c);
+        if (c === '2B' && !(t.itin || []).length) sinItin.push(t.id);
+        (t.req || []).forEach(function (r) {
+          if (orden[r] === undefined) malos.push(t.id + ' da por sabido ' + r + ', que no existe');
+          else if (orden[r] >= orden[t.id]) malos.push(t.id + ' da por sabido ' + r + ', que va después');
+        });
+      });
+    });
+    if (malos.length) ko('cursos, asignaturas y requisitos coherentes', malos.slice(0, 14).join(' · '), 'ninguna incoherencia');
+    else ok('cursos, asignaturas y requisitos coherentes (' + k + ' temas)');
+    eq('temas de 2.º que no dicen de qué asignatura son', sinItin.join(', '), '');
+  })();
+
   /* ---------------- resumen ---------------- */
   var s = document.getElementById('sum');
   s.className = 'sum ' + (fail ? 'fail' : 'pass');
@@ -417,84 +532,117 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     /* Auditoría de un ejercicio procedimental:
        se genera 40 veces y se comprueba que la solución que el propio
        ejercicio declara pasa su propio corrector, que nada revienta y
-       que no queda ninguna fórmula con comandos LaTeX inexistentes. */
+       que no queda ninguna fórmula con comandos LaTeX inexistentes.
+       Un problema por apartados se audita apartado a apartado, con los
+       mismos datos para todos, que es como lo ve el alumno. */
+    function auditarUnidad(u, d, c) {
+      var textos = [];
+      if (u.ask) textos.push(u.ask(d));
+      if (u.hint) {
+        var hh = u.hint(d);
+        textos = textos.concat(Array.isArray(hh) ? hh : [hh]);
+        if (Array.isArray(hh) && !hh.length) c.otros.push('una lista de pistas vacía');
+      }
+      if (u.answer) textos.push(u.answer(d));
+      if (u.steps) textos = textos.concat(u.steps(d));
+      var flds = (typeof u.fields === 'function' ? u.fields(d) : u.fields) || [];
+      flds.forEach(function (f) {
+        textos.push(String(f.label || ''));
+        if (f.opts) Ex.opciones(f).forEach(function (o) { textos.push(o.t); });
+      });
+      textos.forEach(function (t) {
+        if (MathX.inline(String(t)).indexOf('mx-err') >= 0) c.malTex++;
+      });
+      if (!u.sol) return;
+
+      var want = u.sol(d), v = { raw: {} };
+      for (var k in want) {
+        v[k] = (typeof want[k] === 'number') ? want[k] : ML.tryEval(String(want[k]));
+        /* La coma decimal solo tiene sentido si la respuesta es un
+           numero: si es texto -codigo GLSL, por ejemplo- cambiar el
+           punto por una coma lo estropea. */
+        v.raw[k] = (typeof want[k] === 'number')
+          ? String(want[k]).replace('.', ',')
+          : String(want[k]);
+      }
+      var res = u.check ? u.check(v, d) : (function () {
+        for (var n in want) {
+          if (!Ex.same(typeof want[n] === 'string' ? v.raw[n] : v[n], want[n], u.tol)) return false;
+        }
+        return true;
+      })();
+      if (res && typeof res === 'object') res = res.ok;
+      if (!res) c.malCheck++;
+
+      /* En un campo de elección, la solución tiene que ser una de las
+         opciones que se ofrecen: si no, el ejercicio es imposible. */
+      flds.forEach(function (f) {
+        if (!f.opts || want[f.name] === undefined) return;
+        var vals = Ex.opciones(f).map(function (o) { return o.v; });
+        if (vals.indexOf(String(want[f.name])) < 0) c.malOpc++;
+      });
+
+      /* Un «error típico» que salta con la respuesta correcta le diría al
+         alumno que ha fallado cuando ha acertado. */
+      (u.errores || []).forEach(function (er) {
+        try { if (er.si(v, d)) c.malErr++; } catch (e) { c.malErr++; }
+      });
+
+      /* Un corrector de texto libre que acepta cualquier cosa es peor
+         que no tener corrector: el alumno cree que ha acertado. Se le
+         dan dos respuestas sin contenido y ninguna debe pasar. */
+      if (u.check && /v\.raw/.test(String(u.check))) {
+        ['', 'no lo sé'].forEach(function (basura) {
+          var w = { raw: {} }, tocado = 0;
+          for (var k2 in want) {
+            w[k2] = (typeof want[k2] === 'number') ? want[k2] : ML.tryEval(String(want[k2]));
+            w.raw[k2] = (typeof want[k2] === 'number')
+              ? String(want[k2]).replace('.', ',')
+              : String(want[k2]);
+          }
+          flds.forEach(function (f) {
+            if (typeof want[f.name] === 'string') {
+              w.raw[f.name] = basura; w[f.name] = NaN; tocado++;
+            }
+          });
+          // Si el ejercicio no tiene ningún campo de texto que estropear,
+          // esta prueba no dice nada: saltarla en vez de dar un falso aviso.
+          if (!tocado) return;
+          var r2 = u.check(w, d);
+          if (r2 && typeof r2 === 'object') r2 = r2.ok;
+          if (r2) c.tragaTodo++;
+        });
+      }
+    }
+
     function auditar(specs) {
       var fallos = [];
       (specs || []).forEach(function (s, idx) {
-        var etiqueta = 'ej.' + (idx + 1) + ' («' + (s.title || '') + '»)';
-        var malCheck = 0, malTex = 0, tragaTodo = 0, excep = '';
-        for (var i = 0; i < 40; i++) {
+        var etiqueta = (s.partes ? 'problema ' : 'ej.') + (idx + 1) + ' («' + (s.title || '') + '»)';
+        var c = { malCheck: 0, malTex: 0, tragaTodo: 0, malOpc: 0, malErr: 0, otros: [] };
+        var excep = '';
+        if (s.partes && !s.partes.length) excep = 'un problema sin apartados';
+        for (var i = 0; i < 40 && !excep; i++) {
           var d = null, guard = 0;
           try {
             do { d = s.gen ? s.gen(U.rng()) : {}; } while (d === null && ++guard < 60);
             if (d === null) { excep = excep || 'gen() nunca devuelve datos'; break; }
-
-            var textos = [];
-            textos.push(s.ask ? s.ask(d) : '');
-            if (s.hint) textos.push(s.hint(d));
-            if (s.answer) textos.push(s.answer(d));
-            if (s.steps) textos = textos.concat(s.steps(d));
-            var flds = (typeof s.fields === 'function' ? s.fields(d) : s.fields) || [];
-            flds.forEach(function (f) { textos.push(String(f.label || '')); });
-            textos.forEach(function (t) {
-              if (MathX.inline(String(t)).indexOf('mx-err') >= 0) malTex++;
-            });
-
-            if (s.sol) {
-              var want = s.sol(d), v = { raw: {} };
-              for (var k in want) {
-                v[k] = (typeof want[k] === 'number') ? want[k] : ML.tryEval(String(want[k]));
-                /* La coma decimal solo tiene sentido si la respuesta es un
-                   numero: si es texto -codigo GLSL, por ejemplo- cambiar el
-                   punto por una coma lo estropea. */
-                v.raw[k] = (typeof want[k] === 'number')
-                  ? String(want[k]).replace('.', ',')
-                  : String(want[k]);
-              }
-              var res = s.check ? s.check(v, d) : (function () {
-                for (var n in want) {
-                  if (!Ex.same(typeof want[n] === 'string' ? v.raw[n] : v[n], want[n], s.tol)) return false;
-                }
-                return true;
-              })();
-              if (typeof res === 'object') res = res.ok;
-              if (!res) malCheck++;
-
-              /* Un corrector de texto libre que acepta cualquier cosa es peor
-                 que no tener corrector: el alumno cree que ha acertado. Se le
-                 dan dos respuestas sin contenido y ninguna debe pasar. */
-              if (s.check && /v\.raw/.test(String(s.check))) {
-                ['', 'no lo sé'].forEach(function (basura) {
-                  var w = { raw: {} }, tocado = 0;
-                  for (var k2 in want) {
-                    w[k2] = (typeof want[k2] === 'number') ? want[k2] : ML.tryEval(String(want[k2]));
-                    /* La coma decimal solo tiene sentido si la respuesta es un
-                       numero. Si es texto -codigo GLSL, por ejemplo- cambiar el
-                       punto por una coma lo estropea. */
-                    w.raw[k2] = (typeof want[k2] === 'number')
-                      ? String(want[k2]).replace('.', ',')
-                      : String(want[k2]);
-                  }
-                  flds.forEach(function (f) {
-                    if (typeof want[f.name] === 'string') {
-                      w.raw[f.name] = basura; w[f.name] = NaN; tocado++;
-                    }
-                  });
-                  // Si el ejercicio no tiene ningún campo de texto que estropear,
-                  // esta prueba no dice nada: saltarla en vez de dar un falso aviso.
-                  if (!tocado) return;
-                  var r2 = s.check(w, d);
-                  if (typeof r2 === 'object') r2 = r2.ok;
-                  if (r2) tragaTodo++;
-                });
-              }
+            if (s.partes) {
+              var intro = s.intro ? s.intro(d) : '';
+              if (MathX.inline(String(intro)).indexOf('mx-err') >= 0) c.malTex++;
+              s.partes.forEach(function (pt) { auditarUnidad(pt, d, c); });
+            } else {
+              auditarUnidad(s, d, c);
             }
           } catch (e) { excep = e.message; break; }
         }
         if (excep) fallos.push(etiqueta + ': ' + excep);
-        else if (malCheck) fallos.push(etiqueta + ': la solución no pasa su corrector ' + malCheck + '/40 veces');
-        else if (malTex) fallos.push(etiqueta + ': ' + malTex + ' fórmulas con comandos LaTeX desconocidos');
-        else if (tragaTodo) fallos.push(etiqueta + ': el corrector acepta respuestas vacías o sin contenido');
+        else if (c.malCheck) fallos.push(etiqueta + ': la solución no pasa su corrector ' + c.malCheck + ' veces en 40');
+        else if (c.malTex) fallos.push(etiqueta + ': ' + c.malTex + ' fórmulas con comandos LaTeX desconocidos');
+        else if (c.tragaTodo) fallos.push(etiqueta + ': el corrector acepta respuestas vacías o sin contenido');
+        else if (c.malOpc) fallos.push(etiqueta + ': la solución no está entre las opciones que se ofrecen');
+        else if (c.malErr) fallos.push(etiqueta + ': un «error típico» salta con la respuesta correcta');
+        else if (c.otros.length) fallos.push(etiqueta + ': ' + c.otros[0]);
       });
       return fallos;
     }

@@ -34,7 +34,7 @@ Course.topic('gfx-raymarching', function (p) {
     'por cada píxel se lanza un <strong>rayo</strong> desde el ojo hacia dentro de la escena, y se ' +
     'mira dónde choca.');
 
-  p.text('El rayo es una [[ge-rectas|recta en forma paramétrica]], la del bloque de geometría:');
+  p.text('El rayo es una [[ge-rectas|recta en forma paramétrica]], la de la geometría del plano y del espacio:');
 
   p.formula('\\vec{P}(t) = \\vec{o} + t\\,\\vec{d}, \\qquad t \\ge 0',
     'el rayo', 'Donde $\\vec{o}$ es el ojo, $\\vec{d}$ la dirección hacia el píxel (unitaria) y $t$ ' +
@@ -423,6 +423,35 @@ Course.topic('gfx-raymarching', function (p) {
         'Toda la geometría de la imagen cabe en ese renglón: no hay vértices, ni caras, ni malla.'];
     },
     answer: function (d) { return d.ref; }
+  });
+
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'avanzado',
+    gen: function (r) {
+      var casos = [
+        { c: 'float t = 0.0;\nfor (int i = 0; i &lt; 64; i++) {\n    float d = length(ro + t * rd) - 1.0;\n    if (d &lt; 0.001) break;\n    t += d;\n}\nfloat v = step(t, 20.0);',
+          o: ['La silueta blanca de una esfera sobre fondo negro', 'Una esfera iluminada con luces y sombras', 'Un cubo', 'Toda la pantalla blanca'],
+          por: 'Los rayos que chocan con la esfera se paran con un $t$ pequeño; los que no chocan siguen avanzando hasta pasar de 20. Sin iluminación, solo queda la silueta.' },
+        { c: 'float sdf(vec3 q) { return max(length(q) - 1.0, abs(q.y) - 0.3); }',
+          o: ['Una esfera cortada por arriba y por abajo: un disco grueso de canto redondeado', 'Una esfera completa', 'Un cilindro de bases planas y canto recto', 'Dos esferas'],
+          por: 'El máximo de dos distancias es su intersección: los puntos dentro de la esfera y dentro de la franja $|y| < 0{,}3$.' },
+        { c: 'vec3 n = normalize(vec3(sdf(P + e.xyy) - sdf(P - e.xyy),\n                      sdf(P + e.yxy) - sdf(P - e.yxy),\n                      sdf(P + e.yyx) - sdf(P - e.yyx)));\nvec3 col = 0.5 + 0.5 * n;',
+          o: ['La superficie coloreada según la dirección hacia la que mira, calculada como el gradiente de la distancia', 'La superficie de un solo color', 'Solo la silueta', 'El fondo coloreado y la figura negra'],
+          por: 'Las diferencias de la distancia en las tres direcciones forman su gradiente, que es perpendicular a la superficie: la normal, pintada como color.' },
+        { c: 't += 0.5 * d;   // antes: t += d;',
+          o: ['La misma imagen, pero el algoritmo necesita más pasos para llegar a la superficie', 'La esfera se ve la mitad de grande', 'La esfera desaparece', 'La esfera se ve el doble de lejos'],
+          por: 'Avanzar solo la mitad de la distancia segura sigue sin atravesar nada, pero se llega más despacio: con pasos suficientes, la imagen es la misma.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'En el raymarcher del tema, con <code>ro</code> el ojo, <code>rd</code> el rayo del píxel y <code>P</code> el punto alcanzado, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['¿Se usa solo si hay choque, la forma de la distancia o la dirección de la superficie?']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
   });
 
   p.keys([

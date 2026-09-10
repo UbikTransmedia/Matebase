@@ -461,6 +461,35 @@ Course.topic('gfx-directo', function (p) {
     answer: function (d) { return d.ref; }
   });
 
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { c: 'vec3 col = fondo;\ncol = mix(col, colorCapa1, mascara1);\ncol = mix(col, colorCapa2, mascara2);',
+          o: ['Donde se solapan, la capa 2 queda encima de la capa 1', 'Donde se solapan, la capa 1 queda encima', 'Los colores de las dos capas se suman', 'Solo se ve el fondo'],
+          por: 'Cada <code>mix</code> pinta sobre lo que ya había: la última capa aplicada tapa a las anteriores donde su máscara vale 1.' },
+        { c: 'float golpe = exp(-8.0 * fract(iTime * 2.0));\nfloat radio = 0.2 + 0.1 * golpe;',
+          o: ['Un círculo que se hincha de golpe dos veces por segundo y se desinfla rápido', 'Un círculo que crece y decrece suavemente, como un seno', 'Un círculo quieto', 'Un círculo que se hincha una vez cada dos segundos'],
+          por: '<code>fract(2t)</code> vuelve a 0 dos veces por segundo; en ese instante la exponencial vale 1 y enseguida cae: un latido con ataque brusco, como un bombo.' },
+        { c: 'vec3 col = paleta(fract(length(p) - 0.2 * iTime));',
+          o: ['Anillos de colores que salen del centro recorriendo la paleta', 'Anillos de colores que se mueven hacia el centro', 'Toda la pantalla cambiando de color a la vez', 'Sectores de colores que giran'],
+          por: 'Para mantener fijo $r - 0{,}2t$ al crecer el tiempo, $r$ tiene que crecer: cada color de la paleta se aleja del centro.' },
+        { c: 'col = pow(col, vec3(1.0 / 2.2));',
+          o: ['La imagen se aclara, sobre todo en los tonos oscuros: es la corrección gamma', 'La imagen se oscurece', 'Cambian los tonos de los colores', 'No cambia nada'],
+          por: 'Elevar un número entre 0 y 1 a una potencia menor que 1 lo acerca a 1, y el efecto es mayor en los valores pequeños: se levantan las sombras.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'En un shader para una actuación, con <code>p</code> centrada y <code>paleta</code> como en el tema del color, ¿qué produce este fragmento?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Produce', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['Lee el fragmento como una receta de capas y de ritmos: ¿qué se pinta después, qué se repite y cada cuánto?']; },
+    steps: function (d) { return [d.por, 'Produce: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
+  });
+
   p.keys([
     'Una pieza se construye <strong>por capas</strong>: cada una da un color y una máscara, y se apilan con <code>mix</code>.',
     '<strong>Tapar</strong> es para materia y <strong>sumar</strong> para luz. Sumando se sale del rango, y por eso hace falta comprimir el tono.',

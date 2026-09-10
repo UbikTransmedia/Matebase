@@ -72,6 +72,23 @@ Course.topic('fn-integral-indef', function (p) {
     'kilovatios hora; el navegador de un avión mide aceleración con sensores e integra dos veces ' +
     'para saber dónde está sin necesidad de señal exterior.');
 
+  p.section('Inmediatas de tipo compuesto');
+
+  p.text('La tabla de arriba vale también cuando en lugar de $x$ hay una función, <strong>siempre que ' +
+    'venga acompañada de su derivada</strong>. Es la regla de la cadena leída al revés, y reconocer ' +
+    'estos patrones de un vistazo ahorra la mitad de los cambios de variable del examen.');
+
+  p.formulas([
+    '\\int f\'(x)\\,f(x)^n\\,dx = \\frac{f(x)^{n+1}}{n+1} + C \\qquad \\int \\frac{f\'(x)}{f(x)}\\,dx = \\ln|f(x)| + C',
+    '\\int f\'(x)\\,e^{f(x)}\\,dx = e^{f(x)} + C \\qquad \\int f\'(x)\\cos f(x)\\,dx = \\operatorname{sen} f(x) + C'
+  ], 'la tabla de inmediatas, con una función dentro',
+    'Se leen igual que las simples, con $f(x)$ en el papel de $x$. Por ejemplo, la segunda: <em>«la ' +
+      'integral de efe prima partido por efe es el logaritmo del valor absoluto de efe»</em>.<br><br>' +
+      'La prueba de fuego es buscar la derivada: en $\\int \\frac{2x}{x^2 + 1}\\,dx$, el numerador $2x$ ' +
+      'es la derivada del denominador, así que sale $\\ln(x^2 + 1) + C$ sin más.<br><br>Si la derivada ' +
+      'está pero le falta una constante, se ajusta multiplicando y dividiendo: ' +
+      '$\\int x\\,e^{x^2}dx = \\frac{1}{2}\\int 2x\\,e^{x^2}dx = \\frac{1}{2}e^{x^2} + C$.');
+
   p.section('Cambio de variable');
 
   p.text('Es la regla de la cadena leída al revés. Si dentro de la integral aparece una función ' +
@@ -257,10 +274,45 @@ Course.topic('fn-integral-indef', function (p) {
     answer: function (d) { return U.fmt(d.val, 4); }
   });
 
+  p.exercise({
+    title: 'Inmediata de tipo compuesto',
+    level: 'medio',
+    gen: function (r) {
+      var fam = r.int(0, 2), a = r.pm(1, 4), b = r.pm(1, 6), m = r.pick([1, 2, 3, -1]);
+      var x = r.int(0, 2), g = a * x * x + b, v;
+      if (fam === 0) { if (g <= 0) return null; v = m * Math.log(g) / 1; }
+      else if (fam === 1) { v = m * Math.exp(a * x * x) / 1; if (Math.abs(v) > 1e5) return null; }
+      else { v = m * Math.sin(a * x * x + b); }
+      return { fam: fam, a: a, b: b, m: m, x: x, g: g, v: v };
+    },
+    ask: function (d) {
+      var num = ML.termTex(d.m * 2 * d.a, 'x', 1, true);
+      var tex = [
+        '\\dfrac{' + num + '}{' + ML.polyTex([d.a, 0, d.b]) + '}',
+        num + '\\,e^{' + ML.termTex(d.a, 'x', 2, true) + '}',
+        num + '\\cos(' + ML.polyTex([d.a, 0, d.b]) + ')'
+      ][d.fam];
+      return 'Calcula $\\displaystyle\\int ' + tex + '\\,dx$ tomando $C = 0$ y evalúa la primitiva en $x = ' + d.x + '$ (cuatro decimales).';
+    },
+    fields: [{ name: 'v', label: 'valor', w: 'wide' }],
+    sol: function (d) { return { v: U.round(d.v, 6) }; },
+    tol: 3e-4,
+    hint: function (d) {
+      return ['Busca una función cuya derivada esté también en el integrando.',
+        ['El numerador es ' + d.m + ' veces la derivada del denominador: sale un logaritmo.', 'Lo que multiplica es ' + d.m + ' veces la derivada del exponente: sale la misma exponencial.', 'Lo que multiplica es ' + d.m + ' veces la derivada de lo de dentro del coseno: sale un seno.'][d.fam]];
+    },
+    steps: function (d) {
+      var prim = [d.m + '\\ln|' + ML.polyTex([d.a, 0, d.b]) + '|', d.m + 'e^{' + ML.termTex(d.a, 'x', 2, true) + '}', d.m + '\\operatorname{sen}(' + ML.polyTex([d.a, 0, d.b]) + ')'][d.fam];
+      return ['Es de tipo compuesto: la primitiva es $' + prim + ' + C$.', 'En $x = ' + d.x + '$ vale $' + U.fmt(d.v, 4) + '$.', 'Comprobación: derivando $' + prim + '$ con la regla de la cadena vuelve a salir el integrando ✓'];
+    },
+    answer: function (d) { return U.fmt(d.v, 4); }
+  });
+
   p.keys([
     'Integrar es deshacer la derivada: $F$ es primitiva de $f$ si $F\' = f$.',
     'El $+C$ es obligatorio: hay infinitas primitivas, una por cada desplazamiento vertical.',
     '$\\int x^n dx = \\frac{x^{n+1}}{n+1}+C$, salvo en $n=-1$, donde sale $\\ln|x|+C$.',
+    'Si una función aparece junto a su derivada, la integral es inmediata: $\\int \\frac{f\'}{f} = \\ln|f|$, $\\int f\'e^f = e^f$.',
     'Cambio de variable = regla de la cadena al revés: busca una función y su derivada.',
     'Por partes = regla del producto al revés. Para elegir $u$: ALPES.',
     'Integrar es bastante más difícil que derivar, y a veces sencillamente no se puede.'

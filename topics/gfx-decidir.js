@@ -148,6 +148,14 @@ Course.topic('gfx-decidir', function (p) {
     'compuesto con cuidado media docena de <code>mix</code>.');
 
   /* ================= EJERCICIOS ================= */
+  p.hist('Construir figuras complicadas uniendo, cortando y restando formas sencillas tiene nombre: ' +
+    '<em>geometría constructiva de sólidos</em>. Nació en los años sesenta y setenta para el diseño industrial ' +
+    'por ordenador, y una de las primeras empresas en usarla para hacer imágenes fue MAGI, en Nueva York, cuyo ' +
+    'sistema SynthaVision describía los objetos como combinaciones de esferas, cilindros y cajas. Con él se ' +
+    'hicieron buena parte de las secuencias de ordenador de <em>Tron</em> (1982). Las distancias con signo ' +
+    'convirtieron esas operaciones en algo tan barato como un <code>min</code> y un <code>max</code>, y por eso ' +
+    'la técnica ha vuelto con fuerza a los shaders.');
+
   p.section('Practica');
 
   p.exercise({
@@ -266,6 +274,41 @@ Course.topic('gfx-decidir', function (p) {
     },
     steps: function (d) { return ['Se pedía ' + d.pide + '.', 'La respuesta es <code>' + d.ref + '</code>.']; },
     answer: function (d) { return d.ref; }
+  });
+
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var dos = 'float a = length(p - vec2(-0.15, 0.0)) - 0.25;\nfloat b = length(p - vec2(0.15, 0.0)) - 0.25;\n';
+      var casos = [
+        { c: dos + 'float v = step(min(a, b), 0.0);',
+          o: ['Los dos círculos solapados, unidos en una sola figura', 'Solo la zona común a los dos círculos, con forma de lente', 'El círculo izquierdo con un mordisco', 'Dos círculos separados que no se tocan'],
+          por: 'El mínimo de dos distancias es negativo si lo es cualquiera de las dos: es la <strong>unión</strong>.' },
+        { c: dos + 'float v = step(max(a, b), 0.0);',
+          o: ['Solo la zona común a los dos círculos, con forma de lente', 'Los dos círculos solapados, unidos en una sola figura', 'El círculo izquierdo con un mordisco', 'Un anillo'],
+          por: 'El máximo es negativo solo si las dos distancias lo son, es decir, dentro de los dos a la vez: la <strong>intersección</strong>.' },
+        { c: dos + 'float v = step(max(a, -b), 0.0);',
+          o: ['El círculo izquierdo con un mordisco en forma de arco a la derecha', 'Solo la zona común, con forma de lente', 'Los dos círculos unidos', 'Solo el círculo derecho'],
+          por: '$-b$ es negativo fuera del círculo derecho. El máximo pide estar dentro del izquierdo y fuera del derecho: la <strong>diferencia</strong>.' },
+        { c: 'vec3 c = mix(vec3(1.0, 0.0, 0.0), vec3(0.0, 0.0, 1.0), step(0.0, p.x));',
+          o: ['La mitad izquierda roja y la derecha azul, con un corte brusco en el centro', 'Un degradado suave de rojo a azul', 'La mitad izquierda azul y la derecha roja', 'Toda la pantalla morada'],
+          por: '<code>step(0.0, p.x)</code> vale 0 a la izquierda y 1 a la derecha, sin términos medios: mix elige uno de los dos colores.' },
+        { c: 'vec3 c = mix(vec3(1.0, 0.0, 0.0), vec3(0.0, 0.0, 1.0), clamp(p.x + 0.5, 0.0, 1.0));',
+          o: ['Un degradado de rojo a azul de izquierda a derecha, con los bordes de color liso', 'Mitad roja y mitad azul con un corte brusco', 'Toda la pantalla morada', 'Rayas rojas y azules'],
+          por: 'El peso de mix crece de forma continua con $p_x$ entre $-0{,}5$ y $0{,}5$, y el clamp lo fija a 0 o a 1 fuera de ese tramo.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) {
+      return 'Con <code>p</code> centrada en la pantalla y el resultado pintado en blanco donde valga 1 (o con el color <code>c</code>), ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>';
+    },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['Con distancias: <code>min</code> une, <code>max</code> corta, y cambiar el signo es tomar el exterior.', 'Con mix: ¿el peso cambia de golpe o poco a poco?']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
   });
 
   p.keys([

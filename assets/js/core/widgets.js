@@ -210,6 +210,13 @@
      ejemplo y del encuadre, que es lo poco que la maquina sabe de verdad. */
   Plot.prototype._nombra = function () {
     var c = this.canvas;
+    // Un envoltorio que sabe mejor que nadie lo que dibuja (el visor 3D) da
+    // su propio nombre y su propio papel.
+    if (this.o.ariaFija) {
+      c.setAttribute('role', this.o.ariaFija.role || 'img');
+      c.setAttribute('aria-label', this.o.ariaFija.label);
+      return;
+    }
     var txt = this.o.aria;
     if (!txt) {
       var card = this.el.closest ? this.el.closest('.card') : null;
@@ -794,7 +801,7 @@
         ev.preventDefault();
         return;
       }
-      c.style.cursor = hit(pt) ? 'grab' : (self.o.onClick ? 'pointer' : 'default');
+      c.style.cursor = hit(pt) ? 'grab' : (self.o.onClick ? 'pointer' : (self.o.cursor || 'default'));
       if (self.o.onHover) { self.o.onHover(self.iX(pt.px), self.iY(pt.py), self); }
     }
     function up() { if (self._drag) { self._drag = null; c.style.cursor = 'default'; } }
@@ -860,6 +867,270 @@
     });
     return plot;
   };
+
+  /* ========================= VISOR 3D =========================
+     La geometria del espacio no se aprende en un dibujo plano: en el papel
+     dos rectas que se cruzan parecen cortarse, y un plano es un
+     paralelogramo cualquiera. Este visor pinta en perspectiva sobre el mismo
+     Plot2D de siempre -proyectar un punto es un producto de matrices, no
+     hace falta ninguna libreria- y se gira arrastrando o con el teclado.
+
+       var v = W.space3d(host, {
+         rango: 5,                  // el dibujo abarca el cubo [-5, 5]³
+         height: 340, aria: 'Qué se ve, para quien no lo ve',
+         draw: function (g) {       // g es el propio visor
+           g.plano([1, 1, 1], -3, { color: 0 });       // x + y + z - 3 = 0
+           g.linea([0, 0, 0], [1, 2, 0], { color: 1 }); // punto y vector
+           g.punto([1, 1, 1], { label: 'P' });
+           g.vec([0, 0, 0], [2, 1, 3], { color: 2, label: 'u' });
+         }
+       });
+       v.render();
+
+     Convenio de ejes: z hacia arriba, sistema dextrógiro, como en los libros. */
+
+  function resta3(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
+  function prodVec3(a, b) { return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; }
+  function esc3(a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
+  function norma3(a) { var m = Math.sqrt(esc3(a, a)) || 1; return [a[0] / m, a[1] / m, a[2] / m]; }
+
+  /** Tramo de la recta P + t·v que queda dentro del cubo [-R, R]³, o null. */
+  function recorta3(P, v, R) {
+    var t0 = -Infinity, t1 = Infinity;
+    for (var i = 0; i < 3; i++) {
+      if (Math.abs(v[i]) < 1e-12) {
+        if (P[i] < -R - 1e-9 || P[i] > R + 1e-9) return null;
+      } else {
+        var a = (-R - P[i]) / v[i], b = (R - P[i]) / v[i];
+        if (a > b) { var tt = a; a = b; b = tt; }
+        if (a > t0) t0 = a;
+        if (b < t1) t1 = b;
+      }
+    }
+    if (!(t0 <= t1) || !isFinite(t0) || !isFinite(t1)) return null;
+    return [[P[0] + t0 * v[0], P[1] + t0 * v[1], P[2] + t0 * v[2]],
+            [P[0] + t1 * v[0], P[1] + t1 * v[1], P[2] + t1 * v[2]]];
+  }
+
+  /** Poligono que corta el plano n·x + D = 0 en el cubo [-R, R]³, ordenado. */
+  function planoCubo(n, D, R) {
+    var pts = [];
+    var V = [];
+    for (var i = 0; i < 8; i++) V.push([(i & 1) ? R : -R, (i & 2) ? R : -R, (i & 4) ? R : -R]);
+    for (var a = 0; a < 8; a++) {
+      for (var bit = 1; bit <= 4; bit *= 2) {
+        var b = a | bit;
+        if (b === a) continue;
+        var fa = esc3(n, V[a]) + D, fb = esc3(n, V[b]) + D;
+        if ((fa < 0 && fb < 0) || (fa > 0 && fb > 0) || fa === fb) continue;
+        var t = fa / (fa - fb);
+        var q = [V[a][0] + t * (V[b][0] - V[a][0]), V[a][1] + t * (V[b][1] - V[a][1]), V[a][2] + t * (V[b][2] - V[a][2])];
+        var repe = pts.some(function (p) { return Math.abs(p[0] - q[0]) + Math.abs(p[1] - q[1]) + Math.abs(p[2] - q[2]) < 1e-7; });
+        if (!repe) pts.push(q);
+      }
+    }
+    if (pts.length < 3) return [];
+    var c = [0, 0, 0];
+    pts.forEach(function (p) { c[0] += p[0] / pts.length; c[1] += p[1] / pts.length; c[2] += p[2] / pts.length; });
+    var nn = norma3(n);
+    var eje = Math.abs(nn[0]) < 0.9 ? [1, 0, 0] : [0, 1, 0];
+    var u = norma3(prodVec3(nn, eje)), w = prodVec3(nn, u);
+    pts.sort(function (p, q) {
+      var dp = resta3(p, c), dq = resta3(q, c);
+      return Math.atan2(esc3(dp, w), esc3(dp, u)) - Math.atan2(esc3(dq, w), esc3(dq, u));
+    });
+    return pts;
+  }
+  W.recorta3 = recorta3;
+  W.planoCubo = planoCubo;
+  W.v3 = { resta: resta3, cruz: prodVec3, punto: esc3, unitario: norma3 };
+
+  function Space3D(host, o) {
+    o = o || {};
+    var self = this;
+    this.o = o;
+    this.R = o.rango || 5;
+    this.yaw0 = o.yaw === undefined ? -2.25 : o.yaw;
+    this.pitch0 = o.pitch === undefined ? 0.38 : o.pitch;
+    this.yaw = this.yaw0;
+    this.pitch = this.pitch0;
+    this.zoom = 1;
+    var lim = 1.02;
+    this.plot = new Plot(host, {
+      xmin: -lim, xmax: lim, ymin: -lim, ymax: lim, height: o.height || 340,
+      equal: true, grid: false, axes: false, cursor: 'grab',
+      ariaFija: {
+        role: 'application',
+        label: (o.aria || 'Dibujo en tres dimensiones') + '. Se puede girar para verlo desde otro ' +
+          'sitio: arrastrándolo, o con las flechas del teclado; más y menos acercan, y la tecla R ' +
+          'vuelve a la vista inicial.'
+      },
+      draw: function (g) { self.g = g; self._pinta(); }
+    });
+    this.plot.el.classList.add('stage--3d');
+    this._teclas();
+    this._arrastre();
+  }
+
+  /** Proyeccion de un punto del espacio al lienzo (perspectiva suave). */
+  Space3D.prototype.proyecta = function (p) {
+    var R = this.R;
+    var cy = Math.cos(this.yaw), sy = Math.sin(this.yaw);
+    var cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    var x = p[0] / R, y = p[1] / R, z = p[2] / R;
+    var x1 = x * cy - y * sy;
+    var y1 = x * sy + y * cy;             // hacia dentro de la pantalla
+    var alto = z * cp + y1 * sp;
+    var fondo = y1 * cp - z * sp;
+    var f = 4 / (4 + fondo) * 0.8 * this.zoom;
+    return { x: x1 * f, y: alto * f, fondo: fondo };
+  };
+
+  Space3D.prototype.render = function () { this.plot.render(); };
+
+  Space3D.prototype._pinta = function () {
+    var g = this.g, R = this.R, o = this.o, i;
+    if (o.rejilla !== false) {
+      var paso = o.paso || 1;
+      for (i = -R; i <= R + 1e-9; i += paso) {
+        this.seg([i, -R, 0], [i, R, 0], { color: 'grid', w: 1 });
+        this.seg([-R, i, 0], [R, i, 0], { color: 'grid', w: 1 });
+      }
+    }
+    if (o.ejes !== false) {
+      var nombres = ['x', 'y', 'z'];
+      for (i = 0; i < 3; i++) {
+        var a = [0, 0, 0], b = [0, 0, 0];
+        a[i] = -R; b[i] = R;
+        this.seg(a, [0, 0, 0], { color: 'axis', w: 1.2, dash: [4, 4] });
+        this.vec([0, 0, 0], b, { color: 'axis', w: 1.6 });
+        var et = [0, 0, 0]; et[i] = R * 1.07;
+        this.texto(et, nombres[i], { color: 'ink', italic: true, size: 14, align: 'center' });
+        if (o.numeros !== false && R <= 8) {
+          for (var k = 1; k < R; k++) {
+            var m = [0, 0, 0]; m[i] = k;
+            var pm = this.proyecta(m);
+            g.point(pm.x, pm.y, { r: 1.8, color: 'axis', w: 1 });
+            if (k % (R > 5 ? 2 : 1) === 0) {
+              this.texto(m, String(k), { color: 'axis', size: 10, serif: false, dx: 5, dy: 8 });
+            }
+          }
+        }
+      }
+    }
+    if (o.draw) o.draw(this);
+  };
+
+  /* --- primitivas en coordenadas del espacio --- */
+  Space3D.prototype.punto = function (p, op) {
+    var q = this.proyecta(p);
+    this.g.point(q.x, q.y, op || {});
+    return this;
+  };
+  Space3D.prototype.seg = function (a, b, op) {
+    var p = this.proyecta(a), q = this.proyecta(b);
+    this.g.seg(p.x, p.y, q.x, q.y, op || {});
+    return this;
+  };
+  Space3D.prototype.vec = function (a, b, op) {
+    var p = this.proyecta(a), q = this.proyecta(b);
+    this.g.vec(p.x, p.y, q.x, q.y, op || {});
+    return this;
+  };
+  Space3D.prototype.camino = function (pts, op) {
+    var self = this;
+    this.g.path(pts.map(function (p) { var q = self.proyecta(p); return [q.x, q.y]; }), op || {});
+    return this;
+  };
+  Space3D.prototype.poli = function (pts, op) {
+    var self = this;
+    op = op || {};
+    this.g.poly(pts.map(function (p) { var q = self.proyecta(p); return [q.x, q.y]; }), {
+      color: op.color, fill: op.fill === undefined ? true : op.fill,
+      fillAlpha: op.fillAlpha === undefined ? 0.16 : op.fillAlpha, w: op.w || 1.2, dash: op.dash, alpha: op.alpha
+    });
+    return this;
+  };
+  Space3D.prototype.texto = function (p, txt, op) {
+    var q = this.proyecta(p);
+    this.g.text(q.x, q.y, txt, op || {});
+    return this;
+  };
+  /** La recta que pasa por P con direccion v, recortada al cubo. */
+  Space3D.prototype.linea = function (P, v, op) {
+    var s = recorta3(P, v, this.R);
+    if (s) this.seg(s[0], s[1], op);
+    return s;
+  };
+  /** El plano n·x + D = 0, recortado al cubo. */
+  Space3D.prototype.plano = function (n, D, op) {
+    var pts = planoCubo(n, D, this.R);
+    if (pts.length >= 3) this.poli(pts, op);
+    return pts;
+  };
+
+  Space3D.prototype._digo = function () {
+    if (!this.voz) return;
+    var gr = function (r) { return Math.round(r * 180 / Math.PI); };
+    this.voz.textContent = 'Vista girada: ' + gr(this.yaw - this.yaw0) + ' grados en horizontal y ' +
+      gr(this.pitch) + ' grados de elevación.';
+  };
+
+  Space3D.prototype._teclas = function () {
+    var self = this, c = this.plot.canvas;
+    c.tabIndex = 0;
+    this.voz = U.el('div.sr-solo', { 'aria-live': 'polite', 'aria-atomic': 'true' });
+    var pie = U.el('div.stage__teclas', {
+      html: 'Arrastra el dibujo para girarlo. Con el teclado: <kbd>Tab</kbd> hasta el dibujo, ' +
+        '<kbd>&#8592;</kbd><kbd>&#8594;</kbd><kbd>&#8593;</kbd><kbd>&#8595;</kbd> para girar, ' +
+        '<kbd>+</kbd><kbd>&#8722;</kbd> para acercar y <kbd>R</kbd> para volver a la vista inicial.'
+    });
+    var tras = this.plot.el.nextSibling, padre = this.plot.el.parentNode;
+    if (padre) { padre.insertBefore(pie, tras); padre.insertBefore(this.voz, pie); }
+    U.on(c, 'keydown', function (ev) {
+      var d = ev.shiftKey ? 0.03 : 0.12;
+      switch (ev.key) {
+        case 'ArrowLeft': self.yaw -= d; break;
+        case 'ArrowRight': self.yaw += d; break;
+        case 'ArrowUp': self.pitch = Math.min(1.5, self.pitch + d); break;
+        case 'ArrowDown': self.pitch = Math.max(-1.5, self.pitch - d); break;
+        case '+': case '=': self.zoom = Math.min(2.6, self.zoom * 1.12); break;
+        case '-': case '_': self.zoom = Math.max(0.5, self.zoom / 1.12); break;
+        case 'r': case 'R': case 'Home':
+          self.yaw = self.yaw0; self.pitch = self.pitch0; self.zoom = 1; break;
+        default: return;
+      }
+      ev.preventDefault();
+      ev.stopPropagation();
+      self.render();
+      self._digo();
+    });
+  };
+
+  Space3D.prototype._arrastre = function () {
+    var self = this, c = this.plot.canvas, ini = null;
+    function pos(ev) { var t = ev.touches ? ev.touches[0] : ev; return { x: t.clientX, y: t.clientY }; }
+    function down(ev) {
+      var p = pos(ev);
+      ini = { x: p.x, y: p.y, yaw: self.yaw, pitch: self.pitch };
+      if (ev.cancelable) ev.preventDefault();
+    }
+    function move(ev) {
+      if (!ini) return;
+      var p = pos(ev);
+      self.yaw = ini.yaw + (p.x - ini.x) * 0.011;
+      self.pitch = Math.max(-1.5, Math.min(1.5, ini.pitch + (p.y - ini.y) * 0.011));
+      self.render();
+      if (ev.cancelable) ev.preventDefault();
+    }
+    function up() { if (ini) { ini = null; self._digo(); } }
+    U.on(c, 'mousedown', down); U.on(c, 'touchstart', down, { passive: false });
+    U.on(global, 'mousemove', move); U.on(c, 'touchmove', move, { passive: false });
+    U.on(global, 'mouseup', up); U.on(global, 'touchend', up);
+  };
+
+  W.Space3D = Space3D;
+  W.space3d = function (host, o) { return new Space3D(host, o); };
 
   /* repintar todo al cambiar el tema claro/oscuro */
   U.bus.on('theme', function () {

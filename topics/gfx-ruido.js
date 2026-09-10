@@ -140,6 +140,79 @@ Course.topic('gfx-ruido', function (p) {
     }
   });
 
+  p.sub('Ruido de gradiente');
+
+  p.text('El ruido de valor tiene un defecto que, una vez visto, no se deja de ver: sus máximos y mínimos ' +
+    'caen justo en las esquinas de la rejilla, y la imagen tiene un aire cuadriculado. Ken Perlin lo evitó ' +
+    'cambiando lo que se sortea en cada esquina. En lugar de un <strong>valor</strong>, se sortea una ' +
+    '<strong>pendiente</strong>: un vector gradiente. En la esquina el ruido vale 0, pero sale de ella con esa ' +
+    'inclinación. Cada esquina aporta el [[ge-vectores|producto escalar]] de su gradiente con el vector que va ' +
+    'de la esquina al punto, y las cuatro aportaciones se interpolan.');
+
+  p.formula('n(\\vec p) = \\operatorname{mix}\\bigl(\\operatorname{mix}(a, b, u_x),\\ \\operatorname{mix}(c, d, u_x),\\ u_y\\bigr), \\qquad a = \\vec g_{00}\\cdot(\\vec p - \\vec c_{00}),\\ \\dots',
+    'ruido de gradiente',
+    '$\\vec g_{00}$ es el gradiente sorteado en la esquina $\\vec c_{00}$, y lo mismo con las otras tres.<br><br>' +
+    'El peso $u = 6f^5 - 15f^4 + 10f^3$ es un polinomio de quinto grado que Perlin propuso en 2002: como ' +
+    '<code>smoothstep</code>, vale 0 y 1 en los extremos con derivada nula, pero además tiene nula la ' +
+    '<strong>segunda</strong> derivada, y eso elimina unas arrugas que se veían al iluminar el relieve.');
+
+  p.demo({
+    title: 'Valor frente a gradiente',
+    intro: 'A la izquierda, ruido de valor; a la derecha, ruido de gradiente, con la misma escala. Activa la rejilla: en el de valor, las zonas más claras y más oscuras se pegan a las esquinas; en el de gradiente, las esquinas son grises medios y las manchas se reparten libremente.',
+    build: function (host) {
+      W.shader(host, {
+        id: 'gfx-ruido-gradiente', alto: 280,
+        aria: 'Dos mitades de ruido que se desplazan despacio: ruido de valor a la izquierda y ruido de gradiente a la derecha.',
+        mandos: [
+          { n: 'escala', label: 'escala', min: 2.0, max: 20.0, step: 0.5, value: 6.0, dec: 1 },
+          { n: 'rejilla', label: 'mostrar rejilla', min: 0, max: 1, step: 1, value: 0, dec: 0 }
+        ],
+        codigo:
+          'float hash1(vec2 c) { return fract(sin(dot(c, vec2(127.1, 311.7))) * 43758.5453); }\n' +
+          '\n' +
+          'vec2 hash2(vec2 c)\n' +
+          '{\n' +
+          '    c = vec2(dot(c, vec2(127.1, 311.7)), dot(c, vec2(269.5, 183.3)));\n' +
+          '    return -1.0 + 2.0 * fract(sin(c) * 43758.5453);\n' +
+          '}\n' +
+          '\n' +
+          'float ruidoValor(vec2 p)\n' +
+          '{\n' +
+          '    vec2 i = floor(p), f = fract(p);\n' +
+          '    vec2 u = f * f * (3.0 - 2.0 * f);\n' +
+          '    return mix(mix(hash1(i), hash1(i + vec2(1.0, 0.0)), u.x),\n' +
+          '               mix(hash1(i + vec2(0.0, 1.0)), hash1(i + vec2(1.0, 1.0)), u.x), u.y);\n' +
+          '}\n' +
+          '\n' +
+          'float ruidoGradiente(vec2 p)\n' +
+          '{\n' +
+          '    vec2 i = floor(p), f = fract(p);\n' +
+          '    vec2 u = f * f * f * (f * (f * 6.0 - 15.0) + 10.0);     // 6f^5 - 15f^4 + 10f^3\n' +
+          '    float a = dot(hash2(i), f);\n' +
+          '    float b = dot(hash2(i + vec2(1.0, 0.0)), f - vec2(1.0, 0.0));\n' +
+          '    float c = dot(hash2(i + vec2(0.0, 1.0)), f - vec2(0.0, 1.0));\n' +
+          '    float d = dot(hash2(i + vec2(1.0, 1.0)), f - vec2(1.0, 1.0));\n' +
+          '    return 0.5 + 0.7 * mix(mix(a, b, u.x), mix(c, d, u.x), u.y);\n' +
+          '}\n' +
+          '\n' +
+          'void mainImage(out vec4 color, in vec2 fragCoord)\n' +
+          '{\n' +
+          '    vec2 uv = fragCoord / iResolution.xy;\n' +
+          '    vec2 p = fragCoord / iResolution.y * escala + vec2(iTime * 0.2, 0.0);\n' +
+          '\n' +
+          '    float n = uv.x < 0.5 ? ruidoValor(p) : ruidoGradiente(p);\n' +
+          '    vec3 col = vec3(n);\n' +
+          '\n' +
+          '    float linea = 1.0 - smoothstep(0.0, 0.04, min(fract(p.x), fract(p.y)));\n' +
+          '    col = mix(col, vec3(1.0, 0.35, 0.25), rejilla * linea);\n' +
+          '    col *= smoothstep(0.0, 0.004, abs(uv.x - 0.5));        // la raya que separa las dos mitades\n' +
+          '    color = vec4(col, 1.0);\n' +
+          '}\n',
+        nota: 'En la mitad derecha, cambia el 0.7 por un número mayor para ver más contraste: el ruido de gradiente sale más apagado porque rara vez llega a sus extremos.'
+      });
+    }
+  });
+
   p.section('Sumar octavas: el ruido fractal');
 
   p.text('El ruido de valor tiene un solo tamaño de detalle: manchas todas igual de grandes. Las ' +
@@ -390,7 +463,42 @@ Course.topic('gfx-ruido', function (p) {
     answer: function (d) { return d.ref; }
   });
 
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { c: 'float v = hash(floor(p * 8.0));',
+          o: ['Una cuadrícula de cuadrados, cada uno de un gris al azar', 'Nubes suaves', 'Estática que cambia de un píxel a otro', 'Un degradado'],
+          por: 'Todos los píxeles de una misma celda tienen el mismo <code>floor</code>, así que reciben el mismo número al azar: bloques de gris uniforme.' },
+        { c: 'float v = hash(fragCoord);',
+          o: ['Estática: cada píxel con un gris al azar, como una tele sin señal', 'Cuadrados grandes de grises', 'Nubes suaves', 'Una pantalla gris uniforme'],
+          por: 'Cada píxel tiene una coordenada distinta, así que cada uno recibe su propio número al azar, sin relación con el vecino.' },
+        { c: 'float v = ruido(p * 4.0);',
+          o: ['Manchas suaves y borrosas, todas de un tamaño parecido', 'Estática', 'Nubes con detalle a muchas escalas', 'Rayas regulares'],
+          por: 'El ruido interpola suavemente entre los valores de las esquinas de una rejilla: sale una sola escala de manchas, sin detalle fino.' },
+        { c: 'float v = 0.5 * ruido(p * 4.0) + 0.25 * ruido(p * 8.0) + 0.125 * ruido(p * 16.0);',
+          o: ['Nubes con detalle a varias escalas: manchas grandes de borde rugoso', 'Manchas suaves de un solo tamaño', 'Estática', 'Cuadrados de grises'],
+          por: 'Cada octava dobla la frecuencia y reduce a la mitad la amplitud: las manchas grandes llevan encima detalles cada vez más pequeños.' },
+        { c: 'float v = hash(floor(p * 8.0) + floor(iTime));',
+          o: ['Cuadrados de grises al azar que cambian todos de golpe una vez por segundo', 'Cuadrados que cambian de gris suavemente', 'Estática que cambia en cada fotograma', 'Una imagen quieta'],
+          por: '<code>floor(iTime)</code> solo cambia al empezar cada segundo; entre tanto, el hash recibe los mismos números y la imagen no se mueve.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) {
+      return 'Con <code>p</code> centrada, <code>hash</code> y <code>ruido</code> como en el tema y el color final <code>vec3(v)</code>, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>';
+    },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['¿El número al azar cambia de un píxel a otro, de una celda a otra o de forma continua?', '¿Hay una sola escala de detalle o varias sumadas?']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
+  });
+
   p.keys([
+    'El ruido de gradiente sortea pendientes en lugar de valores: vale 0 en las esquinas y evita el aspecto cuadriculado del ruido de valor.',
     'Un shader no puede tirar los dados: necesita <strong>desorden reproducible</strong>, el mismo número para el mismo punto siempre.',
     'Un <em>hash</em> es una función que amplifica muchísimo las diferencias: la misma idea del [[av-caos|caos determinista]], usada como generador.',
     'El ruido útil sortea en los <strong>vértices de una rejilla</strong> e interpola por dentro con la curva $f^2(3-2f)$, que es lo que borra las costuras.',

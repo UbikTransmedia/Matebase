@@ -5,8 +5,13 @@
 
      p.section('Titulo')      p.text('parrafo con $x^2$')
      p.formula('e^{i\\pi}=-1')  p.note('aviso', 'warn')
-     p.demo({...})            p.exercise({...})
+     p.demo({...})            p.exercise({...})    p.problem({...})
      p.keys(['idea 1', ...])
+
+   Hay un segundo constructor, el RECOLECTOR, que entiende las mismas
+   llamadas pero no pinta nada: solo apunta los ejercicios, las formulas y
+   las ideas clave. Con el se montan los simulacros y el formulario sin
+   tener que duplicar ni un ejercicio.
    =================================================================== */
 (function (global) {
   'use strict';
@@ -20,6 +25,8 @@
     /** Los enunciados quedan guardados aqui para que tests.html
         pueda auditarlos (que la solucion pase su propio corrector). */
     this.specs = [];
+    /** Y las tarjetas, para poder abrir un ejercicio concreto desde un enlace. */
+    this.cards = [];
   }
 
   Page.prototype._add = function (el) { this.root.appendChild(el); return el; };
@@ -186,7 +193,18 @@
   Page.prototype.exercise = function (spec) {
     this._ex++;
     this.specs.push(spec);
-    return Ex.card(this.root, spec, this.id, this._ex);
+    var c = Ex.card(this.root, spec, this.id, this._ex);
+    this.cards.push(c);
+    return c;
+  };
+
+  /** Problema por apartados, como los de la PAU. Cuenta como un ejercicio. */
+  Page.prototype.problem = function (spec) {
+    this._ex++;
+    this.specs.push(spec);
+    var c = Ex.problema(this.root, spec, this.id, this._ex);
+    this.cards.push(c);
+    return c;
   };
 
   /** Varios ejercicios de golpe. */
@@ -195,5 +213,55 @@
     list.forEach(function (s) { self.exercise(s); });
   };
 
+  /* ============================ RECOLECTOR ============================
+     Mismas llamadas que Page, sin pintar nada. Numera los ejercicios igual
+     que Page -ejercicios y problemas comparten contador-, asi que el
+     ejercicio 3 de un tema es el 3 aqui y alli, y el progreso que apunte un
+     simulacro cae en el mismo sitio que si se hubiera hecho en el tema. */
+
+  function Recolector(node) {
+    this.node = node || {};
+    this.id = this.node.id || 'sin-id';
+    this._ex = 0;
+    this._sec = '';
+    this.specs = [];
+    this.items = [];          // {spec, n, tipo, sec}
+    this.vistas = [];         // formulas: {tex:[...], label, sec}
+    this.claves = [];         // ideas clave (listas)
+  }
+  function nada() { return null; }
+  ['sub', 'text', 'list', 'note', 'hist', 'util', 'table', 'raw', 'demo'].forEach(function (m) {
+    Recolector.prototype[m] = nada;
+  });
+  Recolector.prototype.section = function (t) { this._sec = t; return null; };
+  Recolector.prototype.formula = function (tex, label) {
+    this.vistas.push({ tex: [tex], label: label || '', sec: this._sec });
+    return null;
+  };
+  Recolector.prototype.formulas = function (list, label) {
+    this.vistas.push({ tex: list.slice(), label: label || '', sec: this._sec });
+    return null;
+  };
+  Recolector.prototype.keys = function (items) { this.claves = this.claves.concat(items); return null; };
+  Recolector.prototype.exercise = function (spec) {
+    this._ex++;
+    this.specs.push(spec);
+    this.items.push({ spec: spec, n: this._ex, tipo: 'ejercicio', sec: this._sec });
+    return null;
+  };
+  Recolector.prototype.problem = function (spec) {
+    this._ex++;
+    this.specs.push(spec);
+    this.items.push({ spec: spec, n: this._ex, tipo: 'problema', sec: this._sec });
+    return null;
+  };
+  Recolector.prototype.exercises = function (list) {
+    var self = this;
+    list.forEach(function (s) { self.exercise(s); });
+  };
+  // Las paginas de repaso (mapa, simulacro, formulario) no se recolectan.
+  ['mapa', 'simulacro', 'formulario'].forEach(function (m) { Recolector.prototype[m] = nada; });
+
+  Page.Recolector = Recolector;
   global.Page = Page;
 })(window);

@@ -164,6 +164,21 @@ Course.topic('fn-integral-def', function (p) {
   p.text('Los límites $a$ y $b$ son los puntos donde las dos curvas se cortan: se obtienen resolviendo ' +
     '$f(x) = g(x)$.');
 
+  p.sub('Áreas con parámetro y con la recta tangente');
+
+  p.text('Dos variantes que el examen repite. En la primera el área se conoce y lo que falta es un ' +
+    'número de la función: se calcula el área en función de ese parámetro y se <strong>iguala</strong> ' +
+    'al valor dado, lo que deja una ecuación. En la segunda, una de las dos curvas es la ' +
+    '[[fn-derivadas|recta tangente]] a la otra en un punto: primero se escribe la tangente, y después ' +
+    'es un área entre dos curvas como cualquier otra, con la particularidad de que en el punto de ' +
+    'tangencia las dos se tocan sin cruzarse.');
+
+  p.formula('\\int_{-k}^{k}\\left(k^2 - x^2\\right)dx = \\frac{4k^3}{3} = 36 \\ \\Rightarrow\\ k^3 = 27 \\ \\Rightarrow\\ k = 3',
+    'un área con parámetro',
+    'Es el área encerrada entre la parábola $y = x^2$ y la recta horizontal $y = k^2$. Los cortes son ' +
+      '$x = \\pm k$, la recta va por encima, y la integral de la diferencia da $\\frac{4k^3}{3}$. Si se ' +
+      'pide que el área valga 36, basta resolver la ecuación.');
+
   /* ================= EJERCICIOS ================= */
   p.util('El área entre dos curvas es una medida de diferencia acumulada, y con ese nombre aparece en ' +
     'economía: entre la curva de ingresos y la de costes está el beneficio total del periodo; entre ' +
@@ -323,8 +338,63 @@ Course.topic('fn-integral-def', function (p) {
     answer: function (d) { return 'Integral ' + U.fmt(d.integral, 4) + ', área ' + U.fmt(d.area, 4) + '.'; }
   });
 
+  p.exercise({
+    title: 'El parámetro que da un área',
+    level: 'avanzado',
+    gen: function (r) {
+      var k = r.int(1, 4), c = r.pick([1, 2, 3]);
+      // area entre y = c x^2 e y = c k^2 : 4 c k^3 / 3
+      return { k: k, c: c, A: ML.F(4 * c * k * k * k, 3) };
+    },
+    ask: function (d) {
+      return 'Halla $k > 0$ para que el área encerrada entre la parábola $y = ' + (d.c === 1 ? '' : d.c) + 'x^2$ y la recta $y = ' + (d.c === 1 ? '' : d.c) + 'k^2$ valga $' + d.A.tex() + '$.';
+    },
+    fields: [{ name: 'k', label: 'k =', w: 'tiny' }],
+    sol: function (d) { return { k: d.k }; },
+    tol: 1e-6,
+    errores: [{ si: function (v, d) { return v.k === -d.k; }, msg: 'El enunciado pide $k > 0$.' }],
+    hint: function (d) {
+      return ['Los cortes son $x = \\pm k$ y entre ellos la recta va por encima.',
+        'El área es $\\int_{-k}^{k} ' + (d.c === 1 ? '' : d.c) + '(k^2 - x^2)\\,dx = \\frac{' + (4 * d.c) + 'k^3}{3}$. Iguala y despeja.'];
+    },
+    steps: function (d) {
+      return ['Cortes: $' + (d.c === 1 ? '' : d.c) + 'x^2 = ' + (d.c === 1 ? '' : d.c) + 'k^2 \\Rightarrow x = \\pm k$.',
+        'Área: $\\displaystyle\\int_{-k}^{k} ' + (d.c === 1 ? '' : d.c) + '(k^2 - x^2)\\,dx = ' + (d.c === 1 ? '' : d.c) + '\\left[k^2x - \\frac{x^3}{3}\\right]_{-k}^{k} = \\frac{' + (4 * d.c) + 'k^3}{3}$',
+        '$\\frac{' + (4 * d.c) + 'k^3}{3} = ' + d.A.tex() + ' \\Rightarrow k^3 = ' + (d.k * d.k * d.k) + ' \\Rightarrow k = ' + d.k + '$'];
+    },
+    answer: function (d) { return 'k = ' + d.k; }
+  });
+
+  p.exercise({
+    title: 'Área entre una parábola, su tangente y el eje Y',
+    level: 'avanzado',
+    gen: function (r) {
+      var a = r.int(1, 4), c = r.pick([1, 2, 3]);
+      return { a: a, c: c, A: ML.F(c * a * a * a, 3) };
+    },
+    ask: function (d) {
+      return 'Calcula el área de la región limitada por $f(x) = ' + (d.c === 1 ? '' : d.c) + 'x^2$, su recta tangente en $x = ' + d.a + '$ y el eje $Y$. (Vale una fracción.)';
+    },
+    fields: [{ name: 'A', label: 'área', w: 'tiny' }],
+    sol: function (d) { return { A: d.A.val() }; },
+    tol: 1e-9,
+    hint: function (d) {
+      return ['Tangente en $x = ' + d.a + '$: $y = f(' + d.a + ') + f\'(' + d.a + ')(x - ' + d.a + ')$.',
+        'La parábola queda por encima de su tangente. Integra la diferencia entre $x = 0$ (el eje $Y$) y $x = ' + d.a + '$.',
+        'La diferencia es $' + (d.c === 1 ? '' : d.c) + '(x - ' + d.a + ')^2$.'];
+    },
+    steps: function (d) {
+      var c = d.c === 1 ? '' : String(d.c);
+      return ['$f(' + d.a + ') = ' + (d.c * d.a * d.a) + '$ y $f\'(' + d.a + ') = ' + (2 * d.c * d.a) + '$: la tangente es $y = ' + ML.polyTex([2 * d.c * d.a, -d.c * d.a * d.a]) + '$.',
+        '$f(x) - \\text{tangente} = ' + c + 'x^2 - ' + (2 * d.c * d.a) + 'x + ' + (d.c * d.a * d.a) + ' = ' + c + '(x - ' + d.a + ')^2 \\ge 0$',
+        '$A = \\displaystyle\\int_0^{' + d.a + '} ' + c + '(x - ' + d.a + ')^2\\,dx = ' + c + '\\left[\\frac{(x - ' + d.a + ')^3}{3}\\right]_0^{' + d.a + '} = ' + d.A.tex() + '$'];
+    },
+    answer: function (d) { return '$' + d.A.tex() + '$'; }
+  });
+
   p.keys([
     'La integral definida nace de llenar el área con rectángulos y afinarlos hasta el límite.',
+    'Si el área es un dato, se calcula en función del parámetro y se iguala: sale una ecuación.',
     '<strong>Regla de Barrow</strong>: $\\int_a^b f = F(b)-F(a)$. No hace falta sumar nada, solo una primitiva.',
     'El teorema fundamental dice que derivar e integrar son operaciones inversas: es la piedra angular del cálculo.',
     'La integral da un <strong>área con signo</strong>: lo que está bajo el eje resta.',

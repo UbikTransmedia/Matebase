@@ -159,7 +159,7 @@ Course.topic('gfx-warp', function (p) {
 
   p.text('Esa columna de la izquierda es, en realidad, un [[av-vectorial|campo vectorial]]: una ' +
     'flecha en cada punto del plano. Torcer el espacio es dibujar sobre un plano al que se le han ' +
-    'aplicado esas flechas, y las mismas ideas del bloque 11 —divergencia, rotacional— describen qué ' +
+    'aplicado esas flechas, y las mismas ideas del [[av-vectorial|cálculo vectorial]] —divergencia, rotacional— describen qué ' +
     'va a pasarle a la imagen: donde el campo diverge la imagen se estira, donde converge se ' +
     'apelmaza, y donde rota se hace un remolino.');
 
@@ -327,6 +327,35 @@ Course.topic('gfx-warp', function (p) {
         'Ni una línea de la función que dibuja ha cambiado: solo el sitio donde se le pregunta.'];
     },
     answer: function (d) { return d.ref; }
+  });
+
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { c: 'p.x += 0.1 * sin(10.0 * p.y);\nfloat v = step(abs(p.x), 0.05);',
+          o: ['Una línea vertical ondulada, como una serpiente', 'Una línea horizontal ondulada', 'Una línea vertical recta', 'Rayas horizontales'],
+          por: 'Se dibuja la franja $|x| < 0{,}05$, pero después de desplazar la $x$ una cantidad que depende de la altura: la franja se curva de un lado a otro al subir.' },
+        { c: 'p += 0.2 * vec2(ruido(p * 3.0), ruido(p * 3.0 + 7.0));\nfloat v = step(0.5, fract(p.x * 6.0));',
+          o: ['Rayas verticales deformadas de forma irregular, como las vetas de la madera', 'Rayas verticales perfectamente rectas', 'Nubes suaves sin rayas', 'Anillos concéntricos'],
+          por: 'El dibujo son rayas verticales, pero cada punto se pregunta en una posición desplazada un poco al azar, de forma suave: las rayas se tuercen.' },
+        { c: 'float v = ruido(p * 3.0 + ruido(p * 3.0));',
+          o: ['Nubes retorcidas, con remolinos que no tiene el ruido corriente', 'Nubes normales, iguales a las del ruido sin torcer', 'Rayas regulares', 'Estática'],
+          por: 'Meter ruido dentro del ruido desplaza cada punto según el propio ruido: las formas se estiran y se enroscan.' },
+        { c: 'p *= 1.0 + 0.3 * sin(iTime);\nfloat v = step(length(p), 0.3);',
+          o: ['Un círculo que se encoge y se agranda periódicamente', 'Un círculo que se desplaza', 'Un círculo quieto', 'Un círculo que se aplasta en elipse'],
+          por: 'Se escala la coordenada por un factor que oscila: cuando el factor crece la figura se encoge, y cuando baja, se agranda.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'Con <code>p</code> centrada, <code>ruido</code> como en el tema y el color final <code>vec3(v)</code>, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['Primero imagina el dibujo sin la deformación.', 'Después piensa cómo se mueve cada punto antes de preguntar por su color.']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
   });
 
   p.keys([

@@ -201,6 +201,103 @@ Course.topic('cib-control', function (p) {
     }
   });
 
+  p.sub('Saturación y windup');
+
+  p.text('Hay un detalle que la fórmula del PID no dice: los actuadores tienen tope. Un motor no da más ' +
+    'fuerza que la que da, una válvula no se abre más del cien por cien y un radiador no calienta más que ' +
+    'a plena potencia. Cuando el controlador pide más de lo que el actuador puede dar, el actuador se ' +
+    '<strong>satura</strong>: entrega su máximo y el resto de la orden se pierde.');
+
+  p.text('La saturación en sí no es grave. Lo grave es lo que le hace al término integral. Mientras el ' +
+    'actuador está al máximo y el error no baja, la integral sigue acumulando error como si sirviera de ' +
+    'algo. Cuando por fin el sistema responde, la integral está tan cargada que mantiene el actuador al ' +
+    'máximo mucho después de llegar al objetivo, y el sistema se pasa de largo. Eso es el ' +
+    '<strong>windup</strong>: la integral se «da cuerda» sola. El remedio más sencillo, el ' +
+    '<strong>antiwindup</strong>, consiste en dejar de integrar mientras el actuador está saturado y el ' +
+    'error empuja en la misma dirección.');
+
+  p.demo({
+    title: 'La integral que no se calla',
+    intro: 'El sistema está bloqueado al principio —una válvula atascada, una puerta que no abre— y no puede moverse aunque el controlador empuje con todo. Alarga el bloqueo y compara las dos curvas: sin antiwindup, la integral acumula todo ese error y el sistema se pasa muchísimo al soltarse; con antiwindup, llega casi limpio.',
+    build: function (host) {
+      var tb = 6, Kp = 3, Ki = 0.8, umax = 20, ref = 8, dt = 0.02, T = 40;
+      var out = W.readout(host, '');
+
+      function simula(anti) {
+        var y = 0, I = 0, s = [[0, 0]], max = 0;
+        for (var i = 1; i * dt <= T + 1e-9; i++) {
+          var t = i * dt, e = ref - y;
+          var bruto = Kp * e + Ki * I;
+          // antiwindup: no se integra si el actuador ya esta al tope y el error empuja hacia ese tope
+          var parado = anti && ((bruto >= umax && e > 0) || (bruto <= 0 && e < 0));
+          if (!parado) I += e * dt;
+          var u = Math.max(0, Math.min(umax, Kp * e + Ki * I));
+          if (t >= tb) y += (u - y) / 1.5 * dt;          // mientras dura el bloqueo, no se mueve
+          if (y > max) max = y;
+          if (i % 10 === 0) s.push([t, y]);
+        }
+        return { s: s, max: max };
+      }
+
+      var plot = W.plot(host, {
+        xmin: 0, xmax: T, ymin: -1, ymax: 22, height: 290, xlabel: 'segundos', ylabel: 'posición',
+        draw: function (g) {
+          if (tb > 0) g.rect(0, -1, tb, 23, { fill: true, color: 'axis', fillAlpha: 0.12, stroke: false });
+          g.hline(ref, { color: 3, dash: true, w: 1.6 });
+          g.path(simula(false).s, { color: 'bad', w: 2.4 });
+          g.path(simula(true).s, { color: 0, w: 2.8 });
+        }
+      });
+
+      function pinta() {
+        var sin = simula(false), con = simula(true);
+        out.set('Bloqueado durante $' + U.fmt(tb, 1) + '$ s &nbsp;·&nbsp; sin antiwindup llega hasta <strong>' + U.fmt(sin.max, 2) +
+          '</strong> (se pasa $' + U.fmt(Math.max(0, sin.max - ref), 2) + '$) &nbsp;·&nbsp; con antiwindup, hasta <strong>' + U.fmt(con.max, 2) +
+          '</strong> (se pasa $' + U.fmt(Math.max(0, con.max - ref), 2) + '$)');
+        plot.render();
+      }
+
+      var fila = W.row(host);
+      W.slider(fila, { label: 'duración del bloqueo (s)', min: 0, max: 15, step: 0.5, value: tb, on: function (v) { tb = v; pinta(); } });
+      W.slider(fila, { label: 'Ki (integral)', min: 0.2, max: 1.5, step: 0.05, value: Ki, on: function (v) { Ki = v; pinta(); } });
+      W.legend(host, [{ c: U.palette().bad, t: 'sin antiwindup' }, { c: 0, t: 'con antiwindup' }]);
+      pinta();
+    }
+  });
+
+  /* ---------------------------------------------------------------- */
+  p.section('Sintonizar sin conocer el sistema: Ziegler-Nichols');
+
+  p.text('Para ajustar $K_p$, $K_i$ y $K_d$ con cuentas hace falta un modelo matemático del sistema, y ' +
+    'muchas veces no se tiene: una fábrica tiene cientos de lazos de control, cada uno con su horno, su ' +
+    'tubería y su motor. En 1942, John Ziegler y Nathaniel Nichols, dos ingenieros de una empresa de ' +
+    'instrumentos de medida, publicaron una receta que no necesita ningún modelo, solo un experimento con ' +
+    'el sistema real:');
+
+  p.list([
+    'Se quitan los términos integral y derivativo y se deja solo el proporcional.',
+    'Se sube $K_p$ poco a poco hasta que el sistema oscila de forma sostenida, sin crecer ni apagarse. Ese valor es la <strong>ganancia última</strong> $K_u$.',
+    'Se mide el periodo de esa oscilación: el <strong>periodo último</strong> $T_u$.',
+    'Con esos dos números se leen los ajustes en la tabla.'
+  ], true);
+
+  p.table(['Controlador', '$K_p$', '$T_i$', '$T_d$'], [
+    ['P', '$0{,}5\\,K_u$', '—', '—'],
+    ['PI', '$0{,}45\\,K_u$', '$T_u / 1{,}2$', '—'],
+    ['PID', '$0{,}6\\,K_u$', '$T_u / 2$', '$T_u / 8$']
+  ]);
+
+  p.formula('K_i = \\frac{K_p}{T_i}, \\qquad K_d = K_p\\,T_d', 'de los tiempos a las ganancias',
+    'La tabla da el <strong>tiempo integral</strong> $T_i$ y el <strong>tiempo derivativo</strong> $T_d$, ' +
+    'que es como prefieren pensar los ingenieros: $T_i$ es lo que tarda la integral en igualar al término ' +
+    'proporcional si el error se mantiene constante, y $T_d$ es cuánto tiempo se adelanta el derivativo.<br><br>' +
+    'Para pasar a las ganancias de la fórmula del PID, $K_i$ <strong>divide</strong> y $K_d$ <strong>multiplica</strong>.');
+
+  p.note('Ziegler-Nichols da un punto de partida agresivo, con bastante sobrepaso, no un ajuste final. Y ' +
+    'el experimento de llevar el sistema al borde de la inestabilidad no se puede hacer con cualquier ' +
+    'cosa: con un reactor químico o con un avión no se prueba. Para esos casos se sintoniza sobre un ' +
+    'modelo, en simulación.', 'warn', 'Un punto de partida, no el final');
+
   p.util('El PID es, con diferencia, el algoritmo de control más usado del mundo: se estima que ' +
     'gobierna la enorme mayoría de los lazos de control industriales que existen, y lleva haciéndolo ' +
     'desde los años cuarenta. Está en el control de crucero de un coche, en el horno que mantiene la ' +
@@ -322,7 +419,65 @@ Course.topic('cib-control', function (p) {
     answer: function (d) { return d.q; }
   });
 
+  p.exercise({
+    title: 'El error que deja un control proporcional',
+    level: 'medio',
+    gen: function (r) {
+      var carga = r.int(1, 6), Kp = r.pick([0.5, 2, 4, 5, 8]), emax = r.pick([0.1, 0.2, 0.25, 0.5]);
+      if (carga / Kp <= emax) return null;
+      return { carga: carga, Kp: Kp, emax: emax, e: carga / Kp, kmin: carga / emax };
+    },
+    ask: function (d) {
+      return 'Una carga constante de valor $' + d.carga + '$ tira en contra de un sistema controlado solo con el término ' +
+        'proporcional. En régimen permanente el sistema está quieto, así que la acción del controlador compensa ' +
+        'exactamente la carga: $K_p\\,e = ' + d.carga + '$.<br><br>¿Qué error queda con $K_p = ' + U.fmt(d.Kp, 1) + '$? ' +
+        '¿Qué $K_p$ haría falta, como mínimo, para que el error no pasara de $' + U.fmt(d.emax, 2) + '$?';
+    },
+    fields: [{ name: 'e', label: 'error permanente', w: 'tiny' }, { name: 'k', label: '$K_p$ mínimo', w: 'tiny' }],
+    sol: function (d) { return { e: d.e, k: d.kmin }; },
+    tol: 1e-6,
+    errores: [{ si: function (v, d) { return Math.abs(v.e - d.carga * d.Kp) < 1e-6; }, msg: 'El error no crece con la ganancia, baja: de $K_p\\,e = \\text{carga}$ se despeja $e = \\dfrac{\\text{carga}}{K_p}$.' }],
+    hint: function () { return ['Despeja $e$ en $K_p\\,e = \\text{carga}$.', 'Para la segunda pregunta, despeja $K_p$ poniendo como $e$ el error máximo permitido.']; },
+    steps: function (d) {
+      return ['$e = \\dfrac{' + d.carga + '}{' + U.fmt(d.Kp, 1) + '} = ' + U.fmt(d.e, 3) + '$',
+        '$K_p \\ge \\dfrac{' + d.carga + '}{' + U.fmt(d.emax, 2) + '} = ' + U.fmt(d.kmin, 2) + '$',
+        'Subir $K_p$ reduce el error permanente pero nunca lo anula, y una ganancia muy alta acaba provocando oscilaciones. Por eso se añade el término integral.'];
+    },
+    answer: function (d) { return 'e = ' + U.fmt(d.e, 3) + ', Kp ≥ ' + U.fmt(d.kmin, 2); }
+  });
+
+  p.exercise({
+    title: 'Sintonía de Ziegler-Nichols',
+    level: 'medio',
+    gen: function (r) {
+      var Ku = r.pick([2, 4, 5, 8, 10]), Tu = r.pick([1, 2, 4, 8]);
+      return { Ku: Ku, Tu: Tu, Kp: 0.6 * Ku, Ti: Tu / 2, Td: Tu / 8, Ki: 1.2 * Ku / Tu, Kd: 0.075 * Ku * Tu };
+    },
+    ask: function (d) {
+      return 'Al subir la ganancia proporcional del control de un horno, el horno empieza a oscilar de forma sostenida con ' +
+        '$K_u = ' + d.Ku + '$, y la oscilación tiene un periodo $T_u = ' + d.Tu + '$ minutos. Con la tabla de ' +
+        'Ziegler-Nichols para un PID, calcula $K_p$, $K_i$ y $K_d$.';
+    },
+    fields: [{ name: 'kp', label: '$K_p$', w: 'tiny' }, { name: 'ki', label: '$K_i$', w: 'tiny' }, { name: 'kd', label: '$K_d$', w: 'tiny' }],
+    sol: function (d) { return { kp: d.Kp, ki: d.Ki, kd: d.Kd }; },
+    tol: 1e-6,
+    errores: [
+      { si: function (v, d) { return d.Tu !== 2 && Math.abs(v.ki - d.Kp * d.Ti) < 1e-6; }, msg: 'Para pasar del tiempo integral a la ganancia se <strong>divide</strong>: $K_i = K_p / T_i$.' },
+      { si: function (v, d) { return d.Tu !== 8 && Math.abs(v.kd - d.Kp / d.Td) < 1e-6; }, msg: 'Para el derivativo se <strong>multiplica</strong>: $K_d = K_p\\,T_d$.' }
+    ],
+    hint: function () { return ['Fila del PID: $K_p = 0{,}6\\,K_u$, $T_i = T_u/2$, $T_d = T_u/8$.', 'Después: $K_i = K_p/T_i$ y $K_d = K_p\\,T_d$.']; },
+    steps: function (d) {
+      return ['$K_p = 0{,}6\\cdot ' + d.Ku + ' = ' + U.fmt(d.Kp, 2) + '$',
+        '$T_i = \\dfrac{' + d.Tu + '}{2} = ' + U.fmt(d.Ti, 2) + '$, así que $K_i = \\dfrac{' + U.fmt(d.Kp, 2) + '}{' + U.fmt(d.Ti, 2) + '} = ' + U.fmt(d.Ki, 4) + '$',
+        '$T_d = \\dfrac{' + d.Tu + '}{8} = ' + U.fmt(d.Td, 3) + '$, así que $K_d = ' + U.fmt(d.Kp, 2) + '\\cdot ' + U.fmt(d.Td, 3) + ' = ' + U.fmt(d.Kd, 4) + '$'];
+    },
+    answer: function (d) { return 'Kp = ' + U.fmt(d.Kp, 2) + ', Ki = ' + U.fmt(d.Ki, 4) + ', Kd = ' + U.fmt(d.Kd, 4); }
+  });
+
   p.keys([
+    'Con solo el término proporcional, el error permanente frente a una carga es $\\frac{\\text{carga}}{K_p}$: baja al subir $K_p$, pero no desaparece.',
+    'Los actuadores saturan. Sin antiwindup, la integral sigue acumulando mientras tanto y provoca sobrepasos enormes.',
+    'Ziegler-Nichols sintoniza sin modelo: con $K_u$ y $T_u$, un PID lleva $K_p = 0{,}6K_u$, $T_i = T_u/2$ y $T_d = T_u/8$.',
     'Todo controlador trabaja sobre la <strong>señal de error</strong> $e = r - y$: la diferencia entre lo que quieres y lo que hay.',
     'El término <strong>proporcional</strong> responde al error de ahora; su defecto es dejar un error permanente cuando hay carga.',
     'El <strong>integral</strong> acumula el error y cierra ese hueco: es la memoria del controlador. Su riesgo es el <em>windup</em>.',

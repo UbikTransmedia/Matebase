@@ -9,6 +9,15 @@ Course.topic('av-noeuclidea', function (p) {
 
   p.text('Y empieza con una frase mal escrita.');
 
+  p.note('En el bloque «Geometría del plano y del espacio» se trabajaba dentro de un marco que nadie ' +
+    'discutía: el de Euclides, con sus rectas, sus paralelas y sus distancias de siempre, y con él se ' +
+    'medían figuras, se escribían ecuaciones de rectas y planos y se calculaban ángulos. Este bloque ' +
+    'hace otra cosa: <strong>pone el marco en cuestión</strong>. Este tema pregunta qué pasa si se cambia ' +
+    'una de sus reglas; [[av-geodif]] mide cuánto se curva una superficie usando el ' +
+    '[[av-vectorial|cálculo en varias variables]]; y [[av-topologia]] se queda con lo que sobrevive cuando ' +
+    'se deja de medir. No es más geometría del mismo tipo, sino la pregunta de qué es una geometría.',
+    'ok', 'Qué tiene de distinto este bloque');
+
   p.section('El postulado incómodo');
 
   p.text('Hacia el 300 a. C., Euclides organizó toda la geometría conocida en los <em>Elementos</em>, ' +
@@ -396,6 +405,13 @@ Course.topic('av-noeuclidea', function (p) {
     'triángulos esféricos con las herramientas del cálculo.', null, 'Por dónde sigue esto');
 
   /* ================= EJERCICIOS ================= */
+  p.hist('La geometría hiperbólica sigue viva. <strong>Maryam Mirzakhani</strong>, matemática iraní, dedicó su carrera a ' +
+    'las superficies hiperbólicas: formas en las que, como en el disco de este tema, los triángulos suman menos de ' +
+    '$180^\\circ$. En su tesis encontró cómo crece el número de geodésicas cerradas simples, los «caminos más cortos» que ' +
+    'vuelven a su origen sin cruzarse, en esas superficies. En 2014 se convirtió en la primera mujer en recibir la ' +
+    'medalla Fields, el premio más prestigioso de las matemáticas, por su trabajo sobre la geometría y la dinámica de ' +
+    'estas superficies. Murió en 2017, con cuarenta años.');
+
   p.section('Practica');
 
   p.exercise({

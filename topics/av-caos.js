@@ -258,6 +258,14 @@ Course.topic('av-caos', function (p) {
     'reflejará, y las antenas fractales aprovechan la repetición a distintas escalas para funcionar ' +
     'en muchas frecuencias con muy poco espacio.');
 
+  p.hist('Casi veinte años antes de Lorenz, <strong>Mary Cartwright</strong> ya había visto el caos, aunque sin ponerle ' +
+    'ese nombre. Durante la Segunda Guerra Mundial, el gobierno británico pidió ayuda a los matemáticos con unos ' +
+    'amplificadores de radar que se comportaban de forma errática. Cartwright y John Littlewood estudiaron la ecuación ' +
+    'que los describía, y demostraron que tenía soluciones de un comportamiento extraordinariamente irregular, muy ' +
+    'sensibles a las condiciones. El físico Freeman Dyson, que asistió a una de sus conferencias, reconoció décadas ' +
+    'después que no había sabido ver la importancia de lo que contaba. En 1947 fue la primera matemática elegida ' +
+    'miembro de la Royal Society.');
+
   p.section('Practica');
 
   p.exercise({

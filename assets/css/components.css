@@ -502,3 +502,173 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
 }
 .shd__mini strong{color:var(--gfx); font-weight:700}
 .shd__mini .cod-com{font-style:italic}
+
+
+/* ================= PREGUNTAS DE ELECCIÓN =================
+   Discutir un sistema no es escribir bien «compatible indeterminado»: se
+   pulsa. Mismo tamaño de diana que un botón y acierto marcado con forma. */
+.fld--opc{gap:6px}
+.fld__et{font-size:0.7812rem; color:var(--ink-faint); font-weight:600}
+.opc__fila{display:flex; align-items:center; gap:8px}
+.opc{display:flex; flex-wrap:wrap; gap:6px}
+.opc__b{
+  font:inherit; font-size:0.9062rem; line-height:1.3; padding:6px 13px; min-height:36px;
+  border:1.5px solid var(--line); border-radius:9px; background:var(--bg-alt); color:var(--ink);
+  cursor:pointer; transition:.13s;
+}
+.opc__b:hover:not([disabled]){border-color:var(--accent); color:var(--accent-ink)}
+.opc__b.is-on{
+  background:var(--accent-soft); border-color:var(--accent); color:var(--accent-ink);
+  font-weight:650; box-shadow:inset 0 0 0 1px var(--accent);
+}
+.opc__b[disabled]{cursor:default}
+.opc__b:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.fld--opc .fld__marca{position:static}
+.fld--opc.is-ok .opc__b.is-on{border-color:var(--ok); background:var(--ok-soft); color:var(--ok); box-shadow:inset 0 0 0 1px var(--ok)}
+.fld--opc.is-bad .opc__b.is-on{border-color:var(--bad); background:var(--bad-soft); color:var(--bad); box-shadow:inset 0 0 0 1px var(--bad)}
+
+/* pistas graduadas y diagnóstico */
+.verdict ol.pistas{margin:6px 0 0; padding-left:1.35em}
+.verdict ol.pistas li{margin:.3em 0}
+.verdict__mas{opacity:.9}
+
+/* enlace a un enunciado concreto */
+.card__aviso{padding:0 16px; font-size:0.8125rem; color:var(--ink-soft); background:var(--panel-2)}
+.card__aviso:not(:empty){padding:9px 16px 11px; border-top:1px solid var(--line-soft)}
+.card__url{
+  display:block; width:100%; margin-top:5px; padding:6px 9px;
+  font-family:var(--mono); font-size:0.7812rem;
+  border:1px solid var(--line); border-radius:7px; background:var(--bg-alt); color:var(--ink);
+}
+.card.is-destacada{box-shadow:0 0 0 3px var(--glow), var(--shadow)}
+.tag--origen{text-transform:none; letter-spacing:0; font-weight:600}
+
+/* ================= PROBLEMAS POR APARTADOS ================= */
+.parte{margin-top:16px; padding-top:14px; border-top:1px dashed var(--line)}
+.parte .q{font-size:1rem; margin-bottom:9px}
+.parte__letra{display:inline-block; min-width:1.7em; font-weight:700; color:var(--accent)}
+.parte.is-hecha .parte__letra{color:var(--ok)}
+.parte__pie{display:flex; flex-wrap:wrap; gap:8px; margin-top:11px}
+.parte__cerrojo{display:none; margin-top:4px; font-size:0.8438rem; color:var(--ink-soft); font-style:italic}
+.parte.is-cerrada .q{color:var(--ink-soft)}
+.parte.is-cerrada .parte__cerrojo{display:block}
+.parte.is-cerrada .ans, .parte.is-cerrada .parte__pie, .parte.is-cerrada .ans__panel{display:none}
+.card--prob.is-examen .parte__cerrojo{display:none}
+
+/* ================= CURSO, ITINERARIO Y REQUISITOS ================= */
+.hdr__curso{display:flex; flex-wrap:wrap; gap:7px; margin-top:13px}
+.tag--curso{background:var(--panel); color:var(--ink-soft); border-color:var(--line)}
+.tag--mii{background:var(--accent-soft); color:var(--accent-ink); border-color:transparent}
+.tag--mcs{background:var(--warn-soft); color:var(--warn); border-color:transparent}
+
+.prereq{
+  margin:-6px 0 26px; padding:12px 16px 14px; border:1px solid var(--line);
+  border-radius:var(--radius); background:var(--panel);
+}
+.prereq__t{
+  display:block; font-size:0.7188rem; text-transform:uppercase; letter-spacing:.1em;
+  font-weight:700; color:var(--ink-faint); margin-bottom:3px;
+}
+.prereq p{margin:0 0 9px; font-size:0.9rem; color:var(--ink-soft)}
+.prereq__l{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:7px}
+.prereq__l li{margin:0}
+.prereq__a{
+  display:inline-flex; align-items:center; gap:7px; padding:5px 12px;
+  border:1px solid var(--line); border-radius:20px; background:var(--bg-alt);
+  font-size:0.85rem; color:var(--ink); text-decoration:none;
+}
+.prereq__a:hover{border-color:var(--accent); color:var(--accent-ink); text-decoration:none}
+.prereq__a .tpc__dot{margin-top:0}
+.prereq__a.is-seen .tpc__dot{background:var(--ink-faint)}
+.prereq__a.is-done .tpc__dot{background:var(--ok)}
+.prereq__st{font-size:0.6875rem; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.04em}
+
+/* ================= PORTADA ================= */
+.seguir{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 14px; margin:14px 0;
+  padding:14px 18px; border:1px solid var(--line); border-radius:var(--radius);
+  background:var(--panel); box-shadow:var(--shadow); color:var(--ink); text-decoration:none;
+}
+.seguir:hover{border-color:var(--accent); text-decoration:none}
+.seguir__k{font-size:0.7188rem; text-transform:uppercase; letter-spacing:.09em; color:var(--ink-faint); font-weight:650}
+.seguir__t{font-weight:650; flex:1}
+.seguir__f{color:var(--accent); font-weight:700}
+.repaso{list-style:none; padding:0; margin:10px 0 0; display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px}
+.repaso li{margin:0}
+.repaso__i{
+  display:flex; flex-direction:column; gap:2px; height:100%; padding:10px 13px;
+  border:1px solid var(--line); border-left:3px solid var(--ok); border-radius:10px;
+  background:var(--panel); color:var(--ink); text-decoration:none;
+}
+.repaso__i.is-fallado{border-left-color:var(--bad)}
+.repaso__i:hover{border-color:var(--accent); text-decoration:none}
+.repaso__t{font-weight:620; font-size:0.9rem}
+.repaso__n{font-size:0.7812rem; color:var(--ink-faint)}
+.itin-inicio{display:flex; flex-wrap:wrap; gap:9px; margin:12px 0 4px}
+a.btn:hover{text-decoration:none}
+
+/* ================= MAPA, SIMULACRO Y FORMULARIO ================= */
+.punto{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--line);
+  margin-right:7px; vertical-align:1px}
+.punto.is-seen{background:var(--ink-faint)}
+.punto.is-done{background:var(--ok)}
+.mapa__n{color:var(--ink-faint); font-size:0.8125rem; font-variant-numeric:tabular-nums}
+.mapa__req{font-size:0.8438rem}
+.mapa__tbl td:first-child{width:42%}
+
+.simul .card__head{background:var(--warn-soft)}
+.simul__kind{background:var(--warn); color:var(--on-accent)}
+.simul__intro{margin:0 0 10px; color:var(--ink-soft)}
+.simul__partes{display:flex; flex-direction:column; gap:6px; margin:8px 0}
+.simul__parte{
+  display:flex; align-items:flex-start; gap:10px; padding:8px 11px; cursor:pointer;
+  border:1px solid var(--line-soft); border-radius:9px; background:var(--bg-alt); font-size:0.9rem;
+}
+.simul__parte input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent)}
+.simul__de{display:block; font-size:0.7812rem; color:var(--ink-faint)}
+.simul__reloj-op{margin-top:4px}
+.simul__info{margin:10px 0 0; font-weight:600; color:var(--ink-soft)}
+.simul__pie{display:flex; flex-wrap:wrap; gap:9px; margin-top:12px}
+.simul__barra{
+  position:sticky; top:52px; z-index:6; display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px;
+  margin:18px 0; padding:10px 14px; border:1px solid var(--line); border-radius:12px;
+  background:var(--panel); box-shadow:var(--shadow);
+}
+.simul__reloj{font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--ink)}
+.simul__reloj.is-fin{color:var(--bad)}
+.simul__cuenta{font-size:0.8438rem; color:var(--ink-soft)}
+.simul__res:not(:empty){
+  margin:10px 0 24px; padding:16px 18px; border:1px solid var(--line);
+  border-radius:var(--radius); background:var(--panel); box-shadow:var(--shadow);
+}
+.simul__nota{display:flex; align-items:baseline; gap:6px; margin-bottom:8px}
+.simul__cifra{font-size:2.4rem; font-weight:720; letter-spacing:-.02em; color:var(--ink)}
+.simul__sobre{color:var(--ink-faint)}
+.simul__nota-pie{font-size:0.875rem; color:var(--ink-soft); margin:10px 0 0}
+.simul__repasa{font-size:0.875rem}
+
+.formu__barra{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:10px 0}
+.formu__barra .chips{margin:0}
+.formu__aviso{font-size:0.875rem; color:var(--ink-faint); min-height:1.2em}
+.formu__bloque{margin:30px 0 6px; font-size:1.3rem}
+.formu__tema{margin:14px 0 20px; padding-top:10px; border-top:1px solid var(--line-soft)}
+.formu__tema h3{font-size:1rem; margin-bottom:4px}
+.formu__tema .fbox{margin:10px 0}
+.formu__tema .keys{margin:12px 0 4px}
+
+/* ================= VISOR 3D ================= */
+.stage--3d canvas{cursor:grab}
+.stage--3d canvas:active{cursor:grabbing}
+
+/* ================= IMPRESIÓN =================
+   El formulario, y cualquier tema, se imprimen sin índice, sin barras y
+   sin botones: solo lo que se lee. */
+@media print{
+  .side, .topbar, .glos, .pager, .scrim, .saltar, .card__foot, .parte__pie,
+  .formu__barra, .fbox__help, .fbox__tip, .ans__como, .stage__teclas, .prereq{display:none !important}
+  html, body, .app, .main{height:auto !important; overflow:visible !important; display:block !important}
+  .wrap{max-width:none; padding:0}
+  body{background:#fff}
+  .card, .fbox, .keys{box-shadow:none}
+  .fbox, .keys, .formu__tema h3{break-inside:avoid}
+}

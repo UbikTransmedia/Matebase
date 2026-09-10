@@ -165,6 +165,59 @@ Course.topic('gfx-color', function (p) {
     '[[gfx-raymarching|raymarching]]. La raíz es una gamma de 2 en vez de 2,2: no es exacta, pero ' +
     'cuesta un ciclo y acierta casi.');
 
+  p.section('HSV: el tono es un ángulo');
+
+  p.text('Una pantalla mezcla rojo, verde y azul porque así funcionan sus luces. Pero nadie piensa así un ' +
+    'color. Se piensa en qué color es —rojo, naranja, azul—, en lo vivo o apagado que está y en lo claro u ' +
+    'oscuro. Esas tres ideas son el modelo <strong>HSV</strong>: tono (<em>hue</em>), saturación y valor o brillo.');
+
+  p.text('Lo interesante matemáticamente es el tono: <strong>es un ángulo</strong>. Los colores puros forman ' +
+    'una rueda en la que, después del magenta, se vuelve al rojo. Por eso el tono se mide en grados, o en ' +
+    'fracciones de vuelta de 0 a 1, y por eso se puede calcular con un [[gfx-coordenadas|atan]]: una rueda ' +
+    'de colores es, literalmente, las coordenadas polares pintadas.');
+
+  p.formula('\\text{rgb} = V\\cdot\\operatorname{mix}\\left(\\vec 1,\\ \\operatorname{clamp}\\left(\\left|\\operatorname{mod}(6H + (0, 4, 2),\\ 6) - 3\\right| - 1,\\ 0,\\ 1\\right),\\ S\\right)',
+    'de HSV a RGB en una línea, con H entre 0 y 1',
+    'Cada canal es la misma onda en forma de trapecio, desplazada un tercio de vuelta: los sumandos 0, 4 y 2 ' +
+    '(sextos de vuelta) hacen que el rojo tenga su máximo en $H = 0$, el verde en $H = \\frac{1}{3}$ y el azul en ' +
+    '$H = \\frac{2}{3}$.<br><br>$S$ mezcla ese color puro con el blanco: con $S = 0$ sale gris. $V$ lo oscurece ' +
+    'multiplicando: con $V = 0$ sale negro.<br><br>En GLSL: <code>vec3 k = clamp(abs(mod(h * 6.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0); return v * mix(vec3(1.0), k, s);</code>');
+
+  p.demo({
+    title: 'La rueda de colores',
+    intro: 'El ángulo de cada punto es su tono y la distancia al centro, su saturación: en el centro, blanco; en el borde, el color puro. Baja el brillo para ver cómo todo tiende al negro, y hazla girar: girar la rueda es sumar una constante al tono.',
+    build: function (host) {
+      W.shader(host, {
+        id: 'gfx-color-hsv', alto: 300,
+        aria: 'Una rueda de colores: el tono cambia con el ángulo y la saturación con la distancia al centro.',
+        mandos: [
+          { n: 'brillo', label: 'brillo V', min: 0.0, max: 1.0, step: 0.01, value: 1.0, dec: 2 },
+          { n: 'giro', label: 'velocidad de giro', min: 0.0, max: 2.0, step: 0.05, value: 0.3, dec: 2 }
+        ],
+        codigo:
+          'vec3 hsv2rgb(vec3 c)\n' +
+          '{\n' +
+          '    vec3 k = clamp(abs(mod(c.x * 6.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);\n' +
+          '    return c.z * mix(vec3(1.0), k, c.y);\n' +
+          '}\n' +
+          '\n' +
+          'void mainImage(out vec4 color, in vec2 fragCoord)\n' +
+          '{\n' +
+          '    vec2 p = (fragCoord - 0.5 * iResolution.xy) / iResolution.y;\n' +
+          '    float r = length(p) / 0.45;\n' +
+          '\n' +
+          '    // el tono es el angulo, pasado a fraccion de vuelta\n' +
+          '    float h = fract(atan(p.y, p.x) / TAU + 0.1 * giro * iTime);\n' +
+          '    vec3 c = hsv2rgb(vec3(h, clamp(r, 0.0, 1.0), brillo));\n' +
+          '\n' +
+          '    float dentro = 1.0 - smoothstep(1.0, 1.01, r);\n' +
+          '    color = vec4(mix(vec3(0.1), c, dentro), 1.0);\n' +
+          '}\n',
+        nota: 'Mezclar dos colores en HSV y en RGB no da lo mismo: a medio camino entre rojo y verde, RGB da un marrón apagado y HSV da amarillo, porque recorre la rueda.'
+      });
+    }
+  });
+
   p.section('El color como señal');
 
   p.text('Merece la pena quedarse con el cambio de mentalidad. Un color no es un nombre ni una ' +
@@ -339,7 +392,41 @@ Course.topic('gfx-color', function (p) {
     answer: function (d) { return d.ref; }
   });
 
+  p.exercise({
+    title: 'Del tono al color',
+    level: 'medio',
+    gen: function (r) {
+      var H = r.pick([0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330]), S = r.pick([1, 0.5]), V = r.pick([1, 0.8]);
+      function onda(h) {
+        return [0, 4, 2].map(function (k) { var x = ((h * 6 + k) % 6 + 6) % 6; return Math.max(0, Math.min(1, Math.abs(x - 3) - 1)); });
+      }
+      function mezcla(base) { return base.map(function (b) { return V * (1 + (b - 1) * S); }); }
+      var base = onda(H / 360), rgb = mezcla(base), mal = mezcla(onda(H));
+      return { H: H, S: S, V: V, base: base, rgb: rgb, mal: mal };
+    },
+    ask: function (d) {
+      return 'Con la función <code>hsv2rgb</code> del tema, ¿qué color RGB sale para un tono de $' + d.H + '^\\circ$, saturación $' + U.fmt(d.S, 1) + '$ y brillo $' + U.fmt(d.V, 1) +
+        '$? (Cada canal entre 0 y 1, tres decimales.)';
+    },
+    fields: [{ name: 'r', label: 'R', w: 'tiny' }, { name: 'g', label: 'G', w: 'tiny' }, { name: 'b', label: 'B', w: 'tiny' }],
+    sol: function (d) { return { r: U.round(d.rgb[0], 6), g: U.round(d.rgb[1], 6), b: U.round(d.rgb[2], 6) }; },
+    tol: 1e-3,
+    errores: [{ si: function (v, d) {
+      var distinto = d.mal.some(function (x, i) { return Math.abs(x - d.rgb[i]) > 2e-3; });
+      return distinto && Math.abs(v.r - d.mal[0]) < 5e-4 && Math.abs(v.g - d.mal[1]) < 5e-4 && Math.abs(v.b - d.mal[2]) < 5e-4;
+    }, msg: 'En la fórmula el tono va de 0 a 1: hay que dividir los grados entre 360 antes de multiplicar por 6.' }],
+    hint: function () { return ['Pasa el tono a fracción de vuelta: $H = \\frac{\\text{grados}}{360}$.', 'Calcula $|\\operatorname{mod}(6H + k, 6) - 3| - 1$ para $k = 0, 4, 2$, recórtalo a $[0, 1]$, mézclalo con 1 según $S$ y multiplica por $V$.']; },
+    steps: function (d) {
+      var h6 = d.H / 60;
+      return ['$H = \\frac{' + d.H + '}{360}$, así que $6H = ' + U.fmt(h6, 1) + '$.',
+        'Onda de cada canal (sumando 0, 4 y 2, módulo 6, menos 3, en valor absoluto, menos 1 y recortado): $(' + d.base.map(function (x) { return U.fmt(x, 3); }).join(',\\ ') + ')$',
+        'Con $S = ' + U.fmt(d.S, 1) + '$ y $V = ' + U.fmt(d.V, 1) + '$: $(' + d.rgb.map(function (x) { return U.fmt(x, 3); }).join(',\\ ') + ')$'];
+    },
+    answer: function (d) { return '(' + d.rgb.map(function (x) { return U.fmt(x, 3); }).join(', ') + ')'; }
+  });
+
   p.keys([
+    'En HSV el tono es un ángulo: una rueda de colores son las coordenadas polares pintadas, y girarla es sumar al tono.',
     'Una <strong>paleta de cosenos</strong> convierte un número en color con doce parámetros: centro, amplitud, frecuencia y fase por canal.',
     'La <strong>fase</strong> es lo que crea el tono. Sin desfase entre canales solo hay grises.',
     'El valor que guarda una imagen <strong>no es la cantidad de luz</strong>: hay una potencia de 2,2 en medio.',

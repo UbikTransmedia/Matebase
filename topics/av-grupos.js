@@ -201,6 +201,14 @@ Course.topic('av-grupos', function (p) {
     '—estudiar las simetrías de las soluciones en lugar de las soluciones— es hoy la herramienta con ' +
     'la que se construyen los códigos correctores de un disco duro y buena parte de la criptografía.');
 
+  p.hist('<strong>Emmy Noether</strong> demostró en 1918 el teorema que une la simetría con la física: a cada simetría ' +
+    'de un sistema le corresponde una magnitud que se conserva. Que las leyes no cambien con el tiempo implica que la ' +
+    'energía se conserva; que no cambien al desplazarse, que se conserva el momento. Además, fue una de las fundadoras ' +
+    'del álgebra abstracta, la manera de estudiar los grupos y otras estructuras por sus propiedades y no por sus ' +
+    'elementos. En Gotinga dio clases durante años sin sueldo y anunciadas con el nombre de David Hilbert, porque la ' +
+    'universidad no aceptaba profesoras. Cuando murió, en 1935, Einstein escribió que había sido el genio matemático ' +
+    'creativo más importante desde que las mujeres tenían acceso a la enseñanza superior.');
+
   p.section('Practica');
 
   p.exercise({

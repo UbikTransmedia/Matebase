@@ -195,7 +195,7 @@ Course.topic('gfx-voronoi', function (p) {
     ['Chebyshev', '<code>max(abs(v.x), abs(v.y))</code>', 'celdas rectangulares, aspecto de baldosa']
   ]);
 
-  p.text('Esas tres son [[av-espacios|normas]] distintas sobre el mismo plano, las del bloque 9, y ' +
+  p.text('Esas tres son [[av-espacios|normas]] distintas sobre el mismo plano, las del álgebra lineal, y ' +
     'aquí se ve para qué sirve que existan varias: no son un capricho de matemático, son tres ' +
     'texturas visualmente distintas que salen de cambiar dos caracteres.');
 
@@ -374,9 +374,38 @@ Course.topic('gfx-voronoi', function (p) {
     },
     steps: function (d) {
       return ['Se pedía ' + d.pide + '.', 'La respuesta es <code>' + d.ref + '</code>.',
-        'Tres normas del bloque 9, tres texturas distintas, la misma siembra por debajo.'];
+        'Tres normas distintas, tres texturas distintas, la misma siembra por debajo.'];
     },
     answer: function (d) { return d.ref; }
+  });
+
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { c: 'float v = primera;   // distancia al punto sembrado mas cercano',
+          o: ['Puntos oscuros en las semillas que se aclaran hacia fuera, formando celdas', 'Celdas de colores lisos', 'Solo las líneas de los bordes entre celdas', 'Rayas'],
+          por: 'La distancia vale 0 en cada semilla y crece al alejarse, hasta el borde con la celda vecina, donde vuelve a empezar a contar desde otra semilla.' },
+        { c: 'float v = segunda - primera;',
+          o: ['Líneas oscuras en los bordes entre celdas y claro en su interior', 'Puntos oscuros en las semillas', 'Celdas de colores lisos', 'Un degradado uniforme'],
+          por: 'En el borde entre dos celdas las dos semillas más cercanas están a la misma distancia, así que la diferencia vale 0: ahí sale oscuro.' },
+        { c: 'vec3 col = 0.5 + 0.5 * cos(TAU * (hash(celdaMasCercana) + vec3(0.0, 0.33, 0.67)));',
+          o: ['Celdas poligonales de colores lisos, como un mosaico de cristales', 'Manchas redondas difuminadas', 'Solo los bordes de las celdas', 'Rayas de colores'],
+          por: 'Todos los píxeles de una celda comparten la misma semilla más cercana, y por tanto el mismo color.' },
+        { c: 'float v = step(0.05, primera);',
+          o: ['Fondo blanco con un punto negro en cada semilla', 'Fondo negro con un punto blanco en cada semilla', 'Líneas negras en los bordes', 'Celdas grises'],
+          por: 'Solo cerca de una semilla la distancia es menor que 0,05; ahí el <code>step</code> da 0, negro, y en el resto, 1.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'En el Voronoi del tema, <code>primera</code> y <code>segunda</code> son las distancias a las dos semillas más cercanas. Con el color final <code>vec3(v)</code> o <code>col</code>, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['¿Qué vale la distancia en una semilla? ¿Y en el borde entre dos celdas?']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
   });
 
   p.keys([

@@ -42,6 +42,10 @@
     'uniform float iTime;',
     'uniform vec4  iMouse;',
     'uniform float iFrame;',
+    // El fotograma anterior, en los visores con memoria (buffer: true). En
+    // los demas no se usa, y declararlo siempre deja pegar cualquier shader
+    // de Shadertoy que lo nombre sin tocar nada.
+    'uniform sampler2D iChannel0;',
     '#define PI 3.14159265359',
     '#define TAU 6.28318530718'
   ];
@@ -181,7 +185,7 @@
            'normalize faceforward reflect refract matrixCompMult lessThan ' +
            'lessThanEqual greaterThan greaterThanEqual equal notEqual any ' +
            'all not texture2D textureCube dFdx dFdy fwidth',
-      uni: 'iResolution iTime iMouse iFrame PI TAU gl_FragCoord gl_FragColor ' +
+      uni: 'iResolution iTime iMouse iFrame iChannel0 PI TAU gl_FragCoord gl_FragColor ' +
            'gl_Position gl_PointSize gl_PointCoord gl_FrontFacing'
     };
     Object.keys(grupos).forEach(function (clase) {
@@ -272,6 +276,17 @@
     this.t0 = 0; this.acumulado = 0; this.frame = 0;
     this.corriendo = false; this.gl = null; this.prog = null;
     this.raton = [0, 0, 0, 0];
+    /* Con memoria: el shader lee en iChannel0 lo que pintó en el fotograma
+       anterior. Es lo que convierte una formula en una simulacion -un
+       automata celular, una reaccion quimica-, y es literalmente un bucle
+       de realimentacion. `escala` reduce la resolucion del estado para que
+       la simulacion vaya ligera; `pasos` da varios pasos por fotograma, y
+       `vista` es una funcion GLSL vec3 vista(vec4 estado) que decide como
+       se pinta el estado en pantalla. */
+    this.buffer = !!o.buffer;
+    this.escala = o.escala || 0.5;
+    this.pasos = Math.max(1, o.pasos || 1);
+    this.tex = [null, null]; this.fb = [null, null];
     this.build(host);
   }
 
@@ -475,6 +490,8 @@
     gl.bindBuffer(gl.ARRAY_BUFFER, this.buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
 
+    if (this.buffer) this.preparaBuffer();
+
     var self = this;
     this._resize = function () { self.mide(); };
     if (global.ResizeObserver) {
@@ -499,7 +516,133 @@
     this.canvas.height = this.H;
     this.canvas.style.height = this.alto + 'px';
     this.gl.viewport(0, 0, this.W, this.H);
+    if (this.buffer && this.progVista) this.texturas();
     if (!this.corriendo) this.pinta();
+  };
+
+  /* ---------------- el visor con memoria ---------------- */
+
+  Visor.prototype.usa = function (pr) {
+    var gl = this.gl;
+    gl.useProgram(pr);
+    var loc = gl.getAttribLocation(pr, 'vPos');
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.buf);
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  };
+
+  /** ¿Se puede pintar en una textura de este tipo de numero? */
+  Visor.prototype.pruebaTipo = function (tipo) {
+    var gl = this.gl;
+    var t = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, t);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 4, 4, 0, gl.RGBA, tipo, null);
+    var f = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, f);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0);
+    var ok = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.deleteFramebuffer(f);
+    gl.deleteTexture(t);
+    return ok;
+  };
+
+  Visor.prototype.preparaBuffer = function () {
+    var gl = this.gl;
+    /* Coma flotante si se puede: con 256 niveles por canal una simulacion
+       quimica se estanca en cuanto los cambios son mas finos que un nivel.
+       Si no hay, se trabaja con bytes y el shader lo nota, pero funciona. */
+    this.tipoTex = gl.UNSIGNED_BYTE;
+    this.filtro = gl.LINEAR;
+    if (gl.getExtension('OES_texture_float') && this.pruebaTipo(gl.FLOAT)) {
+      this.tipoTex = gl.FLOAT;
+      if (!gl.getExtension('OES_texture_float_linear')) this.filtro = gl.NEAREST;
+    } else {
+      var half = gl.getExtension('OES_texture_half_float');
+      if (half && this.pruebaTipo(half.HALF_FLOAT_OES)) {
+        this.tipoTex = half.HALF_FLOAT_OES;
+        if (!gl.getExtension('OES_texture_half_float_linear')) this.filtro = gl.NEAREST;
+      }
+    }
+    var fuente = 'precision highp float;\nuniform sampler2D uTex;\nuniform vec2 uRes;\n' +
+      (this.o.vista || 'vec3 vista(vec4 s) { return s.rgb; }') +
+      '\nvoid main(){ gl_FragColor = vec4(vista(texture2D(uTex, gl_FragCoord.xy / uRes)), 1.0); }';
+    var sh = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(sh, fuente);
+    gl.compileShader(sh);
+    var pr = gl.createProgram();
+    gl.attachShader(pr, this.vs);
+    gl.attachShader(pr, sh);
+    gl.linkProgram(pr);
+    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) {
+      this.muestraErrores([{ linea: 0, msg: 'la vista no compila: ' + (gl.getShaderInfoLog(sh) || '') }]);
+      return;
+    }
+    this.progVista = pr;
+    this.uVista = { tex: gl.getUniformLocation(pr, 'uTex'), res: gl.getUniformLocation(pr, 'uRes') };
+  };
+
+  /** Las dos texturas entre las que rebota el estado. */
+  Visor.prototype.texturas = function () {
+    var gl = this.gl;
+    var tw = Math.max(8, Math.round(this.W * this.escala));
+    var th = Math.max(8, Math.round(this.H * this.escala));
+    if (this.tex[0] && this.tw === tw && this.th === th) return;
+    this.tw = tw; this.th = th;
+    for (var i = 0; i < 2; i++) {
+      if (this.tex[i]) gl.deleteTexture(this.tex[i]);
+      if (this.fb[i]) gl.deleteFramebuffer(this.fb[i]);
+      var t = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, this.filtro);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, this.filtro);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, tw, th, 0, gl.RGBA, this.tipoTex, null);
+      var f = gl.createFramebuffer();
+      gl.bindFramebuffer(gl.FRAMEBUFFER, f);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0);
+      this.tex[i] = t; this.fb[i] = f;
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    this.frame = 0;        // textura nueva, estado nuevo: el shader vuelve a sembrar
+  };
+
+  Visor.prototype.uniformes = function (w, h, esc) {
+    var gl = this.gl, self = this;
+    if (this.u.res) gl.uniform3f(this.u.res, w, h, 1);
+    if (this.u.t) gl.uniform1f(this.u.t, this.tiempo());
+    if (this.u.f) gl.uniform1f(this.u.f, this.frame);
+    if (this.u.m) gl.uniform4f(this.u.m, this.raton[0] * esc, this.raton[1] * esc, this.raton[2] * esc, this.raton[3] * esc);
+    if (this.u.ch) gl.uniform1i(this.u.ch, 0);
+    this.mandos.forEach(function (m) {
+      if (self.um[m.n]) gl.uniform1f(self.um[m.n], self.valores[m.n]);
+    });
+  };
+
+  Visor.prototype.pintaBuffer = function () {
+    var gl = this.gl;
+    if (!this.tex[0]) this.texturas();
+    this.usa(this.prog);
+    for (var k = 0; k < this.pasos; k++) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb[1]);
+      gl.viewport(0, 0, this.tw, this.th);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, this.tex[0]);
+      this.uniformes(this.tw, this.th, this.escala);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      var t = this.tex[0]; this.tex[0] = this.tex[1]; this.tex[1] = t;
+      var f = this.fb[0]; this.fb[0] = this.fb[1]; this.fb[1] = f;
+      this.frame++;
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, this.W, this.H);
+    this.usa(this.progVista);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, this.tex[0]);
+    gl.uniform1i(this.uVista.tex, 0);
+    gl.uniform2f(this.uVista.res, this.W, this.H);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
   };
 
   Visor.prototype.recompila = function () {
@@ -530,7 +673,8 @@
       res: gl.getUniformLocation(pr, 'iResolution'),
       t: gl.getUniformLocation(pr, 'iTime'),
       m: gl.getUniformLocation(pr, 'iMouse'),
-      f: gl.getUniformLocation(pr, 'iFrame')
+      f: gl.getUniformLocation(pr, 'iFrame'),
+      ch: gl.getUniformLocation(pr, 'iChannel0')
     };
     var self = this;
     this.um = {};
@@ -561,6 +705,7 @@
   Visor.prototype.pinta = function () {
     var gl = this.gl;
     if (!gl || !this.prog) return;
+    if (this.buffer && this.progVista) { this.pintaBuffer(); return; }
     var self = this;
     gl.useProgram(this.prog);
     if (this.u.res) gl.uniform3f(this.u.res, this.W, this.H, 1);

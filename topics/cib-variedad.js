@@ -39,7 +39,7 @@ Course.topic('cib-variedad', function (p) {
     'base dos de uve»</em>.<br><br>Con un ejemplo: un dado tiene variedad 6, y en bits ' +
     '$\\log_2 6 \\approx 2{,}58$. Eso significa que con tres preguntas de sí o no bien elegidas se ' +
     'puede averiguar siempre el resultado, y con dos no siempre.<br><br>Y aquí conviene detenerse: ' +
-    'esa fórmula ya la has visto. Es la <strong>entropía</strong> del bloque 11 cuando todos los ' +
+    'esa fórmula ya la has visto. Es la [[av-informacion|<strong>entropía</strong>]] de la teoría de la información cuando todos los ' +
     'casos son igual de probables. Variedad y entropía son la misma medida con dos nombres, uno de ' +
     'Ashby y otro de Shannon.');
 

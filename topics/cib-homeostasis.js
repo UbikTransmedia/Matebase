@@ -303,7 +303,64 @@ Course.topic('cib-homeostasis', function (p) {
     }
   });
 
+  p.exercise({
+    title: 'Al menos un acierto',
+    level: 'medio',
+    gen: function (r) {
+      var total = r.pick([5, 8, 10, 20]), buenas = r.int(1, 2), n = r.pick([3, 5, 10]);
+      var pp = buenas / total;
+      return { total: total, buenas: buenas, n: n, p: pp, v: 1 - Math.pow(1 - pp, n), fallar: Math.pow(1 - pp, n) };
+    },
+    ask: function (d) {
+      return 'Un homeostato sortea al azar entre <strong>' + d.total + ' configuraciones</strong>, de las que <strong>' + d.buenas +
+        '</strong> ' + (d.buenas === 1 ? 'es estable' : 'son estables') + '. ¿Qué probabilidad hay de que encuentre alguna estable en los primeros ' +
+        '<strong>' + d.n + ' sorteos</strong>? (Cuatro decimales.)';
+    },
+    fields: [{ name: 'v', label: 'probabilidad', w: 'wide' }],
+    sol: function (d) { return { v: U.round(d.v, 6) }; },
+    tol: 1e-4,
+    errores: [
+      { si: function (v, d) { return Math.abs(d.n * d.p - d.v) > 2e-4 && Math.abs(v.v - Math.min(1, d.n * d.p)) < 5e-5; }, msg: 'Sumar $n$ veces la probabilidad cuenta varias veces los casos en que se acierta en más de un sorteo, y con muchos sorteos daría más de 1. Calcula la probabilidad de fallar todos y réstala de 1.' },
+      { si: function (v, d) { return Math.abs(d.fallar - d.v) > 2e-4 && Math.abs(v.v - d.fallar) < 5e-5; }, msg: 'Esa es la probabilidad de <strong>fallar</strong> todos los sorteos. La que se pide es la contraria.' }
+    ],
+    hint: function () { return ['Es más fácil calcular lo contrario: no acertar en ningún sorteo.', 'Fallar un sorteo: $1 - p$. Fallar $n$ sorteos independientes seguidos: $(1 - p)^n$.']; },
+    steps: function (d) {
+      return ['Probabilidad de acertar en un sorteo: $p = \\dfrac{' + d.buenas + '}{' + d.total + '} = ' + U.fmt(d.p, 3) + '$.',
+        'Fallar los ' + d.n + ' sorteos: $(1 - ' + U.fmt(d.p, 3) + ')^{' + d.n + '} \\approx ' + U.fmt(d.fallar, 4) + '$.',
+        'Acertar al menos una vez: $1 - ' + U.fmt(d.fallar, 4) + ' \\approx ' + U.fmt(d.v, 4) + '$. Es la regla del [[pe-probabilidad|suceso contrario]].'];
+    },
+    answer: function (d) { return U.fmt(d.v, 4); }
+  });
+
+  p.exercise({
+    title: '¿Corregir o reorganizarse?',
+    level: 'basico',
+    gen: function (r) {
+      return r.pick([
+        { t: 'En un día de calor, el cuerpo empieza a sudar para bajar la temperatura.', q: 'uno' },
+        { t: 'Un animal cuya presa habitual ha desaparecido de la zona aprende a alimentarse de otra cosa.', q: 'dos' },
+        { t: 'Un termostato enciende la calefacción porque la temperatura ha bajado de la consigna.', q: 'uno' },
+        { t: 'Una empresa cuyo sector se hunde cambia por completo de producto y de clientes.', q: 'dos' },
+        { t: 'La pupila se contrae al salir a la calle en un día soleado.', q: 'uno' },
+        { t: 'Tras una lesión, una persona aprende a caminar de otra manera, con muletas.', q: 'dos' },
+        { t: 'El homeostato de Ashby vuelve a sortear sus conexiones porque una aguja se ha salido de sus límites.', q: 'dos' },
+        { t: 'El control de crucero acelera al empezar una cuesta para mantener la velocidad.', q: 'uno' }
+      ]);
+    },
+    ask: function (d) { return '<em>«' + d.t + '»</em><br>¿Es una corrección dentro de las reglas de siempre o una reorganización de las propias reglas?'; },
+    fields: [{ name: 'q', label: 'Es', opts: [{ t: 'una corrección de primer nivel: la misma regla, aplicada', v: 'uno' }, { t: 'una reorganización de segundo nivel: se cambia la regla', v: 'dos' }] }],
+    sol: function (d) { return { q: d.q }; },
+    hint: function () { return ['¿El sistema hace lo que siempre hace ante esa desviación, o cambia su forma de responder?', 'La reorganización llega cuando las correcciones habituales ya no bastan para mantener las variables esenciales.']; },
+    steps: function (d) {
+      return [d.q === 'uno'
+        ? 'Es la respuesta de siempre ante una desviación de siempre: un bucle de realimentación que ya existía. <strong>Primer nivel.</strong>'
+        : 'Las respuestas habituales ya no mantienen las variables esenciales, y el sistema cambia su propia forma de responder. <strong>Segundo nivel</strong>: ultraestabilidad.'];
+    },
+    answer: function (d) { return d.q === 'uno' ? 'Corrección de primer nivel' : 'Reorganización de segundo nivel'; }
+  });
+
   p.keys([
+    'La probabilidad de acertar al menos una vez en $n$ sorteos es $1 - (1 - p)^n$: se calcula por el suceso contrario.',
     'Las <strong>variables esenciales</strong> son las que deben permanecer dentro de unos límites; las demás son medios para conseguirlo.',
     '<strong>Homeostasis</strong> es mantenerlas dentro de ese rango pese a las perturbaciones.',
     'Un sistema es <strong>ultraestable</strong> si además sabe reconfigurarse cuando las reglas del mundo cambian.',

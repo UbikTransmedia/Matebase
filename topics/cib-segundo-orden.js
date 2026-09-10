@@ -1,8 +1,8 @@
 /* Tema: Cibernética de segundo orden */
 Course.topic('cib-segundo-orden', function (p) {
 
-  p.text('Este tema cierra el bloque y el curso, y conviene empezar avisando de qué clase de tema es. ' +
-    'Los ocho anteriores tenían números que calcular. Este tiene <strong>un teorema demostrable y una ' +
+  p.text('Este tema cierra el bloque de cibernética, y conviene empezar avisando de qué clase de tema es. ' +
+    'Los anteriores tenían números que calcular. Este tiene <strong>un teorema demostrable y una ' +
     'consecuencia incómoda</strong>, y la consecuencia se sale del terreno donde las matemáticas ' +
     'zanjan discusiones. Lo trataremos así: primero lo que está demostrado, después lo que se ' +
     'discute, señalando claramente dónde acaba lo uno y empieza lo otro.');
@@ -66,8 +66,8 @@ Course.topic('cib-segundo-orden', function (p) {
     'observador: <strong>quien estudia el sistema está dentro del sistema que estudia</strong>.');
 
   p.text('Heinz von Foerster, que había sido secretario de las conferencias Macy donde se fundó la ' +
-    'disciplina, propuso llamar <strong>cibernética de primer orden</strong> a la de los ocho temas ' +
-    'anteriores —la de los sistemas observados— y <strong>de segundo orden</strong> a la que incluye ' +
+    'disciplina, propuso llamar <strong>cibernética de primer orden</strong> a la de los temas ' +
+    'anteriores del bloque —la de los sistemas observados— y <strong>de segundo orden</strong> a la que incluye ' +
     'al observador en el cuadro. Su formulación es una de esas frases que se recuerdan: la primera es ' +
     'la cibernética de los sistemas observados; la segunda, la de los sistemas observadores.');
 
@@ -165,7 +165,7 @@ Course.topic('cib-segundo-orden', function (p) {
     '<strong>teoría de la conversación</strong>: aprender no es que un emisor transmita información a ' +
     'un receptor, sino que dos sistemas ajusten sus modelos el uno del otro hasta ponerse de acuerdo ' +
     'en el significado de algo. En su lenguaje, entenderse es alcanzar un acuerdo estable — un punto ' +
-    'de equilibrio, en el sentido del bloque 8.');
+    'de equilibrio, en el sentido de los [[av-sistemas-dinamicos|sistemas dinámicos]].');
 
   p.hist('La cibernética vivió una historia curiosa: fue enormemente influyente y a la vez se ' +
     'disolvió. Sus ideas se repartieron por disciplinas que hoy no la citan: la teoría de control se ' +
@@ -179,7 +179,7 @@ Course.topic('cib-segundo-orden', function (p) {
   p.text('Y sin embargo, si has llegado hasta aquí desde el primer tema del curso, habrás notado que ' +
     'las piezas encajaban solas. El bucle de corrección, la entropía, los autovalores, la derivada ' +
     'como anticipación y la integral como memoria, el equilibrio de un sistema dinámico, la ' +
-    'probabilidad de acertar barajando al azar: todo eso estaba disperso en once bloques y aquí se ' +
+    'probabilidad de acertar barajando al azar: todo eso estaba disperso por todo el curso y aquí se ' +
     'ha usado junto para responder a una sola pregunta. Esa capacidad de juntar cosas que parecían ' +
     'de asignaturas distintas es, seguramente, lo mejor que dejó la cibernética, y es también lo que ' +
     'este curso ha intentado enseñar desde el primer día: que las matemáticas son un idioma con el ' +
@@ -297,7 +297,62 @@ Course.topic('cib-segundo-orden', function (p) {
     answer: function (d) { return d.goodhart ? 'sí' : 'no'; }
   });
 
+  p.exercise({
+    title: 'Cuántos modelos puede tener un regulador',
+    level: 'medio',
+    gen: function (r) {
+      var D = r.int(2, 5), R = r.int(2, 4);
+      return { D: D, R: R, n: Math.pow(R, D) };
+    },
+    ask: function (d) {
+      return 'Un regulador se enfrenta a <strong>' + d.D + ' perturbaciones</strong> distintas y dispone de <strong>' + d.R + ' jugadas</strong>. ' +
+        'Una estrategia determinista es una regla que asigna una jugada a cada perturbación: una función $R = f(D)$.<br><br>' +
+        '¿Cuántas estrategias distintas hay? Si solo una de ellas consigue siempre el resultado deseado, ¿qué probabilidad tiene una ' +
+        'estrategia elegida al azar de ser la buena? (Fracción o decimal.)';
+    },
+    fields: [{ name: 'n', label: 'estrategias', w: 'tiny' }, { name: 'p', label: 'probabilidad', w: 'wide' }],
+    sol: function (d) { return { n: d.n, p: 1 / d.n }; },
+    tol: 1e-6,
+    errores: [
+      { si: function (v, d) { return Math.pow(d.D, d.R) !== d.n && v.n === Math.pow(d.D, d.R); }, msg: 'Al revés: para <strong>cada perturbación</strong> se elige una de las jugadas, así que se multiplican tantos factores iguales al número de jugadas como perturbaciones hay.' },
+      { si: function (v, d) { return d.D * d.R !== d.n && v.n === d.D * d.R; }, msg: 'Eso cuenta parejas perturbación-jugada. Una estrategia elige a la vez una jugada para cada perturbación, y esas elecciones se combinan: se multiplican.' }
+    ],
+    hint: function () { return ['Para la primera perturbación hay tantas opciones como jugadas; para la segunda, otras tantas, y así con todas.', 'Por el principio multiplicativo de la [[pe-combinatoria|combinatoria]].']; },
+    steps: function (d) {
+      return ['Cada una de las ' + d.D + ' perturbaciones puede recibir cualquiera de las ' + d.R + ' jugadas: $' + d.R + '^{' + d.D + '} = ' + d.n + '$ estrategias.',
+        'Elegir la buena al azar: $\\dfrac{1}{' + d.n + '} \\approx ' + U.fmt(1 / d.n, 4) + '$.',
+        'El número crece exponencialmente con las perturbaciones. Por eso un buen regulador no puede dar con su modelo sorteando: tiene que construirlo distinguiendo las situaciones, que es lo que exige el teorema.'];
+    },
+    answer: function (d) { return d.n + ' estrategias, probabilidad 1/' + d.n; }
+  });
+
+  p.exercise({
+    title: '¿Primer o segundo orden?',
+    level: 'basico',
+    gen: function (r) {
+      return r.pick([
+        { t: 'Una ingeniera ajusta el termostato de un edificio tratando el edificio como algo externo que se mide y se controla.', q: 'uno' },
+        { t: 'Un profesor se da cuenta de que el examen que diseña cambia la forma en que sus alumnos estudian, y rediseña el examen teniéndolo en cuenta.', q: 'dos' },
+        { t: 'Un ornitólogo cuenta aves desde un escondite sin que ellas lo detecten.', q: 'uno' },
+        { t: 'Una empresa de sondeos estudia cómo la publicación de sus propias encuestas modifica la intención de voto.', q: 'dos' },
+        { t: 'Una terapeuta familiar analiza cómo su propia presencia en las sesiones cambia la manera de hablar de la familia.', q: 'dos' },
+        { t: 'Un técnico mide con un calibre el grosor de una pieza metálica.', q: 'uno' }
+      ]);
+    },
+    ask: function (d) { return '<em>«' + d.t + '»</em><br>¿Es una mirada de cibernética de primer orden o de segundo orden?'; },
+    fields: [{ name: 'q', label: 'Es de', opts: [{ t: 'primer orden: el observador queda fuera del sistema', v: 'uno' }, { t: 'segundo orden: el observador forma parte del sistema', v: 'dos' }] }],
+    sol: function (d) { return { q: d.q }; },
+    hint: function () { return '¿Se tiene en cuenta que quien observa o regula está influyendo en lo observado?'; },
+    steps: function (d) {
+      return [d.q === 'uno'
+        ? 'El observador mide y actúa desde fuera, y su presencia no cambia lo medido, o se considera despreciable. <strong>Primer orden.</strong>'
+        : 'Quien observa se incluye en el cuadro: reconoce que su medida o su presencia forman parte del sistema que estudia. <strong>Segundo orden.</strong>'];
+    },
+    answer: function (d) { return d.q === 'uno' ? 'Primer orden' : 'Segundo orden'; }
+  });
+
   p.keys([
+    'Con $D$ perturbaciones y $R$ jugadas hay $R^D$ estrategias deterministas: dar con la buena a ciegas es inviable, hay que modelar.',
     '<strong>Teorema del buen regulador</strong> (Conant y Ashby, 1970): todo regulador óptimo de un sistema contiene un modelo de ese sistema.',
     'Modelo significa aquí <em>hacer las mismas distinciones</em>, no entender ni representar conscientemente.',
     'Cuando un regulador falla siempre en las mismas circunstancias, lo que le falta es una distinción, no potencia.',

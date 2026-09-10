@@ -134,6 +134,41 @@ Course.topic('al-gauss', function (p) {
     'sistema de muchas ecuaciones que se resuelve así. Con miles de incógnitas nadie lo hace a mano, ' +
     'pero el ordenador ejecuta exactamente los pasos que estás aprendiendo.');
 
+  p.section('Lo que se ve: tres planos');
+
+  p.text('Cada ecuación con tres incógnitas es un plano del espacio, y resolver el sistema es buscar los ' +
+    'puntos que están en los tres a la vez. Los tres finales de la discusión tienen una traducción ' +
+    'geométrica directa: compatible determinado, los tres planos se cortan en <strong>un punto</strong>; ' +
+    'indeterminado, comparten <strong>una recta</strong> (o un plano entero); incompatible, ' +
+    '<strong>no hay ningún punto común</strong> a los tres. Las posiciones de rectas y planos se ' +
+    'estudian a fondo en [[ge-espacio]], y la discusión con un parámetro, en [[al-discusion]].');
+
+  p.demo({
+    title: 'El sistema del ejemplo, en el espacio',
+    intro: 'Los tres planos del sistema de arriba, y dos variantes en las que se cambia solo la tercera ecuación. Gira el dibujo para ver dónde se cortan, si es que se cortan.',
+    build: function (host) {
+      var CASOS = {
+        scd: { t: 'compatible determinado', e3: [3, 1, 2, 10], txt: 'Se cortan en un único punto: $(0{,}4;\\ 2{,}8;\\ 3)$.' },
+        sci: { t: 'compatible indeterminado', e3: [3, 1, 0, 4], txt: 'La tercera ecuación es la suma de las dos primeras: no aporta nada. Los tres planos comparten una recta.' },
+        si: { t: 'incompatible', e3: [3, 1, 0, 7], txt: 'Los coeficientes de la tercera son la suma de las dos primeras, pero el término independiente no: se cortan dos a dos y no hay punto común.' }
+      };
+      var cual = 'scd';
+      var out = W.readout(host, '');
+      var vista = W.space3d(host, {
+        rango: 4, height: 360,
+        aria: 'Los tres planos de un sistema de tres ecuaciones con tres incógnitas',
+        draw: function (g) {
+          var filas = [[1, 2, -1, 3], [2, -1, 1, 1], CASOS[cual].e3];
+          filas.forEach(function (f, i) { g.plano([f[0], f[1], f[2]], -f[3], { color: i, fillAlpha: 0.15, w: 1 }); });
+          if (cual === 'scd') g.punto([0.4, 2.8, 3], { color: 'ink', r: 5, label: 'solución' });
+        }
+      });
+      function pinta() { out.set('<strong>' + CASOS[cual].t + '</strong>. ' + CASOS[cual].txt); vista.render(); }
+      W.chips(host, Object.keys(CASOS).map(function (k) { return { label: CASOS[k].t, value: k }; }), { value: cual, on: function (v) { cual = v; pinta(); } });
+      pinta();
+    }
+  });
+
   p.section('Practica');
 
   p.exercise({
@@ -252,8 +287,97 @@ Course.topic('al-gauss', function (p) {
     answer: function (d) { return d.a + ' bolígrafos (y ' + d.b + ' cuadernos, ' + d.c + ' gomas).'; }
   });
 
+  p.exercise({
+    title: 'Clasificar un sistema 3×3',
+    level: 'medio',
+    gen: function (r) {
+      var tipo = r.pick(['SCD', 'SCI', 'SI']);
+      var f1 = [r.pm(0, 3), r.pm(0, 3), r.pm(0, 3), r.pm(0, 6)], f2 = [r.pm(0, 3), r.pm(0, 3), r.pm(0, 3), r.pm(0, 6)];
+      var cr = [f1[1] * f2[2] - f1[2] * f2[1], f1[2] * f2[0] - f1[0] * f2[2], f1[0] * f2[1] - f1[1] * f2[0]];
+      if (!cr[0] && !cr[1] && !cr[2]) return null;
+      var f3, a = r.pick([1, -1, 2]), b = r.pick([1, -1, 2]);
+      if (tipo === 'SCD') {
+        f3 = [r.pm(0, 3), r.pm(0, 3), r.pm(0, 3), r.pm(0, 6)];
+        if (ML.det3([f1.slice(0, 3), f2.slice(0, 3), f3.slice(0, 3)]) === 0) return null;
+      } else {
+        f3 = f1.map(function (x, j) { return a * x + b * f2[j]; });
+        if (tipo === 'SI') f3[3] += r.pm(1, 4);
+      }
+      var filas = r.shuffle([f1, f2, f3]);
+      return { filas: filas, tipo: tipo };
+    },
+    ask: function (d) {
+      var eq = function (f) {
+        var s = ML.termTex(f[0], 'x', 1, true);
+        s += ML.termTex(f[1], 'y', 1, s === '');
+        s += ML.termTex(f[2], 'z', 1, s === '');
+        return (s || '0') + ' = ' + f[3];
+      };
+      return 'Clasifica el sistema $\\begin{cases}' + d.filas.map(eq).join(' \\\\ ') + '\\end{cases}$';
+    },
+    fields: [{ name: 't', label: 'El sistema es', opts: [{ t: 'Compatible determinado', v: 'SCD' }, { t: 'Compatible indeterminado', v: 'SCI' }, { t: 'Incompatible', v: 'SI' }] }],
+    sol: function (d) { return { t: d.tipo }; },
+    hint: function () { return ['Escalona: haz ceros en la primera columna y luego en la segunda.', 'Mira la última fila: $0\\ 0\\ a \\mid b$, $0\\ 0\\ 0 \\mid 0$ o $0\\ 0\\ 0 \\mid b \\ne 0$.']; },
+    steps: function (d) {
+      return [{
+        SCD: 'Al escalonar, la última fila conserva un coeficiente distinto de cero en $z$: tres ecuaciones independientes. <strong>Compatible determinado</strong>.',
+        SCI: 'Una ecuación es combinación de las otras dos: al escalonar sale una fila $0\\ 0\\ 0 \\mid 0$. <strong>Compatible indeterminado</strong>.',
+        SI: 'Los coeficientes de una ecuación son combinación de los de las otras dos, pero el término independiente no: sale $0\\ 0\\ 0 \\mid b$ con $b \\ne 0$. <strong>Incompatible</strong>.'
+      }[d.tipo]];
+    },
+    answer: function (d) { return { SCD: 'Compatible determinado', SCI: 'Compatible indeterminado', SI: 'Incompatible' }[d.tipo]; }
+  });
+
+  p.problem({
+    title: 'Resolver un sistema indeterminado',
+    level: 'avanzado',
+    gen: function (r) {
+      var pp = r.pm(0, 3), q = r.pm(0, 3), s = r.pm(0, 3), c1 = r.pm(0, 6), c2 = r.pm(0, 6);
+      // x + p y + q z = c1 ; y + s z = c2 ; tercera = suma de las dos
+      var sol = function (z) { var y = c2 - s * z; return { x: c1 - pp * y - q * z, y: y }; };
+      return { p: pp, q: q, s: s, c1: c1, c2: c2, s0: sol(0), s1: sol(1) };
+    },
+    intro: function (d) {
+      var e1 = 'x' + ML.termTex(d.p, 'y', 1, false) + ML.termTex(d.q, 'z', 1, false) + ' = ' + d.c1;
+      var e2 = 'y' + ML.termTex(d.s, 'z', 1, false) + ' = ' + d.c2;
+      var e3 = 'x' + ML.termTex(d.p + 1, 'y', 1, false) + ML.termTex(d.q + d.s, 'z', 1, false) + ' = ' + (d.c1 + d.c2);
+      return 'Se considera el sistema $\\begin{cases}' + e1 + ' \\\\ ' + e2 + ' \\\\ ' + e3 + '\\end{cases}$';
+    },
+    partes: [
+      {
+        ask: function () { return '¿Cuántos grados de libertad tiene la solución (cuántas incógnitas quedan libres)?'; },
+        fields: [{ name: 'g', label: 'grados de libertad', w: 'tiny' }],
+        sol: function () { return { g: 1 }; },
+        hint: function () { return ['La tercera ecuación es la suma de las otras dos.', 'Quedan 2 ecuaciones útiles para 3 incógnitas.']; },
+        steps: function () { return ['La tercera fila es la suma de las dos primeras: $\\operatorname{rg}(A) = \\operatorname{rg}(A^*) = 2 < 3$.', 'Grados de libertad: $3 - 2 = 1$. Se toma $z = \\lambda$ como parámetro.']; },
+        answer: function () { return '1'; }
+      },
+      {
+        ask: function () { return 'Da la solución particular que corresponde a $z = 0$.'; },
+        fields: [{ name: 'x', label: 'x =', w: 'tiny' }, { name: 'y', label: 'y =', w: 'tiny' }],
+        sol: function (d) { return { x: d.s0.x, y: d.s0.y }; },
+        hint: function () { return 'Pon $z = 0$: de la segunda ecuación sale $y$, y con ella la primera da $x$.'; },
+        steps: function (d) { return ['Con $z = 0$: $y = ' + d.c2 + '$.', '$x = ' + d.c1 + ' - (' + d.p + ')(' + d.s0.y + ') = ' + d.s0.x + '$.']; },
+        answer: function (d) { return 'x = ' + d.s0.x + ', y = ' + d.s0.y; }
+      },
+      {
+        ask: function () { return 'Y la que corresponde a $z = 1$.'; },
+        fields: [{ name: 'x', label: 'x =', w: 'tiny' }, { name: 'y', label: 'y =', w: 'tiny' }],
+        sol: function (d) { return { x: d.s1.x, y: d.s1.y }; },
+        hint: function () { return 'Igual, con $z = 1$: primero $y$ de la segunda ecuación, luego $x$.'; },
+        steps: function (d) {
+          return ['Con $z = 1$: $y = ' + d.c2 + ' - (' + d.s + ') = ' + d.s1.y + '$.', '$x = ' + d.c1 + ' - (' + d.p + ')(' + d.s1.y + ') - (' + d.q + ') = ' + d.s1.x + '$.',
+            'En general, con $z = \\lambda$: $y = ' + d.c2 + ML.termTex(-d.s, '\\lambda', 1, false) + '$ y $x$ sale sustituyendo. Cada $\\lambda$ da un punto de la recta común a los tres planos.'];
+        },
+        answer: function (d) { return 'x = ' + d.s1.x + ', y = ' + d.s1.y; }
+      }
+    ]
+  });
+
   p.keys([
     'Gauss es un método <strong>mecánico</strong>: por eso sirve para sistemas grandes y para programarlo.',
+    'Tres ecuaciones con tres incógnitas son tres planos: se cortan en un punto, comparten una recta o no tienen punto común.',
+    'En un sistema indeterminado se toma una incógnita como parámetro y las demás se escriben en función de ella.',
     'Tres operaciones legales: intercambiar filas, multiplicar una fila, sumar a una fila un múltiplo de otra.',
     'El objetivo es la forma escalonada: ceros debajo de la diagonal.',
     'Después se despeja de abajo arriba.',

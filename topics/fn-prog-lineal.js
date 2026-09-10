@@ -387,7 +387,75 @@ Course.topic('fn-prog-lineal', function (p) {
     answer: function (d) { return U.fmt(d.mx, 4) + ' €'; }
   });
 
+  p.exercise({
+    title: '¿Cuántas soluciones óptimas?',
+    level: 'medio',
+    gen: function (r) {
+      var R1 = '\\begin{cases} x \\ge 0,\\ y \\ge 0 \\\\ 2x + y \\le 12 \\\\ x + 4y \\le 20 \\end{cases}';
+      var R2 = '\\begin{cases} x \\ge 0,\\ y \\ge 0 \\\\ x + y \\ge 4 \\\\ x - y \\le 2 \\end{cases}';
+      var casos = [
+        { reg: R1, z: [1, 2], op: 'máximo', ok: 'unica', por: 'Los vértices son $(0,0)$, $(6,0)$, $(4,4)$ y $(0,5)$; $Z$ vale 0, 6, 12 y 10: un único máximo, en $(4,4)$.' },
+        { reg: R1, z: [2, 1], op: 'máximo', ok: 'infinitas', por: 'En $(6,0)$ y en $(4,4)$ vale lo mismo, 12: la función objetivo es paralela a ese lado, y todo él es óptimo.' },
+        { reg: R1, z: [1, 4], op: 'máximo', ok: 'infinitas', por: 'En $(4,4)$ y en $(0,5)$ vale 20: $Z$ es paralela al lado $x + 4y = 20$, que es entero óptimo.' },
+        { reg: R2, z: [1, 1], op: 'máximo', ok: 'noacotada', por: 'La región no está acotada hacia arriba: $Z$ crece sin límite y no hay máximo.' },
+        { reg: R2, z: [1, 1], op: 'mínimo', ok: 'infinitas', por: 'Los vértices son $(0,4)$ y $(3,1)$, y en los dos $Z$ vale 4: todo el lado $x + y = 4$ es óptimo.' },
+        { reg: R2, z: [1, 2], op: 'mínimo', ok: 'unica', por: 'En $(0,4)$ vale 8 y en $(3,1)$ vale 5: un único mínimo, en $(3,1)$.' }
+      ];
+      var c = r.pick(casos);
+      return { c: c, z: c.z };
+    },
+    ask: function (d) {
+      return 'Para la región $' + d.c.reg + '$, ¿cuántas soluciones tiene el <strong>' + d.c.op + '</strong> de $Z = ' + ML.termTex(d.z[0], 'x', 1, true) + ML.termTex(d.z[1], 'y', 1, false) + '$?';
+    },
+    fields: [{ name: 't', label: 'Respuesta', opts: [{ t: 'Una única solución', v: 'unica' }, { t: 'Infinitas: todo un lado', v: 'infinitas' }, { t: 'Ninguna: la región no está acotada en esa dirección', v: 'noacotada' }] }],
+    sol: function (d) { return { t: d.c.ok }; },
+    hint: function () { return ['Dibuja la región y halla sus vértices.', 'Evalúa $Z$ en cada uno: si el mejor valor se repite en dos vértices seguidos, todo el lado es óptimo. Y mira si la región se escapa hacia el infinito.']; },
+    steps: function (d) { return [d.c.por]; },
+    answer: function (d) { return { unica: 'Única', infinitas: 'Infinitas', noacotada: 'No hay' }[d.c.ok]; }
+  });
+
+  p.exercise({
+    title: 'La mejor solución entera',
+    level: 'avanzado',
+    gen: function (r) {
+      var a1 = r.int(1, 4), b1 = r.int(1, 4), c1 = r.int(10, 24), a2 = r.int(1, 4), b2 = r.int(1, 4), c2 = r.int(10, 24);
+      var pz = r.int(1, 5), qz = r.int(1, 5);
+      var best = -1, arg = null, empate = false;
+      for (var x = 0; x <= 24; x++) for (var y = 0; y <= 24; y++) {
+        if (a1 * x + b1 * y > c1 || a2 * x + b2 * y > c2) continue;
+        var z = pz * x + qz * y;
+        if (z > best) { best = z; arg = [x, y]; empate = false; } else if (z === best) empate = true;
+      }
+      if (!arg || empate) return null;
+      // optimo continuo: el mejor de los vertices
+      var vert = [[0, 0], [c1 / a1, 0], [c2 / a2, 0], [0, c1 / b1], [0, c2 / b2]];
+      var det = a1 * b2 - a2 * b1;
+      if (det) vert.push([(c1 * b2 - c2 * b1) / det, (a1 * c2 - a2 * c1) / det]);
+      var cont = null, zc = -1;
+      vert.forEach(function (v) {
+        if (v[0] < -1e-9 || v[1] < -1e-9 || a1 * v[0] + b1 * v[1] > c1 + 1e-9 || a2 * v[0] + b2 * v[1] > c2 + 1e-9) return;
+        var z = pz * v[0] + qz * v[1];
+        if (z > zc) { zc = z; cont = v; }
+      });
+      if (!cont || (Math.abs(cont[0] - Math.round(cont[0])) < 1e-9 && Math.abs(cont[1] - Math.round(cont[1])) < 1e-9)) return null;
+      return { a1: a1, b1: b1, c1: c1, a2: a2, b2: b2, c2: c2, pz: pz, qz: qz, arg: arg, best: best, cont: cont, zc: zc };
+    },
+    ask: function (d) {
+      return 'Maximiza $Z = ' + d.pz + 'x + ' + d.qz + 'y$ con $x, y \\ge 0$, $' + d.a1 + 'x + ' + d.b1 + 'y \\le ' + d.c1 + '$ y $' + d.a2 + 'x + ' + d.b2 + 'y \\le ' + d.c2 + '$, sabiendo que $x$ e $y$ tienen que ser <strong>enteros</strong>.';
+    },
+    fields: [{ name: 'x', label: 'x =', w: 'tiny' }, { name: 'y', label: 'y =', w: 'tiny' }],
+    sol: function (d) { return { x: d.arg[0], y: d.arg[1] }; },
+    hint: function (d) { return ['Resuelve primero sin la condición de enteros: el óptimo está en un vértice, $(' + U.fmt(d.cont[0], 2) + ',\\ ' + U.fmt(d.cont[1], 2) + ')$, que no es entero.', 'Revisa los puntos enteros de la región cercanos a ese vértice y quédate con el de mayor $Z$. Redondear sin más puede dar un punto fuera de la región o que no es el mejor.']; },
+    steps: function (d) {
+      return ['Sin exigir enteros, el óptimo es el vértice $(' + U.fmt(d.cont[0], 3) + ',\\ ' + U.fmt(d.cont[1], 3) + ')$ con $Z \\approx ' + U.fmt(d.zc, 3) + '$.',
+        'Entre los puntos enteros de la región, el mejor es $(' + d.arg[0] + ',\\ ' + d.arg[1] + ')$, con $Z = ' + d.best + '$.',
+        'Comprobación de las restricciones: $' + (d.a1 * d.arg[0] + d.b1 * d.arg[1]) + ' \\le ' + d.c1 + '$ y $' + (d.a2 * d.arg[0] + d.b2 * d.arg[1]) + ' \\le ' + d.c2 + '$ ✓'];
+    },
+    answer: function (d) { return '(' + d.arg[0] + ', ' + d.arg[1] + '), Z = ' + d.best; }
+  });
+
   p.keys([
+    'Si la función objetivo es paralela a un lado óptimo hay infinitas soluciones; en una región no acotada puede no haber óptimo; con variables enteras hay que revisar los puntos enteros.',
     'Programación lineal: optimizar una función lineal sujeta a restricciones lineales.',
     'La región factible es la intersección de semiplanos: siempre un polígono <strong>convexo</strong>.',
     'Las rectas de nivel de $Z$ son paralelas entre sí: al desplazarse, el último punto que tocan es una esquina.',

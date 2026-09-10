@@ -2,8 +2,7 @@
 Course.topic('gfx-pixel', function (p) {
 
   p.text('Bienvenido al último bloque, que es distinto de todos los anteriores y por eso tiene otro ' +
-    'color. Aquí ya no vamos a demostrar nada. Vamos a coger las matemáticas de los doce bloques ' +
-    'anteriores —la distancia, el seno, las matrices, el gradiente, los complejos— y a ponerlas a ' +
+    'color. Aquí ya no vamos a demostrar nada. Vamos a coger las matemáticas de todos los bloques anteriores —la distancia, el seno, las matrices, el gradiente, los complejos— y a ponerlas a ' +
     'dibujar. A sesenta imágenes por segundo, en tu pantalla, con un código que puedes tocar mientras ' +
     'se ejecuta.');
 
@@ -34,7 +33,7 @@ Course.topic('gfx-pixel', function (p) {
     'píxel responde solo.');
 
   p.text('Esto es exactamente el concepto de <strong>función</strong> que estudiaste en el bloque 5, ' +
-    'y el de <strong>campo</strong> del bloque 9: a cada punto del plano le corresponde un valor. Lo ' +
+    'y el de <strong>campo</strong> del [[av-vectorial|cálculo vectorial]]: a cada punto del plano le corresponde un valor. Lo ' +
     'único nuevo es que el valor es un color y que el resultado se ve.');
 
   p.util('Que sean independientes es lo que hace posible la velocidad. Tu tarjeta gráfica tiene ' +
@@ -139,8 +138,7 @@ Course.topic('gfx-pixel', function (p) {
     }
   });
 
-  p.text('Ese <code>mod(a, 2.0)</code> vale 0 si el número es par y 1 si es impar: es la aritmética ' +
-    'modular del bloque 10, decidiendo colores. Y <code>floor</code> es la parte entera. Con dos ' +
+  p.text('Ese <code>mod(a, 2.0)</code> vale 0 si el número es par y 1 si es impar: es la [[av-numeros|aritmética modular]], decidiendo colores. Y <code>floor</code> es la parte entera. Con dos ' +
     'funciones que ya conocías sale un tablero de ajedrez de cualquier tamaño.');
 
   p.section('Cómo se lee un error');
@@ -333,6 +331,35 @@ Course.topic('gfx-pixel', function (p) {
     },
     steps: function (d) { return [d.por]; },
     answer: function (d) { return d.q; }
+  });
+
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'basico',
+    gen: function (r) {
+      var casos = [
+        { c: 'vec2 uv = fragCoord / iResolution.xy;\ncolor = vec4(uv.x, 0.0, 0.0, 1.0);',
+          o: ['Un degradado de negro a rojo, de izquierda a derecha', 'Un degradado de rojo a negro, de izquierda a derecha', 'Un degradado de negro a rojo, de abajo arriba', 'Toda la pantalla roja'],
+          por: '<code>uv.x</code> vale 0 en el borde izquierdo y 1 en el derecho, y va al canal rojo: negro a la izquierda, rojo puro a la derecha.' },
+        { c: 'vec2 uv = fragCoord / iResolution.xy;\ncolor = vec4(uv.x, uv.y, 0.0, 1.0);',
+          o: ['Negro abajo a la izquierda, rojo abajo a la derecha, verde arriba a la izquierda y amarillo arriba a la derecha', 'Un degradado de rojo a verde de izquierda a derecha', 'Toda la pantalla amarilla', 'Amarillo abajo a la izquierda y negro arriba a la derecha'],
+          por: 'El rojo crece hacia la derecha y el verde hacia arriba. Donde los dos valen 1, arriba a la derecha, se suman en amarillo.' },
+        { c: 'float v = step(0.5, fragCoord.x / iResolution.x);\ncolor = vec4(vec3(v), 1.0);',
+          o: ['La mitad izquierda negra y la derecha blanca', 'La mitad izquierda blanca y la derecha negra', 'La mitad de abajo negra y la de arriba blanca', 'Un degradado de negro a blanco'],
+          por: '<code>step(0.5, x)</code> vale 0 si $x < 0{,}5$ y 1 si no: corte brusco en la mitad, negro a la izquierda y blanco a la derecha.' },
+        { c: 'color = vec4(0.0, 0.0, 1.0, 1.0);',
+          o: ['Toda la pantalla azul', 'Un solo píxel azul', 'Un degradado azul', 'Nada: sin fragCoord no se dibuja'],
+          por: 'La respuesta no depende del píxel, así que todos los píxeles contestan lo mismo: azul.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return '¿Qué se ve con este shader?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['Recuerda que <code>fragCoord</code> empieza abajo a la izquierda.', 'Pregúntate qué contesta un píxel del borde izquierdo y qué contesta uno del derecho.']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
   });
 
   p.keys([

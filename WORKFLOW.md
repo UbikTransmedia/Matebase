@@ -1,15 +1,16 @@
 # Workflow del proyecto «Matebase»
 
-Curso interactivo de matemáticas, desde contar hasta sistemas dinámicos.
+Curso interactivo de matemáticas: hasta 2.º de Bachillerato y la prueba de acceso, y desde ahí
+hacia lo que viene después.
 Se abre haciendo doble clic en `index.html`. **Sin servidor local, sin internet, sin dependencias.**
 
 ---
 
 ## Principio rector
 
-> Cada tema nuevo debe costar *un archivo y una línea*.
+> Cada tema nuevo debe costar *un archivo y una entrada en el temario*.
 > Todo lo demás (maquetación, fórmulas, gráficas, corrección de ejercicios,
-> progreso, navegación) ya está resuelto en el núcleo y se recicla.
+> progreso, navegación, repaso) ya está resuelto en el núcleo y se recicla.
 
 ---
 
@@ -19,93 +20,112 @@ Se abre haciendo doble clic en `index.html`. **Sin servidor local, sin internet,
 |---|---|
 | Debe abrirse con `file://` | Prohibido `fetch()`, `XMLHttpRequest` y `<script type="module">` (los bloquea CORS en local). Los temas se cargan inyectando `<script src>` clásicos bajo demanda. |
 | Sin internet | Nada de CDN. MathJax/KaTeX quedan descartados → se escribe un **renderizador LaTeX propio y ligero** (`mathx.js`). |
-| Sin build ni npm | JavaScript ES5/ES6 plano, un namespace global por módulo. |
+| Sin build ni npm | JavaScript ES5 plano, un namespace global por módulo. |
 | Ampliable a mano | El temario vive en un único archivo de datos (`curriculum.js`). Un tema sin archivo no rompe nada: muestra su ficha «en preparación». |
 
 ## Fase 1 — Temario (cerrada) → `assets/js/curriculum.js`
 
-13 bloques, 88 temas, en progresión estricta. El orden es el contrato pedagógico:
-ningún tema usa una herramienta que no se haya explicado antes.
+16 bloques, 158 temas, en progresión estricta. El orden es el contrato pedagógico:
+ningún tema usa una herramienta que no se haya explicado antes, y `tests.html`
+comprueba que los requisitos declarados de cada tema van antes que él.
 
-0. **Lógica, conjuntos y demostración** (3) — proposiciones, conjuntos e inducción.
-1. **Aritmética y fundamentos** (10) — de los naturales a la recta real, con
-   magnitudes y análisis dimensional.
-2. **Álgebra** (12) — del lenguaje algebraico a los complejos.
-3. **Geometría** (10) — de los ángulos a la geometría del espacio.
-4. **Trigonometría** (5) — del triángulo rectángulo a las ondas.
-5. **Funciones y análisis** (12) — del concepto de función a la integral definida,
-   pasando por programación lineal.
-6. **Probabilidad y estadística** (8) — de la media a la inferencia.
-7. **Álgebra lineal** (3) — espacios vectoriales, autovalores, cadenas de Markov.
-8. **Ecuaciones diferenciales y ondas** (5) — EDO, sistemas dinámicos, caos, EDP
-   y Fourier.
-9. **Varias variables y geometría** (4) — cálculo vectorial, descenso de
-   gradiente, geometría diferencial y topología.
-10. **Estructuras, números e infinito** (3) — teoría de números y RSA, grupos y
-   simetría, el infinito de Cantor.
-11. **Discreta y computacional** (4) — grafos, análisis numérico, teoría de la
-   información y teoría de juegos.
-12. **Cibernética** (9) — realimentación, la caja negra, la ley de la variedad
-   requerida, control PID, homeostasis y ultraestabilidad, retardos, filtrado y
-   predicción, autómatas celulares y cibernética de segundo orden.
+**Hasta 2.º de Bachillerato**
 
-> Los cinco últimos empezaron siendo **un solo bloque de 19 temas** llamado
-> «Escalada avanzada», y funcionaba mal: su único criterio de agrupación era
-> negativo —*esto no entra en Bachillerato*—, así que reunía álgebra lineal,
-> análisis, geometría, álgebra abstracta y computación sin más relación entre sí
-> que no ser currículo. Un alumno que abría ese bloque no sabía qué estaba
-> empezando. Repartirlo por disciplinas no cambió ni una línea de contenido: solo
-> el array de `curriculum.js`.
+0. **Lógica, demostración y problemas** (5) — proposiciones, conjuntos, inducción, resolución de problemas y algoritmos.
+1. **Aritmética y fundamentos** (10) — de los naturales a la recta real.
+2. **Álgebra** (15) — del lenguaje algebraico a determinantes, inversa y discusión de sistemas.
+3. **Geometría del plano y del espacio** (12) — la geometría de Euclides, hasta rectas, planos y problemas métricos en el espacio.
+4. **Trigonometría** (5).
+5. **Funciones y análisis** (21) — hasta continuidad, derivabilidad, L'Hôpital, representación, integración y función integral.
+6. **Probabilidad y estadística** (12) — hasta la normal, los intervalos de confianza y el contraste de hipótesis.
 
-Cada tema declara: `id`, `titulo`, `resumen`, `objetivos[]` y `requisitos[]`.
-Se pueden **intercalar temas nuevos** en cualquier punto insertando un objeto en el array.
+**La bisagra**
+
+7. **Repaso de 2.º y PAU** (5) — mapa del temario, errores frecuentes, formulario y simulacros de Matemáticas II y MACS II.
+
+**Lo que viene después**
+
+8. **Álgebra lineal** (5) — espacios, autovalores, mínimos cuadrados, SVD y Markov.
+9. **Cálculo en varias variables** (4) — gradiente, optimización, Lagrange e integrales múltiples.
+10. **Ecuaciones diferenciales y ondas** (7) — EDO, métodos numéricos, oscilador, sistemas dinámicos, caos, EDP y Fourier.
+11. **Geometría avanzada: curvatura y forma** (3) — no euclídeas, geometría diferencial y topología.
+12. **Estructuras, números e infinito** (6).
+13. **Discreta y computacional** (6).
+14. **Cibernética** (15).
+15. **Programación gráfica** (27), con piel propia.
+
+Cada tema declara `id`, `t` (título), `r` (resumen), `o` (objetivos) y `req`
+(requisitos); los de 2.º, además, `curso: '2B'` e `itin` (`['MII']`, `['MCS']` o
+los dos). Se pueden **intercalar temas nuevos** en cualquier punto insertando un
+objeto en el array.
+
+> **Por qué el temario de ampliación está repartido por disciplinas.** Los bloques
+> de ampliación empezaron siendo **un solo bloque de 19 temas** llamado «Escalada
+> avanzada», y funcionaba mal: su único criterio era negativo —*esto no entra en
+> Bachillerato*—, así que un alumno que lo abría no sabía qué estaba empezando.
+> Repartirlo por disciplinas no cambió ni una línea de contenido: solo el array de
+> `curriculum.js`.
+>
+> Pasó lo mismo, a menor escala, con un bloque llamado «Varias variables y
+> geometría», que mezclaba cálculo multivariable con geometrías no euclídeas y
+> topología, y hacía aparecer la palabra «Geometría» en dos bloques sin que se
+> entendiera la diferencia. Se partió en **Cálculo en varias variables** y
+> **Geometría avanzada: curvatura y forma**, el bloque 3 pasó a llamarse **Geometría
+> del plano y del espacio**, y el cálculo en varias variables se colocó antes de las
+> ecuaciones diferenciales, porque las ecuaciones en derivadas parciales lo necesitan.
+>
+> A raíz de aquello se estableció una regla: **los textos no citan bloques por su
+> número**. Nombran el bloque o enlazan el tema con `[[id]]`, para que el orden se
+> pueda cambiar sin dejar referencias rotas.
 
 ## Fase 2 — Núcleo de software (cerrada) → `assets/js/core/`
-
-Ocho módulos, cero duplicación. El orden es el de carga:
 
 | Módulo | Responsabilidad | Lo reutilizan |
 |---|---|---|
 | `util.js` | DOM, RNG con semilla, formato | todos |
-| `mathx.js` | Renderizador LaTeX → HTML (fracciones, raíces, matrices, sumatorios…) | todos |
+| `mathx.js` | Renderizador LaTeX → HTML | todos |
 | `mathlib.js` | Fracciones exactas, polinomios, primos, matrices, **parser de expresiones** para corregir respuestas | ejercicios |
-| `widgets.js` | **`Plot2D`**: motor gráfico único (ejes, funciones, puntos arrastrables, vectores, áreas, barras). `NumberLine`, `GeoBoard`, `Chart` y el círculo goniométrico son *envoltorios* de `Plot2D`. Controles: sliders, botones, marcadores. | demos y ejercicios |
-| `exercise.js` | Motor de **ejercicios procedimentales**: generar → preguntar → corregir → resolver → regenerar | todos los temas |
-| `page.js` | Constructor declarativo de páginas (`p.text`, `p.formula`, `p.demo`, `p.exercise`…) | todos los temas |
-| `progress.js` | Progreso y aciertos en `localStorage` | índice y ejercicios |
-| `app.js` | Índice desplegable, buscador, enrutado por `#/id`, tema claro/oscuro, carga perezosa de temas | shell |
-
-**Dos categorías de material interactivo, visualmente distintas:**
-
-- 🔵 **Ejemplo interactivo** (`p.demo`) — escenario *fijo*, con parámetros que el alumno
-  mueve para *ver* el concepto. No se corrige, no puntúa.
-- 🟢 **Ejercicio práctico** (`p.exercise`) — enunciado **generado proceduralmente** con
-  RNG: botón «Otro ejercicio» que rebaraja los números tantas veces como haga falta,
-  corrección automática, pistas y solución paso a paso.
+| `widgets.js` | **`Plot2D`**, motor gráfico único con sus envoltorios, controles y el **visor 3D** `W.space3d` | ejemplos y ejercicios |
+| `shader.js` | Visor de shaders GLSL, comparación píxel a píxel y modo con memoria | programación gráfica y cibernética |
+| `exercise.js` | Motor de **ejercicios y problemas por apartados**: generar → preguntar → corregir → diagnosticar → resolver → regenerar; modo examen | todos los temas |
+| `page.js` | Constructor declarativo de páginas y recolector de contenido | todos los temas |
+| `repaso.js` | Mapa del temario, simulacros y formulario | bloque de repaso |
+| `progress.js` | Progreso, dominio por tipo de ejercicio y repaso espaciado en `localStorage` | índice, portada y ejercicios |
+| `app.js` | Índice, buscador con glosario, itinerarios, enrutado con semilla y carga perezosa | shell |
 
 ## Fase 3 — Contenido, bloque a bloque (cerrada)
 
-Por cada tema: explicación → apunte histórico → ejemplo interactivo → 3-5
-ejercicios procedimentales → ideas clave.
+Por cada tema: explicación → apunte histórico → ejemplos interactivos → ejercicios
+procedimentales → ideas clave. **Los 158 temas están escritos**, y cada tanda se
+entregó dejando el proyecto funcionando y pasando `tests.html`.
 
-**Los 88 temas están escritos**. Cada tanda se entregó dejando el proyecto
-funcionando y pasando `tests.html`.
+## Fase 4 — Curso de 2.º de Bachillerato y repaso (cerrada)
 
-> El bloque 12 se colocó al final por una razón pedagógica, no cronológica: la
-> cibernética es la única parte del temario que necesita **todo** lo anterior a la
-> vez, y por eso funciona como cierre. Es donde el alumno ve para qué servía lo que
-> fue aprendiendo suelto.
+La revisión con tres miradas —la de un alumno que intenta seguir el curso, la de un
+profesor que prepara la prueba de acceso y la de un especialista en usabilidad—
+llevó a esto:
 
-## Fase 4 — Repaso y ampliación (pendiente, a petición)
+- **Completar 2.º**: determinantes, inversa y ecuaciones matriciales, discusión de
+  sistemas con parámetros, vectores y problemas métricos en el espacio, continuidad y
+  Bolzano, derivabilidad a trozos, L'Hôpital, representación gráfica, integrales
+  racionales, función integral, proporciones y contraste de hipótesis.
+- **Ampliar** los temas que se quedaban cortos y **añadir problemas por apartados**,
+  errores típicos diagnosticados, pistas graduadas y respuestas de elección.
+- **Etiquetar** cada tema por curso y asignatura, con itinerarios MII y MCS y el
+  cuadro «Antes de empezar».
+- **Seguimiento fino**: dominio por tipo de ejercicio, repaso espaciado y «seguir
+  por donde ibas».
+- **Bloque de repaso y PAU**, con simulacros que reutilizan los generadores de los temas.
+- **Ampliar la parte posterior**: mínimos cuadrados, SVD, métodos numéricos,
+  oscilaciones, integrales múltiples, Lagrange, criptografía con curvas elípticas,
+  recurrencias, complejidad; seis temas nuevos de cibernética y siete de programación
+  gráfica.
 
-Lo que queda por hacer si el curso se quiere llevar más lejos:
+## Fase 5 — Ideas pendientes (a petición)
 
-- **Profundizar** en los temas que se hayan quedado cortos.
-- **Intercalar** temas nuevos donde se detecte un salto (basta con insertar un
-  objeto en `curriculum.js` y crear su archivo).
-- **Exámenes mezclados** por bloque, reutilizando los generadores que ya existen:
-  el motor permite juntar ejercicios de varios temas en una sola página.
-- **Seguimiento del progreso** más fino (rachas, temas flojos, repaso espaciado).
+- Más problemas de examen reales, adaptados por comunidades autónomas.
+- Un modo profesor para montar simulacros a medida eligiendo temas.
+- Exportar e importar el progreso para cambiar de ordenador.
 
 ---
 
@@ -116,14 +136,14 @@ Lo que queda por hacer si el curso se quiere llevar más lejos:
    Course.topic('mi-id', function (p) {
      p.section('Idea');
      p.text('Texto con matemáticas en línea: $x^2+1$.');
-     p.formula('\\int_0^1 x^2\\,dx = \\frac{1}{3}');   // en JS, barra doble
-     p.demo({ title: 'Míralo', build: function (host, d) { /* Plot2D... */ } });
-     p.exercise({ /* gen / ask / sol / steps */ });
+     p.formula('\\int_0^1 x^2\\,dx = \\frac{1}{3}', 'etiqueta', 'cómo se lee');
+     p.demo({ title: 'Míralo', build: function (host) { /* W.plot, W.space3d... */ } });
+     p.exercise({ /* gen / ask / fields / sol / errores / hint / steps */ });
      p.keys(['idea 1', 'idea 2']);
    });
    ```
 2. Añadir una entrada en el array del bloque correspondiente de `assets/js/curriculum.js`.
-3. Recargar. No hay paso 3.
+3. Recargar.
 4. Abrir `tests.html`: el tema debe salir en verde y su auditoría limpia.
 
 Detalle de la API en `GUIA-AUTOR.md`.

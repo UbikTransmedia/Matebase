@@ -264,6 +264,35 @@ Course.topic('gfx-coordenadas', function (p) {
     answer: function (d) { return d.ref; }
   });
 
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { c: 'vec2 p = (fragCoord - 0.5 * iResolution.xy) / iResolution.y;\nfloat v = step(length(p), 0.3);',
+          o: ['Un círculo blanco centrado, redondo aunque la pantalla sea ancha', 'Un círculo en la esquina inferior izquierda', 'Una elipse estirada a lo ancho', 'Un anillo'],
+          por: 'El origen está en el centro y las dos coordenadas se dividen por la altura: la misma unidad en las dos direcciones, así que el círculo sale redondo.' },
+        { c: 'vec2 uv = fragCoord / iResolution.xy - 0.5;\nfloat v = step(length(uv), 0.3);',
+          o: ['Una elipse centrada, estirada a lo ancho de la pantalla', 'Un círculo perfecto centrado', 'Un círculo en la esquina inferior izquierda', 'Un cuadrado'],
+          por: 'Al dividir la x por la anchura y la y por la altura, en una pantalla ancha una unidad horizontal ocupa más píxeles que una vertical: el círculo se estira.' },
+        { c: 'vec2 p = (fragCoord - 0.5 * iResolution.xy) / iResolution.y;\nfloat a = atan(p.y, p.x);\nfloat v = 0.5 + 0.5 * sin(8.0 * a);',
+          o: ['Ocho sectores claros y ocho oscuros alrededor del centro, como una sombrilla', 'Ocho anillos concéntricos', 'Ocho rayas verticales', 'Un solo sector claro'],
+          por: 'El valor solo depende del ángulo, que da una vuelta completa: el seno de $8a$ completa ocho ciclos en esa vuelta.' },
+        { c: 'vec2 p = (fragCoord - 0.5 * iResolution.xy) / iResolution.y;\nfloat v = fract(5.0 * length(p));',
+          o: ['Anillos concéntricos que se aclaran hacia fuera y vuelven de golpe a negro', 'Sectores alrededor del centro', 'Un círculo relleno', 'Rayas horizontales'],
+          por: 'El valor solo depende de la distancia al centro, y <code>fract</code> la hace crecer de 0 a 1 y volver a 0 cada quinto de unidad.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'En una pantalla más ancha que alta, con el color final <code>vec3(v)</code>, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['¿Dónde está el origen? ¿Se divide igual en las dos direcciones?', '¿El valor depende de la distancia, del ángulo o de una sola coordenada?']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
+  });
+
   p.keys([
     'Centrar el origen es restar media pantalla; corregir la deformación es dividir <strong>las dos componentes por el mismo número</strong>, normalmente el alto.',
     'Con la normalización buena, $p_y$ va siempre de $-0{,}5$ a $0{,}5$ y $p_x$ se sale en las pantallas anchas: eso es correcto, significa que hay más sitio a los lados.',

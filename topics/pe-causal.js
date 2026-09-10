@@ -33,7 +33,7 @@ Course.topic('pe-causal', function (p) {
   p.note('Esta distinción ya salió en el bloque de cibernética, con la caja negra: allí se decía que ' +
     'un economista no abre el mercado, sino que sube un tipo de interés y observa. Eso es exactamente ' +
     'intervenir. La inferencia causal es la teoría de qué se puede concluir cuando <em>no</em> puedes ' +
-    'intervenir y solo tienes lo que ya ha pasado.', null, 'Un eco del bloque 12');
+    'intervenir y solo tienes lo que ya ha pasado.', null, 'Un eco de la cibernética');
 
   p.section('La variable de confusión');
 

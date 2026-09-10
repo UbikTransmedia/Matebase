@@ -477,6 +477,35 @@ Course.topic('gfx-luz', function (p) {
     answer: function (d) { return d.ref; }
   });
 
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'avanzado',
+    gen: function (r) {
+      var casos = [
+        { c: 'col = mix(col, cielo, 1.0 - exp(-0.02 * t * t));',
+          o: ['Los objetos lejanos se funden con el color del cielo: niebla', 'Los objetos cercanos se vuelven del color del cielo', 'Toda la escena se oscurece por igual', 'No cambia nada'],
+          por: 'Con $t$ pequeño la exponencial vale casi 1 y el peso del cielo casi 0; con $t$ grande, al revés. La mezcla crece con la distancia.' },
+        { c: 'float brillo = pow(max(dot(reflect(-luz, n), -rd), 0.0), 64.0);\ncol += vec3(brillo);',
+          o: ['Un brillo pequeño y muy intenso donde la luz se refleja hacia la cámara', 'Un brillo grande y difuso por toda la superficie', 'Una sombra', 'Un borde oscuro'],
+          por: 'El producto escalar es 1 solo si el rayo reflejado apunta justo a la cámara; la potencia 64 hunde todos los demás valores: una mancha pequeña de brillo especular.' },
+        { c: 'sombra = min(sombra, 8.0 * d / t);   // dentro del bucle hacia la luz',
+          o: ['Sombras de borde suave, más difusas cuanto más lejos está el objeto que las proyecta', 'Sombras de borde duro', 'Sin sombras', 'Sombras de colores'],
+          por: 'El rayo hacia la luz recuerda por qué cerca pasó de un objeto, en proporción a lo que ha recorrido: pasar rozando da penumbra, y la penumbra se ensancha con la distancia.' },
+        { c: 'float oclusion = clamp(1.0 - 3.0 * (0.1 - sdf(P + 0.1 * n)), 0.0, 1.0);\ncol *= oclusion;',
+          o: ['Los rincones y las zonas donde dos superficies se juntan se oscurecen un poco', 'Los bordes exteriores se aclaran', 'Toda la escena se oscurece por igual', 'Aparecen reflejos'],
+          por: 'Un poco por encima de la superficie, la distancia a la escena debería valer 0,1; si hay otra superficie cerca, vale menos, y eso indica un rincón al que llega menos luz.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'En la escena iluminada del tema, con <code>t</code> la distancia recorrida, <code>n</code> la normal y <code>rd</code> el rayo, ¿qué efecto produce esta línea?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Produce', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['Pregúntate en qué píxeles el efecto es grande y en cuáles es casi nulo.']; },
+    steps: function (d) { return [d.por, 'Produce: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
+  });
+
   p.keys([
     'La <strong>difusa</strong> es un producto escalar, y el <code>max</code> con cero no es opcional.',
     'La <strong>sombra suave</strong> sale de guardar el menor $k\\,h/t$ del camino: ese cociente es el ángulo bajo el que el rayo vio el obstáculo.',

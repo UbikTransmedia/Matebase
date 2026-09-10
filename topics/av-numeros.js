@@ -212,6 +212,14 @@ Course.topic('av-numeros', function (p) {
     'trabajando ya en criptografía poscuántica.');
 
   /* ================= EJERCICIOS ================= */
+  p.hist('<strong>Sophie Germain</strong> aprendió matemáticas sola, en la biblioteca de su padre, durante la ' +
+    'Revolución francesa. Como a las mujeres no se les permitía estudiar en la Escuela Politécnica, conseguía los ' +
+    'apuntes y enviaba sus trabajos firmados como «Monsieur Le Blanc». Así se carteó con Gauss, que cuando descubrió ' +
+    'quién era le escribió admirado. Demostró un caso importante del último teorema de Fermat para una familia de ' +
+    'primos, y los primos $p$ tales que $2p + 1$ también es primo se llaman hoy <em>primos de Sophie Germain</em>. En ' +
+    '1816 ganó el premio de la Academia de Ciencias de París con un trabajo sobre la vibración de las superficies ' +
+    'elásticas.');
+
   p.section('Practica');
 
   p.exercise({

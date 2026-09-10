@@ -6,6 +6,13 @@
    Los temas NO se cargan con fetch (el navegador lo prohibe en file://):
    se inyecta una etiqueta <script src="topics/<id>.js"> la primera vez
    que hace falta. Por eso el curso funciona con doble clic, sin servidor.
+
+   Rutas:
+     #/                      portada
+     #/<id>                  un tema
+     #/<id>?e=3              el ejercicio 3 de ese tema, con numeros nuevos
+     #/<id>?e=3&s=12345      el ejercicio 3 con la semilla 12345: el mismo
+                             enunciado, con los mismos numeros, para todos
    =================================================================== */
 (function (global) {
   'use strict';
@@ -35,6 +42,30 @@
 
   global.Course = Course;
 
+  /* ---------------- cursos e itinerarios ----------------
+     El curso sube desde contar, pero quien lo abre suele estar en 2.º de
+     Bachillerato con la PAU delante. Cada tema dice a que curso pertenece y,
+     si es de 2.º, a que asignatura: asi el indice puede mostrar solo el
+     temario de uno, y cada tema puede avisar de lo que da por sabido. */
+
+  var CURSOS = {
+    ESO: 'ESO', '1B': '1.º Bachillerato', '2B': '2.º Bachillerato', AMP: 'Ampliación'
+  };
+  var ITIN = {
+    MII: { corto: 'Matemáticas II', abrev: 'Mat. II', largo: 'Matemáticas II (Ciencias y Tecnología)' },
+    MCS: { corto: 'MACS II', abrev: 'MACS II', largo: 'Matemáticas Aplicadas a las Ciencias Sociales II' }
+  };
+  Course.CURSOS = CURSOS;
+  Course.ITIN = ITIN;
+
+  var itin = 'todo';
+
+  function enItinerario(t, it) {
+    if (!it || it === 'todo') return true;
+    return t.curso === '2B' && (t.itin || []).indexOf(it) >= 0;
+  }
+  Course.enItinerario = enItinerario;
+
   /* ---------------- indice plano y busqueda ---------------- */
 
   var FLAT = [];   // [{node, block, i}]
@@ -44,22 +75,40 @@
     CURRICULUM.forEach(function (b) {
       b.temas.forEach(function (t) {
         t._block = b;
+        if (!t.curso) t.curso = b.curso || '';
         BYID[t.id] = t;
         FLAT.push(t);
       });
     });
   }
 
+  /** La ruta actual, separando el tema de sus parametros. */
+  function ruta() {
+    var h = location.hash.replace(/^#\/?/, '');
+    var i = h.indexOf('?'), q = {};
+    var id = i < 0 ? h : h.slice(0, i);
+    if (i >= 0) {
+      h.slice(i + 1).split('&').forEach(function (kv) {
+        var par = kv.split('=');
+        if (par[0]) {
+          try { q[decodeURIComponent(par[0])] = decodeURIComponent(par[1] || ''); } catch (e) { }
+        }
+      });
+    }
+    return { id: id, q: q };
+  }
+
   /* ---------------- construccion del indice ---------------- */
 
   var sideScroll, mainEl, wrapEl, crumbEl;
+  var glosarioApi = null;
 
   function buildIndex() {
     U.clear(sideScroll);
     CURRICULUM.forEach(function (b) {
-      /* El bloque 13 no es solo matemáticas: es programación y arte, y tiene
-         que notarse antes de leer una palabra. Se marca aquí y el color lo
-         hereda todo lo de dentro, desde el CSS. */
+      /* El bloque de programacion grafica no es solo matemáticas: es
+         programación y arte, y tiene que notarse antes de leer una palabra.
+         Se marca aquí y el color lo hereda todo lo de dentro, desde el CSS. */
       var blk = U.el('div.blk', { 'data-blk': b.id, 'data-piel': b.piel || null });
       var caret = U.el('span.blk__caret', { html: '&#9654;' });
       var btn = U.el('button.blk__btn', { type: 'button' }, [
@@ -88,7 +137,7 @@
 
   /** Marca el tema activo, los vistos y los que aun no existen. */
   function paintIndex() {
-    var cur = location.hash.replace('#/', '');
+    var cur = ruta().id;
     U.$$('.tpc', sideScroll).forEach(function (a) {
       var id = a.getAttribute('data-id');
       a.classList.toggle('is-active', id === cur);
@@ -112,24 +161,101 @@
   }
 
   function filterIndex(q) {
-    q = q.trim().toLowerCase();
-    var norm = function (s) { return s.normalize ? s.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : s; };
-    q = norm(q);
+    q = U.llano(String(q || '').trim());
+    var visibles = 0;
     U.$$('.blk', sideScroll).forEach(function (blk) {
       var any = false;
       U.$$('.tpc', blk).forEach(function (a) {
         var t = BYID[a.getAttribute('data-id')];
-        var hay = norm((t.t + ' ' + (t.r || '') + ' ' + (t.o || []).join(' ')).toLowerCase());
-        var show = !q || hay.indexOf(q) >= 0;
+        var hay = U.llano(t.t + ' ' + (t.r || '') + ' ' + (t.o || []).join(' '));
+        var show = (!q || hay.indexOf(q) >= 0) && enItinerario(t, itin);
         a.style.display = show ? '' : 'none';
-        if (show) any = true;
+        if (show) { any = true; visibles++; }
       });
       blk.style.display = any ? '' : 'none';
-      if (q) blk.classList.add('is-open');
+      if ((q || itin !== 'todo') && any) blk.classList.add('is-open');
     });
+    notaItinerario(visibles);
+    glosarioEnBusqueda(q, visibles);
   }
 
+  function notaItinerario(n) {
+    var nota = U.$('#itinNota');
+    if (!nota) return;
+    nota.textContent = itin === 'todo' ? '' :
+      'Solo el temario de 2.º de ' + ITIN[itin].corto + ' (' + n + ' temas). Lo de cursos ' +
+      'anteriores sigue enlazado en «Antes de empezar», al principio de cada tema.';
+  }
+
+  /* El buscador del indice mira tambien el glosario. Quien busca «rango» o
+     «adjunto» casi nunca busca un tema: busca que significa la palabra. */
+  function glosarioEnBusqueda(q, visibles) {
+    var viejo = U.$('.glosres', sideScroll);
+    if (viejo) viejo.remove();
+    if (!q || q.length < 3 || !global.GLOSARIO) {
+      if (q && !visibles) sideScroll.appendChild(U.el('div.glosres', null, U.el('p.glosres__nada', { text: 'Ningún tema coincide.' })));
+      return;
+    }
+    var hits = GLOSARIO.filter(function (e) {
+      return U.llano(e.t + ' ' + (e.v || '')).indexOf(q) >= 0;
+    }).slice(0, 8);
+    if (!hits.length && visibles) return;
+    var box = U.el('div.glosres');
+    if (!visibles) box.appendChild(U.el('p.glosres__nada', { text: 'Ningún tema coincide con la búsqueda.' }));
+    if (hits.length) {
+      box.appendChild(U.el('div.glosres__t', { text: 'En el glosario' }));
+      hits.forEach(function (e) {
+        box.appendChild(U.el('button.glosres__b', {
+          type: 'button', title: 'Abrir «' + e.t + '» en el glosario',
+          onclick: function () { if (glosarioApi) glosarioApi.abre(e.t); }
+        }, [
+          U.el('span.glosres__n', { text: e.t }),
+          (e.i && BYID[e.i]) ? U.el('span.glosres__i', { text: BYID[e.i].t }) : null
+        ]));
+      });
+    }
+    sideScroll.appendChild(box);
+  }
+
+  function buildItinButtons() {
+    var caja = U.$('#itin');
+    if (!caja) return;
+    U.clear(caja);
+    [{ id: 'todo', t: 'Todo el curso' }, { id: 'MII', t: ITIN.MII.abrev }, { id: 'MCS', t: ITIN.MCS.abrev }]
+      .forEach(function (o) {
+        caja.appendChild(U.el('button.themes__b', {
+          type: 'button', 'data-itin': o.id,
+          title: o.id === 'todo' ? 'Mostrar el curso entero'
+            : 'Mostrar solo el temario de 2.º de ' + ITIN[o.id].largo,
+          onclick: function () { setItinerario(o.id); }
+        }, o.t));
+      });
+  }
+
+  function setItinerario(id) {
+    itin = (id === 'MII' || id === 'MCS') ? id : 'todo';
+    Progress.pref('itin', itin);
+    U.$$('#itin .themes__b').forEach(function (b) {
+      var on = b.getAttribute('data-itin') === itin;
+      b.classList.toggle('is-on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    buildIndex();
+    var s = U.$('#search');
+    filterIndex(s ? s.value : '');
+  }
+  Course.setItinerario = function (id) { setItinerario(id); };
+
   /* ---------------- render de una pagina ---------------- */
+
+  function etiquetasCurso(t) {
+    var out = [];
+    if (t.curso && CURSOS[t.curso]) out.push(U.el('span.tag.tag--curso', { text: CURSOS[t.curso] }));
+    (t.itin || []).forEach(function (k) {
+      if (ITIN[k]) out.push(U.el('span.tag.tag--' + k.toLowerCase(), { text: ITIN[k].corto, title: ITIN[k].largo }));
+    });
+    return out;
+  }
 
   function header(t) {
     var h = U.el('div.hdr');
@@ -138,12 +264,44 @@
     // en vez de quedarse a mitad del indice.
     h.appendChild(U.el('h1', { html: MathX.inline(t.t), tabindex: '-1' }));
     if (t.r) h.appendChild(U.el('p.hdr__sub', { html: MathX.inline(t.r) }));
+    var cur = etiquetasCurso(t);
+    if (cur.length) h.appendChild(U.el('div.hdr__curso', null, cur));
     if (t.o && t.o.length) {
       var meta = U.el('div.hdr__meta');
       t.o.forEach(function (o) { meta.appendChild(U.el('span.tag', { text: o })); });
       h.appendChild(meta);
     }
     return h;
+  }
+
+  /* «Antes de empezar». Casi todo el que se atasca lo hace por un escalon
+     de atras, no por el tema que tiene delante. Aqui se ven los escalones
+     que este tema da por subidos, y en que estado estan para ti. */
+  function antesDeEmpezar(t) {
+    var req = (t.req || []).filter(function (r) { return BYID[r]; });
+    if (!req.length) return null;
+    var box = U.el('nav.prereq', { 'aria-label': 'Temas que este da por sabidos' });
+    box.appendChild(U.el('span.prereq__t', { text: 'Antes de empezar' }));
+    var flojos = 0;
+    var ul = U.el('ul.prereq__l');
+    req.forEach(function (rid) {
+      var r = BYID[rid];
+      var st = Progress.state(rid);
+      if (st !== 'done') flojos++;
+      ul.appendChild(U.el('li', null, U.el('a.prereq__a.is-' + (st || 'nuevo'), { href: '#/' + rid }, [
+        U.el('span.tpc__dot', { 'aria-hidden': 'true' }),
+        U.el('span', { text: r.t }),
+        U.el('span.prereq__st', { text: st === 'done' ? 'dominado' : (st === 'seen' ? 'visto' : 'sin empezar') })
+      ])));
+    });
+    box.appendChild(U.el('p', {
+      text: flojos
+        ? 'Este tema da por sabidos los de la lista. Si alguno no lo dominas todavía, empieza por él: ' +
+          'casi todos los atascos vienen de un escalón anterior.'
+        : 'Dominas todo lo que este tema necesita. Adelante.'
+    }));
+    box.appendChild(ul);
+    return box;
   }
 
   function pager(t) {
@@ -173,7 +331,22 @@
     root.appendChild(box);
   }
 
-  function renderTopic(id) {
+  /** Abre el ejercicio que pide el enlace: con su semilla, si la trae. */
+  function abreEjercicio(p, q) {
+    if (!q || !q.e) return;
+    var c = p.cards[parseInt(q.e, 10) - 1];
+    if (!c) return;
+    var s = parseInt(q.s, 10);
+    if (!isNaN(s)) c.regen(s);
+    c.el.classList.add('is-destacada');
+    setTimeout(function () {
+      if (c.el.scrollIntoView) c.el.scrollIntoView({ block: 'start' });
+      var primero = c.el.querySelector('input:not([disabled]), .opc__b:not([disabled])');
+      if (primero) primero.focus({ preventScroll: true });
+    }, 40);
+  }
+
+  function renderTopic(id, q) {
     var t = BYID[id];
     if (!t) return renderHome();
     U.clear(wrapEl);
@@ -183,6 +356,8 @@
     else wrapEl.removeAttribute('data-piel');
     crumbEl.innerHTML = '<b>' + U.escape(t._block.title) + '</b> &nbsp;/&nbsp; ' + U.escape(t.t);
     wrapEl.appendChild(header(t));
+    var antes = antesDeEmpezar(t);
+    if (antes) wrapEl.appendChild(antes);
     var body = U.el('div');
     wrapEl.appendChild(body);
     wrapEl.appendChild(pager(t));
@@ -191,14 +366,18 @@
     openBlockOf(id);
     paintIndex();
     document.title = t.t + ' · Matebase';
+    t._q = q || {};        // las paginas de repaso leen de aqui la semilla
 
     Course.load(id, function (ok) {
-      if (location.hash.replace('#/', '') !== id) return;   // el alumno ya se movio
+      if (ruta().id !== id) return;   // el alumno ya se movio
       if (!ok) { placeholder(body, t); paintIndex(); return; }
       var p = new Page(body, t);
       try {
         Course.reg[id](p);
         if (W.pintaBloques) W.pintaBloques(body);
+        Progress.tipos(id, p._ex);
+        paintIndex();
+        abreEjercicio(p, q);
       }
       catch (e) {
         console.error('Error en el tema ' + id, e);
@@ -222,7 +401,8 @@
       '<a href="https://gcarbonell.com" target="_blank" rel="noopener noreferrer">' +
       'Guillem Carbonell</a></div>' +
       '<h1>Matemáticas desde el principio</h1>' +
-      '<p class="hdr__sub">De contar con los dedos a los sistemas dinámicos, en ' + total +
+      '<p class="hdr__sub">De contar con los dedos a las matemáticas de 2.º de Bachillerato y la PAU, ' +
+      'y de ahí a los sistemas dinámicos, en ' + total +
       ' temas con ejemplos que se tocan y ejercicios que nunca se repiten.</p>';
     wrapEl.appendChild(h);
 
@@ -252,7 +432,7 @@
     p.text('Este curso está pensado para recorrerse <strong>en orden</strong>. Cada tema supone ' +
       'que entiendes el anterior y ninguno usa una herramienta que no se haya explicado antes. Si ' +
       'algo no se entiende, casi siempre la respuesta está uno o dos temas más atrás, no más ' +
-      'adelante.');
+      'adelante: por eso cada tema empieza con una lista de lo que da por sabido.');
 
     p.text('Dentro de cada tema encontrarás dos cosas distintas, y conviene no confundirlas:');
     p.raw(U.el('div.grid2', null, [
@@ -265,20 +445,64 @@
         U.el('div.card__head', null, [U.el('span.card__kind', { text: 'Ejercicio práctico' })]),
         U.el('div.card__body', { html: '<div class="prose"><p>Un enunciado <strong>generado al azar</strong>. ' +
           'Pulsa «Otro ejercicio» y cambian los números: puedes practicar el mismo tipo ' +
-          'las veces que quieras y comprobar cada intento.</p></div>' })
+          'las veces que quieras y comprobar cada intento. Los problemas largos van ' +
+          '<strong>por apartados</strong>, como en la PAU.</p></div>' })
       ])
     ]));
 
     p.section('Tu progreso');
     p.raw(U.el('div.readout', {
       html: 'Temas visitados: <strong>' + st.seen + '</strong> de ' + total + '<br>' +
-        'Temas dominados (5 ejercicios resueltos o más): <strong>' + st.done + '</strong><br>' +
+        'Temas dominados (cada tipo de ejercicio resuelto al menos una vez): <strong>' + st.done + '</strong><br>' +
         'Ejercicios resueltos: <strong>' + st.ok + '</strong>'
     }));
 
+    var ult = Progress.ultimo();
+    if (ult && BYID[ult]) {
+      p.raw(U.el('a.seguir', { href: '#/' + ult }, [
+        U.el('span.seguir__k', { text: 'Continúa donde lo dejaste' }),
+        U.el('span.seguir__t', { text: BYID[ult].t }),
+        U.el('span.seguir__f', { 'aria-hidden': 'true', text: '→' })
+      ]));
+    }
+
+    var pend = Progress.pendientes(8).filter(function (x) { return BYID[x.id]; });
+    if (pend.length) {
+      p.sub('Para repasar hoy');
+      p.text('Estos ejercicios ya los hiciste, y toca volver a ellos: un repaso justo cuando empieza a ' +
+        'olvidarse fija más que diez seguidos el mismo día. Los que fallaste vuelven antes; los que ' +
+        'aciertas se van espaciando.');
+      var lista = U.el('ul.repaso');
+      pend.forEach(function (x) {
+        lista.appendChild(U.el('li', null, U.el('a.repaso__i' + (x.fallado ? '.is-fallado' : ''), {
+          href: '#/' + x.id + '?e=' + x.n
+        }, [
+          U.el('span.repaso__t', { text: BYID[x.id].t }),
+          U.el('span.repaso__n', {
+            text: 'ejercicio ' + x.n + ' · ' + (x.fallado ? 'lo fallaste la última vez' : 'repaso ' + (x.racha + 1))
+          })
+        ])));
+      });
+      p.raw(lista);
+    }
+
+    p.section('Si estás en 2.º de Bachillerato');
+    p.text('Si lo que tienes delante es la PAU, puedes ir directo a lo tuyo. Elige tu asignatura: el ' +
+      'índice mostrará solo su temario, y cada tema te dirá qué necesitas de cursos anteriores. ' +
+      'En el bloque <strong>Repaso de 2.º y PAU</strong> tienes el mapa del temario con tu estado, ' +
+      'simulacros de examen corregidos, un formulario para imprimir y los errores que más puntos cuestan.');
+    var fila = U.el('div.itin-inicio');
+    ['MII', 'MCS'].forEach(function (k) {
+      fila.appendChild(U.el('button.btn' + (itin === k ? '.btn--main' : ''), {
+        type: 'button', 'aria-pressed': itin === k ? 'true' : 'false',
+        onclick: function () { setItinerario(itin === k ? 'todo' : k); renderHome(); }
+      }, 'Temario de ' + ITIN[k].corto));
+    });
+    if (BYID['pau-mapa']) fila.appendChild(U.el('a.btn', { href: '#/pau-mapa', text: 'Mapa de 2.º y simulacros →' }));
+    p.raw(fila);
+
     p.section('El recorrido');
     CURRICULUM.forEach(function (b) {
-      var written = b.temas.filter(function (t) { return Course.status[t.id] !== 'fail'; }).length;
       var card = U.el('div.card');
       card.appendChild(U.el('div.card__head', null, [
         U.el('span.blk__num', { text: b.n }),
@@ -447,6 +671,7 @@
         }
         var bt = U.el('button.glos__t', {
           type: 'button', 'aria-expanded': abierto[e.t] ? 'true' : 'false',
+          'data-termino': e.t,
           onclick: function () {
             abierto[e.t] = !abierto[e.t];
             bt.setAttribute('aria-expanded', abierto[e.t] ? 'true' : 'false');
@@ -462,7 +687,7 @@
       });
       if (!vistos) {
         lista.appendChild(U.el('div.glos__nada', {
-          html: 'Ningún término coincide con <strong>«' + q + '»</strong>.<br>' +
+          html: 'Ningún término coincide con <strong>«' + U.escape(q) + '»</strong>.<br>' +
             'La búsqueda mira también dentro de las definiciones, así que prueba con ' +
             'una palabra suelta.'
         }));
@@ -495,13 +720,30 @@
       if (ev.key === 'Escape' && caja.classList.contains('is-open')) mostrar(false);
     });
 
+    /* Para el buscador del indice: abre el glosario con el termino desplegado. */
+    glosarioApi = {
+      abre: function (termino) {
+        buscar.value = termino;
+        buscar.parentNode.classList.add('is-filled');
+        abierto[termino] = true;
+        pintar(termino);
+        mostrar(true);
+        var bt = lista.querySelector('.glos__t[data-termino="' + termino.replace(/"/g, '\\"') + '"]');
+        if (bt) { bt.focus(); if (bt.scrollIntoView) bt.scrollIntoView({ block: 'nearest' }); }
+        var side = U.$('.side');
+        if (side) side.classList.remove('is-open');
+        var sc = U.$('.scrim');
+        if (sc) sc.classList.remove('is-on');
+      }
+    };
+
     pintar('');
     if (Progress.pref('glosario') === '1') mostrar(true);
   }
 
   function irAInicio(e) {
     if (e) e.preventDefault();
-    if (location.hash.replace(/^#\/?/, '') === '') { route(); return; }
+    if (ruta().id === '') { route(); return; }
     location.hash = '';
     if (!location.hash) route();
   }
@@ -535,7 +777,7 @@
     cur = i;
     saltando = true;
     var destino = pila[i] ? '#/' + pila[i] : '';
-    if (location.hash.replace(/^#\/?/, '') === (pila[i] || '')) { saltando = false; route(); }
+    if (ruta().id === (pila[i] || '')) { saltando = false; route(); }
     else location.hash = destino;
     pintarNav();
   }
@@ -555,10 +797,10 @@
   var arrancado = false;
 
   function route() {
-    var id = location.hash.replace(/^#\/?/, '');
-    apila(id);
+    var r = ruta();
+    apila(r.id);
     pintarNav();
-    if (!id) renderHome(); else renderTopic(id);
+    if (!r.id) renderHome(); else renderTopic(r.id, r.q);
     // Al navegar, llevar el foco al titulo: quien usa teclado no tiene que
     // volver a recorrer el indice, y quien usa lector de pantalla se entera
     // de que ha cambiado de tema.
@@ -580,7 +822,8 @@
     wrapEl = U.$('#wrap');
     crumbEl = U.$('#crumb');
 
-    buildIndex();
+    buildItinButtons();
+    setItinerario(Progress.pref('itin') || 'todo');      // construye el indice
     buildThemeButtons();
     // Por defecto, claro: es el tema en el que esta pensado el curso. Los otros
     // dos se eligen a mano, y la eleccion se recuerda.
@@ -606,9 +849,9 @@
     });
 
     U.$('#resetBtn').addEventListener('click', function () {
-      if (confirm('¿Borrar el progreso guardado (temas visitados y aciertos)?')) {
+      if (confirm('¿Borrar el progreso guardado (temas visitados, aciertos y repasos pendientes)?')) {
         Progress.reset(); paintIndex();
-        if (!location.hash.replace(/^#\/?/, '')) renderHome();
+        if (!ruta().id) renderHome();
       }
     });
     U.$('#burger').addEventListener('click', function () {
@@ -630,10 +873,17 @@
     global.addEventListener('hashchange', route);
 
     // Navegacion con teclado: flechas izquierda/derecha entre temas.
+    // Antes saltaba de tema aunque la flecha la estuviera usando otra cosa
+    // -mover un punto de una grafica, elegir una opcion-: una grafica que se
+    // maneja con el teclado mandaba al alumno al tema siguiente al primer
+    // toque. Ahora solo navega si nadie mas ha usado la tecla.
     global.addEventListener('keydown', function (e) {
-      if (e.target && /input|textarea/i.test(e.target.tagName)) return;
+      if (e.defaultPrevented) return;
+      var tg = e.target;
+      if (tg && /input|textarea|select/i.test(tg.tagName)) return;
+      if (tg && tg.closest && tg.closest('[role="application"], [role="radiogroup"], canvas')) return;
       if (e.altKey || e.ctrlKey || e.metaKey) return;
-      var id = location.hash.replace(/^#\/?/, '');
+      var id = ruta().id;
       var i = FLAT.indexOf(BYID[id]);
       if (e.key === 'ArrowRight' && i >= 0 && FLAT[i + 1]) location.hash = '#/' + FLAT[i + 1].id;
       if (e.key === 'ArrowLeft' && i > 0) location.hash = '#/' + FLAT[i - 1].id;

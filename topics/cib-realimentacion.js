@@ -1,7 +1,7 @@
 /* Tema: Realimentación: el bucle que se corrige solo */
 Course.topic('cib-realimentacion', function (p) {
 
-  p.text('Llevas once bloques aprendiendo a describir cosas: cuánto vale algo, cómo cambia, qué forma ' +
+  p.text('Llevas todo el curso aprendiendo a describir cosas: cuánto vale algo, cómo cambia, qué forma ' +
     'tiene, con qué probabilidad ocurre. Este bloque hace una pregunta distinta y más ambiciosa: ' +
     '<strong>¿cómo consigue algo mantenerse en su sitio en un mundo que no deja de empujarlo?</strong>');
 
@@ -207,7 +207,7 @@ Course.topic('cib-realimentacion', function (p) {
     'por qué una máquina de vapor se ponía nerviosa.');
 
   p.note('Ese trabajo de Maxwell conecta directamente con lo que ya sabes. La condición de ' +
-    'estabilidad que encontró es, en el lenguaje del bloque 7, una condición sobre los ' +
+    'estabilidad que encontró es, en el lenguaje del [[av-lineal|álgebra lineal]], una condición sobre los ' +
     '<strong>autovalores</strong> del sistema: si su parte real es negativa, las perturbaciones se ' +
     'apagan; si es positiva, crecen. El puente del Milenio y la máquina de vapor de Watt fallan por ' +
     'la misma razón matemática.', 'ok', 'Dónde has visto esto antes');

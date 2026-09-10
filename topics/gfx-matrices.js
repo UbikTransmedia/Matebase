@@ -6,7 +6,7 @@ Course.topic('gfx-matrices', function (p) {
 
   p.section('La matriz de rotación, otra vez');
 
-  p.text('Del bloque 7 traes esta matriz, que gira un vector un ángulo $\\alpha$ alrededor del ' +
+  p.text('Del [[av-espacios|álgebra lineal]] traes esta matriz, que gira un vector un ángulo $\\alpha$ alrededor del ' +
     'origen:');
 
   p.formula('R(\\alpha) = \\begin{pmatrix} \\cos\\alpha & -\\operatorname{sen}\\alpha \\\\ \\operatorname{sen}\\alpha & \\cos\\alpha \\end{pmatrix}',
@@ -43,7 +43,7 @@ Course.topic('gfx-matrices', function (p) {
 
   p.demo({
     title: 'Girar, escalar, mover',
-    intro: 'Las tres transformaciones sobre un cuadrado. Fíjate en el orden: cambia si mueves antes o después de girar, porque componer transformaciones no es conmutativo. Eso también viene del bloque 7.',
+    intro: 'Las tres transformaciones sobre un cuadrado. Fíjate en el orden: cambia si mueves antes o después de girar, porque componer transformaciones no es conmutativo. Eso también viene del álgebra lineal.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-mat-1', alto: 300,
@@ -285,13 +285,42 @@ Course.topic('gfx-matrices', function (p) {
       return ['Se pedía ' + d.pide + '.', 'La respuesta es <code>' + d.ref + '</code>, o su ' +
         'equivalente con <code>PI</code>.',
         'Con 90° el cuadrado se ve idéntico: tiene simetría de orden 4, y girarlo un cuarto de vuelta ' +
-        'lo deja igual. Eso es un grupo de simetría del bloque 10, comprobado a ojo.'];
+        'lo deja igual. Eso es un [[av-grupos|grupo de simetría]], comprobado a ojo.'];
     },
     answer: function (d) { return d.ref; }
   });
 
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'avanzado',
+    gen: function (r) {
+      var casos = [
+        { c: 'p *= 2.0;\nfloat v = step(length(p), 0.3);',
+          o: ['Un círculo de radio 0,15, la mitad de grande', 'Un círculo de radio 0,6, el doble de grande', 'El mismo círculo de radio 0,3', 'Una elipse'],
+          por: 'Se transforma la coordenada, no la figura: con <code>p</code> multiplicada por 2, el borde $|2\\vec p| = 0{,}3$ queda en $|\\vec p| = 0{,}15$. Todo va al revés.' },
+        { c: 'p.x *= 2.0;\nfloat v = step(length(p), 0.3);',
+          o: ['Una elipse más alta que ancha', 'Una elipse más ancha que alta', 'Un círculo', 'Un círculo el doble de grande'],
+          por: 'Solo la $x$ se multiplica por 2, así que la figura se estrecha a la mitad en horizontal y queda más alta que ancha.' },
+        { c: 'float a = 0.785;   // 45 grados\np = mat2(cos(a), sin(a), -sin(a), cos(a)) * p;\nfloat v = step(abs(p.x), 0.02);',
+          o: ['Una línea diagonal que va de abajo a la izquierda a arriba a la derecha', 'Una línea vertical', 'Una línea horizontal', 'Una línea diagonal de arriba a la izquierda a abajo a la derecha'],
+          por: 'Se dibuja la recta $p_x = 0$ en las coordenadas giradas $45^\\circ$. Girar las coordenadas en un sentido gira la figura en el contrario: la vertical se inclina hacia la derecha y queda sobre la recta $y = x$.' },
+        { c: 'p = mat2(cos(iTime), sin(iTime), -sin(iTime), cos(iTime)) * p;\nfloat v = max(step(abs(p.x), 0.02), step(abs(p.y), 0.02));',
+          o: ['Una cruz que gira sobre el centro en el sentido de las agujas del reloj', 'Una cruz que gira en sentido contrario a las agujas del reloj', 'Una cruz quieta', 'Una cruz que se desplaza hacia la derecha'],
+          por: 'La matriz gira las coordenadas en sentido positivo, antihorario, un ángulo que crece con el tiempo. La figura se ve girar en el sentido contrario: el de las agujas del reloj.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'Con <code>p</code> centrada y el color final <code>vec3(v)</code>, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['Recuerda la idea que descoloca: se transforma la coordenada con la que se pregunta, así que la figura sufre la transformación inversa.']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
+  });
+
   p.keys([
-    'La matriz de rotación es la del bloque 7. En GLSL, <code>mat2</code> se construye <strong>por columnas</strong>.',
+    'La matriz de rotación es la del álgebra lineal. En GLSL, <code>mat2</code> se construye <strong>por columnas</strong>.',
     'No se transforma la figura: <strong>se transforma la coordenada</strong>, y por eso todo va invertido. Restar mueve en positivo; dividir agranda.',
     'Componer transformaciones no es conmutativo: girar y luego mover no es lo mismo que mover y luego girar.',
     'Al escalar la coordenada hay que reescalar la distancia al final, o los bordes suaves salen mal.',

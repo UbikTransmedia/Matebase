@@ -319,3 +319,26 @@
 .blk[data-piel="gfx"] .blk__btn{color:var(--gfx-ink)}
 .blk[data-piel="gfx"] .tpc.is-active{background:var(--gfx-soft); color:var(--gfx-ink)}
 .blk[data-piel="gfx"] .blk__list{border-left-color:color-mix(in srgb, var(--gfx) 30%, transparent)}
+
+
+/* --- qué temario muestra el índice ---
+   Mismo aspecto que el selector de tema: son tres opciones excluyentes y el
+   estado activo tiene que verse sin leer. */
+.themes--itin{margin-top:9px}
+.itin__nota{font-size:0.7375rem; line-height:1.45; color:var(--ink-faint); margin-top:7px}
+.itin__nota:empty{display:none}
+
+/* --- lo que el buscador encuentra en el glosario --- */
+.glosres{margin:10px 2px 0; padding-top:8px; border-top:1px solid var(--line-soft)}
+.glosres__t{font-size:0.6875rem; text-transform:uppercase; letter-spacing:.1em;
+  color:var(--ink-faint); font-weight:700; margin:0 8px 4px}
+.glosres__nada{margin:4px 8px 8px; font-size:0.8125rem; color:var(--ink-faint)}
+.glosres__b{
+  display:flex; flex-direction:column; width:100%; text-align:left; gap:1px;
+  background:none; border:0; padding:6px 9px; border-radius:8px; cursor:pointer;
+  font:inherit; font-size:0.8375rem; color:var(--ink-soft);
+}
+.glosres__b:hover{background:var(--panel-2); color:var(--ink)}
+.glosres__b:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
+.glosres__n{font-weight:600}
+.glosres__i{font-size:0.7188rem; color:var(--ink-faint)}

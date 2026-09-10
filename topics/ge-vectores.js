@@ -175,6 +175,55 @@ Course.topic('ge-vectores', function (p) {
     }
   });
 
+  p.section('Bases y proyecciones');
+
+  p.text('Dos vectores del plano que <strong>no son paralelos</strong> forman una <strong>base</strong>: ' +
+    'cualquier otro vector se escribe, de una sola manera, como combinación lineal de ellos, ' +
+    '$\\vec{w} = a\\,\\vec{u} + b\\,\\vec{v}$. Los números $a$ y $b$ son las coordenadas de $\\vec{w}$ en esa ' +
+    'base. La base de siempre, $(1, 0)$ y $(0, 1)$, es solo la más cómoda; con cualquier otra, las ' +
+    'coordenadas se calculan resolviendo un [[al-sistemas|sistema]] de dos ecuaciones.');
+
+  p.text('Y el producto escalar da una operación más, que se usará mucho en el espacio: la ' +
+    '<strong>proyección</strong> de un vector sobre otro, la sombra que deja $\\vec{u}$ sobre la dirección ' +
+    'de $\\vec{v}$ cuando la luz cae en perpendicular.');
+
+  p.formulas([
+    '\\operatorname{proy}_{\\vec{v}}\\,\\vec{u} = \\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{v}|} \\quad \\text{(longitud de la sombra, con signo)}',
+    '\\frac{\\vec{u}\\cdot\\vec{v}}{|\\vec{v}|^2}\\,\\vec{v} \\quad \\text{(la sombra como vector)}'
+  ], 'proyección de u sobre v',
+    'Se lee: <em>«la proyección de u sobre v es u escalar v partido por el módulo de v»</em>.<br><br>' +
+      'Sale de la definición: $\\vec u\\cdot\\vec v = |\\vec u|\\,|\\vec v|\\cos\\alpha$, y la sombra mide ' +
+      '$|\\vec u|\\cos\\alpha$. Si el ángulo es obtuso, la sombra cae hacia atrás y sale negativa.<br><br>' +
+      'La segunda línea da la sombra como vector: esa longitud por el vector unitario en la dirección de $\\vec v$.');
+
+  p.demo({
+    title: 'La sombra de un vector sobre otro',
+    intro: 'Mueve los dos vectores. El vector verde es la proyección de u sobre la recta de v: su sombra con la luz cayendo en perpendicular. Pon u perpendicular a v y la sombra desaparece.',
+    build: function (host) {
+      var out = W.readout(host, '');
+      W.board(host, {
+        xmin: -6, xmax: 6, ymin: -4.5, ymax: 4.5, height: 320,
+        handles: {
+          U: { x: 2, y: 3, label: 'u', color: 0, constrain: snap },
+          V: { x: 4, y: 1, label: 'v', color: 1, constrain: snap }
+        },
+        draw: function (g) {
+          var u = g.h('U'), v = g.h('V'), vv = v.x * v.x + v.y * v.y;
+          if (!vv) { out.set('$\\vec v$ no puede ser el vector cero.'); return; }
+          var ue = u.x * v.x + u.y * v.y, k = ue / vv;
+          g.seg(-6 * v.x, -6 * v.y, 6 * v.x, 6 * v.y, { color: 'axis', w: 1, dash: [4, 4] });
+          g.seg(u.x, u.y, k * v.x, k * v.y, { color: 'axis', w: 1.2, dash: true });
+          if (ue) g.vec(0, 0, k * v.x, k * v.y, { color: 2, w: 4.5 });
+          g.vec(0, 0, v.x, v.y, { color: 1, w: 2.4 });
+          g.vec(0, 0, u.x, u.y, { color: 0, w: 2.4 });
+          out.set('$\\vec u\\cdot\\vec v = ' + ue + '$, $|\\vec v| = \\sqrt{' + vv + '}$ &nbsp;→&nbsp; proyección $= \\frac{' + ue + '}{\\sqrt{' + vv + '}} \\approx ' + U.fmt(ue / Math.sqrt(vv), 3) + '$' +
+            (ue === 0 ? ' &nbsp;<strong>(perpendiculares: sombra nula)</strong>' : (ue < 0 ? ' &nbsp;(negativa: la sombra cae hacia atrás)' : '')));
+        }
+      });
+      function snap(h) { h.x = Math.round(h.x); h.y = Math.round(h.y); }
+    }
+  });
+
   /* ================= EJERCICIOS ================= */
   p.util('El producto escalar mide «cuánto va en la misma dirección», y de ahí salen dos usos constantes. ' +
     'En física es el trabajo: empujar un carrito hacia delante cansa, empujarlo hacia el suelo no lo ' +
@@ -299,7 +348,53 @@ Course.topic('ge-vectores', function (p) {
     answer: function (d) { return U.fmt(d.ang, 1) + '°'; }
   });
 
+  p.exercise({
+    title: 'Proyección de un vector sobre otro',
+    level: 'medio',
+    gen: function (r) {
+      var u = [r.pm(0, 5), r.pm(0, 5)], v = [r.pm(0, 5), r.pm(0, 5)];
+      var vv = v[0] * v[0] + v[1] * v[1];
+      if (!vv || (!u[0] && !u[1])) return null;
+      var ue = u[0] * v[0] + u[1] * v[1];
+      return { u: u, v: v, vv: vv, ue: ue, val: ue / Math.sqrt(vv) };
+    },
+    ask: function (d) { return 'Calcula la proyección (con signo) de $\\vec u = (' + d.u.join(',\\ ') + ')$ sobre la dirección de $\\vec v = (' + d.v.join(',\\ ') + ')$ (cuatro decimales).'; },
+    fields: [{ name: 'p', label: 'proyección', w: 'wide' }],
+    sol: function (d) { return { p: U.round(d.val, 6) }; },
+    tol: 3e-4,
+    errores: [
+      { si: function (v, d) { return d.vv !== 1 && d.ue !== 0 && Math.abs(v.p - d.ue) < 1e-6; }, msg: 'Eso es el producto escalar. La sombra se obtiene dividiéndolo por el <strong>módulo</strong> de $\\vec v$.' },
+      { si: function (v, d) { return d.vv !== 1 && d.ue !== 0 && Math.abs(v.p - d.ue / d.vv) < 1e-4; }, msg: 'Has dividido por el módulo al cuadrado: eso da el coeficiente del vector proyección, no la longitud de la sombra.' }
+    ],
+    hint: function () { return 'Proyección de $\\vec u$ sobre $\\vec v$: $\\frac{\\vec u\\cdot\\vec v}{|\\vec v|}$.'; },
+    steps: function (d) { return ['$\\vec u\\cdot\\vec v = ' + d.ue + '$ y $|\\vec v| = \\sqrt{' + d.vv + '}$.', 'Proyección: $\\dfrac{' + d.ue + '}{\\sqrt{' + d.vv + '}} \\approx ' + U.fmt(d.val, 4) + '$' + (d.ue < 0 ? ' (negativa: el ángulo es obtuso).' : '.')]; },
+    answer: function (d) { return U.fmt(d.val, 4); }
+  });
+
+  p.exercise({
+    title: 'Coordenadas en otra base',
+    level: 'avanzado',
+    gen: function (r) {
+      var u = [r.pm(0, 3), r.pm(0, 3)], v = [r.pm(0, 3), r.pm(0, 3)];
+      if (u[0] * v[1] - u[1] * v[0] === 0) return null;
+      var a = r.pm(1, 4), b = r.pm(1, 4);
+      return { u: u, v: v, a: a, b: b, w: [a * u[0] + b * v[0], a * u[1] + b * v[1]] };
+    },
+    ask: function (d) { return 'Escribe $\\vec w = (' + d.w.join(',\\ ') + ')$ como combinación lineal $a\\,\\vec u + b\\,\\vec v$ de $\\vec u = (' + d.u.join(',\\ ') + ')$ y $\\vec v = (' + d.v.join(',\\ ') + ')$.'; },
+    fields: [{ name: 'a', label: 'a =', w: 'tiny' }, { name: 'b', label: 'b =', w: 'tiny' }],
+    sol: function (d) { return { a: d.a, b: d.b }; },
+    errores: [{ si: function (v, d) { return d.a !== d.b && v.a === d.b && v.b === d.a; }, msg: 'Están intercambiados: $a$ acompaña a $\\vec u$ y $b$ a $\\vec v$.' }],
+    hint: function (d) { return ['Plantea $(' + d.w.join(', ') + ') = a(' + d.u.join(', ') + ') + b(' + d.v.join(', ') + ')$ componente a componente.', 'Sale un sistema de dos ecuaciones con incógnitas $a$ y $b$.']; },
+    steps: function (d) {
+      return ['$\\begin{cases} ' + ML.termTex(d.u[0], 'a', 1, true) + ML.termTex(d.v[0], 'b', 1, !d.u[0]) + ' = ' + d.w[0] + ' \\\\ ' + ML.termTex(d.u[1], 'a', 1, true) + ML.termTex(d.v[1], 'b', 1, !d.u[1]) + ' = ' + d.w[1] + '\\end{cases}$',
+        'Resolviendo: $a = ' + d.a + '$, $b = ' + d.b + '$. Como $\\vec u$ y $\\vec v$ no son paralelos, la solución es única.'];
+    },
+    answer: function (d) { return 'a = ' + d.a + ', b = ' + d.b; }
+  });
+
   p.keys([
+    'Dos vectores no paralelos forman una base del plano; las coordenadas de otro vector en ella salen de un sistema.',
+    'Proyección de $\\vec u$ sobre $\\vec v$: $\\frac{\\vec u\\cdot\\vec v}{|\\vec v|}$, la sombra de $\\vec u$ en la dirección de $\\vec v$.',
     'Vector = módulo + dirección + sentido. En componentes, $\\vec{v}=(v_1,v_2)$.',
     '$\\vec{AB} = B - A$: final menos inicial. Nunca al revés.',
     '$|\\vec{v}| = \\sqrt{v_1^2+v_2^2}$ — Pitágoras otra vez.',

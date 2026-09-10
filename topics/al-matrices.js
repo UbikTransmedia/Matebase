@@ -17,6 +17,27 @@ Course.topic('al-matrices', function (p) {
   p.text('Se nombra $a_{ij}$ al elemento de la fila $i$ y la columna $j$. Siempre en ese orden: ' +
     'primero fila, después columna.');
 
+  p.section('Tipos de matrices y la traspuesta');
+
+  p.text('Algunas formas aparecen tanto que tienen nombre propio. Conviene reconocerlas de un vistazo, ' +
+    'porque cada una se comporta de una manera especial al operar y muchas preguntas de examen dan por ' +
+    'sabido su nombre:');
+
+  p.table(['Nombre', 'Qué la caracteriza', 'Ejemplo'],
+    [['cuadrada', 'tantas filas como columnas', '$\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}$'],
+     ['diagonal', 'cuadrada, con ceros fuera de la diagonal principal', '$\\begin{pmatrix} 3 & 0 \\\\ 0 & -1 \\end{pmatrix}$'],
+     ['identidad $I$', 'diagonal con unos: hace de «uno» en el producto, $AI = IA = A$', '$\\begin{pmatrix} 1 & 0 \\\\ 0 & 1 \\end{pmatrix}$'],
+     ['triangular', 'ceros por debajo (o por encima) de la diagonal', '$\\begin{pmatrix} 2 & 5 \\\\ 0 & 7 \\end{pmatrix}$'],
+     ['nula $O$', 'todos sus elementos son cero', '$\\begin{pmatrix} 0 & 0 \\\\ 0 & 0 \\end{pmatrix}$'],
+     ['simétrica', 'coincide con su traspuesta: $a_{ij} = a_{ji}$', '$\\begin{pmatrix} 1 & 4 \\\\ 4 & 9 \\end{pmatrix}$']]);
+
+  p.formula('A = \\begin{pmatrix} 2 & -1 & 0 \\\\ 3 & 5 & 4 \\end{pmatrix} \\ \\Longrightarrow\\ A^t = \\begin{pmatrix} 2 & 3 \\\\ -1 & 5 \\\\ 0 & 4 \\end{pmatrix}',
+    'la traspuesta: filas por columnas',
+    'La $t$ de arriba se lee «traspuesta»: <em>«a traspuesta»</em>. La primera fila de $A$ pasa a ser ' +
+      'la primera columna de $A^t$, la segunda fila la segunda columna, y así. Una matriz de dimensión ' +
+      '$m\\times n$ se convierte en una $n\\times m$.<br><br>Dos propiedades que se usan mucho: ' +
+      '$(A^t)^t = A$ y $(A\\cdot B)^t = B^t\\cdot A^t$, <strong>con el orden cambiado</strong>.');
+
   p.section('Suma y producto por un número');
 
   p.text('Fáciles: se hacen elemento a elemento. Para sumar, las dos matrices tienen que tener ' +
@@ -146,6 +167,42 @@ Course.topic('al-matrices', function (p) {
     'existen para hacer justamente eso a toda velocidad. Y las redes neuronales que están detrás de ' +
     'cualquier inteligencia artificial son, por dentro, cadenas de productos de matrices: entrenar ' +
     'un modelo consiste en repetir esta operación billones de veces.');
+
+  p.demo({
+    title: 'Girar y luego estirar no es estirar y luego girar',
+    intro: 'A es un giro de 90° y B estira el eje horizontal al doble. El cuadrado azul se transforma con el producto elegido. Cambia el orden y compara: el resultado no es el mismo, y por eso A·B ≠ B·A.',
+    build: function (host) {
+      var orden = 'AB';
+      var A = [[0, -1], [1, 0]], B = [[2, 0], [0, 1]];
+      function aplica(M, v) { return [M[0][0] * v[0] + M[0][1] * v[1], M[1][0] * v[0] + M[1][1] * v[1]]; }
+      function prod(M, N) {
+        return [[M[0][0] * N[0][0] + M[0][1] * N[1][0], M[0][0] * N[0][1] + M[0][1] * N[1][1]],
+          [M[1][0] * N[0][0] + M[1][1] * N[1][0], M[1][0] * N[0][1] + M[1][1] * N[1][1]]];
+      }
+      var cuadrado = [[0, 0], [1, 0], [1, 1], [0, 1]];
+      var out = W.readout(host, '');
+      var plot = W.board(host, {
+        xmin: -2.6, xmax: 2.6, ymin: -2.2, ymax: 2.2, height: 290,
+        draw: function (g) {
+          var P = orden === 'AB' ? prod(A, B) : prod(B, A);
+          g.poly(cuadrado, { color: 0, fillAlpha: 0.15, w: 1.4 });
+          g.poly(cuadrado.map(function (q) { return aplica(P, q); }), { color: 1, fillAlpha: 0.3, w: 2.2 });
+          var e = aplica(P, [1, 0]);
+          g.point(1, 0, { color: 0, r: 4 });
+          g.point(e[0], e[1], { color: 1, r: 5, label: 'imagen de (1, 0)' });
+        }
+      });
+      function pinta() {
+        var P = orden === 'AB' ? prod(A, B) : prod(B, A);
+        out.set('$' + (orden === 'AB' ? 'A\\cdot B' : 'B\\cdot A') + ' = ' + ML.matTex(P) + '$<br>' +
+          (orden === 'AB' ? 'En $A\\cdot B$ se aplica <strong>primero $B$</strong> (estirar) y después $A$ (girar): los productos se leen de derecha a izquierda, como una composición de funciones.'
+            : 'En $B\\cdot A$ se aplica primero $A$ (girar) y después $B$ (estirar). El cuadrado acaba estirado en otra dirección.'));
+        plot.render();
+      }
+      W.chips(host, [{ label: 'A · B', value: 'AB' }, { label: 'B · A', value: 'BA' }], { value: orden, on: function (v) { orden = v; pinta(); } });
+      pinta();
+    }
+  });
 
   p.section('El determinante');
 
@@ -362,8 +419,65 @@ Course.topic('al-matrices', function (p) {
     }
   });
 
+  p.exercise({
+    title: 'Un producto completo',
+    level: 'medio',
+    gen: function (r) {
+      var A = [[r.pm(0, 4), r.pm(0, 4), r.pm(0, 4)], [r.pm(0, 4), r.pm(0, 4), r.pm(0, 4)]];
+      var B = [[r.pm(0, 3), r.pm(0, 3)], [r.pm(0, 3), r.pm(0, 3)], [r.pm(0, 3), r.pm(0, 3)]];
+      var C = A.map(function (f) { return [0, 1].map(function (j) { return f[0] * B[0][j] + f[1] * B[1][j] + f[2] * B[2][j]; }); });
+      return { A: A, B: B, C: C };
+    },
+    ask: function (d) {
+      return 'Calcula $A\\cdot B$ siendo $A = ' + ML.matTex(d.A) + '$ y $B = ' + ML.matTex(d.B) + '$. ¿Qué dimensión tiene el resultado?';
+    },
+    fields: [{ name: 'a', label: '$c_{11}$', w: 'tiny' }, { name: 'b', label: '$c_{12}$', w: 'tiny' }, { name: 'c', label: '$c_{21}$', w: 'tiny' }, { name: 'd', label: '$c_{22}$', w: 'tiny' }],
+    sol: function (d) { return { a: d.C[0][0], b: d.C[0][1], c: d.C[1][0], d: d.C[1][1] }; },
+    hint: function () {
+      return ['$A$ es 2×3 y $B$ es 3×2: se pueden multiplicar (3 = 3) y el resultado es 2×2.',
+        'Cada casilla $c_{ij}$ es la fila $i$ de $A$ por la columna $j$ de $B$: tres productos sumados.'];
+    },
+    steps: function (d) {
+      var s = ['Dimensiones: $(2\\times 3)\\cdot(3\\times 2) = 2\\times 2$.'];
+      for (var i = 0; i < 2; i++) for (var j = 0; j < 2; j++) {
+        s.push('$c_{' + (i + 1) + (j + 1) + '} = ' + [0, 1, 2].map(function (k) { return d.A[i][k] + '\\cdot' + (d.B[k][j] < 0 ? '(' + d.B[k][j] + ')' : d.B[k][j]); }).join(' + ') + ' = ' + d.C[i][j] + '$');
+      }
+      return s;
+    },
+    answer: function (d) { return '$' + ML.matTex(d.C) + '$'; }
+  });
+
+  p.exercise({
+    title: 'La traspuesta de un producto',
+    level: 'avanzado',
+    gen: function (r) {
+      var A = [[r.pm(0, 4), r.pm(0, 4)], [r.pm(0, 4), r.pm(0, 4)]], B = [[r.pm(0, 4), r.pm(0, 4)], [r.pm(0, 4), r.pm(0, 4)]];
+      function pr(M, N) { return [[M[0][0] * N[0][0] + M[0][1] * N[1][0], M[0][0] * N[0][1] + M[0][1] * N[1][1]], [M[1][0] * N[0][0] + M[1][1] * N[1][0], M[1][0] * N[0][1] + M[1][1] * N[1][1]]]; }
+      function tr(M) { return [[M[0][0], M[1][0]], [M[0][1], M[1][1]]]; }
+      var bien = tr(pr(A, B)), mal = pr(tr(A), tr(B));
+      return { A: A, B: B, bien: bien, mal: mal, i: r.int(0, 1), j: r.int(0, 1) };
+    },
+    ask: function (d) {
+      return 'Con $A = ' + ML.matTex(d.A) + '$ y $B = ' + ML.matTex(d.B) + '$, calcula el elemento de la fila ' + (d.i + 1) + ' y columna ' + (d.j + 1) + ' de $(A\\cdot B)^t$.';
+    },
+    fields: [{ name: 'v', label: 'elemento', w: 'tiny' }],
+    sol: function (d) { return { v: d.bien[d.i][d.j] }; },
+    errores: [{
+      si: function (v, d) { return d.mal[d.i][d.j] !== d.bien[d.i][d.j] && v.v === d.mal[d.i][d.j]; },
+      msg: 'Has calculado $A^t\\cdot B^t$. La traspuesta de un producto cambia el orden: $(AB)^t = B^t A^t$.'
+    }],
+    hint: function () { return ['Calcula primero $A\\cdot B$ y después trasponlo.', 'O usa la propiedad $(AB)^t = B^t\\cdot A^t$, con el orden cambiado.']; },
+    steps: function (d) {
+      var AB = [[d.bien[0][0], d.bien[1][0]], [d.bien[0][1], d.bien[1][1]]];
+      return ['$A\\cdot B = ' + ML.matTex(AB) + '$', '$(A\\cdot B)^t = ' + ML.matTex(d.bien) + '$', 'El elemento pedido vale $' + d.bien[d.i][d.j] + '$.'];
+    },
+    answer: function (d) { return String(d.bien[d.i][d.j]); }
+  });
+
   p.keys([
     'Matriz = tabla de números. $a_{ij}$: primero fila, después columna.',
+    'La traspuesta cambia filas por columnas; es simétrica si $A^t = A$, y $(AB)^t = B^tA^t$.',
+    'Multiplicar matrices es encadenar transformaciones: $AB$ aplica primero $B$ y después $A$.',
     'El producto es fila por columna, y exige que las columnas de la primera igualen las filas de la segunda.',
     'El producto de matrices <strong>no es conmutativo</strong>.',
     'El determinante de orden 2 es $ad-bc$; el de orden 3, por Sarrus.',

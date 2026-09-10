@@ -325,6 +325,14 @@ Course.topic('av-computabilidad', function (p) {
     'mismo, una de las cosas que se pueden calcular.');
 
   /* ================= EJERCICIOS ================= */
+  p.hist('Un siglo antes que Turing, <strong>Ada Lovelace</strong> ya había pensado en qué puede y qué no puede hacer ' +
+    'una máquina que calcula. En 1843 tradujo un artículo sobre la Máquina Analítica de Charles Babbage, un ordenador ' +
+    'mecánico que nunca llegó a construirse, y le añadió unas notas tres veces más largas que el original. En ellas ' +
+    'describía paso a paso cómo la máquina calcularía los números de Bernoulli, lo que se considera el primer programa ' +
+    'publicado, e intuía que podría manipular cualquier símbolo, no solo números, e incluso componer música. También ' +
+    'escribió que la máquina no podía «originar» nada, solo hacer lo que se le ordenara; en 1950, Turing dedicó un ' +
+    'apartado de su artículo más famoso a discutir la «objeción de Lady Lovelace».');
+
   p.section('Practica');
 
   p.exercise({

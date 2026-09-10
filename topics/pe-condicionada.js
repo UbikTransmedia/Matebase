@@ -96,6 +96,57 @@ Course.topic('pe-condicionada', function (p) {
     'probabilidades condicionadas. Es la distinción que más aparece en los exámenes.');
 
   /* ---------------------------------------------------------------- */
+  p.section('Tablas de contingencia');
+
+  p.text('Cuando se estudian dos características a la vez —fumar y sexo, curso y aprobado, vacunado y ' +
+    'enfermo—, los datos se ordenan en una <strong>tabla de doble entrada</strong> o de contingencia, con ' +
+    'los totales en los márgenes. De ella salen todas las probabilidades sin fórmulas: basta leer la ' +
+    'casilla correcta y dividir por el total correcto.');
+
+  p.table(['', 'Fuma ($F$)', 'No fuma ($\\overline{F}$)', 'Total'],
+    [['Hombre ($H$)', '30', '70', '100'], ['Mujer ($M$)', '20', '80', '100'], ['Total', '50', '150', '200']], { num: [1, 2, 3] });
+
+  p.list([
+    '<strong>Intersección</strong>: una casilla entre el total general. $P(H \\cap F) = \\frac{30}{200}$.',
+    '<strong>Marginal</strong>: un total de fila o de columna entre el total general. $P(F) = \\frac{50}{200}$.',
+    '<strong>Condicionada</strong>: la casilla entre el total de <em>la fila o columna de lo que se sabe</em>. $P(F|H) = \\frac{30}{100}$, porque sabiendo que es hombre el mundo se reduce a la fila de los hombres; en cambio $P(H|F) = \\frac{30}{50}$, porque el mundo es la columna de los fumadores.'
+  ]);
+
+  p.note('Una tabla de contingencia y un diagrama de árbol guardan la misma información. El árbol empieza ' +
+    'por una característica y se ramifica en la otra; la tabla pone las dos a la vez. Pasar de una a otra es ' +
+    'un ejercicio frecuente, y conviene elegir la que haga más fácil lo que se pregunta: el árbol para la ' +
+    'probabilidad total y Bayes, la tabla para leer condicionadas en cualquier sentido.', 'ok', 'Tabla o árbol');
+
+  p.demo({
+    title: 'Leer una tabla de contingencia',
+    intro: 'Cambia las cuatro casillas. Las probabilidades se recalculan leyendo la tabla, y abajo se comprueba si los dos sucesos son independientes: si P(A ∩ B) coincide con P(A)·P(B).',
+    build: function (host) {
+      var c = { ab: 30, anb: 70, nab: 20, nanb: 80 };
+      var caja = U.el('div');
+      host.appendChild(caja);
+      var out = W.readout(host, '');
+      function pinta() {
+        var fA = c.ab + c.anb, fnA = c.nab + c.nanb, cB = c.ab + c.nab, cnB = c.anb + c.nanb, N = fA + fnA;
+        caja.innerHTML = '<div class="tbl-wrap"><table class="tbl"><thead><tr><th></th><th class="num">B</th><th class="num">no B</th><th class="num">Total</th></tr></thead><tbody>' +
+          '<tr><td>A</td><td class="num">' + c.ab + '</td><td class="num">' + c.anb + '</td><td class="num">' + fA + '</td></tr>' +
+          '<tr><td>no A</td><td class="num">' + c.nab + '</td><td class="num">' + c.nanb + '</td><td class="num">' + fnA + '</td></tr>' +
+          '<tr><td><strong>Total</strong></td><td class="num">' + cB + '</td><td class="num">' + cnB + '</td><td class="num"><strong>' + N + '</strong></td></tr></tbody></table></div>';
+        if (!N || !cB || !fA) { out.set('Hace falta que haya datos en la fila de A y en la columna de B.'); return; }
+        var ind = c.ab * N === fA * cB;
+        out.set('$P(A\\cap B) = \\frac{' + c.ab + '}{' + N + '} \\approx ' + U.fmt(c.ab / N, 3) + '$ &nbsp;·&nbsp; $P(A) \\approx ' + U.fmt(fA / N, 3) + '$ &nbsp;·&nbsp; $P(B) \\approx ' + U.fmt(cB / N, 3) + '$<br>' +
+          '$P(A|B) = \\frac{' + c.ab + '}{' + cB + '} \\approx ' + U.fmt(c.ab / cB, 3) + '$ &nbsp;·&nbsp; $P(B|A) = \\frac{' + c.ab + '}{' + fA + '} \\approx ' + U.fmt(c.ab / fA, 3) + '$<br>' +
+          (ind ? '<strong style="color:var(--ok)">Independientes:</strong> $P(A\\cap B) = P(A)\\cdot P(B)$ exactamente.' : '<strong>No son independientes:</strong> $P(A)\\cdot P(B) \\approx ' + U.fmt(fA * cB / (N * N), 3) + '$, distinto de $P(A\\cap B)$.'));
+      }
+      var fila = W.row(host);
+      [['ab', 'A y B'], ['anb', 'A y no B'], ['nab', 'no A y B'], ['nanb', 'ni A ni B']].forEach(function (k) {
+        W.slider(fila, { label: k[1], min: 0, max: 100, step: 1, value: c[k[0]], on: function (v) { c[k[0]] = v; pinta(); } });
+      });
+      W.hint(host, 'Prueba 20, 30, 40 y 60: la proporción de B es la misma con A y sin A, y los sucesos resultan independientes.');
+      pinta();
+    }
+  });
+
+  /* ---------------------------------------------------------------- */
   p.section('Probabilidad total');
 
   p.text('Cuando un suceso puede llegar por varios caminos incompatibles, su probabilidad es la ' +
@@ -342,8 +393,64 @@ Course.topic('pe-condicionada', function (p) {
     answer: function (d) { return U.fmt(d.bayes, 4); }
   });
 
+  p.problem({
+    title: 'Una tabla de contingencia',
+    level: 'avanzado',
+    gen: function (r) {
+      var N = 200, fA = r.pick([40, 60, 80, 100, 120]), cB = r.pick([50, 100, 150]);
+      var ab = fA * cB / N;
+      var ind = r.bool(0.4);
+      if (!ind) { var k = r.pm(5, 15); ab += k; }
+      var anb = fA - ab, nab = cB - ab, nanb = N - ab - anb - nab;
+      if (ab <= 0 || anb < 0 || nab < 0 || nanb < 0) return null;
+      return { N: N, fA: fA, cB: cB, ab: ab, anb: anb, nab: nab, nanb: nanb, ind: ab * N === fA * cB ? 'si' : 'no' };
+    },
+    intro: function (d) {
+      return 'En una encuesta a ' + d.N + ' estudiantes se pregunta si hacen deporte ($D$) y si duermen más de 8 horas ($S$). Los resultados:' +
+        '<div class="tbl-wrap"><table class="tbl"><thead><tr><th></th><th class="num">S</th><th class="num">no S</th><th class="num">Total</th></tr></thead><tbody>' +
+        '<tr><td>D</td><td class="num">' + d.ab + '</td><td class="num">' + d.anb + '</td><td class="num">' + d.fA + '</td></tr>' +
+        '<tr><td>no D</td><td class="num">' + d.nab + '</td><td class="num">' + d.nanb + '</td><td class="num">' + (d.N - d.fA) + '</td></tr>' +
+        '<tr><td>Total</td><td class="num">' + d.cB + '</td><td class="num">' + (d.N - d.cB) + '</td><td class="num">' + d.N + '</td></tr></tbody></table></div>' +
+        'Se elige un estudiante al azar.';
+    },
+    partes: [
+      {
+        ask: function () { return '¿Cuál es la probabilidad de que haga deporte y duerma más de 8 horas? (Vale una fracción.)'; },
+        fields: [{ name: 'v', label: 'P(D ∩ S)', w: 'tiny' }],
+        sol: function (d) { return { v: d.ab / d.N }; },
+        tol: 1e-9,
+        hint: function () { return 'Casilla de la intersección entre el total general.'; },
+        steps: function (d) { return ['$P(D\\cap S) = \\frac{' + d.ab + '}{' + d.N + '} = ' + ML.F(d.ab, d.N).tex() + '$']; },
+        answer: function (d) { return '$' + ML.F(d.ab, d.N).tex() + '$'; }
+      },
+      {
+        ask: function () { return 'Sabiendo que duerme más de 8 horas, ¿cuál es la probabilidad de que haga deporte?'; },
+        fields: [{ name: 'v', label: 'P(D | S)', w: 'tiny' }],
+        sol: function (d) { return { v: d.ab / d.cB }; },
+        tol: 1e-9,
+        errores: [{ si: function (v, d) { return d.cB !== d.fA && Math.abs(v.v - d.ab / d.fA) < 1e-9; }, msg: 'Has dividido por el total de los que hacen deporte: eso es $P(S|D)$. Lo que se sabe es que duerme más de 8 horas, así que el mundo es la columna de $S$.' }],
+        hint: function () { return 'Lo que se sabe (S) reduce el mundo a su columna: divide por el total de esa columna.'; },
+        steps: function (d) { return ['$P(D|S) = \\frac{' + d.ab + '}{' + d.cB + '} = ' + ML.F(d.ab, d.cB).tex() + '$']; },
+        answer: function (d) { return '$' + ML.F(d.ab, d.cB).tex() + '$'; }
+      },
+      {
+        ask: function () { return '¿Son independientes los sucesos $D$ y $S$?'; },
+        fields: [{ name: 't', label: 'D y S', opts: [{ t: 'Sí, son independientes', v: 'si' }, { t: 'No son independientes', v: 'no' }] }],
+        sol: function (d) { return { t: d.ind }; },
+        hint: function () { return 'Compara $P(D\\cap S)$ con $P(D)\\cdot P(S)$, o $P(D|S)$ con $P(D)$.'; },
+        steps: function (d) {
+          return ['$P(D) = \\frac{' + d.fA + '}{' + d.N + '}$ y $P(D|S) = \\frac{' + d.ab + '}{' + d.cB + '}$.',
+            d.ind === 'si' ? 'Coinciden: saber que duerme más de 8 horas no cambia la probabilidad de que haga deporte. <strong>Independientes.</strong>'
+              : 'No coinciden: saber una cosa cambia la probabilidad de la otra. <strong>No son independientes.</strong>'];
+        },
+        answer: function (d) { return d.ind === 'si' ? 'Independientes' : 'No independientes'; }
+      }
+    ]
+  });
+
   p.keys([
-    '$P(A|B) = \\frac{P(A\\cap B)}{P(B)}$: condicionar es reducir el espacio muestral a $B$.',
+    'En una tabla de contingencia, la condicionada es la casilla entre el total de la fila o columna de lo que se sabe.',
+    '$P(A|B) =\\frac{P(A\\cap B)}{P(B)}$: condicionar es reducir el espacio muestral a $B$.',
     'Independientes: $P(A\\cap B) = P(A)P(B)$. <strong>No</strong> es lo mismo que incompatibles.',
     'Sin reemplazamiento las extracciones dependen unas de otras; con reemplazamiento, no.',
     'Probabilidad total: sumar todos los caminos del árbol, multiplicando a lo largo de cada rama.',

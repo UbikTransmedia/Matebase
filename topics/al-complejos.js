@@ -177,6 +177,59 @@ Course.topic('al-complejos', function (p) {
     }
   });
 
+  p.sub('Raíces n-ésimas: un polígono regular');
+
+  p.text('De la fórmula de De Moivre sale enseguida cómo calcular raíces. Si $w^n = z$ y $z = r_\\alpha$, ' +
+    'el módulo de $w$ tiene que ser $\\sqrt[n]{r}$, y su argumento, multiplicado por $n$, tiene que dar ' +
+    '$\\alpha$… <strong>o $\\alpha$ más cualquier número de vueltas completas</strong>, porque girar ' +
+    '$360^\\circ$ deja las cosas como estaban. Por eso un complejo no nulo tiene exactamente $n$ raíces ' +
+    '$n$-ésimas distintas.');
+
+  p.formula('\\sqrt[n]{r_\\alpha} = \\left(\\sqrt[n]{r}\\right)_{\\frac{\\alpha + 360^\\circ k}{n}}, \\qquad k = 0, 1, \\dots, n - 1',
+    'las n raíces n-ésimas',
+    'Se lee: <em>«las raíces ene-ésimas de erre sub alfa tienen módulo raíz ene-ésima de erre y argumento ' +
+      'alfa más trescientos sesenta por ka, partido por ene»</em>.<br><br>Con $k = n$ se vuelve a la raíz ' +
+      'de $k = 0$, así que basta con $k$ de $0$ a $n - 1$.<br><br>Todas tienen el mismo módulo y están ' +
+      'separadas $\\frac{360^\\circ}{n}$: son los vértices de un <strong>polígono regular</strong> centrado ' +
+      'en el origen.');
+
+  p.demo({
+    title: 'Las raíces forman un polígono',
+    intro: 'Las n raíces n-ésimas de un complejo z. Cambia n y el complejo de partida: siempre quedan repartidas por una circunferencia, como los vértices de un polígono regular. La raíz con k = 0 va en otro color.',
+    build: function (host) {
+      var n = 5, rr = 8, alfa = 60;
+      var out = W.readout(host, '');
+      var plot = W.board(host, {
+        xmin: -2.7, xmax: 2.7, ymin: -2.3, ymax: 2.3, height: 320, xlabel: 'Re', ylabel: 'Im',
+        draw: function (g) {
+          var m = Math.pow(rr, 1 / n), pts = [];
+          for (var k = 0; k < n; k++) {
+            var a = (alfa + 360 * k) / n * Math.PI / 180;
+            pts.push([m * Math.cos(a), m * Math.sin(a)]);
+          }
+          g.circle(0, 0, m, { color: 'axis', w: 1, dash: true });
+          if (n > 2) g.poly(pts, { color: 2, fillAlpha: 0.12, w: 1.6 });
+          pts.forEach(function (q, k) {
+            g.vec(0, 0, q[0], q[1], { color: k === 0 ? 1 : 0, w: 2 });
+            g.point(q[0], q[1], { color: k === 0 ? 1 : 0, r: 4.5, label: 'w' + k });
+          });
+        }
+      });
+      function pinta() {
+        var m = Math.pow(rr, 1 / n), args = [];
+        for (var k = 0; k < n; k++) args.push('$' + U.fmt((alfa + 360 * k) / n, 1) + '^\\circ$');
+        out.set('$z = ' + rr + '_{' + alfa + '^\\circ}$ &nbsp;·&nbsp; módulo de las raíces: $\\sqrt[' + n + ']{' + rr + '} \\approx ' + U.fmt(m, 3) +
+          '$ &nbsp;·&nbsp; separación: $\\frac{360^\\circ}{' + n + '} = ' + U.fmt(360 / n, 1) + '^\\circ$<br>Argumentos: ' + args.join(', '));
+        plot.render();
+      }
+      var fila = W.row(host);
+      W.slider(fila, { label: 'índice n', min: 2, max: 9, step: 1, value: n, on: function (v) { n = v; pinta(); } });
+      W.slider(fila, { label: 'módulo r de z', min: 1, max: 20, step: 1, value: rr, on: function (v) { rr = v; pinta(); } });
+      W.slider(fila, { label: 'argumento de z (grados)', min: 0, max: 355, step: 5, value: alfa, on: function (v) { alfa = v; pinta(); } });
+      pinta();
+    }
+  });
+
   p.sub('El teorema fundamental del álgebra');
 
   p.text('Con los complejos, el álgebra por fin se cierra: <strong>todo polinomio de grado $n$ tiene ' +
@@ -303,7 +356,34 @@ Course.topic('al-complejos', function (p) {
     answer: function (d) { return '$' + d.re + ' \\pm ' + d.im + 'i$'; }
   });
 
+  p.exercise({
+    title: 'Raíces n-ésimas',
+    level: 'avanzado',
+    gen: function (r) {
+      var n = r.pick([3, 4, 6]), base = r.pick([1, 2, 3]), alfa = r.pick([0, 60, 90, 120, 180, 240, 270]), k = r.int(1, n - 1);
+      return { n: n, base: base, r0: Math.pow(base, n), alfa: alfa, k: k, arg: (alfa + 360 * k) / n, arg0: alfa / n };
+    },
+    ask: function (d) {
+      return 'Las raíces ' + ({ 3: 'cúbicas', 4: 'cuartas', 6: 'sextas' }[d.n]) + ' de $z = ' + d.r0 + '_{' + d.alfa + '^\\circ}$ se numeran con $k = 0, 1, \\dots$ ¿Qué módulo y qué argumento, en grados, tiene la raíz con $k = ' + d.k + '$?';
+    },
+    fields: [{ name: 'm', label: 'módulo', w: 'tiny' }, { name: 'a', label: 'argumento (°)', w: 'tiny' }],
+    sol: function (d) { return { m: d.base, a: d.arg }; },
+    tol: 1e-6,
+    errores: [
+      { si: function (v, d) { return Math.abs(v.a - d.arg0) < 1e-6; }, msg: 'Ese es el argumento de la raíz con $k = 0$. Para las demás hay que sumar $360^\\circ k$ <strong>antes</strong> de dividir por $n$.' },
+      { si: function (v, d) { return Math.abs(v.a - (d.arg0 + 360 * d.k)) < 1e-6; }, msg: 'Las vueltas se suman al argumento de $z$ y después se divide todo por $n$: las raíces están separadas $\\frac{360^\\circ}{n}$, no $360^\\circ$.' }
+    ],
+    hint: function (d) { return ['Módulo: $\\sqrt[' + d.n + ']{' + d.r0 + '}$.', 'Argumento: $\\frac{' + d.alfa + '^\\circ + 360^\\circ\\cdot' + d.k + '}{' + d.n + '}$.']; },
+    steps: function (d) {
+      return ['Módulo: $\\sqrt[' + d.n + ']{' + d.r0 + '} = ' + d.base + '$.',
+        'Argumento: $\\dfrac{' + d.alfa + '^\\circ + ' + (360 * d.k) + '^\\circ}{' + d.n + '} = ' + U.fmt(d.arg, 2) + '^\\circ$.',
+        'Las ' + d.n + ' raíces quedan separadas $' + U.fmt(360 / d.n, 1) + '^\\circ$ sobre la circunferencia de radio ' + d.base + '.'];
+    },
+    answer: function (d) { return 'módulo ' + d.base + ', argumento ' + U.fmt(d.arg, 2) + '°'; }
+  });
+
   p.keys([
+    'Un complejo no nulo tiene $n$ raíces $n$-ésimas: mismo módulo $\\sqrt[n]{r}$ y argumentos separados $\\frac{360^\\circ}{n}$, en los vértices de un polígono regular.',
     '$i^2 = -1$. Un complejo es $z = a+bi$: un punto del plano.',
     'Se suman como vectores; se multiplican como binomios usando $i^2=-1$.',
     'Para dividir, se multiplica arriba y abajo por el conjugado.',

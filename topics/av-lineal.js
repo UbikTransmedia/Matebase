@@ -118,6 +118,54 @@ Course.topic('av-lineal', function (p) {
     'el año 2000 porque el paso de la gente excitó uno de sus modos propios. Calcular autovalores es ' +
     'lo que evita que eso ocurra.');
 
+  p.section('Autovalores complejos: girar también transforma');
+
+  p.text('Hay matrices que no dejan ninguna dirección sin torcer. La más evidente es un giro: si todo el plano gira ' +
+    '$90^\\circ$, ningún vector acaba sobre su misma recta, y la ecuación característica no tiene raíces reales. ' +
+    'Pero sí tiene raíces [[al-complejos|complejas]], y esas raíces dicen exactamente cuánto gira y cuánto estira ' +
+    'la transformación.');
+
+  p.formula('A = \\begin{pmatrix} a & -b \\\\ b & a \\end{pmatrix} = r\\begin{pmatrix} \\cos\\theta & -\\operatorname{sen}\\theta \\\\ \\operatorname{sen}\\theta & \\cos\\theta \\end{pmatrix}, \\qquad \\lambda = a \\pm b\\,i',
+    'giro con escala: autovalores complejos',
+    'La ecuación característica es $(a - \\lambda)^2 + b^2 = 0$, así que $\\lambda = a \\pm bi$.<br><br>El ' +
+    '<strong>módulo</strong> del autovalor, $r = \\sqrt{a^2 + b^2}$, es cuánto estira la matriz; su ' +
+    '<strong>argumento</strong>, $\\theta$, cuánto gira.<br><br>Multiplicar el vector $(x, y)$ por $A$ da lo mismo ' +
+    'que multiplicar el complejo $x + yi$ por $a + bi$: los números complejos <em>son</em> giros con escala.');
+
+  p.text('Toda matriz real 2×2 con autovalores complejos $a \\pm bi$ se comporta así en una base adecuada: en cada ' +
+    'aplicación gira un ángulo $\\theta$ y estira por $r$. Si $r < 1$, los puntos caen en espiral hacia el origen; si ' +
+    '$r > 1$, se alejan en espiral; si $r = 1$, giran para siempre sobre una curva cerrada. Es el mismo criterio de ' +
+    'estabilidad de los [[av-sistemas-dinamicos|sistemas dinámicos]].');
+
+  p.demo({
+    title: 'La espiral de los autovalores complejos',
+    intro: 'Se aplica la matriz una y otra vez a un punto de partida. Cada aplicación gira un ángulo θ y estira por r, los dos datos del autovalor complejo. Pon r justo en 1 y el punto da vueltas sin acercarse ni alejarse.',
+    build: function (host) {
+      var rr = 0.93, th = 25;
+      var out = W.readout(host, '');
+      var plot = W.board(host, {
+        xmin: -3, xmax: 3, ymin: -3, ymax: 3, height: 320,
+        aria: 'Las imágenes sucesivas de un punto al aplicar muchas veces una matriz de giro con escala, formando una espiral',
+        draw: function (g) {
+          var t = th * Math.PI / 180, a = rr * Math.cos(t), b = rr * Math.sin(t), x = 2.5, y = 0, pts = [[x, y]];
+          for (var i = 0; i < 60; i++) { var nx = a * x - b * y, ny = b * x + a * y; x = nx; y = ny; pts.push([x, y]); if (Math.hypot(x, y) > 20) break; }
+          g.path(pts, { color: 0, w: 1.8 });
+          pts.forEach(function (q, i) { g.point(q[0], q[1], { color: i === 0 ? 1 : 0, r: i === 0 ? 5 : 3 }); });
+        }
+      });
+      function pinta() {
+        var t = th * Math.PI / 180, a = rr * Math.cos(t), b = rr * Math.sin(t);
+        out.set('$A = \\begin{pmatrix} ' + U.fmt(a, 3) + ' & ' + U.fmt(-b, 3) + ' \\\\ ' + U.fmt(b, 3) + ' & ' + U.fmt(a, 3) + ' \\end{pmatrix}$ &nbsp;·&nbsp; $\\lambda = ' + U.fmt(a, 3) + ' \\pm ' + U.fmt(Math.abs(b), 3) + 'i$ &nbsp;·&nbsp; $|\\lambda| = ' +
+          U.fmt(rr, 3) + '$, argumento $' + th + '^\\circ$ &nbsp;·&nbsp; ' + (rr < 0.999 ? 'cae en espiral hacia el origen' : (rr > 1.001 ? 'se aleja en espiral' : 'gira sin acercarse ni alejarse')));
+        plot.render();
+      }
+      var fila = W.row(host);
+      W.slider(fila, { label: 'módulo r', min: 0.8, max: 1.08, step: 0.005, value: rr, on: function (v) { rr = v; pinta(); } });
+      W.slider(fila, { label: 'ángulo θ (°)', min: 0, max: 180, step: 1, value: th, on: function (v) { th = v; pinta(); } });
+      pinta();
+    }
+  });
+
   p.section('Practica');
 
   p.exercise({
@@ -239,7 +287,35 @@ Course.topic('av-lineal', function (p) {
     answer: function (d) { return U.fmt(d.a, 4) + ' y ' + U.fmt(d.b, 4); }
   });
 
+  p.exercise({
+    title: 'Un giro con escala',
+    level: 'medio',
+    gen: function (r) {
+      var par = r.pick([[1, 1], [-1, 1], [0, 2], [1, -1], [-1, -1], [0, -3], [2, 2], [-2, 0], [3, 3]]);
+      var a = par[0], b = par[1];
+      if (b === 0) return null;
+      var ang = Math.atan2(b, a) * 180 / Math.PI;
+      return { a: a, b: b, r: Math.hypot(a, b), ang: ang, malAng: a !== 0 ? Math.atan(b / a) * 180 / Math.PI : ang };
+    },
+    ask: function (d) {
+      return 'La matriz $A = \\begin{pmatrix} ' + d.a + ' & ' + (-d.b) + ' \\\\ ' + d.b + ' & ' + d.a + ' \\end{pmatrix}$ tiene autovalores $\\lambda = ' + d.a + ' \\pm ' + Math.abs(d.b) +
+        'i$. ¿Cuánto estira y cuánto gira? Da el módulo y el ángulo de giro en grados, entre $-180^\\circ$ y $180^\\circ$, del autovalor $' + d.a + (d.b < 0 ? ' - ' : ' + ') + Math.abs(d.b) + 'i$. (Tres decimales.)';
+    },
+    fields: [{ name: 'r', label: 'módulo', w: 'tiny' }, { name: 'a', label: 'ángulo (°)', w: 'tiny' }],
+    sol: function (d) { return { r: U.round(d.r, 6), a: U.round(d.ang, 6) }; },
+    tol: 1e-3,
+    errores: [{ si: function (v, d) { return Math.abs(d.malAng - d.ang) > 1e-3 && Math.abs(v.a - d.malAng) < 5e-4; }, msg: 'La arcotangente de $\\frac{b}{a}$ no distingue cuadrantes: con $a < 0$ el complejo está a la izquierda, y hay que sumar o restar $180^\\circ$.' }],
+    hint: function () { return ['Módulo: $\\sqrt{a^2 + b^2}$.', 'Ángulo: el argumento del complejo $a + bi$. Dibújalo para ver en qué cuadrante está.']; },
+    steps: function (d) {
+      return ['$r = \\sqrt{' + d.a + '^2 + ' + (d.b < 0 ? '(' + d.b + ')' : d.b) + '^2} = \\sqrt{' + (d.a * d.a + d.b * d.b) + '} \\approx ' + U.fmt(d.r, 3) + '$',
+        'El complejo $' + d.a + (d.b < 0 ? ' - ' : ' + ') + Math.abs(d.b) + 'i$ tiene argumento $' + U.fmt(d.ang, 3) + '^\\circ$.',
+        'Cada aplicación de $A$ estira por ' + U.fmt(d.r, 3) + ' y gira ' + U.fmt(d.ang, 3) + '°.'];
+    },
+    answer: function (d) { return 'r ≈ ' + U.fmt(d.r, 3) + ', ' + U.fmt(d.ang, 3) + '°'; }
+  });
+
   p.keys([
+    'Si los autovalores de una matriz real 2×2 son complejos, $a \\pm bi$, la transformación gira un ángulo igual a su argumento y estira por su módulo.',
     'Una matriz es una <strong>transformación del espacio</strong>, no solo una tabla.',
     'Autovector: dirección que la transformación no tuerce. Autovalor: cuánto la estira.',
     'Se calculan resolviendo $\\det(A-\\lambda I) = 0$.',

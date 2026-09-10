@@ -224,6 +224,13 @@ Course.topic('av-edp', function (p) {
     'La ecuación del calor gobierna además la difusión de un contaminante, y con otro nombre, el ' +
     'modelo de Black-Scholes con el que se ponen precio a las opciones financieras.');
 
+  p.hist('<strong>Sofia Kovalévskaya</strong> tuvo que casarse para poder salir de Rusia a estudiar, porque una mujer ' +
+    'soltera no podía viajar sin permiso de su familia. En Alemania no la dejaban entrar en las clases, así que Karl ' +
+    'Weierstrass le dio lecciones particulares. En 1874 fue la primera mujer de la Europa moderna en doctorarse en ' +
+    'matemáticas, con un resultado que todavía se estudia: el <em>teorema de Cauchy-Kovalévskaya</em>, que garantiza ' +
+    'que ciertas ecuaciones en derivadas parciales tienen solución. En 1888 ganó el premio Bordin de la Academia de ' +
+    'París por su estudio del giro de un sólido, y en 1889 obtuvo una cátedra en Estocolmo.');
+
   p.section('Practica');
 
   p.exercise({

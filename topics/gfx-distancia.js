@@ -145,7 +145,7 @@ Course.topic('gfx-distancia', function (p) {
   p.table(['Figura', 'Distancia con signo', 'De dónde sale'], [
     ['Círculo de radio $r$', '<code>length(p) - r</code>', 'la definición de circunferencia'],
     ['Franja horizontal', '<code>abs(p.y) - h</code>', 'valor absoluto: distancia a una recta'],
-    ['Cuadrado de lado $2a$', '<code>max(abs(p.x), abs(p.y)) - a</code>', 'la distancia del máximo, del bloque 9'],
+    ['Cuadrado de lado $2a$', '<code>max(abs(p.x), abs(p.y)) - a</code>', 'la distancia del máximo, una de las normas del álgebra lineal'],
     ['Segmento, rectángulo…', 'combinaciones de las anteriores', '—']
   ]);
 
@@ -300,6 +300,35 @@ Course.topic('gfx-distancia', function (p) {
         'diferencia es todo el antialiasing.'];
     },
     answer: function (d) { return 'step = ' + d.st + ', smoothstep = ' + U.fmt(d.ss, 4); }
+  });
+
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { c: 'float d = length(p) - 0.3;\nfloat v = step(d, 0.0);',
+          o: ['Un círculo blanco de radio 0,3 con el borde duro, en escalones de píxel', 'Un círculo blanco de radio 0,3 con el borde suave', 'Un anillo de radio 0,3', 'Todo blanco salvo un círculo negro'],
+          por: '<code>step(d, 0.0)</code> vale 1 donde $d \\le 0$, dentro del círculo, y cambia de golpe en el borde: sin transición, se ven los píxeles.' },
+        { c: 'float d = length(p) - 0.3;\nfloat v = 1.0 - smoothstep(0.0, 0.01, d);',
+          o: ['Un círculo blanco de radio 0,3 con el borde suavizado', 'Un círculo con el borde duro', 'Todo blanco salvo un círculo negro', 'Un degradado radial muy amplio'],
+          por: '<code>smoothstep</code> hace la transición a lo largo de 0,01 unidades, apenas unos píxeles: el borde queda suave pero nítido.' },
+        { c: 'float d = length(p) - 0.3;\nfloat v = abs(d);',
+          o: ['Negro justo sobre la circunferencia y más claro al alejarse de ella, por dentro y por fuera', 'Un círculo blanco', 'Blanco sobre la circunferencia y negro lejos de ella', 'Negro dentro del círculo y blanco fuera'],
+          por: '$|d|$ es la distancia sin signo a la circunferencia: vale 0 sobre ella y crece al alejarse en cualquier sentido.' },
+        { c: 'vec2 q = abs(p) - vec2(0.3, 0.2);\nfloat d = max(q.x, q.y);\nfloat v = step(d, 0.0);',
+          o: ['Un rectángulo blanco centrado, más ancho que alto', 'Un rombo', 'Un círculo', 'Un rectángulo más alto que ancho'],
+          por: 'Es negativo solo si $|p_x| < 0{,}3$ y $|p_y| < 0{,}2$ a la vez: un rectángulo de $0{,}6$ por $0{,}4$.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'Con <code>p</code> centrada y el color final <code>vec3(v)</code>, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['La distancia con signo es negativa dentro, cero en el borde y positiva fuera.', '¿La transición es brusca o gradual?']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
   });
 
   p.keys([

@@ -160,6 +160,65 @@ Course.topic('pe-descriptiva', function (p) {
     }
   });
 
+  p.section('Cuartiles y diagrama de caja');
+
+  p.text('La mediana parte los datos ordenados en dos mitades. Los <strong>cuartiles</strong> los parten en ' +
+    'cuatro cuartos: por debajo de $Q_1$ queda el 25 % de los datos, por debajo de $Q_2$ —que es la ' +
+    'mediana— el 50 %, y por debajo de $Q_3$ el 75 %. En general, el <strong>percentil</strong> $P_k$ deja ' +
+    'por debajo el $k$ % de los datos: $Q_1 = P_{25}$ y $Q_3 = P_{75}$. Para calcularlos con $N$ datos:');
+
+  p.list([
+    'Se ordenan los datos de menor a mayor.',
+    'Para $Q_1$ se calcula $\\frac{N}{4}$. Si no es entero, $Q_1$ es el dato de la posición siguiente; si es entero, la media entre ese dato y el siguiente.',
+    'Para $Q_3$ se hace lo mismo con $\\frac{3N}{4}$.'
+  ], true);
+
+  p.formula('RI = Q_3 - Q_1', 'rango intercuartílico',
+    'Se lee «rango intercuartílico»: la anchura del 50 % central de los datos.<br><br>A diferencia del ' +
+      'recorrido (el máximo menos el mínimo), no se deja arrastrar por un dato disparatado, igual que la ' +
+      'mediana no se deja arrastrar como la media. Por eso sirve para detectar <strong>valores ' +
+      'atípicos</strong>: los que quedan a más de $1{,}5\\cdot RI$ por debajo de $Q_1$ o por encima de $Q_3$.');
+
+  p.demo({
+    title: 'El diagrama de caja',
+    intro: 'La caja va de Q₁ a Q₃, con una raya en la mediana; los bigotes llegan hasta el dato más extremo que no es atípico, y los atípicos se marcan sueltos. Añade un dato disparatado y mira qué se mueve y qué no.',
+    build: function (host) {
+      var base = [12, 15, 17, 18, 18, 20, 21, 22, 24, 25, 27, 30], extra = 'nada';
+      function cuartil(ord, k) {
+        var N = ord.length, pos = k * N / 4;
+        if (Math.abs(pos - Math.round(pos)) < 1e-9) { pos = Math.round(pos); return (ord[pos - 1] + ord[pos]) / 2; }
+        return ord[Math.ceil(pos) - 1];
+      }
+      var out = W.readout(host, '');
+      var plot = W.plot(host, {
+        xmin: 0, xmax: 70, ymin: -2, ymax: 2, height: 170, yaxis: false, ylabel: null, xlabel: 'valor',
+        aria: 'Diagrama de caja de un conjunto de datos',
+        draw: function (g) {
+          var datos = base.concat(extra === 'nada' ? [] : [extra === 'alto' ? 60 : 2]).sort(function (a, b) { return a - b; });
+          var q1 = cuartil(datos, 1), q2 = cuartil(datos, 2), q3 = cuartil(datos, 3), ri = q3 - q1;
+          var lo = q1 - 1.5 * ri, hi = q3 + 1.5 * ri;
+          var normales = datos.filter(function (x) { return x >= lo && x <= hi; });
+          var bmin = normales[0], bmax = normales[normales.length - 1];
+          g.rect(q1, -0.7, q3 - q1, 1.4, { fill: true, fillAlpha: 0.2, color: 0, w: 2 });
+          g.seg(q2, -0.7, q2, 0.7, { color: 1, w: 3 });
+          g.seg(bmin, 0, q1, 0, { color: 0, w: 2 }); g.seg(q3, 0, bmax, 0, { color: 0, w: 2 });
+          g.seg(bmin, -0.35, bmin, 0.35, { color: 0, w: 2 }); g.seg(bmax, -0.35, bmax, 0.35, { color: 0, w: 2 });
+          datos.forEach(function (x) { if (x < lo || x > hi) g.point(x, 0, { color: 'bad', r: 5 }); });
+        }
+      });
+      function pinta() {
+        var datos = base.concat(extra === 'nada' ? [] : [extra === 'alto' ? 60 : 2]).sort(function (a, b) { return a - b; });
+        var q1 = cuartil(datos, 1), q2 = cuartil(datos, 2), q3 = cuartil(datos, 3);
+        out.set('$N = ' + datos.length + '$ &nbsp;·&nbsp; $Q_1 = ' + U.fmt(q1, 2) + '$, $Q_2 = ' + U.fmt(q2, 2) + '$, $Q_3 = ' + U.fmt(q3, 2) + '$, $RI = ' + U.fmt(q3 - q1, 2) + '$<br>' +
+          'Media: $' + U.fmt(ML.mean(datos), 2) + '$ &nbsp;·&nbsp; recorrido: $' + (datos[datos.length - 1] - datos[0]) + '$' +
+          (extra !== 'nada' ? '<br>Un solo dato ha movido mucho la media y el recorrido; los cuartiles, casi nada.' : ''));
+        plot.render();
+      }
+      W.chips(host, [{ label: 'sin datos raros', value: 'nada' }, { label: 'añadir un 60', value: 'alto' }, { label: 'añadir un 2', value: 'bajo' }], { value: extra, on: function (v) { extra = v; pinta(); } });
+      pinta();
+    }
+  });
+
   /* ================= EJERCICIOS ================= */
   p.hist('Los gráficos estadísticos son un invento sorprendentemente tardío: William Playfair publicó el ' +
     'primer diagrama de barras en 1786 y el primer gráfico de sectores en 1801, y tuvo que ' +
@@ -339,7 +398,54 @@ Course.topic('pe-descriptiva', function (p) {
     answer: function (d) { return 'El grupo ' + d.mayor + '.'; }
   });
 
+  p.exercise({
+    title: 'Cuartiles',
+    level: 'medio',
+    gen: function (r) {
+      var N = r.int(8, 13), datos = datosAleatorios(r, N, 1, 50).sort(function (a, b) { return a - b; });
+      function cuartil(ord, k) {
+        var M = ord.length, pos = k * M / 4;
+        if (Math.abs(pos - Math.round(pos)) < 1e-9) { pos = Math.round(pos); return (ord[pos - 1] + ord[pos]) / 2; }
+        return ord[Math.ceil(pos) - 1];
+      }
+      var mezcla = r.shuffle(datos);
+      return { N: N, ord: datos, mezcla: mezcla, q1: cuartil(datos, 1), q3: cuartil(datos, 3) };
+    },
+    ask: function (d) { return 'Calcula el primer y el tercer cuartil de estos $' + d.N + '$ datos: $' + d.mezcla.join(',\\ ') + '$'; },
+    fields: [{ name: 'a', label: '$Q_1$', w: 'tiny' }, { name: 'b', label: '$Q_3$', w: 'tiny' }],
+    sol: function (d) { return { a: d.q1, b: d.q3 }; },
+    hint: function (d) {
+      return ['Ordena los datos primero.', '$\\frac{N}{4} = ' + U.fmt(d.N / 4, 2) + '$ y $\\frac{3N}{4} = ' + U.fmt(3 * d.N / 4, 2) + '$. Si no es entero, se toma la posición siguiente; si lo es, la media con el siguiente.'];
+    },
+    steps: function (d) {
+      var t = function (k) { var pos = k * d.N / 4; return Math.abs(pos - Math.round(pos)) < 1e-9 ? 'entero: media de las posiciones ' + pos + ' y ' + (pos + 1) : 'no entero: posición ' + Math.ceil(pos); };
+      return ['Ordenados: $' + d.ord.join(',\\ ') + '$', '$\\frac{N}{4} = ' + U.fmt(d.N / 4, 2) + '$, ' + t(1) + ' → $Q_1 = ' + U.fmt(d.q1, 2) + '$',
+        '$\\frac{3N}{4} = ' + U.fmt(3 * d.N / 4, 2) + '$, ' + t(3) + ' → $Q_3 = ' + U.fmt(d.q3, 2) + '$'];
+    },
+    answer: function (d) { return 'Q₁ = ' + U.fmt(d.q1, 2) + ', Q₃ = ' + U.fmt(d.q3, 2); }
+  });
+
+  p.exercise({
+    title: '¿Es un valor atípico?',
+    level: 'basico',
+    gen: function (r) {
+      var q1 = r.int(10, 40), ri = r.pick([4, 6, 8, 10, 12]), q3 = q1 + ri, lo = q1 - 1.5 * ri, hi = q3 + 1.5 * ri;
+      var tipo = r.pick(['arriba', 'abajo', 'no']), x;
+      if (tipo === 'arriba') x = Math.ceil(hi) + r.int(1, 6);
+      else if (tipo === 'abajo') x = Math.floor(lo) - r.int(1, 6);
+      else x = r.int(Math.ceil(lo) + 1, Math.floor(hi) - 1);
+      return { q1: q1, q3: q3, ri: ri, lo: lo, hi: hi, x: x, tipo: tipo };
+    },
+    ask: function (d) { return 'Un conjunto de datos tiene $Q_1 = ' + d.q1 + '$ y $Q_3 = ' + d.q3 + '$. ¿Es atípico el valor $' + d.x + '$?'; },
+    fields: [{ name: 't', label: 'El valor', opts: [{ t: 'es atípico por arriba', v: 'arriba' }, { t: 'es atípico por abajo', v: 'abajo' }, { t: 'no es atípico', v: 'no' }] }],
+    sol: function (d) { return { t: d.tipo }; },
+    hint: function () { return ['Calcula $RI = Q_3 - Q_1$.', 'Son atípicos los valores por debajo de $Q_1 - 1{,}5\\cdot RI$ o por encima de $Q_3 + 1{,}5\\cdot RI$.']; },
+    steps: function (d) { return ['$RI = ' + d.ri + '$. Límites: $' + d.q1 + ' - 1{,}5\\cdot' + d.ri + ' = ' + U.fmt(d.lo, 1) + '$ y $' + d.q3 + ' + 1{,}5\\cdot' + d.ri + ' = ' + U.fmt(d.hi, 1) + '$.', { arriba: '$' + d.x + '$ supera el límite superior: atípico por arriba.', abajo: '$' + d.x + '$ queda por debajo del límite inferior: atípico por abajo.', no: '$' + d.x + '$ está entre los dos límites: no es atípico.' }[d.tipo]]; },
+    answer: function (d) { return { arriba: 'Atípico por arriba', abajo: 'Atípico por abajo', no: 'No es atípico' }[d.tipo]; }
+  });
+
   p.keys([
+    'Los cuartiles parten los datos ordenados en cuatro cuartos; $RI = Q_3 - Q_1$ mide el 50 % central y no se deja arrastrar por los atípicos.',
     'La estadística descriptiva resume; no predice.',
     'Media, mediana y moda son tres centros distintos y responden a preguntas distintas.',
     'La media se deja arrastrar por los valores extremos; la mediana, no.',

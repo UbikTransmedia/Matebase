@@ -254,6 +254,14 @@ Course.topic('av-numerico', function (p) {
     'errar el blanco por medio kilómetro. En 1996, el Ariane 5 se autodestruyó a los 37 segundos por ' +
     'una conversión numérica que desbordó. Estudiar el error no es pedantería académica.');
 
+  p.hist('Durante décadas, los cálculos numéricos de la aeronáutica los hacían personas. En el centro Langley de la ' +
+    'agencia que después sería la NASA trabajaba un equipo de matemáticas afroamericanas, segregado del resto. ' +
+    '<strong>Dorothy Vaughan</strong>, que lo dirigía, vio llegar los primeros ordenadores IBM y aprendió por su cuenta ' +
+    'el lenguaje FORTRAN para enseñárselo a su equipo antes de que las máquinas lo dejaran sin trabajo. ' +
+    '<strong>Katherine Johnson</strong> calculó a mano trayectorias de las primeras misiones tripuladas, comprobó las ' +
+    'del primer vuelo orbital estadounidense y participó en los cálculos del viaje del Apolo 11 a la Luna. Su historia ' +
+    'se hizo famosa en 2016 con el libro y la película <em>Figuras ocultas</em>.');
+
   p.section('Practica');
 
   p.exercise({

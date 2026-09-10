@@ -158,6 +158,15 @@
             '</span><span class="g" style="font-size:1.05em">' + (name === 'xrightarrow' ? '⟶' : '⟵') + '</span></span>'
         };
       }
+      /* Una marca pequeña encima de un símbolo: el tipo de indeterminación
+         sobre el igual, al aplicar L'Hôpital. Misma pila que \xrightarrow. */
+      case 'overset': case 'stackrel': {
+        var arriba = render(group(p)), base = render(group(p));
+        return {
+          h: '<span class="mx-lim" style="padding:0 .15em"><span class="l" style="font-size:.6em">' + arriba +
+            '</span><span class="g">' + base + '</span></span>'
+        };
+      }
       case 'hline': case 'hdashline': case 'noalign':
         return { h: '' };
       case 'underline':

@@ -111,7 +111,24 @@ Course.topic('fn-limites', function (p) {
     [['$\\frac{0}{0}$ en una racional', 'factorizar arriba y abajo y simplificar el factor común'],
      ['$\\frac{0}{0}$ con raíces', 'multiplicar por el conjugado'],
      ['$\\frac{\\infty}{\\infty}$ en una racional', 'comparar los grados del numerador y el denominador'],
-     ['$\\infty - \\infty$', 'operar hasta convertirlo en un cociente']]);
+     ['$\\infty - \\infty$', 'operar (denominador común o conjugado) hasta convertirlo en un cociente'],
+     ['$0\\cdot\\infty$', 'escribir el producto como un cociente'],
+     ['$1^{\\infty}$', 'usar el número $e$: $\\lim f^{\\,g} = e^{\\lim g\\,(f - 1)}$']]);
+
+  p.sub('La indeterminación $1^\\infty$ y el número $e$');
+
+  p.text('Una base que se acerca a 1 elevada a un exponente que crece sin fin puede dar cualquier cosa: ' +
+    'la base empuja hacia 1 y el exponente hacia el infinito. La clave es el límite que define el número ' +
+    '[[fn-exp-log|$e$]], y una regla práctica que sale de él:');
+
+  p.formulas([
+    '\\lim_{x \\to \\infty}\\left(1 + \\frac{1}{x}\\right)^x = e',
+    '\\text{si } \\lim f = 1 \\text{ y } \\lim g = \\infty: \\quad \\lim f^{\\,g} = e^{\\lim g\\,(f - 1)}'
+  ], 'la regla del número e',
+    'La segunda se lee: <em>«el límite de efe elevado a ge es e elevado al límite de ge por efe menos ' +
+      'uno»</em>.<br><br>Ejemplo: $\\lim_{x \\to \\infty}\\left(\\frac{x + 3}{x + 1}\\right)^{x} = ' +
+      'e^{\\lim x\\left(\\frac{x+3}{x+1} - 1\\right)} = e^{\\lim \\frac{2x}{x + 1}} = e^2$.<br><br>Por qué ' +
+      'funciona se entiende del todo con logaritmos y la [[fn-lhopital|regla de L\'Hôpital]].');
 
   p.sub('¿Y esto no es hacer trampa?');
 
@@ -200,7 +217,7 @@ Course.topic('fn-limites', function (p) {
     'buena sin nombrarla: que <strong>no tienen agujeros</strong>. Que una sucesión creciente y ' +
     'acotada tenga límite, o que una función continua que cambia de signo se anule, son falsos en ' +
     '$\\mathbb{Q}$. La propiedad que lo arregla se llama <em>completitud</em> y se estudia en el ' +
-    'tema [[av-reales|<strong>La completitud de los reales</strong>]], del bloque 10. No hace falta para operar ' +
+    'tema [[av-reales|<strong>La completitud de los reales</strong>]], del bloque «Estructuras, números e infinito». No hace falta para operar ' +
     'con límites, pero sí para creérselos.',
     null, 'La letra pequeña de los límites');
 
@@ -383,7 +400,56 @@ Course.topic('fn-limites', function (p) {
     answer: function (d) { return 'k = ' + d.k; }
   });
 
+  p.exercise({
+    title: 'Una potencia de tipo 1^∞',
+    level: 'avanzado',
+    gen: function (r) {
+      var a = r.int(-4, 4), b = r.int(-4, 4), c = r.pick([1, 2, 3, -1]);
+      if (a === b || Math.abs(c * (a - b)) > 4) return null;
+      return { a: a, b: b, c: c, k: c * (a - b), v: Math.exp(c * (a - b)) };
+    },
+    ask: function (d) {
+      return 'Calcula $\\displaystyle\\lim_{x \\to \\infty}\\left(\\frac{' + ML.polyTex([1, d.a]) + '}{' + ML.polyTex([1, d.b]) + '}\\right)^{' +
+        (d.c === 1 ? '' : (d.c === -1 ? '-' : d.c)) + 'x}$ (cuatro decimales, o como potencia de $e$: <em>e^2</em>).';
+    },
+    fields: [{ name: 'v', label: 'límite', w: 'wide' }],
+    sol: function (d) { return { v: U.round(d.v, 6) }; },
+    tol: 3e-4,
+    errores: [
+      { si: function (v) { return Math.abs(v.v - 1) < 1e-9; }, msg: 'Es $1^\\infty$, que es una indeterminación: no vale 1. Usa la regla del número $e$.' },
+      { si: function (v, d) { return d.c !== 1 && Math.abs(v.v - Math.exp(d.a - d.b)) < 1e-3; }, msg: 'Falta el factor que multiplica a $x$ en el exponente: también entra en el límite de $g(f - 1)$.' }
+    ],
+    hint: function () { return ['La base tiende a 1 y el exponente a infinito: es $1^\\infty$.', '$\\lim f^g = e^{\\lim g(f - 1)}$. Calcula $f - 1$ con denominador común.']; },
+    steps: function (d) {
+      return ['$f - 1 = \\dfrac{' + ML.polyTex([1, d.a]) + '}{' + ML.polyTex([1, d.b]) + '} - 1 = \\dfrac{' + (d.a - d.b) + '}{' + ML.polyTex([1, d.b]) + '}$',
+        '$\\lim ' + d.c + 'x\\cdot\\dfrac{' + (d.a - d.b) + '}{' + ML.polyTex([1, d.b]) + '} = ' + d.k + '$',
+        'El límite es $e^{' + d.k + '} \\approx ' + U.fmt(d.v, 4) + '$'];
+    },
+    answer: function (d) { return '$e^{' + d.k + '}$'; }
+  });
+
+  p.exercise({
+    title: 'Infinito menos infinito con raíces',
+    level: 'medio',
+    gen: function (r) { var a = r.pm(1, 9); return { a: a, v: ML.F(a, 2) }; },
+    ask: function (d) { return 'Calcula $\\displaystyle\\lim_{x \\to \\infty}\\left(\\sqrt{x^2 ' + (d.a < 0 ? '- ' + (-d.a) : '+ ' + d.a) + 'x} - x\\right)$. (Vale una fracción.)'; },
+    fields: [{ name: 'v', label: 'límite', w: 'tiny' }],
+    sol: function (d) { return { v: d.v.val() }; },
+    tol: 1e-9,
+    errores: [
+      { si: function (v) { return v.v === 0; }, msg: 'Los dos términos crecen igual de deprisa, pero su diferencia no se va a cero: multiplica y divide por el conjugado.' },
+      { si: function (v, d) { return v.v === d.a; }, msg: 'Casi: al dividir por el conjugado, el denominador $\\sqrt{x^2 + ax} + x$ se comporta como $2x$, no como $x$.' }
+    ],
+    hint: function () { return ['Es $\\infty - \\infty$: multiplica y divide por el conjugado $\\sqrt{x^2 + ax} + x$.', 'Arriba queda $ax$; abajo, algo que se comporta como $2x$.']; },
+    steps: function (d) {
+      return ['$\\left(\\sqrt{x^2 + ' + d.a + 'x} - x\\right)\\dfrac{\\sqrt{x^2 + ' + d.a + 'x} + x}{\\sqrt{x^2 + ' + d.a + 'x} + x} = \\dfrac{' + d.a + 'x}{\\sqrt{x^2 + ' + d.a + 'x} + x}$',
+        'Dividiendo arriba y abajo por $x$: $\\dfrac{' + d.a + '}{\\sqrt{1 + ' + d.a + '/x} + 1} \\to \\dfrac{' + d.a + '}{2} = ' + d.v.tex() + '$'];
+    },
+    answer: function (d) { return '$' + d.v.tex() + '$'; }
+  });
+
   p.keys([
+    '$\\infty - \\infty$ con raíces: multiplicar y dividir por el conjugado. $1^\\infty$: $\\lim f^g = e^{\\lim g(f-1)}$.',
     'El límite pregunta a dónde <strong>se dirige</strong> la función, no cuánto vale en el punto.',
     'Existe solo si los dos límites laterales coinciden.',
     'Casi siempre basta sustituir. Si sale una indeterminación, hay que transformar la expresión.',

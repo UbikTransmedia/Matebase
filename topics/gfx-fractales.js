@@ -13,7 +13,7 @@ Course.topic('gfx-fractales', function (p) {
   p.formula('z_0 = 0, \\qquad z_{n+1} = z_n^2 + c', 'la iteración',
     'Se lee: <em>«zeta sub ene más uno es igual a zeta sub ene al cuadrado, más ce»</em>.<br><br>' +
       'Es una [[fn-sucesiones|sucesión]] definida por recurrencia: cada término sale del anterior. ' +
-      'La única diferencia con las del bloque 6 es que los términos son puntos del plano, no números ' +
+      'La única diferencia con las del bloque de funciones es que los términos son puntos del plano, no números ' +
       'de la recta.');
 
   p.text('Solo pueden pasar dos cosas. O la sucesión <strong>se dispara</strong> hacia el infinito, o ' +
@@ -33,7 +33,7 @@ Course.topic('gfx-fractales', function (p) {
   p.section('Multiplicar complejos en un shader');
 
   p.text('GLSL no conoce los números complejos, pero un <code>vec2</code> es exactamente un par de ' +
-    'números, y la regla de multiplicar del bloque 3 se escribe en una línea:');
+    'números, y la regla de multiplicar de los [[al-complejos|números complejos]] se escribe en una línea:');
 
   p.formula('(a + bi)(c + di) = (ac - bd) + (ad + bc)\\,i', 'el producto complejo');
 
@@ -101,7 +101,7 @@ Course.topic('gfx-fractales', function (p) {
   p.formula('\\mu = n - \\log_2\\bigl(\\log_2 |z_n|\\bigr)', 'iteración continua');
 
   p.text('Con eso, dos píxeles vecinos que escapan en vueltas distintas reciben valores casi iguales, ' +
-    'y la banda desaparece. Es un ejemplo bonito de algo del bloque 6 —el crecimiento ' +
+    'y la banda desaparece. Es un ejemplo bonito de algo del bloque de funciones —el crecimiento ' +
     '[[fn-exp-log|exponencial y su logaritmo]]— resolviendo un problema puramente visual.');
 
   p.section('Julia: el mismo motor, cambiando quién es quién');
@@ -169,8 +169,70 @@ Course.topic('gfx-fractales', function (p) {
   p.note('Al hacer mucho zoom la imagen se vuelve blocosa y luego se rompe. No es un fallo del ' +
     'programa: los <code>float</code> de la tarjeta tienen unos siete dígitos decimales, y a partir ' +
     'de ahí dos píxeles vecinos <em>reciben el mismo número</em>. Es el [[av-numerico|error de ' +
-    'redondeo]] del bloque 12, visible a simple vista. Los programas que hacen zooms profundos usan ' +
+    'redondeo]] del análisis numérico, visible a simple vista. Los programas que hacen zooms profundos usan ' +
     'aritmética de precisión extendida, y por eso van despacio.', 'warn', 'El fondo del zoom');
+
+  p.section('El fractal de Newton');
+
+  p.text('Hay otra manera de fabricar un fractal que no parte de una fórmula inventada para dibujar, sino de ' +
+    'un algoritmo muy serio: el [[av-numerico|método de Newton-Raphson]] para resolver ecuaciones. Para ' +
+    'encontrar una raíz de $f$, se parte de un punto y se sigue la recta tangente hasta donde corta el eje, una ' +
+    'y otra vez. Con números reales es de lo más obediente. En el plano complejo, con una ecuación de tercer ' +
+    'grado, pasa algo inesperado.');
+
+  p.formula('z_{n+1} = z_n - \\frac{f(z_n)}{f\'(z_n)} = z_n - \\frac{z_n^3 - 1}{3z_n^2} = \\frac{2z_n^3 + 1}{3z_n^2}',
+    'el método de Newton para z³ = 1',
+    'La ecuación $z^3 = 1$ tiene tres soluciones complejas, las [[al-complejos|raíces cúbicas de la unidad]]: $1$ y ' +
+    '$-\\frac{1}{2} \\pm \\frac{\\sqrt 3}{2}i$, en los vértices de un triángulo equilátero.<br><br>Se colorea cada píxel ' +
+    'según la raíz a la que llega el método empezando en él. Lejos de las fronteras todo es tranquilo: se va a la ' +
+    'raíz más cercana. Pero en la frontera entre dos colores <strong>siempre aparece el tercero</strong>, y dentro de ' +
+    'él otra vez los tres, a todas las escalas.');
+
+  p.demo({
+    title: 'Las tres cuencas de Newton',
+    intro: 'Cada píxel es un punto de partida; su color, la raíz a la que llega; y lo oscuro, cuántos pasos tarda. Acércate a una frontera: nunca hay solo dos colores. La relajación multiplica el paso de Newton por un factor: con valores distintos de 1 las cuencas se retuercen.',
+    build: function (host) {
+      W.shader(host, {
+        id: 'gfx-fractales-newton', alto: 320,
+        aria: 'El fractal de Newton para z al cubo igual a uno: tres regiones de colores con fronteras fractales.',
+        mandos: [
+          { n: 'zoom', label: 'amplitud de la vista', min: 0.3, max: 3.0, step: 0.05, value: 2.0, dec: 2 },
+          { n: 'relajacion', label: 'relajación', min: 0.5, max: 1.5, step: 0.01, value: 1.0, dec: 2 },
+          { n: 'sombreado', label: 'sombrear por pasos', min: 0.0, max: 1.0, step: 0.05, value: 0.6, dec: 2 }
+        ],
+        codigo:
+          'vec2 mul(vec2 a, vec2 b) { return vec2(a.x * b.x - a.y * b.y, a.x * b.y + a.y * b.x); }\n' +
+          'vec2 divide(vec2 a, vec2 b) { return vec2(a.x * b.x + a.y * b.y, a.y * b.x - a.x * b.y) / dot(b, b); }\n' +
+          '\n' +
+          'void mainImage(out vec4 color, in vec2 fragCoord)\n' +
+          '{\n' +
+          '    vec2 z = (fragCoord - 0.5 * iResolution.xy) / iResolution.y * zoom;\n' +
+          '    float pasos = 0.0;\n' +
+          '\n' +
+          '    for (int i = 0; i < 40; i++) {\n' +
+          '        vec2 z2 = mul(z, z);\n' +
+          '        vec2 f = mul(z2, z) - vec2(1.0, 0.0);      // f(z)  = z^3 - 1\n' +
+          '        if (dot(f, f) < 1e-6) break;\n' +
+          '        z -= relajacion * divide(f, 3.0 * z2);       // f\'(z) = 3 z^2\n' +
+          '        pasos += 1.0;\n' +
+          '    }\n' +
+          '\n' +
+          '    // a que raiz ha llegado\n' +
+          '    float d1 = length(z - vec2(1.0, 0.0));\n' +
+          '    float d2 = length(z - vec2(-0.5, 0.8660254));\n' +
+          '    float d3 = length(z - vec2(-0.5, -0.8660254));\n' +
+          '    vec3 c = (d1 < d2 && d1 < d3) ? vec3(0.95, 0.35, 0.3) : ((d2 < d3) ? vec3(0.3, 0.8, 0.45) : vec3(0.3, 0.5, 1.0));\n' +
+          '    c *= 1.0 - 0.02 * pasos * sombreado;\n' +
+          '    color = vec4(c, 1.0);\n' +
+          '}\n',
+        nota: 'Con la amplitud al mínimo se ve de cerca el centro, donde las tres cuencas se tocan infinitas veces.'
+      });
+    }
+  });
+
+  p.text('Arthur Cayley se preguntó en 1879 qué zonas del plano complejo acaban en cada raíz. Para ecuaciones ' +
+    'de segundo grado lo resolvió: la frontera es una recta. Para las de tercer grado admitió que no sabía ' +
+    'hacerlo. Hoy se entiende por qué: la respuesta no cabe en una descripción sencilla, porque es un fractal.');
 
   p.util('Más allá de la belleza, la geometría fractal se usa para medir cosas que las figuras ' +
     'clásicas no describen: la rugosidad de una superficie, la ramificación de los bronquios y de las ' +
@@ -365,7 +427,46 @@ Course.topic('gfx-fractales', function (p) {
     answer: function (d) { return d.ref; }
   });
 
+  p.exercise({
+    title: '¿A qué raíz llega?',
+    level: 'avanzado',
+    gen: function (r) {
+      var z0 = r.pick([[2, 0], [-1, 1], [-1, -1], [0, 1], [0, -1], [1, 1], [1, -1], [-2, 1], [-2, -1], [0.5, 1.5], [0.5, -1.5], [-1, 2]]);
+      function mul(a, b) { return [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]]; }
+      function div(a, b) { var q = b[0] * b[0] + b[1] * b[1]; return [(a[0] * b[0] + a[1] * b[1]) / q, (a[1] * b[0] - a[0] * b[1]) / q]; }
+      function paso(z) { var z2 = mul(z, z), z3 = mul(z2, z); return div([2 * z3[0] + 1, 2 * z3[1]], [3 * z2[0], 3 * z2[1]]); }
+      var R = [[1, 0], [-0.5, Math.sqrt(3) / 2], [-0.5, -Math.sqrt(3) / 2]];
+      function cercana(z) { var k = 0, bd = 1e9; R.forEach(function (q, i) { var dd = Math.hypot(z[0] - q[0], z[1] - q[1]); if (dd < bd) { bd = dd; k = i; } }); return k; }
+      var z1 = paso(z0), z = z1;
+      for (var i = 0; i < 80; i++) z = paso(z);
+      var fin = cercana(z);
+      if (cercana(z1) !== fin || Math.hypot(z[0] - R[fin][0], z[1] - R[fin][1]) > 1e-6) return null;
+      return { z0: z0, z1: z1, fin: String(fin) };
+    },
+    ask: function (d) {
+      var re = d.z0[0], im = d.z0[1];
+      var tex = (re !== 0 ? U.fmt(re, 1) : '') + (im === 0 ? '' : (im > 0 ? (re !== 0 ? ' + ' : '') : (re !== 0 ? ' - ' : '-')) + (Math.abs(im) === 1 ? '' : U.fmt(Math.abs(im), 1)) + 'i');
+      return 'En el fractal de Newton para $z^3 = 1$, cada paso es $z_{n+1} = \\dfrac{2z_n^3 + 1}{3z_n^2}$. Partiendo de $z_0 = ' + tex +
+        '$, calcula $z_1$ (tres decimales) y di a qué raíz acaba llegando el método.';
+    },
+    fields: [
+      { name: 're', label: 'parte real de $z_1$', w: 'tiny' }, { name: 'im', label: 'parte imaginaria de $z_1$', w: 'tiny' },
+      { name: 'raiz', label: 'Llega a', opts: [{ t: 'la raíz 1', v: '0' }, { t: 'la raíz −½ + (√3/2)·i', v: '1' }, { t: 'la raíz −½ − (√3/2)·i', v: '2' }] }
+    ],
+    sol: function (d) { return { re: U.round(d.z1[0], 6), im: U.round(d.z1[1], 6), raiz: d.fin }; },
+    tol: 1e-3,
+    hint: function () { return ['Calcula $z_0^2$ y $z_0^3$ multiplicando complejos, y luego divide $2z_0^3 + 1$ entre $3z_0^2$ multiplicando arriba y abajo por el conjugado.', 'Mira a cuál de las tres raíces está más cerca $z_1$: en este caso, el método ya no se sale de su cuenca.']; },
+    steps: function (d) {
+      var R = ['$1$', '$-\\frac{1}{2} + \\frac{\\sqrt 3}{2}i$', '$-\\frac{1}{2} - \\frac{\\sqrt 3}{2}i$'];
+      return ['$z_1 = \\dfrac{2z_0^3 + 1}{3z_0^2} \\approx ' + U.fmt(d.z1[0], 3) + (d.z1[1] < 0 ? ' - ' : ' + ') + U.fmt(Math.abs(d.z1[1]), 3) + 'i$',
+        'La raíz más cercana a $z_1$ es ' + R[+d.fin] + ', y siguiendo las iteraciones el método converge a ella.',
+        'En la imagen, el píxel de $z_0$ tendría el color de esa raíz.'];
+    },
+    answer: function (d) { return ['1', '−½ + (√3/2)i', '−½ − (√3/2)i'][+d.fin]; }
+  });
+
   p.keys([
+    'El fractal de Newton colorea cada punto por la raíz de $z^3 = 1$ a la que llega el método: en cada frontera aparecen siempre los tres colores.',
     'Una regla de cuatro símbolos, $z \\to z^2 + c$, y un criterio de parada, $|z| > 2$: eso es todo el fractal.',
     'El <strong>Mandelbrot</strong> pone el píxel en $c$ y arranca $z$ en cero; el <strong>Julia</strong> hace lo contrario. Mismo bucle, otra figura.',
     'El coloreado a bandas se funde con la <strong>iteración continua</strong>, $n - \\log_2(\\log_2|z|)$.',

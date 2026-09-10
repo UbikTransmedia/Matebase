@@ -178,6 +178,71 @@ Course.topic('cib-caja-negra', function (p) {
     'mirando: una caché, un contador, el orden en que llegaron dos mensajes. Por eso la primera ' +
     'pregunta de un buen depurador no es «¿qué hiciste?» sino «¿qué había pasado antes?».');
 
+  p.sub('Cuando la caja da números: ajustar un modelo');
+
+  p.text('Muchas cajas negras no tienen unos pocos estados, sino una entrada y una salida numéricas: una ' +
+    'resistencia a la que se aplica una tensión, un muelle del que se cuelga un peso, un mercado en el que ' +
+    'se cambia un precio. Sondearlas es anotar pares (entrada, salida). Y como toda medida tiene ruido, los ' +
+    'puntos nunca caen exactamente sobre una curva: hay que elegir el modelo que <strong>mejor los ' +
+    'imita</strong>.');
+
+  p.text('Si se propone un modelo lineal, $y = a\\,x + b$, cada punto medido queda a una distancia vertical ' +
+    'del modelo: su <strong>residuo</strong>. El criterio más usado desde hace dos siglos es elegir $a$ y $b$ ' +
+    'para que la suma de los cuadrados de los residuos sea lo más pequeña posible. Es el método de ' +
+    '<strong>mínimos cuadrados</strong>, el mismo de la [[pe-bidimensional|recta de regresión]].');
+
+  p.formula('a = \\frac{\\sum (x_i - \\overline{x})(y_i - \\overline{y})}{\\sum (x_i - \\overline{x})^2}, \\qquad b = \\overline{y} - a\\,\\overline{x}',
+    'la recta de mínimos cuadrados',
+    'Se lee: <em>«a es la suma de los productos de las desviaciones de equis y de i griega, partida por la ' +
+    'suma de los cuadrados de las desviaciones de equis»</em>.<br><br>La recta pasa siempre por el punto ' +
+    'medio de los datos, $(\\overline{x}, \\overline{y})$.<br><br>Sale de derivar la suma de cuadrados respecto ' +
+    'de $a$ y de $b$ e igualar a cero. Su versión con muchas variables, escrita con matrices, está en ' +
+    '[[av-minimos-cuadrados]].');
+
+  p.demo({
+    title: 'Ajusta a mano una caja ruidosa',
+    intro: 'Estos puntos son medidas de una caja negra: entrada en horizontal, salida en vertical. Mueve la pendiente y la ordenada hasta que la suma de los cuadrados de los residuos —los segmentos rojos— sea lo más pequeña que puedas. Después pide el ajuste óptimo y compara.',
+    build: function (host) {
+      var xs = [], ys = [], rng = U.rng(2024);
+      for (var i = 0; i < 12; i++) {
+        var x0 = 0.5 + i * 0.8;
+        xs.push(x0);
+        ys.push(1.4 * x0 + 1.5 + (rng.real(0, 1) - 0.5) * 3.2);
+      }
+      var mx = ML.mean(xs), my = ML.mean(ys), sxy = 0, sxx = 0;
+      xs.forEach(function (x, j) { sxy += (x - mx) * (ys[j] - my); sxx += (x - mx) * (x - mx); });
+      var aOpt = sxy / sxx, bOpt = my - aOpt * mx;
+      function sse(a1, b1) { var s = 0; xs.forEach(function (x, j) { var e = ys[j] - (a1 * x + b1); s += e * e; }); return s; }
+      var a = 0.5, b = 4;
+      var out = W.readout(host, '');
+      var plot = W.plot(host, {
+        xmin: 0, xmax: 10, ymin: 0, ymax: 18, height: 300, xlabel: 'entrada', ylabel: 'salida',
+        draw: function (g) {
+          xs.forEach(function (x, j) { g.seg(x, ys[j], x, a * x + b, { color: 'bad', w: 1.4 }); });
+          g.fn(function (x) { return a * x + b; }, { color: 0, w: 2.6 });
+          xs.forEach(function (x, j) { g.point(x, ys[j], { color: 1, r: 4 }); });
+        }
+      });
+      function pinta() {
+        var s = sse(a, b), sOpt = sse(aOpt, bOpt);
+        out.set('Tu recta: $y = ' + U.fmt(a, 2) + 'x ' + (b < 0 ? '- ' + U.fmt(-b, 2) : '+ ' + U.fmt(b, 2)) + '$ &nbsp;·&nbsp; suma de cuadrados: <strong>' + U.fmt(s, 2) +
+          '</strong> &nbsp;·&nbsp; la mínima posible: ' + U.fmt(sOpt, 2) + (s - sOpt < 0.05 ? ' &nbsp;<strong style="color:var(--ok)">¡clavado!</strong>' : ''));
+        plot.render();
+      }
+      var fila = W.row(host);
+      var sa = W.slider(fila, { label: 'pendiente a', min: -1, max: 3, step: 0.01, value: a, on: function (v) { a = v; pinta(); } });
+      var sb = W.slider(fila, { label: 'ordenada b', min: -4, max: 8, step: 0.01, value: b, on: function (v) { b = v; pinta(); } });
+      W.buttons(host, [{ t: 'Mostrar el ajuste óptimo', on: function () { a = aOpt; b = bOpt; sa.set(U.round(aOpt, 2)); sb.set(U.round(bOpt, 2)); pinta(); } }]);
+      pinta();
+    }
+  });
+
+  p.hist('El método de mínimos cuadrados lo publicó Adrien-Marie Legendre en 1805, para calcular órbitas de ' +
+    'cometas. Carl Friedrich Gauss lo publicó en 1809 y aseguró que lo usaba desde 1795; con él había ' +
+    'predicho en 1801 dónde reaparecería Ceres, un planeta enano que se había perdido tras el Sol después de ' +
+    'observarse solo unas semanas. Los astrónomos lo encontraron donde Gauss dijo. La disputa por la ' +
+    'prioridad entre los dos fue agria; el método, en cambio, no ha dejado de usarse.');
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -310,7 +375,37 @@ Course.topic('cib-caja-negra', function (p) {
     answer: function (d) { return d.variable; }
   });
 
+  p.exercise({
+    title: 'Ajusta una recta a cinco medidas',
+    level: 'avanzado',
+    gen: function (r) {
+      var a = r.pm(1, 3), b = r.int(-3, 5), k = r.int(1, 2);
+      var patron = r.pick([[1, -1, 0, -1, 1], [-1, 2, 0, -2, 1], [2, -1, -2, -1, 2], [1, -2, 0, 2, -1]]);
+      var xs = [1, 2, 3, 4, 5], ys = xs.map(function (x, i) { return a * x + b + k * patron[i]; });
+      return { a: a, b: b, xs: xs, ys: ys, extremos: (ys[4] - ys[0]) / 4 };
+    },
+    ask: function (d) {
+      return 'Al sondear una caja negra con las entradas $x = 1, 2, 3, 4, 5$ se obtienen las salidas $y = ' + d.ys.join(',\\ ') +
+        '$. Calcula la recta de mínimos cuadrados $y = ax + b$.';
+    },
+    fields: [{ name: 'a', label: 'a =', w: 'tiny' }, { name: 'b', label: 'b =', w: 'tiny' }],
+    sol: function (d) { return { a: d.a, b: d.b }; },
+    tol: 1e-6,
+    errores: [{ si: function (v, d) { return Math.abs(d.extremos - d.a) > 1e-9 && Math.abs(v.a - d.extremos) < 1e-6; }, msg: 'Esa es la pendiente entre el primer punto y el último: ignora los otros tres. Mínimos cuadrados usa todas las medidas.' }],
+    hint: function () { return ['Calcula las medias: $\\overline{x} = 3$ e $\\overline{y}$.', 'Con $x = 1, \\dots, 5$, las desviaciones de $x$ son $-2, -1, 0, 1, 2$ y la suma de sus cuadrados es 10.']; },
+    steps: function (d) {
+      var my = ML.mean(d.ys), dev = d.ys.map(function (y) { return y - my; });
+      var prods = dev.map(function (e, i) { return (d.xs[i] - 3) * e; }), S = prods.reduce(function (s, t) { return s + t; }, 0);
+      return ['$\\overline{x} = 3$, $\\overline{y} = ' + U.fmt(my, 2) + '$',
+        'Productos $(x_i - \\overline{x})(y_i - \\overline{y})$: $' + prods.map(function (t) { return U.fmt(t, 2); }).join(',\\ ') + '$, que suman $' + U.fmt(S, 2) + '$.',
+        '$a = \\dfrac{' + U.fmt(S, 2) + '}{10} = ' + d.a + '$',
+        '$b = ' + U.fmt(my, 2) + ' - ' + (d.a < 0 ? '(' + d.a + ')' : d.a) + '\\cdot 3 = ' + d.b + '$'];
+    },
+    answer: function (d) { return 'y = ' + d.a + 'x ' + (d.b < 0 ? '− ' + (-d.b) : '+ ' + d.b); }
+  });
+
   p.keys([
+    'Con entradas y salidas numéricas y ruido, la caja se imita con un modelo ajustado: la recta de mínimos cuadrados minimiza la suma de los cuadrados de los residuos.',
     'El <strong>estado</strong> de un sistema es lo que hay que conocer para saber qué hará a continuación.',
     'Una <strong>transformación</strong> asigna a cada estado el siguiente; es una aplicación del conjunto de estados en sí mismo.',
     'Un sistema está <strong>determinado por su estado</strong> si desde el mismo estado hace siempre lo mismo.',

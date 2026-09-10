@@ -115,7 +115,7 @@ Course.topic('gfx-repetir', function (p) {
   p.section('mod, y el aviso de siempre');
 
   p.text('<code>mod(x, m)</code> es lo mismo que <code>fract</code> pero con el periodo que quieras: ' +
-    'devuelve el resto de dividir $x$ entre $m$. Es <strong>la aritmética modular del bloque 10</strong>, ' +
+    'devuelve el resto de dividir $x$ entre $m$. Es <strong>la aritmética modular</strong> de la [[av-numeros|teoría de números]], ' +
     'la de las horas del reloj, decidiendo píxeles.');
 
   p.formula('\\operatorname{mod}(x,\\ m) = x - m\\left\\lfloor \\frac{x}{m} \\right\\rfloor', 'el resto');
@@ -273,11 +273,40 @@ Course.topic('gfx-repetir', function (p) {
     answer: function (d) { return d.ref; }
   });
 
+  p.exercise({
+    title: 'Predice la imagen',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        { c: 'float v = step(0.5, fract(p.x * 5.0));',
+          o: ['Rayas verticales blancas y negras del mismo grosor', 'Rayas horizontales', 'Un tablero de ajedrez', 'Un degradado de izquierda a derecha'],
+          por: '<code>fract(5x)</code> sube de 0 a 1 cinco veces por unidad; el <code>step</code> la parte por la mitad: la mitad de cada periodo negra y la otra blanca.' },
+        { c: 'vec2 q = fract(p * 4.0) - 0.5;\nfloat v = step(length(q), 0.2);',
+          o: ['Una cuadrícula de círculos pequeños, uno por celda', 'Un solo círculo en el centro', 'Rayas verticales', 'Anillos concéntricos'],
+          por: '<code>q</code> es la posición dentro de cada celda, con el origen en su centro: en cada celda se dibuja el mismo círculo.' },
+        { c: 'float celda = floor(p.x * 5.0);\nfloat v = fract(celda * 0.3);',
+          o: ['Columnas verticales, cada una de un gris uniforme y distinto', 'Un degradado continuo', 'Filas horizontales de grises', 'Estática'],
+          por: 'Dentro de una columna <code>floor</code> da el mismo número, así que el gris es constante; al pasar a la siguiente columna cambia de golpe.' },
+        { c: 'float v = step(0.5, fract(length(p) * 6.0));',
+          o: ['Anillos concéntricos alternos, blancos y negros', 'Rayas verticales', 'Sectores alrededor del centro', 'Un círculo relleno'],
+          por: 'La repetición se aplica a la distancia al centro en lugar de a una coordenada: se repiten anillos.' }
+      ];
+      var c = r.pick(casos);
+      return { codigo: c.c, textos: c.o, orden: r.shuffle([0, 1, 2, 3]), por: c.por };
+    },
+    ask: function (d) { return 'Con <code>p</code> centrada y el color final <code>vec3(v)</code>, ¿qué se ve?<pre class="shd__mini">' + d.codigo + '</pre>'; },
+    fields: function (d) { return [{ name: 'q', label: 'Se ve', opts: d.orden.map(function (i) { return { t: d.textos[i], v: String(i) }; }) }]; },
+    sol: function () { return { q: '0' }; },
+    hint: function () { return ['<code>fract</code> repite, <code>floor</code> numera las celdas.', '¿A qué se aplica la repetición: a una coordenada, a las dos o a la distancia?']; },
+    steps: function (d) { return [d.por, 'Se ve: <strong>' + d.textos[0] + '</strong>.']; },
+    answer: function (d) { return d.textos[0]; }
+  });
+
   p.keys([
     'No se repite la figura: <strong>se pliega el espacio</strong>. Una figura escrita una vez aparece infinitas veces y cuesta lo mismo.',
     'La receta es siempre: multiplicar para estirar, <code>fract</code> para plegar, <code>- 0.5</code> para centrar en la celda.',
     '<code>fract</code> dice <em>dónde</em> estás dentro de la celda; <code>floor</code> dice <em>en cuál</em>. Con la segunda se hace que cada celda sea distinta.',
-    '<code>mod(x, m)</code> es la aritmética modular del bloque 10, repitiendo con el periodo que quieras.',
+    '<code>mod(x, m)</code> es la aritmética modular de la teoría de números, repitiendo con el periodo que quieras.',
     'Plegar rompe el campo de distancias en las costuras: si la figura se sale de su celda, se corta.'
   ]);
 });

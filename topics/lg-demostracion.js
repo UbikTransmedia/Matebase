@@ -224,6 +224,24 @@ Course.topic('lg-demostracion', function (p) {
     'utilizado en ningún momento que la fórmula vale para $k$, seguramente algo está mal.', null,
     'Dónde se falla');
 
+  p.sub('Inducción más allá de las sumas');
+
+  p.text('La inducción no sirve solo para fórmulas de sumas. Funciona con cualquier afirmación que dependa ' +
+    'de un número natural, y en 2.º de Bachillerato aparece sobre todo en dos sitios: al calcular ' +
+    '<strong>potencias de una matriz</strong>, donde se adivina el patrón con $A^2$ y $A^3$ y se demuestra ' +
+    'por inducción, y al probar <strong>desigualdades</strong>.');
+
+  p.formula('A = \\begin{pmatrix} 1 & 1 \\\\ 0 & 1 \\end{pmatrix} \\ \\Rightarrow\\ A^n = \\begin{pmatrix} 1 & n \\\\ 0 & 1 \\end{pmatrix}',
+    'una conjetura que se demuestra por inducción',
+    'Caso base: para $n = 1$ es la propia $A$. ✓<br><br>Paso: si $A^k = \\begin{pmatrix} 1 & k \\\\ 0 & 1 \\end{pmatrix}$, ' +
+      'entonces $A^{k+1} = A^k\\cdot A = \\begin{pmatrix} 1 & k \\\\ 0 & 1 \\end{pmatrix}\\begin{pmatrix} 1 & 1 \\\\ 0 & 1 \\end{pmatrix} = ' +
+      '\\begin{pmatrix} 1 & k + 1 \\\\ 0 & 1 \\end{pmatrix}$, que es la fórmula con $n = k + 1$. ∎<br><br>' +
+      'Lo verás aplicado en [[al-inversa]].');
+
+  p.text('Con desigualdades, el paso inductivo tiene un truco: no se busca una igualdad sino encadenar ' +
+    'estimaciones. Para probar que $2^n > n$: si $2^k > k$, entonces $2^{k+1} = 2\\cdot 2^k > 2k = k + k \\ge ' +
+    'k + 1$. Cada desigualdad del camino tiene que ser cierta, y la última usa que $k \\ge 1$.');
+
   /* ================= EJERCICIOS ================= */
   p.util('La inducción es la recursión de los programadores puesta por escrito: un caso base y una regla ' +
     'que reduce el problema al anterior. Y es lo que permite fiarse de un programa que nadie puede ' +
@@ -368,7 +386,51 @@ Course.topic('lg-demostracion', function (p) {
     }
   });
 
+  p.exercise({
+    title: 'Ordena la demostración',
+    level: 'medio',
+    gen: function (r) {
+      var casos = [
+        {
+          enun: 'Demostrar por inducción que $1 + 3 + 5 + \\dots + (2n - 1) = n^2$.',
+          pasos: ['Caso base: para $n = 1$ la suma vale $1 = 1^2$.', 'Hipótesis: se supone que $1 + 3 + \\dots + (2k - 1) = k^2$.',
+            'Paso: se suma $2k + 1$ a los dos lados y queda $k^2 + 2k + 1$.', 'Se reconoce $(k + 1)^2$, que es la fórmula para $n = k + 1$. ∎']
+        },
+        {
+          enun: 'Demostrar por inducción que $2^n > n$ para todo natural $n \\ge 1$.',
+          pasos: ['Caso base: $2^1 = 2 > 1$.', 'Hipótesis: se supone que $2^k > k$.',
+            'Paso: $2^{k+1} = 2\\cdot 2^k > 2k$, usando la hipótesis.', 'Como $k \\ge 1$, $2k = k + k \\ge k + 1$, así que $2^{k+1} > k + 1$. ∎']
+        },
+        {
+          enun: 'Demostrar por inducción que $A^n = \\begin{pmatrix} 1 & n \\\\ 0 & 1 \\end{pmatrix}$ para $A = \\begin{pmatrix} 1 & 1 \\\\ 0 & 1 \\end{pmatrix}$.',
+          pasos: ['Caso base: $A^1 = A$, que coincide con la fórmula para $n = 1$.', 'Hipótesis: se supone que $A^k = \\begin{pmatrix} 1 & k \\\\ 0 & 1 \\end{pmatrix}$.',
+            'Paso: se calcula $A^{k+1} = A^k\\cdot A$ usando la hipótesis.', 'El producto da $\\begin{pmatrix} 1 & k + 1 \\\\ 0 & 1 \\end{pmatrix}$, la fórmula para $n = k + 1$. ∎']
+        }
+      ];
+      var c = r.pick(casos), letras = ['A', 'B', 'C', 'D'];
+      var orden = r.shuffle([0, 1, 2, 3]);               // orden[i]: paso que aparece con la letra i
+      var bien = [0, 1, 2, 3].map(function (paso) { return letras[orden.indexOf(paso)]; }).join('');
+      var opciones = [bien], guard = 0;
+      while (opciones.length < 4 && guard++ < 60) {
+        var otra = r.shuffle(letras).join('');
+        if (opciones.indexOf(otra) < 0) opciones.push(otra);
+      }
+      return { c: c, letras: letras, orden: orden, bien: bien, opciones: r.shuffle(opciones) };
+    },
+    ask: function (d) {
+      return d.c.enun + ' Estos son los pasos, desordenados:<br>' + d.orden.map(function (paso, i) {
+        return '<strong>' + d.letras[i] + '.</strong> ' + d.c.pasos[paso];
+      }).join('<br>') + '<br>¿En qué orden van?';
+    },
+    fields: function (d) { return [{ name: 'o', label: 'Orden', opts: d.opciones.map(function (o) { return { t: o.split('').join(' → '), v: o }; }) }]; },
+    sol: function (d) { return { o: d.bien }; },
+    hint: function () { return ['Una demostración por inducción empieza siempre por el caso base.', 'Después viene la hipótesis, y el paso la usa para llegar al caso siguiente.']; },
+    steps: function (d) { return ['Orden correcto: ' + d.bien.split('').join(' → ') + '.', 'Caso base, hipótesis de inducción, uso de la hipótesis y conclusión para $k + 1$.']; },
+    answer: function (d) { return d.bien.split('').join(' → '); }
+  });
+
   p.keys([
+    'La inducción demuestra también desigualdades y patrones de potencias de matrices, no solo sumas.',
     'Comprobar casos <strong>no es</strong> demostrar: un patrón puede aguantar 40 veces y romperse a la 41.ª.',
     'Directa: de $p$ a $q$. Contrarrecíproco: de $\\neg q$ a $\\neg p$, y equivale.',
     'Absurdo: se supone lo contrario y se busca una contradicción.',

@@ -144,6 +144,64 @@ Course.topic('fn-concepto', function (p) {
     }
   });
 
+  p.section('Composición y función inversa');
+
+  p.text('Dos funciones se pueden <strong>encadenar</strong>: la salida de una se usa como entrada de la ' +
+    'otra, como dos máquinas puestas en fila. Es la idea que hay detrás de la ' +
+    '[[fn-derivadas|regla de la cadena]], y la que permite construir funciones complicadas a partir de ' +
+    'otras sencillas.');
+
+  p.formulas([
+    '(g\\circ f)(x) = g\\bigl(f(x)\\bigr)',
+    'y = f(x) \\iff x = f^{-1}(y), \\qquad f^{-1}\\bigl(f(x)\\bigr) = x'
+  ], 'composición y función inversa',
+    'El círculo $\\circ$ se lee «compuesta con»: $g\\circ f$ es <em>«ge compuesta con efe»</em> y se aplica ' +
+      'de derecha a izquierda, primero $f$ y después $g$. En general $g\\circ f \\ne f\\circ g$: ponerse los ' +
+      'calcetines y luego los zapatos no es lo mismo que al revés.<br><br>$f^{-1}$ se lee «efe inversa» ' +
+      '—no «efe elevado a menos uno», y no es $\\frac{1}{f}$— y es la función que deshace lo que hace $f$.');
+
+  p.text('Para calcular la inversa se escribe $y = f(x)$, se <strong>intercambian</strong> $x$ e $y$ y se ' +
+    'despeja la $y$. Solo existe si $f$ no repite valores (si es [[lg-conjuntos|inyectiva]]): si dos entradas ' +
+    'dieran la misma salida, la inversa no sabría a cuál volver. Y su gráfica es la de $f$ reflejada en la ' +
+    'recta $y = x$, porque intercambiar $x$ e $y$ es exactamente esa simetría.');
+
+  p.demo({
+    title: 'Una función y su inversa, reflejadas',
+    intro: 'Elige una función. Su inversa, a trazos, es su reflejo en la diagonal y = x: cada punto (a, b) de una se convierte en el punto (b, a) de la otra.',
+    build: function (host) {
+      var FN = {
+        afin: { t: 'f(x) = 2x + 1', f: function (x) { return 2 * x + 1; }, g: function (x) { return (x - 1) / 2; }, ti: 'f^{-1}(x) = \\frac{x - 1}{2}' },
+        cubo: { t: 'f(x) = x³', f: function (x) { return x * x * x; }, g: function (x) { return Math.cbrt(x); }, ti: 'f^{-1}(x) = \\sqrt[3]{x}' },
+        exp: { t: 'f(x) = eˣ', f: function (x) { return Math.exp(x); }, g: function (x) { return x > 0 ? Math.log(x) : NaN; }, ti: 'f^{-1}(x) = \\ln x' }
+      };
+      var cual = 'afin', a = 1;
+      var out = W.readout(host, '');
+      var plot = W.board(host, {
+        xmin: -4, xmax: 4, ymin: -4, ymax: 4, height: 320,
+        draw: function (g) {
+          var c = FN[cual], b = c.f(a);
+          g.fn(function (x) { return x; }, { color: 'axis', w: 1.2, dash: [3, 4] });
+          g.fn(c.f, { color: 0, w: 2.8 });
+          g.fn(c.g, { color: 1, w: 2.4, dash: true });
+          if (Math.abs(b) < 4) {
+            g.seg(a, b, b, a, { color: 'axis', w: 1, dash: true });
+            g.point(a, b, { color: 0, r: 5 });
+            g.point(b, a, { color: 1, r: 5 });
+          }
+        }
+      });
+      function pinta() {
+        var c = FN[cual], b = c.f(a);
+        out.set('$' + c.ti + '$ &nbsp;·&nbsp; con $a = ' + U.fmt(a, 2) + '$: $f(a) = ' + U.fmt(b, 3) + '$ y $f^{-1}(' + U.fmt(b, 3) + ') = ' + U.fmt(a, 2) + '$');
+        plot.render();
+      }
+      W.chips(host, Object.keys(FN).map(function (k) { return { label: FN[k].t, value: k }; }), { value: cual, on: function (v) { cual = v; pinta(); } });
+      W.slider(W.row(host), { label: 'punto a', min: -1.5, max: 1.3, step: 0.05, value: a, on: function (v) { a = v; pinta(); } });
+      W.legend(host, [{ c: 0, t: 'f' }, { c: 1, t: 'su inversa' }]);
+      pinta();
+    }
+  });
+
   /* ================= EJERCICIOS ================= */
   p.util('Saber leer una gráfica es una defensa ciudadana. La mayoría de los gráficos engañosos que ' +
     'circulan no mienten en los datos: mienten en el eje. Un eje vertical que no empieza en cero ' +
@@ -285,7 +343,52 @@ Course.topic('fn-concepto', function (p) {
     answer: function (d) { return '(0, ' + d.c + '), (' + d.x1 + ', 0) y (' + d.x2 + ', 0)'; }
   });
 
+  p.exercise({
+    title: 'Componer dos funciones',
+    level: 'medio',
+    gen: function (r) {
+      var a = r.pm(1, 4), b = r.pm(0, 5), c = r.pm(0, 5), x0 = r.pm(0, 3);
+      var bien = Math.pow(a * x0 + b, 2) + c, mal = a * (x0 * x0 + c) + b;
+      return { a: a, b: b, c: c, x0: x0, bien: bien, mal: mal };
+    },
+    ask: function (d) {
+      return 'Con $f(x) = ' + ML.polyTex([d.a, d.b]) + '$ y $g(x) = ' + ML.polyTex([1, 0, d.c]) + '$, calcula $(g\\circ f)(' + d.x0 + ')$.';
+    },
+    fields: [{ name: 'v', label: 'valor', w: 'tiny' }],
+    sol: function (d) { return { v: d.bien }; },
+    errores: [{ si: function (v, d) { return d.mal !== d.bien && v.v === d.mal; }, msg: 'Has calculado $f(g(x))$: en $g\\circ f$ se aplica <strong>primero $f$</strong> y al resultado se le aplica $g$.' }],
+    hint: function (d) { return ['Primero $f(' + d.x0 + ')$.', 'Después aplica $g$ a ese resultado.']; },
+    steps: function (d) { var fx = d.a * d.x0 + d.b; return ['$f(' + d.x0 + ') = ' + fx + '$', '$g(' + fx + ') = ' + (fx < 0 ? '(' + fx + ')' : fx) + '^2 ' + (d.c < 0 ? '- ' + (-d.c) : '+ ' + d.c) + ' = ' + d.bien + '$']; },
+    answer: function (d) { return String(d.bien); }
+  });
+
+  p.exercise({
+    title: 'La función inversa',
+    level: 'avanzado',
+    gen: function (r) {
+      var b = r.pm(0, 5), c = r.pm(0, 4), y0 = r.pm(2, 6);
+      if (b === -c) return null;
+      return { b: b, c: c, y0: y0, v: ML.F(b + c * y0, y0 - 1), mal: y0 !== -b ? ML.F(y0 - c, y0 + b) : null };
+    },
+    ask: function (d) {
+      return 'Sea $f(x) = \\dfrac{' + ML.polyTex([1, d.b]) + '}{' + ML.polyTex([1, -d.c]) + '}$. Calcula $f^{-1}(' + d.y0 + ')$. (Vale una fracción.)';
+    },
+    fields: [{ name: 'v', label: 'valor', w: 'tiny' }],
+    sol: function (d) { return { v: d.v.val() }; },
+    tol: 1e-9,
+    errores: [{ si: function (v, d) { return d.mal && !d.mal.eq(d.v) && Math.abs(v.v - d.mal.val()) < 1e-9; }, msg: '$f^{-1}$ no es $\\frac{1}{f}$: la inversa deshace la función, no la invierte como fracción.' }],
+    hint: function () { return ['Escribe $y = f(x)$ y despeja $x$ en función de $y$.', 'O más directo: busca el $x$ tal que $f(x)$ valga el número dado.']; },
+    steps: function (d) {
+      return ['$' + d.y0 + ' = \\dfrac{' + ML.polyTex([1, d.b]) + '}{' + ML.polyTex([1, -d.c]) + '} \\Rightarrow ' + d.y0 + '(' + ML.polyTex([1, -d.c]) + ') = ' + ML.polyTex([1, d.b]) + '$',
+        '$' + d.y0 + 'x' + ML.termTex(-d.y0 * d.c, '', 0, false) + ' = x' + ML.termTex(d.b, '', 0, false) + ' \\Rightarrow ' + (d.y0 - 1) + 'x = ' + (d.b + d.c * d.y0) + '$',
+        '$x = ' + d.v.tex() + '$, así que $f^{-1}(' + d.y0 + ') = ' + d.v.tex() + '$.'];
+    },
+    answer: function (d) { return '$' + d.v.tex() + '$'; }
+  });
+
   p.keys([
+    '$(g\\circ f)(x) = g(f(x))$: primero $f$ y después $g$. El orden importa.',
+    'La inversa deshace la función: se intercambian $x$ e $y$ y se despeja. Solo existe si la función no repite valores, y su gráfica es la simétrica respecto de $y = x$.',
     'Función = a cada entrada le corresponde <strong>una sola</strong> salida.',
     'Prueba de la recta vertical: si una vertical corta dos veces, no es función.',
     'Dominio = valores permitidos. Prohibiciones: denominador cero, raíz par de negativo, logaritmo de no positivo.',

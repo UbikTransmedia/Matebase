@@ -129,7 +129,10 @@ Course.topic('fn-derivadas', function (p) {
      ['$\\ln x$', '$\\dfrac{1}{x}$'],
      ['$\\operatorname{sen} x$', '$\\cos x$'],
      ['$\\cos x$', '$-\\operatorname{sen} x$'],
-     ['$\\operatorname{tg} x$', '$1 + \\operatorname{tg}^2 x = \\dfrac{1}{\\cos^2 x}$']]);
+     ['$\\operatorname{tg} x$', '$1 + \\operatorname{tg}^2 x = \\dfrac{1}{\\cos^2 x}$'],
+     ['$\\operatorname{arcsen} x$', '$\\dfrac{1}{\\sqrt{1 - x^2}}$'],
+     ['$\\arccos x$', '$\\dfrac{-1}{\\sqrt{1 - x^2}}$'],
+     ['$\\operatorname{arctg} x$', '$\\dfrac{1}{1 + x^2}$']]);
 
   p.sub('Y las reglas para combinarlas');
 
@@ -250,6 +253,18 @@ Course.topic('fn-derivadas', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.sub('Derivación logarítmica');
+
+  p.text('Hay funciones que no encajan en ninguna regla: $x^x$ no es una potencia, porque el exponente no ' +
+    'es fijo, ni una exponencial, porque la base tampoco lo es. El truco es tomar logaritmos antes de ' +
+    'derivar: el logaritmo baja el exponente y convierte la potencia en un producto, que sí se sabe derivar.');
+
+  p.formula('y = f(x)^{g(x)} \\ \\Rightarrow\\ \\ln y = g(x)\\ln f(x) \\ \\Rightarrow\\ \\frac{y\'}{y} = g\'(x)\\ln f(x) + g(x)\\,\\frac{f\'(x)}{f(x)}',
+    'derivación logarítmica',
+    'Se toman logaritmos a los dos lados, se deriva cada uno —el izquierdo, con la regla de la cadena, ' +
+      'da $\\frac{y\'}{y}$— y al final se despeja $y\'$ multiplicando por $y$.<br><br>Con $y = x^x$: ' +
+      '$\\ln y = x\\ln x$, así que $\\frac{y\'}{y} = \\ln x + 1$ e $y\' = x^x(\\ln x + 1)$.');
+
   p.section('La recta tangente');
 
   p.text('Con la derivada ya se puede escribir la ecuación de la tangente en un punto: es una recta ' +
@@ -519,7 +534,56 @@ Course.topic('fn-derivadas', function (p) {
     answer: function (d) { return '$y = ' + ML.termTex(d.m, 'x', 1, true) + ML.termTex(d.n, '', 0, false) + '$'; }
   });
 
+  p.exercise({
+    title: 'Derivación logarítmica',
+    level: 'avanzado',
+    gen: function (r) {
+      var fam = r.int(0, 1), a;
+      if (fam === 0) { a = r.pick([2, 3]); return { fam: 0, a: a, tex: 'x^x', v: Math.pow(a, a) * (Math.log(a) + 1), malo: Math.pow(a, a) }; }
+      a = r.pick([2, Math.E]);
+      return { fam: 1, a: a, tex: 'x^{\\ln x}', v: Math.pow(a, Math.log(a)) * 2 * Math.log(a) / a, malo: Math.log(a) * Math.pow(a, Math.log(a) - 1) };
+    },
+    ask: function (d) { return 'Sea $f(x) = ' + d.tex + '$. Calcula $f\'(' + (d.a === Math.E ? 'e' : d.a) + ')$ (cuatro decimales).'; },
+    fields: [{ name: 'v', label: "f'", w: 'wide' }],
+    sol: function (d) { return { v: U.round(d.v, 6) }; },
+    tol: 3e-4,
+    errores: [{ si: function (v, d) { return Math.abs(d.malo - d.v) > 1e-3 && Math.abs(v.v - d.malo) < 1e-3; }, msg: 'Has usado la regla de la potencia como si el exponente fuera fijo. Aquí la variable está arriba y abajo: toma logaritmos.' }],
+    hint: function (d) {
+      return ['Toma logaritmos: ' + (d.fam === 0 ? '$\\ln y = x\\ln x$.' : '$\\ln y = (\\ln x)^2$.'),
+        'Deriva: ' + (d.fam === 0 ? '$\\frac{y\'}{y} = \\ln x + 1$.' : '$\\frac{y\'}{y} = \\frac{2\\ln x}{x}$.') + ' Despeja $y\'$ y sustituye.'];
+    },
+    steps: function (d) {
+      return d.fam === 0
+        ? ['$\\ln y = x\\ln x \\Rightarrow \\frac{y\'}{y} = \\ln x + 1 \\Rightarrow y\' = x^x(\\ln x + 1)$', '$f\'(' + d.a + ') = ' + Math.pow(d.a, d.a) + '(\\ln ' + d.a + ' + 1) \\approx ' + U.fmt(d.v, 4) + '$']
+        : ['$\\ln y = (\\ln x)^2 \\Rightarrow \\frac{y\'}{y} = \\frac{2\\ln x}{x} \\Rightarrow y\' = x^{\\ln x}\\cdot\\frac{2\\ln x}{x}$', 'Sustituyendo: $\\approx ' + U.fmt(d.v, 4) + '$'];
+    },
+    answer: function (d) { return U.fmt(d.v, 4); }
+  });
+
+  p.exercise({
+    title: 'Derivar funciones combinadas',
+    level: 'medio',
+    gen: function (r) {
+      var fam = r.int(0, 3), a = r.int(1, 4), b = r.int(1, 5);
+      var C = [
+        { tex: 'e^{' + (a === 1 ? '' : a) + 'x}\\operatorname{sen}(' + (b === 1 ? '' : b) + 'x)', en: 0, v: b, pasos: '$f\'(x) = e^{' + a + 'x}\\left(' + a + '\\operatorname{sen}(' + b + 'x) + ' + b + '\\cos(' + b + 'x)\\right)$, y en $0$: $1\\cdot(0 + ' + b + ') = ' + b + '$' },
+        { tex: '\\ln(x^2 + ' + a + ')', en: 1, v: 2 / (1 + a), pasos: '$f\'(x) = \\frac{2x}{x^2 + ' + a + '}$, y en $1$: $\\frac{2}{' + (1 + a) + '}$' },
+        { tex: '\\operatorname{arctg}(' + (a === 1 ? '' : a) + 'x)', en: 1, v: a / (1 + a * a), pasos: '$f\'(x) = \\frac{' + a + '}{1 + ' + (a * a) + 'x^2}$, y en $1$: $\\frac{' + a + '}{' + (1 + a * a) + '}$' },
+        { tex: 'x\\,e^{-' + (a === 1 ? '' : a) + 'x}', en: 1, v: Math.exp(-a) * (1 - a), pasos: '$f\'(x) = e^{-' + a + 'x}(1 - ' + a + 'x)$, y en $1$: $e^{-' + a + '}(1 - ' + a + ')$' }
+      ][fam];
+      return { fam: fam, c: C };
+    },
+    ask: function (d) { return 'Sea $f(x) = ' + d.c.tex + '$. Calcula $f\'(' + d.c.en + ')$ (cuatro decimales o fracción).'; },
+    fields: [{ name: 'v', label: "f'", w: 'wide' }],
+    sol: function (d) { return { v: U.round(d.c.v, 6) }; },
+    tol: 3e-4,
+    hint: function () { return ['Identifica si es un producto, una composición o las dos cosas.', 'Aplica la regla del producto y la de la cadena por partes, y sustituye al final.']; },
+    steps: function (d) { return [d.c.pasos + ' $\\approx ' + U.fmt(d.c.v, 4) + '$']; },
+    answer: function (d) { return U.fmt(d.c.v, 4); }
+  });
+
   p.keys([
+    'Si la variable está a la vez en la base y en el exponente, se toman logaritmos antes de derivar.',
     'La derivada es el límite del cociente incremental: la pendiente de la tangente.',
     'Dos lecturas de lo mismo: pendiente (geometría) y ritmo de cambio instantáneo (física).',
     '$(x^n)\' = n\\,x^{n-1}$ resuelve casi todo lo polinómico.',

@@ -41,6 +41,9 @@
         <input id="search" type="search" placeholder="Buscar un tema…" autocomplete="off" spellcheck="false">
         <button class="search__clear" id="searchClear" type="button" title="Limpiar">×</button>
       </div>
+      <!-- Qué temario se ve: el curso entero o solo el de una asignatura de 2.º -->
+      <div class="themes themes--itin" id="itin" role="group" aria-label="Temario que muestra el índice"></div>
+      <div class="itin__nota" id="itinNota" aria-live="polite"></div>
     </div>
 
     <nav class="side__scroll" id="sideScroll" aria-label="Índice del curso"></nav>
@@ -98,6 +101,7 @@
 <script src="assets/js/core/progress.js"></script>
 <script src="assets/js/core/exercise.js"></script>
 <script src="assets/js/core/page.js"></script>
+<script src="assets/js/core/repaso.js"></script>
 <!-- ============ temario y vocabulario ============ -->
 <script src="assets/js/curriculum.js"></script>
 <script src="assets/js/glosario.js"></script>

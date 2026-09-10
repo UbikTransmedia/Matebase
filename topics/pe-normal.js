@@ -134,6 +134,22 @@ Course.topic('pe-normal', function (p) {
   p.text('La tercera es la que permite que las tablas solo tengan valores positivos: la campana es ' +
     'simétrica, así que el área a la izquierda de $-z$ es igual al área a la derecha de $z$.');
 
+  p.sub('Al revés: de la probabilidad al valor');
+
+  p.text('Muchas preguntas van en sentido contrario: se conoce la probabilidad y se pide el valor. <em>«¿Qué ' +
+    'nota hay que sacar para estar en el 10 % mejor?»</em> Se busca la probabilidad <strong>dentro</strong> ' +
+    'de la tabla, se lee el $z$ que le corresponde en el margen y se deshace la tipificación.');
+
+  p.formula('P(X \\le k) = p \\ \\Rightarrow\\ \\Phi\\!\\left(\\frac{k - \\mu}{\\sigma}\\right) = p \\ \\Rightarrow\\ k = \\mu + z_p\\,\\sigma',
+    'el valor que deja por debajo una probabilidad',
+    '$z_p$ es el valor de la $N(0,1)$ que deja por debajo una probabilidad $p$.<br><br>Si $p < 0{,}5$, el ' +
+      '$z$ es negativo y se usa la simetría: por ejemplo, $z_{0{,}1} = -z_{0{,}9} \\approx -1{,}28$.<br><br>' +
+      'Y si lo que se desconoce es $\\mu$ o $\\sigma$, la misma igualdad $\\frac{k - \\mu}{\\sigma} = z_p$ ' +
+      'sirve para despejarlos; con dos datos se plantea un sistema de dos ecuaciones.');
+
+  p.table(['$p$', '0,75', '0,80', '0,90', '0,95', '0,975', '0,99'],
+    [['$z_p$', '0,67', '0,84', '1,28', '1,645', '1,96', '2,33']]);
+
   /* ---------------------------------------------------------------- */
   p.util('Tipificar es poner en una escala común cosas medidas en unidades distintas, y eso lo hace ' +
     'posible comparar lo incomparable: si tu nota de Matemáticas está a 1,5 desviaciones por encima ' +
@@ -290,7 +306,58 @@ Course.topic('pe-normal', function (p) {
     answer: function (d) { return U.fmt(d.val, 4); }
   });
 
+  var ZP = { 0.75: 0.67, 0.8: 0.84, 0.9: 1.28, 0.95: 1.645, 0.975: 1.96, 0.99: 2.33 };
+  function zDe(pp) { return pp >= 0.5 ? ZP[pp] : -ZP[U.round(1 - pp, 3)]; }
+
+  p.exercise({
+    title: 'El valor que deja una probabilidad',
+    level: 'avanzado',
+    gen: function (r) {
+      var mu = r.pick([60, 100, 170, 500]), sigma = r.pick([5, 8, 10, 15, 20]);
+      var pp = r.pick([0.9, 0.95, 0.975, 0.99, 0.8, 0.75, 0.1, 0.05, 0.25]);
+      var z = zDe(pp);
+      return { mu: mu, sigma: sigma, p: pp, z: z, k: mu + z * sigma };
+    },
+    ask: function (d) {
+      return 'Una variable sigue una $N(' + d.mu + ',\\ ' + d.sigma + ')$. Halla el valor $k$ tal que $P(X \\le k) = ' + U.fmt(d.p, 3) + '$ (usa la tabla; dos decimales).';
+    },
+    fields: [{ name: 'k', label: 'k =', w: 'wide' }],
+    sol: function (d) { return { k: U.round(d.k, 4) }; },
+    check: function (v, d) {
+      if (isNaN(v.k)) return { ok: false, msg: 'Escribe un número.' };
+      return Math.abs(v.k - d.k) <= 0.02 * d.sigma + 0.01;
+    },
+    errores: [{ si: function (v, d) { return d.p < 0.5 && Math.abs(v.k - (d.mu - d.z * d.sigma)) <= 0.02 * d.sigma + 0.01; }, msg: 'Con una probabilidad menor que 0,5 el valor está <strong>por debajo</strong> de la media: el $z$ es negativo.' }],
+    hint: function (d) { return ['Busca en la tabla el $z$ con $\\Phi(z) = ' + U.fmt(d.p >= 0.5 ? d.p : 1 - d.p, 3) + '$' + (d.p < 0.5 ? ' y cámbiale el signo, por simetría.' : '.'), 'Deshaz la tipificación: $k = \\mu + z\\sigma$.']; },
+    steps: function (d) { return ['$z \\approx ' + U.fmt(d.z, 3) + '$', '$k = ' + d.mu + ' + (' + U.fmt(d.z, 3) + ')\\cdot' + d.sigma + ' \\approx ' + U.fmt(d.k, 2) + '$']; },
+    answer: function (d) { return U.fmt(d.k, 2); }
+  });
+
+  p.exercise({
+    title: 'Hallar la media conociendo una probabilidad',
+    level: 'avanzado',
+    gen: function (r) {
+      var sigma = r.pick([4, 5, 10, 12]), k = r.pick([80, 120, 200, 250]), pp = r.pick([0.1, 0.05, 0.2, 0.25]);
+      var z = ZP[U.round(1 - pp, 3)];
+      return { sigma: sigma, k: k, p: pp, z: z, mu: k - z * sigma };
+    },
+    ask: function (d) {
+      return 'Una variable normal tiene $\\sigma = ' + d.sigma + '$ y cumple $P(X > ' + d.k + ') = ' + U.fmt(d.p, 2) + '$. ¿Cuánto vale su media $\\mu$? (dos decimales)';
+    },
+    fields: [{ name: 'm', label: 'μ =', w: 'wide' }],
+    sol: function (d) { return { m: U.round(d.mu, 4) }; },
+    check: function (v, d) {
+      if (isNaN(v.m)) return { ok: false, msg: 'Escribe un número.' };
+      return Math.abs(v.m - d.mu) <= 0.02 * d.sigma + 0.01;
+    },
+    errores: [{ si: function (v, d) { return Math.abs(v.m - (d.k + d.z * d.sigma)) <= 0.02 * d.sigma + 0.01; }, msg: 'Revisa el signo: si solo una parte pequeña de los valores queda por encima de ese número, la media está <strong>por debajo</strong> de él.' }],
+    hint: function (d) { return ['$P(X > ' + d.k + ') = ' + U.fmt(d.p, 2) + '$ es lo mismo que $P(X \\le ' + d.k + ') = ' + U.fmt(1 - d.p, 2) + '$.', 'Busca ese $z$ y despeja $\\mu$ en $\\frac{' + d.k + ' - \\mu}{' + d.sigma + '} = z$.']; },
+    steps: function (d) { return ['$P(X \\le ' + d.k + ') = ' + U.fmt(1 - d.p, 2) + ' \\Rightarrow z = ' + d.z + '$', '$\\frac{' + d.k + ' - \\mu}{' + d.sigma + '} = ' + d.z + ' \\Rightarrow \\mu = ' + d.k + ' - ' + d.z + '\\cdot' + d.sigma + ' = ' + U.fmt(d.mu, 2) + '$']; },
+    answer: function (d) { return U.fmt(d.mu, 2); }
+  });
+
   p.keys([
+    'Problemas inversos: se busca la probabilidad dentro de la tabla, se lee $z$ y se despeja $k = \\mu + z\\sigma$ (o $\\mu$, o $\\sigma$).',
     'La normal describe magnitudes continuas agrupadas alrededor de un centro.',
     'En una variable continua, la probabilidad es <strong>área</strong>, y la de un punto exacto es cero.',
     'Regla 68-95-99,7: dentro de $1\\sigma$, $2\\sigma$ y $3\\sigma$ de la media.',
