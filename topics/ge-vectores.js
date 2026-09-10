@@ -1,6 +1,12 @@
 /* Tema: Vectores en el plano */
 Course.topic('ge-vectores', function (p) {
 
+  p.puente('Con Pitágoras calculabas distancias entre dos puntos; con las coordenadas, situabas puntos ' +
+    'en el plano. Un vector junta las dos cosas: es un desplazamiento con coordenadas, y su longitud ' +
+    'sale de Pitágoras. La novedad de este tema es el producto escalar, una operación que devuelve un ' +
+    'número y que responde a la pregunta «¿cuánto van estos dos en la misma dirección?». Con ella, ' +
+    'comprobar un ángulo recto se reduce a una multiplicación.');
+
   p.text('Hay magnitudes que quedan definidas con un número: la masa, la temperatura, el tiempo. ' +
     'Se llaman <strong>escalares</strong>. Pero otras necesitan además una dirección: la velocidad, ' +
     'la fuerza, un desplazamiento. Para esas hace falta un <strong>vector</strong>: una flecha.');
@@ -23,9 +29,16 @@ Course.topic('ge-vectores', function (p) {
 
   p.formula('\\vec{AB} = B - A = (b_1 - a_1,\\ b_2 - a_2)');
 
+  p.comprueba('$A(2, 5)$ y $B(-1, 3)$. ¿Cuál es $\\vec{AB}$?', [
+    { t: '$(3, 2)$', ok: false, por: 'Eso es $A - B$: el vector que va de $B$ a $A$, o sea $\\vec{BA}$. Tiene el sentido contrario.' },
+    { t: '$(-3, -2)$', ok: true, por: 'Final menos inicial: $(-1 - 2,\\ 3 - 5) = (-3, -2)$. Para ir de $A$ a $B$ hay que retroceder 3 y bajar 2.' },
+    { t: '$(1, 8)$', ok: false, por: 'Sumar los puntos no da un vector con sentido geométrico. El vector es la <em>diferencia</em> de coordenadas.' }
+  ]);
+
   p.demo({
     title: 'Un vector, sus componentes y su módulo',
     intro: 'Arrastra la punta del vector. Fíjate en el triángulo rectángulo que forman las componentes.',
+    predice: 'Lleva la punta a $(3, 4)$. ¿Cuánto medirá el módulo? Piensa en la terna pitagórica antes de mirar.',
     build: function (host, d) {
       var out = W.readout(host, '');
       W.board(host, {
@@ -142,9 +155,22 @@ Course.topic('ge-vectores', function (p) {
     'producto escalar vale cero</strong>, porque $\\cos 90^\\circ = 0$. Es la forma más rápida de ' +
     'comprobar un ángulo recto sin dibujar nada.', 'ok', 'La prueba de la perpendicularidad');
 
+  p.ejemplo({
+    title: 'Del producto escalar al ángulo, y de vuelta',
+    enunciado: 'Dados $\\vec u = (3, 1)$ y $\\vec v = (-1, 2)$: ¿qué ángulo forman? ¿Y qué vector es perpendicular a $\\vec u$?',
+    pasos: [
+      { t: '<strong>El signo, primero.</strong> $\\vec u\\cdot\\vec v = 3\\cdot(-1) + 1\\cdot 2 = -3 + 2 = -1$. Negativo: el ángulo será <strong>obtuso</strong>, más de $90^\\circ$. Ya sabemos en qué zona buscar.', antes: 'Calcula $\\vec u\\cdot\\vec v$. Solo con el signo, ¿el ángulo es agudo u obtuso?' },
+      { t: '<strong>Los módulos.</strong> $|\\vec u| = \\sqrt{9 + 1} = \\sqrt{10}$ y $|\\vec v| = \\sqrt{1 + 4} = \\sqrt{5}$.' },
+      { t: '<strong>El coseno y el ángulo.</strong> $\\cos\\alpha = \\dfrac{-1}{\\sqrt{10}\\sqrt{5}} = \\dfrac{-1}{\\sqrt{50}} \\approx -0{,}1414$, así que $\\alpha = \\arccos(-0{,}1414) \\approx 98{,}1^\\circ$. Obtuso, como se había previsto. ✓', antes: 'Con el coseno negativo, ¿el arco coseno saldrá menor o mayor que $90^\\circ$?' },
+      { t: '<strong>Un perpendicular a $\\vec u$.</strong> Se buscan $(a, b)$ con $3a + b = 0$. La forma rápida: intercambiar componentes y cambiar un signo, $(-1, 3)$. Comprobación: $3\\cdot(-1) + 1\\cdot 3 = 0$ ✓.', antes: '¿Cómo fabricarías un vector perpendicular a $(3, 1)$ sin calcular ningún ángulo?' }
+    ],
+    cierre: 'El producto escalar da dos herramientas: el signo, que clasifica el ángulo gratis, y el cero, que detecta la perpendicularidad. El ángulo exacto solo hace falta cuando lo piden.'
+  });
+
   p.demo({
     title: 'Producto escalar y ángulo',
     intro: 'Gira los dos vectores y observa el signo del producto escalar: positivo si el ángulo es agudo, cero si es recto, negativo si es obtuso.',
+    predice: 'Con $\\vec u = (4, 0)$, ¿dónde tendrías que colocar $\\vec v$ para que el producto escalar sea exactamente 0? ¿Hay más de una respuesta?',
     build: function (host, d) {
       var out = W.readout(host, '');
       W.board(host, {
@@ -199,6 +225,7 @@ Course.topic('ge-vectores', function (p) {
   p.demo({
     title: 'La sombra de un vector sobre otro',
     intro: 'Mueve los dos vectores. El vector verde es la proyección de u sobre la recta de v: su sombra con la luz cayendo en perpendicular. Pon u perpendicular a v y la sombra desaparece.',
+    predice: 'Si $\\vec u$ y $\\vec v$ apuntan en sentidos casi opuestos, ¿hacia dónde caerá la sombra verde: hacia $\\vec v$ o hacia el lado contrario? ¿Qué signo tendrá la proyección?',
     build: function (host) {
       var out = W.readout(host, '');
       W.board(host, {
@@ -223,6 +250,12 @@ Course.topic('ge-vectores', function (p) {
       function snap(h) { h.x = Math.round(h.x); h.y = Math.round(h.y); }
     }
   });
+
+  p.trampas([
+    { e: '$\\vec{AB} = A - B$', por: 'Es <em>final menos inicial</em>: $B - A$. Al revés sale el vector con el sentido cambiado.' },
+    { e: '$\\vec u\\cdot\\vec v$ es un vector', por: 'Es un número. Multiplicar componente a componente y <em>sumar</em>: $(3, 1)\\cdot(2, 5) = 6 + 5 = 11$, no $(6, 5)$.' },
+    { e: '$|\\vec u + \\vec v| = |\\vec u| + |\\vec v|$', por: 'Solo si tienen la misma dirección y sentido. En general la diagonal del paralelogramo es más corta que los dos lados sumados: es la desigualdad triangular.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('El producto escalar mide «cuánto va en la misma dirección», y de ahí salen dos usos constantes. ' +
@@ -306,11 +339,13 @@ Course.topic('ge-vectores', function (p) {
       return { u: u, v: v, pe: pe, perp: Math.abs(pe) < 1e-9 };
     },
     ask: function (d) {
-      return 'Calcula $\\vec{u}\\cdot\\vec{v}$ siendo $\\vec{u} = (' + d.u + ')$ y $\\vec{v} = (' + d.v + ')$. ' +
-        'Escribe además <code>1</code> si son perpendiculares o <code>0</code> si no lo son.';
+      return 'Calcula $\\vec{u}\\cdot\\vec{v}$ siendo $\\vec{u} = (' + d.u + ')$ y $\\vec{v} = (' + d.v + ')$, y di si son perpendiculares.';
     },
-    fields: [{ name: 'pe', label: 'Producto escalar', w: 'tiny' }, { name: 'q', label: '¿Perpendiculares?', w: 'tiny' }],
-    sol: function (d) { return { pe: d.pe, q: d.perp ? 1 : 0 }; },
+    fields: [
+      { name: 'pe', label: 'Producto escalar', w: 'tiny' },
+      { name: 'q', label: '¿Perpendiculares?', opts: [{ t: 'sí', v: '1' }, { t: 'no', v: '0' }] }
+    ],
+    sol: function (d) { return { pe: d.pe, q: d.perp ? '1' : '0' }; },
     hint: function () { return 'Producto escalar cero ⟺ perpendiculares.'; },
     steps: function (d) {
       return ['$\\vec{u}\\cdot\\vec{v} = ' + d.u[0] + '\\cdot(' + d.v[0] + ') + ' + d.u[1] + '\\cdot(' + d.v[1] + ')$',

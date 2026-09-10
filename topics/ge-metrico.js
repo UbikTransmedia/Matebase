@@ -24,11 +24,12 @@ Course.topic('ge-metrico', function (p) {
       ML.termTex(v[1], par, 1, false) + ' \\\\ z = ' + P[2] + ML.termTex(v[2], par, 1, false) + '\\end{cases}';
   }
 
-  p.text('Con rectas y planos escritos en ecuaciones, este tema responde a las preguntas de medir: qué ' +
+  p.puente('Con rectas y planos escritos en ecuaciones, este tema responde a las preguntas de medir: qué ' +
     'ángulo forman, a qué distancia están, dónde cae la sombra de un punto, dónde está su reflejo. Son ' +
     'muchas fórmulas en apariencia, pero todas salen de una sola idea que conviene tener grabada: ' +
     '<strong>la distancia más corta se mide siempre en perpendicular</strong>, y en perpendicular ' +
-    'quiere decir con el producto escalar valiendo cero.');
+    'quiere decir con el producto escalar valiendo cero. Los tres productos de vectores del espacio ' +
+    'son las herramientas; aquí solo se combinan.');
 
   /* ---------------------------------------------------------------- */
   p.section('Ángulos');
@@ -48,6 +49,12 @@ Course.topic('ge-metrico', function (p) {
       'escalar da el ángulo entre la recta y la <em>normal</em> del plano, y ese ángulo es el ' +
       'complementario del que la recta forma con el plano: si la recta es perpendicular al plano, forma ' +
       '0° con la normal y 90° con el plano.');
+
+  p.comprueba('Una recta es perpendicular a un plano. ¿Qué vale $\\dfrac{|\\vec v\\cdot\\vec n|}{|\\vec v|\\,|\\vec n|}$ y qué ángulo forman?', [
+    { t: 'Vale 0 y forman $90^\\circ$', ok: false, por: 'Si la recta es perpendicular al plano, su director es <em>paralelo</em> a la normal, y el cociente vale 1, no 0. Con coseno saldría $0^\\circ$ (ángulo con la normal), por eso la fórmula lleva seno.' },
+    { t: 'Vale 1 y forman $90^\\circ$', ok: true, por: '$\\vec v \\parallel \\vec n$, así que el cociente es 1, y $\\operatorname{sen}\\alpha = 1$ da $\\alpha = 90^\\circ$. El seno convierte el ángulo con la normal en el ángulo con el plano.' },
+    { t: 'Vale 1 y forman $0^\\circ$', ok: false, por: '$0^\\circ$ es lo que forma la recta con la <em>normal</em>. Con el plano forma el complementario: $90^\\circ$.' }
+  ]);
 
   /* ---------------------------------------------------------------- */
   p.section('Proyecciones y simétricos');
@@ -73,6 +80,7 @@ Course.topic('ge-metrico', function (p) {
   p.demo({
     title: 'La sombra y el reflejo de un punto',
     intro: 'Mueve el punto P. El segmento de puntos es la perpendicular al plano: el pie Q es la proyección y P′ el simétrico. Gira el dibujo para comprobar que P, Q y P′ están alineados en perpendicular.',
+    predice: 'El plano es $x + y + 2z - 2 = 0$. Si colocas $P$ en $(0, 0, 1)$, que cumple la ecuación, ¿dónde caerán $Q$ y $P\'$?',
     build: function (host) {
       var n = [1, 1, 2], D = -2, P = [2, 1, 3];
       var out = W.readout(host, '');
@@ -122,6 +130,18 @@ Course.topic('ge-metrico', function (p) {
       'mixto es el volumen del paralelepípedo; dividido por el área de la base $|\\vec u\\times\\vec v|$, ' +
       'queda la altura. Las tres son la misma idea: <em>volumen o área entre base es altura</em>.');
 
+  p.ejemplo({
+    title: 'Distancia de un punto a una recta, por dos caminos',
+    enunciado: 'Hallar la distancia de $P(3, 1, 2)$ a la recta $r$ que pasa por $A(1, 0, 0)$ con director $\\vec u = (1, 1, 0)$.',
+    pasos: [
+      { t: '<strong>Camino 1: el paralelogramo.</strong> $\\overrightarrow{AP} = (2, 1, 2)$. Producto vectorial: $\\overrightarrow{AP}\\times\\vec u = (1\\cdot 0 - 2\\cdot 1,\\ -(2\\cdot 0 - 2\\cdot 1),\\ 2\\cdot 1 - 1\\cdot 1) = (-2, 2, 1)$, de módulo $\\sqrt{4 + 4 + 1} = 3$.', antes: 'Calcula $\\overrightarrow{AP}$ y su producto vectorial con $\\vec u$.' },
+      { t: '<strong>Área entre base.</strong> $d = \\dfrac{3}{|\\vec u|} = \\dfrac{3}{\\sqrt 2} \\approx 2{,}121$.', antes: 'El módulo 3 es un área. ¿Entre qué hay que dividirlo para que salga una altura?' },
+      { t: '<strong>Camino 2: el pie de la perpendicular.</strong> Un punto genérico de $r$ es $X = (1 + \\lambda, \\lambda, 0)$, y $\\overrightarrow{XP} = (2 - \\lambda, 1 - \\lambda, 2)$. Perpendicular a $\\vec u$: $(2 - \\lambda) + (1 - \\lambda) = 0 \\Rightarrow \\lambda = 1{,}5$.', antes: '¿Qué condición tiene que cumplir el vector $\\overrightarrow{XP}$ para que $X$ sea el pie de la perpendicular?' },
+      { t: '<strong>Medir.</strong> $X = (2{,}5;\\ 1{,}5;\\ 0)$ y $|\\overrightarrow{XP}| = \\sqrt{0{,}25 + 0{,}25 + 4} = \\sqrt{4{,}5} \\approx 2{,}121$. Los dos caminos coinciden ✓.' }
+    ],
+    cierre: 'La fórmula es más rápida; el segundo camino además da el punto más cercano, que hace falta para proyecciones y simétricos. Conocer los dos permite comprobar uno con el otro.'
+  });
+
   p.text('Y los casos que quedan se reducen a estos: la distancia entre una recta y un plano paralelos, ' +
     'o entre dos planos paralelos, es la distancia desde un punto cualquiera de uno al otro. Si las ' +
     'rectas o los planos se cortan, la distancia es cero.');
@@ -143,6 +163,7 @@ Course.topic('ge-metrico', function (p) {
   p.demo({
     title: 'El camino más corto entre dos rectas que se cruzan',
     intro: 'Mueve la recta s. El segmento naranja es la perpendicular común: une los dos puntos más cercanos y es perpendicular a las dos rectas. Su longitud es la distancia, y coincide con la fórmula del producto mixto.',
+    predice: 'Si pones el giro de $s$ en $0^\\circ$ o en $180^\\circ$, las rectas quedan paralelas. ¿Habrá entonces una sola perpendicular común o infinitas? ¿Y qué le pasa a la fórmula del producto mixto, que divide por $|\\vec u\\times\\vec v|$?',
     build: function (host) {
       var A = [-1, 0, -1], u = [1, 1, 0];
       var sb = 1.5, giro = 90;
@@ -203,8 +224,46 @@ Course.topic('ge-metrico', function (p) {
     'nunca en el mapa. Lo mismo se calcula en robótica para saber si dos brazos pueden chocar, y en ' +
     'minería para decidir dónde perforar un túnel que conecte dos galerías por el camino más corto.');
 
+  p.trampas([
+    { e: 'Coseno para el ángulo entre recta y plano', por: 'El coseno da el ángulo con la normal. El ángulo con el plano es el complementario: la fórmula lleva <em>seno</em>.' },
+    { e: 'Una distancia negativa', por: 'Falta el valor absoluto. El signo solo dice a qué lado del plano está el punto.' },
+    { e: 'Distancia entre planos paralelos restando $D$ sin igualar normales', por: 'Si $\\pi_2$ es $2x + 2y + 2z + 8 = 0$ y $\\pi_1$ es $x + y + z + 1 = 0$, primero se divide $\\pi_2$ entre 2. Después, $|1 - 4|/\\sqrt 3$.' },
+    { e: 'Dar la proyección $Q$ como simétrico', por: '$Q$ está en el plano; el simétrico está al otro lado: $P\' = 2Q - P$.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
+
+  p.exercise({
+    title: '¿Son perpendiculares los planos?',
+    level: 'basico',
+    gen: function (r) {
+      var n1 = [r.pm(0, 3), r.pm(0, 3), r.pm(0, 3)];
+      if (nulo(n1)) return null;
+      var perp = r.bool();
+      var n2;
+      if (perp) {
+        n2 = cruz(n1, [r.pm(0, 2), r.pm(0, 2), r.pm(0, 2)]);
+        if (nulo(n2) || Math.max(Math.abs(n2[0]), Math.abs(n2[1]), Math.abs(n2[2])) > 9) return null;
+      } else {
+        n2 = [r.pm(0, 3), r.pm(0, 3), r.pm(0, 3)];
+        if (nulo(n2) || esc(n1, n2) === 0) return null;
+      }
+      return { n1: n1, n2: n2, D1: r.pm(0, 5), D2: r.pm(0, 5), e: esc(n1, n2), perp: perp };
+    },
+    ask: function (d) {
+      return '¿Son perpendiculares los planos $\\pi_1:\\ ' + planoTex(d.n1, d.D1) + '$ y $\\pi_2:\\ ' + planoTex(d.n2, d.D2) + '$?';
+    },
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'Sí, son perpendiculares', v: 'si' }, { t: 'No', v: 'no' }] }],
+    sol: function (d) { return { r: d.perp ? 'si' : 'no' }; },
+    hint: function () { return 'Dos planos son perpendiculares cuando lo son sus normales: producto escalar cero.'; },
+    steps: function (d) {
+      return ['Normales: $\\vec n_1 = (' + d.n1.join(',\\ ') + ')$ y $\\vec n_2 = (' + d.n2.join(',\\ ') + ')$.',
+        '$\\vec n_1\\cdot\\vec n_2 = ' + d.e + '$.',
+        d.perp ? 'Vale cero: las normales son perpendiculares y los planos también.' : 'No vale cero: los planos se cortan, pero no en ángulo recto.'];
+    },
+    answer: function (d) { return d.perp ? 'Sí.' : 'No.'; }
+  });
 
   p.exercise({
     title: 'Distancia de un punto a un plano',

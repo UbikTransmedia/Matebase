@@ -1,9 +1,10 @@
 /* Tema: La recta en el plano */
 Course.topic('ge-rectas', function (p) {
 
-  p.text('Con vectores en la mano, la geometría se vuelve <strong>analítica</strong>: cada figura ' +
-    'pasa a ser una ecuación, y los problemas de dibujo se convierten en cálculos. Empezamos por lo ' +
-    'más simple, la recta.');
+  p.puente('Con vectores en la mano, la geometría se vuelve <strong>analítica</strong>: cada figura ' +
+    'pasa a ser una ecuación, y los problemas de dibujo se convierten en cálculos. Un punto más un ' +
+    'vector director, que es lo que aprendiste a manejar en el tema anterior, ya describe una recta ' +
+    'entera. Y el producto escalar igual a cero vuelve como criterio de perpendicularidad.');
 
   p.text('Una recta queda determinada por un <strong>punto</strong> $P(p_1,p_2)$ por el que pasa y un ' +
     '<strong>vector director</strong> $\\vec{v}=(v_1,v_2)$ que marca su dirección. Con eso, cualquier ' +
@@ -19,6 +20,7 @@ Course.topic('ge-rectas', function (p) {
   p.demo({
     title: 'Recorrer una recta con el parámetro',
     intro: 'Mueve t y verás cómo el punto barre toda la recta. El vector director es el paso que se da cada vez que t aumenta en 1.',
+    predice: 'Con $P = (-2, -1)$ y $\\vec v = (3, 3)$: ¿en qué punto estará el marcador para $t = 2$? ¿Y para $t = -1$? Calcúlalo antes de mover el deslizador.',
     build: function (host, d) {
       var t = 1;
       var out = W.readout(host, '');
@@ -74,6 +76,25 @@ Course.topic('ge-rectas', function (p) {
 
   p.formula('Ax+By+C = 0 \\ \\Longrightarrow\\ \\vec{n} = (A,B) \\perp r, \\quad \\vec{v} = (-B, A) \\parallel r');
 
+  p.comprueba('¿Cuál es un vector director de la recta $2x - 3y + 6 = 0$?', [
+    { t: '$(2, -3)$', ok: false, por: 'Ese es el vector <em>normal</em>, perpendicular a la recta. El director se obtiene de él intercambiando y cambiando un signo.' },
+    { t: '$(3, 2)$', ok: true, por: '$(-B, A) = (3, 2)$. Comprobación: $2\\cdot 3 - 3\\cdot 2 = 0$, perpendicular a la normal.' },
+    { t: '$(3, -2)$', ok: false, por: 'Solo se cambia <em>un</em> signo. Con $(3, -2)$: $2\\cdot 3 - 3\\cdot(-2) = 12 \\ne 0$, no es perpendicular a la normal.' }
+  ]);
+
+  p.ejemplo({
+    title: 'De dos puntos a las cinco formas',
+    enunciado: 'Escribir de todas las maneras la recta que pasa por $A(1, 2)$ y $B(4, 8)$.',
+    pasos: [
+      { t: '<strong>Vector director.</strong> $\\vec{AB} = (4 - 1, 8 - 2) = (3, 6)$. Cualquier múltiplo sirve, así que se simplifica a $\\vec v = (1, 2)$.', antes: '¿Qué vector director sale? ¿Se puede simplificar?' },
+      { t: '<strong>Vectorial y paramétricas.</strong> $(x, y) = (1, 2) + t(1, 2)$, es decir, $x = 1 + t$, $y = 2 + 2t$.' },
+      { t: '<strong>Continua.</strong> Despejando $t$ en las dos: $\\dfrac{x - 1}{1} = \\dfrac{y - 2}{2}$.', antes: 'Despeja $t$ en cada paramétrica e iguala. ¿Qué queda?' },
+      { t: '<strong>General.</strong> Multiplicando en cruz: $2(x - 1) = y - 2$, o sea $2x - y = 0$. El vector normal es $(2, -1)$: perpendicular a $(1, 2)$, como debe ser ($2 - 2 = 0$).', antes: 'Multiplica en cruz y pásalo todo a un lado. ¿Cuál es el vector normal?' },
+      { t: '<strong>Explícita y comprobación.</strong> $y = 2x$: pendiente 2, pasa por el origen. Se comprueba con $B$: $2\\cdot 4 = 8$ ✓.' }
+    ],
+    cierre: 'Cinco escrituras, una recta. En un examen se pasa de una a otra en dos líneas; lo que importa es leer en cada una lo que enseña: el director en las paramétricas, la normal en la general, la pendiente en la explícita.'
+  });
+
   /* ---------------------------------------------------------------- */
   p.util('Cinco formas para la misma recta no es un capricho: cada una responde bien a una pregunta ' +
     'distinta. La explícita $y=mx+n$ es la que se lee de un vistazo en una gráfica de datos; la ' +
@@ -107,6 +128,7 @@ Course.topic('ge-rectas', function (p) {
   p.demo({
     title: 'Distancia de un punto a una recta',
     intro: 'Arrastra el punto y los que definen la recta. El segmento rojo es siempre perpendicular: por eso es el más corto.',
+    predice: 'Si arrastras $P$ hasta ponerlo encima de la recta, ¿qué valdrá la distancia? ¿Y el numerador de la fórmula, $Ap_1 + Bp_2 + C$?',
     build: function (host, d) {
       var out = W.readout(host, '');
       W.board(host, {
@@ -140,6 +162,13 @@ Course.topic('ge-rectas', function (p) {
     }
   });
 
+  p.trampas([
+    { e: 'Usar $(A, B)$ como vector director', por: '$(A, B)$ es la normal, perpendicular a la recta. El director es $(-B, A)$.' },
+    { e: 'Pendiente $m = \\dfrac{v_1}{v_2}$', por: 'La pendiente es «cuánto sube por cada unidad que avanza»: $m = \\dfrac{v_2}{v_1}$. Con $\\vec v = (1, 2)$, $m = 2$.' },
+    { e: 'Dar una distancia negativa', por: 'El numerador de la fórmula lleva valor absoluto. Si sale $-3$, la distancia es $3$.' },
+    { e: 'Escribir $x = 4$ como $y = mx + n$', por: 'Una recta vertical no tiene pendiente: no cabe en la forma explícita. La general $x - 4 = 0$ sí la recoge.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('La distancia de un punto a una recta es lo que calcula un coche con asistente de carril: la ' +
     'línea pintada en el asfalto es la recta, el coche es el punto, y si esa distancia se sale del ' +
@@ -148,6 +177,31 @@ Course.topic('ge-rectas', function (p) {
     'debía seguir.');
 
   p.section('Practica');
+
+  p.exercise({
+    title: '¿Está el punto en la recta?',
+    level: 'basico',
+    gen: function (r) {
+      var A = r.nz(-5, 5), B = r.nz(-5, 5);
+      var P = [r.pm(0, 6), r.pm(0, 6)];
+      var esta = r.bool();
+      var C = -(A * P[0] + B * P[1]) + (esta ? 0 : r.nz(-4, 4));
+      return { A: A, B: B, C: C, P: P, esta: esta, val: A * P[0] + B * P[1] + C };
+    },
+    ask: function (d) {
+      return '¿Pertenece el punto $P(' + d.P + ')$ a la recta $' + ML.termTex(d.A, 'x', 1, true) +
+        ML.termTex(d.B, 'y', 1, false) + ML.termTex(d.C, '', 0, false) + ' = 0$?';
+    },
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'Sí, está en la recta', v: 'si' }, { t: 'No', v: 'no' }] }],
+    sol: function (d) { return { r: d.esta ? 'si' : 'no' }; },
+    hint: function () { return 'Sustituye las coordenadas del punto en la ecuación. Está en la recta si sale exactamente 0.'; },
+    steps: function (d) {
+      return ['Sustituimos: $' + d.A + '\\cdot(' + d.P[0] + ') + (' + d.B + ')\\cdot(' + d.P[1] + ') + (' + d.C + ') = ' + d.val + '$.',
+        d.esta ? 'Sale 0: el punto cumple la ecuación y <strong>está</strong> en la recta.'
+          : 'No sale 0: el punto <strong>no está</strong> en la recta. (El valor $' + d.val + '$, dividido por $\\sqrt{A^2+B^2}$, sería su distancia.)'];
+    },
+    answer: function (d) { return d.esta ? 'Sí.' : 'No.'; }
+  });
 
   p.exercise({
     title: 'De dos puntos a la ecuación general',
@@ -223,12 +277,10 @@ Course.topic('ge-rectas', function (p) {
         return ML.termTex(a, 'x', 1, true) + ML.termTex(b, 'y', 1, false) + ML.termTex(c, '', 0, false) + ' = 0';
       };
       return '¿Qué posición relativa tienen las rectas<br>$r: ' + eq(d.a1, d.b1, d.c1) + '$<br>' +
-        '$s: ' + eq(d.a2, d.b2, d.c2) + '$?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> si se cortan, ' +
-        '<code>2</code> si son paralelas, <code>3</code> si son coincidentes.</span>';
+        '$s: ' + eq(d.a2, d.b2, d.c2) + '$?';
     },
-    fields: [{ name: 't', label: 'Posición', w: 'tiny' }],
-    sol: function (d) { return { t: d.tipo + 1 }; },
+    fields: [{ name: 't', label: 'Posición', opts: [{ t: 'se cortan', v: '1' }, { t: 'paralelas', v: '2' }, { t: 'coincidentes', v: '3' }] }],
+    sol: function (d) { return { t: String(d.tipo + 1) }; },
     hint: function () { return 'Compara $\\frac{A_1}{A_2}$ con $\\frac{B_1}{B_2}$; si coinciden, mira también $\\frac{C_1}{C_2}$.'; },
     steps: function (d) {
       return ['$\\dfrac{A_1}{A_2} = ' + U.fmt(d.a1 / d.a2, 3) + '$ &nbsp;y&nbsp; $\\dfrac{B_1}{B_2} = ' + U.fmt(d.b1 / d.b2, 3) + '$',

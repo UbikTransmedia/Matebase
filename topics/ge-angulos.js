@@ -1,6 +1,11 @@
 /* Tema: Ángulos, rectas y triángulos */
 Course.topic('ge-angulos', function (p) {
 
+  p.puente('Hasta aquí el curso ha trabajado con números y letras. La geometría trabaja con figuras, ' +
+    'pero el modo de razonar es el mismo que en lógica: unas pocas cosas se aceptan sin demostrar y ' +
+    'todo lo demás se deduce. La primera deducción de verdad llega en este tema: que los ángulos de ' +
+    'un triángulo suman 180°, y por qué.', 'Por dónde empezamos');
+
   p.text('La geometría empieza con tres cosas que no se definen porque son el punto de partida: el ' +
     '<strong>punto</strong>, la <strong>recta</strong> y el <strong>plano</strong>. Todo lo demás se ' +
     'construye a partir de ellas.');
@@ -28,6 +33,12 @@ Course.topic('ge-angulos', function (p) {
     '<strong>Opuestos por el vértice</strong>: los que quedan enfrentados al cruzarse dos rectas. Son <em>iguales</em>.'
   ]);
 
+  p.comprueba('Un ángulo mide $35^\\circ$. ¿Cuánto mide su suplementario?', [
+    { t: '$55^\\circ$', ok: false, por: 'Ese es el complementario, el que completa $90^\\circ$. Suplementario es el que completa $180^\\circ$.' },
+    { t: '$145^\\circ$', ok: true, por: '$180^\\circ - 35^\\circ = 145^\\circ$. Los dos juntos forman un ángulo llano.' },
+    { t: '$35^\\circ$', ok: false, por: 'Iguales son los opuestos por el vértice. El suplementario es lo que falta hasta $180^\\circ$.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.section('Dos paralelas cortadas por una secante');
 
@@ -38,6 +49,7 @@ Course.topic('ge-angulos', function (p) {
   p.demo({
     title: 'Los ocho ángulos que solo son dos',
     intro: 'Gira la secante y separa las paralelas. Los ángulos verdes son todos iguales entre sí, y los naranjas también. Cada verde y cada naranja suman 180°.',
+    predice: 'Si separas las dos paralelas sin girar la secante, ¿cambiará algún ángulo? ¿Y si la secante fuera perpendicular, cuántos valores distintos habría?',
     build: function (host, d) {
       var ang = 55, sep = 2.2;
       var out = W.readout(host, '');
@@ -98,13 +110,22 @@ Course.topic('ge-angulos', function (p) {
 
   p.formula('A + B + C = 180^\\circ', 'suma de los ángulos de cualquier triángulo');
 
-  p.text('Y esto no es una casualidad comprobada en unos cuantos triángulos: se <em>demuestra</em> ' +
-    'con lo que acabas de ver. Traza por un vértice una paralela al lado opuesto. Los tres ángulos ' +
-    'del triángulo se reagrupan sobre esa recta formando un ángulo llano. Fin de la demostración.');
+  p.ejemplo({
+    title: 'La demostración, con los pasos separados',
+    enunciado: 'Demostrar que en cualquier triángulo $ABC$ se cumple $A + B + C = 180^\\circ$.',
+    pasos: [
+      { t: '<strong>Trazar la ayuda.</strong> Por el vértice $C$ se dibuja la recta paralela al lado $AB$. Es la única construcción que hace falta.', antes: '¿Qué recta añadirías al dibujo para poder usar lo de las paralelas?' },
+      { t: '<strong>Reconocer alternos internos.</strong> El lado $AC$ es una secante que corta a las dos paralelas: el ángulo $A$ del triángulo y el ángulo que queda a la izquierda de $C$ sobre la nueva recta son alternos internos, así que son <strong>iguales</strong>.', antes: '$AC$ corta a dos paralelas. ¿Qué pareja de ángulos iguales aparece?' },
+      { t: '<strong>Lo mismo por el otro lado.</strong> El lado $BC$ es otra secante: el ángulo $B$ es igual al que queda a la derecha de $C$ sobre la paralela.' },
+      { t: '<strong>Leer la recta.</strong> Sobre la paralela, en el punto $C$, hay tres ángulos seguidos: una copia de $A$, el propio $C$ y una copia de $B$. Juntos forman un ángulo llano: $A + C + B = 180^\\circ$. ∎', antes: 'En $C$ hay ahora tres ángulos pegados sobre una recta. ¿Cuánto suman?' }
+    ],
+    cierre: 'La demostración no usa medidas: vale para todos los triángulos a la vez. Y depende de una sola cosa: que por $C$ pase exactamente una paralela a $AB$. Sin eso, como verás en la nota de más abajo, la suma puede no ser 180°.'
+  });
 
   p.demo({
     title: 'Los tres ángulos siempre suman 180°',
     intro: 'Arrastra los vértices y comprueba que la suma no se mueve, por raro que sea el triángulo.',
+    predice: 'Si arrastras $C$ hasta casi tocar el segmento $AB$, el triángulo queda aplastado: ¿qué le pasa al ángulo $C$? ¿Y a la suma?',
     build: function (host, d) {
       var out = W.readout(host, '');
       W.board(host, {
@@ -177,6 +198,18 @@ Course.topic('ge-angulos', function (p) {
     '\\text{regular:}\\quad \\text{cada ángulo} = \\frac{(n-2)\\cdot 180^\\circ}{n}'
   ]);
 
+  p.comprueba('¿Cuánto mide cada ángulo de un hexágono regular?', [
+    { t: '$60^\\circ$', ok: false, por: '$60^\\circ$ es $360 : 6$, el ángulo <em>central</em>. El interior es mucho más abierto.' },
+    { t: '$120^\\circ$', ok: true, por: 'Suma: $(6-2)\\cdot 180 = 720^\\circ$; entre 6 ángulos iguales, $120^\\circ$. Por eso tres hexágonos encajan alrededor de un punto: $3\\cdot 120 = 360$.' },
+    { t: '$180^\\circ$', ok: false, por: 'Un ángulo de $180^\\circ$ es una recta: no habría vértice. Es $720 : 6 = 120^\\circ$.' }
+  ]);
+
+  p.trampas([
+    { e: 'Complementarios suman $180^\\circ$', por: 'Complementarios: $90^\\circ$. Suplementarios: $180^\\circ$. Truco: la S de <em>suplementario</em> es la de <em>ciento ochenta</em>… casi; mejor recordar que «suplemento» es más grande.' },
+    { e: 'Con palos de 4, 5 y 9 cm se puede formar un triángulo', por: '$4 + 5 = 9$: los dos cortos, estirados del todo, solo llegan a tocar el largo. Queda un segmento, no un triángulo. Hace falta $4 + 5 > 9$.' },
+    { e: 'Un triángulo puede tener dos ángulos obtusos', por: 'Dos obtusos ya suman más de $180^\\circ$ y no queda nada para el tercero.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Que solo el triángulo, el cuadrado y el hexágono llenen el plano sin dejar huecos no es una ' +
     'curiosidad: es la razón de que las baldosas, los panales y las mallas metálicas tengan las ' +
@@ -226,17 +259,9 @@ Course.topic('ge-angulos', function (p) {
       var lados = [a, b, c].sort(function (x, y) { return x - y; });
       return { a: a, b: b, c: c, ok: lados[0] + lados[1] > lados[2], l: lados };
     },
-    ask: function (d) {
-      return '¿Existe un triángulo con lados $' + d.a + '$, $' + d.b + '$ y $' + d.c + '$?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
-    },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
+    ask: function (d) { return '¿Existe un triángulo con lados $' + d.a + '$, $' + d.b + '$ y $' + d.c + '$?'; },
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'Sí, existe', v: 'si' }, { t: 'No, no se puede construir', v: 'no' }] }],
     sol: function (d) { return { r: d.ok ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var t = v.raw.r.trim().toLowerCase().replace(/[íÍ]/g, 'i');
-      if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe <code>si</code> o <code>no</code>.' };
-      return (t === 'si') === d.ok;
-    },
     hint: function () { return 'Desigualdad triangular: el lado mayor tiene que ser menor que la suma de los otros dos.'; },
     steps: function (d) {
       return ['Ordenamos los lados: $' + d.l.join(' \\le ') + '$.',

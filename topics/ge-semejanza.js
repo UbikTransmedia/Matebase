@@ -1,6 +1,11 @@
 /* Tema: Semejanza y teorema de Tales */
 Course.topic('ge-semejanza', function (p) {
 
+  p.puente('La proporcionalidad de aritmética —multiplicar todo por el mismo número— aplicada a ' +
+    'figuras es la semejanza. Y las potencias vuelven: si las longitudes se multiplican por $k$, las ' +
+    'áreas lo hacen por $k^2$, igual que ocurría al pasar de metros a centímetros cuadrados. El teorema ' +
+    'de Tales, al final, es una regla de tres con dibujo.');
+
   p.text('Dos figuras son <strong>semejantes</strong> cuando tienen la misma forma aunque distinto ' +
     'tamaño: una es una ampliación o una reducción de la otra. Es lo que hace un mapa, una maqueta ' +
     'o una fotocopia al 150 %.');
@@ -23,6 +28,7 @@ Course.topic('ge-semejanza', function (p) {
   p.demo({
     title: 'La misma forma a distinta escala',
     intro: 'Cambia la razón de semejanza. Los ángulos no se mueven ni un grado; todas las longitudes se multiplican por k.',
+    predice: 'Pon $k = 2$. Los lados se doblarán. ¿El área también se doblará, o se multiplicará por otro número? Decide antes de mirar el texto de abajo.',
     build: function (host, d) {
       var k = 1.8;
       var out = W.readout(host, '');
@@ -90,6 +96,12 @@ Course.topic('ge-semejanza', function (p) {
     'superficies 9 veces y las capacidades 27 veces. Por eso una maqueta a escala 1:3 no necesita el ' +
     'triple de material, sino veintisiete veces menos.');
 
+  p.comprueba('Una pizza de 30 cm de diámetro cuesta 10 €. Una de 15 cm, con la misma masa y los mismos ingredientes, ¿cuánto debería costar en proporción?', [
+    { t: '5 €', ok: false, por: 'El diámetro es la mitad, pero la pizza no es la mitad de pizza. El área se divide entre $2^2 = 4$.' },
+    { t: '2,50 €', ok: true, por: 'La razón de semejanza es $\\frac{1}{2}$ y el área se multiplica por $\\left(\\frac{1}{2}\\right)^2 = \\frac{1}{4}$: la pequeña es un cuarto de la grande.' },
+    { t: '7,50 €', ok: false, por: 'No hay ninguna cuenta que dé tres cuartos. El área va con el cuadrado de la razón: un cuarto.' }
+  ]);
+
   p.note('Esto tiene consecuencias que van mucho más allá de la geometría. Un animal el doble de alto ' +
     'pesa ocho veces más, pero la sección de sus huesos solo es cuatro veces mayor: por eso los ' +
     'elefantes tienen patas gruesas y las hormigas no. Se llama <em>ley del cuadrado-cubo</em>, y la ' +
@@ -126,6 +138,7 @@ Course.topic('ge-semejanza', function (p) {
   p.demo({
     title: 'Medir lo inaccesible con una proporción',
     intro: 'El palo y el edificio proyectan sombras a la vez, así que forman dos triángulos semejantes. Con tres medidas fáciles se obtiene la cuarta, que es imposible de medir.',
+    predice: 'El palo mide 1,5 m y su sombra 2,4 m; la sombra del edificio, 18 m. Estima de cabeza la altura del edificio: ¿más cerca de 10 m o de 20 m?',
     build: function (host, d) {
       var hp = 1.5, sp = 2.4, se = 18;
       var out = W.readout(host, '');
@@ -164,6 +177,24 @@ Course.topic('ge-semejanza', function (p) {
       paint();
     }
   });
+
+  p.ejemplo({
+    title: 'Medir un árbol con Tales',
+    enunciado: 'Un árbol proyecta una sombra de 12 m. A la misma hora, una persona de 1,8 m proyecta una sombra de 2,4 m. ¿Cuánto mide el árbol?',
+    pasos: [
+      { t: '<strong>Ver los dos triángulos.</strong> Árbol y sombra forman un triángulo rectángulo; persona y sombra, otro. Los rayos del Sol llegan paralelos, así que el ángulo en la punta de la sombra es el mismo en los dos. Con el ángulo recto son ya dos ángulos iguales: <strong>semejantes</strong>.', antes: '¿Por qué son semejantes los dos triángulos? ¿Qué dos ángulos tienen iguales?' },
+      { t: '<strong>Escribir la proporción, emparejando bien.</strong> Altura con altura, sombra con sombra: $\\dfrac{h}{1{,}8} = \\dfrac{12}{2{,}4}$.', antes: '¿Qué va con qué en la proporción?' },
+      { t: '<strong>Resolver.</strong> $\\dfrac{12}{2{,}4} = 5$, así que $h = 1{,}8\\cdot 5 = 9$ m.' },
+      { t: '<strong>Sentido común.</strong> La sombra del árbol es 5 veces la de la persona, luego el árbol es 5 veces la persona: $9$ m. ✓', antes: 'Sin fórmulas: ¿cuántas veces es mayor la sombra del árbol que la de la persona?' }
+    ],
+    cierre: 'El único error posible aquí es emparejar mal: poner la altura de uno con la sombra del otro. Escribir «altura/sombra» en los dos lados antes de poner números lo evita.'
+  });
+
+  p.trampas([
+    { e: 'Si $k = 3$, el área se triplica', por: 'Las áreas van con $k^2 = 9$. Un cuadrado de lado 3 contiene 9 cuadraditos de lado 1.' },
+    { e: 'Emparejar cruzado en Tales: $\\frac{h}{\\text{sombra}} = \\frac{\\text{sombra}\'}{h\'}$', por: 'Cada razón tiene que comparar lo mismo con lo mismo: altura/sombra en los dos lados, o altura/altura y sombra/sombra.' },
+    { e: 'Dos triángulos con los tres ángulos iguales son iguales', por: 'Son <em>semejantes</em>. Pueden tener tamaños muy distintos: es justo lo que dice este tema.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Tales midió la pirámide de Keops con una vara y su sombra: cuando la sombra de la vara igualaba ' +

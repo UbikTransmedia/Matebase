@@ -1,6 +1,11 @@
 /* Tema: Cuerpos geométricos y volúmenes */
 Course.topic('ge-cuerpos', function (p) {
 
+  p.puente('Las áreas del tema anterior son ahora el ingrediente: casi todo volumen se calcula como ' +
+    '«área de la base por altura», y el área lateral de un cilindro o un cono es una figura plana ' +
+    'desenrollada. Pitágoras vuelve para la generatriz del cono, y la ley del cubo de semejanza ' +
+    'explica por qué un litro cabe en un cubo de 10 cm.');
+
   p.text('Pasamos del plano al espacio. Un <strong>poliedro</strong> es un cuerpo limitado por caras ' +
     'planas; los <strong>cuerpos de revolución</strong> (cilindro, cono, esfera) se obtienen girando ' +
     'una figura plana alrededor de un eje.');
@@ -23,6 +28,12 @@ Course.topic('ge-cuerpos', function (p) {
   p.note('Fíjate en el patrón: <strong>lo que acaba en punta vale un tercio</strong> de lo que tiene ' +
     'la misma base y la misma altura. Pirámide y prisma, cono y cilindro. Ese $\\frac{1}{3}$ no es ' +
     'arbitrario: se demuestra, y Arquímedes ya lo sabía.', 'ok', 'El patrón del tercio');
+
+  p.comprueba('Un cono y un cilindro tienen el mismo radio y la misma altura. Si el cono tiene 20 cm³, ¿cuánto tiene el cilindro?', [
+    { t: '40 cm³', ok: false, por: 'El cono no es la mitad del cilindro, aunque lo parezca: es un tercio.' },
+    { t: '60 cm³', ok: true, por: 'El cono es un tercio del cilindro con su misma base y altura: hacen falta tres conos de agua para llenarlo.' },
+    { t: '20 cm³', ok: false, por: 'Serían iguales solo si el cono no acabara en punta. La punta le quita dos tercios.' }
+  ]);
 
   p.sub('El principio de Cavalieri');
 
@@ -65,6 +76,7 @@ Course.topic('ge-cuerpos', function (p) {
   p.demo({
     title: 'Tres conos llenan un cilindro',
     intro: 'Compara los volúmenes de un cilindro, un cono y una esfera con el mismo radio. Cambia las medidas y observa las proporciones.',
+    predice: 'Pon la altura igual al doble del radio, para que la esfera quepa justa en el cilindro. ¿Qué fracción del cilindro ocupará la esfera: la mitad, dos tercios o tres cuartos?',
     build: function (host, d) {
       var rad = 3, h = 6;
       var out = W.readout(host, '');
@@ -117,6 +129,24 @@ Course.topic('ge-cuerpos', function (p) {
     'relación análoga entre la esfera y el cilindro que pidió que se la grabaran en la tumba; ' +
     'Cicerón la encontró así, siglo y medio después, abandonada entre matorrales.');
 
+  p.ejemplo({
+    title: 'Un cono completo: volumen y área, con Pitágoras en medio',
+    enunciado: 'Un cono tiene 6 cm de radio y 8 cm de altura. Calcular su volumen y su área total.',
+    pasos: [
+      { t: '<strong>Volumen.</strong> Base por altura, dividido entre 3: $V = \\dfrac{\\pi\\cdot 6^2\\cdot 8}{3} = \\dfrac{288\\pi}{3} = 96\\pi \\approx 301{,}6$ cm³.', antes: '¿Qué fórmula toca, y por qué lleva un 3?' },
+      { t: '<strong>La generatriz.</strong> Para el área lateral no sirve la altura: hace falta la <em>generatriz</em> $g$, la distancia de la punta al borde de la base. Radio, altura y generatriz forman un triángulo rectángulo: $g = \\sqrt{6^2 + 8^2} = \\sqrt{100} = 10$ cm.', antes: 'Para el área lateral se necesita un dato que no está en el enunciado. ¿Cuál, y cómo se calcula?' },
+      { t: '<strong>Área lateral.</strong> $\\pi r g = \\pi\\cdot 6\\cdot 10 = 60\\pi$ cm².' },
+      { t: '<strong>Área de la base y total.</strong> Base: $\\pi\\cdot 6^2 = 36\\pi$. Total: $60\\pi + 36\\pi = 96\\pi \\approx 301{,}6$ cm².', antes: '¿Área lateral sola o hay que añadir algo?' }
+    ],
+    cierre: 'Que volumen y área total den los dos $96\\pi$ es una coincidencia de este cono concreto (radio 6 y altura 8), no una regla. Sí es regla que la generatriz salga de Pitágoras: $g^2 = r^2 + h^2$.'
+  });
+
+  p.trampas([
+    { e: 'Área lateral del cono con la altura: $\\pi r h$', por: 'La superficie lateral va de la punta al borde por la <em>generatriz</em>, no por la altura. $g = \\sqrt{r^2 + h^2}$.' },
+    { e: 'Olvidar el tercio en pirámides y conos', por: 'Lo que acaba en punta es un tercio de su prisma o cilindro. Sin el 3, el resultado es el triple del real.' },
+    { e: '$1$ litro $= 100$ cm³', por: 'Un litro es un cubo de 10 cm de arista: $10^3 = 1000$ cm³. La ley del cubo otra vez.' }
+  ]);
+
   p.section('Poliedros regulares');
 
   p.text('Solo existen <strong>cinco</strong> poliedros regulares (todas las caras iguales y ' +
@@ -136,6 +166,12 @@ Course.topic('ge-cuerpos', function (p) {
     'en <strong>cualquier</strong> poliedro convexo.');
 
   p.formula('C + V - A = 2', 'caras + vértices − aristas = 2');
+
+  p.comprueba('Un balón de fútbol clásico tiene 32 caras (12 pentágonos y 20 hexágonos) y 60 vértices. ¿Cuántas aristas tiene?', [
+    { t: '90', ok: true, por: '$C + V - A = 2 \\Rightarrow 32 + 60 - A = 2 \\Rightarrow A = 90$. Y cuadra contando: $12\\cdot 5 + 20\\cdot 6 = 180$ lados de polígono, cada arista compartida por dos caras, $180 : 2 = 90$.' },
+    { t: '92', ok: false, por: 'Ese es $C + V$. Euler dice que las aristas son dos menos: 90.' },
+    { t: '180', ok: false, por: '180 es el número de lados de todos los polígonos sumados, pero cada arista pertenece a dos caras: $180 : 2 = 90$.' }
+  ]);
 
   p.note('Esta fórmula no habla de longitudes ni de ángulos: solo de cómo están conectadas las ' +
     'piezas. Es el primer resultado de <em>topología</em> de la historia, y volverá a aparecer con ' +

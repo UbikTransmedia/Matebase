@@ -12,10 +12,11 @@ Course.topic('ge-espacio-vectores', function (p) {
   function pa(n) { return n < 0 ? '(' + n + ')' : String(n); }
   function det3(m) { return ML.det3(m); }
 
-  p.text('En el plano, un punto necesitaba dos números. En el espacio necesita <strong>tres</strong>: ' +
+  p.puente('En el plano, un punto necesitaba dos números. En el espacio necesita <strong>tres</strong>: ' +
     'cuánto avanzar hacia delante, cuánto hacia la derecha y cuánto subir. Todo lo que aprendiste con ' +
     'los [[ge-vectores|vectores del plano]] sigue valiendo con una coordenada más, y aparecen dos ' +
-    'operaciones nuevas —el producto vectorial y el mixto— que son las que hacen de la geometría del ' +
+    'operaciones nuevas —el producto vectorial y el mixto— que se calculan con los ' +
+    '[[al-determinantes|determinantes]] del bloque de álgebra y que hacen de la geometría del ' +
     'espacio algo que se calcula en vez de algo que se imagina.');
 
   p.text('Este tema es la caja de herramientas de los dos siguientes. Con los tres productos de aquí se ' +
@@ -43,6 +44,7 @@ Course.topic('ge-espacio-vectores', function (p) {
   p.demo({
     title: 'Un punto en el espacio y su vector de posición',
     intro: 'Mueve las tres coordenadas y gira el dibujo arrastrándolo. Las líneas de puntos son los dos triángulos rectángulos que dan el módulo: uno en el suelo y otro de pie.',
+    predice: '$P = (3, 2, 4)$. ¿Cuánto mide su sombra en el suelo, $\\sqrt{3^2 + 2^2}$? ¿Y el vector completo? Pitágoras dos veces.',
     build: function (host) {
       var P = [3, 2, 4];
       var out = W.readout(host, '');
@@ -106,6 +108,11 @@ Course.topic('ge-espacio-vectores', function (p) {
       'que forman los tres. Si vale cero, la caja está aplastada, los tres están en un plano, y un ' +
       'plano no alcanza a describir todo el espacio.');
 
+  p.comprueba('¿Forman base $\\vec u = (1, 0, 0)$, $\\vec v = (0, 1, 0)$ y $\\vec w = (2, 3, 0)$?', [
+    { t: 'Sí: son tres vectores distintos', ok: false, por: 'Ser distintos no basta. $\\vec w = 2\\vec u + 3\\vec v$: es combinación de los otros dos y sobra.' },
+    { t: 'No: los tres están en el plano del suelo', ok: true, por: 'Los tres tienen tercera coordenada 0. El determinante vale 0 (la tercera columna es de ceros): la caja está aplastada.' }
+  ]);
+
   p.note('Es lo mismo que decir que la matriz de los tres vectores tiene <strong>rango 3</strong>. Y si ' +
     'el rango es 2, los tres son coplanarios pero no paralelos; si es 1, los tres son paralelos. Esa ' +
     'traducción entre rango y posición es la llave del tema [[ge-espacio]].', 'ok', 'Rango y geometría');
@@ -158,9 +165,23 @@ Course.topic('ge-espacio-vectores', function (p) {
       'por a ce»</em>.<br><br>El producto vectorial da el área del paralelogramo que forman los dos ' +
       'lados, y el triángulo es justo la mitad de ese paralelogramo.');
 
+  p.ejemplo({
+    title: 'Un producto vectorial, con el signo del medio vigilado',
+    enunciado: 'Calcular $\\vec u\\times\\vec v$ con $\\vec u = (1, 2, 0)$ y $\\vec v = (0, 1, 3)$, y comprobar que es perpendicular a los dos.',
+    pasos: [
+      { t: '<strong>Primera componente.</strong> Se tapa la primera columna: $\\begin{vmatrix} 2 & 0 \\\\ 1 & 3 \\end{vmatrix} = 6 - 0 = 6$.', antes: 'Tapa la primera columna. ¿Qué determinante $2\\times 2$ queda?' },
+      { t: '<strong>Segunda componente, con el menos.</strong> Se tapa la segunda columna: $\\begin{vmatrix} 1 & 0 \\\\ 0 & 3 \\end{vmatrix} = 3$, y se cambia de signo: $-3$.', antes: 'Tapa la columna del medio. Sale 3. ¿Qué signo lleva?' },
+      { t: '<strong>Tercera componente.</strong> $\\begin{vmatrix} 1 & 2 \\\\ 0 & 1 \\end{vmatrix} = 1 - 0 = 1$. Así que $\\vec u\\times\\vec v = (6, -3, 1)$.' },
+      { t: '<strong>Comprobar.</strong> $\\vec u\\cdot(6, -3, 1) = 6 - 6 + 0 = 0$ ✓ y $\\vec v\\cdot(6, -3, 1) = 0 - 3 + 3 = 0$ ✓. Perpendicular a los dos: la cuenta está bien.', antes: '¿Cómo comprobarías el resultado sin dibujar nada?' },
+      { t: '<strong>Área.</strong> $|\\vec u\\times\\vec v| = \\sqrt{36 + 9 + 1} = \\sqrt{46}$ es el área del paralelogramo; el triángulo con esos dos lados mide $\\frac{\\sqrt{46}}{2}$.' }
+    ],
+    cierre: 'La comprobación con los dos productos escalares tarda diez segundos y detecta el error del signo del medio: si hubiéramos escrito $(6, 3, 1)$, saldría $\\vec u\\cdot(6, 3, 1) = 12 \\ne 0$.'
+  });
+
   p.demo({
     title: 'El producto vectorial, de pie sobre el paralelogramo',
     intro: 'Cambia los dos vectores y gira el dibujo. El vector violeta es u×v: siempre perpendicular al paralelogramo, y tanto más largo cuanto mayor es su área. Pon los dos vectores paralelos y verás que se anula.',
+    predice: '$\\vec u = (3, 0, 0)$ y $\\vec v = (1, 2, 0)$ están los dos en el suelo. ¿Hacia dónde apuntará $\\vec u\\times\\vec v$? ¿Y cuánto medirá, si el paralelogramo tiene base 3 y altura 2?',
     build: function (host) {
       var u = [3, 0, 0], v = [1, 2, 0];
       var out = W.readout(host, '');
@@ -229,6 +250,7 @@ Course.topic('ge-espacio-vectores', function (p) {
   p.demo({
     title: 'La caja se aplasta: base o no base',
     intro: 'Los vectores u y v están fijos; el plano sombreado es el que generan. Mueve w. Mientras w se salga del plano, la caja tiene volumen y los tres forman base. Cuando w cae en el plano, el determinante se anula.',
+    predice: '$\\vec w = (1, 1, 3)$. Si bajas $w_3$ a 0, ¿qué le pasará al determinante? ¿Y si cambias $w_1$ o $w_2$ manteniendo $w_3 = 3$?',
     build: function (host) {
       var u = [3, 0, 0], v = [1, 3, 0], w = [1, 1, 3];
       var out = W.readout(host, '');
@@ -271,6 +293,13 @@ Course.topic('ge-espacio-vectores', function (p) {
     'larga afloja mejor un tornillo— y la fuerza que un campo magnético ejerce sobre una carga, que es ' +
     'lo que hace girar cualquier motor eléctrico. Y el producto mixto es la cuenta con la que un programa ' +
     'de diseño 3D calcula el volumen, y por tanto el peso, de una pieza antes de fabricarla.');
+
+  p.trampas([
+    { e: 'Olvidar el signo menos de la segunda componente de $\\vec u\\times\\vec v$', por: 'Es el adjunto de la posición $(1, 2)$, que lleva signo negativo. La comprobación $\\vec u\\cdot(\\vec u\\times\\vec v) = 0$ lo delata.' },
+    { e: '$\\vec u\\cdot\\vec v$ es un vector y $\\vec u\\times\\vec v$ un número', por: 'Al revés: el escalar da un número (se suman productos) y el vectorial da un vector (perpendicular a los dos).' },
+    { e: '«El determinante vale cero, luego forman base»', por: 'Es justo lo contrario: determinante cero significa caja aplastada, vectores coplanarios, <em>no</em> forman base.' },
+    { e: '$\\vec u\\times\\vec v = \\vec v\\times\\vec u$', por: 'Cambiar el orden cambia el sentido: $\\vec v\\times\\vec u = -\\vec u\\times\\vec v$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

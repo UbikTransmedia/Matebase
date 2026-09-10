@@ -1,8 +1,19 @@
 /* Tema: Perímetros, áreas y el número π */
 Course.topic('ge-areas', function (p) {
 
+  p.puente('Ya sabes qué es una unidad de superficie y cómo se convierte; ahora toca calcular ' +
+    'superficies. La idea de este tema es que no hay una fórmula por figura que memorizar, sino una ' +
+    'sola —la del rectángulo, contar cuadraditos— y un método para reducir las demás a ella. El ' +
+    'círculo es el único que no se deja recortar, y de ahí sale el número $\\pi$.');
+
   p.text('El <strong>perímetro</strong> es lo que mide el contorno; el <strong>área</strong>, la ' +
     'superficie que encierra. Son dos cosas independientes: se puede aumentar una sin tocar la otra.');
+
+  p.comprueba('Un rectángulo de $6\\times 2$ y un cuadrado de lado 4 tienen el mismo perímetro, 16. ¿Tienen la misma área?', [
+    { t: 'Sí: mismo perímetro, misma área', ok: false, por: 'El rectángulo tiene $6\\cdot 2 = 12$ y el cuadrado $4\\cdot 4 = 16$. Con el mismo contorno se pueden encerrar superficies distintas.' },
+    { t: 'No: el cuadrado tiene más', ok: true, por: '$12$ frente a $16$. De todos los rectángulos con un perímetro dado, el cuadrado es el que más área encierra.' },
+    { t: 'No: el rectángulo tiene más', ok: false, por: 'Al revés: $6\\cdot 2 = 12 < 16 = 4\\cdot 4$. Cuanto más alargado, menos área para el mismo contorno.' }
+  ]);
 
   p.section('Las fórmulas, y de dónde salen');
 
@@ -24,6 +35,7 @@ Course.topic('ge-areas', function (p) {
   p.demo({
     title: 'Todas salen del rectángulo',
     intro: 'Cada figura se transforma en un rectángulo de la misma área. Pulsa para verlo.',
+    predice: 'El trapecio tiene bases 5 y 2,2 y altura 3. Si pegas dos trapecios iguales, uno del revés, ¿qué base tendrá el paralelogramo que sale? Con eso ya puedes deducir la fórmula antes de pulsar.',
     build: function (host, d) {
       var cual = 'triangulo';
       var out = W.readout(host, '');
@@ -98,6 +110,7 @@ Course.topic('ge-areas', function (p) {
   p.demo({
     title: 'Acorralar a π como Arquímedes',
     intro: 'Aumenta el número de lados de los dos polígonos. Sus perímetros aprietan a la circunferencia por dentro y por fuera, y en medio queda π.',
+    predice: 'Con 6 lados, el polígono inscrito es un hexágono de lado igual al radio: su perímetro es exactamente 6 radios, así que da $\\pi \\approx 3$. ¿Por encima o por debajo del valor real? ¿Cuántos lados crees que hacen falta para acertar dos decimales?',
     build: function (host, d) {
       var n = 6;
       var out = W.readout(host, '');
@@ -139,6 +152,24 @@ Course.topic('ge-areas', function (p) {
     'multiplicada por la fracción de vuelta que abarca:');
 
   p.formula('A_{\\text{sector}} = \\pi r^2 \\cdot \\frac{n^\\circ}{360^\\circ}');
+
+  p.ejemplo({
+    title: 'Una figura compuesta: descomponer, calcular, juntar',
+    enunciado: 'Una ventana tiene forma de rectángulo de 2 m de ancho y 3 m de alto, rematado por arriba con un semicírculo. Calcular su área.',
+    pasos: [
+      { t: '<strong>Descomponer.</strong> La figura es un rectángulo más medio círculo. El semicírculo se apoya en el lado de 2 m, así que su diámetro es 2 m y su radio 1 m.', antes: '¿En qué figuras conocidas se parte la ventana? ¿Cuánto mide el radio del semicírculo?' },
+      { t: '<strong>El rectángulo.</strong> $2\\cdot 3 = 6$ m².' },
+      { t: '<strong>El semicírculo.</strong> Círculo entero: $\\pi\\cdot 1^2 = \\pi$ m². La mitad: $\\dfrac{\\pi}{2} \\approx 1{,}571$ m².', antes: 'Área del círculo de radio 1, y luego… ¿qué fracción?' },
+      { t: '<strong>Juntar.</strong> $6 + 1{,}571 = 7{,}571$ m². Y para comprar el cristal se redondearía hacia arriba: 7,6 m².', antes: 'Aquí se suma. ¿En qué tipo de figura compuesta se restaría?' }
+    ],
+    cierre: 'Toda figura compuesta se resuelve igual: partir en piezas conocidas, calcular cada una y sumar (si están pegadas) o restar (si una es un hueco). Las figuras «raras» no existen: son figuras conocidas pegadas.'
+  });
+
+  p.trampas([
+    { e: 'Área del triángulo $= \\frac{\\text{lado}\\cdot\\text{lado}}{2}$', por: 'Es base por <em>altura</em>, y la altura es perpendicular. Un lado inclinado no sirve; hay que calcular la altura, a menudo con Pitágoras.' },
+    { e: '$A = \\pi r^2$ con el diámetro en lugar del radio', por: 'Con diámetro 10 el radio es 5: $25\\pi$, no $100\\pi$. El error multiplica el área por 4.' },
+    { e: 'Duplicar el radio duplica el área', por: 'El radio va al cuadrado: el área se multiplica por 4. Es la ley del cuadrado del tema de semejanza.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('El número $\\pi$ está en sitios donde no se le espera. Aparece en el periodo de un péndulo, en ' +

@@ -1,6 +1,11 @@
 /* Tema: El teorema de Pitágoras */
 Course.topic('ge-pitagoras', function (p) {
 
+  p.puente('Del tema anterior sabes clasificar triángulos, y uno de ellos —el rectángulo— tiene un ' +
+    'ángulo de $90^\\circ$. Ese ángulo recto impone a los lados una relación exacta que se escribe con ' +
+    'cuadrados y raíces, así que las potencias y raíces de aritmética vuelven a aparecer, ahora ' +
+    'midiendo longitudes. Es la primera fórmula del curso que sirve para calcular distancias.');
+
   p.text('En un triángulo <strong>rectángulo</strong> (el que tiene un ángulo de $90^\\circ$), los dos ' +
     'lados que forman ese ángulo se llaman <em>catetos</em> y el lado de enfrente, siempre el más ' +
     'largo, es la <em>hipotenusa</em>. Entre los tres hay una relación exacta:');
@@ -20,6 +25,7 @@ Course.topic('ge-pitagoras', function (p) {
   p.demo({
     title: 'La demostración con áreas',
     intro: 'El cuadrado construido sobre la hipotenusa tiene exactamente la misma área que los dos cuadrados de los catetos juntos. Arrastra el vértice y compruébalo.',
+    predice: 'El cateto horizontal mide 4. Lleva $C$ a altura 3: ¿cuánto medirá el cuadrado de la hipotenusa? ¿Y si pones $C$ a altura 4, el triángulo tiene dos catetos iguales: será la hipotenusa un número entero?',
     build: function (host, d) {
       var out = W.readout(host, '');
       W.board(host, {
@@ -83,6 +89,24 @@ Course.topic('ge-pitagoras', function (p) {
     'recto</strong>, y siempre el más largo. Si te sale una hipotenusa más corta que un cateto, ' +
     'algo has hecho mal.', 'warn');
 
+  p.comprueba('Un triángulo rectángulo tiene hipotenusa 13 y un cateto 5. ¿Cuánto mide el otro cateto?', [
+    { t: '$\\sqrt{194}$', ok: false, por: 'Has sumado $13^2 + 5^2$. Pero 13 ya es la hipotenusa: el cateto sale <em>restando</em>, $\\sqrt{169 - 25}$.' },
+    { t: '$12$', ok: true, por: '$\\sqrt{13^2 - 5^2} = \\sqrt{169 - 25} = \\sqrt{144} = 12$. Es la terna (5, 12, 13).' },
+    { t: '$8$', ok: false, por: '$13 - 5 = 8$ resta las longitudes, no los cuadrados. Pitágoras trabaja con áreas de cuadrados.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un problema con enunciado, de la figura a la fórmula',
+    enunciado: 'Una cometa está atada con una cuerda de 25 m. El niño que la sujeta está a 15 m del punto del suelo justo debajo de la cometa. ¿A qué altura vuela?',
+    pasos: [
+      { t: '<strong>Dibujar y señalar el ángulo recto.</strong> La altura de la cometa es vertical y la distancia sobre el suelo es horizontal: forman $90^\\circ$. La cuerda cierra el triángulo.', antes: '¿Dónde está el ángulo recto en esta situación?' },
+      { t: '<strong>Identificar la hipotenusa.</strong> Es el lado opuesto al ángulo recto: la cuerda, 25 m. Los 15 m del suelo son un cateto, y la altura $h$ es el otro.', antes: '¿Quién es la hipotenusa: la cuerda, la altura o la distancia en el suelo?' },
+      { t: '<strong>Buscamos un cateto: se resta.</strong> $h^2 = 25^2 - 15^2 = 625 - 225 = 400$.' },
+      { t: '<strong>Raíz y sentido común.</strong> $h = \\sqrt{400} = 20$ m. Es menor que 25, como debe ser cualquier cateto frente a su hipotenusa. ✓', antes: '¿Puede la altura salir mayor que 25?' }
+    ],
+    cierre: 'La terna (15, 20, 25) es (3, 4, 5) multiplicada por 5. Reconocerla habría dado la respuesta sin cuentas, pero la comprobación «cateto menor que hipotenusa» sirve siempre, con ternas o sin ellas.'
+  });
+
   p.sub('El recíproco: sirve para comprobar si un ángulo es recto');
 
   p.text('El teorema funciona también al revés. Si en un triángulo se cumple $a^2+b^2=c^2$, entonces ' +
@@ -98,6 +122,12 @@ Course.topic('ge-pitagoras', function (p) {
     'porque aparecen constantemente en los exámenes:');
   p.formula('(3,4,5) \\quad (5,12,13) \\quad (8,15,17) \\quad (7,24,25) \\quad (20,21,29)');
   p.text('Y todos sus múltiplos: $(6,8,10)$, $(9,12,15)$, $(30,40,50)$…');
+
+  p.trampas([
+    { e: '$\\sqrt{a^2 + b^2} = a + b$', por: 'La raíz no reparte sobre la suma. $\\sqrt{9 + 16} = 5$, no $3 + 4 = 7$.' },
+    { e: 'Sumar siempre, busque lo que busque', por: 'Se suma para la hipotenusa y se resta para un cateto. Si sale un cateto mayor que la hipotenusa, se ha sumado donde tocaba restar.' },
+    { e: 'Usar Pitágoras en un triángulo que no es rectángulo', por: 'La fórmula exige el ángulo de $90^\\circ$. Para los demás triángulos hay que esperar al teorema del coseno, en trigonometría.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('El sentido inverso —si $a^2+b^2=c^2$ entonces el ángulo es recto— es una herramienta de obra. ' +
@@ -161,12 +191,10 @@ Course.topic('ge-pitagoras', function (p) {
       return { a: a, b: b, c: c, tipo: Math.abs(s) < 1e-9 ? 1 : (s > 0 ? 2 : 3) };
     },
     ask: function (d) {
-      return 'Un triángulo tiene lados $' + d.a + '$, $' + d.b + '$ y $' + d.c + '$. ¿Qué tipo es?' +
-        '<br><span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> si es rectángulo, ' +
-        '<code>2</code> si es acutángulo, <code>3</code> si es obtusángulo.</span>';
+      return 'Un triángulo tiene lados $' + d.a + '$, $' + d.b + '$ y $' + d.c + '$. ¿Qué tipo es?';
     },
-    fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],
-    sol: function (d) { return { t: d.tipo }; },
+    fields: [{ name: 't', label: 'Tipo', opts: [{ t: 'rectángulo', v: '1' }, { t: 'acutángulo', v: '2' }, { t: 'obtusángulo', v: '3' }] }],
+    sol: function (d) { return { t: String(d.tipo) }; },
     hint: function (d) { return 'Compara $' + d.c + '^2$ con $' + d.a + '^2 + ' + d.b + '^2$.'; },
     steps: function (d) {
       var s1 = d.a * d.a + d.b * d.b, s2 = d.c * d.c;

@@ -1,6 +1,12 @@
 /* Tema: Movimientos y transformaciones */
 Course.topic('ge-transformaciones', function (p) {
 
+  p.puente('Sumar un vector a un punto lo desplaza; multiplicar sus coordenadas por $k$ es la ' +
+    'semejanza de razón $k$; y una matriz $2\\times 2$ convierte cada vector en otro. Este tema junta ' +
+    'esas tres ideas con un nombre común, transformación, y clasifica las que no deforman. Es el ' +
+    'lugar donde la geometría del plano y las matrices del bloque de álgebra se reconocen la una a ' +
+    'la otra.');
+
   p.text('Una <strong>transformación</strong> convierte cada punto del plano en otro punto. Las más ' +
     'importantes son las que <em>no deforman</em>: conservan las distancias, y por tanto también los ' +
     'ángulos y las áreas. Se llaman <strong>movimientos</strong> o isometrías.');
@@ -16,6 +22,7 @@ Course.topic('ge-transformaciones', function (p) {
   p.demo({
     title: 'Los cuatro movimientos',
     intro: 'Elige un movimiento y mira cómo se transforma la figura. Fíjate en que el tamaño nunca cambia; lo único que cambia en algunos casos es la orientación.',
+    predice: 'La figura tiene forma de L. Antes de pulsar «simetría axial»: ¿su imagen será otra L, o una L al revés? ¿Se podría conseguir ese resultado solo girando la figura original?',
     build: function (host, d) {
       var tipo = 'traslacion';
       var par = 3;
@@ -86,9 +93,28 @@ Course.topic('ge-transformaciones', function (p) {
       'distinguir el punto nuevo del viejo.<br><br>El giro mezcla senos y cosenos porque rotar es ' +
       'exactamente lo que hace la trigonometría en la circunferencia.');
 
+  p.comprueba('¿Cuál es la imagen de $(2, 5)$ por la simetría respecto al eje $X$?', [
+    { t: '$(-2, 5)$', ok: false, por: 'Eso es reflejar en el eje $Y$: cambia la $x$. Al reflejar en el eje $X$ el punto pasa de arriba a abajo, y lo que cambia es la $y$.' },
+    { t: '$(2, -5)$', ok: true, por: 'El eje $X$ hace de espejo horizontal: la $x$ se conserva y la $y$ cambia de signo.' },
+    { t: '$(-2, -5)$', ok: false, por: 'Cambiar las dos coordenadas es la simetría central, media vuelta alrededor del origen.' }
+  ]);
+
   p.note('Esa última fórmula del giro es exactamente lo que hace la matriz $\\begin{pmatrix}\\cos\\alpha & -\\operatorname{sen}\\alpha \\\\ \\operatorname{sen}\\alpha & \\cos\\alpha\\end{pmatrix}$ ' +
     'al multiplicar por el vector $(x,y)$. Toda transformación lineal del plano <em>es</em> una matriz: ' +
     'ese es el puente entre la geometría y el álgebra lineal.', 'ok', 'Geometría = matrices');
+
+  p.ejemplo({
+    title: 'Un giro de 90°, con la fórmula y con la cabeza',
+    enunciado: 'Girar el punto $P(3, 1)$ un ángulo de $90^\\circ$ alrededor del origen, y después otros $90^\\circ$.',
+    pasos: [
+      { t: '<strong>Los valores de la fórmula.</strong> Para $\\alpha = 90^\\circ$: $\\cos 90^\\circ = 0$ y $\\operatorname{sen} 90^\\circ = 1$.' },
+      { t: '<strong>Sustituir.</strong> $x\' = x\\cos\\alpha - y\\operatorname{sen}\\alpha = 3\\cdot 0 - 1\\cdot 1 = -1$; $y\' = x\\operatorname{sen}\\alpha + y\\cos\\alpha = 3\\cdot 1 + 1\\cdot 0 = 3$. Imagen: $P\'(-1, 3)$.', antes: 'Sustituye $x = 3$, $y = 1$ con esos senos y cosenos. ¿Qué punto sale?' },
+      { t: '<strong>Comprobar que es un movimiento.</strong> $|OP| = \\sqrt{9 + 1} = \\sqrt{10}$ y $|OP\'| = \\sqrt{1 + 9} = \\sqrt{10}$: la distancia al centro se conserva. Y $(3, 1)\\cdot(-1, 3) = -3 + 3 = 0$: perpendiculares, como corresponde a un cuarto de vuelta.', antes: '¿Cómo comprobarías que el giro no ha deformado nada, sin dibujar?' },
+      { t: '<strong>La regla rápida.</strong> Un giro de $90^\\circ$ manda $(x, y)$ a $(-y, x)$: se intercambian y se cambia el signo de la que pasa delante. Con $(3, 1)$: $(-1, 3)$ ✓.' },
+      { t: '<strong>Otros $90^\\circ$.</strong> Aplicando la regla a $(-1, 3)$: $(-3, -1)$. Es el opuesto de $P$: dos cuartos de vuelta son media vuelta, la simetría central $(x, y)\\mapsto(-x, -y)$.', antes: 'Aplica la regla otra vez. ¿Qué movimiento resulta de dos giros de $90^\\circ$?' }
+    ],
+    cierre: 'Es exactamente lo que hacía $i$ en los números complejos: multiplicar por $i$ es girar $90^\\circ$, y $i^2 = -1$ es media vuelta. Geometría, matrices y complejos cuentan la misma historia.'
+  });
 
   /* ---------------------------------------------------------------- */
   p.util('Cada vez que arrastras, giras o amplías algo en una pantalla se está aplicando una de estas ' +
@@ -113,6 +139,7 @@ Course.topic('ge-transformaciones', function (p) {
   p.demo({
     title: 'Homotecia',
     intro: 'Cambia la razón. Todas las rectas que unen un punto con su imagen pasan por el centro: por eso es una ampliación «desde un punto», como la de un proyector.',
+    predice: 'Pon la razón en $k = -1$. ¿A cuál de los cuatro movimientos de arriba equivale esa homotecia? ¿Y $k = 1$?',
     build: function (host, d) {
       var k = 1.6;
       var out = W.readout(host, '');
@@ -147,6 +174,13 @@ Course.topic('ge-transformaciones', function (p) {
     'las isometrías; si admites también homotecias sale la geometría afín; y así hasta la topología, ' +
     'donde vale cualquier deformación continua. Una misma figura es «la misma» o no según qué ' +
     'transformaciones consideres legales.');
+
+  p.trampas([
+    { e: 'Giro de $90^\\circ$: $(x, y)\\mapsto(y, x)$', por: 'Intercambiar sin cambiar signo es una simetría respecto a la bisectriz, no un giro. El giro es $(-y, x)$.' },
+    { e: 'Una simetría axial es un giro «visto de otra forma»', por: 'No: el giro conserva la orientación y el espejo la invierte. Una L girada sigue siendo una L; reflejada, es una L al revés, y ningún giro la devuelve.' },
+    { e: 'La homotecia es un movimiento', por: 'Cambia las distancias (las multiplica por $|k|$). Es una semejanza, no una isometría; solo con $k = \\pm 1$ conserva tamaños.' },
+    { e: 'Componer en cualquier orden da lo mismo', por: 'Trasladar y luego reflejar no es reflejar y luego trasladar. Es la misma no conmutatividad que la del producto de matrices.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('La homotecia es lo que hace el zoom, y también lo que explica la escala de un plano o de una ' +

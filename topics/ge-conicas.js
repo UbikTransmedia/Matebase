@@ -1,6 +1,11 @@
 /* Tema: Cónicas */
 Course.topic('ge-conicas', function (p) {
 
+  p.puente('La recta era la figura de una ecuación de primer grado. Las cónicas son las figuras de las ' +
+    'ecuaciones de segundo grado en $x$ e $y$, y todas se definen con la herramienta de Pitágoras: la ' +
+    'distancia entre dos puntos. Una circunferencia es «puntos a distancia $r$ del centro»; las demás ' +
+    'cambian esa condición por otra sobre distancias a uno o dos puntos fijos.');
+
   p.text('Coge un cono y córtalo con un plano. Según la inclinación del corte salen cuatro curvas ' +
     'distintas: <strong>circunferencia, elipse, parábola e hipérbola</strong>. Por eso se llaman ' +
     '<em>cónicas</em>. Que estas cuatro curvas tan distintas sean la misma cosa mirada de otra manera ' +
@@ -9,6 +14,7 @@ Course.topic('ge-conicas', function (p) {
   p.demo({
     title: 'Cortar el cono',
     intro: 'Inclina el plano de corte y mira qué curva aparece. La familia entera depende de un solo ángulo.',
+    predice: 'Antes de pulsar «hipérbola»: el cono tiene dos hojas, una hacia arriba y otra hacia abajo. Si el plano se inclina más que la generatriz, ¿a cuántas hojas llegará? ¿Cuántas ramas tendrá la curva?',
     build: function (host, d) {
       var incl = 0;
       var out = W.readout(host, '');
@@ -74,6 +80,12 @@ Course.topic('ge-conicas', function (p) {
      ['Hipérbola', 'la <strong>diferencia</strong> de distancias a dos focos es constante', '$\\dfrac{x^2}{a^2}-\\dfrac{y^2}{b^2} = 1$'],
      ['Parábola', 'equidista de un foco y de una recta (directriz)', '$y^2 = 2px$']]);
 
+  p.comprueba('¿Qué cónica es $\\dfrac{x^2}{9} + \\dfrac{y^2}{9} = 1$?', [
+    { t: 'Una elipse', ok: false, por: 'Tiene la forma de la elipse, pero con $a = b = 3$. Una elipse con los dos semiejes iguales es una circunferencia: los focos se juntan en el centro.' },
+    { t: 'Una circunferencia de radio 3', ok: true, por: 'Multiplicando por 9: $x^2 + y^2 = 9 = 3^2$. Es el caso $e = 0$ de la familia.' },
+    { t: 'Una circunferencia de radio 9', ok: false, por: 'El 9 es $r^2$. El radio es $\\sqrt{9} = 3$.' }
+  ]);
+
   p.note('La definición de la elipse es la receta del jardinero: clava dos estacas, ata una cuerda ' +
     'entre ellas y tensa con un palo. Al girar, el palo dibuja una elipse perfecta, porque la longitud ' +
     'de la cuerda —la suma de las dos distancias— no cambia.', 'ok', 'Cómo dibujar una elipse en el jardín');
@@ -81,6 +93,7 @@ Course.topic('ge-conicas', function (p) {
   p.demo({
     title: 'La elipse y sus focos',
     intro: 'Arrastra el punto por la elipse: las dos distancias cambian, pero su suma es siempre la misma. Mueve también la excentricidad.',
+    predice: 'Si acercas el semieje $b$ al valor de $a$, ¿hacia dónde se moverán los focos? ¿Y qué le pasa a la suma de distancias cuando $P$ está en el extremo del eje mayor?',
     build: function (host, d) {
       var a = 3.2, b = 2.2;
       var out = W.readout(host, '');
@@ -148,6 +161,24 @@ Course.topic('ge-conicas', function (p) {
   p.formulas([
     '\\text{elipse:}\\quad a^2 = b^2 + c^2',
     '\\text{hipérbola:}\\quad c^2 = a^2 + b^2'
+  ]);
+
+  p.ejemplo({
+    title: 'Leer una elipse entera a partir de su ecuación',
+    enunciado: 'De la elipse $\\dfrac{x^2}{25} + \\dfrac{y^2}{9} = 1$, hallar semiejes, focos, excentricidad y comprobar la definición en un punto.',
+    pasos: [
+      { t: '<strong>Semiejes.</strong> $a^2 = 25$ y $b^2 = 9$: $a = 5$ (el mayor, bajo la $x$, así que el eje mayor es horizontal) y $b = 3$.', antes: '¿Cuánto valen $a$ y $b$? ¿En qué eje está el mayor?' },
+      { t: '<strong>Semidistancia focal.</strong> En la elipse $c^2 = a^2 - b^2 = 25 - 9 = 16$, luego $c = 4$. Los focos están sobre el eje mayor: $F_1(-4, 0)$ y $F_2(4, 0)$.', antes: '¿Con qué relación se obtiene $c$? ¿Se suma o se resta?' },
+      { t: '<strong>Excentricidad.</strong> $e = \\dfrac{c}{a} = \\dfrac{4}{5} = 0{,}8$: bastante achatada.' },
+      { t: '<strong>Comprobar la definición.</strong> El vértice $V(5, 0)$ está en la elipse. Sus distancias a los focos son $9$ y $1$, que suman $10 = 2a$ ✓. Y el punto $(0, 3)$: distancias $\\sqrt{16 + 9} = 5$ y $5$, suman $10$ ✓.', antes: 'Toma el punto $(0, 3)$. ¿A qué distancia está de cada foco? ¿Suman $2a$?' }
+    ],
+    cierre: 'Que $(0, 3)$ esté a distancia $a$ de cada foco es justo el triángulo $a^2 = b^2 + c^2$ dibujado: cateto $b$ vertical, cateto $c$ horizontal, hipotenusa $a$. La relación de la elipse es Pitágoras en ese triángulo.'
+  });
+
+  p.trampas([
+    { e: 'Usar $c^2 = a^2 + b^2$ en la elipse', por: 'En la elipse los focos están <em>dentro</em>, $c < a$: $c^2 = a^2 - b^2$. La suma es la de la hipérbola.' },
+    { e: 'Tomar $a$ del denominador de $x^2$ siempre', por: '$a$ es el semieje <em>mayor</em>. En $\\frac{x^2}{9} + \\frac{y^2}{25} = 1$, $a = 5$ y el eje mayor es vertical, con los focos en $(0, \\pm 4)$.' },
+    { e: 'Radio $= 25$ en $x^2 + y^2 = 25$', por: 'El 25 es $r^2$. El radio es 5.' }
   ]);
 
   /* ================= EJERCICIOS ================= */
@@ -233,12 +264,10 @@ Course.topic('ge-conicas', function (p) {
         '\\dfrac{x^2}{' + (d.a * d.a) + '} - \\dfrac{y^2}{' + (d.b * d.b) + '} = 1',
         'y^2 = ' + (2 * d.pp) + 'x'
       ][d.t];
-      return '¿Qué cónica es $' + eq + '$?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> circunferencia, ' +
-        '<code>2</code> elipse, <code>3</code> hipérbola, <code>4</code> parábola.</span>';
+      return '¿Qué cónica es $' + eq + '$?';
     },
-    fields: [{ name: 'c', label: 'Cónica', w: 'tiny' }],
-    sol: function (d) { return { c: d.t + 1 }; },
+    fields: [{ name: 'c', label: 'Cónica', opts: [{ t: 'circunferencia', v: '1' }, { t: 'elipse', v: '2' }, { t: 'hipérbola', v: '3' }, { t: 'parábola', v: '4' }] }],
+    sol: function (d) { return { c: String(d.t + 1) }; },
     hint: function () { return 'Fíjate en los signos y en si las dos variables están al cuadrado.'; },
     steps: function (d) {
       return ['Circunferencia: los dos cuadrados suman y tienen el mismo denominador.',

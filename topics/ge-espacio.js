@@ -47,7 +47,7 @@ Course.topic('ge-espacio', function (p) {
     return nulo(cruz(a, b)) && !nulo(a) && !nulo(b);
   }
 
-  p.text('Con los [[ge-espacio-vectores|vectores del espacio]] ya se pueden escribir los dos objetos ' +
+  p.puente('Con los [[ge-espacio-vectores|vectores del espacio]] ya se pueden escribir los dos objetos ' +
     'con los que se construye toda la geometría del espacio: la <strong>recta</strong> y el ' +
     '<strong>plano</strong>. La idea es la misma que en el [[ge-rectas|plano]]: un punto para fijar ' +
     'dónde está y uno o dos vectores para decir hacia dónde se extiende.');
@@ -79,6 +79,7 @@ Course.topic('ge-espacio', function (p) {
   p.demo({
     title: 'Recorrer una recta con el parámetro',
     intro: 'Mueve λ y el punto X recorre la recta: cada valor del parámetro es un punto. Gira el dibujo para convencerte de que es una recta de verdad y no un trazo en el papel.',
+    predice: 'La recta es $(1 + 2\\lambda,\\ -2 + \\lambda,\\ 1 + 2\\lambda)$. ¿Qué punto sale con $\\lambda = -0{,}5$? ¿Y hay algún $\\lambda$ que dé el origen $(0, 0, 0)$?',
     build: function (host) {
       var P = [1, -2, 1], v = [2, 1, 2], lam = 1;
       var out = W.readout(host, '');
@@ -123,6 +124,12 @@ Course.topic('ge-espacio', function (p) {
       'coordenadas del vector normal. Y $D$ se calcula obligando a que el plano pase por un punto ' +
       'conocido.');
 
+  p.comprueba('¿Cuál es el vector normal del plano $2x - y + 3z - 6 = 0$?', [
+    { t: '$(2, -1, 3)$', ok: true, por: 'Los coeficientes de $x$, $y$, $z$, con sus signos. El $-6$ es el término independiente y no forma parte de la normal.' },
+    { t: '$(2, 1, 3)$', ok: false, por: 'El coeficiente de $y$ es $-1$: el signo forma parte del vector.' },
+    { t: '$(2, -1, -6)$', ok: false, por: 'El tercer número tiene que ser el coeficiente de $z$, que es 3. El $-6$ no acompaña a ninguna variable.' }
+  ]);
+
   p.list([
     '<strong>Por tres puntos</strong> $A$, $B$, $C$: normal $\\vec{n} = \\overrightarrow{AB}\\times\\overrightarrow{AC}$ y se sustituye $A$ para hallar $D$.',
     '<strong>Por un punto y conteniendo una recta</strong>: los directores son el de la recta y el vector que va del punto a un punto de la recta.',
@@ -132,6 +139,7 @@ Course.topic('ge-espacio', function (p) {
   p.demo({
     title: 'El plano que pasa por tres puntos',
     intro: 'A y B están fijos en los ejes; mueve C. El producto vectorial de dos lados del triángulo da la normal, y con ella la ecuación. Gira el dibujo para ver la normal de perfil: es perpendicular a todo el plano, no solo al triángulo.',
+    predice: 'Si llevas $C$ hasta $(3, 0, 0)$, coincide con $A$. ¿Cuántos planos pasan entonces por esos puntos? ¿Qué le pasará al producto vectorial?',
     build: function (host) {
       var A = [3, 0, 0], B = [0, 3, 0], C = [0, 0, 2];
       var out = W.readout(host, '');
@@ -201,6 +209,18 @@ Course.topic('ge-espacio', function (p) {
      ['$\\vec{v}\\cdot\\vec{n} = 0$ y $P \\notin \\pi$', 'la recta es <strong>paralela</strong> al plano'],
      ['$\\vec{v}\\cdot\\vec{n} = 0$ y $P \\in \\pi$', 'la recta está <strong>contenida</strong> en el plano']]);
 
+  p.ejemplo({
+    title: 'Recta y plano: decidir la posición y hallar el punto de corte',
+    enunciado: 'Estudiar la posición de $r:\\ (x, y, z) = (1, 0, 2) + \\lambda(1, 1, -1)$ y $\\pi:\\ x + 2y + z - 7 = 0$, y si se cortan, hallar el punto.',
+    pasos: [
+      { t: '<strong>Director y normal.</strong> $\\vec v = (1, 1, -1)$ y $\\vec n = (1, 2, 1)$. Su producto escalar: $1 + 2 - 1 = 2 \\ne 0$. La recta no es paralela al plano: lo <strong>corta</strong> en un punto.', antes: 'Calcula $\\vec v\\cdot\\vec n$. ¿Qué te dice el resultado?' },
+      { t: '<strong>Sustituir la recta en el plano.</strong> Un punto de $r$ es $(1 + \\lambda,\\ \\lambda,\\ 2 - \\lambda)$. En $\\pi$: $(1 + \\lambda) + 2\\lambda + (2 - \\lambda) - 7 = 0$.', antes: '¿Cómo se encuentra el punto de corte? ¿Qué se sustituye en qué?' },
+      { t: '<strong>Despejar $\\lambda$.</strong> $2\\lambda - 4 = 0 \\Rightarrow \\lambda = 2$.' },
+      { t: '<strong>El punto.</strong> Con $\\lambda = 2$: $(3, 2, 0)$. Comprobación en $\\pi$: $3 + 4 + 0 - 7 = 0$ ✓.', antes: 'Ya tienes $\\lambda$. ¿Cuál es el punto? Compruébalo en la ecuación del plano.' }
+    ],
+    cierre: 'Si $\\vec v\\cdot\\vec n$ hubiera dado 0, al sustituir la $\\lambda$ habría desaparecido: quedaría «$0 = $ algo», y ese algo decide entre paralela (distinto de 0) y contenida (igual a 0).'
+  });
+
   p.sub('Dos rectas');
   p.text('Aquí aparece la posibilidad que no existe en el plano: dos rectas que ni se cortan ni son ' +
     'paralelas. <strong>Se cruzan</strong>, como una calle y un puente que pasa por encima. Con ' +
@@ -221,6 +241,7 @@ Course.topic('ge-espacio', function (p) {
   p.demo({
     title: 'Cortarse, cruzarse o ser paralelas',
     intro: 'La recta r es el eje x. La recta s pasa a una altura h y está girada un ángulo θ. Con h = 0 las dos se cortan; con θ = 0 son paralelas; con las dos cosas distintas de cero, se cruzan. Gira el dibujo: de frente parecen cortarse siempre.',
+    predice: 'Con $h = 2$ y $\\theta = 60^\\circ$, ¿las rectas se cortan, son paralelas o se cruzan? ¿Qué producto mixto esperas: cero o distinto de cero?',
     build: function (host) {
       var h = 2, th = 60;
       var out = W.readout(host, '');
@@ -322,6 +343,13 @@ Course.topic('ge-espacio', function (p) {
     'resuelto con código en [[gfx-trazado]]. Las impresoras 3D hacen lo contrario: cortan la pieza con ' +
     'planos horizontales, capa a capa. Y en robótica, saber si dos brazos articulados pueden chocar ' +
     'empieza por saber si las rectas de sus ejes se cortan o se cruzan.');
+
+  p.trampas([
+    { e: 'Leer $\\dfrac{x + 2}{3}$ como «pasa por $x = 2$»', por: 'La continua es $\\frac{x - p_1}{v_1}$. Si aparece $x + 2 = x - (-2)$, entonces $p_1 = -2$.' },
+    { e: '«No se cortan, luego son paralelas»', por: 'En el espacio hay una tercera opción: se cruzan. Hay que mirar si los directores son proporcionales.' },
+    { e: 'Director de una recta dada por dos planos: $\\vec n_1 + \\vec n_2$', por: 'La recta es perpendicular a las dos normales, así que su director es $\\vec n_1\\times\\vec n_2$.' },
+    { e: 'Usar la normal del plano como si fuera un director del plano', por: 'La normal es perpendicular al plano; no está en él. Los directores del plano son perpendiculares a la normal.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
