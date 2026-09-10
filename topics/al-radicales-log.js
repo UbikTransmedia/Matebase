@@ -1,6 +1,12 @@
 /* Tema: Ecuaciones exponenciales y logarítmicas */
 Course.topic('al-radicales-log', function (p) {
 
+  p.puente('De las potencias de aritmética sabes que $2^3 = 8$ y que al multiplicar potencias de la ' +
+    'misma base se suman los exponentes. De las ecuaciones de segundo grado, que un cambio de ' +
+    'variable convierte un problema nuevo en uno conocido. Aquí la incógnita se sube al exponente, y ' +
+    'para bajarla de ahí hace falta una operación nueva, el logaritmo, cuyas propiedades son las de ' +
+    'las potencias leídas al revés.');
+
   p.text('Hasta ahora la incógnita siempre estaba en la base: $x^2$, $3x$. ¿Y si está ' +
     '<strong>en el exponente</strong>? $2^x = 8$ se resuelve a ojo ($x=3$), pero $2^x = 10$ no. ' +
     'Hace falta una operación nueva que deshaga la exponencial: el <strong>logaritmo</strong>.');
@@ -16,6 +22,12 @@ Course.topic('al-radicales-log', function (p) {
     '\\log_5 1 = 0 \\quad\\text{porque}\\quad 5^0 = 1'
   ]);
 
+  p.comprueba('¿Cuánto vale $\\log_3 81$?', [
+    { t: '27', ok: false, por: 'Eso es $81 : 3$. El logaritmo no divide: pregunta a qué exponente hay que elevar el 3.' },
+    { t: '4', ok: true, por: '$3^4 = 81$, así que el exponente que falta es 4.' },
+    { t: '3', ok: false, por: '$3^3 = 27$, no 81. Hace falta una potencia más.' }
+  ]);
+
   p.note('Dos bases tienen nombre propio: $\\log x$ (sin base) significa base 10, y $\\ln x$ es el ' +
     '<em>logaritmo neperiano</em>, de base $e \\approx 2{,}71828$. En matemáticas superiores «log» ' +
     'casi siempre quiere decir «ln».', null, 'Notación');
@@ -29,6 +41,7 @@ Course.topic('al-radicales-log', function (p) {
   p.demo({
     title: 'Exponencial y logaritmo son la misma curva reflejada',
     intro: 'Una función deshace lo que hace la otra. Sus gráficas son simétricas respecto de la recta y = x.',
+    predice: 'El punto $(3, 8)$ está en la curva $2^x$. ¿Qué punto correspondiente estará en la curva de $\\log_2 x$? Lleva el deslizador a $x = 3$ y compruébalo.',
     build: function (host, d) {
       var base = 2;
       var out = W.readout(host, '');
@@ -86,6 +99,12 @@ Course.topic('al-radicales-log', function (p) {
   p.note('El logaritmo <strong>no</strong> reparte sobre las sumas: $\\log(x+y) \\ne \\log x + \\log y$. ' +
     'Lo que convierte productos en sumas, no sumas en nada.', 'warn');
 
+  p.comprueba('¿Cómo se desarrolla $\\log(x\\cdot y^2)$?', [
+    { t: '$\\log x + 2\\log y$', ok: true, por: 'El producto se convierte en suma, y el exponente 2 baja multiplicando solo a $\\log y$.' },
+    { t: '$2(\\log x + \\log y)$', ok: false, por: 'El cuadrado afecta solo a $y$, no a $x$. Sería el desarrollo de $\\log(xy)^2$.' },
+    { t: '$\\log x \\cdot 2\\log y$', ok: false, por: 'El producto de dentro se convierte en <em>suma</em> de logaritmos, no en producto.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.util('La propiedad de que el logaritmo convierte productos en sumas cambió la historia de la ciencia: ' +
     'durante trescientos años, astrónomos y navegantes multiplicaban números enormes buscándolos en ' +
@@ -108,6 +127,18 @@ Course.topic('al-radicales-log', function (p) {
 
   p.formula('3^{2x} - 4\\cdot 3^x + 3 = 0 \\ \\xrightarrow{\\ t = 3^x\\ } \\ t^2 - 4t + 3 = 0');
 
+  p.ejemplo({
+    title: 'El cambio de variable, hasta el final',
+    enunciado: 'Resolver $3^{2x} - 4\\cdot 3^x + 3 = 0$.',
+    pasos: [
+      { t: '<strong>Ver la estructura.</strong> $3^{2x} = (3^x)^2$. La ecuación es «algo al cuadrado, menos 4 veces ese algo, más 3»: de segundo grado en $3^x$.', antes: '¿Qué relación hay entre $3^{2x}$ y $3^x$?' },
+      { t: '<strong>Cambiar.</strong> Con $t = 3^x$ queda $t^2 - 4t + 3 = 0$, cuyas soluciones son $t = 1$ y $t = 3$ (suman 4 y multiplican 3).' },
+      { t: '<strong>Deshacer el cambio.</strong> $t$ no es la respuesta; $x$ sí. $3^x = 1 \\Rightarrow x = 0$, y $3^x = 3 \\Rightarrow x = 1$.', antes: '$t = 1$ y $t = 3$. ¿Es eso la solución? ¿Qué falta?' },
+      { t: '<strong>Comprobar.</strong> $x = 0$: $1 - 4 + 3 = 0$ ✓. $x = 1$: $9 - 12 + 3 = 0$ ✓.' }
+    ],
+    cierre: 'Si una de las $t$ hubiera salido negativa, se descartaría: $3^x$ es siempre positivo y no hay ningún $x$ con $3^x = -2$.'
+  });
+
   p.sub('Y las logarítmicas');
 
   p.text('Se juntan todos los logaritmos en uno solo usando las propiedades, y se aplica la ' +
@@ -116,6 +147,13 @@ Course.topic('al-radicales-log', function (p) {
   p.note('En las ecuaciones logarítmicas es <strong>obligatorio comprobar</strong> las soluciones al ' +
     'final: el logaritmo solo existe para números positivos, así que puede salir una solución ' +
     'algebraicamente correcta pero imposible. Se descarta.', 'warn', 'No te saltes la comprobación');
+
+  p.trampas([
+    { e: '$\\log(x + y) = \\log x + \\log y$', por: 'Falso. Con $x = y = 10$: $\\log 20 \\approx 1{,}3$ y $\\log 10 + \\log 10 = 2$.' },
+    { e: '$\\dfrac{\\log x}{\\log y} = \\log x - \\log y$', por: 'Lo que se convierte en resta es el logaritmo de un <em>cociente</em>, $\\log\\frac{x}{y}$. El cociente de dos logaritmos no se simplifica.' },
+    { e: 'Dar por buena $x = -3$ en $\\log x + \\log(x-4) = \\ldots$', por: '$\\log(-3)$ no existe. En las logarítmicas la comprobación es parte de la solución.' },
+    { e: '$2^x = 0$ tiene solución', por: 'Una potencia de base positiva nunca vale 0 ni es negativa. La ecuación no tiene solución.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Estas ecuaciones responden a «¿cuánto tiempo hace falta?». Cuánto tarda una inversión en ' +

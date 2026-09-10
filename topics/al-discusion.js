@@ -46,7 +46,7 @@ Course.topic('al-discusion', function (p) {
     'determinado»</em>. Asusta porque parece que hay infinitos casos, uno por cada valor de $k$. En ' +
     'realidad casi siempre hay solo tres, y hay un método para encontrarlos que no falla.');
 
-  p.text('Todo lo que hace falta está ya en el curso: el [[al-gauss|método de Gauss]], el ' +
+  p.puente('Todo lo que hace falta está ya en el curso: el [[al-gauss|método de Gauss]], el ' +
     '[[al-determinantes|rango]] y los [[al-determinantes|determinantes]]. Aquí se juntan en un ' +
     'teorema y en una receta.');
 
@@ -86,9 +86,29 @@ Course.topic('al-discusion', function (p) {
     'crítico el sistema puede ser incompatible y en el otro indeterminado, y solo se ve sustituyendo.',
     'warn', 'Los valores críticos se estudian sustituyendo');
 
+  p.comprueba('$k$ es un valor crítico: $\\det A = 0$. ¿Qué se sabe seguro del sistema para ese $k$?', [
+    { t: 'Que es compatible indeterminado', ok: false, por: 'Puede serlo, o puede ser incompatible. Con $\\det A = 0$ el rango de $A$ baja, pero el de $A^*$ hay que calcularlo.' },
+    { t: 'Que no es compatible determinado', ok: true, por: 'Eso es lo único seguro: $\\operatorname{rg}(A) < n$. Para decidir entre indeterminado e incompatible hay que sustituir y comparar con $\\operatorname{rg}(A^*)$.' },
+    { t: 'Que es incompatible', ok: false, por: 'No necesariamente. Si los términos independientes «acompañan» a la dependencia de las filas, el sistema es indeterminado.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Una discusión completa, en un sistema 2×2',
+    enunciado: 'Discutir según $k$ el sistema $\\begin{cases} kx + y = 1 \\\\ x + ky = k^2 \\end{cases}$ y resolverlo cuando sea compatible determinado.',
+    pasos: [
+      { t: '<strong>Determinante y valores críticos.</strong> $\\det A = \\begin{vmatrix} k & 1 \\\\ 1 & k \\end{vmatrix} = k^2 - 1$, que se anula en $k = 1$ y $k = -1$.', antes: '¿Para qué valores de $k$ se anula $\\det A$?' },
+      { t: '<strong>Caso general, $k \\ne \\pm 1$.</strong> $\\det A \\ne 0$: $\\operatorname{rg}(A) = \\operatorname{rg}(A^*) = 2$, compatible determinado. Por Cramer: $x = \\dfrac{k - k^2}{k^2 - 1} = \\dfrac{-k}{k + 1}$, $y = \\dfrac{k^3 - 1}{k^2 - 1} = \\dfrac{k^2 + k + 1}{k + 1}$.', antes: 'Si $k$ no es ninguno de los críticos, ¿qué tipo de sistema es? ¿Hace falta calcular rangos?' },
+      { t: '<strong>Sustituir $k = 1$.</strong> Queda $x + y = 1$, $x + y = 1$: la misma ecuación dos veces. $\\operatorname{rg}(A) = \\operatorname{rg}(A^*) = 1 < 2$: compatible indeterminado, con un grado de libertad.', antes: 'Sustituye $k = 1$ en las dos ecuaciones. ¿Qué observas?' },
+      { t: '<strong>Sustituir $k = -1$.</strong> Queda $-x + y = 1$, $x - y = 1$. Sumándolas: $0 = 2$. Incompatible: $\\operatorname{rg}(A) = 1$ pero $\\operatorname{rg}(A^*) = 2$.', antes: 'Ahora $k = -1$. ¿Ocurre lo mismo que con $k = 1$?' },
+      { t: '<strong>Comprobar el caso general con un valor.</strong> $k = 0$: la fórmula da $x = 0$, $y = 1$. En el sistema: $0 + 1 = 1$ ✓ y $0 + 0 = 0 = k^2$ ✓.' }
+    ],
+    cierre: 'Los dos valores críticos anulan el mismo determinante y sin embargo dan sistemas de tipos distintos. Esa es la razón de sustituir uno por uno en vez de decidir «en general».'
+  });
+
   p.demo({
     title: 'Discutir mirando los tres planos',
     intro: 'El sistema kx + y + z = 1, x + ky + z = k, x + y + kz = k². Mueve k: casi siempre los tres planos se cortan en un punto. Solo en k = 1 y k = −2 pasa otra cosa, y es distinta en cada uno.',
+    predice: 'En $k = 1$ las tres ecuaciones se convierten en $x + y + z = 1$. ¿Cuántos planos distintos se verán? ¿Y qué tipo de sistema será?',
     build: function (host) {
       var k = 0;
       var out = W.readout(host, '');
@@ -164,6 +184,13 @@ Course.topic('al-discusion', function (p) {
     'enteros son los coeficientes: 1, 2, 1, 2. Los programas de química lo hacen exactamente así. En ' +
     'economía, las tablas de Leontief, que describen cuánto necesita cada sector de los demás, son ' +
     'sistemas lineales cuya discusión dice si una economía puede sostenerse.');
+
+  p.trampas([
+    { e: '«$\\det A = 0$, luego el sistema es indeterminado»', por: 'Con $\\det A = 0$ solo se sabe que no es determinado. Puede ser incompatible: hay que mirar $\\operatorname{rg}(A^*)$.' },
+    { e: 'Estudiar los valores críticos con la $k$ dentro', por: 'Se sustituye el número y se trabaja con la matriz concreta. Dos valores críticos pueden dar tipos distintos.' },
+    { e: 'Usar Cramer en un valor crítico', por: 'Cramer divide por $\\det A$. Si vale cero, la regla no se puede aplicar: se usa Gauss.' },
+    { e: 'Olvidar el caso general', por: 'La discusión tiene siempre una primera línea: «para $k$ distinto de los valores críticos, compatible determinado». Sin ella está incompleta.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

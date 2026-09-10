@@ -1,6 +1,11 @@
 /* Tema: Polinomios: operaciones y Ruffini */
 Course.topic('al-polinomios', function (p) {
 
+  p.puente('Los monomios del tema anterior se sumaban solo si eran semejantes y se multiplicaban ' +
+    'siempre. Un polinomio no es más que varios monomios sumados, y operar con polinomios es aplicar ' +
+    'aquellas dos reglas muchas veces con orden. La novedad de verdad está al final: dividir, y un ' +
+    'atajo para dividir —Ruffini— que además detecta las raíces.');
+
   p.text('Un <strong>polinomio</strong> es una suma de monomios de una misma variable. Se nombran con ' +
     'letras mayúsculas y se ordenan siempre de mayor a menor grado.');
 
@@ -92,6 +97,7 @@ Course.topic('al-polinomios', function (p) {
   p.demo({
     title: 'La regla de Ruffini, paso a paso',
     intro: 'Se baja el primer coeficiente, se multiplica por a, se suma al siguiente, y se repite. El último número es el resto.',
+    predice: 'Suma los coeficientes de $x^3 - 6x^2 + 11x - 6$: $1 - 6 + 11 - 6 = 0$. Con $a = 1$, ¿qué resto crees que saldrá? ¿Es casualidad?',
     build: function (host, d) {
       var coefs = [1, -6, 11, -6], a = 1;
       var out = W.readout(host, '');
@@ -136,6 +142,19 @@ Course.topic('al-polinomios', function (p) {
     }
   });
 
+  p.ejemplo({
+    title: 'Una división con Ruffini, de principio a fin',
+    enunciado: 'Dividir $P(x) = 2x^3 - 3x^2 - 5x + 6$ entre $x - 2$.',
+    pasos: [
+      { t: '<strong>Preparar.</strong> Coeficientes en orden de grado: $2,\\ -3,\\ -5,\\ 6$. El divisor es $x - 2$, así que $a = 2$ (si fuera $x + 2$, sería $a = -2$).', antes: 'El divisor es $x - 2$. ¿Qué número va en la esquina: $2$ o $-2$?' },
+      { t: '<strong>Bajar el primero.</strong> El 2 baja tal cual. Es el coeficiente principal del cociente.' },
+      { t: '<strong>Multiplicar y sumar.</strong> $2\\cdot 2 = 4$; $-3 + 4 = 1$. Luego $1\\cdot 2 = 2$; $-5 + 2 = -3$. Luego $-3\\cdot 2 = -6$; $6 + (-6) = 0$.', antes: 'Siguiente casilla: $2\\cdot 2 = 4$, y $-3 + 4$ da… Sigue tú las dos siguientes.' },
+      { t: '<strong>Leer el resultado.</strong> La fila de abajo es $2,\\ 1,\\ -3 \\mid 0$: cociente $2x^2 + x - 3$ (un grado menos que $P$) y resto $0$.', antes: 'La última fila es $2, 1, -3, 0$. ¿Cuál es el cociente y cuál el resto?' },
+      { t: '<strong>Interpretar.</strong> Resto cero significa que $x = 2$ es raíz y que $P(x) = (x - 2)(2x^2 + x - 3)$. Comprobación rápida: $P(2) = 16 - 12 - 10 + 6 = 0$ ✓.' }
+    ],
+    cierre: 'Lo que Ruffini entrega no es solo un cociente: cuando el resto es cero, entrega un factor. Y el cociente $2x^2 + x - 3$ se puede seguir factorizando con la ecuación de segundo grado.'
+  });
+
   p.hist('Paolo Ruffini publicó su método en 1804, en el mismo trabajo en el que intentó demostrar que no ' +
     'existe fórmula para las ecuaciones de quinto grado. La demostración tenía una laguna y la ' +
     'comunidad matemática la ignoró; el propio Ruffini murió sin ver reconocida su intuición. Abel ' +
@@ -149,6 +168,12 @@ Course.topic('al-polinomios', function (p) {
 
   p.formula('R = P(a)', 'teorema del resto');
 
+  p.comprueba('¿Qué resto da $x^3 - 2x + 1$ al dividirlo entre $x + 1$?', [
+    { t: '0', ok: false, por: 'Ese es $P(1)$, pero el divisor es $x + 1 = x - (-1)$: hay que evaluar en $a = -1$.' },
+    { t: '2', ok: true, por: '$P(-1) = (-1)^3 - 2(-1) + 1 = -1 + 2 + 1 = 2$. Sin dividir nada.' },
+    { t: '−2', ok: false, por: 'Cuidado con $-2\\cdot(-1)$: es $+2$, no $-2$. El resto es $-1 + 2 + 1 = 2$.' }
+  ]);
+
   p.text('Y de ahí sale el <strong>teorema del factor</strong>, que es el que de verdad se usa:');
 
   p.formula('P(a) = 0 \\iff (x-a) \\text{ divide a } P(x)', 'teorema del factor');
@@ -157,6 +182,12 @@ Course.topic('al-polinomios', function (p) {
     'que anula el polinomio, ya tienes un trozo factorizado. Y por el teorema de las raíces ' +
     'racionales, las candidatas enteras son siempre <em>divisores del término independiente</em>: ' +
     'no hay que probar al azar.', 'ok', 'La estrategia para factorizar');
+
+  p.trampas([
+    { e: 'Dividir entre $x + 3$ poniendo $a = 3$', por: 'El esquema está pensado para $x - a$. Como $x + 3 = x - (-3)$, hay que poner $a = -3$.' },
+    { e: 'Olvidar el coeficiente que falta', por: 'En $x^3 - 4x + 1$ no hay término en $x^2$: su coeficiente es $0$ y hay que escribirlo en su sitio, $1, 0, -4, 1$. Si se salta, todo se descoloca.' },
+    { e: '$\\operatorname{gr}(P\\cdot Q) = \\operatorname{gr}(P)\\cdot\\operatorname{gr}(Q)$', por: 'Los grados se <em>suman</em>: $x^2\\cdot x^3 = x^5$, no $x^6$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Ruffini no es un truco de examen: es el algoritmo que usan las calculadoras y los programas de ' +

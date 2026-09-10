@@ -1,6 +1,11 @@
 /* Tema: Sistemas por el método de Gauss */
 Course.topic('al-gauss', function (p) {
 
+  p.puente('El método de reducción de [[al-sistemas]] consistía en sumar ecuaciones multiplicadas por ' +
+    'números para que una incógnita desapareciera. Gauss es exactamente eso, hecho con orden y sobre ' +
+    'la matriz del sistema, de modo que funcione igual con tres incógnitas que con cien. Las ' +
+    'operaciones de fila que aquí se usan son las mismas que ya conoces de los determinantes.');
+
   p.text('Con dos ecuaciones y dos incógnitas, sustitución o reducción bastan. Con tres, cuatro o ' +
     'cien, hace falta un método <strong>sistemático</strong>: algo que se pueda seguir mecánicamente ' +
     'sin pensar, y que además pueda programarse. Ese método es el de Gauss.');
@@ -31,6 +36,7 @@ Course.topic('al-gauss', function (p) {
   p.demo({
     title: 'Escalonar paso a paso',
     intro: 'Pulsa para ir haciendo ceros debajo de la diagonal. Cuando la matriz esté escalonada, se despeja de abajo arriba.',
+    predice: 'El primer paso será F2 ← F2 − 2·F1. Calcula tú la nueva fila 2 antes de pulsar: $(2, -1, 1 \\mid 1) - 2\\cdot(1, 2, -1 \\mid 3)$.',
     build: function (host, d) {
       var orig = [[1, 2, -1, 3], [2, -1, 1, 1], [3, 1, 2, 10]];
       var M, paso, notas;
@@ -90,6 +96,20 @@ Course.topic('al-gauss', function (p) {
     }
   });
 
+  p.ejemplo({
+    title: 'Gauss de principio a fin, con un intercambio de filas',
+    enunciado: 'Resolver $\\begin{cases} x + y + z = 6 \\\\ 2x - y + z = 3 \\\\ x + 2y - z = 2 \\end{cases}$',
+    pasos: [
+      { t: '<strong>Matriz ampliada.</strong> $\\left(\\begin{array}{ccc|c} 1 & 1 & 1 & 6 \\\\ 2 & -1 & 1 & 3 \\\\ 1 & 2 & -1 & 2 \\end{array}\\right)$. El 1 de la esquina es un pivote cómodo.' },
+      { t: '<strong>Ceros en la primera columna.</strong> F2 ← F2 − 2·F1 da $(0, -3, -1 \\mid -9)$; F3 ← F3 − F1 da $(0, 1, -2 \\mid -4)$.', antes: '¿Qué operación hace cero el 2 de la segunda fila? ¿Y el 1 de la tercera?' },
+      { t: '<strong>Intercambiar para evitar fracciones.</strong> Con $-3$ como pivote saldrían tercios. Se cambian F2 y F3: ahora la segunda fila es $(0, 1, -2 \\mid -4)$ y la tercera $(0, -3, -1 \\mid -9)$. Intercambiar filas es legal.', antes: 'Para hacer cero el $-3$ usando el $1$ conviene… ¿qué jugada?' },
+      { t: '<strong>Cero en la segunda columna.</strong> F3 ← F3 + 3·F2: $(0, 0, -7 \\mid -21)$. Matriz escalonada.', antes: 'Calcula F3 + 3·F2.' },
+      { t: '<strong>De abajo arriba.</strong> $-7z = -21 \\Rightarrow z = 3$. Luego $y - 2\\cdot 3 = -4 \\Rightarrow y = 2$. Y $x + 2 + 3 = 6 \\Rightarrow x = 1$.' },
+      { t: '<strong>Comprobar en una ecuación original.</strong> Segunda: $2\\cdot 1 - 2 + 3 = 3$ ✓.' }
+    ],
+    cierre: 'Solución $(1, 2, 3)$. El intercambio del paso 3 no era obligatorio, pero evita fracciones, y las fracciones son donde se cometen los errores de cuentas.'
+  });
+
   /* ---------------------------------------------------------------- */
   p.section('Discusión: los tres finales posibles');
 
@@ -103,6 +123,18 @@ Course.topic('al-gauss', function (p) {
   p.note('Esa última fila $0\\ 0\\ 0 \\mid 5$ dice literalmente «cero igual a cinco». No hay ningún ' +
     'trío de números que lo cumpla: el sistema no tiene solución. Es la manera más limpia de ' +
     'descubrirlo.', null, 'La fila delatora');
+
+  p.comprueba('Al escalonar, la última fila queda $0\\ 0\\ 0 \\mid 0$. ¿Qué significa?', [
+    { t: 'Que $z = 0$', ok: false, por: 'La fila dice $0\\cdot z = 0$, que es cierto para <em>cualquier</em> $z$. No fija ningún valor.' },
+    { t: 'Que el sistema es incompatible', ok: false, por: 'Incompatible sería $0 = b$ con $b \\ne 0$. Aquí $0 = 0$ no contradice nada: solo sobra una ecuación.' },
+    { t: 'Que hay infinitas soluciones', ok: true, por: 'Una ecuación era combinación de las otras. Quedan dos ecuaciones útiles para tres incógnitas: compatible indeterminado, con una incógnita libre.' }
+  ]);
+
+  p.trampas([
+    { e: 'Leer $0\\ 0\\ 0 \\mid 0$ como «$z = 0$»', por: 'Es $0 = 0$: la ecuación sobraba. $z$ queda libre y se toma como parámetro.' },
+    { e: 'Olvidar la columna de la derecha', por: 'La operación F2 ← F2 − 2·F1 se aplica a los cuatro números de la fila, término independiente incluido.' },
+    { e: 'Multiplicar una fila por 0 para «hacer ceros»', por: 'Eso borra la ecuación y cambia las soluciones. Solo se multiplica por números distintos de cero.' }
+  ]);
 
   p.hist('Gauss desarrolló su método hacia 1809 por una necesidad muy concreta: acababa de aparecer y ' +
     'perderse el asteroide Ceres, del que solo existían unas pocas observaciones antes de que se ' +
@@ -172,6 +204,33 @@ Course.topic('al-gauss', function (p) {
   p.section('Practica');
 
   p.exercise({
+    title: 'Una operación de fila',
+    level: 'basico',
+    gen: function (r) {
+      var f1 = [r.nz(-3, 3), r.pm(0, 4), r.pm(0, 4), r.pm(0, 6)];
+      var k = r.pick([-3, -2, 2, 3]);
+      var f2 = [k * f1[0], r.pm(0, 4), r.pm(0, 4), r.pm(0, 6)];
+      var res = f2.map(function (x, j) { return x - k * f1[j]; });
+      return { f1: f1, f2: f2, k: k, res: res };
+    },
+    ask: function (d) {
+      var fila = function (f) { return f[0] + ' & ' + f[1] + ' & ' + f[2] + ' & ' + f[3]; };
+      return 'En la matriz $\\left(\\begin{array}{ccc|c} ' + fila(d.f1) + ' \\\\ ' + fila(d.f2) + ' \\end{array}\\right)$ ' +
+        'se quiere hacer cero el primer número de la fila 2. Calcula la nueva fila 2 tras $F_2 \\leftarrow F_2 ' +
+        (d.k > 0 ? '- ' + d.k : '+ ' + (-d.k)) + '\\cdot F_1$.';
+    },
+    fields: [{ name: 'a', label: '1.º', w: 'tiny' }, { name: 'b', label: '2.º', w: 'tiny' }, { name: 'c', label: '3.º', w: 'tiny' }, { name: 'd', label: 'indep.', w: 'tiny' }],
+    sol: function (d) { return { a: d.res[0], b: d.res[1], c: d.res[2], d: d.res[3] }; },
+    hint: function () { return 'La operación se aplica a los cuatro números de la fila, también al de la derecha de la barra.'; },
+    steps: function (d) {
+      return [0, 1, 2, 3].map(function (j) {
+        return '$' + d.f2[j] + ' - (' + d.k + ')\\cdot(' + d.f1[j] + ') = ' + d.res[j] + '$';
+      }).concat(['Nueva fila 2: $(' + d.res[0] + ',\\ ' + d.res[1] + ',\\ ' + d.res[2] + ' \\mid ' + d.res[3] + ')$. El primer número es cero, como se quería.']);
+    },
+    answer: function (d) { return '(' + d.res.join(', ') + ')'; }
+  });
+
+  p.exercise({
     title: 'Sistema 3×3 con solución única',
     level: 'medio',
     gen: function (r) {
@@ -229,12 +288,10 @@ Course.topic('al-gauss', function (p) {
       var eq = function (f) {
         return ML.termTex(f[0], 'x', 1, true) + ML.termTex(f[1], 'y', 1, false) + ' = ' + f[2];
       };
-      return 'Escalona y clasifica: $\\begin{cases}' + eq(d.f1) + ' \\\\ ' + eq(d.f2) + '\\end{cases}$<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> determinado, ' +
-        '<code>2</code> indeterminado, <code>3</code> incompatible.</span>';
+      return 'Escalona y clasifica: $\\begin{cases}' + eq(d.f1) + ' \\\\ ' + eq(d.f2) + '\\end{cases}$';
     },
-    fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],
-    sol: function (d) { return { t: d.tipo + 1 }; },
+    fields: [{ name: 't', label: 'Tipo', opts: [{ t: 'compatible determinado', v: '1' }, { t: 'compatible indeterminado', v: '2' }, { t: 'incompatible', v: '3' }] }],
+    sol: function (d) { return { t: String(d.tipo + 1) }; },
     hint: function () { return 'Haz un cero en la primera columna de la segunda fila y mira qué queda.'; },
     steps: function (d) {
       var k = d.f2[0] / d.f1[0];

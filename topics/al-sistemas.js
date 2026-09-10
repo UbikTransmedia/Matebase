@@ -1,6 +1,11 @@
 /* Tema: Sistemas de ecuaciones lineales */
 Course.topic('al-sistemas', function (p) {
 
+  p.puente('Una ecuación de primer grado con una incógnita tiene una solución. Si aparece una segunda ' +
+    'incógnita, una sola ecuación ya no basta: $x + y = 5$ la cumplen infinitos pares. Hace falta una ' +
+    'segunda condición, y la técnica de este tema es convertir dos ecuaciones con dos incógnitas en una ' +
+    'ecuación con una, que ya sabes resolver.');
+
   p.text('Un <strong>sistema</strong> es un conjunto de ecuaciones que tienen que cumplirse ' +
     '<em>a la vez</em>. Con dos incógnitas hace falta, en general, dos condiciones.');
 
@@ -18,6 +23,7 @@ Course.topic('al-sistemas', function (p) {
   p.demo({
     title: 'Dos rectas buscándose',
     intro: 'Cada ecuación es una recta. La solución es el punto donde se cortan. Mueve los coeficientes y mira qué pasa cuando las rectas se vuelven paralelas.',
+    predice: 'El sistema de partida es $2x + y = 7$, $x - y = 2$. Prueba $x = 3$ en las dos: ¿qué $y$ sale en cada una? Si coincide, ya sabes dónde se cortan.',
     build: function (host, d) {
       var a1 = 2, b1 = 1, c1 = 7;
       var a2 = 1, b2 = -1, c2 = 2;
@@ -100,6 +106,18 @@ Course.topic('al-sistemas', function (p) {
     'multiplica cada ecuación por lo que haga falta. Si no hay nada evidente, reducción sigue siendo ' +
     'la apuesta segura.', null, 'Por qué reducción suele ganar');
 
+  p.ejemplo({
+    title: 'Reducción cuando nada se va solo',
+    enunciado: 'Resolver $\\begin{cases} 3x + 2y = 12 \\\\ 2x - 3y = -5 \\end{cases}$',
+    pasos: [
+      { t: '<strong>Elegir qué eliminar.</strong> Los coeficientes de $y$ son $2$ y $-3$, ya de signos opuestos. Multiplicando la primera por 3 y la segunda por 2 quedarán $6y$ y $-6y$.', antes: '¿Por qué números multiplicarías cada ecuación para que la $y$ desaparezca al sumar?' },
+      { t: '<strong>Multiplicar y sumar.</strong> $9x + 6y = 36$ y $4x - 6y = -10$. Sumando: $13x = 26$, luego $x = 2$.', antes: 'Suma las dos ecuaciones nuevas. ¿Qué queda?' },
+      { t: '<strong>Recuperar la otra.</strong> En la primera original: $3\\cdot 2 + 2y = 12 \\Rightarrow 2y = 6 \\Rightarrow y = 3$.', antes: 'Ya tienes $x = 2$. ¿Cómo sacas $y$ sin volver a empezar?' },
+      { t: '<strong>Comprobar en la otra ecuación.</strong> Segunda: $2\\cdot 2 - 3\\cdot 3 = 4 - 9 = -5$ ✓. Se comprueba en la que <em>no</em> se usó para despejar; si no, la comprobación no aporta nada.' }
+    ],
+    cierre: 'Solución $(2, 3)$: el punto donde se cortan las dos rectas. Si te hubieras equivocado en un signo al multiplicar, la comprobación en la segunda ecuación habría fallado.'
+  });
+
   p.util('Un sistema de ecuaciones es lo que resuelve un GPS cada segundo. Tu móvil recibe la señal de ' +
     'varios satélites y de cada uno deduce una distancia; cruzar esas distancias para averiguar ' +
     'dónde estás es exactamente resolver un sistema. Con dos satélites hay dos posiciones posibles, ' +
@@ -118,6 +136,12 @@ Course.topic('al-sistemas', function (p) {
      ['$\\dfrac{a_1}{a_2} = \\dfrac{b_1}{b_2} = \\dfrac{c_1}{c_2}$', 'compatible indeterminado', 'la misma recta'],
      ['$\\dfrac{a_1}{a_2} = \\dfrac{b_1}{b_2} \\ne \\dfrac{c_1}{c_2}$', 'incompatible', 'paralelas']]);
 
+  p.comprueba('$\\begin{cases} x + y = 3 \\\\ 2x + 2y = 8 \\end{cases}$ ¿De qué tipo es?', [
+    { t: 'Compatible determinado', ok: false, por: 'La segunda ecuación es la primera multiplicada por 2 en el lado izquierdo: misma pendiente. No pueden cortarse en un punto.' },
+    { t: 'Compatible indeterminado', ok: false, por: 'Serían la misma recta si también $8 = 2\\cdot 3$. Pero $2\\cdot 3 = 6 \\ne 8$.' },
+    { t: 'Incompatible', ok: true, por: '$\\frac{1}{2} = \\frac{1}{2} \\ne \\frac{3}{8}$: rectas paralelas distintas. Dicho en palabras: si $x + y = 3$, entonces $2x + 2y = 6$, nunca 8.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Clasificar antes de resolver ahorra trabajo y evita disparates. Un sistema incompatible en una ' +
     'mezcla química significa que la receta pedida es imposible con esos ingredientes; uno ' +
@@ -131,6 +155,34 @@ Course.topic('al-sistemas', function (p) {
     'claros de una misma idea descubierta dos veces, con veinte siglos de diferencia.');
 
   p.section('Practica');
+
+  p.exercise({
+    title: '¿Es solución?',
+    level: 'basico',
+    gen: function (r) {
+      var x = r.pm(1, 6), y = r.pm(1, 6);
+      var a1 = r.nz(-4, 4), b1 = r.nz(-4, 4), a2 = r.nz(-4, 4), b2 = r.nz(-4, 4);
+      if (Math.abs(a1 * b2 - a2 * b1) < 1e-9) return null;
+      var es = r.bool();
+      var c1 = a1 * x + b1 * y, c2 = a2 * x + b2 * y + (es ? 0 : r.nz(-3, 3));
+      return { x: x, y: y, a1: a1, b1: b1, c1: c1, a2: a2, b2: b2, c2: c2, es: es, v2: a2 * x + b2 * y };
+    },
+    ask: function (d) {
+      return '¿Es el par $(x, y) = (' + d.x + ', ' + d.y + ')$ solución del sistema $\\begin{cases}' +
+        ML.termTex(d.a1, 'x', 1, true) + ML.termTex(d.b1, 'y', 1, false) + ' = ' + d.c1 + '\\\\' +
+        ML.termTex(d.a2, 'x', 1, true) + ML.termTex(d.b2, 'y', 1, false) + ' = ' + d.c2 + '\\end{cases}$?';
+    },
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'Sí, cumple las dos ecuaciones', v: 'si' }, { t: 'No', v: 'no' }] }],
+    sol: function (d) { return { r: d.es ? 'si' : 'no' }; },
+    hint: function () { return 'Sustituye $x$ e $y$ en las dos ecuaciones. Tiene que cumplir <strong>las dos</strong>, no solo una.'; },
+    steps: function (d) {
+      return ['Primera: $' + d.a1 + '\\cdot(' + d.x + ') + (' + d.b1 + ')\\cdot(' + d.y + ') = ' + d.c1 + '$ ✓.',
+        'Segunda: $' + d.a2 + '\\cdot(' + d.x + ') + (' + d.b2 + ')\\cdot(' + d.y + ') = ' + d.v2 + '$' +
+        (d.es ? ' ✓.' : ', y la ecuación pide $' + d.c2 + '$ ✗.'),
+        d.es ? 'Cumple las dos: es solución.' : 'Solo cumple la primera: no es solución del sistema. Un sistema exige las dos a la vez.'];
+    },
+    answer: function (d) { return d.es ? 'Sí, es solución.' : 'No: cumple la primera pero no la segunda.'; }
+  });
 
   p.exercise({
     title: 'Resuelve el sistema',
@@ -185,12 +237,14 @@ Course.topic('al-sistemas', function (p) {
     ask: function (d) {
       return 'Clasifica sin resolver: $\\begin{cases}' +
         ML.termTex(d.a1, 'x', 1, true) + ML.termTex(d.b1, 'y', 1, false) + ' = ' + d.c1 + '\\\\' +
-        ML.termTex(d.a2, 'x', 1, true) + ML.termTex(d.b2, 'y', 1, false) + ' = ' + d.c2 + '\\end{cases}$' +
-        '<br><span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> si es compatible ' +
-        'determinado, <code>2</code> si es compatible indeterminado, <code>3</code> si es incompatible.</span>';
+        ML.termTex(d.a2, 'x', 1, true) + ML.termTex(d.b2, 'y', 1, false) + ' = ' + d.c2 + '\\end{cases}$';
     },
-    fields: [{ name: 't', label: 'Tipo (1, 2 o 3)', w: 'tiny' }],
-    sol: function (d) { return { t: d.tipo + 1 }; },
+    fields: [{ name: 't', label: 'Tipo', opts: [
+      { t: 'compatible determinado', v: '1' },
+      { t: 'compatible indeterminado', v: '2' },
+      { t: 'incompatible', v: '3' }
+    ] }],
+    sol: function (d) { return { t: String(d.tipo + 1) }; },
     hint: function () { return 'Compara $a_1/a_2$ con $b_1/b_2$. Si coinciden, mira también $c_1/c_2$.'; },
     steps: function (d) {
       var r1 = d.a1 / d.a2, r2 = d.b1 / d.b2, r3 = d.c1 / d.c2;

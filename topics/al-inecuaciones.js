@@ -1,6 +1,11 @@
 /* Tema: Inecuaciones */
 Course.topic('al-inecuaciones', function (p) {
 
+  p.puente('Las ecuaciones de primer y segundo grado ya están resueltas; los intervalos de la recta ' +
+    'real, también. Este tema los junta: se cambia el $=$ por un $<$ y la respuesta deja de ser un ' +
+    'número para ser un intervalo. La técnica de despejar es la misma, con una sola regla nueva, y ' +
+    'la parábola de segundo grado vuelve a aparecer para decidir dónde una expresión es positiva.');
+
   p.text('Una <strong>inecuación</strong> es como una ecuación pero con una desigualdad en vez del ' +
     'signo igual. Y eso cambia la naturaleza de la respuesta: ya no es un número, es un ' +
     '<strong>tramo entero de la recta</strong>.');
@@ -22,6 +27,7 @@ Course.topic('al-inecuaciones', function (p) {
   p.demo({
     title: 'Por qué se da la vuelta al signo',
     intro: 'Los dos puntos están ordenados. Multiplica por un número negativo y mira cómo se cruzan al saltar al otro lado del cero.',
+    predice: '$2 < 5$. Multiplica los dos por $-1$: ¿es $-2 < -5$ o $-2 > -5$? Sitúalos en la recta mentalmente antes de mover $k$.',
     build: function (host, d) {
       var k = 1, a = 2, b = 5;
       var out = W.readout(host, '');
@@ -52,6 +58,18 @@ Course.topic('al-inecuaciones', function (p) {
     }
   });
 
+  p.ejemplo({
+    title: 'Despejar con un coeficiente negativo',
+    enunciado: 'Resolver $-3x + 7 \\le 1$.',
+    pasos: [
+      { t: '<strong>Transponer.</strong> Se pasa el 7 restando, igual que en una ecuación: $-3x \\le -6$. Sumar o restar nunca cambia el sentido.', antes: 'Al pasar el 7 al otro lado, ¿cambia el signo de la desigualdad?' },
+      { t: '<strong>Dividir entre $-3$.</strong> Es negativo, así que la desigualdad <strong>se da la vuelta</strong>: $x \\ge 2$.', antes: 'Ahora hay que dividir entre $-3$. ¿Qué pasa con el $\\le$?' },
+      { t: '<strong>Escribir la solución.</strong> $x \\in [2, +\\infty)$. Corchete en el 2 porque el $\\le$ incluye la igualdad.' },
+      { t: '<strong>Comprobar con un valor.</strong> $x = 3$: $-9 + 7 = -2 \\le 1$ ✓. Y con $x = 0$, que queda fuera: $7 \\le 1$ ✗. La solución está bien orientada.', antes: 'Elige un número dentro de la solución y otro fuera. ¿Cumplen o no cumplen la inecuación original?' }
+    ],
+    cierre: 'Probar un número de cada lado tarda diez segundos y detecta el error más frecuente del tema: haber olvidado dar la vuelta al signo.'
+  });
+
   /* ---------------------------------------------------------------- */
   p.section('Inecuaciones de segundo grado');
 
@@ -69,6 +87,7 @@ Course.topic('al-inecuaciones', function (p) {
   p.demo({
     title: 'El signo de una parábola por tramos',
     intro: 'Las raíces parten la recta en zonas. Cambia los coeficientes y observa dónde la curva queda por encima del eje (positiva) y dónde por debajo (negativa).',
+    predice: '$x^2 - x - 6$ tiene raíces $-2$ y $3$. Sustituye $x = 0$, que está entre las dos: ¿sale positivo o negativo? Eso ya te dice el signo de todo el tramo central.',
     build: function (host, d) {
       var a = 1, b = -1, c = -6;
       var out = W.readout(host, '');
@@ -119,6 +138,18 @@ Course.topic('al-inecuaciones', function (p) {
     'las raíces y positiva fuera</strong>. Si $a < 0$ es al revés. Con eso y las raíces, la solución ' +
     'sale sin probar valores.', 'ok');
 
+  p.comprueba('¿Cuál es la solución de $x^2 - 9 > 0$?', [
+    { t: '$x > 3$', ok: false, por: 'Es lo que sale al «despejar» como si fuera de primer grado, y se deja fuera medio resultado: $x = -4$ también cumple $16 - 9 > 0$.' },
+    { t: '$(-3, 3)$', ok: false, por: 'Entre las raíces la parábola $x^2 - 9$ (que sonríe) es <em>negativa</em>. Prueba $x = 0$: $-9 > 0$ es falso.' },
+    { t: '$(-\\infty, -3)\\cup(3, +\\infty)$', ok: true, por: 'Raíces $\\pm 3$ y $a > 0$: positiva fuera de las raíces. Los extremos van abiertos porque en $\\pm 3$ vale 0, no más que 0.' }
+  ]);
+
+  p.trampas([
+    { e: '$-2x < 6 \\;\\Rightarrow\\; x < -3$', por: 'Al dividir entre $-2$ se invierte: $x > -3$. Comprueba con $x = 0$: $0 < 6$ es cierto, así que el 0 tiene que estar en la solución.' },
+    { e: '$x - 5 > 2 \\;\\Rightarrow\\; x < 7$', por: 'Al sumar o restar el signo <em>no</em> cambia. Solo al multiplicar o dividir por negativo. Aquí $x > 7$.' },
+    { e: '$x^2 > 4 \\;\\Rightarrow\\; x > 2$', por: 'Una inecuación de segundo grado no se despeja: se miran las raíces $\\pm 2$ y la parábola. Solución: $x < -2$ o $x > 2$.' }
+  ]);
+
   p.section('Sistemas de inecuaciones');
 
   p.text('Cuando hay varias condiciones a la vez, se resuelve cada una por separado y la solución ' +
@@ -155,12 +186,13 @@ Course.topic('al-inecuaciones', function (p) {
     },
     ask: function (d) {
       return 'Resuelve $' + ML.termTex(d.a, 'x', 1, true) + ML.termTex(d.b, '', 0, false) + ' ' +
-        d.sentido + ' ' + d.c + '$<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Da el valor frontera y escribe ' +
-        '<code>1</code> si la solución es «x mayor que» ese valor, o <code>2</code> si es «x menor que».</span>';
+        d.sentido + ' ' + d.c + '$. Da el valor frontera y el sentido de la solución.';
     },
-    fields: [{ name: 'v', label: 'Valor frontera', w: 'tiny' }, { name: 's', label: 'Sentido (1 o 2)', w: 'tiny' }],
-    sol: function (d) { return { v: d.x, s: d.mayor ? 1 : 2 }; },
+    fields: [
+      { name: 'v', label: 'Valor frontera', w: 'tiny' },
+      { name: 's', label: 'La solución es', opts: [{ t: '$x$ mayor que ese valor', v: '1' }, { t: '$x$ menor que ese valor', v: '2' }] }
+    ],
+    sol: function (d) { return { v: d.x, s: d.mayor ? '1' : '2' }; },
     hint: function (d) {
       return d.a < 0 ? 'Cuidado: al dividir entre $' + d.a + '$, que es negativo, hay que dar la vuelta al signo.'
         : 'Se despeja igual que una ecuación; el coeficiente es positivo, así que el signo no cambia.';
@@ -189,16 +221,14 @@ Course.topic('al-inecuaciones', function (p) {
       return { a: a, b: b, c: c, lo: lo, hi: hi, sentido: sentido, esDentro: esDentro };
     },
     ask: function (d) {
-      return 'Resuelve $' + ML.polyTex([d.a, d.b, d.c]) + ' ' + d.sentido + ' 0$<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code> si la solución es ' +
-        'el intervalo <em>entre</em> las raíces, o <code>2</code> si son los dos tramos <em>de fuera</em>.</span>';
+      return 'Resuelve $' + ML.polyTex([d.a, d.b, d.c]) + ' ' + d.sentido + ' 0$. Da las raíces y di qué tramos forman la solución.';
     },
     fields: [
       { name: 'a', label: 'Raíz menor', w: 'tiny' },
       { name: 'b', label: 'Raíz mayor', w: 'tiny' },
-      { name: 't', label: 'Tramo (1 o 2)', w: 'tiny' }
+      { name: 't', label: 'Solución', opts: [{ t: 'el intervalo entre las raíces', v: '1' }, { t: 'los dos tramos de fuera', v: '2' }] }
     ],
-    sol: function (d) { return { a: d.lo, b: d.hi, t: d.esDentro ? 1 : 2 }; },
+    sol: function (d) { return { a: d.lo, b: d.hi, t: d.esDentro ? '1' : '2' }; },
     hint: function (d) {
       return 'Halla primero las raíces. Después: si $a > 0$ la parábola sonríe, así que es negativa entre las raíces.';
     },

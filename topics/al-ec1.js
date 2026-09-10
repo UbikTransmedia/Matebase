@@ -1,6 +1,11 @@
 /* Tema: Ecuaciones de primer grado */
 Course.topic('al-ec1', function (p) {
 
+  p.puente('Traducir frases a álgebra ya lo sabes. Cuando la frase incluye un «vale», un «es igual a», ' +
+    'aparece un signo $=$ con una incógnita dentro, y eso es una ecuación. Resolverla es el camino de ' +
+    'vuelta: partir de la igualdad y recuperar el número escondido. Toda la técnica cabe en una ' +
+    'imagen, la balanza.');
+
   p.text('Una <strong>ecuación</strong> es una igualdad en la que aparece una letra desconocida. ' +
     'Resolverla es encontrar el valor (o los valores) que hacen que la igualdad sea cierta.');
 
@@ -18,6 +23,7 @@ Course.topic('al-ec1', function (p) {
   p.demo({
     title: 'Resolver pesando',
     intro: 'Quita y reparte peso en los dos lados hasta dejar la x sola. Cada botón hace lo mismo a la izquierda y a la derecha.',
+    predice: 'La balanza dice $3x - 5 = 7$. Si sumas 5 en los dos platos, ¿qué queda en cada lado? ¿Y después de dividir entre 3?',
     build: function (host, d) {
       var A0 = 3, B0 = -5, C0 = 7;           // Ax + B = C
       var A = A0, B = B0, C = C0, hist = [];
@@ -97,6 +103,18 @@ Course.topic('al-ec1', function (p) {
   p.note('«Pasar al otro lado» no es magia ni un truco: es restar lo mismo a los dos lados, ' +
     'abreviado. Si lo entiendes así, nunca te confundirás con los signos.', null, 'Qué significa transponer');
 
+  p.ejemplo({
+    title: 'El método entero, con denominadores y paréntesis',
+    enunciado: 'Resolver $\\dfrac{x+1}{2} - \\dfrac{x-2}{3} = 1$.',
+    pasos: [
+      { t: '<strong>Denominadores.</strong> El m.c.m. de 2 y 3 es 6. Se multiplica <em>toda</em> la ecuación por 6, también el 1 de la derecha: $3(x+1) - 2(x-2) = 6$.', antes: '¿Por qué número hay que multiplicar? ¿Y hay que multiplicar también el 1?' },
+      { t: '<strong>Paréntesis.</strong> $3x + 3 - 2x + 4 = 6$. El menos delante de $(x-2)$ cambia los dos signos de dentro: $-2\\cdot(-2) = +4$.', antes: 'Al quitar $-2(x-2)$, ¿qué signo lleva el 4?' },
+      { t: '<strong>Reducir y transponer.</strong> $x + 7 = 6$, y pasando el 7: $x = 6 - 7 = -1$.' },
+      { t: '<strong>Comprobar en la original.</strong> $\\dfrac{-1+1}{2} - \\dfrac{-1-2}{3} = 0 - (-1) = 1$ ✓.', antes: 'Sustituye $x = -1$ en la ecuación de partida, no en una intermedia. ¿Sale 1?' }
+    ],
+    cierre: 'Los dos sitios donde se pierden puntos son el 1 sin multiplicar por 6 y el signo del 4. La comprobación final los habría detectado a los dos.'
+  });
+
   p.section('Casos especiales');
 
   p.text('Al reducir puede desaparecer la $x$. Entonces hay dos posibilidades:');
@@ -104,6 +122,18 @@ Course.topic('al-ec1', function (p) {
   p.table(['Queda', 'Significa', 'Ejemplo'],
     [['$0 = 0$ (o algo cierto)', 'Cualquier número vale: <strong>identidad</strong>', '$2(x+1) = 2x+2$'],
      ['$0 = 5$ (algo falso)', 'Ningún número vale: <strong>incompatible</strong>', '$x+1 = x+3$']]);
+
+  p.comprueba('Al resolver $3(x + 2) = 3x + 6$, ¿qué ocurre?', [
+    { t: 'Sale $x = 0$', ok: false, por: 'Al quitar el paréntesis queda $3x + 6 = 3x + 6$; las $x$ se van y queda $0 = 0$, no $x = 0$. Son cosas distintas.' },
+    { t: 'Es una identidad: vale cualquier $x$', ok: true, por: 'Los dos lados son la misma expresión escrita de dos formas. Cualquier número la cumple.' },
+    { t: 'No tiene solución', ok: false, por: 'Sin solución sería llegar a algo falso, como $0 = 5$. Aquí se llega a $0 = 0$, que es cierto siempre.' }
+  ]);
+
+  p.trampas([
+    { e: '$\\dfrac{x}{2} + 3 = 5 \\;\\Rightarrow\\; x + 3 = 10$', por: 'Se ha multiplicado por 2 el $\\frac{x}{2}$ y el 5, pero no el 3. O se multiplica <em>todo</em>, o nada: $x + 6 = 10$.' },
+    { e: '$2x = 8 \\;\\Rightarrow\\; x = 8 - 2$', por: 'El 2 está multiplicando, así que pasa dividiendo: $x = 4$. Solo lo que suma pasa restando.' },
+    { e: '$-(x - 3) = -x - 3$', por: 'El menos cambia los dos signos: $-x + 3$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Que una ecuación salga «sin solución» o «con infinitas» no es un fallo, es información valiosa. ' +

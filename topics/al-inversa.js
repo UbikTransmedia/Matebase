@@ -40,10 +40,11 @@ Course.topic('al-inversa', function (p) {
   }
   function pa(n) { return n < 0 ? '(' + n + ')' : String(n); }
 
-  p.text('En [[al-matrices]] la inversa apareció para matrices 2×2, con una fórmula que cabía en una ' +
-    'línea. Aquí se generaliza a cualquier tamaño, de dos maneras. Y se usa para lo que de verdad ' +
-    'sirve: <strong>despejar</strong> en ecuaciones cuya incógnita es una matriz entera, que es una de ' +
-    'las preguntas más frecuentes del examen de matrices.');
+  p.puente('En [[al-matrices]] la inversa apareció para matrices 2×2, con una fórmula que cabía en una ' +
+    'línea, y en [[al-determinantes]] aprendiste a calcular adjuntos. Aquí las dos cosas se juntan: la ' +
+    'inversa de cualquier tamaño se construye con adjuntos, y se usa para lo que de verdad sirve, ' +
+    '<strong>despejar</strong> en ecuaciones cuya incógnita es una matriz entera, que es una de las ' +
+    'preguntas más frecuentes del examen de matrices.');
 
   p.text('Una advertencia que merece ir por delante: <strong>entre matrices no existe la ' +
     'división</strong>. No se puede «pasar dividiendo». Se multiplica por la inversa, y como el producto ' +
@@ -59,6 +60,12 @@ Course.topic('al-inversa', function (p) {
       '[[al-determinantes|adjunto]] $A_{ij}$ de ese elemento. La $t$ de arriba es trasponer: filas por ' +
       'columnas.<br><br>Solo existe si $\\det A \\ne 0$, porque hay que dividir por él.');
 
+  p.comprueba('Una matriz tiene $\\det A = 0$. ¿Qué se puede decir de $A^{-1}$?', [
+    { t: 'No existe', ok: true, por: 'La fórmula divide por $\\det A$, y no se puede dividir por cero. Geométricamente, $A$ aplastó el espacio y no hay forma de deshacerlo.' },
+    { t: 'Es la matriz nula', ok: false, por: 'La matriz nula multiplicada por $A$ da la nula, no la identidad. No cumple $A\\cdot A^{-1} = I$.' },
+    { t: 'Es $(\\operatorname{Adj} A)^t$, sin dividir', ok: false, por: 'Si $\\det A = 0$, el producto $A\\cdot(\\operatorname{Adj} A)^t$ da la matriz nula, no $I$. No hay inversa.' }
+  ]);
+
   p.list([
     'Calcular $\\det A$. Si es cero, no hay inversa y se acabó.',
     'Calcular la matriz de adjuntos: cada elemento sustituido por su adjunto, con su signo.',
@@ -70,6 +77,7 @@ Course.topic('al-inversa', function (p) {
   p.demo({
     title: 'La inversa, paso a paso',
     intro: 'Pulsa «Siguiente paso» para construir la inversa de una matriz 3×3. Al final se multiplica por la original para comprobar que sale la identidad.',
+    predice: 'Para una matriz $3\\times 3$, ¿cuántos adjuntos hay que calcular? ¿Y cuál de los cinco pasos crees que es el que más se olvida?',
     build: function (host) {
       var M, paso;
       var caja = U.el('div', { style: { textAlign: 'center', overflowX: 'auto' } });
@@ -143,9 +151,23 @@ Course.topic('al-inversa', function (p) {
     'se pueden sumar. Lo que se suma a $A$ es la matriz identidad $I$, que es la que hace de «uno» ' +
     'entre matrices: $X = IX$.', 'warn', 'El «uno» de las matrices es la identidad');
 
+  p.ejemplo({
+    title: 'Despejar por el lado correcto',
+    enunciado: 'Resolver $XA = B$ con $A = \\begin{pmatrix} 1 & 1 \\\\ 0 & 1 \\end{pmatrix}$ y $B = \\begin{pmatrix} 2 & 3 \\\\ 4 & 5 \\end{pmatrix}$.',
+    pasos: [
+      { t: '<strong>¿Por qué lado?</strong> $A$ está a la <em>derecha</em> de $X$. Para que $A\\cdot A^{-1}$ se cancele hay que multiplicar por $A^{-1}$ por la derecha en los dos miembros: $XAA^{-1} = BA^{-1}$, es decir, $X = BA^{-1}$.', antes: '$A$ está a la derecha de $X$. ¿La inversa se multiplica por la izquierda o por la derecha?' },
+      { t: '<strong>La inversa.</strong> $\\det A = 1$. Intercambiando la diagonal y cambiando el signo de los otros dos: $A^{-1} = \\begin{pmatrix} 1 & -1 \\\\ 0 & 1 \\end{pmatrix}$.' },
+      { t: '<strong>El producto, en ese orden.</strong> $X = BA^{-1} = \\begin{pmatrix} 2 & 3 \\\\ 4 & 5 \\end{pmatrix}\\begin{pmatrix} 1 & -1 \\\\ 0 & 1 \\end{pmatrix} = \\begin{pmatrix} 2 & 1 \\\\ 4 & 1 \\end{pmatrix}$.', antes: 'Calcula $BA^{-1}$ fila por columna.' },
+      { t: '<strong>Comprobar.</strong> $XA = \\begin{pmatrix} 2 & 1 \\\\ 4 & 1 \\end{pmatrix}\\begin{pmatrix} 1 & 1 \\\\ 0 & 1 \\end{pmatrix} = \\begin{pmatrix} 2 & 3 \\\\ 4 & 5 \\end{pmatrix} = B$ ✓.' },
+      { t: '<strong>Lo que habría salido por el otro lado.</strong> $A^{-1}B = \\begin{pmatrix} -2 & -2 \\\\ 4 & 5 \\end{pmatrix}$, y esa matriz no cumple $XA = B$. El lado no es un detalle: cambia la respuesta.', antes: '¿Qué habría pasado con $A^{-1}B$? ¿Cumple la ecuación?' }
+    ],
+    cierre: 'La regla cabe en una frase: la inversa se pone en el mismo lado en el que está la matriz que quieres quitar, y en los dos miembros a la vez.'
+  });
+
   p.demo({
     title: 'El orden importa',
     intro: 'Para resolver AX = B hay dos candidatos que parecen iguales: A⁻¹B y BA⁻¹. Aquí se calculan los dos y se prueba cuál cumple la ecuación de verdad.',
+    predice: 'Aquí la ecuación es $AX = B$, con $A$ a la izquierda. ¿Cuál de los dos candidatos, $A^{-1}B$ o $BA^{-1}$, cumplirá la ecuación al comprobar?',
     build: function (host) {
       var A, B;
       var caja = U.el('div', { style: { textAlign: 'center', overflowX: 'auto' } });
@@ -196,6 +218,7 @@ Course.topic('al-inversa', function (p) {
   p.demo({
     title: 'Buscar el patrón de las potencias',
     intro: 'Elige una matriz y sube el exponente. Mira qué se repite o qué crece: eso es lo que se escribe en el examen.',
+    predice: 'La primera matriz es $\\begin{pmatrix} 1 & 2 \\\\ 0 & 1 \\end{pmatrix}$. ¿Qué valdrá su esquina superior derecha en $A^5$? ¿Y en $A^{12}$?',
     build: function (host) {
       var FAM = {
         lin: { t: 'patrón lineal', M: [[1, 2], [0, 1]] },
@@ -233,8 +256,37 @@ Course.topic('al-inversa', function (p) {
     '$A$ dice cómo cambia una población de un año al siguiente, $A^{50}$ dice cómo estará dentro de ' +
     'cincuenta años. Es la idea que desarrolla el tema de [[av-markov|cadenas de Markov]].');
 
+  p.trampas([
+    { e: '$AX = B \\;\\Rightarrow\\; X = \\dfrac{B}{A}$', por: 'Entre matrices no hay división. Se multiplica por $A^{-1}$, y por el lado correcto: $X = A^{-1}B$.' },
+    { e: '$(AB)^{-1} = A^{-1}B^{-1}$', por: 'El orden se invierte, como en la traspuesta: $(AB)^{-1} = B^{-1}A^{-1}$. Para deshacer «ponerse calcetines y luego zapatos» hay que quitarse primero los zapatos.' },
+    { e: '$AX + X = B \\;\\Rightarrow\\; (A + 1)X = B$', por: 'A una matriz no se le suma un número. El «uno» es la identidad: $(A + I)X = B$.' },
+    { e: 'Olvidar trasponer la matriz de adjuntos', por: 'La fórmula lleva $(\\operatorname{Adj} A)^t$. Sin la traspuesta, la comprobación $A\\cdot A^{-1}$ no da $I$.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
+
+  p.exercise({
+    title: '¿Tiene inversa?',
+    level: 'basico',
+    gen: function (r) {
+      var sing = r.bool();
+      var a = r.pm(1, 5), b = r.pm(1, 5), k = r.pick([-2, -1, 2, 3]);
+      var M = sing ? [[a, b], [k * a, k * b]] : [[a, b], [r.pm(0, 5), r.pm(0, 5)]];
+      var d = det2(M);
+      if (!sing && d === 0) return null;
+      return { M: M, d: d, tiene: d !== 0 };
+    },
+    ask: function (d) { return '¿Tiene inversa la matriz $A = ' + ML.matTex(d.M) + '$?'; },
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'Sí', v: 'si' }, { t: 'No', v: 'no' }] }],
+    sol: function (d) { return { r: d.tiene ? 'si' : 'no' }; },
+    hint: function () { return 'Calcula el determinante. Hay inversa si y solo si no es cero.'; },
+    steps: function (d) {
+      return ['$\\det A = ' + d.M[0][0] + '\\cdot' + pa(d.M[1][1]) + ' - ' + pa(d.M[0][1]) + '\\cdot' + pa(d.M[1][0]) + ' = ' + d.d + '$',
+        d.tiene ? 'Distinto de cero: la inversa existe.' : 'Vale cero (las filas son proporcionales): no hay inversa.'];
+    },
+    answer: function (d) { return d.tiene ? 'Sí, porque det A = ' + d.d + ' ≠ 0.' : 'No: det A = 0.'; }
+  });
 
   p.exercise({
     title: 'Despejar la incógnita',

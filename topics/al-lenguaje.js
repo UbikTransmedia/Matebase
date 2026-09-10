@@ -1,6 +1,11 @@
 /* Tema: Lenguaje algebraico y monomios */
 Course.topic('al-lenguaje', function (p) {
 
+  p.puente('En aritmética cada número iba con nombre y apellido: 7, $\\frac{3}{4}$, $2^3$. El álgebra ' +
+    'los sustituye por letras para hablar de todos a la vez. No hay que aprender a operar de nuevo: la ' +
+    'jerarquía de operaciones, las propiedades de las potencias y el manejo de los signos siguen ' +
+    'valiendo tal cual, solo que ahora algunos números no se ven.', 'Por dónde empezamos');
+
   p.text('El álgebra empieza con una idea sencilla y enorme: usar una <strong>letra</strong> para ' +
     'representar un número que no conocemos, o que puede ser cualquiera. Con eso se pasa de resolver ' +
     '<em>un</em> problema a resolver <em>todos los problemas de ese tipo a la vez</em>.');
@@ -40,6 +45,24 @@ Course.topic('al-lenguaje', function (p) {
     'en castellano y no lo es en álgebra. $2x+5$ y $2(x+5)$ son cosas distintas. Esa precisión es ' +
     'justamente para lo que sirven los paréntesis.', null, 'Por qué el álgebra es más clara que el idioma');
 
+  p.comprueba('«El triple de la suma de un número y 4». ¿Cómo se escribe?', [
+    { t: '$3x + 4$', ok: false, por: 'Eso es «el triple de un número, más 4». La frase dice el triple <em>de la suma</em>: la suma va dentro del paréntesis.' },
+    { t: '$3(x + 4)$', ok: true, por: 'Primero se forma la suma $x + 4$ y después se triplica entera. El paréntesis guarda el orden de la frase.' },
+    { t: '$x + 12$', ok: false, por: 'Es lo que sale al desarrollar solo la mitad: $3(x+4) = 3x + 12$, no $x + 12$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Traducir una frase entera',
+    enunciado: 'Escribir con álgebra: «la suma de un número y el doble de su siguiente vale 43».',
+    pasos: [
+      { t: '<strong>Nombrar la incógnita.</strong> «Un número» es $x$. Escribirlo explícitamente evita medio problema: <em>llamo $x$ al número</em>.', antes: '¿Qué es lo primero que hay que fijar antes de escribir nada?' },
+      { t: '<strong>Traducir trozo a trozo.</strong> «Su siguiente» es $x + 1$. «El doble de su siguiente» es $2(x + 1)$: el doble de <em>todo</em> el siguiente, así que el paréntesis es obligatorio.', antes: '«El doble de su siguiente»: ¿$2x + 1$ o $2(x+1)$?' },
+      { t: '<strong>Montar la frase.</strong> «La suma de un número y el doble de su siguiente» es $x + 2(x+1)$, y «vale 43» pone el signo igual: $x + 2(x+1) = 43$.' },
+      { t: '<strong>Comprobar con un número.</strong> Si $x = 5$, la frase dice $5 + 2\\cdot 6 = 17$ y la expresión da $5 + 2(5+1) = 17$. Coinciden: la traducción es fiel.', antes: '¿Cómo sabrías que la traducción es correcta sin resolver nada?' }
+    ],
+    cierre: 'Comprobar con un valor concreto es la mejor defensa contra un paréntesis mal puesto: si la frase y la fórmula dan números distintos, la traducción está mal.'
+  });
+
   p.util('Traducir a álgebra es exactamente lo que hace una hoja de cálculo. Cuando escribes en una celda ' +
     '<code>=B2*1,21</code> estás poniendo «el precio más el IVA» en lenguaje algebraico, con $x$ ' +
     'llamada B2. Toda la contabilidad del mundo, el presupuesto de una obra y la nómina que cobrarás ' +
@@ -55,6 +78,7 @@ Course.topic('al-lenguaje', function (p) {
   p.demo({
     title: 'La expresión como máquina',
     intro: 'Mueve el valor de x y mira lo que devuelve cada expresión. Observa que expresiones distintas pueden coincidir para un valor concreto y separarse en todos los demás.',
+    predice: '¿Hay algún valor de $x$ para el que $2x + 5$ y $2(x + 5)$ den lo mismo? Piensa en la diferencia entre las dos antes de mover el deslizador.',
     build: function (host, d) {
       var x = 3;
       var exprs = [
@@ -93,6 +117,12 @@ Course.topic('al-lenguaje', function (p) {
 
   p.formula('\\underbrace{-5}_{\\text{coeficiente}}\\ \\underbrace{x^3y^2}_{\\text{parte literal}} \\qquad \\text{grado } 3+2=5');
 
+  p.comprueba('¿Qué grado tiene el monomio $7xy^4$?', [
+    { t: '4', ok: false, por: 'Ese es solo el exponente de $y$. La $x$ también cuenta: lleva exponente 1 aunque no se escriba.' },
+    { t: '5', ok: true, por: 'El grado es la suma de los exponentes: $1 + 4 = 5$.' },
+    { t: '7', ok: false, por: 'El 7 es el coeficiente; no interviene en el grado.' }
+  ]);
+
   p.sub('Semejantes: la regla que lo gobierna todo');
 
   p.text('Dos monomios son <strong>semejantes</strong> si tienen exactamente la misma parte literal. ' +
@@ -108,6 +138,13 @@ Course.topic('al-lenguaje', function (p) {
     'los coeficientes y se suman los exponentes de cada letra.');
 
   p.formula('(-5x^3y)\\cdot(2x^2y^4) = -10\\,x^{5}y^{5}');
+
+  p.trampas([
+    { e: '$3x + 2x^2 = 5x^3$', por: 'No son semejantes: no se pueden sumar. La expresión se queda como está, $3x + 2x^2$.' },
+    { e: '$x + x = x^2$', por: 'Sumar es contar: una $x$ y otra $x$ son $2x$. El cuadrado aparece al <em>multiplicar</em>: $x\\cdot x = x^2$.' },
+    { e: '$2x\\cdot 3x = 6x$', por: 'Al multiplicar, los exponentes se suman: $x\\cdot x = x^2$, así que da $6x^2$.' },
+    { e: '$(2x)^2 = 2x^2$', por: 'El cuadrado afecta al coeficiente también: $(2x)^2 = 2^2 x^2 = 4x^2$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Que solo se puedan sumar monomios semejantes no es una regla arbitraria: es que <strong>no se ' +

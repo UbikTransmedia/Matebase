@@ -1,6 +1,12 @@
 /* Tema: Matrices y determinantes */
 Course.topic('al-matrices', function (p) {
 
+  p.puente('En los sistemas de ecuaciones lo que de verdad se manipulaba eran los coeficientes: las ' +
+    'letras $x$, $y$ solo marcaban la columna. Si se quitan las letras y se dejan los números en su ' +
+    'sitio, queda una tabla. Ese objeto, la matriz, tiene sus propias operaciones, y una de ellas, ' +
+    'el producto, no se parece a nada de lo visto hasta ahora. Merece la pena entender por qué se ' +
+    'define así antes de practicarlo.');
+
   p.text('Una <strong>matriz</strong> es una tabla rectangular de números. Suena a poco y es una de ' +
     'las herramientas más potentes que existen: sirve para resolver sistemas enormes, para describir ' +
     'transformaciones geométricas, para el buscador de Google y para casi toda la inteligencia artificial.');
@@ -16,6 +22,12 @@ Course.topic('al-matrices', function (p) {
 
   p.text('Se nombra $a_{ij}$ al elemento de la fila $i$ y la columna $j$. Siempre en ese orden: ' +
     'primero fila, después columna.');
+
+  p.comprueba('En la matriz $A$ de arriba, ¿cuánto vale $a_{21}$?', [
+    { t: '$-1$', ok: false, por: 'Ese es $a_{12}$: fila 1, columna 2. El primer subíndice siempre es la fila.' },
+    { t: '$3$', ok: true, por: 'Fila 2, columna 1: el primer número de la segunda fila.' },
+    { t: '$5$', ok: false, por: '$5$ está en la fila 2, columna 2: es $a_{22}$.' }
+  ]);
 
   p.section('Tipos de matrices y la traspuesta');
 
@@ -84,6 +96,7 @@ Course.topic('al-matrices', function (p) {
   p.demo({
     title: 'Fila por columna, paso a paso',
     intro: 'Pulsa una casilla del resultado y verás qué fila y qué columna se han combinado para obtenerla.',
+    predice: 'Para la casilla $c_{11}$ se combinan la fila 1 de $A$, $(2, -1)$, y la columna 1 de $B$, $(1, -2)$. Calcula $2\\cdot 1 + (-1)\\cdot(-2)$ antes de mirar.',
     build: function (host, d) {
       var A = [[2, -1], [3, 5]], B = [[1, 4], [-2, 0]];
       var sel = [0, 0];
@@ -159,6 +172,18 @@ Course.topic('al-matrices', function (p) {
       W.hint(host, 'Haz clic en cualquier casilla verde del resultado.');
       pinta();
     }
+  });
+
+  p.ejemplo({
+    title: 'Un producto completo, y el mismo al revés',
+    enunciado: 'Con $A = \\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}$ y $B = \\begin{pmatrix} 0 & 1 \\\\ 5 & -1 \\end{pmatrix}$, calcular $A\\cdot B$ y $B\\cdot A$.',
+    pasos: [
+      { t: '<strong>Dimensiones.</strong> $(2\\times 2)\\cdot(2\\times 2)$: las columnas de la primera (2) coinciden con las filas de la segunda (2). Se puede, y el resultado es $2\\times 2$.', antes: '¿Se pueden multiplicar? ¿Qué dimensión tendrá el resultado?' },
+      { t: '<strong>Primera fila de $A$ por cada columna de $B$.</strong> $c_{11} = 1\\cdot 0 + 2\\cdot 5 = 10$; $c_{12} = 1\\cdot 1 + 2\\cdot(-1) = -1$.', antes: 'Fila $(1, 2)$ por columna $(0, 5)$: ¿cuánto da?' },
+      { t: '<strong>Segunda fila de $A$.</strong> $c_{21} = 3\\cdot 0 + 4\\cdot 5 = 20$; $c_{22} = 3\\cdot 1 + 4\\cdot(-1) = -1$. Así que $A\\cdot B = \\begin{pmatrix} 10 & -1 \\\\ 20 & -1 \\end{pmatrix}$.' },
+      { t: '<strong>Ahora $B\\cdot A$.</strong> Filas de $B$ por columnas de $A$: $0\\cdot 1 + 1\\cdot 3 = 3$, $0\\cdot 2 + 1\\cdot 4 = 4$, $5\\cdot 1 - 1\\cdot 3 = 2$, $5\\cdot 2 - 1\\cdot 4 = 6$. $B\\cdot A = \\begin{pmatrix} 3 & 4 \\\\ 2 & 6 \\end{pmatrix}$.', antes: '¿Saldrá lo mismo al cambiar el orden? Calcula al menos la primera casilla.' }
+    ],
+    cierre: 'Dos productos completamente distintos con las mismas dos matrices. No es un caso raro: es lo normal. Cuando $AB = BA$ se dice que las matrices <em>conmutan</em>, y es la excepción.'
   });
 
   /* ---------------------------------------------------------------- */
@@ -264,6 +289,19 @@ Course.topic('al-matrices', function (p) {
       W.hint(host, 'Prueba a poner los dos vectores en la misma dirección: el determinante se anula.');
     }
   });
+
+  p.comprueba('¿Cuánto vale $\\det\\begin{pmatrix} 2 & 4 \\\\ 1 & 2 \\end{pmatrix}$?', [
+    { t: '$8$', ok: false, por: 'Eso es solo $2\\cdot 4$. Falta restar el producto de la otra diagonal: $2\\cdot 2 - 4\\cdot 1 = 0$.' },
+    { t: '$0$', ok: true, por: '$2\\cdot 2 - 4\\cdot 1 = 0$. Las filas $(2, 4)$ y $(1, 2)$ son proporcionales: los dos vectores están alineados y el paralelogramo no tiene área.' },
+    { t: '$4$', ok: false, por: 'Es $ad - bc = 4 - 4 = 0$. Con filas proporcionales el determinante siempre se anula.' }
+  ]);
+
+  p.trampas([
+    { e: 'Multiplicar casilla a casilla', por: 'El producto es fila por columna. $\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}\\begin{pmatrix} 1 & 0 \\\\ 0 & 1 \\end{pmatrix}$ tiene que dar la misma matriz, no $\\begin{pmatrix} 1 & 0 \\\\ 0 & 4 \\end{pmatrix}$.' },
+    { e: '$A\\cdot B = B\\cdot A$', por: 'Casi nunca. Si en un cálculo cambias el orden de un producto, el resultado cambia.' },
+    { e: 'Aplicar Sarrus a una matriz $4\\times 4$', por: 'Sarrus solo vale para $3\\times 3$. Un $4\\times 4$ se desarrolla por adjuntos.' },
+    { e: '$(A + B)^2 = A^2 + 2AB + B^2$', por: 'Al desarrollar sale $A^2 + AB + BA + B^2$, y $AB \\ne BA$ en general: los dos términos del medio no se juntan.' }
+  ]);
 
   p.hist('Los determinantes son más antiguos que las matrices, que es lo contrario de lo que parece al ' +
     'estudiarlos. Se usaban para resolver sistemas desde el siglo XVII —Seki en Japón y Leibniz en ' +

@@ -1,6 +1,11 @@
 /* Tema: Números complejos */
 Course.topic('al-complejos', function (p) {
 
+  p.puente('En las ecuaciones de segundo grado, cuando el discriminante salía negativo, la respuesta ' +
+    'era «no hay solución real». Este tema toma ese callejón sin salida y lo abre inventando un ' +
+    'número nuevo. Todo lo que sabes de operar con binomios sigue valiendo; solo se añade una regla, ' +
+    '$i^2 = -1$, y al final aparece una recompensa geométrica: multiplicar se convierte en girar.');
+
   p.text('$x^2 + 1 = 0$ no tiene solución real: ningún número real elevado al cuadrado da negativo. ' +
     'Durante siglos la respuesta fue «esta ecuación no tiene solución». Hasta que alguien probó a ' +
     '<em>inventarse</em> una.');
@@ -34,6 +39,7 @@ Course.topic('al-complejos', function (p) {
   p.demo({
     title: 'Un complejo es un punto del plano',
     intro: 'Arrastra el punto. Verás sus dos formas de escribirlo: por coordenadas (binómica) y por distancia y ángulo (polar).',
+    predice: 'Lleva el punto a $(0, 1)$, que es el propio $i$. Antes de hacerlo: ¿qué módulo tendrá? ¿Y qué ángulo?',
     build: function (host, d) {
       var out = W.readout(host, '');
       W.board(host, {
@@ -94,6 +100,25 @@ Course.topic('al-complejos', function (p) {
     'Su gracia es que $z\\cdot\\bar{z} = a^2+b^2 = |z|^2$ es siempre un <em>número real positivo</em>. ' +
     'Por eso sirve para quitar la $i$ del denominador.', 'ok');
 
+  p.comprueba('¿Cuánto vale $(2 + i)(2 - i)$?', [
+    { t: '$3$', ok: false, por: 'Es suma por diferencia: $4 - i^2$. Y $i^2 = -1$, así que $4 - (-1) = 5$, no $4 - 1$.' },
+    { t: '$5$', ok: true, por: '$(2+i)(2-i) = 4 - i^2 = 4 + 1 = 5$: un número real, igual a $|2+i|^2$. Por eso el conjugado limpia los denominadores.' },
+    { t: '$4 - i$', ok: false, por: 'Los términos cruzados $-2i + 2i$ se cancelan. Solo queda $4 - i^2 = 5$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Dividir dos complejos',
+    enunciado: 'Calcular $\\dfrac{3 + 2i}{1 - i}$.',
+    pasos: [
+      { t: '<strong>Elegir el multiplicador.</strong> El conjugado del denominador es $1 + i$. Se multiplica arriba y abajo por él: así el denominador se vuelve real y la fracción no cambia de valor.', antes: '¿Por qué número hay que multiplicar arriba y abajo?' },
+      { t: '<strong>Numerador.</strong> $(3+2i)(1+i) = 3 + 3i + 2i + 2i^2 = 3 + 5i - 2 = 1 + 5i$.', antes: 'Desarrolla $(3+2i)(1+i)$. ¿Qué pasa con el $2i^2$?' },
+      { t: '<strong>Denominador.</strong> $(1-i)(1+i) = 1 - i^2 = 2$.' },
+      { t: '<strong>Resultado.</strong> $\\dfrac{1 + 5i}{2} = \\dfrac{1}{2} + \\dfrac{5}{2}i$.' },
+      { t: '<strong>Comprobar.</strong> $\\left(\\dfrac{1}{2} + \\dfrac{5}{2}i\\right)(1 - i) = \\dfrac{1}{2} - \\dfrac{1}{2}i + \\dfrac{5}{2}i - \\dfrac{5}{2}i^2 = 3 + 2i$ ✓.', antes: '¿Cómo comprobarías una división sin volver a dividir?' }
+    ],
+    cierre: 'Dividir es multiplicar por el conjugado y luego repartir el denominador real entre las dos partes. La comprobación es multiplicar el resultado por el divisor, como con números.'
+  });
+
   p.sub('Las potencias de i se repiten cada cuatro');
   p.text('Elevar $i$ a potencias sucesivas no produce números cada vez mayores, como pasaría con ' +
     'cualquier número real: produce un ciclo que se repite. La razón es que $i^2=-1$ y, por tanto, ' +
@@ -146,6 +171,7 @@ Course.topic('al-complejos', function (p) {
   p.demo({
     title: 'Multiplicar es girar y estirar',
     intro: 'Arrastra los dos complejos. El producto tiene por módulo el producto de los módulos y por argumento la suma de los argumentos.',
+    predice: 'Pon $z_2$ en $(0, 1)$, es decir, $z_2 = i$. ¿Dónde caerá el producto $z_1\\cdot i$ respecto a $z_1$? Piensa en giros antes de mirar.',
     build: function (host, d) {
       var out = W.readout(host, '');
       W.board(host, {
@@ -236,6 +262,13 @@ Course.topic('al-complejos', function (p) {
     'exactamente $n$ raíces</strong> (contando multiplicidades). Ninguna ecuación polinómica se queda ' +
     'ya sin solución. Ese fue el premio a inventarse $i$.');
 
+  p.trampas([
+    { e: '$\\sqrt{-4}\\cdot\\sqrt{-9} = \\sqrt{36} = 6$', por: 'La regla $\\sqrt{a}\\sqrt{b} = \\sqrt{ab}$ es solo para positivos. Con $i$: $2i\\cdot 3i = 6i^2 = -6$.' },
+    { e: '$i^2 = 1$', por: 'Es $-1$: esa es toda la definición. $i^4$ sí vale 1.' },
+    { e: 'Dividir «tachando» la $i$: $\\dfrac{3i}{1+i} = \\dfrac{3}{1+1}$', por: 'La $i$ del denominador está sumada, no multiplicando. Se multiplica arriba y abajo por el conjugado $1 - i$.' },
+    { e: 'Argumento de $-1 + i$ con la calculadora: $\\arctan(-1) = -45^\\circ$', por: 'La arcotangente no distingue cuadrantes. El punto $(-1, 1)$ está en el segundo: $135^\\circ$.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('En forma polar, multiplicar es girar. Esa idea es la base del tratamiento digital de señales: ' +
     'cuando el móvil separa tu voz del ruido, cuando una canción se guarda en MP3 o cuando una foto ' +
@@ -252,17 +285,9 @@ Course.topic('al-complejos', function (p) {
       var res = n % 4;
       return { n: n, res: res, texto: ['1', 'i', '-1', '-i'][res] };
     },
-    ask: function (d) {
-      return 'Calcula $i^{' + d.n + '}$.<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>1</code>, <code>-1</code>, ' +
-        '<code>i</code> o <code>-i</code>.</span>';
-    },
-    fields: [{ name: 'v', label: 'Resultado', w: 'tiny' }],
+    ask: function (d) { return 'Calcula $i^{' + d.n + '}$.'; },
+    fields: [{ name: 'v', label: 'Resultado', opts: [{ t: '$1$', v: '1' }, { t: '$i$', v: 'i' }, { t: '$-1$', v: '-1' }, { t: '$-i$', v: '-i' }] }],
     sol: function (d) { return { v: d.texto }; },
-    check: function (v, d) {
-      var t = v.raw.v.trim().toLowerCase().replace(/\s/g, '').replace('+', '');
-      return t === d.texto.toLowerCase();
-    },
     hint: function (d) { return 'Las potencias de $i$ se repiten cada 4. Divide $' + d.n + '$ entre 4 y quédate con el resto.'; },
     steps: function (d) {
       return ['$i^1=i$, $i^2=-1$, $i^3=-i$, $i^4=1$, y vuelta a empezar.',

@@ -1,6 +1,11 @@
 /* Tema: Identidades notables y factorización */
 Course.topic('al-identidades', function (p) {
 
+  p.puente('Ya sabes multiplicar dos polinomios: cada término por cada término y luego reducir. Este ' +
+    'tema no añade ninguna regla; señala tres productos que salen tan a menudo que merece la pena ' +
+    'tenerlos hechos de antemano. Y les da la vuelta: reconocer un producto ya desarrollado es ' +
+    'factorizar, que es la herramienta con la que Ruffini y las ecuaciones trabajan.');
+
   p.text('Hay tres productos que aparecen tantas veces que conviene reconocerlos de un vistazo. No ' +
     'tienen nada de especial: si los desarrollas a mano, término a término, salen solos. Lo que pasa ' +
     'es que aparecen <em>constantemente</em>, y quien los reconoce se ahorra media hoja de cuentas ' +
@@ -34,9 +39,16 @@ Course.topic('al-identidades', function (p) {
     '$a^2+b^2$. Falta el doble producto $2ab$. Compruébalo con números: $(3+4)^2 = 49$, mientras que ' +
     '$3^2+4^2 = 25$.', 'warn', 'El error más caro del álgebra');
 
+  p.comprueba('Desarrolla $(x - 5)^2$.', [
+    { t: '$x^2 - 25$', ok: false, por: 'Falta el doble producto. $x^2 - 25$ es $(x-5)(x+5)$, otra identidad distinta.' },
+    { t: '$x^2 - 10x + 25$', ok: true, por: 'Cuadrado del primero, menos el doble producto $2\\cdot x\\cdot 5$, más el cuadrado del segundo. El último término siempre es positivo.' },
+    { t: '$x^2 - 10x - 25$', ok: false, por: 'El último término es $(-5)^2 = +25$: menos por menos da más.' }
+  ]);
+
   p.demo({
     title: 'Por qué sobra ese 2ab',
     intro: 'Un cuadrado de lado $a+b$ se parte en cuatro trozos. Dos son cuadrados y dos son rectángulos iguales: ahí está el doble producto.',
+    predice: 'Con $a = 3$ y $b = 2$: ¿cuánto vale $(a+b)^2$? ¿Y $a^2 + b^2$? La diferencia entre los dos números tiene que estar en algún sitio del dibujo.',
     build: function (host, d) {
       var a = 3, b = 2;
       var out = W.readout(host, '');
@@ -98,6 +110,18 @@ Course.topic('al-identidades', function (p) {
 
   p.formula('x^2 - 5x + 6 = (x-2)(x-3)', 'factorizar usando las raíces');
 
+  p.ejemplo({
+    title: 'Factorizar del todo, en el orden correcto',
+    enunciado: 'Factorizar $2x^3 - 8x$.',
+    pasos: [
+      { t: '<strong>Factor común.</strong> Los dos términos comparten un $2$ y una $x$: $2x^3 - 8x = 2x(x^2 - 4)$.', antes: '¿Qué tienen en común $2x^3$ y $8x$?' },
+      { t: '<strong>Identidad notable.</strong> Lo que queda dentro, $x^2 - 4$, es una diferencia de cuadrados: $x^2 - 2^2 = (x-2)(x+2)$.', antes: '$x^2 - 4$: ¿te recuerda a alguna de las tres identidades?' },
+      { t: '<strong>Resultado.</strong> $2x^3 - 8x = 2x(x-2)(x+2)$. Ya no se puede seguir: cada factor es de grado 1.' },
+      { t: '<strong>Comprobar.</strong> Con $x = 3$: la expresión original da $54 - 24 = 30$ y la factorizada $6\\cdot 1\\cdot 5 = 30$ ✓.', antes: '¿Cómo comprobarías que no te has dejado nada, sin volver a multiplicar todo?' }
+    ],
+    cierre: 'Si se intenta la identidad antes que el factor común, $2x^3 - 8x$ no se parece a nada. El orden de la lista no es un capricho: el factor común destapa lo demás.'
+  });
+
   p.demo({
     title: 'De las raíces a los factores',
     intro: 'Mueve las dos raíces y observa cómo la parábola corta el eje justo ahí, y cómo cambia el polinomio desarrollado.',
@@ -124,6 +148,12 @@ Course.topic('al-identidades', function (p) {
       W.hint(host, 'Arrastra los puntos rojos sobre el eje horizontal.');
     }
   });
+
+  p.trampas([
+    { e: '$(a+b)^2 = a^2 + b^2$', por: 'Falta $2ab$. Con $a = 3$, $b = 4$: $49 \\ne 25$.' },
+    { e: '$x^2 + 9 = (x+3)^2$', por: 'Un cuadrado perfecto necesita el término del medio: $(x+3)^2 = x^2 + 6x + 9$. Y $x^2 + 9$, suma de cuadrados, no se factoriza con números reales.' },
+    { e: 'Empezar por la identidad y olvidar el factor común', por: '$3x^2 - 12$ no es ninguna identidad hasta que sacas el 3: $3(x^2 - 4) = 3(x-2)(x+2)$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Factorizar es la operación que sostiene la criptografía moderna, precisamente porque con ' +

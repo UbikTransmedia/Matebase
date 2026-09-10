@@ -1,6 +1,11 @@
 /* Tema: Ecuaciones de segundo grado */
 Course.topic('al-ec2', function (p) {
 
+  p.puente('En las ecuaciones de primer grado la incógnita se aislaba con sumas y divisiones. Con un ' +
+    '$x^2$ eso ya no basta, y hacen falta las dos cosas que acabas de aprender: factorizar (un producto ' +
+    'es cero si lo es un factor) y las identidades notables, que son las que están detrás de la fórmula ' +
+    'general. Lo nuevo es que ahora puede haber dos soluciones, una o ninguna.');
+
   p.text('Una ecuación de <strong>segundo grado</strong> es la que se puede escribir así, con $a \\ne 0$:');
 
   p.formula('ax^2 + bx + c = 0', 'forma general');
@@ -44,6 +49,7 @@ Course.topic('al-ec2', function (p) {
   p.demo({
     title: 'La parábola y el discriminante',
     intro: 'Mueve los tres coeficientes. Las soluciones de la ecuación son exactamente los puntos donde la curva cruza el eje horizontal.',
+    predice: 'Empieza con $x^2 - x - 6 = 0$. Busca dos números que multiplicados den $-6$ y sumados $1$: ¿dónde cortará la parábola al eje? Después sube $c$ hasta que deje de cortarlo.',
     build: function (host, d) {
       var a = 1, b = -1, c = -6;
       var out = W.readout(host, '');
@@ -81,6 +87,19 @@ Course.topic('al-ec2', function (p) {
     }
   });
 
+  p.ejemplo({
+    title: 'La fórmula general, con los signos vigilados',
+    enunciado: 'Resolver $2x^2 - 5x - 3 = 0$.',
+    pasos: [
+      { t: '<strong>Identificar.</strong> $a = 2$, $b = -5$, $c = -3$. Los signos van con el número: $b$ no es 5, es $-5$.', antes: '¿Cuánto valen $a$, $b$ y $c$? Con signo.' },
+      { t: '<strong>Discriminante.</strong> $\\Delta = b^2 - 4ac = (-5)^2 - 4\\cdot 2\\cdot(-3) = 25 + 24 = 49$. Positivo: habrá dos soluciones. Y es un cuadrado perfecto, así que saldrán exactas.', antes: 'Calcula $\\Delta$. ¿Cuántas soluciones va a haber?' },
+      { t: '<strong>Fórmula.</strong> $x = \\dfrac{-(-5) \\pm \\sqrt{49}}{2\\cdot 2} = \\dfrac{5 \\pm 7}{4}$. El $-b$ convierte el $-5$ en $+5$.' },
+      { t: '<strong>Las dos soluciones.</strong> $x_1 = \\dfrac{12}{4} = 3$ y $x_2 = \\dfrac{-2}{4} = -\\dfrac{1}{2}$.', antes: 'Una con el más y otra con el menos. ¿Cuáles son?' },
+      { t: '<strong>Comprobar con Vieta.</strong> Suma: $3 - \\frac{1}{2} = \\frac{5}{2} = -\\frac{b}{a}$ ✓. Producto: $3\\cdot(-\\frac{1}{2}) = -\\frac{3}{2} = \\frac{c}{a}$ ✓.' }
+    ],
+    cierre: 'Cuando $a \\ne 1$, las relaciones de Vieta son $-b/a$ y $c/a$. Comprobar con ellas tarda diez segundos y detecta cualquier error de signo.'
+  });
+
   /* ---------------------------------------------------------------- */
   p.util('El discriminante responde a «¿llega o no llega?» sin necesidad de resolver nada. La trayectoria ' +
     'de un balón es una parábola: preguntar si entra por la escuadra es preguntar si esa parábola ' +
@@ -100,6 +119,18 @@ Course.topic('al-ec2', function (p) {
   p.note('En el caso $ax^2+bx=0$ <strong>jamás</strong> dividas los dos lados entre $x$: estarías ' +
     'perdiendo la solución $x=0$. Saca factor común y usa que un producto es cero si lo es alguno ' +
     'de sus factores.', 'warn', 'La solución que todo el mundo pierde');
+
+  p.comprueba('¿Cuáles son las soluciones de $x^2 = 5x$?', [
+    { t: 'Solo $x = 5$', ok: false, por: 'Has dividido entre $x$ y se ha perdido una solución. Comprueba: $x = 0$ también cumple $0 = 0$.' },
+    { t: '$x = 0$ y $x = 5$', ok: true, por: '$x^2 - 5x = 0 \\Rightarrow x(x - 5) = 0$: o $x = 0$ o $x = 5$.' },
+    { t: '$x = \\pm\\sqrt{5}$', ok: false, por: 'Eso sería $x^2 = 5$. Aquí a la derecha hay $5x$, no $5$.' }
+  ]);
+
+  p.trampas([
+    { e: 'Meter $b = 5$ en la fórmula cuando la ecuación es $x^2 - 5x + 6 = 0$', por: 'El signo va con el coeficiente: $b = -5$, y entonces $-b = 5$.' },
+    { e: '$x = -b \\pm \\dfrac{\\sqrt{\\Delta}}{2a}$', por: 'El $2a$ divide a <em>todo</em> el numerador, incluido el $-b$.' },
+    { e: 'Dividir $x^2 = 5x$ entre $x$', por: 'Se pierde la solución $x = 0$. Se saca factor común y se iguala cada factor a cero.' }
+  ]);
 
   p.section('Suma y producto de las raíces');
 

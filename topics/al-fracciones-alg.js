@@ -1,6 +1,11 @@
 /* Tema: Fracciones algebraicas */
 Course.topic('al-fracciones-alg', function (p) {
 
+  p.puente('Dos cosas se juntan aquí: las fracciones numéricas de aritmética, con sus reglas para ' +
+    'simplificar, sumar y multiplicar, y la factorización del tema anterior. Una fracción algebraica ' +
+    'se maneja exactamente como $\\frac{6}{9}$; lo único es que, para ver qué se puede tachar, antes ' +
+    'hay que escribir el numerador y el denominador como productos.');
+
   p.text('Una <strong>fracción algebraica</strong> es un cociente de polinomios. Se manejan ' +
     'exactamente igual que las fracciones numéricas: lo único nuevo es que ahora, para simplificar, ' +
     'hay que <strong>factorizar</strong> antes.');
@@ -26,9 +31,16 @@ Course.topic('al-fracciones-alg', function (p) {
     'Mientras haya sumas a la vista no se puede tachar nada; en cuanto todo esté escrito como ' +
     'producto, se tacha sin miedo.');
 
+  p.comprueba('¿Se puede simplificar $\\dfrac{x^2 + 2x}{x}$?', [
+    { t: 'No: la $x$ de arriba es un sumando', ok: false, por: 'Antes de decidir hay que factorizar: $x^2 + 2x = x(x + 2)$. Ahora la $x$ sí es un factor de todo el numerador.' },
+    { t: 'Sí, queda $x + 2$', ok: true, por: '$\\dfrac{x(x+2)}{x} = x + 2$, válido para $x \\ne 0$. Se ha tachado un factor, no un sumando.' },
+    { t: 'Sí, queda $x^2 + 2$', ok: false, por: 'Eso es tachar solo la $x$ del segundo sumando. O se divide todo el numerador entre $x$, o nada.' }
+  ]);
+
   p.demo({
     title: 'Simplificar: lo que se puede y lo que no',
     intro: 'Compara las dos expresiones evaluándolas en varios valores. Si la simplificación fuera legítima, las dos columnas coincidirían siempre.',
+    predice: 'Antes de pulsar «tachar sumandos»: si $\\frac{x+3}{x+5}$ fuera igual a $\\frac{3}{5}$, ¿qué valdría la fracción en $x = 0$? ¿Y en $x = 1$?',
     build: function (host, d) {
       var caso = 'bien';
       var casos = {
@@ -91,6 +103,18 @@ Course.topic('al-fracciones-alg', function (p) {
   p.text('Aunque después de simplificar el $-3$ ya no aparezca, la expresión de partida seguía sin ' +
     'estar definida ahí. Es un agujero: exactamente la discontinuidad evitable que verás en límites.');
 
+  p.ejemplo({
+    title: 'Simplificar sin perder los valores prohibidos',
+    enunciado: 'Simplificar $\\dfrac{x^2 - 4}{x^2 + 4x + 4}$ e indicar para qué valores no existe.',
+    pasos: [
+      { t: '<strong>Valores prohibidos, primero.</strong> El denominador original es $x^2 + 4x + 4 = (x+2)^2$, que se anula solo en $x = -2$. Ese valor queda prohibido pase lo que pase después.', antes: '¿En qué momento hay que buscar los valores prohibidos: antes o después de simplificar?' },
+      { t: '<strong>Factorizar arriba.</strong> $x^2 - 4$ es una diferencia de cuadrados: $(x-2)(x+2)$.', antes: '$x^2 - 4$ y $x^2 + 4x + 4$: ¿qué identidad notable es cada uno?' },
+      { t: '<strong>Tachar el factor común.</strong> $\\dfrac{(x-2)(x+2)}{(x+2)(x+2)} = \\dfrac{x-2}{x+2}$. Se cancela <em>un</em> $(x+2)$ de arriba con <em>uno</em> de abajo; el otro se queda.' },
+      { t: '<strong>Escribir la respuesta completa.</strong> $\\dfrac{x^2-4}{x^2+4x+4} = \\dfrac{x-2}{x+2}$ para $x \\ne -2$.', antes: 'La fracción simplificada también tiene un valor prohibido. ¿Coincide con el original?' }
+    ],
+    cierre: 'Aquí el valor prohibido sobrevive a la simplificación, pero en $\\frac{x^2-9}{x^2+5x+6}$ del principio el $-3$ desaparecía del denominador simplificado y seguía prohibido. Por eso se buscan siempre en el original.'
+  });
+
   p.util('Los valores prohibidos son la causa de una buena parte de los fallos de software. Cuando una ' +
     'aplicación se cierra sola o muestra un error incomprensible, muy a menudo es que algo ha ' +
     'acabado dividiendo entre cero: un promedio calculado sobre una lista vacía, un porcentaje sobre ' +
@@ -122,6 +146,12 @@ Course.topic('al-fracciones-alg', function (p) {
     'mayor exponente.');
 
   p.formula('\\frac{1}{x-2} + \\frac{3}{x+1} = \\frac{(x+1) + 3(x-2)}{(x-2)(x+1)} = \\frac{4x-5}{(x-2)(x+1)}');
+
+  p.trampas([
+    { e: '$\\dfrac{x+3}{x+5} = \\dfrac{3}{5}$', por: 'Se han tachado sumandos. Con $x = 1$: $\\frac{4}{6} \\ne \\frac{3}{5}$.' },
+    { e: 'Buscar los valores prohibidos en la fracción ya simplificada', por: 'Un factor cancelado se lleva su valor prohibido con él, pero la expresión original sigue sin existir ahí.' },
+    { e: '$\\dfrac{2}{x} - \\dfrac{x-1}{x} = \\dfrac{2 - x - 1}{x}$', por: 'El menos afecta a todo el numerador: $2 - (x - 1) = 2 - x + 1 = 3 - x$. Paréntesis al restar.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

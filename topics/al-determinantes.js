@@ -37,7 +37,7 @@ Course.topic('al-determinantes', function (p) {
   function pa(n) { return n < 0 ? '(' + n + ')' : String(n); }
   function mt(M, d) { return ML.matTex(M, d || 'vmatrix'); }
 
-  p.text('En el tema de [[al-matrices|matrices]] el determinante apareció como una cuenta: $ad - bc$ ' +
+  p.puente('En el tema de [[al-matrices|matrices]] el determinante apareció como una cuenta: $ad - bc$ ' +
     'para las de orden 2 y la regla de Sarrus para las de orden 3. Aquí se convierte en una ' +
     'herramienta. Primero, sus <strong>propiedades</strong>, que permiten calcular sin hacer todas las ' +
     'cuentas y adivinar el resultado de un vistazo. Después, el <strong>desarrollo por adjuntos</strong>, ' +
@@ -69,9 +69,16 @@ Course.topic('al-determinantes', function (p) {
       '$2\\det A$.<br><br>La segunda es un aviso: el determinante no se lleva bien con la suma. Con el ' +
       'producto sí; con la suma no hay fórmula.');
 
+  p.comprueba('$A$ es una matriz $3\\times 3$ con $\\det A = 5$. ¿Cuánto vale $\\det(2A)$?', [
+    { t: '$10$', ok: false, por: 'Multiplicar la matriz por 2 multiplica <em>cada una de las tres filas</em> por 2, y cada fila aporta un factor 2: $2^3\\cdot 5 = 40$.' },
+    { t: '$40$', ok: true, por: '$\\det(kA) = k^n\\det A$ con $n = 3$: $8\\cdot 5 = 40$. Geométricamente, doblar las tres aristas de una caja multiplica su volumen por 8.' },
+    { t: '$8$', ok: false, por: '$8$ es el factor $2^3$. Falta multiplicarlo por el determinante original: $8\\cdot 5 = 40$.' }
+  ]);
+
   p.demo({
     title: 'Operaciones de fila y lo que le pasa al determinante',
     intro: 'Aplica operaciones a la matriz y mira cómo cambia el determinante. Cada botón es una propiedad: fíjate en cuáles lo dejan igual, cuáles le cambian el signo y cuáles lo multiplican.',
+    predice: 'La matriz de partida tiene determinante $-11$. Antes de pulsar: si intercambias F1 y F2, ¿qué saldrá? ¿Y si multiplicas F1 por 2? ¿Y con F3 ← F3 − 2·F2?',
     build: function (host) {
       var orig = [[2, 1, 3], [1, 0, 2], [4, 1, 1]];
       var M, nota;
@@ -117,9 +124,23 @@ Course.topic('al-determinantes', function (p) {
       'es elegir <strong>la que tenga más ceros</strong>, porque cada cero es un término que no hay que ' +
       'calcular.');
 
+  p.ejemplo({
+    title: 'Un determinante 3×3 por adjuntos, eligiendo bien la fila',
+    enunciado: 'Calcular $\\begin{vmatrix} 2 & 1 & 3 \\\\ 1 & 0 & 2 \\\\ 4 & 1 & 1 \\end{vmatrix}$ desarrollando por una fila.',
+    pasos: [
+      { t: '<strong>Elegir la fila.</strong> La segunda tiene un cero en el medio: desarrollando por ella solo hay dos términos que calcular, no tres.', antes: '¿Qué fila o columna elegirías? Busca ceros.' },
+      { t: '<strong>Signos de la fila 2.</strong> En el tablero de ajedrez la segunda fila es $-\\ +\\ -$. Así que $\\det = -1\\cdot M_{21} + 0\\cdot M_{22} - 2\\cdot M_{23}$.', antes: '¿Qué signos llevan los tres elementos de la fila 2?' },
+      { t: '<strong>Los menores.</strong> Tachando fila 2 y columna 1: $M_{21} = \\begin{vmatrix} 1 & 3 \\\\ 1 & 1 \\end{vmatrix} = 1 - 3 = -2$. Tachando fila 2 y columna 3: $M_{23} = \\begin{vmatrix} 2 & 1 \\\\ 4 & 1 \\end{vmatrix} = 2 - 4 = -2$.', antes: 'Tacha fila 2 y columna 1: ¿qué $2\\times 2$ queda?' },
+      { t: '<strong>Sumar.</strong> $\\det = -1\\cdot(-2) - 2\\cdot(-2) = 2 + 4 = 6$.' },
+      { t: '<strong>Comprobar por Sarrus.</strong> $0 + 8 + 3 - 0 - 1 - 4 = 6$ ✓. Dos métodos, un resultado: eso es lo que da seguridad en un examen.', antes: '¿Cómo comprobarías el resultado con otro método?' }
+    ],
+    cierre: 'Para un $3\\times 3$ Sarrus es más rápido; el desarrollo por adjuntos se practica aquí porque es el único que sirve para $4\\times 4$, y ahí la elección de la fila con más ceros lo es todo.'
+  });
+
   p.demo({
     title: 'Desarrollar por la fila o la columna que quieras',
     intro: 'Una matriz 4×4. Elige por dónde desarrollar: el resultado es siempre el mismo, pero el trabajo no. La columna 2 tiene tres ceros y deja un único término.',
+    predice: 'La columna 2 tiene tres ceros. ¿Cuántos determinantes $3\\times 3$ habrá que calcular si se desarrolla por ella? ¿Y si se desarrolla por la fila 1?',
     build: function (host) {
       var M = [[2, 0, 1, 3], [1, 0, 0, 2], [3, 1, 2, 0], [0, 0, 4, 1]];
       var eleccion = 'c1';
@@ -179,6 +200,12 @@ Course.topic('al-determinantes', function (p) {
       'determinante distinto de cero, su rango es 3 sin más cuentas. Si es cero, el rango es como mucho ' +
       '2, y basta encontrar un menor 2×2 no nulo para asegurar que es exactamente 2.');
 
+  p.comprueba('¿Qué rango tiene $\\begin{pmatrix} 1 & 2 & 3 \\\\ 2 & 4 & 6 \\\\ 0 & 0 & 1 \\end{pmatrix}$?', [
+    { t: '3', ok: false, por: 'La segunda fila es el doble de la primera, así que el determinante es 0 y el rango no llega a 3.' },
+    { t: '2', ok: true, por: 'Las filas 1 y 2 son proporcionales (cuentan como una), pero la tercera no es combinación de ellas: el menor $\\begin{vmatrix} 2 & 3 \\\\ 0 & 1 \\end{vmatrix} = 2 \\ne 0$ lo confirma.' },
+    { t: '1', ok: false, por: 'Rango 1 exigiría que las tres filas fueran proporcionales, y $(0, 0, 1)$ no lo es de $(1, 2, 3)$.' }
+  ]);
+
   p.text('Cuando la matriz lleva un <strong>parámetro</strong>, el determinante se convierte en una ' +
     'expresión en $k$. Los valores que lo anulan, los <strong>valores críticos</strong>, son los únicos ' +
     'en los que el rango puede bajar, y hay que estudiarlos uno por uno. Es exactamente el primer paso ' +
@@ -220,6 +247,13 @@ Course.topic('al-determinantes', function (p) {
     'es la cuenta que hace un programa de ingeniería antes de resolver un sistema enorme: si la matriz ' +
     'de una estructura no tiene rango completo, la estructura es un mecanismo y se mueve sola, es decir, ' +
     'se cae.');
+
+  p.trampas([
+    { e: '$\\det(2A) = 2\\det A$', por: 'Cada fila aporta un factor: $\\det(kA) = k^n\\det A$. Para una $3\\times 3$, el factor es 8.' },
+    { e: '$\\det(A + B) = \\det A + \\det B$', por: 'No hay fórmula para la suma. Compruébalo con $A = B = I$ de orden 2: $\\det(2I) = 4$, pero $1 + 1 = 2$.' },
+    { e: 'Usar el menor como si fuera el adjunto', por: 'El adjunto lleva el signo $(-1)^{i+j}$. En la posición $(1, 2)$ es negativo aunque el menor salga positivo.' },
+    { e: 'Cambiar de signo al sumar a una fila un múltiplo de otra', por: 'Esa operación no cambia el determinante. Solo el <em>intercambio</em> de filas cambia el signo.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
