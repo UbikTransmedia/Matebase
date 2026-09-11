@@ -1,10 +1,15 @@
 /* Tema: Oscilaciones: la ecuacion de segundo orden */
 Course.topic('av-oscilador', function (p) {
 
+  p.puente('Las ecuaciones del tema anterior eran de primer orden: solo aparecía $y\'$. La segunda ley de ' +
+    'Newton lleva una aceleración, es decir, una derivada segunda, y eso cambia el tipo de solución. Para ' +
+    'resolverla hacen falta la ecuación de segundo grado con su discriminante, la exponencial y, cuando el ' +
+    'discriminante sale negativo, los [[al-complejos|números complejos]] con la fórmula de Euler.');
+
   p.text('Un peso colgado de un muelle, un columpio, la suspensión de un coche, la cuerda de una guitarra, un ' +
     'circuito eléctrico con una bobina y un condensador. Todos oscilan, y todos siguen <strong>la misma ecuación ' +
     'diferencial</strong>. Es probablemente la ecuación más importante de la física, y resolverla necesita algo ' +
-    'que parece no tener nada que ver: los [[al-complejos|números complejos]].');
+    'que parece no tener nada que ver: los números complejos.');
 
   /* ---------------------------------------------------------------- */
   p.section('La ecuación del muelle');
@@ -41,9 +46,29 @@ Course.topic('av-oscilador', function (p) {
     ['$\\gamma > \\omega_0$', 'sobreamortiguado', 'vuelve despacio, sin oscilar', '$A\\,e^{r_1 t} + B\\,e^{r_2 t}$, con $r_1, r_2 < 0$']
   ]);
 
+  p.comprueba('Un oscilador cumple $x\'\' + 4x\' + 4x = 0$. ¿Cómo vuelve al reposo?', [
+    { t: 'Oscilando, porque hay un muelle', ok: false, por: 'Que haya muelle no garantiza oscilación. El discriminante $c^2 - 4mk = 16 - 16 = 0$: raíz doble $r = -2$, sin parte imaginaria. No oscila.' },
+    { t: 'Sin oscilar y lo más rápido posible: amortiguamiento crítico', ok: true, por: '$\\gamma = 2 = \\omega_0$: justo en la frontera. La solución es $(A + Bt)e^{-2t}$, que vuelve a cero sin pasarse. Es lo que busca la suspensión de un coche.' },
+    { t: 'Despacio y sin oscilar: sobreamortiguado', ok: false, por: 'Sobreamortiguado sería $\\gamma > \\omega_0$, discriminante positivo. Aquí es exactamente cero: el caso crítico, que es el más rápido de los que no oscilan.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un oscilador subamortiguado, resuelto',
+    enunciado: 'Resolver $x\'\' + 2x\' + 5x = 0$ con $x(0) = 1$ y $x\'(0) = 0$: el cuerpo se suelta desde 1 sin velocidad. ¿Con qué frecuencia oscila y cuánto tarda en reducirse la amplitud al 1 %?',
+    pasos: [
+      { t: '<strong>Ecuación característica.</strong> $r^2 + 2r + 5 = 0$: $r = \\dfrac{-2 \\pm \\sqrt{4 - 20}}{2} = -1 \\pm 2i$. Discriminante negativo: oscila. $\\gamma = 1$ y $\\omega_d = 2$.', antes: 'Prueba $x = e^{rt}$. ¿Qué ecuación de segundo grado sale y qué signo tiene su discriminante?' },
+      { t: '<strong>Solución general.</strong> La parte real $-1$ apaga y la imaginaria $2$ oscila: $x(t) = e^{-t}(A\\cos 2t + B\\operatorname{sen} 2t)$.' },
+      { t: '<strong>Condiciones iniciales.</strong> $x(0) = A = 1$. Derivando, $x\'(t) = e^{-t}\\bigl((-A + 2B)\\cos 2t + (-B - 2A)\\operatorname{sen} 2t\\bigr)$, y $x\'(0) = -A + 2B = 0$: $B = \\frac{1}{2}$. Así, $x(t) = e^{-t}\\left(\\cos 2t + \\tfrac{1}{2}\\operatorname{sen} 2t\\right)$.', antes: 'Dos constantes, dos datos. ¿Cuál se obtiene sin derivar y cuál necesita $x\'$?' },
+      { t: '<strong>Frecuencia y periodo.</strong> $\\omega_d = 2$ rad/s, periodo $T = \\frac{2\\pi}{2} = \\pi \\approx 3{,}14$ s. Sin rozamiento sería $\\omega_0 = \\sqrt 5 \\approx 2{,}24$: el amortiguamiento la ha bajado un poco.', antes: '¿Oscila más deprisa o más despacio que sin rozamiento?' },
+      { t: '<strong>El apagado.</strong> La envolvente es $e^{-t}$. Baja al 1 % cuando $e^{-t} = 0{,}01$, es decir, $t = \\ln 100 \\approx 4{,}6$ s: menos de dos oscilaciones completas.' }
+    ],
+    cierre: 'Todo está en la raíz $-1 \\pm 2i$: el $-1$ dice cómo de rápido muere, el $2$ a qué ritmo oscila. Un ingeniero lee la raíz y ya sabe cómo se comporta el sistema sin resolver nada más.'
+  });
+
   p.demo({
     title: 'Tres maneras de volver al reposo',
     intro: 'El cuerpo se suelta desde x = 1 sin velocidad. Sube el amortiguamiento desde cero: primero oscila cada vez menos, luego llega al punto crítico, en el que vuelve lo más rápido posible sin pasarse, y después se vuelve perezoso. Las curvas de puntos son la envolvente e^(−γt).',
+    predice: 'Con $m = 1$ y $k = 4$, ¿en qué valor de $c$ dejará de oscilar? Calcula $2\\sqrt{mk}$ antes de mover el mando.',
     build: function (host) {
       var m = 1, c = 0.4, k = 4;
       var out = W.readout(host, '');
@@ -102,6 +127,7 @@ Course.topic('av-oscilador', function (p) {
   p.demo({
     title: 'La curva de resonancia',
     intro: 'Amplitud de la oscilación según la frecuencia con la que se empuja, para un muelle con ω₀ = 2. Baja el amortiguamiento: el pico se hace más alto y más estrecho. Mueve la frecuencia del empuje y compara la amplitud con la que tendría con una fuerza constante, F/k.',
+    predice: 'Si bajas el amortiguamiento $c$ a la mitad, ¿el pico de resonancia subirá al doble, a más del doble o menos? Mira la fórmula $F/(c\\,\\omega_0)$ antes de probar.',
     build: function (host) {
       var c = 0.5, W0 = 2, m = 1, k = 4, F = 1, Om = 1.5;
       var out = W.readout(host, '');
@@ -141,6 +167,13 @@ Course.topic('av-oscilador', function (p) {
     'con muelles que oscilan en contra. Una radio sintoniza una emisora ajustando un circuito para que resuene a su ' +
     'frecuencia y apenas responda a las demás. Y los relojes de cuarzo cuentan el tiempo con un cristal que resuena ' +
     '32 768 veces por segundo.');
+
+  p.trampas([
+    { e: '«Hay muelle, luego oscila»', por: 'Con bastante amortiguamiento no oscila: $x\'\' + 4x\' + 4x = 0$ vuelve al reposo sin cruzar el cero. Lo decide el discriminante, no la presencia del muelle.' },
+    { e: 'Tomar $c^2 - mk$ como discriminante', por: 'Es $c^2 - 4mk$. El 4 cambia el veredicto: con $m = 1$, $k = 4$, $c = 3$ sale $9 - 16 < 0$ (oscila) y sin el 4 saldría $9 - 4 > 0$.' },
+    { e: 'Leer la parte imaginaria como «la frecuencia sin rozamiento»', por: 'La parte imaginaria es $\\omega_d = \\sqrt{\\omega_0^2 - \\gamma^2}$, un poco menor que $\\omega_0$. El rozamiento frena también la oscilación.' },
+    { e: 'Creer que en resonancia la amplitud es infinita', por: 'Solo sin rozamiento. Con $c > 0$ vale $F/(c\\,\\omega_0)$: grande, pero finita. Lo que la hace peligrosa es que crece cuanto menor es $c$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

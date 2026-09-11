@@ -1,6 +1,11 @@
 /* Tema: Ecuaciones en derivadas parciales */
 Course.topic('av-edp', function (p) {
 
+  p.puente('Se juntan aquí dos hilos del curso: las ecuaciones diferenciales de este bloque y las ' +
+    '[[av-vectorial|derivadas parciales]] del bloque anterior. La incógnita pasa a depender de dos ' +
+    'variables, y el método para resolverla, separar variables, devuelve el problema a dos ecuaciones ' +
+    'ordinarias que ya se saben resolver: una exponencial y un oscilador.');
+
   p.text('En una ecuación diferencial ordinaria la incógnita es una función de <strong>una</strong> ' +
     'variable: $y(x)$. Pero casi todo lo interesante de la física depende de varias a la vez: la ' +
     'temperatura de una barra depende del punto <em>y</em> del instante, $T(x,t)$.');
@@ -20,9 +25,16 @@ Course.topic('av-edp', function (p) {
     'es decir, cuánto se aparta un punto del promedio de su entorno. La ecuación es una frase de ' +
     'sentido común escrita en símbolos.', 'ok', 'Qué dice de verdad la ecuación del calor');
 
+  p.comprueba('En un punto de la barra, el perfil de temperatura tiene forma de cima: más caliente que sus vecinos de los dos lados. Según $u_t = k\\,u_{xx}$, ¿qué hace ahí la temperatura?', [
+    { t: 'Baja: en una cima $u_{xx} < 0$, así que $u_t < 0$', ok: true, por: 'La segunda derivada es negativa donde la curva es cóncava, como en una cima. La ecuación dice entonces que $u_t$ es negativa: el punto cede calor a los vecinos más fríos.' },
+    { t: 'Sube: está caliente y sigue calentándose', ok: false, por: 'La ecuación no mira cuánto vale $u$, sino cómo se curva. Un punto caliente rodeado de fríos tiene $u_{xx} < 0$ y se enfría.' },
+    { t: 'No cambia: es un máximo y ahí la derivada es cero', ok: false, por: 'La derivada <em>primera</em> en $x$ es cero en la cima, pero la ecuación usa la segunda, que no lo es. Y $u_t$ es la derivada en el tiempo, otra cosa distinta.' }
+  ]);
+
   p.demo({
     title: 'El calor difundiéndose',
     intro: 'Una barra metálica con los extremos fríos y un pico de calor en medio. Avanza el tiempo y verás cómo la ecuación alisa el perfil.',
+    predice: 'Con el perfil de «dos focos», ¿los dos picos se fundirán en uno antes o después de que la temperatura máxima baje a la mitad? ¿Y a qué valor tiende todo al final?',
     build: function (host, d) {
       var N = 120;
       var u = new Array(N).fill(0);
@@ -148,9 +160,22 @@ Course.topic('av-edp', function (p) {
     'armónico $n$ decae como $e^{-kn^2t}$, así que los detalles finos (los $n$ grandes) se apagan ' +
     'muchísimo más rápido que la forma general.', 'ok', 'La motivación histórica de las series de Fourier');
 
+  p.ejemplo({
+    title: 'Una barra con dos modos',
+    enunciado: 'Una barra de longitud $L = 1$ con extremos a 0 °C y $k = 1$ empieza con el perfil $u(x, 0) = \\operatorname{sen}(\\pi x) + \\tfrac{1}{2}\\operatorname{sen}(3\\pi x)$. Escribir $u(x, t)$ y ver qué queda de cada modo en $t = 0{,}1$.',
+    pasos: [
+      { t: '<strong>Reconocer los modos.</strong> El perfil ya es una suma de senos de la forma $\\operatorname{sen}(n\\pi x)$: el modo $n = 1$ con coeficiente $b_1 = 1$ y el modo $n = 3$ con $b_3 = \\frac{1}{2}$. No hace falta calcular ninguna integral de Fourier.', antes: '¿Qué valores de $n$ aparecen? ¿Cuáles son los $b_n$?' },
+      { t: '<strong>Cada modo se apaga a su ritmo.</strong> El modo $n$ lleva el factor $e^{-k(n\\pi)^2 t}$: $u(x, t) = e^{-\\pi^2 t}\\operatorname{sen}(\\pi x) + \\tfrac{1}{2}e^{-9\\pi^2 t}\\operatorname{sen}(3\\pi x)$.', antes: 'Multiplica cada modo por su exponencial. ¿Qué exponente le toca al modo 3?' },
+      { t: '<strong>Comprobar que es solución.</strong> Para un modo, $u_t = -k(n\\pi)^2 u$ y $u_{xx} = -(n\\pi)^2 u$, así que $u_t = k\\,u_{xx}$ ✓. Y como la ecuación es lineal, la suma también cumple.' },
+      { t: '<strong>En $t = 0{,}1$.</strong> Modo 1: $e^{-\\pi^2\\cdot 0{,}1} = e^{-0{,}987} \\approx 0{,}373$. Modo 3: $\\tfrac{1}{2}e^{-9\\pi^2\\cdot 0{,}1} = \\tfrac{1}{2}e^{-8{,}88} \\approx 0{,}00007$. El detalle fino ha desaparecido; queda la forma suave al 37 %.', antes: 'Calcula los dos exponentes. ¿Cuánto más rápido se apaga el modo 3?' }
+    ],
+    cierre: 'El exponente lleva $n^2$: el modo 3 se apaga nueve veces más deprisa que el 1. Por eso una foto desenfocada pierde primero los bordes y por eso, a la larga, cualquier perfil de calor acaba pareciéndose a un solo seno.'
+  });
+
   p.demo({
     title: 'Modos que se apagan a distinta velocidad',
     intro: 'Tres armónicos de una barra. Avanza el tiempo y observa que los de frecuencia alta desaparecen primero: por eso el calor borra los detalles antes que la forma general.',
+    predice: 'En $t = 0{,}5$, ¿qué amplitud le quedará al modo 1 y cuál al modo 6? Los exponentes son $-k\\pi^2 t$ y $-36k\\pi^2 t$, con $k = 0{,}02$.',
     build: function (host, d) {
       var t = 0, k = 0.02;
       var out = W.readout(host, '');
@@ -216,6 +241,13 @@ Course.topic('av-edp', function (p) {
     'rechazó por absurdo. Bernoulli tenía razón, pero hicieron falta Fourier y otros cien años de ' +
     'análisis para demostrarlo.');
 
+  p.trampas([
+    { e: 'Contar mal las derivadas temporales', por: 'Una en el tiempo: calor, difunde. Dos: ondas, viaja. Ninguna: Laplace, equilibrio. Es lo primero que se mira, antes que cualquier coeficiente.' },
+    { e: 'Creer que $u_{xx}$ mide la pendiente', por: 'Mide la <em>curvatura</em>: cuánto se aparta el punto del promedio de sus vecinos. Un perfil en línea recta tiene $u_{xx} = 0$ y no cambia con el tiempo aunque tenga pendiente.' },
+    { e: 'Olvidar que las condiciones de contorno eligen los modos', por: 'Sin los extremos a cero, $\\lambda$ podría ser cualquier número. Son los extremos los que fuerzan $\\lambda_n = (n\\pi/L)^2$: la cuantización viene del contorno.' },
+    { e: 'Intentar rebobinar la ecuación del calor', por: 'Los modos altos se han apagado a $10^{-5}$: recuperarlos exige multiplicar por $10^5$ cualquier ruido. La ecuación del calor destruye información; la de ondas no.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Las ecuaciones en derivadas parciales son las que simulan la realidad continua, y hoy ' +
     'sustituyen a buena parte de los ensayos físicos. Un coche se choca miles de veces en un ' +
@@ -249,12 +281,10 @@ Course.topic('av-edp', function (p) {
       return { f: c.f, t: c.t, n: c.n };
     },
     ask: function (d) {
-      return '¿Qué ecuación es $' + d.f + '$?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> del calor · ' +
-        '<code>2</code> de ondas · <code>3</code> de Laplace</span>';
+      return '¿Qué ecuación es $' + d.f + '$?';
     },
-    fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],
-    sol: function (d) { return { t: d.t }; },
+    fields: [{ name: 't', label: 'Es la ecuación', opts: [{ t: 'del calor', v: '1' }, { t: 'de ondas', v: '2' }, { t: 'de Laplace', v: '3' }] }],
+    sol: function (d) { return { t: String(d.t) }; },
     hint: function () { return 'Cuenta las derivadas respecto al tiempo: una es calor, dos es ondas, ninguna es Laplace.'; },
     steps: function (d) {
       return ['La clave está en cuántas veces se deriva respecto al tiempo.',

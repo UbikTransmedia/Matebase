@@ -1,6 +1,11 @@
 /* Tema: Sistemas dinámicos y espacio de fases */
 Course.topic('av-sistemas-dinamicos', function (p) {
 
+  p.puente('Hasta ahora cada ecuación diferencial tenía una sola incógnita. Aquí hay dos que se influyen, y ' +
+    'para entenderlas se usan dos cosas del bloque de álgebra lineal: la matriz del sistema y sus ' +
+    '[[av-lineal|autovalores]], que deciden si un equilibrio atrae, repele o hace girar. El tema anterior ' +
+    'ya lo anticipaba: la parte real apaga y la imaginaria oscila.');
+
   p.text('Un <strong>sistema dinámico</strong> es cualquier cosa que evoluciona con el tiempo según ' +
     'una regla fija: un péndulo, una población, la economía, el clima. Cuando hay <em>varias</em> ' +
     'magnitudes que se influyen entre sí, aparece una idea nueva y muy potente: el ' +
@@ -26,9 +31,16 @@ Course.topic('av-sistemas-dinamicos', function (p) {
     '<strong>Centro</strong>: las trayectorias giran alrededor sin acercarse ni alejarse.'
   ]);
 
+  p.comprueba('En el sistema $x\' = -y$, $y\' = x$, el origen es un equilibrio. Si se aparta un poco el sistema, ¿vuelve?', [
+    { t: 'Sí: las flechas apuntan hacia el origen', ok: false, por: 'No apuntan hacia el origen sino <em>alrededor</em>: en $(1, 0)$ la velocidad es $(0, 1)$, perpendicular al radio. El sistema gira.' },
+    { t: 'Ni vuelve ni se aleja: gira alrededor para siempre', ok: true, por: 'Es un centro. $\\frac{d}{dt}(x^2 + y^2) = 2xx\' + 2yy\' = -2xy + 2xy = 0$: la distancia al origen se conserva. Es el péndulo sin rozamiento.' },
+    { t: 'Se aleja: el equilibrio es inestable', ok: false, por: 'Tampoco. La distancia al origen no cambia: las órbitas son circunferencias. Con un poco de rozamiento sí caería en espiral.' }
+  ]);
+
   p.demo({
     title: 'Retrato de fases',
     intro: 'Las flechas dicen hacia dónde se mueve el sistema desde cada estado. Haz clic para lanzar una trayectoria y ver a dónde va a parar.',
+    predice: 'En el punto de silla, ¿qué pasará si sueltas el sistema justo sobre el eje vertical? ¿Y un milímetro a la derecha de ese eje?',
     build: function (host, d) {
       var tipo = 'atractor';
       var pistas = [];
@@ -107,6 +119,19 @@ Course.topic('av-sistemas-dinamicos', function (p) {
     'parte real negativa → foco estable; imaginarios puros → centro. La geometría queda determinada ' +
     'por dos números.', 'ok', 'La conexión con el álgebra lineal');
 
+  p.ejemplo({
+    title: 'Clasificar un equilibrio con los autovalores',
+    enunciado: 'Clasificar el origen del sistema $x\' = x + 2y$, $y\' = 2x + y$ y describir hacia dónde van las trayectorias.',
+    pasos: [
+      { t: '<strong>La matriz.</strong> $A = \\begin{pmatrix} 1 & 2 \\\\ 2 & 1 \\end{pmatrix}$: cada fila son los coeficientes de una ecuación.' },
+      { t: '<strong>Autovalores.</strong> Traza 2, determinante $1 - 4 = -3$: $\\lambda^2 - 2\\lambda - 3 = 0$, raíces $\\lambda = 3$ y $\\lambda = -1$. Reales y de signo distinto: <strong>punto de silla</strong>.', antes: 'Traza y determinante. ¿De qué signo salen las raíces?' },
+      { t: '<strong>Las direcciones.</strong> Para $\\lambda = 3$: $(A - 3I)\\vec v = 0$ da $-2x + 2y = 0$, dirección $(1, 1)$. Para $\\lambda = -1$: $2x + 2y = 0$, dirección $(1, -1)$.', antes: 'Cada autovalor tiene su autovector. ¿Qué direcciones salen?' },
+      { t: '<strong>Qué hace cada una.</strong> Sobre la recta $(1, 1)$ las soluciones van como $e^{3t}$: se alejan deprisa. Sobre $(1, -1)$ van como $e^{-t}$: se acercan. Cualquier otra trayectoria se acerca primero a la diagonal $(1, 1)$ y luego escapa por ella.', antes: '¿Por cuál de las dos rectas se acerca el sistema al origen, y por cuál se aleja?' },
+      { t: '<strong>Comprobación con un punto.</strong> En $(1, 1)$: $x\' = 3$, $y\' = 3$. La velocidad es $3\\cdot(1, 1)$: apunta hacia fuera por la misma recta, tres veces más deprisa. ✓' }
+    ],
+    cierre: 'Solo hay una manera de acabar en el origen: partir exactamente de la recta $(1, -1)$. Un milímetro fuera de ella y el término $e^{3t}$ acaba mandando. Eso es lo que hace inestable al equilibrio, aunque tenga una dirección que atrae.'
+  });
+
   /* ---------------------------------------------------------------- */
   p.util('Distinguir un equilibrio estable de uno inestable es la pregunta central del control ' +
     'automático. Un péndulo colgando es estable y el mismo péndulo invertido no lo es, y sin embargo ' +
@@ -125,6 +150,7 @@ Course.topic('av-sistemas-dinamicos', function (p) {
   p.demo({
     title: 'Conejos y zorros',
     intro: 'Arriba, las dos poblaciones en el tiempo; abajo, la misma historia en el espacio de fases. Las oscilaciones no vienen de fuera: las genera el propio acoplamiento.',
+    predice: 'Si subes la mortalidad de los zorros $\\gamma$, ¿el equilibrio se moverá hacia más presas, más depredadores, o las dos cosas? Mira las fórmulas del equilibrio antes de tocar.',
     build: function (host, d) {
       var alfa = 1.1, beta = 0.4, gamma = 0.9, delta = 0.25;
       var x0 = 3, y0 = 2;
@@ -186,6 +212,13 @@ Course.topic('av-sistemas-dinamicos', function (p) {
     'menos, se beneficia más al depredador que a la presa. Alfred Lotka había llegado a las mismas ' +
     'ecuaciones estudiando reacciones químicas.');
 
+  p.trampas([
+    { e: 'Leer el retrato de fases como una gráfica frente al tiempo', por: 'Los ejes son $x$ e $y$, dos magnitudes del sistema. El tiempo no está dibujado: es el recorrido a lo largo de la curva.' },
+    { e: '«Tiene una dirección que atrae, luego es estable»', por: 'Una silla atrae por una recta y repele por otra. Basta una dirección que repela para que el equilibrio sea inestable: casi todo escapa.' },
+    { e: 'Confundir un centro con un foco estable', por: 'Con autovalores imaginarios puros ($\\pm i\\omega$) las órbitas son cerradas y no se acercan nunca. Basta una parte real negativa pequeña para que caigan en espiral.' },
+    { e: 'Creer que las oscilaciones de Lotka-Volterra vienen de fuera', por: 'No hay estaciones ni clima en el modelo. El ciclo lo genera el acoplamiento: más presas alimentan más zorros, que comen más presas, que alimentan menos zorros…' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Este modelo nació de un dato real y desconcertante: durante la Primera Guerra Mundial, con ' +
     'mucha menos pesca en el Adriático, la proporción de tiburones capturados subió en lugar de ' +
@@ -245,11 +278,10 @@ Course.topic('av-sistemas-dinamicos', function (p) {
     },
     ask: function (d) {
       return 'El sistema $x\' = ' + d.a + 'x$, $y\' = ' + d.b + 'y$ tiene el equilibrio en el origen. ' +
-        '¿De qué tipo es?<br><span style="font-size:0.875rem;color:var(--ink-faint)">' +
-        '<code>1</code> nodo estable · <code>2</code> nodo inestable · <code>3</code> punto de silla</span>';
+        '¿De qué tipo es?';
     },
-    fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],
-    sol: function (d) { return { t: d.t }; },
+    fields: [{ name: 't', label: 'Tipo', opts: [{ t: 'nodo estable', v: '1' }, { t: 'nodo inestable', v: '2' }, { t: 'punto de silla', v: '3' }] }],
+    sol: function (d) { return { t: String(d.t) }; },
     hint: function () { return 'Mira el signo de los dos coeficientes: negativo significa que esa dirección atrae.'; },
     steps: function (d) {
       return ['En la dirección $x$: el coeficiente es $' + d.a + '$, ' +
@@ -291,7 +323,7 @@ Course.topic('av-sistemas-dinamicos', function (p) {
     answer: function (d) { return '(' + U.fmt(d.xe, 4) + ', ' + U.fmt(d.ye, 4) + ')'; }
   });
 
-  p.note('Todo lo que has visto aquí sobre equilibrios estables tiene una lectura que se desarrolla en el bloque de cibernética. Un equilibrio estable no se mantiene solo: se mantiene porque hay algo que <strong>corrige las desviaciones</strong>, y a ese algo se le llama realimentación negativa. Visto así, la condición de estabilidad que aquí sale de los autovalores es exactamente la que estudió Maxwell en 1868 para averiguar por qué algunas máquinas de vapor se ponían nerviosas.', null, 'Lo que sostiene un equilibrio');
+  p.note('Todo lo que has visto aquí sobre equilibrios estables tiene una lectura que se desarrolla en [[cib-realimentacion|el tema de realimentación]]. Un equilibrio estable no se mantiene solo: se mantiene porque hay algo que <strong>corrige las desviaciones</strong>, y a ese algo se le llama realimentación negativa. Visto así, la condición de estabilidad que aquí sale de los autovalores es exactamente la que estudió Maxwell en 1868 para averiguar por qué algunas máquinas de vapor se ponían nerviosas.', null, 'Lo que sostiene un equilibrio');
 
   p.keys([
     'El espacio de fases dibuja el estado del sistema, no su evolución temporal: el tiempo se esconde en la trayectoria.',

@@ -1,10 +1,11 @@
 /* Tema: Resolver ecuaciones diferenciales con el ordenador */
 Course.topic('av-edo-numerico', function (p) {
 
-  p.text('En [[av-edo]] se resolvían ecuaciones diferenciales con fórmulas: separar variables, integrar, ' +
+  p.puente('En [[av-edo]] se resolvían ecuaciones diferenciales con fórmulas: separar variables, integrar, ' +
     'despejar. Es la parte bonita, pero engaña: la inmensa mayoría de las ecuaciones que aparecen en física, ' +
     'biología o ingeniería <strong>no tienen solución en forma de fórmula</strong>. El péndulo sin aproximar, tres ' +
-    'planetas que se atraen, el tiempo atmosférico. Y sin embargo se predicen órbitas y tormentas todos los días.');
+    'planetas que se atraen, el tiempo atmosférico. Y sin embargo se predicen órbitas y tormentas todos los días. ' +
+    'La herramienta es la recta tangente de [[fn-derivadas|derivadas]], repetida muchas veces.');
 
   p.text('La idea que lo permite es muy sencilla. Una ecuación $y\' = f(t, y)$ dice, en cada punto, hacia dónde ' +
     'apunta la solución: es el campo de pendientes. Si no se puede seguir la curva entera, se avanza a pasitos, ' +
@@ -26,9 +27,28 @@ Course.topic('av-edo-numerico', function (p) {
     'exactamente la sucesión cuyo [[fn-limites|límite]] es el número $e$. Euler con pasos cada vez más pequeños ' +
     '<em>es</em> la definición de $e$.');
 
+  p.comprueba('Para $y\' = y$, Euler se queda siempre por debajo de la solución exacta $e^t$. ¿Por qué?', [
+    { t: 'Porque la pendiente crece durante el paso y Euler usa la del principio, que es la menor', ok: true, por: 'La solución se curva hacia arriba; la tangente al principio del paso se queda corta, y ese déficit se acumula. Con una solución que se curvara hacia abajo, Euler se pasaría.' },
+    { t: 'Por los errores de redondeo del ordenador', ok: false, por: 'El redondeo es minúsculo comparado con esto. $(1 + \\frac{1}{n})^n < e$ es una desigualdad exacta, sin ordenador de por medio.' },
+    { t: 'Porque el paso es demasiado pequeño', ok: false, por: 'Al revés: cuanto menor el paso, más se acerca. El error viene de que el paso no es cero.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Euler a mano, y por qué Runge-Kutta gana',
+    enunciado: 'Para $y\' = y$ con $y(0) = 1$, estimar $y(1)$ con Euler de paso $0{,}5$, con paso $0{,}25$ y con un solo paso de Runge-Kutta 4. Comparar con $e \\approx 2{,}7183$.',
+    pasos: [
+      { t: '<strong>Euler, $h = 0{,}5$.</strong> Cada paso multiplica por $1 + h = 1{,}5$: $y_1 = 1{,}5$ en $t = 0{,}5$ e $y_2 = 2{,}25$ en $t = 1$. Error: $2{,}718 - 2{,}25 = 0{,}468$.', antes: 'Con $f(t, y) = y$, ¿en qué se convierte $y_{n+1} = y_n + h\\,y_n$?' },
+      { t: '<strong>Euler, $h = 0{,}25$.</strong> Cuatro pasos multiplicando por $1{,}25$: $1{,}25^4 = 2{,}4414$. Error: $0{,}277$. El paso se ha dividido entre 2 y el error ha bajado a poco más de la mitad: orden 1.', antes: 'Si el paso se divide entre 2, ¿cuánto esperas que baje el error?' },
+      { t: '<strong>Runge-Kutta 4, $h = 1$, un solo paso.</strong> $k_1 = 1$, $k_2 = 1 + \\frac{1}{2} = 1{,}5$, $k_3 = 1 + \\frac{1{,}5}{2} = 1{,}75$, $k_4 = 1 + 1{,}75 = 2{,}75$. $y_1 = 1 + \\frac{1}{6}(1 + 3 + 3{,}5 + 2{,}75) = 2{,}7083$. Error: $0{,}010$.', antes: 'Un solo paso de tamaño 1, pero mirando la pendiente cuatro veces. ¿Cuál será mejor: esto o cuatro pasos de Euler?' },
+      { t: '<strong>Por qué.</strong> $2{,}7083 = 1 + 1 + \\frac{1}{2} + \\frac{1}{6} + \\frac{1}{24}$: Runge-Kutta reproduce el [[fn-taylor|polinomio de Taylor]] de $e^h$ hasta el grado 4. Euler solo llega al grado 1.' }
+    ],
+    cierre: 'Cuatro evaluaciones de la pendiente en un paso de Runge-Kutta cuestan lo mismo que cuatro pasos de Euler, y el error pasa de 0,277 a 0,010. Por eso casi nadie usa Euler para calcular; se usa para entender.'
+  });
+
   p.demo({
     title: 'Euler sobre el campo de pendientes',
     intro: 'Las rayitas son el campo de pendientes: la dirección que marca la ecuación en cada punto. La curva gruesa es la solución exacta, y la poligonal, el método de Euler. Reduce el paso y mira cómo la poligonal se pega a la curva; auméntalo y verás cómo se despega.',
+    predice: 'Con $y\' = y$ y paso $h = 1$, ¿qué dará Euler en $t = 2$? Calcula $(1 + 1)^2$ y compáralo con $e^2 \\approx 7{,}39$ antes de mover el mando.',
     build: function (host) {
       var cual = 'crece', h = 0.25;
       var EQ = {
@@ -110,6 +130,7 @@ Course.topic('av-edo-numerico', function (p) {
   p.demo({
     title: 'Una órbita que Euler no sabe cerrar',
     intro: 'El sistema x′ = −y, y′ = x describe un punto que gira en círculo: su solución exacta es la circunferencia de radio 1. Euler, en cada paso, sale por la tangente y cae un poco fuera, así que la órbita se abre en espiral. Runge-Kutta 4, con el mismo paso, se mantiene sobre el círculo durante muchas vueltas.',
+    predice: 'Cada paso de Euler multiplica el radio por $\\sqrt{1 + h^2}$. Con $h = 0{,}2$ y tres vueltas, unos 94 pasos: ¿el radio final estará cerca de 1,5, de 3 o por encima de 6?',
     build: function (host) {
       var h = 0.2, vueltas = 3;
       var out = W.readout(host, '');
@@ -163,6 +184,13 @@ Course.topic('av-edo-numerico', function (p) {
     'unos minutos. Los videojuegos mueven cada objeto con un paso de Euler por fotograma, en una variante que ' +
     'no deja que las órbitas se abran. Y cuando una misión espacial corrige su rumbo, los ordenadores de control ' +
     'integran numéricamente las ecuaciones de la gravedad del Sol, la Tierra y la Luna a la vez.');
+
+  p.trampas([
+    { e: 'Sumar la pendiente sin multiplicarla por $h$', por: '$y_{n+1} = y_n + h\\,f$: se avanza durante un tiempo $h$, no durante una unidad. Sin la $h$, con paso 0,1 el método daría saltos diez veces mayores de lo debido.' },
+    { e: 'Creer que reducir el paso siempre mejora', por: 'Hasta cierto punto. Con pasos minúsculos, los errores de redondeo del ordenador se acumulan y el resultado empeora. Hay un paso óptimo.' },
+    { e: 'Usar Euler para simular órbitas', por: 'Cada paso sale por la tangente y cae fuera del círculo: la órbita se abre en espiral aunque la energía debería conservarse. Hacen falta métodos de orden alto o diseñados para conservar.' },
+    { e: 'Confundir el orden con el número de pendientes', por: 'Runge-Kutta 4 evalúa cuatro pendientes y es de orden 4, pero eso no es una regla: el orden dice cómo baja el error con $h$, y hay métodos con más evaluaciones que orden.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

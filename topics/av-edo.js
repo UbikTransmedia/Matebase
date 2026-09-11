@@ -1,6 +1,12 @@
 /* Tema: Ecuaciones diferenciales ordinarias */
 Course.topic('av-edo', function (p) {
 
+  p.puente('Este bloque usa la derivada y la integral al revés de como se aprendieron: en vez de derivar ' +
+    'una función conocida, se conoce algo sobre la derivada y se busca la función. Hacen falta las ' +
+    'reglas de derivación, las primitivas inmediatas, la exponencial y el logaritmo. Con eso se leen ' +
+    'las leyes de la física, que casi nunca dicen cuánto vale algo, sino cómo cambia.',
+    'Por dónde empezamos');
+
   p.text('En una ecuación normal la incógnita es un <em>número</em>. En una <strong>ecuación ' +
     'diferencial</strong> la incógnita es una <strong>función entera</strong>, y lo que se conoce es ' +
     'una relación entre esa función y sus derivadas.');
@@ -26,9 +32,16 @@ Course.topic('av-edo', function (p) {
     'un segmentito con esa pendiente en muchos puntos, las soluciones aparecen solas: son las curvas ' +
     'que van «peinando» el campo.');
 
+  p.comprueba('¿Es $y = e^{2x} + 1$ solución de $y\' = 2y$?', [
+    { t: 'Sí: su derivada es $2e^{2x}$, una exponencial', ok: false, por: 'Ser exponencial no basta. Hay que comparar $y\'$ con $2y$: $y\' = 2e^{2x}$, pero $2y = 2e^{2x} + 2$. No coinciden.' },
+    { t: 'No: $y\' = 2e^{2x}$ y $2y = 2e^{2x} + 2$, y no son iguales', ok: true, por: 'Comprobar una solución es sustituir en la ecuación. Las soluciones son $y = Ce^{2x}$; sumar 1 la estropea, aunque $e^{2x} + 1$ sí resuelve otra ecuación: $y\' = 2(y - 1)$.' },
+    { t: 'Sí, con $C = 1$', ok: false, por: '$C = 1$ da $y = e^{2x}$, sin el $+1$. La constante de las soluciones multiplica, no suma.' }
+  ]);
+
   p.demo({
     title: 'El campo de pendientes y sus soluciones',
     intro: 'Cada rayita es la pendiente que impone la ecuación en ese punto. Haz clic en cualquier sitio del plano para lanzar una solución desde ahí.',
+    predice: 'Elige «enfriamiento» y lanza una solución desde $y = 5$ y otra desde $y = 0$. ¿Hacia dónde irán las dos? ¿Se cruzarán alguna vez?',
     build: function (host, d) {
       var tipo = 'exp';
       var curvas = [];
@@ -114,6 +127,19 @@ Course.topic('av-edo', function (p) {
     'el crecimiento de bacterias y la descarga de un condensador: todos obedecen «la variación es ' +
     'proporcional a lo que hay».');
 
+  p.ejemplo({
+    title: 'Un café que se enfría, de principio a fin',
+    enunciado: 'Un café a 90 °C se deja en una habitación a 20 °C. A los 5 minutos está a 60 °C. Escribir la ecuación, resolverla, hallar $k$ y predecir la temperatura a los 10 minutos.',
+    pasos: [
+      { t: '<strong>La ecuación.</strong> Ley de enfriamiento: $T\' = -k(T - 20)$. El café se enfría a un ritmo proporcional a lo que le sobra respecto al ambiente.', antes: '¿De qué depende la velocidad a la que se enfría? Escríbelo como ecuación.' },
+      { t: '<strong>Separar.</strong> $\\dfrac{dT}{T - 20} = -k\\,dt$. Integrando los dos lados: $\\ln|T - 20| = -kt + C$, y tomando exponenciales, $T - 20 = A\\,e^{-kt}$.', antes: 'Pon todo lo que tenga $T$ a un lado y lo que tenga $t$ al otro. ¿Qué integrales quedan?' },
+      { t: '<strong>Condición inicial.</strong> En $t = 0$, $T = 90$: $A = 70$. Así que $T(t) = 20 + 70\\,e^{-kt}$.' },
+      { t: '<strong>El dato de los 5 minutos fija $k$.</strong> $60 = 20 + 70\\,e^{-5k}$, luego $e^{-5k} = \\frac{40}{70} = \\frac{4}{7}$ y $k = \\frac{1}{5}\\ln\\frac{7}{4} \\approx 0{,}112$ min$^{-1}$.', antes: 'Sustituye $t = 5$ y $T = 60$. Despeja la exponencial y luego $k$ con un logaritmo.' },
+      { t: '<strong>Predecir.</strong> $T(10) = 20 + 70\\,e^{-10k} = 20 + 70\\left(e^{-5k}\\right)^2 = 20 + 70\\cdot\\frac{16}{49} \\approx 42{,}9$ °C. Ni siquiera hace falta $k$: diez minutos son dos tramos de cinco, y cada tramo multiplica el exceso por $\\frac{4}{7}$.', antes: '¿Cuánto vale $e^{-10k}$ si sabes $e^{-5k}$?' }
+    ],
+    cierre: 'El exceso sobre el ambiente, $T - 20$, se multiplica por el mismo factor en cada intervalo igual de tiempo: 70, 40, 22,9, 13,1… Es la marca de toda ecuación $y\' = ky$, y la razón de que un forense pueda estimar la hora de una muerte con dos medidas de temperatura.'
+  });
+
   p.util('Una ecuación diferencial dice «cómo cambia esto» y su solución dice «cómo es esto», que es el ' +
     'salto más útil de la ciencia aplicada. La ley de enfriamiento de Newton, separable, es la que ' +
     'usa un forense para estimar la hora de la muerte a partir de la temperatura del cuerpo; la ' +
@@ -138,6 +164,13 @@ Course.topic('av-edo', function (p) {
     'que convierte el lado izquierdo en la derivada de un producto y permite integrar directamente.');
 
   p.formula('y = \\frac{1}{\\mu}\\left(\\int \\mu\\,Q\\,dx + C\\right), \\qquad \\mu = e^{\\int P\\,dx}');
+
+  p.trampas([
+    { e: 'Olvidar la constante al integrar', por: 'Sin $C$ solo se tiene una solución de infinitas. La condición inicial es la que la fija; sin $C$ no hay nada que fijar.' },
+    { e: 'Pasar de $\\ln|y| = kx + C$ a $y = e^{kx} + C$', por: 'La exponencial de una suma es un producto: $y = e^{C}e^{kx} = A\\,e^{kx}$. La constante multiplica.' },
+    { e: 'Dividir entre $y$ sin pensar en $y = 0$', por: 'Al separar $\\frac{dy}{y}$ se pierde la solución $y = 0$, que casi siempre es una solución de equilibrio válida.' },
+    { e: 'Dar por solución un número', por: 'La incógnita es una función. «$y = 3$» solo es solución si la función constante 3 cumple la ecuación.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('El circuito eléctrico más común —una resistencia y una bobina, o una resistencia y un ' +

@@ -1,6 +1,11 @@
 /* Tema: Series y transformada de Fourier */
 Course.topic('av-fourier', function (p) {
 
+  p.puente('El tema anterior dejó un problema abierto: para resolver la ecuación del calor con un perfil ' +
+    'inicial cualquiera hay que escribirlo como suma de senos. Este tema resuelve ese problema. Hacen ' +
+    'falta las [[tr-funciones|funciones trigonométricas]], la integral definida y, para la transformada, la ' +
+    'fórmula de Euler de los complejos.');
+
   p.text('En [[tr-funciones|el tema de trigonometría]] viste que sumando ondas aparecen formas nuevas. Fourier ' +
     'demostró en 1807 algo mucho más fuerte, y tan chocante que la Academia de Ciencias de París ' +
     'tardó quince años en publicárselo:');
@@ -9,7 +14,7 @@ Course.topic('av-fourier', function (p) {
     'saltos, como una onda cuadrada— se puede escribir como suma de senos y cosenos. Infinitos, sí, ' +
     'pero solo senos y cosenos.', 'ok', 'El teorema de Fourier');
 
-  p.note('Esta idea no es nueva del todo: en el bloque 5 ya se aproximó una función por una suma ' +
+  p.note('Esta idea no es nueva del todo: en [[fn-taylor|el tema de Taylor]] ya se aproximó una función por una suma ' +
     'infinita de piezas sencillas, con los <strong>polinomios de Taylor</strong>. La diferencia ' +
     'está en las piezas y en el alcance. Taylor usa potencias de $x$ y aproxima muy bien ' +
     '<em>cerca de un punto</em>, deteriorándose al alejarse; Fourier usa senos y cosenos y ' +
@@ -43,9 +48,29 @@ Course.topic('av-fourier', function (p) {
     '$f$ a cada onda pura. Es como preguntarle a la señal «¿cuánto hay de esta frecuencia dentro de ' +
     'ti?». Por eso se dice que Fourier <em>descompone</em> una señal en sus ingredientes.');
 
+  p.comprueba('La señal es $f(x) = \\operatorname{sen}(2x)$, una onda pura. ¿Qué dará el «detector» $\\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} f(x)\\operatorname{sen}(x)\\,dx$, que busca la frecuencia 1?', [
+    { t: 'Cero: la señal no contiene la frecuencia 1', ok: true, por: 'El producto $\\operatorname{sen}(2x)\\operatorname{sen}(x)$ es tan positivo como negativo a lo largo de un periodo y la integral se cancela. Es la <em>ortogonalidad</em>: cada detector solo responde a su frecuencia.' },
+    { t: 'Algo positivo: las dos son senos', ok: false, por: 'Ser senos no basta; tienen que tener la <em>misma</em> frecuencia. Con frecuencias distintas los productos se cancelan exactamente.' },
+    { t: 'Uno: la señal tiene amplitud 1', ok: false, por: 'Uno es lo que daría el detector de la frecuencia 2, $\\frac{1}{\\pi}\\int \\operatorname{sen}(2x)\\operatorname{sen}(2x)\\,dx = 1$. El de la frecuencia 1 da cero.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Los coeficientes de la onda cuadrada',
+    enunciado: 'Sea $f(x) = 1$ en $(0, \\pi)$ y $f(x) = -1$ en $(-\\pi, 0)$, repetida con periodo $2\\pi$. Calcular $a_n$, $b_1$ y $b_2$, y deducir la serie.',
+    pasos: [
+      { t: '<strong>Los $a_n$.</strong> $f$ es impar y $\\cos(nx)$ es par, así que el producto es impar y su integral en $(-\\pi, \\pi)$ vale 0. Todos los $a_n$ son cero, $a_0$ incluido: la onda no tiene altura media ni cosenos.', antes: '¿Es $f$ par o impar? ¿Qué pasa con la integral de una función impar en un intervalo simétrico?' },
+      { t: '<strong>$b_1$.</strong> $f\\cdot\\operatorname{sen} x$ es par, así que basta el doble de la integral en $(0, \\pi)$: $b_1 = \\frac{2}{\\pi}\\int_0^\\pi \\operatorname{sen} x\\,dx = \\frac{2}{\\pi}\\bigl[-\\cos x\\bigr]_0^\\pi = \\frac{2}{\\pi}\\cdot 2 = \\frac{4}{\\pi}$.', antes: 'Integra $\\operatorname{sen} x$ entre 0 y $\\pi$. ¿Cuánto da?' },
+      { t: '<strong>$b_2$.</strong> $b_2 = \\frac{2}{\\pi}\\int_0^\\pi \\operatorname{sen} 2x\\,dx = \\frac{2}{\\pi}\\left[-\\frac{\\cos 2x}{2}\\right]_0^\\pi = \\frac{2}{\\pi}\\cdot 0 = 0$. El seno de frecuencia 2 da una vuelta completa en $(0, \\pi)$ y su integral se cancela.', antes: '¿Cuánto vale $\\int_0^\\pi \\operatorname{sen} 2x\\,dx$? Dibújalo.' },
+      { t: '<strong>El caso general.</strong> $b_n = \\frac{2}{\\pi}\\cdot\\frac{1 - \\cos n\\pi}{n}$: vale $\\frac{4}{\\pi n}$ si $n$ es impar y 0 si es par. Serie: $f(x) = \\frac{4}{\\pi}\\left(\\operatorname{sen} x + \\frac{\\operatorname{sen} 3x}{3} + \\frac{\\operatorname{sen} 5x}{5} + \\cdots\\right)$.' },
+      { t: '<strong>Comprobar en un punto.</strong> En $x = \\frac{\\pi}{2}$, $f = 1$ y la serie da $\\frac{4}{\\pi}\\left(1 - \\frac{1}{3} + \\frac{1}{5} - \\cdots\\right)$. Para que cuadre, el paréntesis tiene que valer $\\frac{\\pi}{4}$: es la serie de Leibniz, y así es.' }
+    ],
+    cierre: 'Tres cosas ahorran trabajo: la paridad elimina la mitad de los coeficientes, la integral en medio periodo se duplica, y el resultado se comprueba en un punto cómodo. Y la amplitud $\\frac{4}{\\pi n}$ dice por qué con pocos armónicos ya se reconoce la forma.'
+  });
+
   p.demo({
     title: 'Construir una onda cuadrada con senos',
     intro: 'Añade armónicos y mira cómo una suma de curvas suavísimas va fabricando esquinas y saltos verticales. Con infinitos términos, la igualdad es exacta.',
+    predice: 'Con 1 armónico se ve un seno. ¿Cuántos crees que hacen falta para que se distinga una onda cuadrada: 3, 10, 50? Y los picos junto a los saltos, ¿desaparecerán al añadir más?',
     build: function (host, d) {
       var N = 1, forma = 'cuadrada';
       var out = W.readout(host, '');
@@ -126,6 +151,7 @@ Course.topic('av-fourier', function (p) {
   p.demo({
     title: 'La señal y su espectro',
     intro: 'Arriba, la suma de tres ondas puras. Abajo, su espectro: una barra por cada frecuencia presente. Cambia las amplitudes y observa las dos vistas a la vez.',
+    predice: 'Si pones a cero la amplitud de $f = 1$ y dejas solo $f = 5$, ¿cómo será la señal de arriba? ¿Y si subes $f = 3$ y $f = 5$ a la vez: se verá una onda o una mezcla irregular?',
     build: function (host, d) {
       var A = [1, 0, 0.5], frec = [1, 3, 5];
       var out = W.readout(host, '');
@@ -201,6 +227,13 @@ Course.topic('av-fourier', function (p) {
     'razón en que la demostración era floja; se equivocaban en el resultado. Resolver esa polémica ' +
     'obligó a definir con rigor qué es una función, qué es la convergencia y qué es una integral: ' +
     'buena parte del análisis moderno nació de esta discusión.');
+
+  p.trampas([
+    { e: 'Calcular todos los coeficientes sin mirar la paridad', por: 'Una función impar no tiene cosenos; una par no tiene senos. Se ahorra la mitad de las integrales, y a menudo la otra mitad se simplifica.' },
+    { e: 'Creer que los picos de Gibbs desaparecen con más armónicos', por: 'Se estrechan, pero su altura se queda en un 9 % del salto por muchos términos que se sumen. Es una propiedad de la serie, no un defecto del cálculo.' },
+    { e: 'Confundir frecuencia $f$ con frecuencia angular $\\omega$', por: '$\\omega = 2\\pi f$. Dentro del seno va $\\omega$; en hercios se da $f$. Un error de $2\\pi$ es un error de más de seis veces.' },
+    { e: '«Espectro y señal son informaciones distintas»', por: 'Son la misma información en dos idiomas. La transformada pasa de uno a otro sin perder nada; lo que pierde un MP3 lo tira a propósito.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Fourier es probablemente la matemática que más veces se ejecuta cada día en el mundo. Está ' +

@@ -1,6 +1,11 @@
 /* Tema: Teoría del caos y fractales */
 Course.topic('av-caos', function (p) {
 
+  p.puente('El tema anterior clasificaba equilibrios: estables, inestables, centros. Este tema muestra lo ' +
+    'que pasa cuando un sistema no cae en ninguno. Solo hace falta saber iterar una fórmula, como en las ' +
+    '[[fn-sucesiones|sucesiones recurrentes]], y recordar la parábola. Con eso se ve nacer el caos, y con ' +
+    'un logaritmo se mide la dimensión de un fractal.');
+
   p.text('Hasta aquí, casi todo lo que has visto era <em>predecible</em>: conocidas las reglas y el ' +
     'punto de partida, el resultado sale. Este tema trata del descubrimiento contrario, y es uno de ' +
     'los más importantes del siglo XX: hay sistemas <strong>completamente deterministas</strong> ' +
@@ -31,9 +36,28 @@ Course.topic('av-caos', function (p) {
 
   p.text('Es una parábola. Nada más inofensivo. Y sin embargo:');
 
+  p.comprueba('El mapa logístico es una regla exacta, sin azar. ¿Se puede predecir la población dentro de 100 años?', [
+    { t: 'Sí: aplicando la fórmula 100 veces', ok: false, por: 'Sobre el papel sí, pero la población inicial nunca se conoce con infinitos decimales. En la zona caótica, un error en la sexta cifra se convierte en un error total en unas decenas de pasos.' },
+    { t: 'Depende de $r$: para $r < 3$ sí, en la zona caótica no', ok: true, por: 'Con $r = 2{,}7$ todo tiende al mismo equilibrio y el error inicial se olvida. Con $r = 3{,}9$ el error inicial crece exponencialmente y la predicción a largo plazo es imposible, aunque la regla sea exacta.' },
+    { t: 'No: una fórmula con parábola nunca es predecible', ok: false, por: 'Para $r$ pequeño es perfectamente predecible: la población se estabiliza. El caos no está en la fórmula sino en el valor del parámetro.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Iterar hasta ver el ciclo',
+    enunciado: 'Con $r = 3{,}2$ y $x_0 = 0{,}5$, calcular los primeros términos del mapa logístico y comparar con el equilibrio $x^* = 1 - 1/r$.',
+    pasos: [
+      { t: '<strong>El equilibrio.</strong> $x^* = 1 - \\frac{1}{3{,}2} = 0{,}6875$. Si la población empezara justo ahí, no cambiaría.', antes: '¿Qué valor cumple $x = 3{,}2\\,x(1 - x)$?' },
+      { t: '<strong>Iterar.</strong> $x_1 = 3{,}2\\cdot 0{,}5\\cdot 0{,}5 = 0{,}8$. $x_2 = 3{,}2\\cdot 0{,}8\\cdot 0{,}2 = 0{,}512$. $x_3 = 3{,}2\\cdot 0{,}512\\cdot 0{,}488 = 0{,}7995$. $x_4 = 3{,}2\\cdot 0{,}7995\\cdot 0{,}2005 = 0{,}5130$.', antes: 'Aplica la fórmula dos veces. ¿Se acerca a 0,6875?' },
+      { t: '<strong>Seguir.</strong> $x_5 = 0{,}7995$, $x_6 = 0{,}5130$, $x_7 = 0{,}7995$… La población alterna entre dos valores, $0{,}513$ y $0{,}800$, y no se acerca al equilibrio.', antes: 'Calcula $x_5$ y $x_6$. ¿Ves un patrón?' },
+      { t: '<strong>Por qué.</strong> El equilibrio existe pero es inestable para $r > 3$: la pendiente de la parábola en $x^*$ es $r(1 - 2x^*) = 2 - r = -1{,}2$, de módulo mayor que 1. Cualquier desviación se amplifica y el sistema se instala en el ciclo de periodo 2.' }
+    ],
+    cierre: 'Con $r = 2{,}7$ la misma cuenta converge a $0{,}6296$; con $r = 3{,}5$ el ciclo tiene cuatro valores; con $3{,}9$ no se repite nunca. La fórmula no cambia: cambia un número.'
+  });
+
   p.demo({
     title: 'La misma fórmula, cuatro comportamientos',
     intro: 'Mueve la fertilidad r y observa la evolución año a año. Verás que el sistema pasa de estabilizarse, a oscilar entre dos valores, a oscilar entre cuatro, y finalmente a volverse impredecible.',
+    predice: 'Con $r = 3{,}2$, según el ejemplo, la población alterna entre 0,513 y 0,800. Si cambias la población inicial a 0,2, ¿acabará en los mismos dos valores o en otros?',
     build: function (host, d) {
       var r = 2.7, x0 = 0.4;
       var out = W.readout(host, '');
@@ -84,6 +108,7 @@ Course.topic('av-caos', function (p) {
   p.demo({
     title: 'Dos mundos que empiezan casi igual',
     intro: 'Las dos curvas parten de valores que difieren en 0,000001. Sube la fertilidad a la zona caótica y mira cuántos años tardan en no parecerse en nada.',
+    predice: 'Con diferencia inicial $10^{-6}$ se separan hacia el año 25. Si la reduces mil veces, a $10^{-9}$, ¿se separarán mil veces más tarde, o solo unos años después?',
     build: function (host, d) {
       var r = 3.9, eps = 1e-6;
       var out = W.readout(host, '');
@@ -206,6 +231,7 @@ Course.topic('av-caos', function (p) {
   p.demo({
     title: 'El copo de nieve de Koch',
     intro: 'Cada paso sustituye cada segmento por cuatro. El perímetro crece sin límite mientras el área se queda acotada: una curva de longitud infinita encerrando un área finita.',
+    predice: 'Cada paso multiplica el perímetro por $\\frac{4}{3}$. ¿Y el área añadida en cada paso: crece, se mantiene o se reduce? Piensa en el tamaño de los triangulitos nuevos.',
     build: function (host, d) {
       var nivel = 3;
       var out = W.readout(host, '');
@@ -249,6 +275,13 @@ Course.topic('av-caos', function (p) {
       paint();
     }
   });
+
+  p.trampas([
+    { e: '«Determinista, luego predecible»', por: 'El mapa logístico es una parábola exacta y con $r = 3{,}9$ no se puede predecir a 50 pasos. Determinista dice que la regla no tiene azar; predecible exige además que los errores no crezcan.' },
+    { e: 'Creer que medir mejor arregla el caos', por: 'Mil veces más precisión solo compra unos pocos pasos más, porque el error crece exponencialmente. Por eso el tiempo se predice a días, no a meses.' },
+    { e: '«Existe el equilibrio, luego el sistema va a él»', por: 'Para $r = 3{,}2$ el equilibrio $0{,}6875$ existe y es inestable: el sistema lo esquiva y se instala en un ciclo. Existir y atraer son cosas distintas.' },
+    { e: 'Dar dimensión 1 al copo de Koch porque «es una curva»', por: 'Su longitud es infinita y su área cero: no se comporta como una curva ni como una superficie. La dimensión de autosemejanza, $\\log 4/\\log 3 \\approx 1{,}26$, mide justo eso.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('La dimensión fraccionaria no es una excentricidad: mide rugosidad, y se usa en medicina. La ' +
