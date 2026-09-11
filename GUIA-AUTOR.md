@@ -64,7 +64,11 @@ posición que corresponda del array. El orden del array es el orden del curso.
 | `p.note(html, tipo, 'título')` | Aviso. `tipo`: `null`, `'warn'`, `'ok'` |
 | `p.hist(html)` | Apunte histórico |
 | `p.keys([...])` | Caja de ideas clave (va al final del tema) |
-| `p.demo({...})` | **Ejemplo interactivo** (azul) |
+| `p.puente(html, 'título')` | **De dónde venimos**: organizador previo, al principio del tema |
+| `p.ejemplo({ title, enunciado, pasos, cierre })` | **Ejemplo resuelto** con pasos que se destapan uno a uno |
+| `p.comprueba(pregunta, opciones, { title })` | **Comprobación rápida**: una elección con explicación de cada opción |
+| `p.trampas([{ e, por }], 'título')` | **Trampas habituales**: errores frecuentes con su contraejemplo |
+| `p.demo({...})` | **Ejemplo interactivo** (azul); admite `predice` |
 | `p.exercise({...})` | **Ejercicio práctico** (verde) |
 | `p.problem({...})` | **Problema por apartados**, como los de examen |
 | `p.mapa()` | Mapa del temario de 2.º con el estado del alumno (bloque de repaso) |
@@ -100,6 +104,108 @@ la sección, no al principio: primero se entiende la idea, después se ve para q
 vale. Busca aplicaciones concretas y comprobables —el dígito de control del DNI,
 el folio A4, la sonda que se perdió por confundir unidades—, no frases genéricas
 del tipo «esto se usa mucho en ingeniería».
+
+---
+
+## Los componentes pedagógicos
+
+Además de explicar, cada tema tiene que **enganchar con lo anterior, enseñar a
+hacer, comprobar y avisar**. Para eso hay cinco piezas, cada una con evidencia
+detrás, y un orden que conviene respetar:
+
+> puente → idea con un caso concreto → fórmula y su lectura → demo (con
+> predicción) → ejemplo resuelto → comprobación → trampas → Practica (básico →
+> medio → avanzado) → ideas clave.
+
+No todos los temas necesitan todo en cada sección, pero **todos los temas de
+contenido llevan al menos un puente, un ejemplo resuelto, una comprobación, una
+predicción por demo y una lista de trampas** (el bloque de repaso tiene su propia
+estructura: mapa, simulacros, formulario y catálogo de errores). La línea de cada
+tema en `tests.html` cuenta ejemplos, resueltos y comprobaciones: si alguno está a
+cero, falta algo.
+
+### El puente — `p.puente`
+
+```js
+p.puente('El tema anterior dejó el bucle escrito como una sucesión. Este lo ' +
+  'escribe como un dibujo de cajas, y para leerlo hace falta la ' +
+  '[[fn-derivadas|derivada]] de un cociente.');
+```
+
+Va **el primero**, antes de cualquier texto: dos o tres frases que dicen de dónde
+venimos y qué herramienta del curso se va a reutilizar, con enlaces
+`[[tema|texto]]` a los temas que se retoman. Es el organizador previo de Ausubel:
+el alumno sabe dónde colgar lo que viene. El título por defecto es «De dónde
+venimos»; en el primer tema de un bloque se pasa `'Por dónde empezamos'` como
+segundo argumento. Nunca se escribe «el bloque 5» ni «el tema 10» en la prosa:
+se enlaza al tema por su id.
+
+### El ejemplo resuelto — `p.ejemplo`
+
+```js
+p.ejemplo({
+  title: 'Tres ganancias, a mano',
+  enunciado: 'Con $y_{n+1} = y_n + K(21 - y_n)$ y $y_0 = 12$, calcular dos pasos con $K = 0{,}5$.',
+  pasos: [
+    { t: 'Error $9$, corrección $4{,}5$: $y_1 = 16{,}5$.', antes: '¿Cuánto corrige con $K = 0{,}5$?' },
+    { t: 'Error $4{,}5$: $y_2 = 18{,}75$.' },
+    'Cada paso recorre la mitad de lo que falta: se acerca sin pasarse.'
+  ],
+  cierre: 'Con $K = 1{,}5$ la misma cuenta oscila. Se ve en la sección siguiente.'
+});
+```
+
+Los pasos se destapan uno a uno. Si un paso lleva `antes`, esa pregunta se enseña
+**antes** de destaparlo, para que el alumno lo intente él: es el ejemplo resuelto
+con autoexplicación (Sweller, Renkl). Un paso puede ser una cadena suelta. Hacen
+falta **al menos dos pasos**, con números de verdad, y el ejemplo va antes de
+«Practica», porque es lo que enseña el procedimiento que los ejercicios piden.
+
+### La comprobación rápida — `p.comprueba`
+
+```js
+p.comprueba('Un termostato tarda mucho en llegar a 21°. ¿Qué pasa si se duplica $K$?', [
+  { t: 'Llega antes, y cuanto más se suba $K$, mejor', ok: false, por: 'Pasado un punto oscila, y más allá se descontrola.' },
+  { t: 'Depende de dónde estaba $K$', ok: true, por: 'La ganancia tiene un punto dulce, no una dirección buena.' },
+  { t: 'No cambia nada', ok: false, por: 'Con $K > 1$ la corrección supera al error y se pasa al otro lado.' }
+]);
+```
+
+Una pregunta de elección justo después de la idea clave, con la explicación de
+**cada** opción, también de las equivocadas: es el efecto del test con
+retroalimentación elaborada (Roediger). Reglas que `tests.html` comprueba:
+exactamente una opción con `ok: true`, al menos dos opciones, y todas con `por`.
+Las opciones falsas tienen que ser errores plausibles, no rellenos.
+
+### La predicción en las demos — `predice`
+
+```js
+p.demo({
+  title: 'Un termostato con el mando de la ganancia',
+  intro: 'Sube la ganancia poco a poco y observa el cambio de comportamiento.',
+  predice: 'Con $K = 1$, ¿el primer paso se pasará, se quedará corto o llegará justo a 21?',
+  build: function (host, d) { /* ... */ }
+});
+```
+
+Un campo más en `p.demo`: una pregunta que el alumno se hace **antes** de tocar
+los mandos, con una respuesta concreta que la demo confirma o desmiente. Es el
+ciclo predecir-observar-explicar (White y Gunstone), y convierte una demo que se
+mira en una demo que se usa. Ponla en todas las demos.
+
+### Las trampas — `p.trampas`
+
+```js
+p.trampas([
+  { e: 'Subir la ganancia para corregir más deprisa', por: 'Con $K = 2{,}5$ cada corrección supera al error que arregla: se descontrola.' },
+  { e: 'Culpar al operario de una oscilación', por: 'Con retardo nadie decide mal y aun así oscila. Es la estructura, no el juicio.' }
+]);
+```
+
+Va justo antes de «Practica»: tres o cuatro errores que de verdad cometen los
+alumnos, cada uno con **un contraejemplo concreto** en `por`, no con una regla
+abstracta. Es el contraste de casos, y es también la lista que el alumno repasa
+antes de un examen. El título por defecto es «Trampas habituales».
 
 ---
 
@@ -155,7 +261,13 @@ p.exercise({
 - `v.raw[nombre]` es la cadena tal cual, para respuestas de texto.
 - `check` devuelve `true`/`false` o `{ ok, msg, fields }`.
 
-> **Si corriges respuestas escritas con palabras, usa `U.eligeOpcion`.**
+> **Si la respuesta es una de pocas palabras, no la pidas como texto: usa un
+> grupo `opts`.** Dentro/fuera, positiva/negativa, sí/no, A/B/C/D: se corrige
+> sin ambigüedad, se audita, y el alumno no tiene que adivinar el vocabulario
+> que espera el corrector. `U.eligeOpcion` queda para respuestas realmente
+> abiertas, en las que se describe algo con una frase.
+
+> **Si aun así corriges respuestas escritas con palabras, usa `U.eligeOpcion`.**
 > Buscar una palabra suelta con una expresión regular falla de dos maneras, y
 > las dos se han visto en este proyecto: rechaza respuestas correctas con tilde
 > («se amplía» no contiene «ampli») y acepta respuestas negadas («no esencial»
@@ -470,3 +582,10 @@ Abre **`tests.html`**. Comprueba:
 5. Ningún enlace `[[tema|texto]]` apunta a un tema que no existe.
 6. Ningún «error típico» salta con la respuesta correcta.
 7. Los requisitos del tema van antes que él en el temario.
+8. El tema lleva puente, al menos un ejemplo resuelto, al menos una comprobación,
+   una predicción en cada demo y una lista de trampas. En la línea del tema,
+   «resueltos» y «comprobaciones» no están a cero. La auditoría exige que cada
+   comprobación tenga exactamente una opción correcta y explicación en todas, y
+   que cada ejemplo resuelto tenga al menos dos pasos.
+9. Ninguna respuesta de pocas palabras se pide como texto libre: va en `opts`.
+10. La prosa no dice «bloque 5» ni «tema 10»: enlaza al tema con `[[id|texto]]`.

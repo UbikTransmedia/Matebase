@@ -121,7 +121,31 @@ llevó a esto:
   recurrencias, complejidad; seis temas nuevos de cibernética y siete de programación
   gráfica.
 
-## Fase 5 — Ideas pendientes (a petición)
+## Fase 5 — Revisión pedagógica de los 158 temas (cerrada)
+
+Un pase completo por todos los bloques con tres voces: un alumno que lee cada tema
+y anota lo que no entiende y dónde el hilo salta; un profesor que compara esas
+notas con el curso y propone cambios; y un especialista en usabilidad que los
+aplica con lo que se sabe de contenidos interactivos eficaces. El resultado, en
+todos los temas:
+
+- **Puente** al principio (`p.puente`): de dónde venimos y qué herramienta del curso
+  se reutiliza, con enlaces al tema en vez de «el bloque 5».
+- **Ejemplo resuelto** paso a paso con números (`p.ejemplo`), con una pregunta antes
+  de destapar cada paso, colocado antes de «Practica».
+- **Comprobación rápida** tras la idea clave (`p.comprueba`), con la explicación de
+  cada opción, también de las equivocadas.
+- **Predicción antes de cada demo** (`predice`): predecir, observar, explicar.
+- **Trampas habituales** con contraejemplo (`p.trampas`), justo antes de practicar.
+- Ejercicios de texto libre convertidos en **opciones**; ejercicios básicos añadidos
+  donde faltaban; niveles ordenados de básico a avanzado; errores de contenido
+  corregidos al pasar (la penumbra de las sombras suaves, entre otros).
+
+`tests.html` audita también estas piezas: cuenta ejemplos, resueltos y
+comprobaciones por tema y exige una sola opción correcta y explicación en todas.
+Cada bloque se entregó en un commit con las pruebas en verde.
+
+## Fase 6 — Ideas pendientes (a petición)
 
 - Más problemas de examen reales, adaptados por comunidades autónomas.
 - Un modo profesor para montar simulacros a medida eligiendo temas.
@@ -134,10 +158,14 @@ llevó a esto:
 1. Crear `topics/<id>.js`:
    ```js
    Course.topic('mi-id', function (p) {
+     p.puente('De dónde venimos y qué se reutiliza, con enlaces [[otro-id|así]].');
      p.section('Idea');
      p.text('Texto con matemáticas en línea: $x^2+1$.');
      p.formula('\\int_0^1 x^2\\,dx = \\frac{1}{3}', 'etiqueta', 'cómo se lee');
-     p.demo({ title: 'Míralo', build: function (host) { /* W.plot, W.space3d... */ } });
+     p.demo({ title: 'Míralo', predice: '¿Qué crees que pasará si…?', build: function (host) { /* W.plot, W.space3d... */ } });
+     p.ejemplo({ title: 'Resuelto', enunciado: '…', pasos: [{ t: 'paso 1', antes: 'pregunta' }, 'paso 2'], cierre: '…' });
+     p.comprueba('¿Pregunta?', [{ t: 'opción', ok: true, por: '…' }, { t: 'otra', ok: false, por: '…' }]);
+     p.trampas([{ e: 'error habitual', por: 'contraejemplo' }]);
      p.exercise({ /* gen / ask / fields / sol / errores / hint / steps */ });
      p.keys(['idea 1', 'idea 2']);
    });

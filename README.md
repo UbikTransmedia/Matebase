@@ -13,8 +13,12 @@ abrirla en cualquier ordenador con un navegador.
 ## Qué hay dentro
 
 A la izquierda, un índice desplegable con los dieciséis bloques del curso. A la
-derecha, el tema abierto. Cada tema tiene explicación, historia, ejemplos que se
-tocan y ejercicios que se pueden repetir infinitas veces.
+derecha, el tema abierto. Cada tema empieza con un **puente** desde lo anterior
+—de dónde venimos y qué herramienta del curso se reutiliza— y tiene explicación,
+historia, ejemplos que se tocan (con una **predicción** que hacer antes de
+tocarlos), un **ejemplo resuelto** paso a paso, **comprobaciones rápidas** con la
+explicación de cada opción, una lista de **trampas habituales** con su
+contraejemplo, y ejercicios que se pueden repetir infinitas veces.
 
 **Dos tipos de material interactivo, y conviene no confundirlos:**
 
@@ -102,8 +106,9 @@ recompila al vuelo, y donde los ejercicios de código se corrigen **comparando l
 pinta tu shader con lo que pinta la solución**. La idea que lo sostiene, que es la
 del curso entero: **reglas simples, complejidad epatante**.
 
-En total, **316 ejemplos interactivos**, **626 ejercicios procedimentales** y
-**21 problemas por apartados**, **240 cuadros de utilidad**, **176 apuntes
+En total, **316 ejemplos interactivos**, **644 ejercicios procedimentales**,
+**21 problemas por apartados**, **157 ejemplos resueltos paso a paso**,
+**174 comprobaciones rápidas**, **240 cuadros de utilidad**, **176 apuntes
 históricos** —con las matemáticas de Hipatia, Sophie Germain, Sofia Kovalévskaya,
 Ada Lovelace, Emmy Noether, Mary Cartwright, Katherine Johnson, Donella Meadows o
 Maryam Mirzakhani—, **59 visores de shaders**, **13 escenas en tres dimensiones**
@@ -182,7 +187,7 @@ Los detalles están en **`GUIA-AUTOR.md`**.
 - La programación gráfica usa **WebGL 1.0**. Si falta, el visor lo dice y el código
   sigue leyéndose. Las texturas se generan por fórmula y no se carga ninguna imagen,
   que es precisamente lo que permite que funcione desde `file://`.
-- `tests.html` hace 214 comprobaciones del núcleo y **audita todos los ejercicios y
+- `tests.html` hace 225 comprobaciones del núcleo y **audita todos los ejercicios y
   problemas**: genera cada uno 40 veces y verifica que la solución declarada pasa su
   propio corrector, que ningún «error típico» salta con la respuesta correcta, que
   nada lanza excepciones, que no queda ninguna fórmula con comandos LaTeX
