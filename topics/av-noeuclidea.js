@@ -1,6 +1,11 @@
 /* Tema: Geometrías no euclídeas */
 Course.topic('av-noeuclidea', function (p) {
 
+  p.puente('Toda la [[ge-angulos|geometría del plano]] del curso daba por sentado un marco: rectas, paralelas ' +
+    'y triángulos que suman 180°. Este bloque pone el marco en cuestión. No hacen falta técnicas nuevas, ' +
+    'solo los ángulos, los triángulos y la esfera de siempre, y una disposición: aceptar que una ' +
+    'regla que parece evidente puede cambiarse sin que nada se rompa.', 'Por dónde empezamos');
+
   p.text('Esta es, probablemente, la mejor historia de las matemáticas. Dura dos mil años, tiene un ' +
     'protagonista que demuestra lo contrario de lo que quería demostrar y no se da cuenta, un genio ' +
     'que se calla por miedo al ridículo, dos jóvenes que llegan a la meta a la vez y sin conocerse, ' +
@@ -9,7 +14,7 @@ Course.topic('av-noeuclidea', function (p) {
 
   p.text('Y empieza con una frase mal escrita.');
 
-  p.note('En el bloque «Geometría del plano y del espacio» se trabajaba dentro de un marco que nadie ' +
+  p.note('En [[ge-angulos|el bloque de geometría del plano y del espacio]] se trabajaba dentro de un marco que nadie ' +
     'discutía: el de Euclides, con sus rectas, sus paralelas y sus distancias de siempre, y con él se ' +
     'medían figuras, se escribían ecuaciones de rectas y planos y se calculaban ángulos. Este bloque ' +
     'hace otra cosa: <strong>pone el marco en cuestión</strong>. Este tema pregunta qué pasa si se cambia ' +
@@ -54,9 +59,16 @@ Course.topic('av-noeuclidea', function (p) {
     'proposiciones del libro I, y solo lo saca cuando ya no le queda más remedio. Esa reticencia se ' +
     'contagió a todos los que vinieron detrás.');
 
+  p.comprueba('«Los ángulos de un triángulo suman 180°.» ¿Es un hecho independiente o depende del quinto postulado?', [
+    { t: 'Es independiente: se demuestra midiendo cualquier triángulo', ok: false, por: 'Medir no demuestra nada, y menos con triángulos pequeños. Sobre la Tierra, un triángulo con vértices en el polo y en dos puntos del ecuador separados 90° tiene tres ángulos rectos: suma 270°.' },
+    { t: 'Depende del quinto: es equivalente a él', ok: true, por: 'La demostración de los 180° usa una paralela por el vértice, es decir, el quinto postulado. Y al revés: si se admite que todo triángulo suma 180°, el quinto se deduce. Son la misma afirmación.' },
+    { t: 'Depende de los cuatro primeros postulados', ok: false, por: 'Con solo los cuatro primeros se demuestra que la suma es <em>menor o igual</em> que 180° en el caso hiperbólico y no se puede fijar el valor. Hace falta el quinto.' }
+  ]);
+
   p.demo({
     title: 'Lo que depende del quinto postulado',
     intro: 'Casi todo lo que aprendiste de triángulos y paralelas se cae si se toca el quinto. Recorre la lista y fíjate en cuántas cosas «evidentes» son en realidad consecuencias suyas.',
+    predice: 'Antes de recorrer la lista: de estas cinco afirmaciones, ¿cuántas crees que sobreviven si se niega el quinto postulado? Apunta tu número.',
     build: function (host) {
       var cual = 0;
       var casos = [
@@ -66,7 +78,7 @@ Course.topic('av-noeuclidea', function (p) {
           dib: 'tri' },
         { t: 'El teorema de Pitágoras',
           d: 'Depende del quinto. En una esfera, $a^2+b^2 \\ne c^2$ para un triángulo rectángulo: ' +
-             'toda la trigonometría del bloque 4 vive dentro de la geometría euclídea.',
+             'toda la trigonometría del curso vive dentro de la geometría euclídea.',
           dib: 'pit' },
         { t: 'Existen rectángulos',
           d: 'Un cuadrilátero con cuatro ángulos rectos <strong>no existe</strong> si se niega el ' +
@@ -192,9 +204,23 @@ Course.topic('av-noeuclidea', function (p) {
     'ni las fotografías ampliadas. Vivimos tan dentro de la geometría euclídea que ni siquiera ' +
     'notamos que la semejanza es un privilegio.');
 
+  p.ejemplo({
+    title: 'Un triángulo sobre la Tierra, medido',
+    enunciado: 'Un triángulo tiene un vértice en el polo norte y los otros dos en el ecuador, separados 90° de longitud. Hallar sus ángulos, su exceso y su área, con $R = 6371$ km.',
+    pasos: [
+      { t: '<strong>Los lados.</strong> Los tres son arcos de círculo máximo: dos meridianos y un cuarto de ecuador. Cada uno mide un cuarto de vuelta, $\\frac{\\pi R}{2} \\approx 10\\,000$ km. Es un triángulo equilátero.', antes: '¿Cuánto mide un meridiano del polo al ecuador? ¿Y el arco de ecuador entre los dos?' },
+      { t: '<strong>Los ángulos.</strong> Los meridianos cortan al ecuador en ángulo recto: dos ángulos de 90°. En el polo, los meridianos se separan 90° de longitud: el tercero también es recto. Suma: $270°$.', antes: '¿Con qué ángulo cruza un meridiano el ecuador? ¿Y qué ángulo forman en el polo dos meridianos separados 90°?' },
+      { t: '<strong>El exceso.</strong> $270° - 180° = 90°$, es decir, $\\frac{\\pi}{2}$ radianes. En el plano sería imposible: un triángulo equilátero con tres ángulos rectos.' },
+      { t: '<strong>El área.</strong> $A = (\\alpha + \\beta + \\gamma - \\pi)R^2 = \\frac{\\pi}{2}\\cdot 6371^2 \\approx 6{,}4\\cdot 10^7$ km². Comprobación: es un octavo de la esfera, $\\frac{4\\pi R^2}{8} = \\frac{\\pi R^2}{2}$ ✓.', antes: '¿Qué fracción de la superficie de la esfera ocupa este triángulo? Piensa en cuántos caben.' },
+      { t: '<strong>Y uno pequeño.</strong> El triángulo de Gauss en Hannover, de unos 70 km de lado, tiene área $\\approx 2000$ km²: exceso $= \\frac{2000}{6371^2} \\approx 5\\cdot 10^{-5}$ rad, unos 10 segundos de arco. Casi nada, y sin embargo Gauss lo midió.' }
+    ],
+    cierre: 'El exceso es proporcional al área: un triángulo de 10 000 km de lado se pasa 90°, y uno de 70 km, diez segundos. A escala humana la Tierra es euclídea con un error que ningún instrumento de aula detecta.'
+  });
+
   p.demo({
     title: 'Un triángulo en la esfera',
     intro: 'En una esfera, la «recta» es el círculo máximo: el camino más corto entre dos puntos. Agranda el triángulo y mira cómo la suma de sus ángulos crece por encima de 180°. El exceso es proporcional al área.',
+    predice: 'Con el ángulo del polo en 90°, el triángulo del ejemplo, ¿qué porcentaje de la esfera ocupará? ¿Y si abres el ángulo hasta 170°: se acerca al 25 %, al 50 % o más?',
     build: function (host) {
       var lat = 30;
       var out = W.readout(host, '');
@@ -286,6 +312,7 @@ Course.topic('av-noeuclidea', function (p) {
   p.demo({
     title: 'El disco de Poincaré',
     intro: 'Dentro del disco, las rectas son estos arcos. Arrastra los dos puntos y mira la recta que los une: se curva hacia el centro. Fíjate en cuántas rectas pasan por un punto sin cortar a otra: infinitas.',
+    predice: 'Arrastra A y B hacia el borde manteniéndolos a la misma separación aparente. ¿La distancia hiperbólica se mantendrá, bajará o se disparará?',
     build: function (host) {
       var out = W.readout(host, '');
       var plot = W.board(host, {
@@ -404,6 +431,13 @@ Course.topic('av-noeuclidea', function (p) {
     'se puede medir desde dentro de la superficie, sin salir de ella— y se vuelve sobre los ' +
     'triángulos esféricos con las herramientas del cálculo.', null, 'Por dónde sigue esto');
 
+  p.trampas([
+    { e: '«La suma es 180° porque lo he medido»', por: 'A escala de aula el exceso es de millonésimas de grado. Medir no distingue las tres geometrías; solo lo hacen triángulos de cientos de kilómetros.' },
+    { e: 'Creer que la geometría no euclídea es «falsa» o «imaginaria»', por: 'La esfera es un modelo perfectamente real de la elíptica: la navegación y el GPS trabajan en ella. La pregunta «¿cuál es la verdadera?» no tiene sentido sin decir de qué espacio se habla.' },
+    { e: 'Pensar que en la esfera las paralelas «se curvan»', por: 'En la esfera no hay paralelas: dos círculos máximos siempre se cortan, en dos puntos. Los paralelos de latitud no son rectas de la esfera, salvo el ecuador.' },
+    { e: 'Usar Pitágoras o la semejanza en una superficie curva', por: 'Las dos dependen del quinto postulado. En la esfera no hay triángulos semejantes de distinto tamaño: los ángulos fijan el área.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.hist('La geometría hiperbólica sigue viva. <strong>Maryam Mirzakhani</strong>, matemática iraní, dedicó su carrera a ' +
     'las superficies hiperbólicas: formas en las que, como en el disco de este tema, los triángulos suman menos de ' +
@@ -432,26 +466,13 @@ Course.topic('av-noeuclidea', function (p) {
       return r.pick(casos);
     },
     ask: function (d) {
-      return '«' + d.t + '»<br><br>¿A qué geometría corresponde?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>euclídea</code>, ' +
-        '<code>elíptica</code>, <code>hiperbólica</code>, o <code>no euclídea</code> si vale para ' +
-        'las dos no euclídeas.</span>';
+      return '«' + d.t + '»<br><br>¿A qué geometría corresponde?';
     },
-    fields: [{ name: 'q', label: 'Geometría', w: 'wide' }],
+    fields: [{ name: 'q', label: 'Geometría', opts: [
+      { t: 'euclídea', v: 'euclidea' }, { t: 'elíptica', v: 'eliptica' },
+      { t: 'hiperbólica', v: 'hiperbolica' }, { t: 'a las dos no euclídeas', v: 'noeuclidea' }
+    ] }],
     sol: function (d) { return { q: d.g }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        noeuclidea: /no euclid|noeuclid|las dos no|ambas no/,
-        eliptica: /eliptic|esferic|esfera|riemann/,
-        hiperbolica: /hiperbol|lobach|bolyai|silla/,
-        euclidea: /^euclid|euclidea|euclides|plana|plano/
-      });
-      if (!q) {
-        return { ok: false, msg: 'Responde <strong>euclídea</strong>, <strong>elíptica</strong>, ' +
-          '<strong>hiperbólica</strong> o <strong>no euclídea</strong>.' };
-      }
-      return { ok: q === d.g };
-    },
     hint: function () {
       return 'Suma mayor que 180° → curvatura positiva → elíptica. Menor → negativa → hiperbólica. ' +
         'Exactamente 180° → euclídea.';
@@ -530,20 +551,10 @@ Course.topic('av-noeuclidea', function (p) {
     },
     ask: function (d) {
       return '«' + d.t + '»<br><br>¿Depende del quinto postulado, es decir, deja de valer en las ' +
-        'geometrías no euclídeas?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>sí</code> si depende ' +
-        'del quinto, o <code>no</code> si vale en las tres geometrías.</span>';
+        'geometrías no euclídeas?';
     },
-    fields: [{ name: 'q', label: 'Respuesta', w: 'wide', ph: 'sí / no' }],
+    fields: [{ name: 'q', label: 'Esta afirmación', opts: [{ t: 'depende del quinto: solo vale en la euclídea', v: 'si' }, { t: 'vale en las tres geometrías', v: 'no' }] }],
     sol: function (d) { return { q: d.dep ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        si: /^s|si\b|depende|solo euclid|falla/,
-        no: /^n|no\b|no depende|vale siempre|las tres/
-      });
-      if (!q) return { ok: false, msg: 'Responde <strong>sí</strong> o <strong>no</strong>.' };
-      return { ok: (q === 'si') === d.dep };
-    },
     hint: function () {
       return 'Los cuatro primeros postulados y todo lo que se deduce solo de ellos —la llamada ' +
         '<em>geometría absoluta</em>— vale en las tres. Lo que habla de paralelas, de 180° o de ' +

@@ -1,6 +1,11 @@
 /* Tema: Geometría diferencial: curvatura */
 Course.topic('av-geodif', function (p) {
 
+  p.puente('El tema anterior descubrió que hay geometrías con curvatura positiva, nula o negativa. Este ' +
+    'tema le pone número a la curvatura, y lo hace con una herramienta que ya conoces: la segunda ' +
+    'derivada, la misma que medía la concavidad en [[fn-aplicaciones|el estudio de funciones]]. Al final, ' +
+    'los triángulos esféricos del tema anterior reaparecen como consecuencia de un teorema.');
+
   p.text('La geometría clásica estudia rectas, círculos y polígonos: figuras rígidas. El cálculo ' +
     'estudia funciones que cambian. La <strong>geometría diferencial</strong> junta las dos y estudia ' +
     'curvas y superficies <em>cualesquiera</em>, usando derivadas para medir cómo se doblan.');
@@ -25,6 +30,7 @@ Course.topic('av-geodif', function (p) {
   p.demo({
     title: 'El círculo que mejor se ajusta',
     intro: 'Mueve el punto por la curva y observa el círculo osculador: el que se pega más a la curva ahí. Donde la curva es casi recta, el círculo es enorme.',
+    predice: 'En la cúbica $y = 0{,}12x^3$, ¿qué pasará con el círculo al pasar por $x = 0$? Ahí $y\'\' = 0$: piensa en qué radio le corresponde.',
     build: function (host, d) {
       var cual = 'parabola';
       var fs = {
@@ -81,6 +87,25 @@ Course.topic('av-geodif', function (p) {
     'sabías que medía la concavidad. La geometría diferencial no inventa nada nuevo aquí: le da ' +
     'significado geométrico exacto a algo que ya usabas para estudiar funciones.', 'ok');
 
+  p.comprueba('La parábola $y = x^2$ tiene $y\'\' = 2$ en todos sus puntos. ¿Tiene la misma curvatura en todos?', [
+    { t: 'Sí: la curvatura es la segunda derivada', ok: false, por: 'La segunda derivada es solo el numerador. El denominador $(1 + y\'^2)^{3/2}$ crece al alejarse del vértice, y la curvatura baja.' },
+    { t: 'No: en el vértice vale 2 y lejos de él se acerca a 0', ok: true, por: 'En $x = 0$, $\\kappa = 2$ (radio $0{,}5$). En $x = 1$, $\\kappa = \\frac{2}{5^{3/2}} \\approx 0{,}18$ (radio $5{,}6$). Lejos del vértice la parábola es casi recta.' },
+    { t: 'No: la curvatura crece al alejarse del vértice', ok: false, por: 'Al revés: las ramas de la parábola se van enderezando. El círculo osculador se hace enorme.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Curvatura de una parábola, y de una esfera',
+    enunciado: 'Calcular la curvatura y el radio de curvatura de $y = x^2$ en $x = 0$ y en $x = 1$. Después, la curvatura de Gauss de una esfera de radio $R$ y de un cilindro del mismo radio.',
+    pasos: [
+      { t: '<strong>Derivadas.</strong> $y\' = 2x$ e $y\'\' = 2$.' },
+      { t: '<strong>En el vértice.</strong> $y\'(0) = 0$: $\\kappa = \\dfrac{2}{(1 + 0)^{3/2}} = 2$. Radio de curvatura $R = \\frac{1}{2}$: el círculo que mejor se pega a la parábola en su vértice tiene radio $0{,}5$.', antes: 'Sustituye $x = 0$. ¿Qué vale el denominador?' },
+      { t: '<strong>En $(1, 1)$.</strong> $y\'(1) = 2$: $\\kappa = \\dfrac{2}{(1 + 4)^{3/2}} = \\dfrac{2}{5\\sqrt 5} \\approx 0{,}179$. Radio $\\approx 5{,}6$: once veces mayor que en el vértice.', antes: 'Ahora $y\' = 2$. ¿Cuánto vale $(1 + 4)^{3/2}$?' },
+      { t: '<strong>La esfera.</strong> Cualquier corte por un plano que pase por el centro es un círculo máximo de radio $R$: $\\kappa_1 = \\kappa_2 = \\frac{1}{R}$, y $K = \\frac{1}{R^2}$. Una esfera pequeña está muy curvada; la Tierra, con $R = 6371$ km, tiene $K \\approx 2{,}5\\cdot 10^{-8}$ km$^{-2}$.', antes: '¿Cuánto se curva una esfera en cada dirección?' },
+      { t: '<strong>El cilindro.</strong> Alrededor: $\\kappa_1 = \\frac{1}{R}$. A lo largo: recto, $\\kappa_2 = 0$. Producto $K = 0$: la misma curvatura de Gauss que una hoja plana, y por eso una hoja se enrolla en cilindro sin arrugas.', antes: '¿En qué dirección es recto un cilindro?' }
+    ],
+    cierre: 'La esfera y el cilindro se curvan igual en una dirección y tienen $K$ completamente distinta. Ese es el sentido de multiplicar: $K$ mide si la superficie se curva <em>en las dos</em> direcciones, y eso es lo que decide si se puede aplanar.'
+  });
+
   /* ---------------------------------------------------------------- */
   p.section('Superficies: la curvatura de Gauss');
 
@@ -98,6 +123,7 @@ Course.topic('av-geodif', function (p) {
   p.demo({
     title: 'Los tres tipos de curvatura',
     intro: 'Corte de una superficie por dos planos perpendiculares. Cambia el tipo y mira los dos perfiles: su producto es la curvatura de Gauss.',
+    predice: 'El cilindro se curva claramente en una dirección. ¿Su curvatura de Gauss será positiva o cero? Piensa en si se puede desenrollar sobre una mesa sin arrugarlo.',
     build: function (host, d) {
       var tipo = 'esfera';
       var tipos = {
@@ -170,6 +196,7 @@ Course.topic('av-geodif', function (p) {
   p.demo({
     title: 'Triángulos en una esfera',
     intro: 'Un triángulo formado por dos meridianos y el ecuador. Abre el ángulo entre los meridianos y suma los tres ángulos del triángulo.',
+    predice: 'Con 90° entre meridianos la suma es 270°. Si cierras el ángulo a 10°, ¿la suma bajará hasta 180° o se quedará por encima? ¿Qué le pasa al área?',
     build: function (host, d) {
       var ang = 90;
       var out = W.readout(host, '');
@@ -229,6 +256,13 @@ Course.topic('av-geodif', function (p) {
     'Hasta que en 1915 Einstein la necesitó: en la relatividad general, la gravedad <strong>no es una ' +
     'fuerza</strong>, sino la curvatura del espacio-tiempo, y los planetas simplemente siguen ' +
     'geodésicas. La herramienta ya estaba construida, esperando.');
+
+  p.trampas([
+    { e: 'Tomar $y\'\'$ como la curvatura', por: 'Es solo el numerador. La parábola $y = x^2$ tiene $y\'\' = 2$ en todas partes y curvatura 2 en el vértice y 0,18 en $(1, 1)$.' },
+    { e: '«El cilindro se curva, luego $K > 0$»', por: 'Se curva en una dirección y es recto en la otra: $K = \\kappa_1\\cdot 0 = 0$. Por eso se desenrolla sin estirar, y por eso una hoja de papel se enrolla pero no se ajusta a una pelota.' },
+    { e: 'Creer que un mapa mejor arreglaría las deformaciones', por: 'Es un teorema, no una limitación técnica: la esfera tiene $K > 0$ y el papel $K = 0$, y $K$ no cambia sin estirar. Todo mapa plano miente en algo.' },
+    { e: 'Pensar que la geodésica es «la recta del mapa»', por: 'En el mapa plano la geodésica Madrid–Nueva York parece un rodeo por Groenlandia. La línea recta del mapa es la que da el rodeo de verdad, sobre la esfera.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Las geodésicas son la razón de que un vuelo de Madrid a Nueva York suba hacia Groenlandia: ' +
@@ -306,12 +340,10 @@ Course.topic('av-geodif', function (p) {
       return { s: c.s, t: c.t };
     },
     ask: function (d) {
-      return '¿Qué signo tiene la curvatura de Gauss de <strong>' + d.s + '</strong>?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> positiva · ' +
-        '<code>2</code> cero · <code>3</code> negativa</span>';
+      return '¿Qué signo tiene la curvatura de Gauss de <strong>' + d.s + '</strong>?';
     },
-    fields: [{ name: 't', label: 'Signo', w: 'tiny' }],
-    sol: function (d) { return { t: d.t }; },
+    fields: [{ name: 't', label: 'Signo', opts: [{ t: 'positiva', v: '1' }, { t: 'cero', v: '2' }, { t: 'negativa', v: '3' }] }],
+    sol: function (d) { return { t: String(d.t) }; },
     hint: function () { return 'Piensa en las dos direcciones extremas: ¿se curva hacia el mismo lado (positiva), hacia lados opuestos (negativa) o es recta en alguna (cero)?'; },
     steps: function (d) {
       return ['$K = \\kappa_1 \\kappa_2$, así que su signo lo deciden las dos curvaturas principales.',

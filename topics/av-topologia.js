@@ -1,6 +1,11 @@
 /* Tema: Topología */
 Course.topic('av-topologia', function (p) {
 
+  p.puente('Los dos temas anteriores cambiaban las reglas de la geometría y medían la curvatura. Este ' +
+    'da el paso final: deja de medir. Solo hace falta contar: piezas, agujeros, caras, aristas y ' +
+    'vértices, con la fórmula de Euler que apareció en [[ge-cuerpos|los poliedros]]. Es la geometría que ' +
+    'queda cuando se quita todo lo que se puede quitar.');
+
   p.text('Imagina una geometría en la que no existen las distancias, ni los ángulos, ni las áreas. ' +
     'Una geometría hecha de goma, donde puedes estirar, encoger y retorcer cuanto quieras —pero no ' +
     'romper ni pegar—. Lo que sobrevive a esas deformaciones es la <strong>topología</strong>.');
@@ -13,9 +18,16 @@ Course.topic('av-topologia', function (p) {
     'La topología clasifica las figuras por lo que se conserva en esas deformaciones: cuántas piezas ' +
     'tiene, cuántos agujeros, si tiene borde, si tiene dos caras o una sola.');
 
+  p.comprueba('¿Son topológicamente equivalentes la letra <strong>A</strong> y la letra <strong>R</strong> (en trazo grueso, como en un cartel)?', [
+    { t: 'Sí: las dos tienen exactamente un agujero', ok: true, por: 'La A tiene un triángulo cerrado y dos patas; la R, un bucle cerrado y dos patas. Un agujero cada una, una sola pieza: se deforma una en la otra estirando.' },
+    { t: 'No: tienen formas muy distintas', ok: false, por: 'La forma es justo lo que a la topología no le importa. Solo cuenta piezas y agujeros, y en eso coinciden.' },
+    { t: 'No: la R tiene una curva y la A solo rectas', ok: false, por: 'Curvo o recto es cuestión de estirar, que está permitido. Lo que no se puede es abrir o cerrar agujeros, y aquí no hace falta.' }
+  ]);
+
   p.demo({
     title: 'La misma figura, deformada',
     intro: 'Estira y retuerce el contorno. Por mucho que lo deformes sigue siendo una curva cerrada sin autointersecciones: para la topología, siempre una circunferencia.',
+    predice: 'Con la deformación al máximo y 9 lóbulos la figura parece una estrella. ¿Cuántas piezas y cuántos agujeros tendrá? ¿Ha cambiado algo topológico?',
     build: function (host, d) {
       var def = 0, lobulos = 3;
       var out = W.readout(host, '');
@@ -64,9 +76,23 @@ Course.topic('av-topologia', function (p) {
     'convertirlo en una esfera cumple $C - A + V = 2$, sea un cubo, una pirámide o un balón de fútbol. ' +
     'Es el primer <em>invariante topológico</em> de la historia.');
 
+  p.ejemplo({
+    title: 'Contar caras, aristas y vértices en un marco',
+    enunciado: 'Un marco de cuadro cuadrado, macizo, con sección cuadrada (un toro hecho de caras planas). Contar $C$, $A$ y $V$, calcular $\\chi$ y deducir el género.',
+    pasos: [
+      { t: '<strong>Las caras.</strong> El marco tiene cuatro barras. Cada barra muestra cuatro caras rectangulares (exterior, interior, arriba, abajo): $C = 16$.', antes: 'Recorre mentalmente una barra del marco. ¿Cuántas caras planas tiene a la vista?' },
+      { t: '<strong>Los vértices.</strong> En cada esquina del marco hay dos cuadrados de sección, uno exterior y otro interior, con 4 vértices cada uno... pero las esquinas comparten. Contando con cuidado: 8 vértices en el contorno exterior (arriba y abajo) y 8 en el interior: $V = 16$.', antes: 'Cuenta las esquinas del cuadrado exterior grande, arriba y abajo, y las del hueco interior.' },
+      { t: '<strong>Las aristas.</strong> Mejor sin contar: cada cara es un cuadrilátero con 4 aristas, y cada arista pertenece a 2 caras. $A = \\frac{4\\cdot 16}{2} = 32$.', antes: '¿Cómo se cuentan las aristas sin señalarlas una a una? Piensa en cuántas tiene cada cara y a cuántas caras pertenece cada arista.' },
+      { t: '<strong>La característica.</strong> $\\chi = C - A + V = 16 - 32 + 16 = 0$.' },
+      { t: '<strong>El género.</strong> $0 = 2 - 2g$ da $g = 1$: un agujero. El marco es un toro, como el donut y la taza, y la fórmula lo ha detectado contando, sin mirar la forma.', antes: 'Despeja $g$ de $\\chi = 2 - 2g$.' }
+    ],
+    cierre: 'Si el marco tuviera las esquinas redondeadas, o la sección circular, el recuento sería otro y $\\chi$ sería el mismo: 0. Eso es lo que significa invariante.'
+  });
+
   p.demo({
     title: 'Euler no depende de cómo dividas',
     intro: 'Cambia el número de caras en que partes la esfera. La característica sale siempre 2.',
+    predice: 'El balón de fútbol tiene 32 caras, 90 aristas y 60 vértices. Antes de pulsar: ¿cuánto dará $C - A + V$? ¿Y para el toro de 16 caras?',
     build: function (host, d) {
       var poliedros = [
         { n: 'tetraedro', C: 4, V: 4, A: 6 },
@@ -120,6 +146,7 @@ Course.topic('av-topologia', function (p) {
   p.demo({
     title: 'Recorrer la banda de Möbius',
     intro: 'La banda vista de perfil, con el giro señalado. Avanza el recorrido y observa que después de una vuelta completa estás en la «otra cara» sin haber cruzado ningún borde.',
+    predice: 'Tras una vuelta completa, ¿la flecha apuntará igual que al principio o al revés? ¿Cuántas vueltas harán falta para que vuelva a su posición original?',
     build: function (host, d) {
       var t = 0;
       var out = W.readout(host, '');
@@ -191,6 +218,13 @@ Course.topic('av-topologia', function (p) {
   p.text('Por eso <strong>siempre hay al menos un punto en la Tierra donde no sopla el viento</strong>, ' +
     'y por eso todo ciclón tiene un ojo. En cambio, un toro sí se puede peinar entero: la topología ' +
     'decide qué es posible y qué no, sin hacer una sola cuenta.');
+
+  p.trampas([
+    { e: 'Comparar figuras por su forma', por: 'La forma es lo que la topología ignora. Una taza y un donut se diferencian en todo menos en lo que importa: un agujero cada uno.' },
+    { e: 'Dar $\\chi = 2$ sin contar', por: 'Solo vale 2 para lo que se puede inflar hasta ser una esfera. Un marco de cuadro da $16 - 32 + 16 = 0$: tiene un agujero.' },
+    { e: 'Confundir el hueco encerrado por una curva con un agujero de la superficie', por: 'Una circunferencia encierra una región, pero como curva es una sola pieza cerrada. El género cuenta agujeros <em>que atraviesan</em>, como el del donut.' },
+    { e: '«Al cortar la banda de Möbius por el medio salen dos»', por: 'Sale una sola banda, más larga y con dos vueltas. Con una tira de papel se comprueba en un minuto, y sorprende siempre.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('La topología parece la más abstracta y ha resultado ser de las más aplicadas. El análisis ' +
@@ -293,17 +327,10 @@ Course.topic('av-topologia', function (p) {
       return { a: c.a, b: c.b, ok: c.ok, por: c.por };
     },
     ask: function (d) {
-      return '¿Son topológicamente equivalentes <strong>' + d.a + '</strong> y <strong>' + d.b +
-        '</strong>?<br><span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> ' +
-        'o <code>no</code>.</span>';
+      return '¿Son topológicamente equivalentes <strong>' + d.a + '</strong> y <strong>' + d.b + '</strong>?';
     },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'sí, son homeomorfos', v: 'si' }, { t: 'no', v: 'no' }] }],
     sol: function (d) { return { r: d.ok ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var t = v.raw.r.trim().toLowerCase().replace(/[íÍ]/g, 'i');
-      if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe <code>si</code> o <code>no</code>.' };
-      return (t === 'si') === !!d.ok;
-    },
     hint: function () { return 'Cuenta los agujeros y las piezas. Se vale estirar y encoger; no se vale romper ni pegar.'; },
     steps: function (d) {
       return ['La pregunta es si uno se puede deformar en el otro sin romper ni pegar.',
