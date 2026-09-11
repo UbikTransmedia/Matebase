@@ -1001,6 +1001,12 @@ window.CURRICULUM = [
         req: ['gfx-tiempo']
       },
       {
+        id: 'gfx-texto', t: 'Letras sin fuentes: texto con distancias',
+        r: 'Un marcador de siete segmentos, letras hechas de trazos, un letrero de LED y los efectos de un título.',
+        o: ['Cifras de siete segmentos y el bit de un número', 'Letras como unión de segmentos: contorno, brillo y sombra', 'Una fuente de mapa de bits dentro de un float'],
+        req: ['gfx-curvas', 'gfx-repetir', 'ar-naturales']
+      },
+      {
         id: 'gfx-matrices', t: 'Matrices que giran el mundo',
         r: 'Rotar, escalar y torcer, y la idea que descoloca: transformas la coordenada, no la figura.',
         o: ['La matriz de rotación 2×2', 'Por qué todo va al revés', 'Componer transformaciones'],
