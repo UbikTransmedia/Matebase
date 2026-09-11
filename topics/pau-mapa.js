@@ -1,6 +1,12 @@
 /* Tema: Mapa del temario de 2.º */
 Course.topic('pau-mapa', function (p) {
 
+  p.puente('Los bloques anteriores enseñan; este ordena. Aquí no hay fórmulas nuevas: hay un mapa de lo ' +
+    'que entra en el examen de acceso, un catálogo de los errores que más puntos cuestan, un formulario ' +
+    'que se genera solo a partir de los temas y dos simulacros con reloj. Conviene pasar por él dos ' +
+    'veces: al empezar el curso, para ver el terreno, y en las últimas semanas, para decidir qué repasar.',
+    'Por dónde empezamos');
+
   p.text('Este bloque no enseña nada nuevo: ordena lo que ya has visto. Llegar al examen de acceso a la ' +
     'universidad no depende tanto de haber estudiado mucho como de saber <strong>qué</strong> entra, ' +
     '<strong>cómo vas</strong> en cada parte y <strong>qué necesita</strong> cada tema para entenderse. ' +
@@ -37,6 +43,19 @@ Course.topic('pau-mapa', function (p) {
     '<strong>Haz simulacros con reloj.</strong> Un examen no solo mide lo que sabes: mide si lo sabes hacer en noventa minutos y sin pistas. Los simulacros de este bloque sacan preguntas de los temas y te dicen al final qué repasar.',
     '<strong>Estudia tus errores, no solo los aciertos.</strong> El tema de los errores que más puntos cuestan recoge los de siempre. Reconocerlos en un examen ajeno es el primer paso para no cometerlos en el tuyo.'
   ], true);
+
+  p.comprueba('Te quedan tres tardes y fallas la discusión de sistemas con parámetro. ¿Por dónde empiezas?', [
+    { t: 'Por la discusión de sistemas, que es lo que cae en el examen', ok: false, por: 'Si falla la base, machacar el tema de arriba no arregla nada. La discusión da por sabidos el rango y los determinantes; si esos fallan, la discusión seguirá fallando.' },
+    { t: 'Por lo que da por sabido: rango y determinantes', ok: true, por: 'Es lo que dice la última columna del mapa. Una tarde de ejercicios de rango suele desbloquear la discusión entera; después, una tarde de discusión con parámetro y la tercera para un simulacro.' },
+    { t: 'Por releer la teoría de los tres temas', ok: false, por: 'Releer da sensación de dominio sin comprobarlo. Resolver ejercicios con «Otro» hasta que salgan a la primera es lo único que dice si lo sabes.' }
+  ]);
+
+  p.trampas([
+    { e: 'Releer en vez de resolver', por: 'Releer produce la sensación de saber; solo resolver sin mirar la teoría la comprueba. Si un tema «se entiende» pero sus ejercicios fallan, no está aprendido.' },
+    { e: 'Empezar por el tema que más gusta', por: 'Suele ser el que ya se sabe. El tiempo rinde más en el tema con más temas colgando de él y peor estado.' },
+    { e: 'Dejar los simulacros para el final', por: 'El primer simulacro dice dónde estás; sin él, el repaso va a ciegas. Uno al empezar, otro a mitad y otro al final.' },
+    { e: 'Estudiar siempre sin reloj', por: 'El examen mide también velocidad. Un ejercicio que sale en veinte minutos no sirve si en la prueba tocan diez.' }
+  ], 'Trampas del repaso');
 
   p.util('Planificar un repaso es un problema de dependencias, igual que planificar una obra o compilar un ' +
     'programa: no se puede poner el tejado antes que las paredes. La columna «Lo que da por sabido» es un ' +

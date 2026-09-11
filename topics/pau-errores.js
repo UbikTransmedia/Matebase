@@ -1,6 +1,10 @@
 /* Tema: Los errores que mas puntos cuestan */
 Course.topic('pau-errores', function (p) {
 
+  p.puente('Cada tema del curso termina con una lista de trampas habituales. Este tema las reúne, las ' +
+    'clasifica por bloque y añade lo que más importa en un examen y menos se explica: la diferencia ' +
+    'entre equivocarse en una cuenta y equivocarse en una idea.');
+
   p.text('Casi nadie suspende matemáticas por no saber nada. Se pierden puntos, sobre todo, por un ' +
     'puñado de errores que se repiten año tras año y alumno tras alumno: siempre los mismos, en los ' +
     'mismos sitios. La buena noticia es que un error que tiene nombre se reconoce, y un error que se ' +
@@ -15,6 +19,25 @@ Course.topic('pau-errores', function (p) {
   p.note('Lee cada fila y pregúntate si alguna vez lo has hecho. Si la respuesta es «sí» o «no estoy ' +
     'seguro», sigue el enlace y haz un par de ejercicios de ese tema: los ejercicios del curso detectan ' +
     'muchos de estos errores y te avisan cuando los cometes.', 'ok', 'Cómo usar el catálogo');
+
+  p.comprueba('Ana plantea bien un área, parte el intervalo en el corte con el eje y se equivoca al restar en la regla de Barrow: da $7/2$ en vez de $9/2$. Bruno integra de un tirón sin partir y obtiene $5/2$, con las cuentas perfectas. ¿Quién pierde más puntos?', [
+    { t: 'Ana: su resultado está mal', ok: false, por: 'Es un error de cálculo con un planteamiento correcto: resta poco. Quien corrige ve que sabe qué es un área y cómo se calcula.' },
+    { t: 'Bruno: su resultado está mal y el método también', ok: true, por: 'Es un error de concepto: no sabe que la integral resta donde la función es negativa. Puede anular el apartado aunque las cuentas sean impecables.' },
+    { t: 'Los dos igual: ninguno ha acertado', ok: false, por: 'Los criterios de corrección distinguen los dos casos. El procedimiento vale más que el número final, y por eso conviene escribirlo entero.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un apartado, comprobado en un minuto',
+    enunciado: 'Has terminado el apartado «Halla el área encerrada entre $f(x) = x^2 - 4$ y el eje $X$ en $[0, 3]$» y te ha salido $-3$. Antes de pasar al siguiente, pásale la lista de comprobación.',
+    pasos: [
+      { t: '<strong>¿Tiene sentido?</strong> Un área no puede ser negativa. Algo está mal, y esa señal vale oro: se ha detectado antes de entregar.', antes: 'Mira el signo del resultado. ¿Puede ser?' },
+      { t: '<strong>¿Qué se pidió?</strong> Área, no integral. $\\displaystyle\\int_0^3 (x^2 - 4)\\,dx = -3$ es correcto como integral, pero no es lo que preguntan.', antes: 'Relee la pregunta: ¿integral o área?' },
+      { t: '<strong>¿Dónde corta el eje?</strong> $x^2 - 4 = 0$ en $x = 2$, que está dentro de $[0, 3]$. Ahí hay que partir: entre 0 y 2 la función es negativa y la integral resta.' },
+      { t: '<strong>Rehacer.</strong> $\\displaystyle\\int_0^2 = -\\frac{16}{3}$ y $\\displaystyle\\int_2^3 = \\frac{7}{3}$. Área $= \\frac{16}{3} + \\frac{7}{3} = \\frac{23}{3}$. Y comprobación: $-\\frac{16}{3} + \\frac{7}{3} = -3$, la integral de antes ✓.', antes: 'Calcula cada trozo por separado y suma en valor absoluto.' },
+      { t: '<strong>Cerrar.</strong> «El área vale $23/3$ unidades cuadradas.» Con unidades y con una frase.' }
+    ],
+    cierre: 'Un minuto de comprobación ha convertido un error de concepto, que podía anular el apartado, en la respuesta correcta. La lista es siempre la misma: sentido, pregunta, cortes, rehacer, cerrar.'
+  });
 
   /* ---------------------------------------------------------------- */
   p.section('Álgebra: matrices y sistemas');

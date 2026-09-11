@@ -1,6 +1,10 @@
 /* Tema: Simulacro de MACS II */
 Course.topic('pau-simulacro-mcs', function (p) {
 
+  p.puente('Los temas anteriores de este bloque dicen qué entra y qué se falla. El simulacro junta las ' +
+    'dos cosas con un reloj delante: preguntas de los temas de tu asignatura, repartidas como en la ' +
+    'prueba, y una corrección que dice qué repasar.');
+
   p.text('Un simulacro es un examen de verdad hecho en casa: con reloj, sin apuntes y sin pistas. Aquí ' +
     'las preguntas salen de los ejercicios de los temas de Matemáticas Aplicadas a las Ciencias Sociales II, ' +
     'repartidas por bloques como en la prueba de acceso, y cada vez que empiezas uno los números son ' +
@@ -35,6 +39,19 @@ Course.topic('pau-simulacro-mcs', function (p) {
     '<strong>Interpreta los resultados en el contexto</strong>: un número de trabajadores no puede ser 3,4; un beneficio máximo tiene unidades; un intervalo de confianza se explica con una frase.',
     '<strong>Lo importante no es la nota, sino la tabla final.</strong> Cada enlace de «Para repasar» lleva al ejercicio exacto que falló, y lo que falles volverá a salirte en la portada unos días después.'
   ], true);
+
+  p.comprueba('Llevas quince minutos en un apartado al que corresponden diez y no sale. ¿Qué haces?', [
+    { t: 'Seguir hasta que salga: ya casi está', ok: false, por: '«Ya casi está» es lo que se piensa siempre. Cada minuto de más aquí es un minuto menos para una pregunta que sí sabes.' },
+    { t: 'Dejar escrito lo que hay, pasar al siguiente y volver al final', ok: true, por: 'El planteamiento escrito ya puntúa. Con la cabeza en otro problema, al volver suele verse el fallo; y si no, se han asegurado los puntos del resto.' },
+    { t: 'Tacharlo todo y empezar otro bloque', ok: false, por: 'Tachar borra lo que valía. Un planteamiento correcto sin terminar vale más que una hoja en blanco.' }
+  ]);
+
+  p.trampas([
+    { e: 'No escribir qué es cada incógnita', por: 'En programación lineal y sistemas, «$x$: número de mesas» evita la mitad de los errores de planteamiento y le dice al corrector qué has entendido.' },
+    { e: 'Dar 3,4 trabajadores o un beneficio sin unidades', por: 'El contexto forma parte de la respuesta. Un resultado sin interpretar puede no puntuar entero.' },
+    { e: 'Usar $\\hat{p}$ en la raíz de un contraste', por: 'En el contraste se razona suponiendo $H_0$: va $p_0$. En el intervalo de confianza iba $\\hat{p}$. Es el despiste más habitual del bloque de inferencia.' },
+    { e: 'Olvidar los vértices en programación lineal', por: 'El óptimo está siempre en un vértice de la región factible. Sin la lista de vértices con su valor, la respuesta no está justificada.' }
+  ], 'Trampas del día del examen');
 
   p.note('El enlace de un simulacro corregido reproduce las mismas preguntas con los mismos números. Un ' +
     'profesor puede hacer uno, copiar el enlace y pasárselo a la clase: todos harán el mismo examen y ' +

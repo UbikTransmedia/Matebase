@@ -1,6 +1,9 @@
 /* Tema: Formulario de 2.º */
 Course.topic('pau-formulario', function (p) {
 
+  p.puente('Cada tema termina con sus ideas clave y sus fórmulas. Esta página las recoge todas, en el ' +
+    'orden del mapa, para tenerlas juntas cuando toca repasar. No añade nada: reúne.');
+
   p.text('Aquí están, juntas y en orden, todas las fórmulas y las ideas clave de los temas de tu ' +
     'asignatura. No están copiadas a mano: salen de los propios temas cada vez que abres esta página, ' +
     'así que si un tema cambia, el formulario cambia con él.');
@@ -12,6 +15,12 @@ Course.topic('pau-formulario', function (p) {
 
   p.text('Con el botón de imprimir sale una versión limpia, sin menús ni ejemplos interactivos, que se ' +
     'puede guardar en PDF. Elige antes la asignatura: Matemáticas II y MACS II no tienen el mismo temario.');
+
+  p.comprueba('Ves en el formulario $|kA| = k^n|A|$ y no recuerdas por qué. ¿Qué haces?', [
+    { t: 'Memorizarla tal cual', ok: false, por: 'Una fórmula sin su porqué se recuerda mal y se aplica peor: en el examen aparecerá con $n = 3$ y $k = -2$ y habrá que saber qué hacer con cada cosa.' },
+    { t: 'Seguir el enlace al tema y hacer un par de ejercicios', ok: true, por: 'Para eso está el enlace. Al multiplicar una matriz por $k$ se multiplican todas sus filas, y cada fila aporta un factor: con eso la fórmula se reconstruye sola.' },
+    { t: 'Saltarla, porque seguramente no cae', ok: false, por: 'Cae. Es uno de los errores más frecuentes del examen, y está en el catálogo de errores de este bloque.' }
+  ]);
 
   p.formulario();
 
