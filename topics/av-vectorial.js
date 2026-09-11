@@ -1,9 +1,15 @@
 /* Tema: Cálculo vectorial */
 Course.topic('av-vectorial', function (p) {
 
-  p.text('Todo el cálculo que has visto trata funciones de <em>una</em> variable. Pero la temperatura ' +
-    'de una habitación depende de tres coordenadas, y la velocidad del viento es un vector distinto en ' +
-    'cada punto. El <strong>cálculo vectorial</strong> extiende derivadas e integrales a esos casos.');
+  p.puente('Todo el cálculo que has visto trata funciones de <em>una</em> variable. Este bloque lo lleva a ' +
+    'funciones de varias, y lo hace con dos herramientas ya conocidas: la derivada, que aquí se hace ' +
+    '«de una variable cada vez», y los vectores del plano y del espacio, que sirven para juntar esas ' +
+    'derivadas en un solo objeto. Si la regla de la cadena y el producto escalar están frescos, el ' +
+    'bloque entero se sigue sin sobresaltos.', 'Por dónde empezamos');
+
+  p.text('Pero la temperatura de una habitación depende de tres coordenadas, y la velocidad del viento ' +
+    'es un vector distinto en cada punto. El <strong>cálculo vectorial</strong> extiende derivadas e ' +
+    'integrales a esos casos.');
 
   p.section('Campos escalares y campos vectoriales');
   p.text('Hasta ahora una función devolvía un número por cada número que le dabas. Aquí damos el salto a ' +
@@ -45,9 +51,29 @@ Course.topic('av-vectorial', function (p) {
     'entrena hoy prácticamente toda la inteligencia artificial: para minimizar una función, se dan ' +
     'pasitos en la dirección contraria al gradiente.');
 
+  p.comprueba('Estás en una ladera donde el gradiente de la altura vale $(3, 0)$: apunta al este. ¿Hacia dónde caminas para no subir ni bajar?', [
+    { t: 'Hacia el norte o el sur', ok: true, por: 'Perpendicular al gradiente se recorre la curva de nivel: la altura no cambia. Hacia el este se sube con pendiente 3; hacia el oeste se baja igual.' },
+    { t: 'Hacia el oeste, en sentido contrario al gradiente', ok: false, por: 'Contra el gradiente es donde más se <em>baja</em>. Es el sentido del descenso de gradiente, no el de la curva de nivel.' },
+    { t: 'En cualquier dirección: el gradiente solo mide la pendiente máxima', ok: false, por: 'Mide la pendiente máxima <em>y</em> su dirección. En dirección $\\vec u$ la pendiente es $\\nabla f\\cdot\\vec u$, que solo se anula si $\\vec u$ es perpendicular al gradiente.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un gradiente con números',
+    enunciado: 'Para $f(x, y) = x^2 + 3xy - y^2$, calcular el gradiente en $(1, 2)$, la máxima pendiente, la dirección de la curva de nivel y la pendiente en la dirección de $(1, 1)$.',
+    pasos: [
+      { t: '<strong>Parciales.</strong> Respecto de $x$, con $y$ como constante: $f_x = 2x + 3y$. Respecto de $y$: $f_y = 3x - 2y$. El término $3xy$ aporta a las dos, cada vez con la otra variable como coeficiente.', antes: 'Deriva $3xy$ respecto de $x$ tratando $y$ como un número. ¿Qué queda?' },
+      { t: '<strong>En el punto.</strong> $\\nabla f(1, 2) = (2 + 6,\\ 3 - 4) = (8, -1)$.' },
+      { t: '<strong>Máxima pendiente.</strong> $|\\nabla f| = \\sqrt{64 + 1} = \\sqrt{65} \\approx 8{,}06$, en la dirección de $(8, -1)$: casi hacia el este, ligeramente al sur.', antes: '¿Qué mide el módulo del gradiente?' },
+      { t: '<strong>Curva de nivel.</strong> Perpendicular al gradiente: dirección $(1, 8)$, porque $(8, -1)\\cdot(1, 8) = 8 - 8 = 0$. Caminando por ahí, $f$ no cambia.', antes: 'Busca un vector perpendicular a $(8, -1)$.' },
+      { t: '<strong>Pendiente en la dirección de $(1, 1)$.</strong> Se normaliza, $\\vec u = \\frac{1}{\\sqrt 2}(1, 1)$, y se hace el producto escalar: $\\nabla f\\cdot\\vec u = \\frac{8 - 1}{\\sqrt 2} = \\frac{7}{\\sqrt 2} \\approx 4{,}95$. Menor que $8{,}06$, como tiene que ser: la máxima solo se alcanza en la dirección del gradiente.' }
+    ],
+    cierre: 'Todo sale de dos derivadas de una variable y un producto escalar. El gradiente es la brújula: su dirección, hacia arriba; su módulo, cuánto; su perpendicular, el nivel; y su producto escalar con cualquier dirección, la pendiente en ella.'
+  });
+
   p.demo({
     title: 'Campo escalar, curvas de nivel y gradiente',
     intro: 'El fondo son las curvas de nivel, como en un mapa topográfico. Haz clic en cualquier punto y verás el gradiente: siempre perpendicular al nivel y apuntando cuesta arriba.',
+    predice: 'En el cuenco, si haces clic en $(2, 0)$, ¿hacia dónde apuntará la flecha: al centro o hacia fuera? ¿Y en la silla de montar, en el mismo punto?',
     build: function (host, d) {
       var tipo = 'cuenco';
       var puntos = [];
@@ -147,6 +173,7 @@ Course.topic('av-vectorial', function (p) {
   p.demo({
     title: 'Fuentes, sumideros y remolinos',
     intro: 'Compara los campos. Fíjate en si las flechas salen de un punto, entran hacia él o giran a su alrededor.',
+    predice: 'La cizalla $\\vec F = (y, 0)$ tiene todas las flechas paralelas al eje $x$. ¿Crees que su rotacional será cero? Imagina una ruedecita de palas puesta en el campo.',
     build: function (host, d) {
       var tipo = 'fuente';
       var campos = {
@@ -218,6 +245,13 @@ Course.topic('av-vectorial', function (p) {
     'probablemente la predicción teórica más espectacular de la historia de la ciencia, y salió de ' +
     'manipular estos operadores.');
 
+  p.trampas([
+    { e: 'Derivar respecto de $x$ y «olvidar» que $y$ sigue ahí', por: '$\\partial_x(3xy) = 3y$, no 3. La otra variable se trata como constante, pero una constante que multiplica se queda.' },
+    { e: 'Creer que el gradiente apunta hacia el mínimo', por: 'Apunta cuesta <em>arriba</em>. Para bajar se va en contra: por eso el descenso de gradiente lleva un signo menos.' },
+    { e: '«Flechas paralelas, luego rotacional cero»', por: 'La cizalla $(y, 0)$ tiene todas las flechas paralelas y rotacional $-1$: el campo es más fuerte arriba que abajo y una ruedecita giraría.' },
+    { e: 'Confundir divergencia (número) con rotacional (vector)', por: 'La divergencia responde «¿sale o entra?» y es un escalar. El rotacional responde «¿gira?» y es un vector, aunque en el plano solo importe su componente $z$.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Estos teoremas son las ecuaciones de Maxwell, y las ecuaciones de Maxwell son la razón de que ' +
     'exista la electricidad tal como la usamos, la radio, el wifi y la luz entendida como onda. ' +
@@ -226,6 +260,30 @@ Course.topic('av-vectorial', function (p) {
     'veinte años después. Prácticamente toda la tecnología del siglo XX salió de ahí.');
 
   p.section('Practica');
+
+  p.exercise({
+    title: '¿Campo escalar o campo vectorial?',
+    level: 'basico',
+    gen: function (r) {
+      var casos = [
+        { t: 'La temperatura en cada punto de una habitación', ok: 'esc' },
+        { t: 'La velocidad del viento en cada punto de la atmósfera', ok: 'vec' },
+        { t: 'La altitud de cada punto de un mapa', ok: 'esc' },
+        { t: 'La fuerza de la gravedad en cada punto alrededor de la Tierra', ok: 'vec' },
+        { t: 'La presión en cada punto del océano', ok: 'esc' },
+        { t: 'La corriente de un río en cada punto', ok: 'vec' },
+        { t: 'El gradiente de la temperatura en cada punto', ok: 'vec' },
+        { t: 'La divergencia del viento en cada punto', ok: 'esc' }
+      ];
+      return r.pick(casos);
+    },
+    ask: function (d) { return '<em>' + d.t + '</em>. ¿Es un campo escalar o vectorial?'; },
+    fields: [{ name: 'q', label: 'Es un campo', opts: [{ t: 'escalar', v: 'esc' }, { t: 'vectorial', v: 'vec' }] }],
+    sol: function (d) { return { q: d.ok }; },
+    hint: function () { return '¿Lo que se asigna a cada punto es un número o una flecha? Ojo: el gradiente de un escalar es un vector, y la divergencia de un vector es un escalar.'; },
+    steps: function (d) { return [d.ok === 'esc' ? 'A cada punto le corresponde un <strong>número</strong>: campo escalar.' : 'A cada punto le corresponde un <strong>vector</strong>, con dirección y módulo: campo vectorial.']; },
+    answer: function (d) { return d.ok === 'esc' ? 'Escalar' : 'Vectorial'; }
+  });
 
   p.exercise({
     title: 'Derivadas parciales',

@@ -1,7 +1,7 @@
 /* Tema: Optimizar con restricciones: multiplicadores de Lagrange */
 Course.topic('av-lagrange', function (p) {
 
-  p.text('En [[fn-aplicaciones]] se optimizaba con una condición: el rectángulo de mayor área con un perímetro dado, la ' +
+  p.puente('En [[fn-aplicaciones]] se optimizaba con una condición: el rectángulo de mayor área con un perímetro dado, la ' +
     'lata de menor superficie con un volumen fijo. El método era despejar una variable en la condición y sustituir. ' +
     'Funciona cuando se puede despejar, pero muchas condiciones no se dejan: una elipse, una superficie curva, un ' +
     'presupuesto con varias variables. Joseph-Louis Lagrange encontró un método que no necesita despejar nada, y que ' +
@@ -19,6 +19,12 @@ Course.topic('av-lagrange', function (p) {
     '<em>corta</em> una curva de nivel, se puede seguir subiendo. El máximo llega cuando ya no la corta, sino que la ' +
     '<strong>toca</strong>: cuando las dos curvas son tangentes.');
 
+  p.comprueba('Se busca el máximo de $f$ sobre una curva. En un punto de la curva, la curva de nivel de $f$ la <em>corta</em>. ¿Puede ser ese punto el máximo?', [
+    { t: 'No: si corta, a un lado de la curva $f$ vale más', ok: false, por: 'La conclusión es correcta, pero el motivo es otro: no es «a un lado de la curva», es «un poco más adelante <em>sobre</em> la curva». Al cruzar el nivel, se pasa a niveles más altos por un lado y más bajos por el otro.' },
+    { t: 'No: avanzando por la curva se cruza a niveles más altos', ok: true, por: 'Si el nivel corta la restricción, seguir por la restricción en un sentido lleva a valores mayores de $f$. En el máximo, el nivel solo puede <em>tocar</em>: tangente, y gradientes paralelos.' },
+    { t: 'Sí, si el corte es perpendicular', ok: false, por: 'Perpendicular es el peor caso: es cuando $f$ cambia más deprisa a lo largo de la curva. El máximo exige tangencia, el otro extremo.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.section('El método de los multiplicadores');
 
@@ -35,9 +41,23 @@ Course.topic('av-lagrange', function (p) {
     'con tres incógnitas, $x$, $y$ y $\\lambda$. Sus soluciones son los candidatos a máximo o mínimo; se evalúa $f$ en todos y se ' +
     'comparan. Con más variables y más restricciones funciona igual, con un multiplicador por restricción.');
 
+  p.ejemplo({
+    title: 'El máximo de xy sobre una elipse',
+    enunciado: 'Hallar el máximo y el mínimo de $f(x, y) = xy$ sobre la elipse $\\dfrac{x^2}{9} + \\dfrac{y^2}{4} = 1$.',
+    pasos: [
+      { t: '<strong>Gradientes.</strong> $\\nabla f = (y, x)$ y, con $g = \\frac{x^2}{9} + \\frac{y^2}{4}$, $\\nabla g = \\left(\\frac{2x}{9}, \\frac{y}{2}\\right)$.', antes: 'Deriva $f$ y $g$ parcialmente. ¿Qué vectores salen?' },
+      { t: '<strong>Condiciones.</strong> $y = \\lambda\\frac{2x}{9}$, $x = \\lambda\\frac{y}{2}$ y la elipse. Sustituyendo la primera en la segunda: $x = \\lambda\\cdot\\frac{\\lambda x}{9}$, así que $\\lambda^2 = 9$ si $x \\ne 0$. (Con $x = 0$ saldría $y = 0$, que no está en la elipse.)', antes: 'Elimina $y$ entre las dos primeras ecuaciones. ¿Qué queda para $\\lambda$?' },
+      { t: '<strong>$\\lambda = 3$.</strong> $y = \\frac{2x}{3}$. En la elipse: $\\frac{x^2}{9} + \\frac{4x^2/9}{4} = \\frac{2x^2}{9} = 1$, luego $x = \\pm\\frac{3}{\\sqrt 2}$, $y = \\pm\\sqrt 2$ (mismo signo). En los dos puntos $f = \\frac{3}{\\sqrt 2}\\cdot\\sqrt 2 = 3$.' },
+      { t: '<strong>$\\lambda = -3$.</strong> $y = -\\frac{2x}{3}$: los otros dos puntos, $\\left(\\pm\\frac{3}{\\sqrt 2}, \\mp\\sqrt 2\\right)$, con $f = -3$.', antes: 'Repite con $\\lambda = -3$. ¿Qué valor toma $f$?' },
+      { t: '<strong>Conclusión.</strong> Cuatro candidatos: máximo $3$ en $\\left(\\frac{3}{\\sqrt 2}, \\sqrt 2\\right) \\approx (2{,}12,\\ 1{,}41)$ y su opuesto; mínimo $-3$ en los otros dos. En la demo de abajo, el máximo está a $45^\\circ$.' }
+    ],
+    cierre: 'Sin Lagrange habría que despejar $y = \\pm 2\\sqrt{1 - x^2/9}$ y derivar una raíz. Con Lagrange, tres ecuaciones polinómicas y ninguna raíz. Y $\\lambda = 3$ dice además cuánto subiría el máximo si la elipse se agrandara: $\\frac{df_{\\text{máx}}}{dc} = 3$.'
+  });
+
   p.demo({
     title: 'Cuando los gradientes son paralelos',
     intro: 'Se busca el máximo de f(x, y) = x·y sobre la elipse x²/9 + y²/4 = 1. Las curvas finas son curvas de nivel de f: hipérbolas. Recorre la elipse con el deslizador. La flecha azul es la dirección del gradiente de f y la naranja, la del gradiente de g. En el máximo son paralelas, y la hipérbola toca la elipse sin cortarla.',
+    predice: 'Según el ejemplo, el máximo está a $45^\\circ$. ¿En qué otros ángulos crees que los gradientes también serán paralelos? ¿Cuántos candidatos hay en total?',
     build: function (host) {
       var t = 20;
       var out = W.readout(host, '');
@@ -97,6 +117,13 @@ Course.topic('av-lagrange', function (p) {
     'resolviendo un problema de optimización con restricciones mediante multiplicadores. Las redes eléctricas reparten ' +
     'la producción entre centrales minimizando el coste con la restricción de cubrir la demanda, y el multiplicador de ' +
     'esa restricción es, literalmente, el precio de la electricidad en el mercado mayorista.');
+
+  p.trampas([
+    { e: 'Igualar el gradiente de $f$ a cero', por: 'Eso busca el máximo libre, que suele estar fuera de la curva. Con restricción, el gradiente de $f$ no se anula: se alinea con el de $g$.' },
+    { e: 'Quedarse con la primera solución', por: 'Las condiciones dan todos los candidatos, máximos y mínimos juntos. Hay que evaluar $f$ en cada uno y comparar.' },
+    { e: 'Dividir por $x$ o por $y$ sin mirar si valen cero', por: 'Al eliminar $\\lambda$ se pierde el caso $x = 0$. Hay que comprobarlo aparte: a veces es un candidato.' },
+    { e: 'Olvidar la ecuación de la restricción', por: '$\\nabla f = \\lambda\\nabla g$ son dos ecuaciones con tres incógnitas. La tercera es $g = c$: sin ella, no hay punto.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

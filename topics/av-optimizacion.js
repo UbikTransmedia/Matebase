@@ -1,6 +1,11 @@
 /* Tema: Optimización y descenso de gradiente */
 Course.topic('av-optimizacion', function (p) {
 
+  p.puente('De [[fn-aplicaciones|una variable]] viene la receta: derivar, igualar a cero, comprobar. Del tema ' +
+    'anterior, el gradiente y su propiedad clave: apunta cuesta arriba. Con las dos cosas se optimiza ' +
+    'en varias variables, y cuando las ecuaciones no se dejan resolver, con la segunda sola se ' +
+    'construye el algoritmo que entrena a las redes neuronales.');
+
   p.text('Ya sabes optimizar funciones de una variable: derivar, igualar a cero, comprobar. Con ' +
     '<strong>varias</strong> variables el planteamiento es el mismo, pero aparece un problema nuevo: ' +
     'las ecuaciones que salen suelen ser imposibles de resolver a mano. Y de esa dificultad nació el ' +
@@ -32,6 +37,25 @@ Course.topic('av-optimizacion', function (p) {
     'muchas dimensiones sea difícil. En espacios de millones de dimensiones —como los de una red ' +
     'neuronal— los puntos de silla son muchísimo más abundantes que los mínimos.', 'warn');
 
+  p.comprueba('En $f(x, y) = x^2 - y^2$ el gradiente se anula en $(0, 0)$, y $f(0, 0) = 0$. ¿Es un mínimo?', [
+    { t: 'Sí: el gradiente es cero y en $x$ la función sube', ok: false, por: 'Sube por el eje $x$, pero por el eje $y$ baja: $f(0, 1) = -1 < 0$. Un mínimo tiene que subir en <em>todas</em> las direcciones.' },
+    { t: 'No: es un punto de silla', ok: true, por: 'Sube en unas direcciones y baja en otras. Gradiente cero es condición necesaria, no suficiente, igual que $f\'(a) = 0$ en una variable.' },
+    { t: 'No se puede saber sin la segunda derivada', ok: false, por: 'Aquí se puede saber probando dos direcciones: $f(1, 0) = 1 > 0$ y $f(0, 1) = -1 < 0$. Con eso ya no puede ser ni mínimo ni máximo.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un mínimo a mano y después a pasitos',
+    enunciado: 'Hallar el mínimo de $f(x, y) = x^2 + y^2 - 2x - 4y + 5$. Después, aplicar dos pasos de descenso de gradiente desde $(0, 0)$ con $\\eta = 0{,}25$.',
+    pasos: [
+      { t: '<strong>Punto crítico.</strong> $f_x = 2x - 2 = 0$ y $f_y = 2y - 4 = 0$: el único candidato es $(1, 2)$.', antes: 'Dos parciales, dos ecuaciones. ¿Qué punto sale?' },
+      { t: '<strong>Tipo.</strong> Completando cuadrados, $f = (x - 1)^2 + (y - 2)^2$: suma de dos cuadrados, sube en todas las direcciones. Mínimo, con valor $f(1, 2) = 0$.', antes: 'Escribe $f$ como suma de cuadrados. ¿Qué signo tiene cada uno?' },
+      { t: '<strong>Primer paso.</strong> En $(0, 0)$, $\\nabla f = (-2, -4)$. Nuevo punto: $(0, 0) - 0{,}25\\cdot(-2, -4) = (0{,}5,\\ 1)$. Se ha movido hacia el mínimo: contra el gradiente.', antes: 'El gradiente en el origen apunta hacia fuera del cuenco. ¿Hacia dónde da el paso?' },
+      { t: '<strong>Segundo paso.</strong> En $(0{,}5, 1)$, $\\nabla f = (-1, -2)$. Nuevo punto: $(0{,}5, 1) + 0{,}25\\cdot(1, 2) = (0{,}75,\\ 1{,}5)$. La distancia a $(1, 2)$ se ha vuelto a reducir a la mitad.' },
+      { t: '<strong>Por qué a la mitad.</strong> Cada componente hace $x_{n+1} - 1 = (1 - 2\\eta)(x_n - 1) = \\frac{1}{2}(x_n - 1)$. Con $\\eta = 0{,}5$ llegaría en un paso; con $\\eta = 1$, el factor sería $-1$: oscilaría sin acercarse nunca.', antes: '¿Qué $\\eta$ llevaría al mínimo en un solo paso? ¿Y cuál haría que el punto oscilara?' }
+    ],
+    cierre: 'Con la fórmula, el mínimo sale exacto. Con los pasitos, sale aproximado pero sin resolver ninguna ecuación: es lo que se hace cuando hay un millón de variables y las ecuaciones no se dejan.'
+  });
+
   /* ---------------------------------------------------------------- */
   p.section('El descenso de gradiente');
 
@@ -52,6 +76,7 @@ Course.topic('av-optimizacion', function (p) {
   p.demo({
     title: 'Bajar la ladera a pasitos',
     intro: 'Haz clic en cualquier punto para soltar la bola. Cambia el tamaño del paso y observa qué pasa cuando es demasiado pequeño o demasiado grande.',
+    predice: 'En el cuenco alargado, ¿la bola irá recta al centro o hará zigzag? Y si subes $\\eta$ a 1,8, ¿llegará más rápido o dejará de llegar?',
     build: function (host, d) {
       var eta = 0.15, superficie = 'cuenco';
       var trayectorias = [];
@@ -176,8 +201,32 @@ Course.topic('av-optimizacion', function (p) {
     'y Williams lo combinaron con la retropropagación para entrenar redes neuronales, y aun así hicieron ' +
     'falta otros veinticinco años —y tarjetas gráficas— para que el método enseñara de lo que era capaz.');
 
+  p.trampas([
+    { e: '«Gradiente cero, luego mínimo»', por: 'Puede ser máximo o punto de silla. En $x^2 - y^2$ el gradiente se anula en el origen y no hay extremo.' },
+    { e: 'Dar el paso <em>a favor</em> del gradiente', por: 'El gradiente apunta cuesta arriba. Sin el signo menos, el método sube en vez de bajar.' },
+    { e: 'Subir $\\eta$ para ir más rápido', por: 'Hasta cierto punto sí; pasado el umbral, cada paso se pasa de largo y la trayectoria oscila o se dispara. En $ax^2$, el límite es $\\eta < 1/a$.' },
+    { e: 'Creer que el descenso encuentra el mínimo global', por: 'Solo ve la pendiente bajo los pies: se queda en el primer valle. Con dos mínimos, a cuál llega depende de dónde empieza.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
+
+  p.exercise({
+    title: 'La dirección del paso',
+    level: 'basico',
+    gen: function (r) {
+      var gx = r.nz(-6, 6), gy = r.nz(-6, 6), eta = r.pick([0.1, 0.2, 0.5]);
+      return { gx: gx, gy: gy, eta: eta, dx: -eta * gx, dy: -eta * gy };
+    },
+    ask: function (d) { return 'En un punto, el gradiente de la función de pérdida vale $\\nabla f = (' + d.gx + ', ' + d.gy + ')$ y la tasa de aprendizaje es $\\eta = ' + U.fmt(d.eta, 1) + '$. ¿Cuánto se mueve cada coordenada en un paso de descenso de gradiente?'; },
+    fields: [{ name: 'x', label: 'Δx', w: 'tiny' }, { name: 'y', label: 'Δy', w: 'tiny' }],
+    sol: function (d) { return { x: U.round(d.dx, 6), y: U.round(d.dy, 6) }; },
+    tol: 1e-6,
+    errores: [{ si: function (v, d) { return Math.abs(v.x + d.dx) < 1e-6 && Math.abs(v.y + d.dy) < 1e-6; }, msg: 'Eso es a favor del gradiente: cuesta arriba. Para bajar, el paso lleva signo menos.' }],
+    hint: function () { return 'El paso es $-\\eta\\,\\nabla f$: en sentido contrario al gradiente y de tamaño proporcional a $\\eta$.'; },
+    steps: function (d) { return ['$\\Delta\\vec x = -\\eta\\,\\nabla f = -' + U.fmt(d.eta, 1) + '\\cdot(' + d.gx + ', ' + d.gy + ') = (' + U.fmt(d.dx, 2) + ', ' + U.fmt(d.dy, 2) + ')$', 'Signo contrario al gradiente en cada componente: se baja por donde más se baja.']; },
+    answer: function (d) { return '(' + U.fmt(d.dx, 2) + ', ' + U.fmt(d.dy, 2) + ')'; }
+  });
 
   p.exercise({
     title: 'Punto crítico',
@@ -191,14 +240,13 @@ Course.topic('av-optimizacion', function (p) {
     ask: function (d) {
       return 'Halla el punto crítico de $f(x,y) = ' + d.a + '(x' + (d.p >= 0 ? '-' + d.p : '+' + (-d.p)) +
         ')^2 ' + (d.b >= 0 ? '+ ' + d.b : '- ' + (-d.b)) + '(y' + (d.q >= 0 ? '-' + d.q : '+' + (-d.q)) + ')^2$ ' +
-        'y di de qué tipo es.<br><span style="font-size:0.875rem;color:var(--ink-faint)">' +
-        '<code>1</code> mínimo · <code>2</code> máximo · <code>3</code> punto de silla</span>';
+        'y di de qué tipo es.';
     },
     fields: [
       { name: 'x', label: 'x', w: 'tiny' }, { name: 'y', label: 'y', w: 'tiny' },
-      { name: 't', label: 'Tipo', w: 'tiny' }
+      { name: 't', label: 'Tipo', opts: [{ t: 'mínimo', v: '1' }, { t: 'máximo', v: '2' }, { t: 'punto de silla', v: '3' }] }
     ],
-    sol: function (d) { return { x: d.p, y: d.q, t: d.tipo }; },
+    sol: function (d) { return { x: d.p, y: d.q, t: String(d.tipo) }; },
     tol: 1e-6,
     hint: function () { return 'Deriva parcialmente respecto a cada variable e iguala a cero. El tipo lo deciden los signos de los dos coeficientes.'; },
     steps: function (d) {
@@ -254,17 +302,10 @@ Course.topic('av-optimizacion', function (p) {
     },
     ask: function (d) {
       return 'Aplicamos descenso de gradiente a $f(x) = ' + d.a + 'x^2$ con $\\eta = ' + U.fmt(d.eta, 2) +
-        '$. ¿Converge al mínimo o se dispara?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> si converge o ' +
-        '<code>no</code> si diverge.</span>';
+        '$. ¿Converge al mínimo o se dispara?';
     },
-    fields: [{ name: 'r', label: '¿Converge?', w: 'tiny', ph: 'si / no' }],
+    fields: [{ name: 'r', label: 'El método', opts: [{ t: 'converge', v: 'si' }, { t: 'diverge', v: 'no' }] }],
     sol: function (d) { return { r: d.converge ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var t = v.raw.r.trim().toLowerCase().replace(/[íÍ]/g, 'i');
-      if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe <code>si</code> o <code>no</code>.' };
-      return (t === 'si') === d.converge;
-    },
     hint: function (d) { return 'Cada paso multiplica $x$ por $1 - 2a\\eta$. Converge si ese factor tiene valor absoluto menor que 1.'; },
     steps: function (d) {
       return ['$f\'(x) = ' + (2 * d.a) + 'x$, así que el paso es $x_{n+1} = x_n - ' + U.fmt(d.eta, 2) +
