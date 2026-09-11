@@ -50,7 +50,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     var t = '?t=' + Date.now();
     ['core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
      'core/shader', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
-     'glosario'].forEach(function (f) {
+     'glosario', 'glsl'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
   })();
@@ -222,6 +222,81 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     GLOSARIO.forEach(function (e) { if (e.i && !glosIds[e.i]) glosHuerfanas.push(e.t + ' → ' + e.i); });
     if (glosHuerfanas.length) ko('cada entrada apunta a un tema real', glosHuerfanas.join(', '), 'temas del temario');
     else ok('cada entrada apunta a un tema real (' + GLOSARIO.length + ' entradas)');
+  }
+
+  /* ---------------- referencia GLSL ---------------- */
+  /* Lo que muestra la columna derecha al pulsar «GLSL». Cada ejemplo se
+     compila de verdad, porque una referencia con ejemplos que no compilan
+     enseña a equivocarse, y cada palabra que el editor colorea tiene que
+     tener su entrada. */
+  group('referencia GLSL');
+  truthy('la referencia se carga', !!window.GLSL && GLSL.entradas.length > 50);
+  if (window.GLSL) {
+    var gGrupos = {}, gVistos = {}, gMal = [], gRep = [], gHuer = [], gMx = [];
+    var gTemas = {};
+    CURRICULUM.forEach(function (b3) { b3.temas.forEach(function (t) { gTemas[t.id] = 1; }); });
+    GLSL.grupos.forEach(function (g) { gGrupos[g.id] = 1; });
+    GLSL.entradas.forEach(function (e) {
+      if (!e.t || !gGrupos[e.g] || !e.d || e.d.length < 40) gMal.push(e.t || '(sin título)');
+      if (gVistos[e.t]) gRep.push(e.t); else gVistos[e.t] = 1;
+      if (e.i && !gTemas[e.i]) gHuer.push(e.t + ' → ' + e.i);
+      if (MathX.inline(e.d).indexOf('mx-err') >= 0) gMx.push(e.t);
+    });
+    eq('entradas incompletas (título, grupo o explicación)', gMal.join(', '), '');
+    eq('entradas repetidas', gRep.join(', '), '');
+    eq('entradas que apuntan a temas que no existen', gHuer.join(', '), '');
+    eq('explicaciones con fórmulas mal escritas', gMx.join(', '), '');
+
+    if (W.glslLexico) {
+      var gCubre = {};
+      GLSL.entradas.forEach(function (e) {
+        e.t.split(/[^A-Za-z0-9_]+/).forEach(function (w) { if (w) gCubre[w] = 1; });
+      });
+      var gFaltan = Object.keys(W.glslLexico).filter(function (w) { return !gCubre[w]; });
+      eq('palabras que el editor colorea y la referencia no explica', gFaltan.join(', '), '');
+    }
+
+    if (W.glslCompila) {
+      // Las recetas se compilan juntas, en su orden: unas usan a otras.
+      var gLib = '';
+      GLSL.entradas.forEach(function (e) {
+        if (e.g !== 'recetas' || !e.e) return;
+        if (e.t.indexOf('mapa') === 0) gLib += 'float mapa(vec3 p) { return length(p) - 1.0; }\n';
+        gLib += e.e + '\n';
+      });
+      // Lo que los ejemplos sueltos dan por declarado.
+      var gDecl = [
+        'vec2 uv = fragCoord / iResolution.xy;',
+        'vec2 p = uv - 0.5, q = p, pa = p, ba = vec2(1.0, 0.0);',
+        'vec3 col = vec3(0.5), base = col, fondo = col, tinta = col, cielo = col;',
+        'vec3 n = vec3(0.0, 1.0, 0.0), rd = normalize(vec3(p, 1.0)), ro = vec3(0.0, 0.0, -3.0);',
+        'vec3 luz = normalize(vec3(1.0)), mitad = normalize(vec3(0.0, 1.0, 1.0));',
+        'vec3 f = vec3(0.0, 0.0, 1.0), r = vec3(1.0, 0.0, 0.0), u = vec3(0.0, 1.0, 0.0);',
+        'float d = 0.1, t = 1.0, x = 0.5, a = 0.3, h = 0.5, k = 1.0, mascara = 0.5;',
+        'float circulo = 0.1, caja = 0.2, b = 0.5, c = 0.25;',
+        'mat2 m = mat2(1.0);'
+      ].join('\n');
+      var gNoCompilan = [], gAltera = [];
+      GLSL.entradas.forEach(function (e) {
+        [e.s, e.e].forEach(function (txt) {
+          if (!txt || !W.glslPinta) return;
+          var caja = document.createElement('div');
+          caja.innerHTML = W.glslPinta(txt);
+          if (caja.textContent !== txt) gAltera.push(e.t);
+        });
+        if (!e.e || e.x === 'no') return;
+        var src = e.x === 'solo' ? e.e
+          : e.x === 'global'
+            ? (e.g === 'recetas' ? gLib : gLib + e.e + '\n') +
+              'void mainImage(out vec4 color, in vec2 fragCoord) { color = vec4(0.0); }'
+            : gLib + 'void mainImage(out vec4 color, in vec2 fragCoord) {\n' + gDecl +
+              '\n{\n' + e.e + '\n}\ncolor = vec4(col, 1.0);\n}';
+        var r = W.glslCompila(src);
+        if (!r.sinWebgl && !r.ok) gNoCompilan.push(e.t + ' (' + r.errores[0].msg + ')');
+      });
+      eq('ejemplos de la referencia que no compilan en WebGL 1', gNoCompilan.join(' · '), '');
+      eq('coloreado que altera el texto de una entrada', gAltera.join(', '), '');
+    }
   }
 
   /* ---------------- contraste de la paleta ---------------- */

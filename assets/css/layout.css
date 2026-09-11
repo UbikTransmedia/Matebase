@@ -246,6 +246,35 @@
 .glos__nada{padding:22px 8px; color:var(--ink-faint); font-size:0.8438rem; line-height:1.55}
 .glos__marca{background:var(--accent-soft); color:var(--accent-ink); border-radius:3px}
 
+/* ---------- La columna tiene dos documentos: glosario y referencia GLSL ---------- */
+.topbar__docs{flex:0 0 auto; display:flex; gap:6px}
+.topbar__ico{font-family:var(--mono); font-weight:700; font-size:0.75rem; letter-spacing:-.04em}
+.glos[data-modo="glsl"] .glos__title{color:var(--gfx)}
+.glos__intro{margin:4px 6px 8px; font-size:0.8125rem; line-height:1.55; color:var(--ink-soft); text-wrap:pretty}
+.glos__grupo{
+  margin:16px 6px 3px; font-size:0.6875rem; text-transform:uppercase; letter-spacing:.1em;
+  font-weight:700; color:var(--gfx);
+}
+.glos__n{flex:1; min-width:0; overflow-wrap:anywhere}
+.glos__t--cod .glos__n{font-family:var(--mono); font-size:0.8125rem; letter-spacing:0}
+.glos__tag{
+  flex:0 0 auto; margin-top:2px; padding:0 5px; border:1px solid var(--line); border-radius:5px;
+  font-size:0.625rem; font-weight:600; color:var(--ink-faint); white-space:nowrap; letter-spacing:0;
+}
+.glos__cod{
+  margin:8px 0; padding:8px 10px; border-radius:8px;
+  background:var(--panel-2); border:1px solid var(--line-soft);
+  font-family:var(--mono); font-size:0.75rem; line-height:1.55;
+  /* la columna es estrecha: mejor partir la linea que obligar a desplazarse */
+  white-space:pre-wrap; overflow-wrap:anywhere; color:var(--ink);
+}
+.glos__cod .cod-com{font-style:italic}
+.glos__ejt{
+  margin-top:10px; font-size:0.6562rem; text-transform:uppercase; letter-spacing:.09em;
+  font-weight:700; color:var(--ink-faint);
+}
+.glosres__n--cod{font-family:var(--mono); font-size:0.8125rem}
+
 /* en pantallas estrechas se superpone, como el índice */
 @media (max-width:1240px){
   .glos{position:fixed; right:0; top:0; transform:translateX(100%); transition:transform .25s;

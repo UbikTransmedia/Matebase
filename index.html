@@ -67,18 +67,27 @@
     <div class="topbar">
       <button class="burger" id="burger" type="button" aria-label="Índice">☰</button>
       <div class="topbar__crumb" id="crumb"></div>
-      <button class="topbar__glos" id="glosBtn" type="button" aria-expanded="false"
-              aria-controls="glos" title="Mostrar u ocultar el glosario">
-        ▤ <span>Glosario</span>
-      </button>
+      <!-- Dos documentos que comparten la columna derecha: cada botón abre el
+           suyo, y pulsarlo otra vez cuando ya se ve lo cierra. -->
+      <div class="topbar__docs" role="group" aria-label="Documentación">
+        <button class="topbar__glos" id="glosBtn" type="button" aria-expanded="false"
+                aria-controls="glos" aria-label="Glosario" title="Mostrar u ocultar el glosario">
+          ▤ <span>Glosario</span>
+        </button>
+        <button class="topbar__glos" id="glslBtn" type="button" aria-expanded="false"
+                aria-controls="glos" aria-label="Referencia GLSL"
+                title="Mostrar u ocultar la referencia del lenguaje GLSL">
+          <b class="topbar__ico" aria-hidden="true">{}</b> <span>GLSL</span>
+        </button>
+      </div>
     </div>
     <div class="wrap" id="wrap"></div>
   </main>
 
   <!-- ================= GLOSARIO ================= -->
-  <aside class="glos" id="glos" aria-label="Glosario de términos">
+  <aside class="glos" id="glos" aria-label="Glosario de términos" data-modo="glos">
     <div class="glos__head">
-      <span class="glos__title">Glosario</span>
+      <span class="glos__title" id="glosTitle">Glosario</span>
       <button class="glos__x" id="glosClose" type="button" aria-label="Ocultar el glosario">×</button>
       <div class="search search--glos">
         <span class="search__icon">⌕</span>
@@ -105,6 +114,7 @@
 <!-- ============ temario y vocabulario ============ -->
 <script src="assets/js/curriculum.js"></script>
 <script src="assets/js/glosario.js"></script>
+<script src="assets/js/glsl.js"></script>
 <!-- ============ arranque (los temas se cargan solos al abrirlos) ============ -->
 <script src="assets/js/core/app.js"></script>
 

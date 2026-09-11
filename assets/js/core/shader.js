@@ -795,6 +795,9 @@
   };
 
   W.glslPinta = pintaGLSL;
+  /* Las palabras que el coloreado reconoce. tests.html comprueba que cada
+     una tiene su entrada en la referencia GLSL del panel lateral. */
+  W.glslLexico = LEXICO;
   W.pintaBloques = pintaBloques;
   W.glslIguales = iguales;
   W.glslPreambulo = PREAMBULO;

@@ -40,9 +40,13 @@ Los ejercicios hacen más que decir «bien» o «mal»:
 - **Enlaces con semilla**: copiar el enlace de un ejercicio reproduce exactamente
   los mismos números, para que un profesor pase el mismo a toda la clase.
 
-A la derecha, un **glosario** que se abre y se cierra con el botón de la barra
-superior, con buscador que mira también dentro de las definiciones y no
-distingue tildes. El buscador del índice encuentra también términos del glosario.
+A la derecha, una columna con dos documentos, cada uno con su botón en la barra
+superior: el **glosario** y la **referencia GLSL** —los tipos, las palabras y
+las funciones del lenguaje de los shaders, con su firma, un ejemplo que compila
+en WebGL 1 y el tema donde se explican—. Pulsar el otro botón cambia de
+documento sin cerrar la columna; pulsar el mismo la cierra. Los dos buscadores
+miran también dentro de las explicaciones y no distinguen tildes, y el buscador
+del índice encuentra términos de los dos.
 
 **El progreso se guarda en el propio navegador**, y va más allá de «visto»:
 
@@ -135,6 +139,7 @@ matebase/
 │   └── js/
 │       ├── curriculum.js ← EL TEMARIO (el único sitio donde se decide qué hay)
 │       ├── glosario.js   ← EL VOCABULARIO (un término por entrada)
+│       ├── glsl.js       ← LA REFERENCIA DEL LENGUAJE DE LOS SHADERS
 │       └── core/         ← el motor, compartido por todos los temas
 └── topics/               ← un archivo por tema
 ```
@@ -152,7 +157,7 @@ El núcleo (`assets/js/core/`) es lo que evita repetir código:
 | `repaso.js` | las páginas de repaso: mapa del temario, simulacros y formulario, montadas con el contenido de los demás temas |
 | `progress.js` | progreso en `localStorage`: dominio por tipo de ejercicio y repaso espaciado |
 | `shader.js` | visor de shaders GLSL: editor, recompilación al vuelo, errores con su número de línea, comparación de dos shaders píxel a píxel y modo con memoria entre fotogramas |
-| `app.js` | índice desplegable, buscador con glosario, itinerarios, enrutado y carga perezosa de temas |
+| `app.js` | índice desplegable, buscador con glosario, columna del glosario y la referencia GLSL, itinerarios, enrutado y carga perezosa de temas |
 
 Un tema de trigonometría y uno de geometría usan exactamente el mismo código de
 dibujo; lo único que cambia es lo que se le pide dibujar.

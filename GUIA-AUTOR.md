@@ -542,6 +542,34 @@ check: function (v, d) {
 Una tolerancia de 6 a 12 va bien: por debajo, dos formas legítimas de escribir
 lo mismo pueden diferir por redondeo; por encima, entra cualquier cosa.
 
+### La referencia GLSL de la columna derecha
+
+Junto al botón **Glosario** está el botón **GLSL**. Los dos abren la misma
+columna: cada uno muestra su documento, pulsar el otro cambia de documento sin
+cerrarla y pulsar otra vez el que ya se ve la cierra. La referencia vive en
+`assets/js/glsl.js`, separada del glosario, y cada entrada es así:
+
+```js
+{ t: 'smoothstep', g: 'comunes',                       // nombre y grupo
+  s: 'genType smoothstep(genType e0, genType e1, genType x)',   // firma
+  d: 'Un escalón suave: 0 antes de <code>e0</code>…',   // explicación (HTML y $latex$)
+  e: 'float relleno = 1.0 - smoothstep(0.0, 0.01, d);', // ejemplo
+  v: 'escalon suave antialiasing',                     // variantes para buscar
+  i: 'gfx-distancia' }                                 // tema donde se explica
+```
+
+- Solo se documenta lo que **compila en WebGL 1**. Lo que es de GLSL ES 3.00
+  (`round`, `texture`, `%`, arrays con inicializador…) va en el grupo «Lo que no
+  hay en WebGL 1», diciendo cómo se sustituye.
+- `tests.html` **compila cada ejemplo**. Por defecto lo mete dentro de
+  `mainImage`, con unas cuantas variables ya declaradas (`p`, `uv`, `col`, `d`,
+  `n`, `rd`…); con `x: 'global'` va fuera, con `x: 'solo'` es un shader entero y
+  con `x: 'no'` no se compila. Las recetas del curso (`hash`, `ruido`, `fbm`…)
+  se compilan juntas y en orden, porque unas usan a otras.
+- Cada palabra que el editor colorea como tipo, función o uniform tiene que
+  aparecer en el título de alguna entrada: si se añade un uniform al preámbulo
+  del visor, la prueba pide su entrada.
+
 ---
 
 ## Matemáticas de apoyo (`ML`) y utilidades (`U`)

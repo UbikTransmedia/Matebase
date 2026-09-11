@@ -91,7 +91,7 @@ objeto en el array.
 | `page.js` | Constructor declarativo de páginas y recolector de contenido | todos los temas |
 | `repaso.js` | Mapa del temario, simulacros y formulario | bloque de repaso |
 | `progress.js` | Progreso, dominio por tipo de ejercicio y repaso espaciado en `localStorage` | índice, portada y ejercicios |
-| `app.js` | Índice, buscador con glosario, itinerarios, enrutado con semilla y carga perezosa | shell |
+| `app.js` | Índice, buscador con glosario, columna derecha con el glosario y la referencia GLSL, itinerarios, enrutado con semilla y carga perezosa | shell |
 
 ## Fase 3 — Contenido, bloque a bloque (cerrada)
 

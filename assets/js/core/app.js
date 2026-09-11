@@ -187,33 +187,37 @@
       'anteriores sigue enlazado en «Antes de empezar», al principio de cada tema.';
   }
 
-  /* El buscador del indice mira tambien el glosario. Quien busca «rango» o
-     «adjunto» casi nunca busca un tema: busca que significa la palabra. */
+  /* El buscador del indice mira tambien el glosario y la referencia GLSL.
+     Quien busca «rango» o «adjunto» casi nunca busca un tema: busca que
+     significa la palabra; y quien busca «smoothstep», que hace la funcion. */
   function glosarioEnBusqueda(q, visibles) {
     var viejo = U.$('.glosres', sideScroll);
     if (viejo) viejo.remove();
-    if (!q || q.length < 3 || !global.GLOSARIO) {
+    if (!q || q.length < 3 || (!global.GLOSARIO && !global.GLSL)) {
       if (q && !visibles) sideScroll.appendChild(U.el('div.glosres', null, U.el('p.glosres__nada', { text: 'Ningún tema coincide.' })));
       return;
     }
-    var hits = GLOSARIO.filter(function (e) {
-      return U.llano(e.t + ' ' + (e.v || '')).indexOf(q) >= 0;
-    }).slice(0, 8);
-    if (!hits.length && visibles) return;
+    function coincide(e) { return U.llano(e.t + ' ' + (e.v || '')).indexOf(q) >= 0; }
+    var enGlosario = (global.GLOSARIO || []).filter(coincide).slice(0, 8);
+    var enGlsl = (global.GLSL ? global.GLSL.entradas : []).filter(coincide).slice(0, 6);
+    if (!enGlosario.length && !enGlsl.length && visibles) return;
     var box = U.el('div.glosres');
     if (!visibles) box.appendChild(U.el('p.glosres__nada', { text: 'Ningún tema coincide con la búsqueda.' }));
-    if (hits.length) {
-      box.appendChild(U.el('div.glosres__t', { text: 'En el glosario' }));
-      hits.forEach(function (e) {
+    function seccion(titulo, lista, modo, donde) {
+      if (!lista.length) return;
+      box.appendChild(U.el('div.glosres__t', { text: titulo }));
+      lista.forEach(function (e) {
         box.appendChild(U.el('button.glosres__b', {
-          type: 'button', title: 'Abrir «' + e.t + '» en el glosario',
-          onclick: function () { if (glosarioApi) glosarioApi.abre(e.t); }
+          type: 'button', title: 'Abrir «' + e.t + '» en ' + donde,
+          onclick: function () { if (glosarioApi) glosarioApi.abre(modo, e.t); }
         }, [
-          U.el('span.glosres__n', { text: e.t }),
+          U.el('span.glosres__n' + (modo === 'glsl' && !e.p ? '.glosres__n--cod' : ''), { text: e.t }),
           (e.i && BYID[e.i]) ? U.el('span.glosres__i', { text: BYID[e.i].t }) : null
         ]));
       });
     }
+    seccion('En el glosario', enGlosario, 'glos', 'el glosario');
+    seccion('En la referencia GLSL', enGlsl, 'glsl', 'la referencia GLSL');
     sideScroll.appendChild(box);
   }
 
@@ -638,119 +642,278 @@
     U.bus.emit('theme', t.id);
   }
 
-  /* ---------------- glosario ----------------
-     Columna derecha ocultable. Cada termino es un desplegable que se abre
-     en su sitio: el contenido central no se toca nunca. */
+  /* ---------------- glosario y referencia GLSL ----------------
+     Columna derecha ocultable con dos documentos que comparten sitio: el
+     glosario del curso y la referencia del lenguaje de los shaders. Cada
+     boton de la barra superior abre el suyo; pulsarlo cuando su contenido
+     ya se ve cierra la columna, y pulsar el otro cambia de documento sin
+     cerrarla. Cada entrada es un desplegable que se abre en su sitio: el
+     contenido central no se toca nunca. */
 
   function sinTildes(s) {
     return s.normalize ? s.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : s;
   }
 
-  /** Resalta el trozo buscado dentro del titulo, respetando las tildes. */
+  /** Resalta el trozo buscado dentro del titulo, respetando las tildes. El
+      titulo se escapa: en la referencia GLSL hay titulos con < y &. */
   function resaltar(texto, q) {
-    if (!q) return texto;
+    if (!q) return U.escape(texto);
     var plano = sinTildes(texto).toLowerCase();
     var i = plano.indexOf(q);
-    if (i < 0) return texto;
-    return texto.slice(0, i) + '<mark class="glos__marca">' +
-      texto.slice(i, i + q.length) + '</mark>' + texto.slice(i + q.length);
+    if (i < 0) return U.escape(texto);
+    return U.escape(texto.slice(0, i)) + '<mark class="glos__marca">' +
+      U.escape(texto.slice(i, i + q.length)) + '</mark>' + U.escape(texto.slice(i + q.length));
   }
 
   function montarGlosario() {
     var caja = U.$('#glos');
     var lista = U.$('#glosList');
-    var boton = U.$('#glosBtn');
     var buscar = U.$('#glosSearch');
     var cuenta = U.$('#glosCount');
-    if (!caja || !lista || !global.GLOSARIO) return;
+    var titulo = U.$('#glosTitle');
+    var cerrar = U.$('#glosClose');
+    if (!caja || !lista || !buscar) return;
 
-    var TERMINOS = global.GLOSARIO.slice().sort(function (a, b) {
+    /* Texto sobre el que busca cada entrada: titulo, variantes y definicion. */
+    function indexa(e, extra) {
+      e._t = sinTildes(String(e.t).toLowerCase());
+      e._v = sinTildes(String(e.v || '').toLowerCase());
+      e._b = sinTildes((e.t + ' ' + (e.v || '') + ' ' + (extra || '') + ' ' +
+        String(e.d).replace(/<[^>]+>/g, '')).toLowerCase());
+    }
+
+    var TERMINOS = (global.GLOSARIO || []).slice().sort(function (a, b) {
       return sinTildes(a.t).toLowerCase().localeCompare(sinTildes(b.t).toLowerCase(), 'es');
     });
-    // texto sobre el que busca cada entrada: titulo + variantes + definicion
-    TERMINOS.forEach(function (e) {
-      e._b = sinTildes((e.t + ' ' + (e.v || '') + ' ' +
-        String(e.d).replace(/<[^>]+>/g, '')).toLowerCase());
+    TERMINOS.forEach(function (e) { indexa(e); });
+
+    var REF = global.GLSL || { intro: '', grupos: [], entradas: [] };
+    var GRUPO = {};
+    REF.grupos.forEach(function (g) { GRUPO[g.id] = g; });
+    REF.entradas.forEach(function (e) {
+      indexa(e, (e.s || '') + ' ' + (GRUPO[e.g] ? GRUPO[e.g].t : ''));
     });
 
-    var abierto = {};   // que definiciones estan desplegadas
+    /* Lo que cambia de un documento a otro. Cada uno recuerda lo que se
+       estaba buscando, que entradas estaban abiertas y por donde se iba. */
+    var MODOS = {
+      glos: {
+        boton: U.$('#glosBtn'), titulo: 'Glosario', aria: 'Glosario de términos',
+        ph: 'Buscar un término…', cierre: 'Ocultar el glosario',
+        nombre: 'términos', total: TERMINOS.length, q: '', abierto: {}, scroll: 0
+      },
+      glsl: {
+        boton: U.$('#glslBtn'), titulo: 'Referencia GLSL', aria: 'Referencia del lenguaje GLSL',
+        ph: 'Buscar una función o palabra…', cierre: 'Ocultar la referencia GLSL',
+        nombre: 'entradas', total: REF.entradas.length, q: '', abierto: {}, scroll: 0
+      }
+    };
+    var modo = 'glos';
 
-    function pintar(q) {
-      q = sinTildes(String(q || '').trim().toLowerCase());
-      U.clear(lista);
+    function pintaCodigo(txt) {
+      return (global.W && W.glslPinta) ? W.glslPinta(txt) : U.escape(txt);
+    }
+
+    /* Un desplegable. `rellena` construye la definicion la primera vez que se
+       abre: la referencia colorea codigo, y no tiene sentido colorear ciento
+       y pico ejemplos en cada pulsacion del buscador. */
+    function desplegable(e, q, abierto, deCodigo, rellena, etiqueta) {
+      var item = U.el('div.glos__item');
+      var def = U.el('div.glos__d');
+      var hecho = false, bt;
+      function abre(v) {
+        if (v && !hecho) { rellena(def); hecho = true; }
+        def.classList.toggle('is-open', v);
+        bt.setAttribute('aria-expanded', v ? 'true' : 'false');
+      }
+      bt = U.el('button.glos__t' + (deCodigo ? '.glos__t--cod' : ''), {
+        type: 'button', 'aria-expanded': 'false', 'data-termino': e.t,
+        onclick: function () { abierto[e.t] = !abierto[e.t]; abre(!!abierto[e.t]); }
+      }, [
+        U.el('span.glos__caret', null, '▸'),
+        U.el('span.glos__n', { html: resaltar(e.t, q) }),
+        etiqueta ? U.el('span.glos__tag', { text: etiqueta }) : null
+      ]);
+      item.appendChild(bt);
+      item.appendChild(def);
+      if (abierto[e.t]) abre(true);
+      return item;
+    }
+
+    function enlaceTema(def, e) {
+      if (e.i && BYID[e.i]) {
+        def.appendChild(U.el('a.glos__ir', { href: '#/' + e.i, text: 'Ver en «' + BYID[e.i].t + '» →' }));
+      }
+    }
+
+    function entradaGlosario(e, q, m) {
+      return desplegable(e, q, m.abierto, false, function (def) {
+        def.innerHTML = MathX.inline(e.d);
+        enlaceTema(def, e);
+      });
+    }
+
+    function entradaGlsl(e, q, m, etiqueta) {
+      return desplegable(e, q, m.abierto, !e.p, function (def) {
+        if (e.s) def.appendChild(U.el('pre.glos__cod', { html: pintaCodigo(e.s) }));
+        def.appendChild(U.el('div', { html: MathX.inline(e.d) }));
+        if (e.e) {
+          def.appendChild(U.el('div.glos__ejt', { text: 'Ejemplo' }));
+          def.appendChild(U.el('pre.glos__cod', { html: pintaCodigo(e.e) }));
+        }
+        enlaceTema(def, e);
+      }, etiqueta);
+    }
+
+    function pintaGlosario(q, m) {
       var vistos = 0;
       TERMINOS.forEach(function (e) {
         if (q && e._b.indexOf(q) < 0) return;
         vistos++;
-        var item = U.el('div.glos__item');
-        var def = U.el('div.glos__d' + (abierto[e.t] ? '.is-open' : ''), {
-          html: MathX.inline(e.d)
-        });
-        if (e.i && BYID[e.i]) {
-          def.appendChild(U.el('a.glos__ir', {
-            href: '#/' + e.i, text: 'Ver en «' + BYID[e.i].t + '» →'
-          }));
-        }
-        var bt = U.el('button.glos__t', {
-          type: 'button', 'aria-expanded': abierto[e.t] ? 'true' : 'false',
-          'data-termino': e.t,
-          onclick: function () {
-            abierto[e.t] = !abierto[e.t];
-            bt.setAttribute('aria-expanded', abierto[e.t] ? 'true' : 'false');
-            def.classList.toggle('is-open', !!abierto[e.t]);
-          }
-        }, [
-          U.el('span.glos__caret', null, '▸'),
-          U.el('span', { html: resaltar(e.t, q) })
-        ]);
-        item.appendChild(bt);
-        item.appendChild(def);
-        lista.appendChild(item);
+        lista.appendChild(entradaGlosario(e, q, m));
       });
+      return vistos;
+    }
+
+    /* Sin buscar, la referencia va por grupos, en el orden en que se aprende.
+       Buscando, primero lo que se llama asi y despues lo que lo menciona:
+       quien escribe «mix» quiere mix, no las entradas que lo usan de pasada. */
+    function pintaGlsl(q, m) {
+      var vistos = 0;
+      if (!q) {
+        if (REF.intro) lista.appendChild(U.el('p.glos__intro', { html: MathX.inline(REF.intro) }));
+        REF.grupos.forEach(function (g) {
+          var suyas = REF.entradas.filter(function (e) { return e.g === g.id; });
+          if (!suyas.length) return;
+          lista.appendChild(U.el('div.glos__grupo', { role: 'heading', 'aria-level': '3', text: g.t }));
+          suyas.forEach(function (e) { vistos++; lista.appendChild(entradaGlsl(e, q, m)); });
+        });
+        return vistos;
+      }
+      var nombre = [], mencion = [];
+      REF.entradas.forEach(function (e, i) {
+        if (e._t.indexOf(q) >= 0 || e._v.indexOf(q) >= 0) {
+          // el titulo exacto delante: «sin» antes que «asin»
+          var exacto = (' ' + e._t.replace(/[^a-z0-9_#]+/g, ' ') + ' ').indexOf(' ' + q + ' ') >= 0;
+          nombre.push({ e: e, k: exacto ? 0 : (e._t.indexOf(q) >= 0 ? 1 : 2), i: i });
+        } else if (e._b.indexOf(q) >= 0) mencion.push(e);
+      });
+      nombre.sort(function (a, b) { return a.k - b.k || a.i - b.i; });
+      function etiq(e) { return GRUPO[e.g] ? (GRUPO[e.g].c || GRUPO[e.g].t) : ''; }
+      nombre.forEach(function (x) { vistos++; lista.appendChild(entradaGlsl(x.e, q, m, etiq(x.e))); });
+      if (mencion.length) {
+        if (nombre.length) {
+          lista.appendChild(U.el('div.glos__grupo', { role: 'heading', 'aria-level': '3', text: 'También lo mencionan' }));
+        }
+        mencion.forEach(function (e) { vistos++; lista.appendChild(entradaGlsl(e, q, m, etiq(e))); });
+      }
+      return vistos;
+    }
+
+    function pintar() {
+      var m = MODOS[modo];
+      var q = sinTildes(String(m.q || '').trim().toLowerCase());
+      U.clear(lista);
+      var vistos = modo === 'glsl' ? pintaGlsl(q, m) : pintaGlosario(q, m);
       if (!vistos) {
         lista.appendChild(U.el('div.glos__nada', {
-          html: 'Ningún término coincide con <strong>«' + U.escape(q) + '»</strong>.<br>' +
-            'La búsqueda mira también dentro de las definiciones, así que prueba con ' +
-            'una palabra suelta.'
+          html: (modo === 'glsl' ? 'Ninguna entrada' : 'Ningún término') + ' coincide con <strong>«' +
+            U.escape(q) + '»</strong>.<br>La búsqueda mira también dentro de las ' +
+            (modo === 'glsl' ? 'explicaciones' : 'definiciones') + ', así que prueba con una palabra suelta.'
         }));
       }
-      cuenta.textContent = vistos === TERMINOS.length
-        ? TERMINOS.length + ' términos'
-        : vistos + ' de ' + TERMINOS.length + ' términos';
+      cuenta.textContent = vistos === m.total ? m.total + ' ' + m.nombre
+        : vistos + ' de ' + m.total + ' ' + m.nombre;
     }
 
-    function mostrar(v) {
-      caja.classList.toggle('is-open', v);
-      boton.setAttribute('aria-expanded', v ? 'true' : 'false');
-      Progress.pref('glosario', v ? '1' : '0');
-      if (v) buscar.focus();
+    function cabecera() {
+      var m = MODOS[modo];
+      caja.setAttribute('data-modo', modo);
+      caja.setAttribute('aria-label', m.aria);
+      if (titulo) titulo.textContent = m.titulo;
+      if (cerrar) cerrar.setAttribute('aria-label', m.cierre);
+      buscar.placeholder = m.ph;
+      buscar.value = m.q;
+      buscar.parentNode.classList.toggle('is-filled', m.q !== '');
     }
 
-    boton.addEventListener('click', function () {
-      mostrar(!caja.classList.contains('is-open'));
+    function abierta() { return caja.classList.contains('is-open'); }
+
+    function marcaBotones() {
+      Object.keys(MODOS).forEach(function (k) {
+        var b = MODOS[k].boton;
+        if (b) b.setAttribute('aria-expanded', abierta() && k === modo ? 'true' : 'false');
+      });
+    }
+
+    /** Pasa al otro documento, conservando en cada uno lo que se buscaba y
+        por donde se iba leyendo. */
+    function cambiaA(k) {
+      if (k === modo) return;
+      MODOS[modo].scroll = lista.scrollTop;
+      modo = k;
+      cabecera();
+      pintar();
+      lista.scrollTop = MODOS[modo].scroll;
+    }
+
+    /** k: 'glos', 'glsl' o false para cerrar la columna. */
+    function mostrar(k, sinFoco) {
+      if (k) { cambiaA(k); caja.classList.add('is-open'); }
+      else caja.classList.remove('is-open');
+      marcaBotones();
+      Progress.pref('glosario', k || '0');
+      if (k && !sinFoco) buscar.focus();
+    }
+
+    function botonActivo() { return MODOS[modo].boton; }
+
+    Object.keys(MODOS).forEach(function (k) {
+      var b = MODOS[k].boton;
+      if (b) b.addEventListener('click', function () {
+        mostrar(abierta() && modo === k ? false : k);
+      });
     });
-    U.$('#glosClose').addEventListener('click', function () { mostrar(false); });
+    if (cerrar) cerrar.addEventListener('click', function () {
+      mostrar(false);
+      if (botonActivo()) botonActivo().focus();     // el aspa desaparece: el foco no
+    });
     buscar.addEventListener('input', function () {
-      pintar(buscar.value);
+      MODOS[modo].q = buscar.value;
+      pintar();
       buscar.parentNode.classList.toggle('is-filled', buscar.value !== '');
     });
     U.$('#glosClear').addEventListener('click', function () {
-      buscar.value = ''; pintar(''); buscar.parentNode.classList.remove('is-filled');
+      buscar.value = '';
+      MODOS[modo].q = '';
+      pintar();
+      buscar.parentNode.classList.remove('is-filled');
       buscar.focus();
     });
     global.addEventListener('keydown', function (ev) {
-      if (ev.key === 'Escape' && caja.classList.contains('is-open')) mostrar(false);
+      if (ev.key !== 'Escape' || !abierta()) return;
+      var dentro = caja.contains(document.activeElement);
+      mostrar(false);
+      if (dentro && botonActivo()) botonActivo().focus();
     });
 
-    /* Para el buscador del indice: abre el glosario con el termino desplegado. */
+    /* Para el buscador del indice: abre un documento con la entrada desplegada. */
     glosarioApi = {
-      abre: function (termino) {
-        buscar.value = termino;
-        buscar.parentNode.classList.add('is-filled');
-        abierto[termino] = true;
-        pintar(termino);
-        mostrar(true);
-        var bt = lista.querySelector('.glos__t[data-termino="' + termino.replace(/"/g, '\\"') + '"]');
+      abre: function (k, termino) {
+        if (termino === undefined) { termino = k; k = 'glos'; }
+        if (!MODOS[k]) return;
+        if (modo !== k) MODOS[modo].scroll = lista.scrollTop;
+        modo = k;
+        MODOS[k].q = termino;
+        MODOS[k].abierto[termino] = true;
+        cabecera();
+        pintar();
+        lista.scrollTop = 0;
+        mostrar(k, true);
+        var bt = null;
+        [].forEach.call(lista.querySelectorAll('.glos__t'), function (b) {
+          if (!bt && b.getAttribute('data-termino') === termino) bt = b;
+        });
         if (bt) { bt.focus(); if (bt.scrollIntoView) bt.scrollIntoView({ block: 'nearest' }); }
         var side = U.$('.side');
         if (side) side.classList.remove('is-open');
@@ -759,8 +922,11 @@
       }
     };
 
-    pintar('');
-    if (Progress.pref('glosario') === '1') mostrar(true);
+    cabecera();
+    pintar();
+    var guardado = Progress.pref('glosario');
+    if (guardado === '1') guardado = 'glos';       // como se guardaba antes de haber dos
+    if (guardado === 'glos' || guardado === 'glsl') mostrar(guardado, true);
   }
 
   function irAInicio(e) {
