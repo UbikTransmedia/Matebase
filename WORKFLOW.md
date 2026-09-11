@@ -25,7 +25,7 @@ Se abre haciendo doble clic en `index.html`. **Sin servidor local, sin internet,
 
 ## Fase 1 — Temario (cerrada) → `assets/js/curriculum.js`
 
-16 bloques, 158 temas, en progresión estricta. El orden es el contrato pedagógico:
+16 bloques, 164 temas, en progresión estricta. El orden es el contrato pedagógico:
 ningún tema usa una herramienta que no se haya explicado antes, y `tests.html`
 comprueba que los requisitos declarados de cada tema van antes que él.
 
@@ -96,7 +96,7 @@ objeto en el array.
 ## Fase 3 — Contenido, bloque a bloque (cerrada)
 
 Por cada tema: explicación → apunte histórico → ejemplos interactivos → ejercicios
-procedimentales → ideas clave. **Los 158 temas están escritos**, y cada tanda se
+procedimentales → ideas clave. **Los 164 temas están escritos**, y cada tanda se
 entregó dejando el proyecto funcionando y pasando `tests.html`.
 
 ## Fase 4 — Curso de 2.º de Bachillerato y repaso (cerrada)

@@ -1109,6 +1109,24 @@ window.CURRICULUM = [
         req: ['gfx-escena', 'fn-exp-log']
       },
       {
+        id: 'gfx-terreno', t: 'Terreno: montañas con una función de dos variables',
+        r: 'Un paisaje infinito de ruido, un paso seguro sobre las laderas y materiales que leen la pendiente.',
+        o: ['Avanzar sobre un campo de alturas sin atravesarlo', 'Octavas giradas: montañas, lomas y piedras', 'La normal del terreno y los materiales por pendiente y altura'],
+        req: ['gfx-luz', 'gfx-ruido', 'gfx-derivadas']
+      },
+      {
+        id: 'gfx-materiales', t: 'Texturas sólidas: mármol, madera y planetas',
+        r: 'El color como función del punto del espacio: vetas sin costuras y un planeta entero con dos ruidos.',
+        o: ['Ruido de valor en tres dimensiones', 'Mármol y madera tallados en un bloque', 'Un planeta: mar, tierra, hielo, nubes y atmósfera'],
+        req: ['gfx-terreno', 'gfx-trazado', 'gfx-warp']
+      },
+      {
+        id: 'gfx-nubes', t: 'Nubes y humo: la luz dentro de un volumen',
+        r: 'Atravesar el humo en rodajas: transmitancia, una suma de Riemann a lo largo del rayo y un cielo de cúmulos.',
+        o: ['Beer-Lambert con densidad variable', 'Acumular luz de delante hacia atrás', 'La luz del sol dentro de la nube'],
+        req: ['gfx-materiales', 'gfx-luz', 'fn-integral-def']
+      },
+      {
         id: 'gfx-fractales', t: 'Fractales: iterar en el plano complejo',
         r: 'Mandelbrot, Julia y Newton en tiempo real, con zoom. El caos, ahora tocable.',
         o: ['Iterar z² + c en el shader', 'Escape, coloreado y conjuntos de Julia', 'El fractal de Newton'],
