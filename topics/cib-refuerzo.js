@@ -1,6 +1,10 @@
 /* Tema: Aprender jugando: MENACE y el refuerzo */
 Course.topic('cib-refuerzo', function (p) {
 
+  p.puente('El perceptrón aprendía porque alguien le decía la respuesta correcta en cada ejemplo. Este ' +
+    'tema quita esa ayuda: solo llega, al final, un premio o un castigo. Las herramientas son la ' +
+    '[[pe-probabilidad|regla de Laplace]], la esperanza de una variable aleatoria y la probabilidad total.');
+
   p.text('En 1961, Donald Michie quería demostrar que una máquina podía aprender a jugar sin que nadie le ' +
     'explicara la estrategia. No tenía un ordenador a mano, así que construyó uno con lo que había: ' +
     '<strong>287 cajas de cerillas</strong>, una por cada posición distinta del tres en raya, y un saco de ' +
@@ -31,9 +35,29 @@ Course.topic('cib-refuerzo', function (p) {
     'es buena casilla. Solo cambia probabilidades según los resultados, y las jugadas que llevan a perder ' +
     'se van quedando sin cuentas hasta desaparecer.');
 
+  p.comprueba('Una jugada de MENACE pierde el 60 % de las veces y gana el 40 %. Con premio de 3 cuentas y castigo de 1, ¿acabará desapareciendo de la caja?', [
+    { t: 'Sí: pierde más veces de las que gana', ok: false, por: 'Las veces no cuentan igual: cada victoria suma 3 y cada derrota resta 1. De media, $3\\cdot 0{,}4 - 1\\cdot 0{,}6 = 0{,}6$ cuentas por partida: crece.' },
+    { t: 'No: de media gana 0,6 cuentas por partida', ok: true, por: 'Es una esperanza. Una jugada puede perder la mayoría de las veces y aun así reforzarse, porque el premio es mayor que el castigo. Para desaparecer tendría que ganar menos del 25 %.' },
+    { t: 'Depende del azar de cada partida', ok: false, por: 'Cada partida sí es azar, pero en muchas partidas manda la media. Con esperanza positiva, la tendencia es a crecer.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Tres partidas de una caja',
+    enunciado: 'Una caja tiene 2 cuentas rojas, 2 verdes y 2 azules. MENACE saca roja y gana; luego saca roja y pierde; luego saca verde y pierde. Seguir la probabilidad de la jugada roja.',
+    pasos: [
+      { t: '<strong>Al principio.</strong> $P(\\text{roja}) = 2/6 = 1/3$. Las tres jugadas son igual de probables.' },
+      { t: '<strong>Gana con roja.</strong> Se añaden 3 rojas: 5 rojas de 9. $P(\\text{roja}) = 5/9 \\approx 0{,}56$. Verde y azul han bajado a $2/9$ cada una sin que nadie las tocara.', antes: 'Añade 3 cuentas rojas. ¿Cuántas hay en total ahora?' },
+      { t: '<strong>Pierde con roja.</strong> Se quita 1 roja: 4 de 8. $P(\\text{roja}) = 1/2$. Ha bajado, pero sigue muy por encima del tercio inicial: el castigo es más suave que el premio.', antes: 'Quita una roja. ¿Baja mucho?' },
+      { t: '<strong>Pierde con verde.</strong> Se quita 1 verde: 4 rojas de 7. $P(\\text{roja}) = 4/7 \\approx 0{,}57$. La roja ha subido sin haber jugado: el castigo a otra la favorece.', antes: 'Ahora la que pierde es la verde. ¿Qué le pasa a la probabilidad de la roja?' },
+      { t: '<strong>Balance.</strong> Tres partidas, una ganada, y la roja ha pasado de $0{,}33$ a $0{,}57$. Así de rápido se sesga una caja pequeña; en las cajas grandes el cambio es más lento.' }
+    ],
+    cierre: 'La probabilidad de una jugada depende de su numerador y del total: subir o bajar las otras también la mueve. Por eso una caja converge tan deprisa hacia lo que funciona.'
+  });
+
   p.demo({
     title: 'MENACE aprende a jugar al Nim',
     intro: 'Hay 13 palillos. Por turnos, cada jugador coge 1, 2 o 3, y gana quien coge el último. MENACE juega primero y tiene una caja para cada número de palillos, con cuentas de tres colores: coger 1, 2 o 3. Si gana, añade 3 cuentas a cada jugada que hizo; si pierde, le quita una. Hazle jugar y mira cómo cambian sus cajas y su porcentaje de victorias.',
+    predice: 'Con 13 palillos la jugada ganadora es coger 1, que deja 12. ¿Cuántas partidas crees que tardará MENACE en preferirla claramente contra un rival al azar: 10, 50, 500?',
     build: function (host) {
       var N = 13, rival = 'azar', cajas, partidas, ganadas, historial, rng;
       var out = W.readout(host, '');
@@ -143,6 +167,7 @@ Course.topic('cib-refuerzo', function (p) {
   p.demo({
     title: 'Tres tragaperras: explorar o aprovechar',
     intro: 'Tres máquinas dan premio con probabilidades 0,3, 0,5 y 0,7, pero el jugador no lo sabe. Con probabilidad ε prueba una al azar; el resto de las veces juega la que mejor le ha ido. La curva gruesa es el premio medio conseguido, promediado sobre 60 jugadores. Compara con no explorar nunca (ε = 0) y con explorar siempre (ε = 1).',
+    predice: 'Con $\\varepsilon = 1$ se elige siempre al azar: el premio medio será la media de $0{,}3$, $0{,}5$ y $0{,}7$. Calcúlala. ¿Y con $\\varepsilon = 0$, crees que quedará por encima o por debajo de esa cifra?',
     build: function (host) {
       var eps = 0.1, P = [0.3, 0.5, 0.7], N = 1000, REPS = 60;
       var out = W.readout(host, '');
@@ -201,6 +226,13 @@ Course.topic('cib-refuerzo', function (p) {
     'AlphaZero aprendió ajedrez, go y shogi partiendo solo de las reglas. Fuera de los juegos, el mismo ' +
     'dilema de explorar o aprovechar decide qué anuncio mostrar, qué versión de una web probar o cómo ' +
     'repartir pacientes entre tratamientos en un ensayo adaptativo.');
+
+  p.trampas([
+    { e: 'Sumar solo al numerador al premiar', por: 'Las cuentas nuevas también entran en el total: de $2/6$ se pasa a $5/9$, no a $5/6$.' },
+    { e: 'Contar victorias en vez de cuentas', por: 'Una jugada que pierde el 60 % de las veces crece igual, porque cada victoria vale 3 y cada derrota 1. Lo que decide es la esperanza.' },
+    { e: 'Creer que MENACE «sabe» que hay que dejar múltiplos de 4', por: 'No sabe nada del Nim. Las jugadas que llevan a perder se quedan sin cuentas; lo que queda parece una estrategia, y lo es, sin que nadie la haya escrito.' },
+    { e: 'No explorar nunca', por: 'Con $\\varepsilon = 0$ el jugador se casa con la primera máquina que le dio premio, y puede ser la peor. Explorar un poco cuesta algo hoy y evita quedarse atrapado.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

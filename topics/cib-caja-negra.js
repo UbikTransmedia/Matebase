@@ -1,6 +1,11 @@
 /* Tema: La caja negra: sistemas, estados y transiciones */
 Course.topic('cib-caja-negra', function (p) {
 
+  p.puente('Los dos temas anteriores describían bucles conociendo sus ecuaciones. Este pregunta qué se ' +
+    'puede saber de un sistema cuando no se conocen: solo se puede tocar y mirar. Las herramientas son ' +
+    'las [[lg-conjuntos|aplicaciones]] de lógica, la aritmética del reloj y, al final, la recta de ' +
+    'regresión de estadística.');
+
   p.text('Tienes delante un aparato cerrado. No puedes abrirlo —está soldado, o es un organismo vivo, ' +
     'o es la economía de un país— y necesitas saber cómo funciona. Solo se te permite hacer dos ' +
     'cosas: <strong>tocar sus mandos y mirar qué hace</strong>. ¿Se puede aprender algo así?');
@@ -29,7 +34,7 @@ Course.topic('cib-caja-negra', function (p) {
 
   p.text('Y lo que hace el sistema es <strong>pasar de un estado a otro</strong>. Ashby llamó ' +
     '<em>transformación</em> a la regla que dice a dónde va cada estado. Fíjate en que eso es ' +
-    'exactamente una aplicación de las del bloque 0: a cada estado le corresponde uno y solo uno. Lo ' +
+    'exactamente una [[lg-conjuntos|aplicación]]: a cada estado le corresponde uno y solo uno. Lo ' +
     'único nuevo es que ahora el conjunto de partida y el de llegada son el mismo, de modo que la ' +
     'transformación se puede aplicar una y otra vez.');
 
@@ -65,9 +70,28 @@ Course.topic('cib-caja-negra', function (p) {
     'hay una variable escondida que no estás mirando —la temperatura, un contador interno, la humedad— ' +
     'y que forma parte del estado sin que lo sepas.', 'ok', 'Cuando el sistema parece caprichoso');
 
+  p.comprueba('La transformación $A \\to B \\to C \\to A$ tiene periodo 3. Si se aplica 302 veces partiendo de $A$, ¿dónde acaba?', [
+    { t: 'En $C$: 302 dividido entre 3 da resto 2, y dos pasos desde $A$ llevan a $C$', ok: true, por: 'Cada tres aplicaciones se vuelve al principio, así que 300 no cambian nada y solo cuentan las 2 que sobran. Es la aritmética del reloj.' },
+    { t: 'En $B$: 302 es par', ok: false, por: 'La paridad no tiene que ver: el ciclo es de 3, no de 2. Lo que importa es el resto de dividir entre 3.' },
+    { t: 'Hay que aplicarla 302 veces para saberlo', ok: false, por: 'Con periodo conocido basta el resto. Solo hay que seguir paso a paso cuando la transformación no vuelve al principio, por ejemplo si un estado se queda atrapado.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Una transformación con ciclo y con trampa',
+    enunciado: 'Cinco estados con la regla $A \\to B$, $B \\to C$, $C \\to A$, $D \\to E$, $E \\to E$. Calcular $T^{100}(A)$, $T^{100}(D)$ y decidir si la transformación entera tiene periodo.',
+    pasos: [
+      { t: '<strong>Desde $A$.</strong> $A, B, C$ forman un ciclo de 3. $100 = 3\\cdot 33 + 1$: 99 aplicaciones devuelven a $A$ y la que sobra lleva a $B$. $T^{100}(A) = B$.', antes: '¿Cuál es el resto de dividir 100 entre 3? ¿Cuántos pasos cuentan de verdad?' },
+      { t: '<strong>Desde $D$.</strong> $D \\to E$, y $E$ se transforma en sí mismo: es un estado <em>absorbente</em>. Después del primer paso ya no hay más movimiento. $T^{100}(D) = E$.', antes: 'Sigue $D$ dos o tres pasos. ¿Qué pasa?' },
+      { t: '<strong>¿Periodo?</strong> Para tener periodo, alguna potencia de $T$ tendría que devolver <em>todos</em> los estados a su sitio. Pero $D$ nunca vuelve: una vez en $E$, se queda. La transformación entera no tiene periodo, aunque una parte de ella sí.', antes: '¿Existe un $n$ con $T^n(D) = D$?' },
+      { t: '<strong>Lo que enseña.</strong> Antes de usar el resto hay que comprobar que el estado de partida está en un ciclo. Si cae en un absorbente, el resto no sirve; se sigue el camino hasta que se detiene.' }
+    ],
+    cierre: 'Ciclos y estados absorbentes son las dos cosas que le pueden pasar a una transformación finita: tarde o temprano todo estado o bien gira o bien se para. Es lo mismo que en las cadenas de Markov, sin azar.'
+  });
+
   p.demo({
     title: 'Una caja negra que puedes sondear',
     intro: 'Dentro hay una máquina con cuatro estados y dos mandos. No puedes ver su tabla, pero sí pulsar los mandos y observar en qué estado queda. Púlsalos hasta que creas saber cómo funciona; el botón de abajo te descubre la tabla para comprobarlo.',
+    predice: 'Pulsa ↻ cuatro veces seguidas desde A y anota la secuencia. ¿Volverás a A? Después prueba ⇢ dos veces: ¿a dónde crees que llegarás?',
     build: function (host, d) {
       // maquina fija (es un ejemplo explicativo, no un ejercicio)
       var NOM = ['A', 'B', 'C', 'D'];
@@ -202,6 +226,7 @@ Course.topic('cib-caja-negra', function (p) {
   p.demo({
     title: 'Ajusta a mano una caja ruidosa',
     intro: 'Estos puntos son medidas de una caja negra: entrada en horizontal, salida en vertical. Mueve la pendiente y la ordenada hasta que la suma de los cuadrados de los residuos —los segmentos rojos— sea lo más pequeña que puedas. Después pide el ajuste óptimo y compara.',
+    predice: 'Intenta primero a ojo: ¿qué pendiente crees que tienen los puntos, alrededor de 0,5, de 1,5 o de 3? Anota tu mejor suma de cuadrados antes de pedir el óptimo.',
     build: function (host) {
       var xs = [], ys = [], rng = U.rng(2024);
       for (var i = 0; i < 12; i++) {
@@ -243,6 +268,13 @@ Course.topic('cib-caja-negra', function (p) {
     'observarse solo unas semanas. Los astrónomos lo encontraron donde Gauss dijo. La disputa por la ' +
     'prioridad entre los dos fue agria; el método, en cambio, no ha dejado de usarse.');
 
+  p.trampas([
+    { e: 'Llamar «aleatorio» a lo que no se entiende', por: 'Un pulsador que unas veces enciende y otras apaga es perfectamente determinista: le falta al estado «cómo estaba la luz». Casi siempre falta una variable, no sobra azar.' },
+    { e: 'Usar el resto módulo el periodo sin comprobar que hay ciclo', por: 'Si el estado cae en uno absorbente, no vuelve nunca y el resto no significa nada. Primero se mira a dónde va; el atajo solo vale dentro de un ciclo.' },
+    { e: 'Creer que se ha descubierto «cómo es» la caja', por: 'Solo se ha encontrado un modelo que la imita en lo probado. Otra máquina distinta podría responder igual a todos esos experimentos.' },
+    { e: 'Ajustar la recta con el primer punto y el último', por: 'Ignora los demás y el ruido de esos dos manda. Mínimos cuadrados usa todas las medidas y reparte el error.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -266,16 +298,11 @@ Course.topic('cib-caja-negra', function (p) {
         'Si parte del estado <strong>' + d.NOM[d.ini] + '</strong> y la aplicas <strong>' + d.pasos +
         ' veces</strong>, ¿en qué estado acaba?';
     },
-    fields: [{ name: 'fin', label: 'estado final', w: 'tiny' }],
+    fields: [{ name: 'fin', label: 'estado final', opts: [{ t: 'A', v: 'A' }, { t: 'B', v: 'B' }, { t: 'C', v: 'C' }, { t: 'D', v: 'D' }] }],
     sol: function (d) {
       var s = d.ini;
       for (var i = 0; i < d.pasos; i++) s = d.destino[s];
       return { fin: d.NOM[s] };
-    },
-    check: function (v, d) {
-      var s = d.ini;
-      for (var i = 0; i < d.pasos; i++) s = d.destino[s];
-      return { ok: String(v.raw.fin || '').trim().toUpperCase() === d.NOM[s] };
     },
     hint: function () {
       return 'Con tan pocos pasos, ir anotando dónde estás después de cada aplicación es lo más ' +

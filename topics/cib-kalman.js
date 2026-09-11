@@ -1,6 +1,11 @@
 /* Tema: El filtro de Kalman en una dimension */
 Course.topic('cib-kalman', function (p) {
 
+  p.puente('El tema anterior dejó un dilema: suavizar limpia el ruido pero retrasa. Este lo resuelve de ' +
+    'otra manera, sin ventana: en vez de promediar el pasado, funde una predicción con una medida, dando a ' +
+    'cada una el peso que merece. Hacen falta la [[pe-normal|campana normal]], la media ponderada y una ' +
+    'recurrencia que se repite para siempre.');
+
   p.text('Imagina que vas en coche por un túnel sin cobertura. Sabes a qué velocidad ibas y cuánto tiempo ' +
     'ha pasado, así que puedes <strong>predecir</strong> dónde estás; pero la predicción se va ' +
     'equivocando un poco más a cada minuto. Al salir del túnel, el GPS te da una <strong>medida</strong>; ' +
@@ -31,9 +36,29 @@ Course.topic('cib-kalman', function (p) {
     'de las varianzas, se suman. Por eso la estimación fundida es siempre más precisa que cualquiera de ' +
     'las dos por separado: dos informaciones imperfectas valen más que la mejor de ellas.');
 
+  p.comprueba('Dos sensores independientes miden la misma posición, los dos con varianza 4. ¿Qué varianza tiene la estimación que los funde?', [
+    { t: '4: son igual de buenos, así que da igual', ok: false, por: 'No da igual: dos opiniones imperfectas e independientes valen más que una. Las precisiones se suman, $\\frac{1}{4} + \\frac{1}{4} = \\frac{1}{2}$: varianza 2.' },
+    { t: '2: se suman las precisiones y la varianza se divide por dos', ok: true, por: 'Es la media de dos medidas independientes: su varianza es la mitad. Con $n$ sensores iguales la varianza se divide por $n$, la misma regla que la media muestral.' },
+    { t: '8: se suman las varianzas', ok: false, por: 'Se suman las varianzas al <em>sumar</em> dos variables aleatorias. Al fundir estimaciones se suman las precisiones, y la varianza baja.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Una fusión a mano',
+    enunciado: 'La predicción dice $x_p = 10$ con $\\sigma_p = 2$; el sensor mide $z = 14$ con $\\sigma_m = 1$. Calcular la estimación fundida de las dos maneras y comprobar que coinciden.',
+    pasos: [
+      { t: '<strong>Varianzas.</strong> $\\sigma_p^2 = 4$, $\\sigma_m^2 = 1$. El sensor es cuatro veces más preciso que la predicción.', antes: 'Pasa de desviaciones típicas a varianzas. ¿Cuál de las dos fuentes es más fiable?' },
+      { t: '<strong>Media ponderada.</strong> $x_e = \\dfrac{1\\cdot 10 + 4\\cdot 14}{4 + 1} = \\dfrac{66}{5} = 13{,}2$. La predicción va multiplicada por la varianza de la medida (1) y la medida por la de la predicción (4): pesa más la fuente mejor.', antes: 'Aplica la fórmula del cruce. ¿Qué peso lleva cada fuente?' },
+      { t: '<strong>Con la ganancia.</strong> $K = \\dfrac{4}{4 + 1} = 0{,}8$. Innovación: $14 - 10 = 4$. $x_e = 10 + 0{,}8\\cdot 4 = 13{,}2$. Coincide.', antes: 'Calcula $K$ y recorre esa fracción del camino desde 10 hasta 14.' },
+      { t: '<strong>Varianza fundida.</strong> $\\sigma_e^2 = (1 - 0{,}8)\\cdot 4 = 0{,}8$. Menor que 1, la del mejor sensor. En precisiones: $\\frac{1}{4} + 1 = 1{,}25 = \\frac{1}{0{,}8}$.' },
+      { t: '<strong>Si el sensor fuera el malo.</strong> Con $\\sigma_p = 1$ y $\\sigma_m = 2$: $K = \\frac{1}{5} = 0{,}2$ y $x_e = 10 + 0{,}2\\cdot 4 = 10{,}8$. Misma medida, la estimación apenas se mueve.', antes: 'Intercambia las desviaciones. ¿Hacia dónde cae ahora la estimación?' }
+    ],
+    cierre: 'Las dos fórmulas son la misma: la ganancia $K$ solo reescribe la media ponderada como «parte de la predicción y avanza una fracción del camino». Esa forma es la que se repite en cada paso del filtro.'
+  });
+
   p.demo({
     title: 'Dos campanas y una tercera',
     intro: 'La campana azul es la predicción; la naranja, la medida. La rellena es la estimación fundida. Estrecha una de las dos y verás cómo la estimación se va hacia ella; ensánchalas y verás que la fundida siempre es más estrecha que las dos.',
+    predice: 'Deja $x_p = 8$ y $z = 12$ y pon $\\sigma_p = \\sigma_m$: ¿dónde caerá la estimación? Y si haces $\\sigma_m$ el doble que $\\sigma_p$, ¿se acercará a 8 o a 12?',
     build: function (host) {
       var xp = 8, sp = 2, z = 12, sm = 1.5;
       var out = W.readout(host, '');
@@ -104,6 +129,7 @@ Course.topic('cib-kalman', function (p) {
   p.demo({
     title: 'Seguir algo que se mide mal',
     intro: 'La línea fina es la posición real de un objeto que deambula; los puntos, lo que mide un sensor muy ruidoso. Compara la media móvil de las cinco últimas medidas con el filtro de Kalman. Luego desajusta el filtro: dile que el sensor es perfecto, o que miente muchísimo, y mira qué le pasa.',
+    predice: 'Los valores reales son $q = 0{,}3$ y $R = 4$. Si pones $R = 0{,}1$, el filtro creerá que el sensor es casi perfecto: ¿su curva se parecerá más a las medidas sueltas o a la posición real?',
     build: function (host) {
       var q = 0.3, R = 4, semilla = 7, N = 120, Q_REAL = 0.3, R_REAL = 4;
       var out = W.readout(host, '');
@@ -182,6 +208,13 @@ Course.topic('cib-kalman', function (p) {
     'acumulando error. Lo mismo hacen los drones, los coches autónomos y los robots para saber dónde ' +
     'están. Y las predicciones del tiempo corrigen cada pocas horas sus simulaciones de la atmósfera con ' +
     'medidas reales usando versiones del mismo principio, con millones de variables en lugar de una.');
+
+  p.trampas([
+    { e: 'Quedarse con la fuente mejor y tirar la otra', por: 'Fundir siempre gana: la varianza fundida es menor que la de la mejor fuente. Con $\\sigma_p^2 = 4$ y $\\sigma_m^2 = 1$ sale 0,8.' },
+    { e: 'Poner los pesos derechos en vez de cruzados', por: 'La predicción se multiplica por la varianza de la <em>medida</em>. Al revés, pesa más la fuente que peor está.' },
+    { e: 'Olvidar $q$ al predecir', por: 'Sin ruido de proceso la varianza solo baja, $K$ tiende a 0 y el filtro acaba ignorando las medidas: se vuelve sordo a un cambio real.' },
+    { e: 'Creer que $K$ se ajusta a mano', por: 'Se calcula sola a partir de las varianzas, y cambia en cada paso. Lo que se ajusta a mano son $q$ y $R$, y de ellos depende todo.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

@@ -1,9 +1,11 @@
 /* Tema: Realimentación: el bucle que se corrige solo */
 Course.topic('cib-realimentacion', function (p) {
 
-  p.text('Llevas todo el curso aprendiendo a describir cosas: cuánto vale algo, cómo cambia, qué forma ' +
+  p.puente('Llevas todo el curso aprendiendo a describir cosas: cuánto vale algo, cómo cambia, qué forma ' +
     'tiene, con qué probabilidad ocurre. Este bloque hace una pregunta distinta y más ambiciosa: ' +
-    '<strong>¿cómo consigue algo mantenerse en su sitio en un mundo que no deja de empujarlo?</strong>');
+    '<strong>¿cómo consigue algo mantenerse en su sitio en un mundo que no deja de empujarlo?</strong> ' +
+    'Las herramientas ya están: las [[fn-sucesiones|sucesiones por recurrencia]], la progresión geométrica, ' +
+    'la derivada y la integral, y los autovalores. Lo nuevo es la pregunta.', 'Por dónde empezamos');
 
   p.text('La respuesta cabe en una palabra, y es la idea más productiva de todo el siglo XX en ' +
     'ingeniería: <strong>realimentación</strong>. Un sistema mide su propio resultado, lo compara con ' +
@@ -67,9 +69,28 @@ Course.topic('cib-realimentacion', function (p) {
     'descontrolándose. Es contraintuitivo y es la lección práctica más importante del tema.',
     'warn', 'Más fuerza no es mejor control');
 
+  p.comprueba('Un termostato tarda mucho en llevar la habitación a 21°. ¿Qué pasará si se duplica la ganancia $K$?', [
+    { t: 'Llegará antes, y cuanto más se suba $K$, mejor', ok: false, por: 'Hasta cierto punto llega antes. Pasado ese punto se pasa de largo, vuelve, se vuelve a pasar: oscila. Y más allá, se descontrola.' },
+    { t: 'Depende de dónde estaba $K$: puede mejorar o empezar a oscilar', ok: true, por: 'Con $K = 0{,}2$, duplicar a $0{,}4$ mejora. Con $K = 0{,}8$, duplicar a $1{,}6$ produce vaivenes. Con $K = 1{,}2$, duplicar a $2{,}4$ lo descontrola. La ganancia tiene un punto dulce, no una dirección buena.' },
+    { t: 'No cambiará nada: la ganancia solo afecta a la velocidad', ok: false, por: 'Afecta a la velocidad y a la <em>forma</em> de llegar. Con $K > 1$ la corrección es mayor que el error y el sistema se pasa al otro lado.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Tres ganancias, a mano',
+    enunciado: 'La habitación está a 12° y el objetivo es 21°. Calcular tres pasos del bucle $y_{n+1} = y_n + K(21 - y_n)$ con $K = 0{,}5$, con $K = 1{,}5$ y con $K = 2{,}5$.',
+    pasos: [
+      { t: '<strong>$K = 0{,}5$.</strong> Error 9, corrección 4,5: $y_1 = 16{,}5$. Error 4,5, corrección 2,25: $y_2 = 18{,}75$. Error 2,25: $y_3 = 19{,}875$. Cada paso recorre la mitad de lo que falta: se acerca sin pasarse.', antes: 'Error $21 - 12 = 9$. ¿Cuánto corrige con $K = 0{,}5$ y a dónde llega?' },
+      { t: '<strong>$K = 1{,}5$.</strong> Error 9, corrección 13,5: $y_1 = 25{,}5$, se ha pasado. Error $-4{,}5$, corrección $-6{,}75$: $y_2 = 18{,}75$, ahora se queda corto. Error 2,25: $y_3 = 22{,}125$. Oscila a un lado y a otro, cada vez con la mitad de amplitud: se calma.', antes: 'Con $K = 1{,}5$ la corrección es mayor que el error. ¿Dónde cae $y_1$?' },
+      { t: '<strong>$K = 2{,}5$.</strong> Error 9, corrección 22,5: $y_1 = 34{,}5$. Error $-13{,}5$, corrección $-33{,}75$: $y_2 = 0{,}75$. Error 20,25: $y_3 = 51{,}4$. Cada vaivén es mayor que el anterior: se descontrola.', antes: '¿Y con $K = 2{,}5$? Fíjate en si la desviación crece o mengua.' },
+      { t: '<strong>La regla que lo resume.</strong> La desviación se multiplica cada paso por $1 - K$: por $0{,}5$ (mengua), por $-0{,}5$ (cambia de signo y mengua) y por $-1{,}5$ (cambia de signo y crece). Las tres gráficas de la demo, en un solo número.' }
+    ],
+    cierre: 'Misma ecuación, tres mundos. Y ninguno se ve en la fórmula: hay que iterar, o mirar el factor $1 - K$, que es lo que se hace en la sección siguiente.'
+  });
+
   p.demo({
     title: 'Un termostato con el mando de la ganancia',
     intro: 'La habitación está a 12° y quieres 21°. Sube la ganancia poco a poco y observa el cambio de comportamiento: primero lento pero seguro, después rápido y limpio, luego oscilante y por fin descontrolado. En ningún momento se ha tocado nada más que la fuerza de la corrección.',
+    predice: 'Según el ejemplo, con $K = 1{,}5$ el primer paso sube hasta 25,5. ¿Y con $K = 1$: se pasará, se quedará corto o llegará justo a 21?',
     build: function (host, d) {
       var K = 0.35, ref = 21, y0 = 12, N = 90;
       var out = W.readout(host, '');
@@ -147,7 +168,7 @@ Course.topic('cib-realimentacion', function (p) {
     'Se lee: <em>«i griega sub ene más uno es igual a i griega sub ene, más ka por, erre menos i ' +
     'griega sub ene»</em>.<br><br>El subíndice $n$ numera los pasos: $y_n$ es el valor ahora e ' +
     '$y_{n+1}$ el del instante siguiente. Es una <strong>sucesión definida por recurrencia</strong>, ' +
-    'de las del bloque 5: cada término se calcula a partir del anterior.<br><br>' +
+    'de las de [[fn-sucesiones|el tema de sucesiones]]: cada término se calcula a partir del anterior.<br><br>' +
     'Y aquí está el puente con la simulación: el paréntesis es el error $e_n$, y $K$ por ese ' +
     'paréntesis es exactamente la acción $u_n$.');
 
@@ -167,7 +188,7 @@ Course.topic('cib-realimentacion', function (p) {
     'El truco del segundo paso es fijarse en que $r - y_n$ es justo $-d_n$, la desviación cambiada de ' +
     'signo. Sustituyendo, queda $d_n - K d_n$, y sacando $d_n$ factor común aparece la última línea.' +
     '<br><br>Lo que dice es contundente: <em>la desviación de cada paso es la anterior multiplicada ' +
-    'por $1-K$</em>. Nada más. Es una progresión geométrica de razón $1-K$, de las del bloque 5.');
+    'por $1-K$</em>. Nada más. Es una progresión geométrica de razón $1-K$, de las de [[fn-sucesiones|sucesiones]].');
 
   p.text('Y con eso se entiende toda la gráfica de antes, sin simular. Como es una progresión ' +
     'geométrica, lo que decide su destino es el <strong>valor absoluto de la razón</strong>:');
@@ -222,12 +243,13 @@ Course.topic('cib-realimentacion', function (p) {
   p.section('Cuando el bucle amplifica');
 
   p.text('La realimentación positiva se estudia menos y explica más titulares. Su firma es el ' +
-    'crecimiento explosivo, y ya la conoces con otro nombre: es la exponencial del bloque 5, vista ' +
+    'crecimiento explosivo, y ya la conoces con otro nombre: es la [[fn-exp-log|exponencial]], vista ' +
     'desde el lado de las causas.');
 
   p.demo({
     title: 'El mismo bucle, cambiando el signo',
     intro: 'Con corrección negativa la desviación se apaga; con corrección positiva se dispara. Mueve el mando por debajo de cero para ver el otro lado.',
+    predice: 'Con $K = -0{,}1$ la desviación se multiplica cada paso por $1{,}1$. Tras 40 pasos, ¿será unas 4 veces mayor, unas 45, o miles de veces? Calcula $1{,}1^{40}$ a ojo.',
     build: function (host, d) {
       var K = 0.3, N = 40;
       var out = W.readout(host, '');
@@ -276,6 +298,13 @@ Course.topic('cib-realimentacion', function (p) {
     'iban a destruir empleos y a exigir que alguien pensara en ello antes. Su segundo libro se titula ' +
     '<em>El uso humano de los seres humanos</em>, y se lee hoy con una actualidad incómoda.');
 
+  p.trampas([
+    { e: '«Negativa» leído como «mala» y «positiva» como «buena»', por: 'Son signos de la corrección, no juicios. La negativa mantiene tu temperatura; la positiva es el pánico bancario y también el interés compuesto.' },
+    { e: 'Subir la ganancia para corregir más deprisa', por: 'Con $K = 2{,}5$ cada corrección es mayor que el error que arregla. El termostato se descontrola sin que nadie haya tocado nada más.' },
+    { e: 'Buscar al culpable en una oscilación', por: 'En el bucle con $K = 1{,}5$ nadie decide mal: es la estructura la que oscila. Cambiar de operario no la arregla; cambiar $K$ sí.' },
+    { e: 'Olvidar que $u$ es lo que se suma al sistema', por: '$u = Ke$ no es un número que se mira: es el calor que aporta la caldera. Por eso la fórmula del bucle es $y_{n+1} = y_n + K(r - y_n)$.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -299,19 +328,10 @@ Course.topic('cib-realimentacion', function (p) {
       return { texto: c.t, neg: c.neg };
     },
     ask: function (d) {
-      return 'Lee la situación y decide qué tipo de bucle es:<br><br><em>«' + d.texto + '»</em><br><br>' +
-        'Escribe <strong>negativa</strong> si el bucle estabiliza, o <strong>positiva</strong> si amplifica.';
+      return 'Lee la situación y decide qué tipo de bucle es:<br><br><em>«' + d.texto + '»</em>';
     },
-    fields: [{ name: 'tipo', label: 'El bucle es', w: 'wide' }],
+    fields: [{ name: 'tipo', label: 'El bucle es', opts: [{ t: 'realimentación negativa: estabiliza', v: 'negativa' }, { t: 'realimentación positiva: amplifica', v: 'positiva' }] }],
     sol: function (d) { return { tipo: d.neg ? 'negativa' : 'positiva' }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.tipo, {
-        negativa: /negativ|estabiliz|corrig|compens|amortigu|frena/,
-        positiva: /positiv|amplific|refuerz|dispara|crece|a favor/
-      });
-      if (!q) return { ok: false, msg: 'Responde «negativa» o «positiva».' };
-      return { ok: q === (d.neg ? 'negativa' : 'positiva') };
-    },
     hint: function () {
       return 'Pregúntate: cuando la cosa se desvía, ¿lo que ocurre después la trae de vuelta o la ' +
         'empuja más lejos?';
@@ -378,25 +398,14 @@ Course.topic('cib-realimentacion', function (p) {
     },
     fields: [
       { name: 'f', label: '1 − K =', w: 'tiny' },
-      { name: 'q', label: 'comportamiento', w: 'wide' }
+      { name: 'q', label: 'comportamiento', opts: [{ t: 'converge', v: 'converge' }, { t: 'oscila creciendo', v: 'crece' }, { t: 'oscilación sostenida', v: 'sostenida' }] }
     ],
     sol: function (d) {
       var f = 1 - d.K;
       var a = Math.abs(f);
-      return { f: f, q: a < 1 ? 'converge' : (a > 1 ? 'oscila creciendo' : 'oscilación sostenida') };
+      return { f: U.round(f, 6), q: a < 1 ? 'converge' : (a > 1 ? 'crece' : 'sostenida') };
     },
-    check: function (v, d) {
-      var f = 1 - d.K, a = Math.abs(f);
-      var okF = Math.abs(v.f - f) < 1e-6;
-      var q = U.eligeOpcion(v.raw.q, {
-        converge: /converg|estabil|se apaga|calm|tiende a|se acerca|desaparece|encoge/,
-        crece: /crec|dispara|descontrol|diverg|se va de|explota/,
-        sostenida: /sosten|constante|se mantiene|siempre igual|misma amplitud|ni se calma/
-      });
-      var esperada = a < 1 ? 'converge' : (a > 1 ? 'crece' : 'sostenida');
-      var okQ = q === esperada;
-      return { ok: okF && okQ, fields: { f: okF, q: okQ } };
-    },
+    tol: 1e-6,
     hint: function () {
       return 'Lo que decide es el <strong>valor absoluto</strong> del factor. Si es menor que 1, la ' +
         'desviación encoge en cada paso; si es mayor, crece.';

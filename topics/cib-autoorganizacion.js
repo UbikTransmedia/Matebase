@@ -1,6 +1,11 @@
 /* Tema: Autoorganización: autómatas celulares */
 Course.topic('cib-autoorganizacion', function (p) {
 
+  p.puente('Todos los sistemas anteriores tenían un regulador. Este tema lo quita y mira qué hacen muchas ' +
+    'piezas iguales que solo obedecen a sus vecinas. Las cuentas son las más sencillas del bloque: contar ' +
+    'vecinas, escribir números en base 2 y, al final, dos ecuaciones de reacción y difusión que retoman la ' +
+    '[[cib-realimentacion|realimentación]] positiva y negativa.');
+
   p.text('Hasta aquí, en todos los sistemas del bloque había algo parecido a un gobernante: un ' +
     'controlador que mide, decide y actúa. Este tema quita esa figura y hace una pregunta molesta: ' +
     '<strong>¿puede aparecer orden sin que nadie lo organice?</strong>');
@@ -39,7 +44,7 @@ Course.topic('cib-autoorganizacion', function (p) {
 
   p.text('Se habla de «la regla 30» o «la regla 110», y conviene entender qué significa ese número, ' +
     'porque no es una etiqueta arbitraria: <strong>es la regla entera, comprimida</strong>. La idea ' +
-    'es la del valor posicional que viste en el primer bloque, pero contando con dos símbolos en vez ' +
+    'es la del [[ar-naturales|valor posicional]] de los números naturales, pero contando con dos símbolos en vez ' +
     'de diez.');
 
   p.text('Escribe las ocho respuestas en fila, de la vecindad 7 a la 0, y léelas como un número en ' +
@@ -64,6 +69,7 @@ Course.topic('cib-autoorganizacion', function (p) {
   p.demo({
     title: 'Las 256 reglas, una por una',
     intro: 'Cada fila se calcula a partir de la anterior mirando solo tres casillas. Se empieza con una única celda encendida en el centro. Recorre las reglas y fíjate en lo distintas que son: unas mueren, otras hacen rayas periódicas, otras dibujan triángulos anidados, y unas pocas producen algo que parece azar puro sin serlo.',
+    predice: 'La regla 0 apaga todo y la 255 lo enciende todo. La 90, que en binario es 01011010, ¿crees que dará algo periódico, algo caótico o algo intermedio? Anótalo antes de pulsar.',
     build: function (host, d) {
       var regla = 30, filas = 60, ancho = 121;
 
@@ -160,9 +166,28 @@ Course.topic('cib-autoorganizacion', function (p) {
     'mueven, osciladores que laten, <em>planeadores</em> que se desplazan por el tablero, cañones que ' +
     'los disparan cada treinta pasos, y configuraciones capaces de construir copias de sí mismas.');
 
+  p.comprueba('Un cuadrado de $2\\times 2$ celdas vivas, rodeado de celdas muertas. ¿Qué pasa en la generación siguiente?', [
+    { t: 'Se queda igual: cada viva tiene 3 vecinas y ninguna muerta llega a 3', ok: true, por: 'Cada celda del bloque toca a las otras tres: sobrevive. Las muertas de alrededor tocan como mucho a dos del bloque: no nacen. Es la «naturaleza muerta» más simple.' },
+    { t: 'Muere: están demasiado apretadas', ok: false, por: 'Apretadas sería con 4 o más vecinas. En un bloque de cuatro, cada una tiene exactamente 3, dentro de la franja buena.' },
+    { t: 'Crece: las muertas de alrededor nacen', ok: false, por: 'Para nacer hacen falta exactamente 3 vecinas vivas. Las de los lados tocan a 2 del bloque; las de las esquinas, a 1.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Tres celdas en fila, paso a paso',
+    enunciado: 'Tres celdas vivas en horizontal, en un tablero vacío. Calcular la generación siguiente contando vecinas, y la siguiente a esa.',
+    pasos: [
+      { t: '<strong>Las tres vivas.</strong> La del centro toca a las dos de los lados: 2 vecinas, sobrevive. Cada extremo solo toca al centro: 1 vecina, muere de soledad.', antes: 'Cuenta las vecinas vivas de cada una de las tres. ¿Cuál sobrevive?' },
+      { t: '<strong>Las muertas de alrededor.</strong> La celda justo encima del centro toca a las tres vivas: 3 vecinas, nace. Lo mismo la de justo debajo. Las de encima de los extremos tocan a 2: no nacen. Las de los lados, a 1.', antes: 'Busca celdas muertas con exactamente 3 vecinas vivas. ¿Cuántas hay?' },
+      { t: '<strong>Resultado.</strong> Sobrevive el centro y nacen la de arriba y la de abajo: tres celdas en vertical. La fila se ha convertido en columna.' },
+      { t: '<strong>Otra generación.</strong> El mismo razonamiento, girado: el centro sobrevive, los extremos verticales mueren y nacen las de izquierda y derecha. Vuelve a ser la fila del principio. Es un oscilador de periodo 2, el «parpadeador».', antes: 'Aplica el mismo argumento a la columna. ¿Qué sale?' }
+    ],
+    cierre: 'Ninguna celda se ha movido ni ha «decidido» parpadear. Solo se han contado vecinas dos veces. El parpadeo es una propiedad del conjunto, no de las reglas: es la emergencia más pequeña que existe.'
+  });
+
   p.demo({
     title: 'El Juego de la Vida',
     intro: 'Pon una figura y déjala correr. El planeador se desplaza en diagonal, indefinidamente. La «rana» late. Y la configuración al azar suele acabar en un revoltijo de restos quietos y osciladores, tras un rato de actividad sorprendente.',
+    predice: 'Pulsa «Rana» y avanza de uno en uno: ¿volverá a su forma en 2, 4 o más pasos? Luego el planeador: en 20 generaciones, ¿cuántas casillas se habrá desplazado?',
     build: function (host, d) {
       var W2 = 42, H2 = 26;
       var g0 = [];
@@ -305,6 +330,7 @@ Course.topic('cib-autoorganizacion', function (p) {
   p.demo({
     title: 'Reacción y difusión',
     intro: 'Cada píxel es una celda con dos sustancias que reaccionan y se difunden a sus vecinas. Nadie dibuja nada: las formas salen solas de unas gotas iniciales. Elige una receta, o mueve F y k con cuidado, y reinicia.',
+    predice: 'Las dos recetas difieren en $F$ y $k$ en menos de dos centésimas. ¿Crees que las formas serán parecidas o completamente distintas?',
     build: function (host) {
       var N = 110, u, v, u2, v2, F = 0.0545, K = 0.062, vivo = true, PASOS = 10, intentos = 0;
       var RECETAS = { coral: [0.0545, 0.062], mitosis: [0.0367, 0.0649] };
@@ -385,6 +411,13 @@ Course.topic('cib-autoorganizacion', function (p) {
     'de reacción-difusión. Hoy se estudian con ellas las rayas de las cebras, la separación de los dedos en ' +
     'el embrión y la disposición de los folículos del pelo.');
 
+  p.trampas([
+    { e: 'Leer el número de regla de izquierda a derecha', por: 'Las posiciones se cuentan desde la derecha empezando en 0: el bit de la derecha responde a la vecindad 000. La regla 110 es 01101110, y el 0 final dice que tres apagadas siguen apagadas.' },
+    { e: 'Contar a la propia celda como vecina', por: 'En la Vida las vecinas son las ocho de alrededor; la celda no se cuenta a sí misma. Un bloque $2\\times 2$ tiene 3 vecinas por celda, no 4.' },
+    { e: 'Buscar quién mueve el planeador', por: 'Ninguna celda se mueve nunca: se encienden y se apagan. El desplazamiento es un patrón que se reconstruye un poco más allá, igual que un atasco retrocede mientras los coches avanzan.' },
+    { e: 'Creer que emergencia significa que las reglas no lo explican', por: 'Lo explican del todo: el planeador se deduce de las reglas. Lo que no se puede es anticiparlo leyéndolas. Saber la regla no es saber la consecuencia.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -408,22 +441,10 @@ Course.topic('cib-autoorganizacion', function (p) {
         'Recuerda las reglas: una viva sobrevive con 2 o 3 vecinas; una muerta revive con exactamente 3.' +
         '<br><br>¿Cómo estará en la generación siguiente?';
     },
-    fields: [{ name: 'q', label: 'quedará', w: 'tiny' }],
+    fields: [{ name: 'q', label: 'quedará', opts: [{ t: 'viva', v: 'viva' }, { t: 'muerta', v: 'muerta' }] }],
     sol: function (d) {
       var r = d.viva ? (d.vecinas === 2 || d.vecinas === 3) : (d.vecinas === 3);
       return { q: r ? 'viva' : 'muerta' };
-    },
-    check: function (v, d) {
-      var r = d.viva ? (d.vecinas === 2 || d.vecinas === 3) : (d.vecinas === 3);
-      var bruto = U.llano(v.raw.q).trim();
-      if (bruto === '1') return { ok: r };          // notacion binaria, respuesta entera
-      if (bruto === '0') return { ok: !r };
-      var q = U.eligeOpcion(bruto, {
-        viva: /viva|vive|nace|encend|sobreviv|revive/,
-        muerta: /muert|muere|apag|desaparec/
-      });
-      if (!q) return { ok: false, msg: 'Responde «viva» o «muerta».' };
-      return { ok: r ? q === 'viva' : q === 'muerta' };
     },
     hint: function () { return 'Con 0 o 1 vecinas siempre se muere; con 4 o más también. La franja buena es estrecha.'; },
     steps: function (d) {

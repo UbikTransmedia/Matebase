@@ -1,6 +1,11 @@
 /* Tema: Variedad y la ley de la variedad requerida */
 Course.topic('cib-variedad', function (p) {
 
+  p.puente('El tema anterior contaba estados: cuántos tiene una caja y cuántas observaciones hacen falta. ' +
+    'Este cuenta estados de dos cosas a la vez, el mundo y quien lo regula, y compara. Solo hace falta ' +
+    'contar y, para medir en bits, el logaritmo en base 2 que ya apareció en ' +
+    '[[av-informacion|teoría de la información]].');
+
   p.text('Este tema contiene, en mi opinión, el resultado más útil de toda la cibernética, y tiene la ' +
     'virtud de las cosas grandes: se enuncia en una frase, se demuestra casi contando con los dedos y ' +
     'una vez entendido no se puede dejar de ver. Ashby lo llamó la <strong>ley de la variedad ' +
@@ -81,9 +86,28 @@ Course.topic('cib-variedad', function (p) {
     'controlar: <strong>la variedad del resultado no puede bajar de $V_D - V_R$</strong>. Es decir, ' +
     'lo que el regulador no tiene en jugadas se lo queda el mundo en desorden.');
 
+  p.comprueba('Un servicio de atención recibe 12 tipos de incidencia distintos y el operador solo puede dar 4 respuestas. Se le envía a un curso para que sea más rápido y amable. ¿Mejorará el porcentaje de incidencias resueltas?', [
+    { t: 'Sí: con más habilidad resolverá más', ok: false, por: 'La habilidad no añade respuestas. Con 4 respuestas para 12 tipos, en el caso exigente el techo es $4/12 = 33\\,\\%$, sea quien sea el operador.' },
+    { t: 'No: el techo lo fija la variedad, $4/12$, y el curso no la cambia', ok: true, por: 'Solo hay dos salidas: darle más respuestas (amplificar $V_R$) o reducir los tipos de incidencia que le llegan (atenuar $V_D$). El curso no hace ninguna de las dos.' },
+    { t: 'Depende de cuánto se esfuerce', ok: false, por: 'El esfuerzo tampoco añade jugadas. Es la parte más incómoda de la ley: el fallo es aritmético, no de actitud.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un mando a distancia con pocos botones',
+    enunciado: 'Un aparato tiene 10 funciones distintas y el mando solo tiene 3 botones. ¿Se puede gobernar? ¿Cuántos bits de variedad tiene el problema y cuántas pulsaciones hacen falta?',
+    pasos: [
+      { t: '<strong>Variedades.</strong> $V_D = 10$ funciones a pedir. Con una pulsación, $V_R = 3$. Como $3 < 10$, una pulsación no basta: hay 7 funciones que ningún botón puede pedir.', antes: 'Compara $V_R$ con $V_D$. ¿Cumple la ley?' },
+      { t: '<strong>Encadenar.</strong> Con dos pulsaciones hay $3\\cdot 3 = 9$ secuencias distintas. Todavía falta una. Con tres pulsaciones, $27 \\ge 10$: sobra.', antes: 'Las variedades de piezas independientes se multiplican. ¿Cuántas secuencias de dos pulsaciones hay?' },
+      { t: '<strong>En bits.</strong> $\\log_2 10 \\approx 3{,}32$ bits de variedad en el problema. Cada botón aporta $\\log_2 3 \\approx 1{,}58$ bits por pulsación. Hacen falta $3{,}32 / 1{,}58 \\approx 2{,}1$ pulsaciones: es decir, 3, porque 2 no llegan.', antes: 'En bits, ¿cuánto aporta cada pulsación y cuántas hacen falta para cubrir 3,32?' },
+      { t: '<strong>La otra salida.</strong> Si en vez de amplificar (más pulsaciones) se atenúa, el fabricante quita funciones: con 9 funciones bastan dos pulsaciones; con 3, una. Los submenús son amplificación; el «modo simple», atenuación.' }
+    ],
+    cierre: 'La ley no dice cómo conseguir la variedad, solo cuánta hace falta. Encadenar pulsaciones, añadir botones o quitar funciones son tres maneras de cerrar la misma cuenta.'
+  });
+
   p.demo({
     title: 'El juego de la regulación',
     intro: 'El entorno tiene cuatro perturbaciones y tú tienes un regulador. Elige cuántas jugadas le permites y ponte a jugar: en cada ronda ves la perturbación, eliges tu respuesta y sale un resultado. Tu objetivo es que salga siempre «a». Con menos jugadas que perturbaciones, prueba todo lo que quieras: no hay manera.',
+    predice: 'Con 3 jugadas, ¿cuál será tu techo de aciertos: el 75 %, el 100 % o algo intermedio según lo bien que juegues?',
     build: function (host, d) {
       var TABLA = [               // filas = jugadas del regulador, columnas = perturbaciones
         ['a', 'b', 'c', 'd'],
@@ -259,6 +283,13 @@ Course.topic('cib-variedad', function (p) {
     'modela forma parte del mundo que modela, aparece un bucle nuevo: el observador dentro del ' +
     'sistema observado. Eso es la cibernética de segundo orden.', null, 'Hacia dónde lleva esto');
 
+  p.trampas([
+    { e: 'Culpar a la habilidad de lo que es falta de repertorio', por: 'Con 2 jugadas frente a 4 perturbaciones el techo es el 50 %. No lo sube el mejor jugador del mundo; lo sube una tercera jugada.' },
+    { e: 'Contar la variedad sin decir qué se distingue', por: 'Un coche tiene variedad 2, 12 o millones según quién mire. La variedad es del observador; antes de contar hay que fijar qué estados se consideran distintos.' },
+    { e: 'Sumar variedades de piezas independientes', por: 'Se multiplican: dos interruptores dan $2\\cdot 2 = 4$ estados, no 4 sumando. En bits sí se suman, porque el logaritmo convierte el producto en suma.' },
+    { e: 'Leer la ley como una igualdad', por: 'Es una cota: en el caso exigente hace falta $V_R \\ge V_D$. En un mundo benévolo, donde una jugada sirve para varias perturbaciones, se necesita menos.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -367,16 +398,8 @@ Course.topic('cib-variedad', function (p) {
         '<strong>amplificar</strong> la del regulador.<br><br><em>«' + d.texto + '»</em><br><br>' +
         '¿Cuál de las dos se está aplicando?';
     },
-    fields: [{ name: 'q', label: 'está…', w: 'wide' }],
+    fields: [{ name: 'q', label: 'Se está', opts: [{ t: 'atenuando la variedad del entorno', v: 'atenuando' }, { t: 'amplificando la variedad del regulador', v: 'amplificando' }] }],
     sol: function (d) { return { q: d.at ? 'atenuando' : 'amplificando' }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        atenuar: /aten[uú]|reduc|limit|restring|recort|simplific|menos variedad|menos opciones/,
-        amplificar: /amplific|amplia|ampli[eé]|aument|a[nñ]ad|mas variedad|mas respuestas|repertorio|refuerz/
-      });
-      if (!q) return { ok: false, msg: 'Responde «atenuar» o «amplificar».' };
-      return { ok: q === (d.at ? 'atenuar' : 'amplificar') };
-    },
     hint: function () { return '¿Se están recortando las situaciones que pueden presentarse, o se están añadiendo respuestas posibles?'; },
     steps: function (d) {
       return d.at

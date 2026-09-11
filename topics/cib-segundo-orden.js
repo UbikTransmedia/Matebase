@@ -1,6 +1,12 @@
 /* Tema: Cibernética de segundo orden */
 Course.topic('cib-segundo-orden', function (p) {
 
+  p.puente('Último tema del bloque, y el que menos calcula. Recoge la ley de la [[cib-variedad|variedad]] ' +
+    'y la lleva un paso más allá: un regulador no solo necesita jugadas suficientes, necesita tenerlas ' +
+    'emparejadas con las situaciones. Y después pregunta por quien mira: el observador también está ' +
+    'dentro. Las cuentas son las de [[pe-combinatoria|combinatoria]]: cuántas funciones hay de un ' +
+    'conjunto en otro.');
+
   p.text('Este tema cierra el bloque de cibernética, y conviene empezar avisando de qué clase de tema es. ' +
     'Los anteriores tenían números que calcular. Este tiene <strong>un teorema demostrable y una ' +
     'consecuencia incómoda</strong>, y la consecuencia se sale del terreno donde las matemáticas ' +
@@ -51,6 +57,25 @@ Course.topic('cib-segundo-orden', function (p) {
     'contempla un escenario no lo va a gestionar bien improvisando. Antes de pedir más recursos, hay ' +
     'que preguntar qué distinciones le faltan.');
 
+  p.comprueba('Un control de crucero mantiene la velocidad en llano, pero en las cuestas largas siempre se queda corto. ¿Qué le falta?', [
+    { t: 'Más potencia de motor', ok: false, por: 'La potencia está: en llano sobra. Lo que pasa es que el regulador no sabe que hay cuesta, y corrige tarde y poco. El fallo es sistemático, y eso apunta al modelo.' },
+    { t: 'Una distinción: su modelo no incluye la pendiente', ok: true, por: 'El teorema del buen regulador lo dice así: el regulador tiene que distinguir lo mismo que distingue el sistema. Un sensor de inclinación añade esa distinción, y con ella el mismo motor basta.' },
+    { t: 'Más ganancia proporcional', ok: false, por: 'Reduciría el hueco en cuesta y provocaría vaivenes en llano. Un fallo que aparece <em>siempre en la misma circunstancia</em> se arregla midiendo esa circunstancia, no apretando.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Cuántas estrategias hay, y por qué no se sortean',
+    enunciado: 'Un regulador ve 3 perturbaciones distintas ($a$, $b$, $c$) y tiene 2 jugadas ($0$ y $1$). Contar las estrategias deterministas posibles, escribirlas, y decidir cuántas son buenas si el resultado deseado exige responder 1 a $a$ y a $c$ y 0 a $b$.',
+    pasos: [
+      { t: '<strong>Qué es una estrategia.</strong> Una función $f$ que asigna una jugada a cada perturbación: $f(a)$, $f(b)$ y $f(c)$, cada una 0 o 1. Tres elecciones independientes con dos opciones: $2^3 = 8$.', antes: '¿Cuántas elecciones hay que hacer y cuántas opciones tiene cada una?' },
+      { t: '<strong>Las ocho.</strong> Escritas como $(f(a), f(b), f(c))$: $000, 001, 010, 011, 100, 101, 110, 111$. Son los números de 0 a 7 en base 2, la misma idea que numerar las reglas de un autómata.' },
+      { t: '<strong>La buena.</strong> Solo $101$ responde 1 a $a$, 0 a $b$ y 1 a $c$. Una de ocho: $P = 1/8$ de acertar sorteando.', antes: '¿Cuál de las ocho cumple las tres condiciones?' },
+      { t: '<strong>Escalar.</strong> Con 10 perturbaciones y 2 jugadas, $2^{10} = 1024$ estrategias; con 20, más de un millón; con 4 jugadas y 10 perturbaciones, $4^{10} \\approx 10^6$. Sortear deja de servir enseguida.' },
+      { t: '<strong>Lo que hace un buen regulador.</strong> No sortea: distingue $a$ de $b$ y de $c$ y responde a cada una. Esa correspondencia es su modelo, y el teorema dice que sin ella no hay regulación óptima posible.' }
+    ],
+    cierre: 'El mismo conteo que en el homeostato, con la conclusión contraria: allí había bastantes configuraciones buenas entre pocas; aquí el número de estrategias crece exponencialmente y hay que construir la buena, no encontrarla.'
+  });
+
   p.hist('Ashby había llegado a esto desde la psiquiatría, y en su cabeza el teorema apuntaba a una ' +
     'conclusión concreta: si un organismo regula su conducta en un entorno, entonces contiene ' +
     'necesariamente un modelo de ese entorno. No como metáfora ni como hipótesis psicológica, sino ' +
@@ -80,6 +105,7 @@ Course.topic('cib-segundo-orden', function (p) {
   p.demo({
     title: 'Un sistema que se observa a sí mismo',
     intro: 'Una máquina intenta regular una señal, y a la vez construye un modelo de ella observándola. El detalle es que sus propias correcciones cambian lo que observa. Sube el acoplamiento y verás aparecer el problema del segundo orden: cuanto más actúa sobre el mundo, menos se parece lo que mide a lo que habría pasado sin ella.',
+    predice: 'Con acoplamiento 0 las tres líneas casi coinciden. Al subirlo a 0,5, ¿cuál cambiará: la de puntos, la medida, el modelo, o las tres?',
     build: function (host, d) {
       var acopl = 0, N = 120;
       var out = W.readout(host, '');
@@ -185,6 +211,13 @@ Course.topic('cib-segundo-orden', function (p) {
     'este curso ha intentado enseñar desde el primer día: que las matemáticas son un idioma con el ' +
     'que se puede decir casi todo, incluido cómo se sostiene algo en pie.');
 
+  p.trampas([
+    { e: 'Leer «modelo» como «entendimiento»', por: 'El teorema solo exige que el regulador distinga lo que distingue el sistema. Un termostato tiene modelo de la habitación en ese sentido: separa frío de calor.' },
+    { e: 'Pedir más potencia a un regulador que falla siempre igual', por: 'Un fallo sistemático es una distinción que falta. El control de crucero en cuesta necesita un sensor de pendiente, no más motor.' },
+    { e: 'Convertir la medida en objetivo', por: 'Ley de Goodhart: en cuanto se premia el tiempo de espera, se acorta el tiempo de espera y deja de informar sobre la calidad. El indicador se acopla con lo indicado.' },
+    { e: 'Sacar de la demo una ley general', por: 'La gráfica ilustra un caso en que observar altera lo observado. No demuestra que ocurra siempre ni cuánto: ese salto no lo autoriza nadie.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -206,25 +239,10 @@ Course.topic('cib-segundo-orden', function (p) {
     ask: function (d) {
       return '<em>«' + d.texto + '»</em><br><br>¿Se está produciendo el efecto de la ley de Goodhart ' +
         '—la medida se ha convertido en objetivo y ha dejado de medir lo que medía— o se trata de una ' +
-        'medición que no altera lo medido?<br><br>Responde <strong>sí</strong> o <strong>no</strong>.';
+        'medición que no altera lo medido?';
     },
-    fields: [{ name: 'q', label: '¿Goodhart?', w: 'tiny' }],
-    sol: function (d) { return { q: d.goodhart ? 'sí' : 'no' }; },
-    check: function (v, d) {
-      var s = U.llano(v.raw.q).trim();
-      // «no lo sé» empieza por «no» y no es una respuesta: no puede acertar.
-      if (/^(no lo se|no se|ni idea|no sabria|no estoy seguro)/.test(s)) {
-        return { ok: false, msg: 'Decide: ¿se produce el efecto o no?' };
-      }
-      if (/^(no|n)\b/.test(s)) return { ok: !d.goodhart };   // «no», «no se produce»…
-      if (/^(si|s|yes)\b/.test(s)) return { ok: d.goodhart };
-      var q = U.eligeOpcion(s, {
-        si: /se produce|hay goodhart|es goodhart|goodhart/,
-        no: /no se produce|no altera|medicion normal|no hay/
-      });
-      if (!q) return { ok: false, msg: 'Responde «sí» o «no».' };
-      return { ok: d.goodhart ? q === 'si' : q === 'no' };
-    },
+    fields: [{ name: 'q', label: '¿Goodhart?', opts: [{ t: 'sí: la medida se ha vuelto objetivo y ha dejado de medir', v: 'si' }, { t: 'no: la medición no altera lo medido', v: 'no' }] }],
+    sol: function (d) { return { q: d.goodhart ? 'si' : 'no' }; },
     hint: function () {
       return '¿Hay alguien con un incentivo para cambiar su conducta <em>a causa</em> de que le midan? Un termómetro no tiene incentivos.';
     },

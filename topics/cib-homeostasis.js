@@ -1,6 +1,11 @@
 /* Tema: Homeostasis y ultraestabilidad */
 Course.topic('cib-homeostasis', function (p) {
 
+  p.puente('Hasta aquí los bucles corregían dentro de unas reglas fijas. Este tema pregunta qué pasa ' +
+    'cuando las reglas cambian y el bucle deja de servir. La respuesta de Ashby usa solo dos ' +
+    'cosas: una desigualdad, que dice si una variable está dentro de sus límites, y la probabilidad de ' +
+    'acertar a la primera, la del [[pe-probabilidad|suceso contrario]].');
+
   p.text('Tu temperatura interna es de unos 37 °C. Puedes estar en la nieve o en el desierto, correr o ' +
     'dormir, y sigue siendo 37. Si baja de 35 o sube de 41, te mueres. Es decir: <strong>hay una ' +
     'cantidad que tiene que permanecer dentro de un margen estrecho, y todo lo demás está al servicio ' +
@@ -48,6 +53,12 @@ Course.topic('cib-homeostasis', function (p) {
     'que cumple el promedio pero se sale una vez, ha fracasado. Un cuerpo cuya temperatura media es ' +
     'estupenda pero que pasó por 43 °C durante un minuto está muerto igual.');
 
+  p.comprueba('Un termostato al que le han invertido los cables sigue midiendo bien y corrigiendo con energía. ¿Qué le pasa a la habitación?', [
+    { t: 'Se mantiene igual: el termostato corrige como siempre', ok: false, por: 'Corrige como siempre, pero ahora «calentar» enfría y «enfriar» calienta. Cada corrección aleja de la consigna, y la siguiente aleja más: el bucle se ha vuelto positivo.' },
+    { t: 'Se descontrola: corrige en la dirección equivocada cada vez con más fuerza', ok: true, por: 'El termostato no sabe que las reglas han cambiado; solo sabe corregir. Un sistema ultraestable detectaría que la temperatura se sale de los límites y probaría otra configuración.' },
+    { t: 'Se apaga por seguridad', ok: false, por: 'Solo si alguien ha añadido un segundo nivel que vigile los límites. Un termostato simple no lo tiene: eso es justamente lo que le falta para ser ultraestable.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.section('El homeostato de Ashby');
 
@@ -75,6 +86,7 @@ Course.topic('cib-homeostasis', function (p) {
   p.demo({
     title: 'Un homeostato de cuatro unidades',
     intro: 'Cuatro variables se influyen entre sí con coeficientes al azar. Las líneas de puntos son los límites de supervivencia: si alguna se sale, el sistema baraja de nuevo los coeficientes y vuelve a intentarlo. Pulsa «perturbar» para sacarlo de su sitio, o «invertir los cables» para cambiarle las reglas del mundo, como hizo Ashby.',
+    predice: 'Pulsa «invertir los cables». ¿Crees que el sistema se saldrá de los límites enseguida, y cuántos barajeos le costará volver a estabilizarse: uno, unos pocos, decenas?',
     build: function (host, d) {
       var N = 4, LIM = 1;
       var rng = U.rng(4242);
@@ -217,6 +229,26 @@ Course.topic('cib-homeostasis', function (p) {
     'heredan su idea —algoritmos genéticos, recocido simulado— no sortean del todo a ciegas: ' +
     'conservan lo que funcionaba y solo alteran una parte.', 'warn', 'Dónde deja de funcionar el azar');
 
+  p.ejemplo({
+    title: 'Cuánto tarda el homeostato',
+    enunciado: 'Un homeostato sortea entre 20 configuraciones, de las que 4 son estables. Calcular la probabilidad de acertar en un sorteo, los sorteos que tarda de media y la probabilidad de haber acertado en los tres primeros.',
+    pasos: [
+      { t: '<strong>Un sorteo.</strong> $p = \\dfrac{4}{20} = 0{,}2$. Uno de cada cinco intentos sale bien.' },
+      { t: '<strong>De media.</strong> Si acierta una de cada cinco veces, entre acierto y acierto pasan cinco sorteos: $\\dfrac{1}{p} = 5$. No cinco exactos, sino cinco de promedio.', antes: 'Si de cada 100 sorteos aciertas 20, ¿cuántos sorteos hay entre dos aciertos?' },
+      { t: '<strong>En tres sorteos.</strong> Lo fácil es lo contrario: fallar los tres. Cada uno falla con $0{,}8$, los tres con $0{,}8^3 = 0{,}512$. Acertar al menos una vez: $1 - 0{,}512 = 0{,}488$.', antes: '¿Probabilidad de fallar un sorteo? ¿Y de fallar tres seguidos?' },
+      { t: '<strong>Lo que no vale.</strong> Sumar $0{,}2 + 0{,}2 + 0{,}2 = 0{,}6$ cuenta dos veces los casos en que se acierta más de una vez. Con diez sorteos daría 2, que no es una probabilidad.' },
+      { t: '<strong>Con más variables.</strong> Si en vez de 20 configuraciones hubiera un millón, con la misma fracción de buenas la media seguiría siendo 5. Pero si las buenas fueran 4 entre un millón, la media sería 250 000 sorteos: el azar puro deja de servir.', antes: '¿Qué cambia la media: el número de configuraciones o la fracción de buenas?' }
+    ],
+    cierre: 'El método del homeostato es tonto y funciona mientras la fracción de configuraciones buenas no sea minúscula. Cuando lo es, hay que dejar de sortear a ciegas y conservar lo que iba bien.'
+  });
+
+  p.trampas([
+    { e: 'Confundir variable esencial con variable importante', por: 'El pulso es importante y no es esencial: puede triplicarse sin peligro. Esencial es la que no puede salirse del rango, como la temperatura interna.' },
+    { e: 'Cumplir los límites de media', por: 'La condición es para todo $t$. Un cuerpo con temperatura media perfecta que pasó un minuto a 43 °C está muerto igual.' },
+    { e: 'Creer que el homeostato «aprende» cuál es la buena configuración', por: 'No calcula ni recuerda: detecta que se muere y baraja. Que eso baste para adaptarse es lo asombroso del resultado.' },
+    { e: 'Sumar probabilidades para «al menos un acierto»', por: 'Con $p = 0{,}2$ y 10 sorteos saldría 2. Se calcula por el contrario: $1 - 0{,}8^{10} = 0{,}89$.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -245,16 +277,8 @@ Course.topic('cib-homeostasis', function (p) {
         'sobrevive— o <strong>instrumental</strong> —puede variar mucho, y de hecho varía para ' +
         'proteger a las esenciales—?';
     },
-    fields: [{ name: 'q', label: 'es una variable', w: 'wide' }],
+    fields: [{ name: 'q', label: 'es una variable', opts: [{ t: 'esencial', v: 'esencial' }, { t: 'instrumental', v: 'instrumental' }] }],
     sol: function (d) { return { q: d.esencial ? 'esencial' : 'instrumental' }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        esencial: /esencial|critic|vital|imprescind/,
-        instrumental: /instrument|medio|palanca|auxiliar|secundar|prescind/
-      });
-      if (!q) return { ok: false, msg: 'Responde «esencial» o «instrumental».' };
-      return { ok: q === (d.esencial ? 'esencial' : 'instrumental') };
-    },
     hint: function () { return 'Pregúntate si el sistema puede permitirse que esa variable se dispare durante un rato. Si puede, es instrumental.'; },
     steps: function (d) {
       return d.esencial

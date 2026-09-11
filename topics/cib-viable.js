@@ -1,6 +1,10 @@
 /* Tema: El modelo de sistema viable */
 Course.topic('cib-viable', function (p) {
 
+  p.puente('El tema de la [[cib-variedad|variedad]] dio una ley; este la aplica a algo que no es una ' +
+    'máquina: una organización. Solo hacen falta la ley de Ashby, los logaritmos en base 2 para medir en ' +
+    'bits y, al final, la suma de una [[fn-sucesiones|progresión geométrica]].');
+
   p.text('¿Por qué unas organizaciones sobreviven décadas a crisis, cambios de dirección y mercados que se ' +
     'hunden, y otras se desmoronan a la primera? Stafford Beer, un teórico británico de la gestión, se hizo ' +
     'esa pregunta con las herramientas de este bloque. Su respuesta fue un modelo: cinco funciones que tiene ' +
@@ -56,9 +60,29 @@ Course.topic('cib-viable', function (p) {
     'con los $B$ bits de amplificación, tiene que alcanzar a la de las operaciones para poder regularlas. ' +
     'Si alguna de las dos falla, algo se queda sin gobernar.');
 
+  p.comprueba('Una dirección desbordada decide que a partir de ahora <em>todo</em> pase por ella para «tener control». ¿Qué le pasará?', [
+    { t: 'Tendrá más control: verá todo lo que ocurre', ok: false, por: 'Verá más de lo que puede atender. Lo que no atiende queda sin gobernar, y ahora además sin que las unidades lo resuelvan, porque se les ha quitado la autonomía.' },
+    { t: 'Se desbordará más: sube más variedad de la que puede manejar', ok: true, por: 'La ley no se negocia: $V_R \\ge V_D$. Si no puede ampliar su capacidad, la única salida es atenuar lo que sube, es decir, delegar y dar normas. Centralizarlo todo es lo contrario.' },
+    { t: 'Nada: la dirección se adaptará con esfuerzo', ok: false, por: 'El esfuerzo no añade variedad. Con 40 asuntos de capacidad y 400 que suben, sobran 360 cada día, se esfuerce lo que se esfuerce.' }
+  ]);
+
+  p.ejemplo({
+    title: 'El balance de un instituto, en bits',
+    enunciado: 'En un instituto surgen cada día unas 500 situaciones distintas que podrían llegar a jefatura, y jefatura puede atender unas 16. Calcular el balance en bits y decidir cuántos bits hay que atenuar.',
+    pasos: [
+      { t: '<strong>Variedad de las operaciones.</strong> $\\log_2 500 \\approx 8{,}97$ bits: hacen falta casi 9 preguntas de sí o no para distinguir una situación de otra.', antes: '¿Entre qué dos potencias de 2 está 500?' },
+      { t: '<strong>Variedad de jefatura.</strong> $\\log_2 16 = 4$ bits.' },
+      { t: '<strong>El balance.</strong> Para que jefatura dé abasto, $8{,}97 - A \\le 4$: hay que atenuar al menos $A \\approx 5$ bits. En número de asuntos, $500/16 \\approx 31$: de cada 31 situaciones solo una puede subir.', antes: 'Resta las dos variedades. ¿Cuántos bits sobran?' },
+      { t: '<strong>Cómo se atenúan 5 bits.</strong> Cada bit es una división por dos. Un protocolo que resuelve el caso corriente (retrasos, faltas, permisos) quita quizá 3 bits; que los departamentos decidan lo suyo, otros 2. No hace falta un filtro: hacen falta cinco.' },
+      { t: '<strong>El otro sentido.</strong> Para que las decisiones de jefatura alcancen a las 500 situaciones, $4 + B \\ge 8{,}97$: hay que amplificar unos 5 bits, con normas generales que cubran muchas situaciones a la vez. Los mismos 5 bits, en la otra dirección.' }
+    ],
+    cierre: 'El balance no dice qué normas dictar ni qué delegar. Dice cuánto: unos cinco bits en cada sentido. Es una cota, como la ley de Ashby de la que sale.'
+  });
+
   p.demo({
     title: '¿Da abasto la dirección?',
     intro: 'Cada día surgen en las operaciones muchos asuntos, y la dirección solo puede atender unos cuantos. Sin filtros, se desborda. Mueve qué parte de los asuntos sube a la dirección —el resto lo resuelven las propias unidades con normas y autonomía— y la capacidad de la dirección, hasta que no quede nada sin atender.',
+    predice: 'Con 400 asuntos, el 100 % subiendo y capacidad 40, quedan 360 sin atender. ¿Qué porcentaje máximo puede subir para que la dirección dé abasto? Calcula $40/400$.',
     build: function (host) {
       var V = 400, f = 100, C = 40;
       var out = W.readout(host, '');
@@ -138,6 +162,13 @@ Course.topic('cib-viable', function (p) {
     'doscientas. Y su preocupación central —cuánta autonomía dar a cada parte para que el conjunto sea ' +
     'gobernable sin asfixiar a nadie— reaparece en el diseño de redes informáticas, de sistemas federales ' +
     'y de equipos de trabajo.');
+
+  p.trampas([
+    { e: 'Confundir coordinar (2) con mandar (3)', por: 'El horario no decide objetivos ni reparte recursos: solo evita que dos grupos pidan la misma aula. Coordinar es impedir choques; controlar es gestionar el presente.' },
+    { e: 'Dar por sentado que alguien mira el futuro', por: 'En muchas organizaciones todo el mundo apaga fuegos: el sistema 4 no existe. Funcionan como un reloj hasta que el mundo cambia.' },
+    { e: 'Centralizar para «tener control»', por: 'Sube más variedad de la que la dirección puede absorber. La ley de Ashby manda: o se atenúa lo que sube o se amplía la capacidad de arriba.' },
+    { e: 'Contar solo las unidades del último nivel', por: 'Cada nivel intermedio y la organización entera son también sistemas viables. Con 3 unidades y 2 niveles hay $1 + 3 + 9 = 13$, no 9.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

@@ -1,6 +1,11 @@
 /* Tema: Diagramas de bloques: el algebra de los bucles */
 Course.topic('cib-bloques', function (p) {
 
+  p.puente('El tema anterior dejó el bucle escrito como una sucesión. Este lo escribe como un dibujo de ' +
+    'cajas y flechas, y descubre que el dibujo se simplifica con álgebra de primer grado: despejar una ' +
+    'incógnita que aparece a los dos lados. Con eso sale la fórmula más importante del control, y para ' +
+    'leerla al final hace falta la derivada de un cociente.');
+
   p.text('Un ingeniero de control casi nunca empieza por las ecuaciones. Empieza por un dibujo: cajas que ' +
     'representan las partes del sistema —un motor, un sensor, un controlador— y flechas que dicen qué ' +
     'señal va de una a otra. Ese dibujo se llama <strong>diagrama de bloques</strong>, y tiene una virtud ' +
@@ -51,9 +56,29 @@ Course.topic('cib-bloques', function (p) {
     'desaparecido.</strong> El comportamiento del sistema entero ya no depende del bloque potente, ' +
     'impreciso y caro, sino solo del sensor, que puede ser una pieza pequeña, barata y exacta.');
 
+  p.comprueba('Un amplificador de ganancia $G = 1000$ se cierra en bucle con un sensor de $H = 0{,}01$. ¿Qué ganancia tiene el conjunto, aproximadamente?', [
+    { t: 'Unos 1000: el sensor apenas cuenta', ok: false, por: 'Al revés: $GH = 10$, el denominador es 11 y $T = 1000/11 \\approx 91$. La realimentación ha «tirado» el 91 % de la ganancia a cambio de precisión.' },
+    { t: 'Unos 91, cerca de $1/H = 100$', ok: true, por: '$T = \\frac{1000}{1 + 10} = 90{,}9$. Y si $G$ fuera 10 000, $T = 99$: se acerca al techo $1/H$ y deja de depender de $G$.' },
+    { t: 'Unos 10: el producto $GH$', ok: false, por: '$GH = 10$ es la ganancia del <em>bucle</em>, lo que se amplifica una señal al dar la vuelta. La del conjunto es $G/(1 + GH)$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un amplificador que pierde el 20 %',
+    enunciado: 'Un bloque tiene $G = 100$ y se realimenta con $H = 0{,}1$. Calcular la ganancia en bucle cerrado. Después, $G$ cae a 80 por desgaste: ¿cuánto cae la ganancia total?',
+    pasos: [
+      { t: '<strong>Bucle cerrado, nuevo.</strong> $GH = 10$: $T = \\dfrac{100}{1 + 10} = 9{,}09$.', antes: 'Aplica $T = G/(1 + GH)$. ¿Cuánto vale $GH$?' },
+      { t: '<strong>Bucle cerrado, desgastado.</strong> $GH = 8$: $T = \\dfrac{80}{1 + 8} = 8{,}89$.' },
+      { t: '<strong>La caída.</strong> De 9,09 a 8,89: un $2{,}2\\,\\%$. El bloque ha perdido un 20 % y el sistema entero, un 2 %.', antes: '¿Qué porcentaje de 9,09 es la diferencia $9{,}09 - 8{,}89$?' },
+      { t: '<strong>Con la fórmula de la sensibilidad.</strong> $S = \\dfrac{1}{1 + GH} = \\dfrac{1}{11} \\approx 0{,}09$: cada 1 % de cambio en $G$ se nota como un 0,09 % en $T$. Para un 20 %, unos 1,8 %; el 2,2 % exacto difiere un poco porque la fórmula vale para cambios pequeños.' },
+      { t: '<strong>El precio.</strong> Sin realimentación la ganancia sería 100; con ella, 9. Se han gastado once veces la ganancia para dividir por once la sensibilidad. Es la misma cuenta.' }
+    ],
+    cierre: 'Con $H = 0{,}1$ el techo es $1/H = 10$, y $T = 9{,}09$ ya está al 91 % del techo. Si $G$ fuera $10\\,000$, $T$ sería 9,99 y un desgaste del 20 % se notaría como un 0,02 %.'
+  });
+
   p.demo({
     title: 'Un bucle con dos mandos',
     intro: 'Mueve la ganancia G del bloque directo y la del sensor H. Abajo, la ganancia en bucle cerrado según G: por grande que sea G, nunca pasa de 1/H. A partir de cierto punto, lo que decide la salida ya no es G, sino el sensor.',
+    predice: 'Con $H = 0{,}2$ el techo es 5. Con $G = 10$, ¿a qué fracción del techo estará $T$: al 50 %, al 67 %, al 90 %? Calcula $10/(1 + 2)$.',
     build: function (host) {
       var G = 10, H = 0.2;
       var out = W.readout(host, '');
@@ -129,6 +154,7 @@ Course.topic('cib-bloques', function (p) {
   p.demo({
     title: 'Un amplificador que envejece',
     intro: 'Un amplificador tiene ganancia G = 1000 cuando es nuevo, pero con el calor y los años pierde parte de ella. Compara cuánto cae la salida sin realimentación y con ella. Cuanto mayor es la ganancia del bucle GH, menos se nota el desgaste.',
+    predice: 'Con $H = 0{,}1$ y una pérdida del 30 %, ¿la barra de la derecha caerá un 3 %, un 0,3 % o menos? Piensa en $GH = 100$.',
     build: function (host) {
       var perdida = 30, H = 0.1, G0 = 1000;
       var out = W.readout(host, '');
@@ -174,6 +200,13 @@ Course.topic('cib-bloques', function (p) {
     'dos resistencias que forman el bucle. La ganancia del circuito depende solo de la razón entre esas ' +
     'resistencias. El mismo diagrama describe el control de crucero de un coche, la regulación del azúcar ' +
     'en sangre y el piloto automático de un avión: cambian las cajas, no el álgebra.');
+
+  p.trampas([
+    { e: 'Multiplicar los bloques en paralelo', por: 'En paralelo la misma señal entra en los dos y las salidas se suman: $G_1 + G_2$. Se multiplican los que van en serie.' },
+    { e: 'Escribir $1 - GH$ con realimentación negativa', por: 'El signo menos del sumador da $1 + GH$ en el denominador. Con $1 - GH$ sería positiva, y se dispara al acercarse $GH$ a 1.' },
+    { e: 'Creer que la realimentación aumenta la ganancia', por: 'La reduce: de $G$ a $G/(1 + GH)$. Lo que compra con esa pérdida es precisión y estabilidad frente al desgaste.' },
+    { e: 'Usar $T \\approx 1/H$ con $GH$ pequeño', por: 'La aproximación exige $GH \\gg 1$. Con $G = 5$ y $H = 0{,}1$, $T = 3{,}3$, lejos de $1/H = 10$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

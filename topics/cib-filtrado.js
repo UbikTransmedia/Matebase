@@ -1,6 +1,11 @@
 /* Tema: Predicción y filtrado: separar la señal del ruido */
 Course.topic('cib-filtrado', function (p) {
 
+  p.puente('Los bucles anteriores suponían que el sensor dice la verdad. Este tema empieza cuando no: ' +
+    'lo medido es la señal más un ruido que no se conoce. Las herramientas son la media aritmética y el ' +
+    'cociente incremental de [[fn-derivadas|derivadas]], y el resultado es un compromiso nuevo: cuanto ' +
+    'más se limpia, más tarde se llega.');
+
   p.text('En 1940, con Europa en guerra y los bombardeos sobre Londres, se le encargó a Norbert Wiener ' +
     'un problema muy concreto: mejorar la puntería de los cañones antiaéreos. Un proyectil tarda ' +
     'unos segundos en llegar a la altura del avión, así que no hay que disparar a donde está el ' +
@@ -65,12 +70,31 @@ Course.topic('cib-filtrado', function (p) {
   p.text('Y aquí aparece el dilema que da sentido al tema. Cuanto más grande es la ventana, más ruido ' +
     'se cancela y más limpia sale la curva. Pero también <strong>más vieja</strong>: el promedio de ' +
     'los últimos veinte valores es, en realidad, una estimación de cómo estaban las cosas hace diez ' +
-    'instantes. Suavizar cuesta retraso, y el retraso, como viste en el tema anterior, es lo que ' +
+    'instantes. Suavizar cuesta retraso, y el retraso, como viste en [[cib-retardos|el tema de los retardos]], es lo que ' +
     'desestabiliza los bucles.');
+
+  p.comprueba('Un informe usa la media móvil de 7 días de los casos diarios. El dato de hoy, ¿de qué día habla en realidad?', [
+    { t: 'De hoy: es la media de hoy', ok: false, por: 'La media de los últimos 7 días mezcla hoy con los seis anteriores: su centro está hace tres días. Lo que se publica el sábado describe el miércoles.' },
+    { t: 'De hace unos tres días: el centro de la ventana', ok: true, por: 'Con ventana $k$ el retraso es $(k-1)/2$; con $k = 7$, tres días. Es el precio de quitar el diente de sierra de los fines de semana.' },
+    { t: 'De hace siete días: el más antiguo de la ventana', ok: false, por: 'El dato más antiguo pesa lo mismo que el más reciente; el promedio queda en medio, no en el extremo.' }
+  ]);
+
+  p.ejemplo({
+    title: 'La media móvil se queda atrás',
+    enunciado: 'Una señal sube un punto por instante: $10, 11, 12, 13, 14, 15$. Calcular la media móvil de ventana 3 en cada instante a partir del tercero y comparar con la señal.',
+    pasos: [
+      { t: '<strong>Instante 3.</strong> Ventana $10, 11, 12$: media 11. La señal vale 12. Va un punto por detrás.', antes: 'Promedia los tres primeros valores. ¿Cuánto vale la señal en ese momento?' },
+      { t: '<strong>Instantes 4, 5 y 6.</strong> $(11+12+13)/3 = 12$, $(12+13+14)/3 = 13$, $(13+14+15)/3 = 14$. La señal vale 13, 14 y 15: siempre un punto por detrás.' },
+      { t: '<strong>Por qué uno.</strong> El promedio de tres valores consecutivos es el del medio, que es de hace un instante: $(k-1)/2 = 1$. Con ventana 7 sería de hace 3.', antes: '¿Cuál de los tres valores de la ventana coincide con la media? ¿De cuándo es?' },
+      { t: '<strong>Con ruido.</strong> Si la señal fuera $10, 12, 11, 14, 13, 16$, la misma subida con saltos de $\\pm 1$, las medias serían $11,\\ 12{,}3,\\ 12{,}7,\\ 14{,}3$: los saltos se han reducido a un tercio y el retraso sigue siendo uno. Ese es el compromiso: se paga el mismo retraso, se cobra menos ruido.' }
+    ],
+    cierre: 'En una señal que sube, la media móvil siempre marca menos de lo que hay; en una que baja, siempre más. No es un defecto del cálculo: es que promedia el pasado.'
+  });
 
   p.demo({
     title: 'El compromiso entre suavidad y retraso',
     intro: 'La línea de puntos es la señal verdadera, que tú no puedes ver en la vida real. Los puntos sueltos son lo que mide tu sensor, con ruido. La línea gruesa es lo que sale del filtro. Sube la ventana y observa las dos cosas a la vez: la curva se limpia, y se va quedando atrás.',
+    predice: 'Con ventana $k = 7$, ¿cuántos instantes irá por detrás la curva filtrada? Y con $k = 21$, ¿el error medio será menor o mayor que sin filtrar?',
     build: function (host, d) {
       var k = 1, ruido = 1.6, N = 130;
       var rng = U.rng(31415);
@@ -165,8 +189,8 @@ Course.topic('cib-filtrado', function (p) {
     'El símbolo $\\approx$ se lee «aproximadamente igual». $\\Delta$ es la letra griega delta ' +
     'mayúscula y aquí es el tiempo que quieres adelantarte.<br><br>Se dice: <em>«ese estimada de te ' +
     'más delta es aproximadamente ese estimada de te, más la derivada de ese estimada en te, por ' +
-    'delta»</em>.<br><br>Reconocerás la fórmula: es la <strong>recta tangente</strong> del bloque de ' +
-    'derivadas, usada como bola de cristal. Se supone que durante un ratito la señal seguirá con la ' +
+    'delta»</em>.<br><br>Reconocerás la fórmula: es la <strong>recta tangente</strong> de ' +
+    '[[fn-derivadas|derivadas]], usada como bola de cristal. Se supone que durante un ratito la señal seguirá con la ' +
     'misma pendiente que lleva.');
 
   p.sub('Por qué derivar es peligroso con datos ruidosos');
@@ -214,6 +238,13 @@ Course.topic('cib-filtrado', function (p) {
     'llevas una velocidad— y produce una estimación mejor que cualquiera de las dos por separado. Por ' +
     'eso el punto azul sigue avanzando de forma razonable durante unos segundos aunque entres en un ' +
     'túnel: está prediciendo.');
+
+  p.trampas([
+    { e: 'Despejar $s = x - n$', por: 'El ruido no se conoce; si se conociera no sería ruido. Solo se puede estimar, y toda estimación es un compromiso.' },
+    { e: 'Creer que la ventana grande es «más precisa» sin coste', por: 'Es más limpia y más vieja: con $k = 21$ describe lo que pasaba hace diez instantes. En un bucle de control, ese retraso desestabiliza.' },
+    { e: 'Derivar datos crudos', por: 'Una décima de ruido con paso $0{,}01$ da una derivada falsa de 20. Antes de derivar hay que suavizar, y suavizar retrasa.' },
+    { e: 'Medir más a menudo para estimar mejor la velocidad', por: 'Mejora la posición y empeora la velocidad: el ruido no se divide, se multiplica por $1/\\Delta t$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
@@ -306,16 +337,8 @@ Course.topic('cib-filtrado', function (p) {
         'menos retraso y más ruido.<br><br><em>«' + d.texto + '»</em><br><br>¿Qué conviene aquí, ' +
         'ventana <strong>grande</strong> o <strong>pequeña</strong>?';
     },
-    fields: [{ name: 'q', label: 'ventana', w: 'tiny' }],
-    sol: function (d) { return { q: d.grande ? 'grande' : 'pequeña' }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        grande: /grand|larg|amplia|much|alta/,
-        pequena: /peque|cort|estrech|minim|baja|breve/
-      });
-      if (!q) return { ok: false, msg: 'Responde «grande» o «pequeña».' };
-      return { ok: q === (d.grande ? 'grande' : 'pequena') };
-    },
+    fields: [{ name: 'q', label: 'Conviene una ventana', opts: [{ t: 'grande: más suavidad, más retraso', v: 'grande' }, { t: 'pequeña: menos retraso, más ruido', v: 'pequena' }] }],
+    sol: function (d) { return { q: d.grande ? 'grande' : 'pequena' }; },
     hint: function () { return 'La pregunta clave es: ¿qué cuesta más caro aquí, equivocarse por ruido o llegar tarde?'; },
     steps: function (d) {
       return d.grande

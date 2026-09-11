@@ -1,10 +1,11 @@
 /* Tema: Control por error: proporcional, integral y derivativo */
 Course.topic('cib-control', function (p) {
 
-  p.text('En el primer tema del bloque corregíamos con una sola regla: <em>mira cuánto te has desviado ' +
+  p.puente('En [[cib-realimentacion|el primer tema del bloque]] corregíamos con una sola regla: <em>mira cuánto te has desviado ' +
     'y empuja en proporción</em>. Funciona, y para muchas cosas basta. Pero tiene dos defectos que ' +
     'aparecen en cuanto se prueba en el mundo real, y arreglarlos exige exactamente las dos ' +
-    'herramientas que aprendiste en el bloque de análisis.');
+    'herramientas que aprendiste en análisis: la [[fn-integral-def|integral]] como acumulación y la ' +
+    '[[fn-derivadas|derivada]] como ritmo de cambio.');
 
   p.text('Este tema es, en ese sentido, el que más rendimiento le saca al curso entero: vas a ver la ' +
     '<strong>derivada</strong> y la <strong>integral</strong> trabajando juntas, en tiempo real, para ' +
@@ -78,7 +79,7 @@ Course.topic('cib-control', function (p) {
     '\\frac{de}{dt} \\ \\approx\\ \\frac{e_n - e_{n-1}}{\\Delta t}'
   ], 'la integral y la derivada, tal como las calcula una máquina',
     'La primera dice: <em>«la integral del error se aproxima por la suma de todos los errores medidos, ' +
-    'cada uno multiplicado por el paso»</em>. Es exactamente la definición del bloque 5: el área bajo ' +
+    'cada uno multiplicado por el paso»</em>. Es exactamente la definición de [[fn-integral-def|la integral definida]]: el área bajo ' +
     'la curva como suma de rectangulitos de anchura $\\Delta t$.<br><br>' +
     'La segunda: <em>«la derivada se aproxima por el error de ahora menos el anterior, partido por el ' +
     'paso»</em>. Es el cociente incremental, el mismo con el que se definió la derivada, pero sin ' +
@@ -107,6 +108,25 @@ Course.topic('cib-control', function (p) {
     'Ese hueco se llama <strong>error en régimen permanente</strong>, y es la razón número uno por la ' +
     'que un control solo proporcional no basta.');
 
+  p.comprueba('Un dron con control solo proporcional se queda un palmo por debajo de la altura pedida y ahí se queda quieto. ¿Por qué no sube el último palmo?', [
+    { t: 'Porque el controlador tiene poca ganancia; con más $K_p$ subiría del todo', ok: false, por: 'Con más $K_p$ el hueco se hace más pequeño, pero nunca cero: para sostener el peso hace falta una acción permanente, y la acción proporcional es cero cuando el error es cero.' },
+    { t: 'Porque sostener el peso exige una acción constante, y sin error no hay acción proporcional', ok: true, por: 'El dron encuentra el punto donde $K_p\\,e$ compensa justo su peso. Ese $e$ no puede ser cero. Solo el término integral, que acumula, puede dar acción con error nulo.' },
+    { t: 'Porque el sensor de altura está mal calibrado', ok: false, por: 'Puede pasar, pero no es esto: el fenómeno aparece con un sensor perfecto. Es estructural del control proporcional frente a una carga constante.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un paso de PID con números',
+    enunciado: 'Referencia $r = 50$. Ahora se mide $y = 44$; en el paso anterior, $41$. El error acumulado hasta ahora es 10. Con $K_p = 2$, $K_i = 0{,}2$, $K_d = 1$ y $\\Delta t = 1$, calcular la acción $u$.',
+    pasos: [
+      { t: '<strong>Errores.</strong> Ahora: $e = 50 - 44 = 6$. Antes: $e_{\\text{ant}} = 50 - 41 = 9$. El error está bajando: de 9 a 6.', antes: 'Calcula el error de ahora y el del paso anterior. ¿Sube o baja?' },
+      { t: '<strong>Proporcional.</strong> $K_p\\,e = 2\\cdot 6 = 12$. Cuanto más lejos, más empuja.' },
+      { t: '<strong>Integral.</strong> Acumulado nuevo: $10 + 6\\cdot 1 = 16$. Término: $K_i\\cdot 16 = 3{,}2$. Es la memoria: lleva 16 unidades de error sin corregir.', antes: 'Suma el error de ahora al acumulado. ¿Cuánto aporta el término integral?' },
+      { t: '<strong>Derivativo.</strong> Variación del error: $(6 - 9)/1 = -3$. Término: $K_d\\cdot(-3) = -3$. Negativo: el error ya está bajando deprisa, así que frena.', antes: 'El error pasa de 9 a 6. ¿Qué signo tiene la derivada y qué hace el término?' },
+      { t: '<strong>Total.</strong> $u = 12 + 3{,}2 - 3 = 12{,}2$. El proporcional empuja, el integral añade lo que falta por lo acumulado, el derivativo resta porque ya va bien encaminado.' }
+    ],
+    cierre: 'Tres preguntas sobre la misma señal: cuánto, cuánto llevo, hacia dónde va. Y ninguna operación más difícil que sumar y restar: la integral es una suma y la derivada, una resta.'
+  });
+
   p.sub('El término integral: la memoria que cierra el hueco');
 
   p.text('La integral acumula el error. Si queda un huequito de error, por pequeño que sea, la ' +
@@ -131,6 +151,7 @@ Course.topic('cib-control', function (p) {
   p.demo({
     title: 'Sintoniza un PID',
     intro: 'Hay que llevar la barra a la línea de puntos, y hay una carga constante tirando de ella hacia abajo. Empieza con solo Kp y observa que se queda corta: ese hueco es el error en régimen permanente. Luego sube Ki y míralo cerrarse. Después sube Kp mucho y añade Kd para domar el sobrepaso.',
+    predice: 'Con $K_p = 0{,}8$ y carga 2,2, ¿cuánto error quedará en régimen permanente? Calcula $\\text{carga}/K_p$. Y al subir $K_p$ a 4, ¿desaparecerá el hueco o solo se reducirá?',
     build: function (host, d) {
       var Kp = 0.8, Ki = 0, Kd = 0;
       var ref = 10, carga = 2.2, N = 260, dt = 0.1;
@@ -219,6 +240,7 @@ Course.topic('cib-control', function (p) {
   p.demo({
     title: 'La integral que no se calla',
     intro: 'El sistema está bloqueado al principio —una válvula atascada, una puerta que no abre— y no puede moverse aunque el controlador empuje con todo. Alarga el bloqueo y compara las dos curvas: sin antiwindup, la integral acumula todo ese error y el sistema se pasa muchísimo al soltarse; con antiwindup, llega casi limpio.',
+    predice: 'Si el bloqueo dura el doble, ¿el sobrepaso sin antiwindup será el doble, más del doble o igual? Piensa en cuánto error acumula la integral mientras tanto.',
     build: function (host) {
       var tb = 6, Kp = 3, Ki = 0.8, umax = 20, ref = 8, dt = 0.02, T = 40;
       var out = W.readout(host, '');
@@ -317,6 +339,13 @@ Course.topic('cib-control', function (p) {
     'ocurre al aprender a conducir, a servir agua sin derramarla o a mantener el equilibrio en ' +
     'bicicleta: lo que se está adquiriendo con la práctica es una sintonía de ganancias.');
 
+  p.trampas([
+    { e: 'Subir $K_p$ para eliminar el error permanente', por: 'Lo reduce a $\\text{carga}/K_p$, pero nunca lo anula, y una $K_p$ muy alta oscila. El hueco lo cierra el término integral.' },
+    { e: 'Derivar la medida en vez del error', por: 'El término derivativo usa $e_n - e_{n-1}$. Con referencia constante coincide con $-(y_n - y_{n-1})$, pero el signo cambia: hay que fijarse.' },
+    { e: 'Dejar integrar mientras el actuador está saturado', por: 'La integral se carga con error que no puede corregir y luego provoca un sobrepaso enorme. Es el windup, y todo PID serio lleva un tope.' },
+    { e: 'Tomar Ziegler-Nichols como ajuste final', por: 'Da un punto de partida agresivo, con sobrepaso. Y el experimento de llevar el sistema al borde de la oscilación no se puede hacer con un reactor o un avión.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -393,21 +422,10 @@ Course.topic('cib-control', function (p) {
       return { texto: c.t, q: c.q, por: c.por };
     },
     ask: function (d) {
-      return 'Observa el síntoma y di qué término del PID hay que reforzar:<br><br><em>«' + d.texto +
-        '»</em><br><br>Responde <strong>proporcional</strong>, <strong>integral</strong> o ' +
-        '<strong>derivativo</strong>.';
+      return 'Observa el síntoma y di qué término del PID hay que reforzar:<br><br><em>«' + d.texto + '»</em>';
     },
-    fields: [{ name: 'q', label: 'reforzar el término', w: 'wide' }],
+    fields: [{ name: 'q', label: 'reforzar el término', opts: [{ t: 'proporcional', v: 'proporcional' }, { t: 'integral', v: 'integral' }, { t: 'derivativo', v: 'derivativo' }] }],
     sol: function (d) { return { q: d.q }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        proporcional: /proporcion|\bkp\b/,
-        integral: /integr|\bki\b|acumul/,
-        derivativo: /deriv|\bkd\b|amortigu/
-      });
-      if (!q) return { ok: false, msg: 'Responde con uno solo de los tres términos.' };
-      return { ok: q === d.q };
-    },
     hint: function () {
       return 'Fíjate en QUÉ falla, no en cuánto. ¿Se queda un hueco que nadie cierra? ¿Llega pero ' +
         'pasándose y volviendo? ¿O simplemente reacciona con desgana? Cada síntoma señala a un ' +

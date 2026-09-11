@@ -1,6 +1,11 @@
 /* Tema: Retardos y oscilación */
 Course.topic('cib-retardos', function (p) {
 
+  p.puente('El bucle de [[cib-realimentacion|realimentación]] suponía que la corrección actúa al instante. ' +
+    'Este tema le añade una sola cosa, una demora, y todo cambia. Las cuentas siguen siendo las de una ' +
+    'sucesión por recurrencia, pero ahora cada término mira dos posiciones atrás, y eso basta para que ' +
+    'una ganancia segura empiece a oscilar.');
+
   p.text('Todo el mundo ha peleado con la ducha de un hotel. Sale fría, giras el grifo hacia el rojo, ' +
     'no pasa nada, giras más, sigue sin pasar nada, giras más todavía — y de pronto sale hirviendo. ' +
     'Giras hacia el azul con la misma decisión y a los pocos segundos estás otra vez helado. Puedes ' +
@@ -44,9 +49,29 @@ Course.topic('cib-retardos', function (p) {
     'tener memoria</em>. Con retardo $d$ hacen falta $d+1$ valores iniciales.',
     null, 'Por qué hacen falta dos valores para empezar');
 
+  p.comprueba('En la ducha, giras hacia el caliente y el agua sigue fría tres segundos después. ¿Qué conviene hacer?', [
+    { t: 'Girar más: la primera corrección no ha sido suficiente', ok: false, por: 'Ha sido suficiente, pero está en camino. Girar más añade una segunda corrección que llegará junto a la primera: agua hirviendo.' },
+    { t: 'Esperar sin tocar: la corrección ya viaja por la tubería', ok: true, por: 'Con retardo, la información de ahora refleja la acción de hace un rato. Corregir menos y esperar es la regla, aunque la impaciencia diga lo contrario.' },
+    { t: 'Girar hacia el frío para compensar por adelantado', ok: false, por: 'Eso anula la corrección buena antes de que llegue. Lo que hace falta no es adivinar el signo, sino dejar tiempo a que el efecto aparezca.' }
+  ]);
+
+  p.ejemplo({
+    title: 'El mismo bucle, con y sin retardo, a mano',
+    enunciado: 'Referencia $r = 20$, ganancia $K = 0{,}5$, partiendo de $y = 10$. Calcular cinco pasos sin retardo y cinco con retardo de un paso, $y_{n+1} = y_n + K(r - y_{n-1})$, arrancando con $y_0 = y_1 = 10$.',
+    pasos: [
+      { t: '<strong>Sin retardo.</strong> $15,\\ 17{,}5,\\ 18{,}75,\\ 19{,}375,\\ 19{,}69$. Cada paso cierra la mitad del hueco: se acerca sin pasarse.', antes: 'Error 10, corrección 5. ¿Y el siguiente?' },
+      { t: '<strong>Con retardo, primeros pasos.</strong> $y_2 = 10 + 0{,}5(20 - y_0) = 15$. $y_3 = 15 + 0{,}5(20 - y_1) = 20$. Ya está en el objetivo... pero sigue corrigiendo con el error de hace un paso.', antes: 'Para $y_3$ el error se calcula con $y_1$, no con $y_2$. ¿Cuánto sale?' },
+      { t: '<strong>Se pasa.</strong> $y_4 = 20 + 0{,}5(20 - y_2) = 20 + 2{,}5 = 22{,}5$. Y $y_5 = 22{,}5 + 0{,}5(20 - y_3) = 22{,}5 + 0 = 22{,}5$. $y_6 = 22{,}5 + 0{,}5(20 - 22{,}5) = 21{,}25$.', antes: 'En $y_3$ el sistema ya vale 20. ¿Qué error usa para calcular $y_4$? ¿Hacia dónde se mueve?' },
+      { t: '<strong>Comparar.</strong> Sin retardo, a los cinco pasos está en 19,7 y sigue acercándose. Con retardo, ha pasado por 22,5 y vuelve oscilando. Misma $K$, mismo objetivo: la única diferencia es que la información llega un paso tarde.' },
+      { t: '<strong>Qué ayudaría.</strong> Con $K = 0{,}25$ y retardo, la secuencia es $12{,}5,\\ 15,\\ 16{,}9,\\ 18{,}1,\\ 18{,}9$: más lenta, sin pasarse. Corregir menos funciona mejor que corregir más.', antes: 'Prueba con $K = 0{,}25$ y retardo. ¿Se pasa?' }
+    ],
+    cierre: 'Nadie ha decidido mal en ningún paso: cada corrección era proporcional al error visible. La oscilación está en la estructura, y por eso no la arregla un operario más listo sino una ganancia más baja o un retardo más corto.'
+  });
+
   p.demo({
     title: 'El mismo bucle, con y sin retardo',
     intro: 'Empieza con retardo cero y una ganancia razonable: el sistema se estabiliza sin problema. Ahora sube el retardo sin tocar nada más. Verás aparecer una oscilación que antes no existía, y con retardo suficiente el sistema se vuelve incontrolable con esa misma ganancia que antes era buena.',
+    predice: 'Con $K = 0{,}5$ y retardo 0 se estabiliza. Según el ejemplo, con retardo 1 oscila y se calma. ¿Con retardo 4 y la misma $K$: se calmará, oscilará para siempre o se disparará?',
     build: function (host, d) {
       var K = 0.5, ret = 0, ref = 20, N = 120;
       var out = W.readout(host, '');
@@ -137,6 +162,7 @@ Course.topic('cib-retardos', function (p) {
   p.demo({
     title: 'El efecto látigo en una cadena de cuatro eslabones',
     intro: 'Una tienda, un mayorista, un distribuidor y una fábrica. Cada uno pide al siguiente lo que le piden a él, más una corrección para rehacer su almacén, y lo pedido tarda unas semanas en llegar. En la semana 5 la demanda de los clientes pasa de 4 a 8 cajas y ya no cambia más. Mira lo que hacen los pedidos río arriba; luego activa «contar lo que ya viene de camino».',
+    predice: 'La demanda real solo sube de 4 a 8, una vez. ¿Hasta cuánto crees que llegará el pedido máximo de la fábrica: 8, 12, más de 20?',
     build: function (host) {
       var L = 2, alfa = 0.5, cuenta = false, T = 40, OBJ = 12;
       var NOM = ['tienda', 'mayorista', 'distribuidor', 'fábrica'];
@@ -206,6 +232,13 @@ Course.topic('cib-retardos', function (p) {
     'según lo que veías. Esa segunda idea, llevada a las matemáticas, es el asunto de ' +
     '[[cib-filtrado|predicción y filtrado]] y del [[cib-kalman|filtro de Kalman]].');
 
+  p.trampas([
+    { e: 'Corregir más fuerte cuando «no pasa nada»', por: 'Sí pasa: la corrección está en camino. Añadir otra encima es la receta de la ducha hirviendo y del efecto látigo.' },
+    { e: 'Culpar al grifo o al operario', por: 'En un bucle con retardo, cada decisión es razonable con la información visible y aun así el conjunto oscila. Es la estructura, no el juicio.' },
+    { e: 'Usar la ganancia que era segura sin retardo', por: 'El retardo consume margen de estabilidad. Con $K = 0{,}5$ y retardo 4, lo que antes convergía ahora oscila con fuerza. Hay que bajar $K$.' },
+    { e: 'Calcular el error con el último valor cuando hay retardo', por: 'La fórmula es $y_{n+1} = y_n + K(r - y_{n-d})$: el error se mide con el valor de hace $d$ pasos. Ese es todo el problema, y hay que reproducirlo en la cuenta.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -227,22 +260,10 @@ Course.topic('cib-retardos', function (p) {
       return { texto: c.t, q: c.q };
     },
     ask: function (d) {
-      return 'Identifica qué domina en esta situación:<br><br><em>«' + d.texto + '»</em><br><br>' +
-        'Responde <strong>negativa</strong> (bucle estabilizador sin más), <strong>positiva</strong> ' +
-        '(bucle amplificador) o <strong>retardo</strong> (bucle estabilizador que oscila porque la ' +
-        'información llega tarde).';
+      return 'Identifica qué domina en esta situación:<br><br><em>«' + d.texto + '»</em>';
     },
-    fields: [{ name: 'q', label: 'domina…', w: 'wide' }],
+    fields: [{ name: 'q', label: 'Domina', opts: [{ t: 'realimentación negativa: estabiliza sin más', v: 'negativa' }, { t: 'realimentación positiva: amplifica', v: 'positiva' }, { t: 'el retardo: estabiliza, pero oscila porque la información llega tarde', v: 'retardo' }] }],
     sol: function (d) { return { q: d.q }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        retardo: /retard|demora|tarda|desfas|retras|llega tarde/,
-        positiva: /positiv|amplific|refuerz/,
-        negativa: /negativ|estabiliz|corrig|compens/
-      });
-      if (!q) return { ok: false, msg: 'Responde con una de las tres: negativa, positiva o retardo.' };
-      return { ok: q === d.q };
-    },
     hint: function () { return '¿Hay oscilación o vaivén en el tiempo? Entonces sospecha del retardo, aunque el bucle sea estabilizador.'; },
     steps: function (d) {
       var m = {

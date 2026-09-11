@@ -1,6 +1,10 @@
 /* Tema: Dinamica de sistemas: stocks y flujos */
 Course.topic('cib-dinamica', function (p) {
 
+  p.puente('Los temas anteriores hablaban de bucles; este habla de lo que se acumula dentro de ellos. La ' +
+    'idea es la [[fn-funcion-integral|función integral]]: un stock es la integral de lo que entra menos ' +
+    'lo que sale. Con eso y el método de Euler se simulan poblaciones, almacenes y epidemias.');
+
   p.text('Una bañera es el sistema más sencillo que existe y, a la vez, uno de los más engañosos. El nivel ' +
     'del agua es un <strong>stock</strong>: algo que se acumula. El grifo y el desagüe son ' +
     '<strong>flujos</strong>: lo que entra y lo que sale por unidad de tiempo. El nivel no depende de ' +
@@ -29,6 +33,12 @@ Course.topic('cib-dinamica', function (p) {
     'científica razonaban a menudo como si el stock tuviera que imitar la forma del flujo. Es el error más ' +
     'común de toda la dinámica de sistemas.', 'warn', 'El error de la bañera');
 
+  p.comprueba('En una bañera entran 6 litros por minuto y salen 4. Se cierra un poco el grifo y ahora entran 5. ¿Qué hace el nivel?', [
+    { t: 'Baja: la entrada ha bajado', ok: false, por: 'La entrada ha bajado, pero sigue siendo mayor que la salida: $5 > 4$. El nivel sube, solo que más despacio que antes.' },
+    { t: 'Sigue subiendo, más despacio: entra más de lo que sale', ok: true, por: 'El stock solo baja cuando la salida supera a la entrada. Es el error de la bañera: confundir la forma del flujo con la del stock.' },
+    { t: 'Se queda igual', ok: false, por: 'Se quedaría igual con entrada 4, igual que la salida. Con 5 sigue entrando 1 litro neto por minuto.' }
+  ]);
+
   p.sub('Simular con el método de Euler');
 
   p.text('Casi ningún sistema con varios stocks tiene una fórmula cerrada. Pero todos se pueden ' +
@@ -42,9 +52,23 @@ Course.topic('cib-dinamica', function (p) {
     'Cuanto más pequeño es $\\Delta t$, más se parece la simulación a la solución exacta; si es demasiado ' +
     'grande, la simulación puede pasarse de largo e incluso oscilar sin motivo.');
 
+  p.ejemplo({
+    title: 'La bañera, con Euler y con fórmula',
+    enunciado: 'Entran 4 litros por minuto y salen $0{,}1\\cdot S$. Con $S_0 = 10$ litros, calcular dos pasos de Euler con $\\Delta t = 1$, el nivel de equilibrio y cuánto tarda en llegar al 95 %.',
+    pasos: [
+      { t: '<strong>Primer paso.</strong> Flujo neto: $4 - 0{,}1\\cdot 10 = 3$. $S_1 = 10 + 1\\cdot 3 = 13$.', antes: 'Entrada menos salida con $S = 10$. ¿Cuánto sube en un minuto?' },
+      { t: '<strong>Segundo paso.</strong> Flujo neto: $4 - 0{,}1\\cdot 13 = 2{,}7$. $S_2 = 13 + 2{,}7 = 15{,}7$. Sube menos que antes: la salida crece con el nivel.' },
+      { t: '<strong>Equilibrio.</strong> El nivel se para donde el flujo neto es cero: $4 - 0{,}1 S = 0$, $S^* = 40$ litros. No hace falta simular para saberlo.', antes: '¿En qué nivel lo que sale iguala a lo que entra?' },
+      { t: '<strong>Cuánto tarda.</strong> La distancia al equilibrio, $40 - S$, se reduce como $e^{-0{,}1 t}$: constante de tiempo $\\tau = 1/0{,}1 = 10$ minutos. Al 95 % del camino se llega hacia $3\\tau = 30$ minutos, porque $e^{-3} \\approx 0{,}05$.', antes: '¿Qué fracción del hueco queda tras $\\tau$, $2\\tau$ y $3\\tau$ minutos?' },
+      { t: '<strong>Comprobar con Euler.</strong> Con la fórmula exacta, $S(2) = 40 - 30e^{-0{,}2} = 15{,}44$. Euler dio 15,7: se pasa un poco porque supone el flujo constante durante cada minuto. Con $\\Delta t = 0{,}1$ daría 15,47.' }
+    ],
+    cierre: 'Dos maneras de mirar lo mismo: Euler paso a paso, que vale para cualquier sistema, y la fórmula, que aquí existe porque el sistema es lineal. Cuando se pueda, conviene tener las dos: una comprueba a la otra.'
+  });
+
   p.demo({
     title: 'La bañera que busca su nivel',
     intro: 'Entra agua a caudal constante y sale más deprisa cuanto más llena está la bañera, porque la presión en el desagüe aumenta: la salida es k·S. Cambia el caudal y el desagüe: el nivel siempre acaba donde lo que sale iguala a lo que entra. Y prueba a cerrar el grifo a mitad.',
+    predice: 'Con entrada 4 y desagüe 0,1 el equilibrio es 40. Si duplicas la entrada a 8, ¿el equilibrio será 80? ¿Y si duplicas el desagüe a 0,2, con entrada 4?',
     build: function (host) {
       var e = 4, k = 0.1, S0 = 10, cierra = false, T = 60, dt = 0.1;
       var out = W.readout(host, '');
@@ -120,6 +144,7 @@ Course.topic('cib-dinamica', function (p) {
   p.demo({
     title: 'Pescar sin acabar con los peces',
     intro: 'Una población de peces crece de forma logística hasta la capacidad K = 100, y cada año se pesca una cantidad fija h. Sube la captura poco a poco: hasta cierto valor la población se adapta a un nivel más bajo; un poco más allá, se hunde. La línea de puntos marca K/2.',
+    predice: 'Con $r = 0{,}4$ y $K = 100$, la captura máxima sostenible es $rK/4 = 10$. ¿Qué pasará con $h = 9{,}5$? ¿Y con $h = 10{,}5$? Solo un pez de diferencia.',
     build: function (host) {
       var rr = 0.4, K = 100, h = 5, T = 60, dt = 0.05;
       var out = W.readout(host, '');
@@ -191,6 +216,13 @@ Course.topic('cib-dinamica', function (p) {
     'suministro de un supermercado, el nivel de un embalse o la deuda de un país se estudian igual. Y la ' +
     'oscilación de los inventarios que aparece en el tema de [[cib-retardos|retardos]] es un sistema de ' +
     'stocks con un flujo que llega tarde.');
+
+  p.trampas([
+    { e: 'Creer que el stock imita la forma del flujo', por: 'Si las emisiones bajan, el CO₂ acumulado sigue subiendo mientras se emita más de lo que se absorbe. El stock solo baja cuando la salida supera a la entrada.' },
+    { e: 'Calcular el equilibrio como $e\\cdot k$', por: 'En el equilibrio $kS = e$, así que $S^* = e/k$. Con $e = 4$ y $k = 0{,}1$: 40, no 0,4.' },
+    { e: 'Olvidar $\\Delta t$ en el paso de Euler', por: 'El flujo es «por minuto»; si el paso dura medio minuto, se multiplica por 0,5. Sin eso, la simulación avanza el doble de deprisa de lo que debería.' },
+    { e: 'Pescar la captura máxima sostenible «con margen»', por: 'Con $h = 10{,}5$ frente a un máximo de 10, la población desaparece. El umbral es exacto; un poco por encima no es «casi bien», es colapso.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

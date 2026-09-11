@@ -1,6 +1,11 @@
 /* Tema: La neurona de McCulloch-Pitts y el perceptron */
 Course.topic('cib-neurona', function (p) {
 
+  p.puente('Los temas anteriores regulaban con números: ganancias, integrales, varianzas. Este regula ' +
+    'con un sí o un no. Una neurona artificial es un [[ge-vectores|producto escalar]] seguido de una ' +
+    'comparación, y aprender es un bucle de corrección como el de [[cib-realimentacion|la realimentación]], ' +
+    'aplicado a los pesos en vez de a la temperatura.');
+
   p.text('En 1943, un neurofisiólogo de cuarenta y cinco años, Warren McCulloch, y un lógico de ' +
     'diecinueve, Walter Pitts, publicaron un artículo con un título de lo más árido: <em>Un cálculo lógico ' +
     'de las ideas inmanentes en la actividad nerviosa</em>. Dentro había una idea que iba a cambiar el ' +
@@ -41,9 +46,16 @@ Course.topic('cib-neurona', function (p) {
     'neurona es, literalmente, <strong>trazar una recta</strong> que separe las esquinas que deben dar 1 de ' +
     'las que deben dar 0.');
 
+  p.comprueba('Con pesos $(1, 1)$, ¿qué umbral hace que la neurona se comporte como OR y cuál como AND?', [
+    { t: 'OR con $\\theta = 1$, AND con $\\theta = 2$', ok: true, por: 'Las sumas posibles son 0, 1, 1 y 2. Con $\\theta = 1$ se dispara en cuanto una entrada vale 1; con $\\theta = 2$ solo cuando valen 1 las dos. El umbral es la única diferencia entre las dos puertas.' },
+    { t: 'OR con $\\theta = 2$, AND con $\\theta = 1$', ok: false, por: 'Al revés: un umbral alto exige más, y eso es AND. Con $\\theta = 1$ basta con una entrada activa: OR.' },
+    { t: 'No se puede: hacen falta pesos distintos', ok: false, por: 'Con pesos iguales salen las dos, solo cambia el umbral. Lo que no sale con ningún peso ni umbral es XOR.' }
+  ]);
+
   p.demo({
     title: 'Una neurona que parte el plano',
     intro: 'Las dos entradas son las coordenadas de un punto; la neurona se dispara en la zona coloreada, donde w₁x₁ + w₂x₂ ≥ θ. Elige una puerta y busca pesos y umbral que la imiten en las cuatro esquinas: una esquina con aro rojo está mal. Con XOR no lo vas a conseguir, y no es por falta de paciencia.',
+    predice: 'Con $w = (1,1)$ y $\\theta = 1{,}5$ la neurona hace AND. Si bajas el umbral a $0{,}5$ sin tocar los pesos, ¿qué puerta saldrá?',
     build: function (host) {
       var w1 = 1, w2 = 1, th = 1.5, puerta = 'AND';
       var TABLAS = { AND: [0, 0, 0, 1], OR: [0, 1, 1, 1], NAND: [1, 1, 1, 0], XOR: [0, 1, 1, 0] };
@@ -113,6 +125,7 @@ Course.topic('cib-neurona', function (p) {
   p.demo({
     title: 'Un perceptrón que aprende',
     intro: 'Dos nubes de puntos: los azules deben quedar a un lado de la recta y los naranjas al otro. Cada paso presenta un punto; si está mal clasificado (punto hueco y más grande), la regla del perceptrón mueve la recta. Con nubes separables acaba encontrando una recta buena; con nubes mezcladas, no para nunca.',
+    predice: 'Con nubes separables y $\\eta = 0{,}2$, ¿cuántas pasadas crees que harán falta hasta cero errores: una, unas pocas, cientos? Y con nubes mezcladas, ¿se parará alguna vez?',
     build: function (host) {
       var sep = true, eta = 0.2, semilla = 3, datos, w, b, pasos, idx;
       var out = W.readout(host, '');
@@ -180,6 +193,19 @@ Course.topic('cib-neurona', function (p) {
     'recortar regiones de cualquier forma. El problema pasa a ser otro: cómo repartir la culpa del error ' +
     'entre neuronas que no están en la salida.');
 
+  p.ejemplo({
+    title: 'Diseñar NAND y comprobar que XOR no sale',
+    enunciado: 'Encontrar pesos y umbral para una neurona NAND, que da 0 solo cuando las dos entradas valen 1, y explicar por qué ninguna neurona de este tipo hace XOR.',
+    pasos: [
+      { t: '<strong>Qué pide NAND.</strong> Salidas 1, 1, 1, 0 para $(0,0)$, $(0,1)$, $(1,0)$, $(1,1)$. Hay que dispararse «casi siempre»: solo la esquina $(1,1)$ debe quedar fuera.', antes: 'Escribe la tabla de NAND. ¿Cuántas esquinas deben dar 1?' },
+      { t: '<strong>Pesos negativos.</strong> Con $w = (-1, -1)$ las sumas son $0, -1, -1, -2$. La única que debe quedar por debajo del umbral es $-2$, así que $\\theta$ tiene que estar entre $-2$ (excluido) y $-1$ (incluido): $\\theta = -1$ sirve.', antes: 'Con pesos $(-1,-1)$, ¿qué suma sale en cada esquina? ¿Dónde tiene que caer el umbral?' },
+      { t: '<strong>Comprobar.</strong> $0 \\ge -1$: 1. $-1 \\ge -1$: 1. $-1 \\ge -1$: 1. $-2 \\ge -1$: no, 0. Es NAND. La recta $-x_1 - x_2 = -1$, o sea $x_1 + x_2 = 1$, deja $(1,1)$ sola a un lado.' },
+      { t: '<strong>Ahora XOR.</strong> Pide 1 en $(0,1)$ y $(1,0)$, y 0 en $(0,0)$ y $(1,1)$. Dispararse en $(0,1)$ exige $w_2 \\ge \\theta$; en $(1,0)$, $w_1 \\ge \\theta$. No dispararse en $(0,0)$ exige $0 < \\theta$. Sumando las dos primeras: $w_1 + w_2 \\ge 2\\theta > \\theta$. Luego en $(1,1)$ la suma supera el umbral y la neurona se dispara. Pero XOR pedía 0.', antes: 'Escribe las desigualdades que impone XOR. ¿Se pueden cumplir a la vez?' },
+      { t: '<strong>Lo que enseña.</strong> No es que no se haya encontrado la recta: es que las desigualdades se contradicen. Ninguna búsqueda, por larga que sea, la va a encontrar. Con dos neuronas (OR y NAND) y una tercera que haga AND de ambas, sí.' }
+    ],
+    cierre: 'El argumento de XOR cabe en tres líneas y es del mismo tipo que Minsky y Papert desarrollaron en 1969 para funciones mucho más complicadas: hay cosas que una sola recta no puede separar.'
+  });
+
   p.hist('Walter Pitts fue un autodidacta que nunca llegó a tener un título universitario; con doce años ya ' +
     'discutía por carta con Bertrand Russell. En 1969, Marvin Minsky y Seymour Papert publicaron ' +
     '<em>Perceptrons</em>, un libro que demostraba con rigor los límites de una sola capa, empezando por ' +
@@ -192,6 +218,13 @@ Course.topic('cib-neurona', function (p) {
     'producto escalar, le suma un sesgo y aplica una función que decide cuánto se dispara, suave en lugar ' +
     'de todo o nada para poder derivar. Aprender sigue siendo mover los pesos en la dirección que reduce ' +
     'el error, con el [[av-optimizacion|descenso de gradiente]].');
+
+  p.trampas([
+    { e: 'Leer «mayor que» donde dice «mayor o igual»', por: 'Con suma igual al umbral, la neurona se dispara. En el diseño de puertas ese caso límite decide si sale AND o falla.' },
+    { e: 'Actualizar los pesos cuando la neurona acierta', por: 'El error $t - y$ vale 0 y la regla no toca nada. Solo se aprende de los fallos.' },
+    { e: 'Creer que XOR saldrá con más paciencia', por: 'Las desigualdades se contradicen: no hay recta. El perceptrón no para nunca, y es porque no existe la solución, no porque no la encuentre.' },
+    { e: 'Subir $\\eta$ para aprender antes', por: 'Es la ganancia del bucle: grande da bandazos, cada error mueve mucho la recta y estropea lo que ya iba bien. Igual que $K$ en el termostato.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
