@@ -192,7 +192,7 @@ Course.topic('gfx-coordenadas', function (p) {
       { name: 'y', label: 'p.y', w: 'tiny' }
     ],
     sol: function (d) { return { x: U.round(d.x, 8), y: U.round(d.y, 8) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function (d) {
       return 'Resta media pantalla a cada componente y divide las dos entre el <strong>alto</strong>, ' +
         'que aquí es ' + d.h + '. El mismo divisor para las dos: eso es lo que evita la deformación.';
@@ -224,7 +224,7 @@ Course.topic('gfx-coordenadas', function (p) {
       { name: 'a', label: 'ángulo (rad)', w: 'tiny' }
     ],
     sol: function (d) { return { r: U.round(d.r, 8), a: U.round(d.a, 8) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () {
       return 'La distancia es Pitágoras: $\\sqrt{x^2+y^2}$. El ángulo va de $-\\pi$ a $\\pi$, y el ' +
         'signo de cada componente dice el cuadrante.';

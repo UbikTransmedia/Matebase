@@ -396,7 +396,8 @@ Course.topic('ge-vectores', function (p) {
     },
     fields: [{ name: 'a', label: 'Ángulo (°)', w: 'tiny' }],
     sol: function (d) { return { a: U.round(d.ang, 1) }; },
-    tol: 2e-3,
+    dec: 1,
+    tol: 2e-3,      // el arco coseno amplifica el redondeo del coseno
     hint: function () { return 'Usa $\\cos\\alpha = \\dfrac{\\vec{u}\\cdot\\vec{v}}{|\\vec{u}||\\vec{v}|}$ y después el arco coseno.'; },
     steps: function (d) {
       return ['Producto escalar: $\\vec{u}\\cdot\\vec{v} = ' + d.pe + '$.',

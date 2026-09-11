@@ -332,14 +332,14 @@ Course.topic('cib-homeostasis', function (p) {
         'posibles, de las cuales <strong>' + d.buenas + '</strong> son estables. Cada vez que se sale ' +
         'de los límites vuelve a sortear, con la misma probabilidad para todas.<br><br>' +
         '¿Cuál es la probabilidad de acertar en un sorteo, y cuántos sorteos hacen falta por término ' +
-        'medio hasta dar con una buena?';
+        'medio hasta dar con una buena? (Fracción o cuatro decimales.)';
     },
     fields: [
       { name: 'p', label: 'probabilidad', w: 'tiny' },
       { name: 'n', label: 'sorteos de media', w: 'tiny' }
     ],
     sol: function (d) { return { p: d.buenas / d.total, n: d.total / d.buenas }; },
-    tol: 1e-6,
+    dec: 4,
     hint: function () {
       return 'Para la segunda parte, usa el razonamiento de arriba: si aciertas una de cada tantas ' +
         'veces, de media necesitas justamente esas tantas.';

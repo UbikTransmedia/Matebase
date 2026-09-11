@@ -199,14 +199,14 @@ Course.topic('av-edo-numerico', function (p) {
     title: 'Dos pasos de Euler',
     level: 'basico',
     gen: function (r) {
-      var y0 = r.int(0, 3), h = r.pick([0.1, 0.2, 0.5]);
+      var y0 = r.int(1, 3), h = r.pick([0.1, 0.2, 0.5]);
       var y1 = y0 + h * (0 + y0), y2 = y1 + h * (h + y1);
       return { y0: y0, h: h, y1: y1, y2: y2, sinH: y0 + (0 + y0) };
     },
     ask: function (d) { return 'Para $y\' = t + y$ con $y(0) = ' + d.y0 + '$, aplica dos pasos del método de Euler con $h = ' + U.fmt(d.h, 1) + '$. ¿Cuánto valen $y_1$ e $y_2$? (Tres decimales.)'; },
     fields: [{ name: 'a', label: '$y_1$', w: 'tiny' }, { name: 'b', label: '$y_2$', w: 'tiny' }],
     sol: function (d) { return { a: U.round(d.y1, 6), b: U.round(d.y2, 6) }; },
-    tol: 1e-3,
+    dec: 3,
     errores: [{ si: function (v, d) { return Math.abs(d.sinH - d.y1) > 1e-3 && Math.abs(v.a - d.sinH) < 5e-4; }, msg: 'Falta multiplicar la pendiente por el paso $h$: se avanza durante un tiempo $h$, no durante una unidad.' }],
     hint: function () { return ['$y_1 = y_0 + h\\,f(t_0, y_0)$, con $t_0 = 0$.', 'Para el segundo paso, $t_1 = h$ y la pendiente es $t_1 + y_1$.']; },
     steps: function (d) {
@@ -229,7 +229,7 @@ Course.topic('av-edo-numerico', function (p) {
     },
     fields: [{ name: 'v', label: 'Euler da', w: 'wide' }, { name: 'e', label: 'error', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.v, 6), e: U.round(d.err, 6) }; },
-    tol: 2e-4,
+    dec: 4,
     errores: [{ si: function (v, d) { return Math.abs(v.v - (1 + 1 / d.n) * d.n) < 2e-4; }, msg: 'Cada paso <strong>multiplica</strong> por $1 + h$: después de $n$ pasos, $(1 + h)^n$, una potencia, no un producto por $n$.' }],
     hint: function (d) { return ['Con $y\' = y$, un paso es $y_{n+1} = (1 + h)\\,y_n$.', '$h = \\frac{1}{' + d.n + '}$, y hay ' + d.n + ' pasos.']; },
     steps: function (d) {
@@ -253,7 +253,7 @@ Course.topic('av-edo-numerico', function (p) {
     },
     fields: [{ name: 'e', label: 'error esperado', w: 'wide' }],
     sol: function (d) { return { e: d.nuevo }; },
-    tol: 1e-6,
+    rel: 2e-3,
     errores: [{ si: function (v, d) { return d.ord !== 1 && Math.abs(v.e - d.lineal) < 1e-9; }, msg: 'Así bajaría con un método de orden 1. Con orden $p$, el error es proporcional a $h^p$: dividir el paso entre 2 divide el error entre $2^p$.' }],
     hint: function () { return ['Un método de orden $p$ tiene un error proporcional a $h^p$.', 'Si $h$ se divide entre $m$, el error se divide entre $m^p$.']; },
     steps: function (d) {
@@ -277,7 +277,7 @@ Course.topic('av-edo-numerico', function (p) {
     },
     fields: [{ name: 'k', label: '$k_2$', w: 'tiny' }, { name: 'y', label: '$y_1$', w: 'wide' }],
     sol: function (d) { return { k: U.round(d.k2, 8), y: U.round(d.y1, 8) }; },
-    tol: 2e-5,
+    dec: 5,
     errores: [{ si: function (v, d) { return Math.abs(v.y - d.euler) < 2e-5; }, msg: 'Eso es un paso de Euler, que solo usa $k_1$. Runge-Kutta combina las cuatro pendientes con pesos $\\frac{1}{6}, \\frac{2}{6}, \\frac{2}{6}, \\frac{1}{6}$.' }],
     hint: function () { return ['Con $f(t, y) = y$, cada $k$ es simplemente el valor de $y$ donde se evalúa: $k_2 = y_0 + \\frac{h}{2}k_1$.', 'Después, $y_1 = y_0 + \\frac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4)$.']; },
     steps: function (d) {

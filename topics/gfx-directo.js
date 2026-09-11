@@ -346,8 +346,9 @@ Course.topic('gfx-directo', function (p) {
       var bpm = r.pick([90, 100, 120, 128, 140, 174]);
       var k = r.pick([2, 4, 6]);
       var t = r.real(0.2, 4, 3);
-      var f = (t * bpm / 60) % 1;
-      return { bpm: bpm, k: k, t: t, periodo: 60 / bpm, f: f, g: Math.pow(1 - f, k) };
+      var f = (t * bpm / 60) % 1, g = Math.pow(1 - f, k);
+      if (g < 0.001) return null;      // cuatro decimales no describen una envolvente tan apagada
+      return { bpm: bpm, k: k, t: t, periodo: 60 / bpm, f: f, g: g };
     },
     ask: function (d) {
       return 'Las visuales laten a <strong>' + d.bpm + ' pulsos por minuto</strong> con la ' +
@@ -363,6 +364,7 @@ Course.topic('gfx-directo', function (p) {
     sol: function (d) {
       return { p: U.round(d.periodo, 8), f: U.round(d.f, 8), g: U.round(d.g, 8) };
     },
+    dec: { p: 4, f: 4 },      // la envolvente se calcula a partir de f redondeada: tol mas holgada
     tol: 3e-4,
     hint: function (d) {
       return 'Un pulso dura $60/\\text{bpm}$ segundos. Y <code>fract</code> se queda con la parte ' +

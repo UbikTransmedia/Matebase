@@ -320,7 +320,7 @@ Course.topic('ge-angulos', function (p) {
     },
     fields: [{ name: 's', label: 'Suma (°)', w: 'tiny' }, { name: 'c', label: 'Cada uno (°)', w: 'tiny' }],
     sol: function (d) { return { s: d.suma, c: U.round(d.cada, 4) }; },
-    tol: 3e-4,
+    dec: 2,
     hint: function (d) { return 'Se parte en $' + d.n + ' - 2 = ' + (d.n - 2) + '$ triángulos desde un vértice.'; },
     steps: function (d) {
       return ['Desde un vértice se trazan diagonales que parten el polígono en $n-2 = ' + (d.n - 2) + '$ triángulos.',

@@ -490,7 +490,7 @@ Course.topic('fn-taylor', function (p) {
     },
     fields: [{ name: 'e', label: 'Cota del error', w: 'wide' }],
     sol: function (d) { return { e: U.round(d.cota, 12) }; },
-    tol: 1e-3,
+    rel: 1e-3,
     hint: function (d) {
       return 'Sustituye sin más: $\\dfrac{' + U.fmt(d.x, 1) + '^{' + (d.n + 1) + '}}{' + (d.n + 1) +
         '!}$. Puedes escribirlo tal cual en la casilla.';

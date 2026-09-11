@@ -302,6 +302,7 @@ Course.topic('fn-finanzas', function (p) {
     },
     fields: [{ name: 'v', label: 'Valor actual (€)', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.VA, 4) }; },
+    dec: 2,
     tol: 2e-4,
     hint: function () { return 'Descontar es dividir: $VA = \\dfrac{C_n}{(1+i)^n}$, con $i$ en tanto por uno.'; },
     steps: function (d) {
@@ -331,7 +332,7 @@ Course.topic('fn-finanzas', function (p) {
     },
     fields: [{ name: 'v', label: 'TAE (%)', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.tae * 100, 6) }; },
-    tol: 5e-5,
+    dec: 3,
     hint: function () {
       return '$\\text{TAE} = \\left(1+\\frac{\\text{TIN}}{m}\\right)^m - 1$. Acuérdate de multiplicar ' +
         'el resultado por 100 para darlo en porcentaje.';
@@ -366,7 +367,8 @@ Course.topic('fn-finanzas', function (p) {
     },
     fields: [{ name: 'c', label: 'Cuota (€)', w: 'wide' }],
     sol: function (d) { return { c: U.round(d.c, 4) }; },
-    tol: 2e-4,
+    dec: 2,
+    tol: 2e-4,      // la cuota es sensible al redondeo de (1+i)^-n por el camino
     hint: function () {
       return '$c = P\\dfrac{i}{1-(1+i)^{-n}}$ con $i$ = interés anual entre 12 y $n$ = años por 12.';
     },

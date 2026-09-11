@@ -306,7 +306,9 @@ Course.topic('cib-bloques', function (p) {
     gen: function (r) {
       var G = r.pick([50, 100, 500, 1000]), H = r.pick([0.01, 0.05, 0.1, 0.5]), pc = r.pick([10, 20, 30, 50]);
       var T1 = G / (1 + G * H), G2 = G * (1 - pc / 100), T2 = G2 / (1 + G2 * H);
-      return { G: G, H: H, pc: pc, T1: T1, T2: T2, caida: 100 * (1 - T2 / T1) };
+      var caida = 100 * (1 - T2 / T1);
+      if (caida < 0.05) return null;      // con dos decimales no se distinguiria de cero
+      return { G: G, H: H, pc: pc, T1: T1, T2: T2, caida: caida };
     },
     ask: function (d) {
       return 'Un bucle tiene $G = ' + d.G + '$ y $H = ' + U.fmt(d.H, 2) + '$. Con el tiempo, $G$ pierde un ' + d.pc +
@@ -314,6 +316,7 @@ Course.topic('cib-bloques', function (p) {
     },
     fields: [{ name: 'c', label: 'baja un (%)', w: 'tiny' }],
     sol: function (d) { return { c: U.round(d.caida, 4) }; },
+    dec: 2,
     tol: 0.006,
     errores: [{ si: function (v, d) { return Math.abs(v.c - d.pc) < 0.006; }, msg: 'Ese es el desgaste de $G$, que es lo que caería la salida <strong>sin</strong> realimentación. Calcula $T$ antes y después.' }],
     hint: function () { return ['Calcula $T = \\dfrac{G}{1 + GH}$ con la $G$ de antes y con la de después.', 'Porcentaje de caída: $100\\left(1 - \\dfrac{T_{\\text{después}}}{T_{\\text{antes}}}\\right)$.']; },

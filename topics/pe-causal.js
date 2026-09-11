@@ -518,7 +518,7 @@ Course.topic('pe-causal', function (p) {
       { name: 'b', label: 'Total B (%)', w: 'tiny' }
     ],
     sol: function (d) { return { a: U.round(d.tA, 4), b: U.round(d.tB, 4) }; },
-    tol: 2e-3,
+    dec: 1,
     hint: function () {
       return 'Suma los éxitos de cada tratamiento y divide entre el total de casos que ha tratado. ' +
         'No promedies los dos porcentajes: los grupos no tienen el mismo tamaño.';

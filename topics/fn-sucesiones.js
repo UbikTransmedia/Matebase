@@ -248,7 +248,7 @@ Course.topic('fn-sucesiones', function (p) {
       return [{ name: 'a', label: 'a₍' + d.n + '₎', w: 'wide' }, { name: 's', label: 'Suma', w: 'wide' }];
     },
     sol: function (d) { return { a: U.round(d.an, 6), s: U.round(d.S, 6) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () { return '$a_n = a_1 r^{n-1}$ y $S_n = a_1\\frac{r^n-1}{r-1}$.'; },
     steps: function (d) {
       return ['$a_{' + d.n + '} = ' + d.a1 + ' \\cdot ' + U.fmt(d.r, 1) + '^{' + (d.n - 1) + '} = ' + U.fmt(d.an, 4) + '$',
@@ -286,7 +286,7 @@ Course.topic('fn-sucesiones', function (p) {
       var t = v.raw.v.trim().toLowerCase().replace(/\s/g, '');
       if (d.val === Infinity) return t === 'inf' || t === '+inf' || t === 'infinito';
       if (d.val === -Infinity) return t === '-inf' || t === '-infinito';
-      return Ex.same(v.v, d.val, 3e-5);
+      return Ex.sameDec(v.v, d.val, 4);
     },
     hint: function () { return 'Compara los grados de numerador y denominador, igual que con las funciones.'; },
     steps: function (d) {
@@ -320,7 +320,7 @@ Course.topic('fn-sucesiones', function (p) {
     },
     fields: [{ name: 'S', label: 'Suma total', w: 'wide' }],
     sol: function (d) { return { S: U.round(d.S, 6) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () { return 'Como $|r| < 1$, la suma infinita converge: $S_\\infty = \\frac{a_1}{1-r}$.'; },
     steps: function (d) {
       return ['La razón cumple $|r| = \\frac{1}{' + d.den + '} < 1$, así que la suma infinita existe.',

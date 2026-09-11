@@ -256,6 +256,7 @@ Course.topic('fn-integral-indef', function (p) {
       if (fam === 0) { if (g <= 0) return null; v = m * Math.log(g) / 1; }
       else if (fam === 1) { v = m * Math.exp(a * x * x) / 1; if (Math.abs(v) > 1e5) return null; }
       else { v = m * Math.sin(a * x * x + b); }
+      if (Math.abs(v) < 0.01) return null;      // cuatro decimales no describen un valor tan pequeno
       return { fam: fam, a: a, b: b, m: m, x: x, g: g, v: v };
     },
     ask: function (d) {
@@ -269,7 +270,7 @@ Course.topic('fn-integral-indef', function (p) {
     },
     fields: [{ name: 'v', label: 'valor', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.v, 6) }; },
-    tol: 3e-4,
+    dec: 4,
     hint: function (d) {
       return ['Busca una función cuya derivada esté también en el integrando.',
         ['El numerador es ' + d.m + ' veces la derivada del denominador: sale un logaritmo.', 'Lo que multiplica es ' + d.m + ' veces la derivada del exponente: sale la misma exponencial.', 'Lo que multiplica es ' + d.m + ' veces la derivada de lo de dentro del coseno: sale un seno.'][d.fam]];

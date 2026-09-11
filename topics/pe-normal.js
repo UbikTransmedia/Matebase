@@ -284,7 +284,10 @@ Course.topic('pe-normal', function (p) {
       var x = mu + r.pm(1, 20);
       var z = (x - mu) / sd;
       var tipo = r.bool();
-      return { mu: mu, sd: sd, x: x, z: z, tipo: tipo, val: tipo ? ML.normalCdf(z) : 1 - ML.normalCdf(z) };
+      var val = tipo ? ML.normalCdf(z) : 1 - ML.normalCdf(z);
+      // por debajo del 1 % la tolerancia de la tabla es mayor que la respuesta
+      if (val < 0.01) return null;
+      return { mu: mu, sd: sd, x: x, z: z, tipo: tipo, val: val };
     },
     ask: function (d) {
       return 'La altura de una población sigue una $N(' + d.mu + ',\\ ' + d.sd + ')$ cm. ¿Qué ' +

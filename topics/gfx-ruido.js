@@ -416,6 +416,7 @@ Course.topic('gfx-ruido', function (p) {
     sol: function (d) {
       return { a: U.round(d.a, 8), s: U.round(d.tot, 8), l: U.round(d.lim, 8) };
     },
+    dec: 4,
     tol: 3e-4,
     hint: function (d) {
       return 'Las amplitudes son $1, g, g^2, \\dots$: una progresión geométrica. La última es ' +

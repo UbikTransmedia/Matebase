@@ -299,7 +299,7 @@ Course.topic('gfx-mosaicos', function (p) {
     },
     fields: [{ name: 'cx', label: 'celda.x', w: 'tiny' }, { name: 'cy', label: 'celda.y', w: 'tiny' }, { name: 'qx', label: 'q.x', w: 'tiny' }, { name: 'qy', label: 'q.y', w: 'tiny' }],
     sol: function (d) { return { cx: d.cx, cy: d.cy, qx: U.round(d.qx, 6), qy: U.round(d.qy, 6) }; },
-    tol: 1e-3,
+    dec: 3,
     errores: [
       { si: function (v, d) { return (d.px < 0 && v.cx === Math.trunc(d.px) && Math.trunc(d.px) !== d.cx) || (d.py < 0 && v.cy === Math.trunc(d.py) && Math.trunc(d.py) !== d.cy); }, msg: '<code>floor</code> redondea siempre hacia abajo, también con negativos: $\\lfloor -1{,}3 \\rfloor = -2$, no $-1$.' },
       { si: function (v, d) { return Math.abs(v.qx - (d.qx + 0.5)) < 5e-4 && Math.abs(v.qy - (d.qy + 0.5)) < 5e-4; }, msg: 'Eso es <code>fract</code> sin centrar: falta restar 0,5 para que la coordenada local vaya de −0,5 a 0,5.' }

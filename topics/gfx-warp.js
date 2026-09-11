@@ -236,7 +236,7 @@ Course.topic('gfx-warp', function (p) {
       { name: 'y', label: 'q.y', w: 'tiny' }
     ],
     sol: function (d) { return { x: U.round(d.qx, 8), y: U.round(d.qy, 8) }; },
-    tol: 3e-4,
+    dec: 4,
     hint: function () {
       return 'Ojo al cruce: la componente <code>x</code> del desplazamiento depende de <code>p.y</code>, ' +
         'y la <code>y</code> de <code>p.x</code>. Ese cruce es lo que produce la ondulación en las ' +
@@ -274,7 +274,7 @@ Course.topic('gfx-warp', function (p) {
       { name: 'r', label: 'radio aparente', w: 'tiny' }
     ],
     sol: function (d) { return { x: U.round(-d.k / d.esc, 8), r: U.round(d.r / d.esc, 8) }; },
-    tol: 3e-4,
+    dec: 4,
     hint: function (d) {
       return 'Despeja. El círculo se dibuja donde la coordenada <em>ya transformada</em> tiene módulo ' +
         U.fmt(d.r, 1) + '. Si esa coordenada es $' + U.fmt(d.esc, 1) + 'x + ' + U.fmt(d.k, 2) + '$, ' +

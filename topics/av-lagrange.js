@@ -173,11 +173,11 @@ Course.topic('av-lagrange', function (p) {
     },
     ask: function (d) {
       return 'Una persona tiene ' + d.M + ' € para dos bienes de precios $p = ' + d.p + '$ € y $q = ' + d.q + '$ €, y su satisfacción es $U(x, y) = x^{' + d.alfa.tex() + '}\\,y^{' + ML.F(1).sub(d.alfa).tex() +
-        '}$. ¿Qué cantidades $x$ e $y$ maximizan su satisfacción?';
+        '}$. ¿Qué cantidades $x$ e $y$ maximizan su satisfacción? (Dos decimales.)';
     },
     fields: [{ name: 'x', label: '$x$', w: 'tiny' }, { name: 'y', label: '$y$', w: 'tiny' }],
     sol: function (d) { return { x: d.x, y: d.y }; },
-    tol: 1e-6,
+    dec: 2,
     errores: [{ si: function (v, d) { return !d.alfa.eq(ML.F(1, 2)) && Math.abs(v.x - d.M / (2 * d.p)) < 1e-6 && Math.abs(v.y - d.M / (2 * d.q)) < 1e-6; }, msg: 'Gastar la mitad en cada bien solo es óptimo si los dos exponentes son iguales. La fracción del presupuesto para cada bien es su exponente.' }],
     hint: function () { return ['Toma logaritmos: maximizar $U$ es maximizar $\\alpha\\ln x + (1 - \\alpha)\\ln y$, que da ecuaciones más cómodas.', 'Resulta $p\\,x = \\alpha M$ y $q\\,y = (1 - \\alpha)M$.']; },
     steps: function (d) {

@@ -249,7 +249,7 @@ Course.topic('tr-razones', function (p) {
     },
     fields: [{ name: 'v', label: 'Longitud (cm)', w: 'tiny' }],
     sol: function (d) { return { v: U.round(d.res, 2) }; },
-    tol: 3e-3,
+    dec: 2,
     hint: function (d) {
       return d.caso === 0 ? 'Opuesto y contiguo → tangente.' : 'Opuesto e hipotenusa → seno.';
     },
@@ -280,7 +280,7 @@ Course.topic('tr-razones', function (p) {
     },
     fields: [{ name: 'a', label: 'Ángulo (°)', w: 'tiny' }],
     sol: function (d) { return { a: U.round(d.ang, 1) }; },
-    tol: 3e-3,
+    dec: 1,
     hint: function () { return 'Tienes opuesto y contiguo: usa la tangente y después el arco tangente.'; },
     steps: function (d) {
       return ['$\\operatorname{tg}\\alpha = \\dfrac{' + d.op + '}{' + d.cont + '} = ' + U.fmt(d.op / d.cont, 4) + '$',

@@ -395,7 +395,7 @@ Course.topic('pe-continuas', function (p) {
     },
     fields: [{ name: 'P', label: 'Probabilidad', w: 'wide' }],
     sol: function (d) { return { P: U.round(d.P, 8) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function (d) {
       return 'La densidad es constante y vale $\\frac{1}{' + (d.b - d.a) + '}$. El área de un ' +
         'rectángulo es base por altura.';
@@ -430,7 +430,7 @@ Course.topic('pe-continuas', function (p) {
     },
     fields: [{ name: 'P', label: 'Probabilidad', w: 'wide' }],
     sol: function (d) { return { P: U.round(d.P, 8) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function (d) {
       return 'Si la media es ' + d.media + ', entonces $\\lambda = \\frac{1}{' + d.media +
         '}$. Y $F(t) = 1 - e^{-\\lambda t}$ es la probabilidad de que ya haya fallado.';
@@ -464,7 +464,7 @@ Course.topic('pe-continuas', function (p) {
     },
     fields: [{ name: 'm', label: 'μ', w: 'wide' }],
     sol: function (d) { return { m: U.round(d.mu, 8) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function (d) {
       return 'Multiplica $x$ por la densidad antes de integrar: te queda $\\int_0^{' + d.b +
         '} \\frac{2x^2}{' + (d.b * d.b) + '}dx$, que es una potencia corriente.';

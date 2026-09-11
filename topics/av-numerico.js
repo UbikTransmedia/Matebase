@@ -312,7 +312,7 @@ Course.topic('av-numerico', function (p) {
     },
     fields: [{ name: 'v', label: 'Error máximo', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.err, 10) }; },
-    tol: 3e-5,
+    dec: 6,
     hint: function (d) { return 'Cada paso divide el intervalo entre dos: $\\frac{b-a}{2^n}$.'; },
     steps: function (d) {
       return ['Longitud inicial: $' + d.b + ' - ' + d.a + ' = ' + (d.b - d.a) + '$.',
@@ -341,7 +341,7 @@ Course.topic('av-numerico', function (p) {
     },
     fields: [{ name: 'v', label: 'x₁', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.x1, 8) }; },
-    tol: 3e-5,
+    dec: 6,
     hint: function (d) { return 'Sustituye directamente: $\\frac{1}{2}\\left(' + d.x0 + ' + \\frac{' + d.c + '}{' + d.x0 + '}\\right)$.'; },
     steps: function (d) {
       return ['$x_1 = \\dfrac{1}{2}\\left(' + d.x0 + ' + \\dfrac{' + d.c + '}{' + d.x0 + '}\\right)$',
@@ -400,7 +400,7 @@ Course.topic('av-numerico', function (p) {
     },
     fields: [{ name: 'v', label: 'Aproximación', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.T, 8) }; },
-    tol: 3e-5,
+    dec: 6,
     hint: function (d) { return 'Paso $h = \\frac{' + d.b + '}{' + d.n + '} = ' + U.fmt(d.b / d.n, 4) + '$. Los extremos pesan 1 y los interiores 2.'; },
     steps: function (d) {
       var h = (d.b - d.a) / d.n;

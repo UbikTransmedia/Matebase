@@ -278,7 +278,7 @@ Course.topic('av-optimizacion', function (p) {
     },
     fields: [{ name: 'x', label: 'x nueva', w: 'wide' }, { name: 'y', label: 'y nueva', w: 'wide' }],
     sol: function (d) { return { x: U.round(d.nx, 6), y: U.round(d.ny, 6) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function (d) { return 'El gradiente es $(2x, 2y) = (' + (2 * d.x) + ', ' + (2 * d.y) + ')$. Se resta $\\eta$ veces eso.'; },
     steps: function (d) {
       return ['$\\nabla f = (2x, 2y) = (' + (2 * d.x) + ', ' + (2 * d.y) + ')$',

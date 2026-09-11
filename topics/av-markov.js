@@ -232,7 +232,7 @@ Course.topic('av-markov', function (p) {
     },
     fields: [{ name: 'v', label: 'P(sol mañana)', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.nx[0], 6) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () { return 'Hay dos caminos hasta «sol mañana»: venir de sol o venir de lluvia. Es probabilidad total.'; },
     steps: function (d) {
       return ['Camino 1: hoy sol y sigue: $' + U.fmt(d.x[0], 2) + ' \\cdot ' + U.fmt(d.pss, 2) + ' = ' + U.fmt(d.x[0] * d.pss, 5) + '$.',
@@ -259,7 +259,7 @@ Course.topic('av-markov', function (p) {
     },
     fields: [{ name: 'v', label: 'π₁', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.pi1, 6) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function (d) { return 'En equilibrio, el flujo que sale de un estado iguala al que entra: $\\pi_1 \\cdot ' + U.fmt(d.a, 2) + ' = \\pi_2 \\cdot ' + U.fmt(d.b, 2) + '$.'; },
     steps: function (d) {
       return ['La condición $\\vec{\\pi}P = \\vec{\\pi}$ equivale a que el trasiego entre los dos estados se compense.',
@@ -288,7 +288,7 @@ Course.topic('av-markov', function (p) {
     },
     fields: [{ name: 'v', label: 'Probabilidad', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.p11, 6) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () { return 'Es el elemento $(1,1)$ de $P^2$: hay dos caminos, 1→1→1 y 1→2→1.'; },
     steps: function (d) {
       return ['Para llegar de 1 a 1 en dos pasos hay dos caminos posibles.',
@@ -315,7 +315,7 @@ Course.topic('av-markov', function (p) {
     },
     fields: [{ name: 'v', label: 'Probabilidad', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.prob, 6) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function (d) { return 'En un juego justo la respuesta es sorprendentemente simple: la fracción del objetivo que ya se tiene.'; },
     steps: function (d) {
       return ['Los estados $0$ y $' + d.N + '$ son <strong>absorbentes</strong>: al llegar, el juego termina.',

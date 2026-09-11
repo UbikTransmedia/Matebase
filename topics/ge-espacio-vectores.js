@@ -399,7 +399,8 @@ Course.topic('ge-espacio-vectores', function (p) {
     },
     fields: [{ name: 'a', label: 'ángulo (°)', w: 'wide' }],
     sol: function (d) { return { a: U.round(d.ang, 4) }; },
-    tol: 1e-3,
+    dec: 2,
+    tol: 1e-3,      // el arco coseno amplifica el redondeo del coseno
     errores: [
       {
         si: function (v, d) { return Math.abs(v.a - d.ang * Math.PI / 180) < 0.01; },

@@ -188,7 +188,9 @@ Course.topic('av-edo', function (p) {
       var k = r.nz(-4, 4);
       var C = r.nz(1, 6);
       var x = r.int(0, 2);
-      return { k: k, C: C, x: x, val: C * Math.exp(k * x) };
+      var val = C * Math.exp(k * x);
+      if (val < 0.01) return null;      // cuatro decimales no describen un valor tan pequeno
+      return { k: k, C: C, x: x, val: val };
     },
     ask: function (d) {
       return 'La solución general de $y\' = ' + d.k + 'y$ es $y = C e^{' + d.k + 'x}$. Si además ' +
@@ -196,6 +198,7 @@ Course.topic('av-edo', function (p) {
     },
     fields: function (d) { return [{ name: 'v', label: 'y(' + d.x + ')', w: 'wide' }]; },
     sol: function (d) { return { v: U.round(d.val, 6) }; },
+    dec: 4,
     tol: 3e-4,
     hint: function (d) { return 'La condición inicial fija $C$: al sustituir $x=0$ queda $y(0) = C$, así que $C = ' + d.C + '$.'; },
     steps: function (d) {
@@ -214,7 +217,9 @@ Course.topic('av-edo', function (p) {
       var N0 = r.int(1, 20) * 10;
       var t = r.int(1, 60);
       var k = Math.LN2 / semi;
-      return { semi: semi, N0: N0, t: t, k: k, val: N0 * Math.exp(-k * t) };
+      var val = N0 * Math.exp(-k * t);
+      if (val < 0.01) return null;
+      return { semi: semi, N0: N0, t: t, k: k, val: val };
     },
     ask: function (d) {
       return 'Una sustancia cumple $N\' = -kN$ con semivida de $' + d.semi + '$ años. Si al principio ' +
@@ -222,6 +227,7 @@ Course.topic('av-edo', function (p) {
     },
     fields: [{ name: 'v', label: 'Gramos', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.val, 6) }; },
+    dec: 4,
     tol: 3e-4,
     hint: function (d) { return 'La constante sale de la semivida: $k = \\frac{\\ln 2}{' + d.semi + '} = ' + U.fmt(d.k, 5) + '$.'; },
     steps: function (d) {
@@ -249,6 +255,7 @@ Course.topic('av-edo', function (p) {
     },
     fields: [{ name: 'v', label: 'Temperatura (°C)', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.val, 6) }; },
+    dec: 4,
     tol: 3e-4,
     hint: function (d) { return 'La solución es $T(t) = T_a + (T_0 - T_a)e^{-kt}$. Aquí $T_0 - T_a = ' + (d.T0 - d.Ta) + '$.'; },
     steps: function (d) {
@@ -277,6 +284,7 @@ Course.topic('av-edo', function (p) {
     },
     fields: function (d) { return [{ name: 'v', label: 'y(' + d.x + ')', w: 'wide' }]; },
     sol: function (d) { return { v: U.round(d.val, 6) }; },
+    dec: 4,
     tol: 3e-4,
     hint: function () { return 'Separa: $dy = x^n dx$ e integra los dos lados.'; },
     steps: function (d) {

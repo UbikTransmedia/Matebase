@@ -253,12 +253,12 @@ Course.topic('av-fourier', function (p) {
       return { f: f, T: 1 / f, w: 2 * Math.PI * f };
     },
     ask: function (d) {
-      return 'Una onda tiene frecuencia $f = ' + d.f + '$ Hz. Calcula su periodo en segundos y su ' +
-        'frecuencia angular $\\omega = 2\\pi f$ (seis y cuatro decimales respectivamente).';
+      return 'Una onda tiene frecuencia $f = ' + d.f + '$ Hz. Calcula su periodo en segundos (seis ' +
+        'decimales) y su frecuencia angular $\\omega = 2\\pi f$ (cuatro decimales).';
     },
     fields: [{ name: 'T', label: 'Periodo (s)', w: 'wide' }, { name: 'w', label: 'ω (rad/s)', w: 'wide' }],
     sol: function (d) { return { T: U.round(d.T, 8), w: U.round(d.w, 4) }; },
-    tol: 3e-4,
+    dec: { T: 6, w: 4 },
     hint: function () { return 'El periodo es el inverso de la frecuencia: $T = 1/f$.'; },
     steps: function (d) {
       return ['$T = \\dfrac{1}{f} = \\dfrac{1}{' + d.f + '} = ' + U.fmt(d.T, 8) + '$ s',
@@ -283,6 +283,7 @@ Course.topic('av-fourier', function (p) {
     },
     fields: [{ name: 'v', label: 'Amplitud', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.val, 6) }; },
+    dec: 4,
     tol: 3e-4,
     hint: function (d) { return 'Sustituye $n = ' + d.n + '$ en $\\frac{4}{\\pi n}$.'; },
     steps: function (d) {
@@ -311,6 +312,7 @@ Course.topic('av-fourier', function (p) {
     },
     fields: [{ name: 'v', label: 'Valor', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.val, 6) }; },
+    dec: 4,
     tol: 3e-4,
     hint: function (d) { return 'Suma los términos con $n = 1, 3, 5, \\dots$ hasta el ' + d.N + '.º, y multiplica todo por $4/\\pi$.'; },
     steps: function (d) {

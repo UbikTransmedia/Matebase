@@ -243,7 +243,7 @@ Course.topic('gfx-pixel', function (p) {
       { name: 'g', label: 'verde', w: 'tiny' }
     ],
     sol: function (d) { return { r: U.round(d.u, 8), g: U.round(d.v, 8) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () {
       return 'Normalizar es dividir cada componente por el tamaño correspondiente: la x entre el ' +
         'ancho y la y entre el alto.';

@@ -215,7 +215,7 @@ Course.topic('fn-integral-racional', function (p) {
     },
     fields: [{ name: 'A', label: 'A =', w: 'tiny' }, { name: 'B', label: 'B =', w: 'tiny' }],
     sol: function (d) { return { A: d.A.val(), B: d.B.val() }; },
-    tol: 1e-9,
+    dec: 4,
     errores: [{
       si: function (v, d) { return !d.A.eq(d.B) && Math.abs(v.A - d.B.val()) < 1e-9 && Math.abs(v.B - d.A.val()) < 1e-9; },
       msg: 'Están intercambiados: al sustituir $x$ por la raíz de un factor, el coeficiente que se despeja es el de <em>ese</em> factor.'
@@ -287,10 +287,10 @@ Course.topic('fn-integral-racional', function (p) {
         answer: function (d) { return d.a + ' y ' + d.b; }
       },
       {
-        ask: function (d) { return 'Descompón: ¿cuánto valen $A$ (el de $' + menos(d.a) + '$) y $B$ (el de $' + menos(d.b) + '$)?'; },
+        ask: function (d) { return 'Descompón: ¿cuánto valen $A$ (el de $' + menos(d.a) + '$) y $B$ (el de $' + menos(d.b) + '$)? (Valen fracciones.)'; },
         fields: [{ name: 'A', label: 'A =', w: 'tiny' }, { name: 'B', label: 'B =', w: 'tiny' }],
         sol: function (d) { return { A: d.A.val(), B: d.B.val() }; },
-        tol: 1e-9,
+        dec: 4,
         hint: function () { return 'Quita denominadores y da a $x$ el valor de cada raíz.'; },
         steps: function (d) { return ['$A = \\frac{' + (d.p * d.a + d.q) + '}{' + (d.a - d.b) + '} = ' + d.A.tex() + '$ y $B = \\frac{' + (d.p * d.b + d.q) + '}{' + (d.b - d.a) + '} = ' + d.B.tex() + '$']; },
         answer: function (d) { return '$A = ' + d.A.tex() + '$, $B = ' + d.B.tex() + '$'; }

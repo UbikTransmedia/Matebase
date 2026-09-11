@@ -230,7 +230,7 @@ Course.topic('gfx-raton', function (p) {
     },
     fields: [{ name: 'x', label: 'm.x', w: 'tiny' }, { name: 'y', label: 'm.y', w: 'tiny' }],
     sol: function (d) { return { x: U.round(d.mx, 6), y: U.round(d.my, 6) }; },
-    tol: 1e-3,
+    dec: 3,
     errores: [{ si: function (v, d) { return Math.abs(d.malx - d.mx) > 2e-3 && Math.abs(v.x - d.malx) < 5e-4; }, msg: 'Las dos componentes se dividen por la <strong>altura</strong>, también la x: si no, el ratón queda en otra escala que el píxel y la distancia sale deformada.' }],
     hint: function () { return ['Resta la mitad de la resolución a cada componente.', 'Divide las dos por <code>iResolution.y</code>.']; },
     steps: function (d) {
@@ -254,7 +254,7 @@ Course.topic('gfx-raton', function (p) {
     },
     fields: [{ name: 'l', label: 'luz', w: 'wide' }],
     sol: function (d) { return { l: U.round(d.luz, 6) }; },
-    tol: 1e-3,
+    dec: 3,
     errores: [{ si: function (v, d) { return Math.abs(d.mal - d.luz) > 2e-3 && Math.abs(v.l - d.mal) < 5e-4; }, msg: 'En el denominador va la distancia <strong>al cuadrado</strong>: $d^2 = ' + '\\Delta x^2 + \\Delta y^2$, sin raíz.' }],
     hint: function () { return ['$d^2 = \\Delta x^2 + \\Delta y^2$: ni siquiera hace falta la raíz.', 'Luego sustituye en la fórmula.']; },
     steps: function (d) {
@@ -310,7 +310,7 @@ Course.topic('gfx-raton', function (p) {
     },
     fields: [{ name: 'q', label: 'q.x', w: 'wide' }],
     sol: function (d) { return { q: U.round(d.qx, 6) }; },
-    tol: 1e-3,
+    dec: 3,
     hint: function () { return ['$\\vec p - \\vec m$ y el peso $e^{-|\\vec p - \\vec m|^2 / r^2}$.', '$q_x = m_x + (p_x - m_x)\\,(1 - k\\cdot\\text{peso})$.']; },
     steps: function (d) {
       return ['$p_x - m_x = ' + U.fmt(d.dx, 2) + '$', '$\\text{peso} = e^{-' + U.fmt(d.dx, 2) + '^2 / ' + U.fmt(d.rad, 1) + '^2} \\approx ' + U.fmt(d.peso, 4) + '$',

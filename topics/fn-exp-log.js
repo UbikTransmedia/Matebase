@@ -280,6 +280,7 @@ Course.topic('fn-exp-log', function (p) {
     },
     fields: [{ name: 'v', label: 'Población', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.val, 4) }; },
+    dec: 4,
     tol: 3e-6,
     hint: function (d) { return 'Cada año se multiplica por $' + U.fmt(1 + d.pct / 100, 2) + '$, y eso $' + d.t + '$ veces.'; },
     steps: function (d) {

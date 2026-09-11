@@ -170,11 +170,11 @@ Course.topic('tr-circunferencia', function (p) {
     ask: function (d) {
       return 'Pasa $' + d.g + '^\\circ$ a radianes. ' +
         '<span style="font-size:0.875rem;color:var(--ink-faint)">Puedes escribirlo con <code>pi</code>, ' +
-        'por ejemplo <code>3pi/4</code>.</span>';
+        'por ejemplo <code>3pi/4</code>, o dar el valor con cuatro decimales.</span>';
     },
     fields: [{ name: 'v', label: 'Radianes', w: 'wide' }],
     sol: function (d) { return { v: d.rad }; },
-    tol: 1e-6,
+    dec: 4,
     hint: function () { return 'Multiplica por $\\dfrac{\\pi}{180}$ y simplifica la fracción.'; },
     steps: function (d) {
       var f = ML.F(d.g, 180);

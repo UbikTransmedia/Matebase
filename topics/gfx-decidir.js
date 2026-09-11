@@ -204,7 +204,7 @@ Course.topic('gfx-decidir', function (p) {
     },
     fields: [{ name: 'v', label: 'resultado', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.v, 8) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () { return '$\\operatorname{mix}(a,b,t) = a(1-t) + bt$. Con $t=0$ sale $a$; con $t=1$, $b$.'; },
     steps: function (d) {
       return ['$' + U.fmt(d.a, 2) + '\\cdot(1-' + U.fmt(d.t, 2) + ') + ' + U.fmt(d.b, 2) + '\\cdot' +
@@ -238,7 +238,7 @@ Course.topic('gfx-decidir', function (p) {
       { name: 'q', label: 'El píxel queda', opts: [{ t: 'dentro', v: 'dentro' }, { t: 'fuera', v: 'fuera' }] }
     ],
     sol: function (d) { return { d: U.round(d.d, 6), q: d.d < 0 ? 'dentro' : 'fuera' }; },
-    tol: 1e-3,
+    dec: 3,
     hint: function (d) {
       return 'Unión es <code>min</code>, intersección es <code>max</code>, y la diferencia cambia el ' +
         'signo de la segunda antes del <code>max</code>. Negativo significa dentro.';

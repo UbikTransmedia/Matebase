@@ -327,15 +327,17 @@ Course.topic('av-lineal', function (p) {
       var l2 = r.pick([1, 2, 3, -1, -2, 0.5]);
       var n = r.int(3, 10);
       if (Math.abs(Math.pow(l1, n)) > 1e7 || Math.abs(Math.pow(l2, n)) > 1e7) return null;
+      // 0,5^n por debajo de 0,005 no se distingue con cuatro decimales
+      if (Math.abs(Math.pow(l1, n)) < 0.005 || Math.abs(Math.pow(l2, n)) < 0.005) return null;
       return { l1: l1, l2: l2, n: n, a: Math.pow(l1, n), b: Math.pow(l2, n) };
     },
     ask: function (d) {
       return 'Una matriz diagonalizable tiene autovalores $' + U.fmt(d.l1, 1) + '$ y $' + U.fmt(d.l2, 1) +
-        '$. ¿Cuáles son los autovalores de $A^{' + d.n + '}$?';
+        '$. ¿Cuáles son los autovalores de $A^{' + d.n + '}$? (Si no son enteros, cuatro decimales.)';
     },
     fields: [{ name: 'a', label: 'Primer autovalor', w: 'wide' }, { name: 'b', label: 'Segundo autovalor', w: 'wide' }],
     sol: function (d) { return { a: U.round(d.a, 6), b: U.round(d.b, 6) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () { return 'Si $A = PDP^{-1}$, entonces $A^n = PD^nP^{-1}$: solo hay que elevar los autovalores.'; },
     steps: function (d) {
       return ['$A^{' + d.n + '} = P\\,D^{' + d.n + '}\\,P^{-1}$, y elevar una diagonal es elevar sus elementos.',

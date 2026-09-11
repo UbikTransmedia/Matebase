@@ -345,7 +345,7 @@ Course.topic('tr-identidades', function (p) {
       // 2 sen^2 x + k cos x - m = 0  ->  usando sen^2 = 1 - cos^2
       var casos = [
         { txt: '2\\operatorname{sen}^2 x + 3\\cos x - 3 = 0', sols: [0, 60, 300], cos: [1, 0.5] },
-        { txt: '2\\cos^2 x + \\operatorname{sen} x - 1 = 0', sols: [210, 330], cos: null },
+        { txt: '2\\cos^2 x + \\operatorname{sen} x - 1 = 0', sols: [90, 210, 330], cos: null },
         { txt: '\\cos 2x + \\cos x = 0', sols: [60, 180, 300], cos: null }
       ];
       var c = r.pick(casos);

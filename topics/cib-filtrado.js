@@ -263,7 +263,7 @@ Course.topic('cib-filtrado', function (p) {
     ask: function (d) {
       return 'Un sensor ha dado estas lecturas consecutivas:<br><br>$' + d.datos.join(', \\ ') + '$<br><br>' +
         'Calcula la media móvil de ventana $k = ' + d.k + '$ en el <strong>último</strong> instante, ' +
-        'es decir, el promedio de las ' + d.k + ' últimas lecturas.';
+        'es decir, el promedio de las ' + d.k + ' últimas lecturas. (Dos decimales si no es exacta.)';
     },
     fields: [{ name: 'm', label: 'media =', w: 'tiny' }],
     sol: function (d) {
@@ -271,7 +271,7 @@ Course.topic('cib-filtrado', function (p) {
       for (var i = d.datos.length - d.k; i < d.datos.length; i++) s += d.datos[i];
       return { m: s / d.k };
     },
-    tol: 1e-6,
+    dec: 2,
     hint: function (d) {
       return 'Solo intervienen las últimas ' + d.k + ' lecturas: las anteriores ya han salido de la ventana.';
     },

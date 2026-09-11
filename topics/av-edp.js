@@ -302,7 +302,7 @@ Course.topic('av-edp', function (p) {
       var k = r.pick([0.01, 0.02, 0.05, 0.1]);
       var t = r.int(1, 10);
       var amp = Math.exp(-k * n * n * Math.PI * Math.PI * t);
-      if (amp < 1e-9) return null;
+      if (amp < 1e-4) return null;      // con seis decimales, menos de eso es "0,0000xx"
       return { n: n, k: k, t: t, amp: amp };
     },
     ask: function (d) {
@@ -312,7 +312,7 @@ Course.topic('av-edp', function (p) {
     },
     fields: [{ name: 'a', label: 'Amplitud', w: 'wide' }],
     sol: function (d) { return { a: U.round(d.amp, 8) }; },
-    tol: 3e-4,
+    rel: 2e-3,      // el exponente se redondea por el camino: error relativo, no absoluto
     hint: function (d) { return 'Calcula el exponente: $-' + U.fmt(d.k, 2) + ' \\cdot ' + d.n + '^2 \\cdot \\pi^2 \\cdot ' + d.t + '$.'; },
     steps: function (d) {
       var exp = -d.k * d.n * d.n * Math.PI * Math.PI * d.t;
@@ -341,6 +341,7 @@ Course.topic('av-edp', function (p) {
     },
     fields: function (d) { return [{ name: 'l', label: 'λ' + d.n, w: 'wide' }]; },
     sol: function (d) { return { l: U.round(d.lam, 6) }; },
+    dec: 4,
     tol: 3e-5,
     hint: function (d) { return 'Sustituye $n = ' + d.n + '$ y $L = ' + d.L + '$ y eleva al cuadrado.'; },
     steps: function (d) {

@@ -336,12 +336,12 @@ Course.topic('al-complejos', function (p) {
       return { a: a, b: b, mod: Math.hypot(a, b), ang: ang < 0 ? ang + 360 : ang };
     },
     ask: function (d) {
-      return 'Halla el módulo y el argumento (en grados, entre $0^\\circ$ y $360^\\circ$, un decimal) de ' +
-        '$z = ' + d.a + (d.b >= 0 ? '+' + d.b : d.b) + 'i$.';
+      return 'Halla el módulo (dos decimales si hace falta) y el argumento (en grados, entre $0^\\circ$ ' +
+        'y $360^\\circ$, un decimal) de $z = ' + d.a + (d.b >= 0 ? '+' + d.b : d.b) + 'i$.';
     },
     fields: [{ name: 'm', label: 'Módulo', w: 'tiny' }, { name: 'a', label: 'Argumento (°)', w: 'tiny' }],
     sol: function (d) { return { m: U.round(d.mod, 4), a: U.round(d.ang, 1) }; },
-    tol: 3e-4,
+    dec: { m: 2, a: 1 },
     hint: function () { return 'Módulo: Pitágoras con las dos partes. Argumento: arco tangente, mirando en qué cuadrante cae.'; },
     steps: function (d) {
       return ['$|z| = \\sqrt{' + d.a + '^2 + (' + d.b + ')^2} = \\sqrt{' + (d.a * d.a + d.b * d.b) + '} = ' + U.fmt(d.mod, 4) + '$',

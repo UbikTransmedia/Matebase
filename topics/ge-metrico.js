@@ -316,7 +316,8 @@ Course.topic('ge-metrico', function (p) {
     },
     fields: [{ name: 'a', label: 'ángulo (°)', w: 'wide' }],
     sol: function (d) { return { a: U.round(d.ang, 4) }; },
-    tol: 1e-3,
+    dec: 2,
+    tol: 1e-3,      // el arco seno amplifica el redondeo del seno
     errores: [{
       si: function (v, d) { return Math.abs(v.a - (90 - d.ang)) < 0.05; },
       msg: 'Has usado el <strong>coseno</strong>: eso da el ángulo con la normal. El ángulo con el plano es su complementario, y la fórmula lleva seno.'

@@ -187,7 +187,7 @@ Course.topic('gfx-tiempo', function (p) {
       { name: 'c', label: 'c', w: 'tiny' }
     ],
     sol: function (d) { return { x: U.round(d.v, 8), c: U.round(d.c, 8) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () {
       return 'El seno trabaja en radianes. Y fíjate en la segunda: $0{,}5 + 0{,}5\\operatorname{sen}$ ' +
         'siempre cae entre 0 y 1, que es el rango de un color.';
@@ -217,7 +217,7 @@ Course.topic('gfx-tiempo', function (p) {
     },
     fields: [{ name: 'T', label: 'periodo (s)', w: 'wide' }],
     sol: function (d) { return { T: U.round(d.T, 8) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () {
       return 'El seno se repite cada $2\\pi$ radianes. Si el argumento es $\\omega t$, hay que ver ' +
         'qué $t$ hace que el argumento avance $2\\pi$.';

@@ -420,7 +420,7 @@ Course.topic('fn-prog-lineal', function (p) {
     },
     fields: [{ name: 'z', label: 'Beneficio (€)', w: 'wide' }],
     sol: function (d) { return { z: U.round(d.mx, 6) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function (d) {
       return 'Llama $x$ a las sillas e $y$ a las mesas. Las restricciones son $' + d.h1A + 'x + ' + d.h1B +
         'y \\le ' + d.H1 + '$ y $' + d.h2A + 'x + ' + d.h2B + 'y \\le ' + d.H2 + '$. Evalúa en los vértices.';

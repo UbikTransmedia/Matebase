@@ -275,11 +275,11 @@ Course.topic('al-determinantes', function (p) {
       return { n: n, d: d, c: c };
     },
     ask: function (d) {
-      return '$A$ es una matriz cuadrada de orden $' + d.n + '$ con $\\det A = ' + d.d + '$. Calcula ' + d.c.t + '.';
+      return '$A$ es una matriz cuadrada de orden $' + d.n + '$ con $\\det A = ' + d.d + '$. Calcula ' + d.c.t + '. (Si sale una fracción, puedes escribirla tal cual.)';
     },
     fields: [{ name: 'v', label: 'valor', w: 'tiny' }],
     sol: function (d) { return { v: d.c.v }; },
-    tol: 1e-9,
+    dec: 4,
     errores: [{
       si: function (v, d) { return d.c.malo !== undefined && d.c.malo !== d.c.v && Math.abs(v.v - d.c.malo) < 1e-9; },
       msg: 'Multiplicar la matriz por un número multiplica <strong>cada fila</strong>, y cada fila aporta un factor: $\\det(kA) = k^n\\det A$.'

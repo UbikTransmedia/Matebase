@@ -311,7 +311,7 @@ Course.topic('gfx-color', function (p) {
     sol: function (d) {
       return { r: U.round(d.c[0], 8), g: U.round(d.c[1], 8), b: U.round(d.c[2], 8) };
     },
-    tol: 3e-4,
+    dec: 4,
     hint: function () {
       return 'Cada canal por separado, con la misma fórmula y solo cambiando la fase. Y el coseno en ' +
         '<strong>radianes</strong>: el argumento es $2\\pi$ por lo de dentro.';
@@ -352,7 +352,7 @@ Course.topic('gfx-color', function (p) {
       { name: 'b', label: 'promedio en luz', w: 'tiny' }
     ],
     sol: function (d) { return { m: U.round(d.mal, 8), b: U.round(d.bien, 8) }; },
-    tol: 3e-4,
+    dec: 4,
     hint: function () {
       return 'Para pasar a luz, eleva a 2,2. Promedia allí. Para volver, eleva a $1/2{,}2$, que es ' +
         'aproximadamente $0{,}4545$.';
@@ -389,7 +389,7 @@ Course.topic('gfx-color', function (p) {
     },
     fields: [{ name: 'r', label: 'R', w: 'tiny' }, { name: 'g', label: 'G', w: 'tiny' }, { name: 'b', label: 'B', w: 'tiny' }],
     sol: function (d) { return { r: U.round(d.rgb[0], 6), g: U.round(d.rgb[1], 6), b: U.round(d.rgb[2], 6) }; },
-    tol: 1e-3,
+    dec: 3,
     errores: [{ si: function (v, d) {
       var distinto = d.mal.some(function (x, i) { return Math.abs(x - d.rgb[i]) > 2e-3; });
       return distinto && Math.abs(v.r - d.mal[0]) < 5e-4 && Math.abs(v.g - d.mal[1]) < 5e-4 && Math.abs(v.b - d.mal[2]) < 5e-4;

@@ -246,7 +246,7 @@ Course.topic('ge-semejanza', function (p) {
     },
     fields: [{ name: 'v', label: 'Distancia (km)', w: 'tiny' }],
     sol: function (d) { return { v: U.round(d.km, 4) }; },
-    tol: 3e-4,
+    dec: 2,
     hint: function (d) { return 'Cada centímetro del mapa son $' + U.miles(d.esc) + '$ cm reales. Y $1$ km son $100\\,000$ cm.'; },
     steps: function (d) {
       return ['Distancia real en cm: $' + U.fmt(d.cm, 1) + ' \\cdot ' + d.esc + ' = ' + U.miles(d.cm * d.esc) + '$ cm.',

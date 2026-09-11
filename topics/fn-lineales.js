@@ -234,11 +234,11 @@ Course.topic('fn-lineales', function (p) {
     },
     ask: function (d) {
       return 'Halla la pendiente de una recta ' + (d.perp ? '<strong>perpendicular</strong>' : '<strong>paralela</strong>') +
-        ' a $y = ' + (d.md === 1 ? d.mn : '\\frac{' + d.mn + '}{' + d.md + '}') + 'x + 3$.';
+        ' a $y = ' + (d.md === 1 ? d.mn : '\\frac{' + d.mn + '}{' + d.md + '}') + 'x + 3$. (Vale una fracción o cuatro decimales.)';
     },
     fields: [{ name: 'm', label: 'Pendiente', w: 'tiny' }],
     sol: function (d) { return { m: d.res }; },
-    tol: 1e-6,
+    dec: 4,
     hint: function (d) { return d.perp ? 'La perpendicular tiene pendiente $-1/m$.' : 'Las paralelas tienen la misma pendiente.'; },
     steps: function (d) {
       if (!d.perp) return ['Dos rectas son paralelas cuando tienen la misma pendiente.',

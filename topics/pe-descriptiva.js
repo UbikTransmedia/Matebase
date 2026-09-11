@@ -302,7 +302,7 @@ Course.topic('pe-descriptiva', function (p) {
       { name: 'mo', label: 'Moda', w: 'tiny' }
     ],
     sol: function (d) { return { me: d.media, md: d.mediana, mo: d.moda }; },
-    tol: 3e-3,
+    dec: 2,
     hint: function (d) {
       return 'Para la mediana hay que <strong>ordenar</strong> primero. Hay ' + d.datos.length +
         ' datos (par), así que la mediana es la media de los dos centrales.';

@@ -355,7 +355,7 @@ Course.topic('av-reales', function (p) {
       { name: 's', label: 'supremo', w: 'tiny' }
     ],
     sol: function (d) { return { i: d.inf, s: d.sup }; },
-    tol: 1e-5,
+    dec: 4,
     hint: function () {
       return 'Escribe los primeros elementos del conjunto y mira hacia dónde van. El supremo es el ' +
         'borde por arriba, se alcance o no.';

@@ -281,7 +281,8 @@ Course.topic('tr-teoremas', function (p) {
     },
     fields: [{ name: 'A', label: 'Ángulo A (°)', w: 'wide' }],
     sol: function (d) { return { A: U.round(d.A, 4) }; },
-    tol: 3e-4,
+    dec: 2,
+    tol: 1e-3,      // el arco coseno amplifica el redondeo del coseno
     hint: function () { return 'Despeja el coseno de la fórmula: $\\cos A = \\frac{b^2+c^2-a^2}{2bc}$.'; },
     steps: function (d) {
       var num = d.b * d.b + d.c * d.c - d.a * d.a;

@@ -163,7 +163,9 @@ Course.topic('pe-binomial', function (p) {
       var n = r.int(4, 12);
       var prob = r.pick([0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75]);
       var k = r.int(0, n);
-      return { n: n, p: prob, k: k, val: ML.comb(n, k) * Math.pow(prob, k) * Math.pow(1 - prob, n - k) };
+      var val = ML.comb(n, k) * Math.pow(prob, k) * Math.pow(1 - prob, n - k);
+      if (val < 0.005) return null;      // con cuatro decimales, un valor asi es "0,0000"
+      return { n: n, p: prob, k: k, val: val };
     },
     ask: function (d) {
       return 'Sea $X \\sim B(' + d.n + ',\\ ' + U.fmt(d.p, 2) + ')$. Calcula $P(X = ' + d.k + ')$ ' +
@@ -171,6 +173,7 @@ Course.topic('pe-binomial', function (p) {
     },
     fields: function (d) { return [{ name: 'v', label: 'P(X = ' + d.k + ')', w: 'wide' }]; },
     sol: function (d) { return { v: U.round(d.val, 6) }; },
+    dec: 4,
     tol: 3e-4,
     hint: function (d) { return '$P(X=k) = \\binom{' + d.n + '}{' + d.k + '} \\cdot ' + U.fmt(d.p, 2) + '^{' + d.k + '} \\cdot ' + U.fmt(1 - d.p, 2) + '^{' + (d.n - d.k) + '}$'; },
     steps: function (d) {
@@ -194,7 +197,9 @@ Course.topic('pe-binomial', function (p) {
       for (var i = 0; i <= k; i++) acum += ML.comb(n, i) * Math.pow(prob, i) * Math.pow(1 - prob, n - i);
       var alMenos = 0;
       for (var j = k; j <= n; j++) alMenos += ML.comb(n, j) * Math.pow(prob, j) * Math.pow(1 - prob, n - j);
-      return { n: n, p: prob, k: k, tipo: tipo, val: tipo ? alMenos : acum };
+      var val = tipo ? alMenos : acum;
+      if (val < 0.005 || val > 0.995) return null;
+      return { n: n, p: prob, k: k, tipo: tipo, val: val };
     },
     ask: function (d) {
       return 'Sea $X \\sim B(' + d.n + ',\\ ' + U.fmt(d.p, 2) + ')$. Calcula ' +
@@ -202,6 +207,7 @@ Course.topic('pe-binomial', function (p) {
     },
     fields: [{ name: 'v', label: 'Probabilidad', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.val, 6) }; },
+    dec: 4,
     tol: 3e-4,
     hint: function (d) {
       return d.tipo ? 'Es más corto calcularlo por el contrario: $1 - P(X \\le ' + (d.k - 1) + ')$.'
@@ -234,6 +240,7 @@ Course.topic('pe-binomial', function (p) {
       var prob = r.pick([0.2, 0.25, 0.3, 0.5]);
       var k = r.int(1, Math.min(4, n - 1));
       var val = ML.comb(n, k) * Math.pow(prob, k) * Math.pow(1 - prob, n - k);
+      if (val < 0.005) return null;
       return { n: n, p: prob, k: k, val: val };
     },
     ask: function (d) {
@@ -243,6 +250,7 @@ Course.topic('pe-binomial', function (p) {
     },
     fields: [{ name: 'v', label: 'Probabilidad', w: 'wide' }],
     sol: function (d) { return { v: U.round(d.val, 6) }; },
+    dec: 4,
     tol: 3e-4,
     hint: function (d) {
       return 'Comprueba las cuatro condiciones: $' + d.n + '$ repeticiones, dos resultados, $p$ ' +

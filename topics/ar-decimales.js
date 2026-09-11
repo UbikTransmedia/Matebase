@@ -287,7 +287,7 @@ Course.topic('ar-decimales', function (p) {
       { name: 'e', label: 'Error absoluto', w: 'tiny' }
     ],
     sol: function (d) { return { a: d.apr, e: U.round(d.ea, 5) }; },
-    tol: 2e-4,
+    dec: 5,
     hint: function (d) { return 'El valor exacto es $' + U.fmt(d.val, 8) + '\\dots$; el error es la diferencia en valor absoluto.'; },
     steps: function (d) {
       return ['Valor exacto: $' + U.fmt(d.val, 8) + '\\dots$',

@@ -193,7 +193,7 @@ Course.topic('gfx-repetir', function (p) {
       { name: 'm', label: 'mod', w: 'tiny' }
     ],
     sol: function (d) { return { f: U.round(d.f, 8), l: d.fl, m: U.round(d.md, 8) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () {
       return 'Con negativos, <code>floor</code> va hacia abajo: <code>floor(-1.3)</code> es $-2$, no ' +
         '$-1$. Por eso <code>fract</code> de un negativo sale positivo.';
@@ -235,7 +235,7 @@ Course.topic('gfx-repetir', function (p) {
     sol: function (d) {
       return { cx: d.cx, cy: d.cy, dx: U.round(d.dx, 8), dy: U.round(d.dy, 8) };
     },
-    tol: 3e-5,
+    dec: 4,
     hint: function (d) {
       return 'Primero multiplica las dos componentes por ' + d.n + '. La parte entera es la celda y ' +
         'la decimal, menos 0,5, es la posición dentro.';

@@ -207,7 +207,7 @@ Course.topic('gfx-matrices', function (p) {
       { name: 'y', label: "y'", w: 'tiny' }
     ],
     sol: function (d) { return { x: U.round(d.nx, 8), y: U.round(d.ny, 8) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () {
       return '$x\' = x\\cos\\alpha - y\\operatorname{sen}\\alpha$ y ' +
         '$y\' = x\\operatorname{sen}\\alpha + y\\cos\\alpha$. Pasa los grados a radianes.';

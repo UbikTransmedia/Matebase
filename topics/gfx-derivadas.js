@@ -244,7 +244,7 @@ Course.topic('gfx-derivadas', function (p) {
       { name: 'w', label: 'fwidth', w: 'tiny' }
     ],
     sol: function (d) { return { x: U.round(d.dx, 8), y: U.round(d.dy, 8), w: U.round(d.fw, 8) }; },
-    tol: 3e-4,
+    dec: 4,
     hint: function () {
       return 'Son restas, nada más: el vecino menos tú. Y <code>fwidth</code> es la suma de los dos ' +
         '<strong>valores absolutos</strong>, no la suma a secas: mide cuánto cambia la cosa, no ' +
@@ -282,7 +282,7 @@ Course.topic('gfx-derivadas', function (p) {
       { name: 'n', label: 'píxeles de borde', w: 'tiny' }
     ],
     sol: function (d) { return { u: U.round(d.w, 8), n: U.round(d.fijo / d.w, 8) }; },
-    tol: 3e-4,
+    dec: 4,
     hint: function (d) {
       return 'Un píxel de <code>fragCoord</code> se convierte en <code>' + d.zoom + '/' + d.alto +
         '</code> unidades de <code>p</code>. Para lo segundo: si un píxel mide esa cantidad, ' +

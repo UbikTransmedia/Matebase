@@ -263,6 +263,9 @@ Course.topic('fn-lhopital', function (p) {
     level: 'avanzado',
     gen: function (r) {
       var a = r.pm(1, 3), b = r.pick([1, 2, 3, -1]), fam = r.int(0, 1);
+      // con |ab| grande, L = e^{ab} queda por debajo de 0,001 o por encima
+      // de 8000: cuatro decimales no dicen nada de un numero asi
+      if (Math.abs(a * b) > 4) return null;
       var tex = fam === 0 ? '\\lim_{x \\to \\infty}\\left(1 + \\dfrac{' + a + '}{x}\\right)^{' + k(b) + 'x}'
         : '\\lim_{x \\to 0}\\left(1 + ' + k(a) + 'x\\right)^{' + b + '/x}';
       return { a: a, b: b, fam: fam, tex: tex, ln: a * b, L: Math.exp(a * b) };
@@ -299,7 +302,7 @@ Course.topic('fn-lhopital', function (p) {
         ask: function () { return '¿Cuánto vale $L$? (cuatro decimales, o como potencia de $e$: <em>e^2</em>)'; },
         fields: [{ name: 'v', label: 'L', w: 'wide' }],
         sol: function (d) { return { v: U.round(d.L, 6) }; },
-        tol: 3e-4,
+        dec: 4,
         errores: [{ si: function (v, d) { return d.ln !== 1 && Math.abs(v.v - d.ln) < 1e-6; }, msg: 'Ese es $\\ln L$. Para despejar $L$ hay que deshacer el logaritmo: $L = e^{\\ln L}$.' }],
         hint: function () { return 'Si $\\ln L = c$, entonces $L = e^c$.'; },
         steps: function (d) { return ['$L = e^{' + d.ln + '} \\approx ' + U.fmt(d.L, 4) + '$']; },

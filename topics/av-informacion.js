@@ -253,7 +253,7 @@ Course.topic('av-informacion', function (p) {
     },
     fields: [{ name: 'b', label: 'Bits', w: 'wide' }],
     sol: function (d) { return { b: U.round(d.bits, 6) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function (d) { return '$I = \\log_2\\frac{1}{p}$, con $p = ' + U.fmt(d.p, 6) + '$.'; },
     steps: function (d) {
       return ['La probabilidad del suceso es $p = ' + U.fmt(d.p, 6) + '$.',
@@ -287,7 +287,8 @@ Course.topic('av-informacion', function (p) {
     },
     fields: [{ name: 'h', label: 'H (bits)', w: 'wide' }],
     sol: function (d) { return { h: U.round(d.H, 6) }; },
-    tol: 3e-5,
+    dec: 4,
+    tol: 1e-4,      // los dos sumandos se redondean por separado
     hint: function (d) {
       return d.equi ? 'Con $n$ símbolos equiprobables, $H = \\log_2 n$.'
         : '$H = -p\\log_2 p - (1-p)\\log_2(1-p)$.';
@@ -352,7 +353,7 @@ Course.topic('av-informacion', function (p) {
     },
     fields: [{ name: 'b', label: 'Bits totales', w: 'wide' }],
     sol: function (d) { return { b: U.round(d.var_, 6) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () { return 'Calcula primero la longitud media: cada longitud pesada por su probabilidad.'; },
     steps: function (d) {
       return ['Longitud media: $0{,}5 \\cdot 1 + 0{,}25 \\cdot 2 + 0{,}125 \\cdot 3 + 0{,}125 \\cdot 3 = ' +

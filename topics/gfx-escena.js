@@ -349,7 +349,7 @@ Course.topic('gfx-escena', function (p) {
       { name: 'd', label: 'distancia', w: 'tiny' }
     ],
     sol: function (d) { return { x: U.round(d.qx, 8), z: U.round(d.qz, 8), d: U.round(d.d, 8) }; },
-    tol: 3e-4,
+    dec: 4,
     hint: function (d) {
       return 'El <code>mod</code> de GLSL devuelve siempre algo entre 0 y ' + U.fmt(d.c, 1) +
         ', también con negativos. Al restarle la mitad, queda centrado entre $-' + U.fmt(d.c / 2, 2) +

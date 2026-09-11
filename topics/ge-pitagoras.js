@@ -233,7 +233,7 @@ Course.topic('ge-pitagoras', function (p) {
     },
     fields: [{ name: 'v', label: 'Resultado', w: 'tiny' }],
     sol: function (d) { return { v: U.round(d.res, 2) }; },
-    tol: 3e-3,
+    dec: 2,
     hint: function (d) {
       if (d.t === 1) return 'La escalera es la hipotenusa; la separación y la altura son los catetos.';
       return 'La diagonal es la hipotenusa de un triángulo rectángulo cuyos catetos son los lados.';
@@ -278,7 +278,7 @@ Course.topic('ge-pitagoras', function (p) {
     },
     fields: [{ name: 'v', label: 'Distancia', w: 'tiny' }],
     sol: function (d) { return { v: U.round(d.res, 2) }; },
-    tol: 3e-3,
+    dec: 2,
     hint: function () { return 'Los catetos son las diferencias de coordenadas: $\\Delta x$ y $\\Delta y$.'; },
     steps: function (d) {
       var dx = d.x2 - d.x1, dy = d.y2 - d.y1;

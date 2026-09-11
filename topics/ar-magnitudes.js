@@ -222,7 +222,7 @@ Course.topic('ar-magnitudes', function (p) {
     },
     fields: function (d) { return [{ name: 'r', label: 'Resultado (' + d.a + ')', w: 'wide' }]; },
     sol: function (d) { return { r: U.round(d.res, 6) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function (d) { return 'Monta el factor de conversión de forma que se tache la unidad de partida.'; },
     steps: function (d) {
       return ['Buscamos el factor que relaciona $\\text{' + d.de + '}$ con $\\text{' + d.a + '}$.',

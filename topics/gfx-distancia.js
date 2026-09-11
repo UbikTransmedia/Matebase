@@ -306,7 +306,7 @@ Course.topic('gfx-distancia', function (p) {
       { name: 'm', label: 'smoothstep', w: 'tiny' }
     ],
     sol: function (d) { return { s: d.st, m: U.round(d.ss, 8) }; },
-    tol: 3e-5,
+    dec: 4,
     hint: function () {
       return '<code>step(borde, x)</code> vale 1 si $x \\ge$ borde y 0 si no. Para ' +
         '<code>smoothstep</code>, primero $t = \\frac{x-a}{b-a}$ recortado a $[0,1]$, y después ' +

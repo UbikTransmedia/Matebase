@@ -196,7 +196,7 @@ Course.topic('pe-contraste', function (p) {
     ask: function (d) { return 'Halla el valor crítico $z$ para un contraste ' + (d.tipo === 'bi' ? '<strong>bilateral</strong>' : '<strong>unilateral</strong>') + ' con nivel de significación $\\alpha = ' + (d.alfa / 100).toString().replace('.', '{,}') + '$ (dos decimales; da el valor positivo).'; },
     fields: [{ name: 'z', label: 'z', w: 'tiny' }],
     sol: function (d) { return { z: d.z }; },
-    tol: 0.004,
+    dec: 2,
     errores: [{ si: function (v, d) { return d.tipo === 'uni' && Math.abs(v.z - ZB[d.alfa]) < 0.01; }, msg: 'Ese es el de un contraste bilateral. En el unilateral, todo el $\\alpha$ va a una sola cola.' },
       { si: function (v, d) { return d.tipo === 'bi' && Math.abs(v.z - ZU[d.alfa]) < 0.01; }, msg: 'Ese es el de un unilateral. En el bilateral, $\\alpha$ se reparte entre las dos colas: se busca $z_{\\alpha/2}$.' }],
     hint: function (d) { return d.tipo === 'bi' ? 'En el bilateral, $\\alpha$ se reparte en dos colas: busca $z$ con $P(Z \\le z) = 1 - \\frac{\\alpha}{2}$.' : 'En el unilateral, todo $\\alpha$ está en una cola: busca $z$ con $P(Z \\le z) = 1 - \\alpha$.'; },
