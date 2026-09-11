@@ -1,9 +1,10 @@
 /* Tema: Teoría de juegos */
 Course.topic('av-juegos', function (p) {
 
-  p.text('Toda la optimización que has visto tiene un supuesto oculto: que el mundo no reacciona. Bajas ' +
-    'la ladera y la ladera se queda quieta. Pero si enfrente hay <strong>otro que también decide</strong> ' +
-    '—y que además sabe que tú decides—, el problema cambia de naturaleza.');
+  p.puente('Toda la [[av-optimizacion|optimización]] que has visto tiene un supuesto oculto: que el mundo no ' +
+    'reacciona. Bajas la ladera y la ladera se queda quieta. Pero si enfrente hay <strong>otro que también ' +
+    'decide</strong>, y que además sabe que tú decides, el problema cambia de naturaleza. Solo hace falta ' +
+    'saber leer una tabla de doble entrada y comparar números.');
 
   p.text('La <strong>teoría de juegos</strong> estudia exactamente eso: decisiones estratégicas donde ' +
     'el resultado de cada uno depende de lo que hagan los demás.');
@@ -32,6 +33,7 @@ Course.topic('av-juegos', function (p) {
   p.demo({
     title: 'El dilema, casilla a casilla',
     intro: 'Pulsa una casilla y razona: dado lo que hace el otro, ¿qué me conviene? El resultado al que se llega es desconcertante.',
+    predice: 'Antes de pulsar: si B calla, ¿qué le conviene a A, callar o delatar? ¿Y si B delata? Si la respuesta es la misma en los dos casos, A tiene una estrategia dominante.',
     build: function (host, d) {
       var sel = [0, 0];
       // pagos (años de cárcel, en negativo): [fila, columna]
@@ -126,9 +128,29 @@ Course.topic('av-juegos', function (p) {
     'el mejor resultado posible. En el dilema del prisionero es el <em>peor</em> resultado colectivo. ' +
     'Equilibrio significa solo «estable», no «bueno».');
 
+  p.comprueba('En el dilema del prisionero, (callar, callar) da 1 año a cada uno, lo mejor para los dos. ¿Es un equilibrio de Nash?', [
+    { t: 'Sí: es el mejor resultado para ambos', ok: false, por: 'Ser el mejor no es el criterio. Si A cambia a delatar mientras B calla, A pasa de 1 año a 0: mejora cambiando él solo. No es estable.' },
+    { t: 'No: cualquiera de los dos mejora si delata mientras el otro calla', ok: true, por: 'Un equilibrio exige que <em>nadie</em> gane desviándose en solitario. Aquí los dos ganan desviándose, y por eso la cooperación se deshace aunque sea lo mejor para todos.' },
+    { t: 'Sí, porque los dos hacen lo mismo', ok: false, por: 'Que hagan lo mismo no tiene nada que ver. (Delatar, delatar) también es simétrico y ese sí es equilibrio; (callar, callar) no lo es.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Buscar los equilibrios en la caza del ciervo',
+    enunciado: 'Dos cazadores eligen entre cazar un ciervo, que exige cooperar, o una liebre, que cada uno caza solo. Pagos (A, B): ciervo-ciervo (4, 4), ciervo-liebre (0, 3), liebre-ciervo (3, 0), liebre-liebre (3, 3). Hallar los equilibrios de Nash.',
+    pasos: [
+      { t: '<strong>Casilla (ciervo, ciervo).</strong> ¿Mejora A cambiando a liebre? Pasaría de 4 a 3: no. ¿Mejora B? Igual, de 4 a 3: no. Nadie gana desviándose: <strong>equilibrio</strong>.', antes: 'Fija lo que hace B (ciervo). ¿Le conviene a A cambiar?' },
+      { t: '<strong>Casilla (ciervo, liebre).</strong> A tiene 0; cambiando a liebre tendría 3. Mejora: no es equilibrio. (No hace falta mirar a B.)' },
+      { t: '<strong>Casilla (liebre, ciervo).</strong> Simétrica de la anterior: B mejora cambiando. No es equilibrio.' },
+      { t: '<strong>Casilla (liebre, liebre).</strong> ¿Mejora A cambiando a ciervo? Pasaría de 3 a 0: no. ¿B? Tampoco. <strong>Equilibrio</strong> también.', antes: 'Con B cazando liebre, ¿le conviene a A ir a por el ciervo solo?' },
+      { t: '<strong>Dos equilibrios.</strong> Uno mejor para todos (4, 4) y otro más seguro (3, 3). Cuál se alcanza depende de la confianza: si A duda de que B vaya al ciervo, la liebre le garantiza 3. Es el dilema de la cooperación cuando cooperar es arriesgado.' }
+    ],
+    cierre: 'El método es siempre el mismo: casilla a casilla, preguntar si alguno de los dos gana desviándose él solo. Cuatro casillas, ocho preguntas, y salen todos los equilibrios puros.'
+  });
+
   p.demo({
     title: 'Otros juegos clásicos',
     intro: 'Cambia de juego y busca los equilibrios. Verás que algunos tienen uno, otros tienen dos y otros ninguno en estrategias puras.',
+    predice: 'Elige «Pares o nones». En cada casilla, ¿hay siempre alguien que quiere cambiar? Entonces, ¿cuántos equilibrios puros tendrá?',
     build: function (host, d) {
       var cual = 'prisionero';
       var juegos = {
@@ -223,6 +245,13 @@ Course.topic('av-juegos', function (p) {
     'debía dárselo. Su historia inspiró la película <em>Una mente maravillosa</em>. Murió en un ' +
     'accidente de taxi en 2015, volviendo de recibir el premio Abel.');
 
+  p.trampas([
+    { e: 'Leer los pagos en el orden equivocado', por: 'En cada casilla, el primer número es del jugador de las filas y el segundo, del de las columnas. Cambiarlos convierte un dilema en otro juego.' },
+    { e: '«Equilibrio» leído como «mejor resultado»', por: 'En el dilema del prisionero el equilibrio es el peor resultado colectivo. Equilibrio significa estable: nadie gana moviéndose solo.' },
+    { e: 'Comprobar solo a un jugador', por: 'Una casilla es equilibrio si <em>ninguno</em> de los dos mejora desviándose. Hay que hacer las dos preguntas en cada casilla.' },
+    { e: 'Creer que todo juego tiene un equilibrio puro', por: 'Pares o nones no tiene ninguno: siempre alguien quiere cambiar. Lo que garantiza Nash es un equilibrio <em>mixto</em>, jugando al azar.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Que la cooperación aparezca cuando el juego se repite es uno de los resultados más ' +
     'esperanzadores de esta teoría, y tiene confirmación histórica: en las trincheras de la Primera ' +
@@ -247,12 +276,10 @@ Course.topic('av-juegos', function (p) {
       return 'Los pagos del jugador A (el de las filas) son:<br>' +
         '$\\begin{array}{c|cc} & B_1 & B_2 \\\\ \\hline A_1 & ' + d.a + ' & ' + d.b + ' \\\\ A_2 & ' +
         d.c + ' & ' + d.e + ' \\end{array}$<br>' +
-        '¿Tiene A alguna estrategia dominante?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> sí, $A_1$ · ' +
-        '<code>2</code> sí, $A_2$ · <code>0</code> no tiene ninguna</span>';
+        '¿Tiene A alguna estrategia dominante?';
     },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny' }],
-    sol: function (d) { return { r: d.res }; },
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'sí, $A_1$', v: '1' }, { t: 'sí, $A_2$', v: '2' }, { t: 'no tiene ninguna', v: '0' }] }],
+    sol: function (d) { return { r: String(d.res) }; },
     hint: function () { return 'Una estrategia domina si es mejor en <strong>las dos</strong> columnas a la vez.'; },
     steps: function (d) {
       return ['Si B juega $B_1$: A prefiere ' + (d.a > d.c ? '$A_1$ ($' + d.a + ' > ' + d.c + '$)'
@@ -284,13 +311,10 @@ Course.topic('av-juegos', function (p) {
       return { s: c.s, t: c.t };
     },
     ask: function (d) {
-      return '<em>' + d.s + '</em><br>¿Qué tipo de juego es?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> dilema del prisionero ' +
-        '(lo racional individual perjudica a todos) · <code>2</code> juego de coordinación ' +
-        '(lo importante es ponerse de acuerdo, da igual en qué)</span>';
+      return '<em>' + d.s + '</em><br>¿Qué tipo de juego es?';
     },
-    fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],
-    sol: function (d) { return { t: d.t }; },
+    fields: [{ name: 't', label: 'Tipo', opts: [{ t: 'dilema del prisionero: lo racional individual perjudica a todos', v: '1' }, { t: 'juego de coordinación: lo importante es ponerse de acuerdo', v: '2' }] }],
+    sol: function (d) { return { t: String(d.t) }; },
     hint: function () { return 'Pregúntate: ¿hay tentación de traicionar al otro para salir ganando, o simplemente hace falta coincidir?'; },
     steps: function (d) {
       return ['En un <strong>dilema del prisionero</strong> cada uno tiene incentivo para traicionar, ' +
@@ -364,16 +388,10 @@ Course.topic('av-juegos', function (p) {
     ask: function (d) {
       return 'El rival juega, ronda a ronda: <strong>' + d.jugadas.slice(0, d.n).join(' · ') + '</strong> ' +
         '<span style="font-size:0.875rem;color:var(--ink-faint)">(C = coopera, T = traiciona)</span><br>' +
-        '¿Qué juega <em>Tit for Tat</em> en la ronda <strong>' + d.n + '</strong>?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>C</code> o <code>T</code>.</span>';
+        '¿Qué juega <em>Tit for Tat</em> en la ronda <strong>' + d.n + '</strong>?';
     },
-    fields: [{ name: 'j', label: 'Jugada', w: 'tiny', ph: 'C / T' }],
+    fields: [{ name: 'j', label: 'Jugada', opts: [{ t: 'C: coopera', v: 'C' }, { t: 'T: traiciona', v: 'T' }] }],
     sol: function (d) { return { j: d.res }; },
-    check: function (v, d) {
-      var t = v.raw.j.trim().toUpperCase();
-      if (t !== 'C' && t !== 'T') return { ok: false, msg: 'Escribe <code>C</code> o <code>T</code>.' };
-      return t === d.res;
-    },
     hint: function (d) {
       return d.n === 1 ? 'En la primera ronda siempre coopera.'
         : 'Copia lo que hizo el rival en la ronda anterior, que fue la ' + (d.n - 1) + '.';

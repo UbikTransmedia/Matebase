@@ -1,11 +1,12 @@
 /* Tema: Recurrencias y funciones generadoras */
 Course.topic('av-recurrencias', function (p) {
 
-  p.text('Muchas sucesiones no se definen con una fórmula para el término $n$, sino diciendo cómo se calcula ' +
+  p.puente('Muchas sucesiones no se definen con una fórmula para el término $n$, sino diciendo cómo se calcula ' +
     'cada término a partir de los anteriores. Es lo que en [[fn-sucesiones]] se llamaba una definición por ' +
     'recurrencia. La más famosa es la de Fibonacci: cada término es la suma de los dos anteriores. Pero aparecen ' +
     'por todas partes: en poblaciones que crecen, en préstamos que se amortizan y, sobre todo, al contar cuánto ' +
-    'tarda un algoritmo que se llama a sí mismo.');
+    'tarda un algoritmo que se llama a sí mismo. Para resolverlas basta una ecuación de segundo grado y un ' +
+    'sistema de dos ecuaciones.');
 
   p.text('La pregunta de este tema es cómo pasar de la regla a la fórmula: cómo saber cuánto vale el término ' +
     'mil sin calcular los novecientos noventa y nueve anteriores. Y la respuesta sale de sitios conocidos: una ' +
@@ -33,9 +34,29 @@ Course.topic('av-recurrencias', function (p) {
     'recurrencia se escribe con una matriz, $\\begin{pmatrix} a_{n+1} \\\\ a_n \\end{pmatrix} = \\begin{pmatrix} p & q \\\\ 1 & 0 \\end{pmatrix}' +
     '\\begin{pmatrix} a_n \\\\ a_{n-1} \\end{pmatrix}$, y las raíces $x_1$, $x_2$ son exactamente los autovalores de esa matriz.');
 
+  p.comprueba('La recurrencia $a_n = 2a_{n-1} + 3a_{n-2}$. ¿Cuáles son sus raíces características?', [
+    { t: '$3$ y $-1$', ok: true, por: '$x^2 = 2x + 3$, es decir, $x^2 - 2x - 3 = 0$, que factoriza como $(x - 3)(x + 1)$. Comprobación: suman 2 y su producto es $-3$.' },
+    { t: '$-3$ y $1$', ok: false, por: 'Eso sale de $x^2 + 2x - 3 = 0$, con los signos cambiados. La ecuación es $x^2 = px + q$: al pasar todo a un lado quedan $-p$ y $-q$.' },
+    { t: '$2$ y $3$', ok: false, por: '$p$ y $q$ no son las raíces: son los coeficientes. Las raíces se obtienen resolviendo $x^2 = 2x + 3$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Una recurrencia resuelta de principio a fin',
+    enunciado: 'Hallar el término general de $a_n = a_{n-1} + 2a_{n-2}$ con $a_0 = 2$ y $a_1 = 1$, y calcular $a_{10}$ sin pasar por los anteriores.',
+    pasos: [
+      { t: '<strong>Ecuación característica.</strong> $x^2 = x + 2$, o sea $x^2 - x - 2 = 0$: raíces $x_1 = 2$ y $x_2 = -1$.', antes: 'Prueba $a_n = x^n$. ¿Qué ecuación de segundo grado queda?' },
+      { t: '<strong>Solución general.</strong> $a_n = A\\cdot 2^n + B\\cdot(-1)^n$, para cualesquiera $A$ y $B$.' },
+      { t: '<strong>Los valores iniciales.</strong> $n = 0$: $A + B = 2$. $n = 1$: $2A - B = 1$. Sumando, $3A = 3$: $A = 1$, $B = 1$.', antes: 'Dos incógnitas, dos datos. Plantea el sistema y resuélvelo.' },
+      { t: '<strong>El término general.</strong> $a_n = 2^n + (-1)^n$. Comprobar con la recurrencia: $a_2 = 4 + 1 = 5$, y también $a_1 + 2a_0 = 1 + 4 = 5$ ✓. $a_3 = 8 - 1 = 7$, y $a_2 + 2a_1 = 5 + 2 = 7$ ✓.', antes: 'Calcula $a_2$ de las dos maneras. ¿Coinciden?' },
+      { t: '<strong>$a_{10}$ directo.</strong> $2^{10} + (-1)^{10} = 1024 + 1 = 1025$. Sin la fórmula habría que calcular nueve términos; con ella, una potencia.' }
+    ],
+    cierre: 'La raíz 2 manda: a la larga $a_n \\approx 2^n$ y el $(-1)^n$ solo añade o quita 1. En la demo de arriba se ve como el cociente $a_n/a_{n-1}$ acercándose a 2.'
+  });
+
   p.demo({
     title: 'Una recurrencia y su ecuación característica',
     intro: 'Elige los coeficientes p y q y los dos primeros términos. Arriba, los términos; abajo, el cociente entre cada término y el anterior, con las raíces marcadas a trazos. Cuando las raíces son reales, el cociente acaba pegándose a la de mayor valor absoluto: esa raíz es la que manda. Con raíces complejas, la sucesión oscila.',
+    predice: 'Pon $p = 1$, $q = 2$, $a_0 = 2$ y $a_1 = 1$: la recurrencia del ejemplo. ¿A qué valor se acercará el cociente de abajo? ¿Y si pones $q = -2$: seguirá acercándose a algo?',
     build: function (host) {
       var pp = 1, qq = 1, a0 = 0, a1 = 1, N = 16;
       var out = W.readout(host, '');
@@ -120,6 +141,13 @@ Course.topic('av-recurrencias', function (p) {
     'una recurrencia: ordenar una lista partiéndola en dos mitades cuesta $T(n) = 2\\,T(\\frac{n}{2}) + n$, y de ahí ' +
     'sale que tarda del orden de $n\\log n$ (lo verás en [[av-complejidad]]). Las cuotas de un préstamo cumplen ' +
     '$s_{n+1} = (1 + i)\\,s_n - c$, una recurrencia de orden 1 como las de [[fn-finanzas]].');
+
+  p.trampas([
+    { e: 'Tomar $p$ y $q$ como raíces', por: 'Son los coeficientes. Las raíces salen de $x^2 = px + q$; para Fibonacci, $p = q = 1$ y las raíces son $1{,}618$ y $-0{,}618$.' },
+    { e: 'Equivocar los signos al pasar la ecuación a un lado', por: '$x^2 = px + q$ se convierte en $x^2 - px - q = 0$. Con $p = 2$, $q = 3$ sale $x^2 - 2x - 3$, no $x^2 + 2x + 3$.' },
+    { e: 'Fijar $A$ y $B$ con $a_1$ y $a_2$ en vez de con $a_0$ y $a_1$', por: 'Vale cualquier par de términos, pero hay que sustituir el $n$ correcto en cada uno: $a_2 = A x_1^2 + B x_2^2$, no $A x_1 + B x_2$.' },
+    { e: 'Creer que la fórmula de Binet da decimales', por: 'Lleva $\\sqrt 5$ por todas partes y aun así da enteros exactos, porque las partes irracionales se cancelan. Redondeando $\\varphi^n/\\sqrt 5$ se obtiene $F_n$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

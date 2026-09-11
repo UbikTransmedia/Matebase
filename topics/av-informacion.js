@@ -1,6 +1,10 @@
 /* Tema: Teoría de la información y entropía */
 Course.topic('av-informacion', function (p) {
 
+  p.puente('Aquí se juntan dos cosas ya vistas: la [[pe-probabilidad|probabilidad]] de un suceso y el ' +
+    '[[fn-exp-log|logaritmo]], en base 2. Con ellas se define una medida de la información que resulta ' +
+    'ser un límite físico, y que explica por qué un archivo comprimido no se comprime más.');
+
   p.text('¿Se puede <strong>medir</strong> la información? ¿Cuánta hay en un mensaje? En 1948, Claude ' +
     'Shannon publicó un artículo que respondía a esas preguntas con una precisión asombrosa, y de él ' +
     'salió la era digital entera: internet, el móvil, los códigos correctores, la compresión de datos.');
@@ -32,9 +36,29 @@ Course.topic('av-informacion', function (p) {
 
   p.formula('H = -\\sum_i p_i \\log_2 p_i', 'entropía de Shannon, en bits por símbolo');
 
+  p.comprueba('Una moneda trucada sale cara el 90 % de las veces. ¿Su entropía es mayor o menor que la de una moneda justa?', [
+    { t: 'Menor: casi siempre se sabe lo que va a salir', ok: true, por: '$H = -0{,}9\\log_2 0{,}9 - 0{,}1\\log_2 0{,}1 \\approx 0{,}47$ bits, frente a 1 bit de la justa. Menos incertidumbre, menos información por lanzamiento, más fácil de comprimir.' },
+    { t: 'Mayor: la cruz, cuando sale, informa muchísimo', ok: false, por: 'La cruz aporta $\\log_2 10 \\approx 3{,}3$ bits, pero sale una vez de diez. La entropía es la <em>media</em>, y la media está dominada por las caras, que aportan casi nada.' },
+    { t: 'Igual: sigue habiendo dos resultados', ok: false, por: 'El número de resultados no basta; importan sus probabilidades. Con dos resultados la entropía va de 0 (seguro) a 1 bit (equiprobables).' }
+  ]);
+
+  p.ejemplo({
+    title: 'Entropía y código óptimo de una fuente de cuatro símbolos',
+    enunciado: 'Una fuente emite A, B, C y D con probabilidades $\\frac{1}{2}$, $\\frac{1}{4}$, $\\frac{1}{8}$ y $\\frac{1}{8}$. Calcular su entropía, proponer un código y codificar el mensaje ABAC.',
+    pasos: [
+      { t: '<strong>Información de cada símbolo.</strong> $I(A) = \\log_2 2 = 1$ bit, $I(B) = \\log_2 4 = 2$, $I(C) = I(D) = \\log_2 8 = 3$. Lo raro informa más.', antes: '$I = \\log_2(1/p)$. ¿Cuántos bits aporta cada símbolo?' },
+      { t: '<strong>Entropía.</strong> Media ponderada: $H = \\frac{1}{2}\\cdot 1 + \\frac{1}{4}\\cdot 2 + \\frac{1}{8}\\cdot 3 + \\frac{1}{8}\\cdot 3 = 0{,}5 + 0{,}5 + 0{,}375 + 0{,}375 = 1{,}75$ bits por símbolo.', antes: 'Pesa cada información por su probabilidad y suma.' },
+      { t: '<strong>Un código.</strong> Corto para lo frecuente: A = 0, B = 10, C = 110, D = 111. Ningún código es el principio de otro, así que se decodifica sin separadores.' },
+      { t: '<strong>Longitud media.</strong> $\\frac{1}{2}\\cdot 1 + \\frac{1}{4}\\cdot 2 + \\frac{1}{8}\\cdot 3 + \\frac{1}{8}\\cdot 3 = 1{,}75$ bits: exactamente la entropía. El código es óptimo; Shannon dice que no se puede bajar de ahí.', antes: 'Calcula la longitud media del código. ¿Cómo se compara con $H$?' },
+      { t: '<strong>ABAC.</strong> $0\\,10\\,0\\,110$: 7 bits. Con un código fijo de 2 bits por símbolo serían 8. Y leyendo $0100110$ de izquierda a derecha se recupera ABAC sin ambigüedad.' }
+    ],
+    cierre: 'La entropía sale exacta porque las probabilidades son potencias de 2. Con otras probabilidades el mejor código se queda un poco por encima de $H$, pero nunca por debajo: ese es el teorema.'
+  });
+
   p.demo({
     title: 'Entropía de una moneda trucada',
     intro: 'Cambia la probabilidad de cara. La entropía es máxima cuando la moneda es justa, y cae a cero cuando el resultado es seguro.',
+    predice: 'Con $p = 0{,}9$ la entropía es unos 0,47 bits. ¿Con $p = 0{,}1$ será la misma, mayor o menor? Piensa en la simetría del problema.',
     build: function (host, d) {
       var prob = 0.5;
       var out = W.readout(host, '');
@@ -93,6 +117,7 @@ Course.topic('av-informacion', function (p) {
   p.demo({
     title: 'Codificar según la frecuencia',
     intro: 'Compara un código de longitud fija con uno que da códigos cortos a lo frecuente. Cambia lo desigual que es la fuente y mira el ahorro.',
+    predice: 'Con el deslizador en 1 los cuatro símbolos son equiprobables. ¿La entropía será 2 bits, más o menos? ¿Y el código variable mejorará al fijo, o lo empeorará?',
     build: function (host, d) {
       var sesgo = 0.6;
       var out = W.readout(host, '');
@@ -196,6 +221,13 @@ Course.topic('av-informacion', function (p) {
     'nombre; y segundo, y más importante, nadie sabe realmente qué es la entropía, así que en una ' +
     'discusión siempre llevarás ventaja». La coincidencia, sin embargo, es profunda: información y ' +
     'desorden son la misma magnitud vista desde dos sitios.');
+
+  p.trampas([
+    { e: 'Confundir información con importancia', por: '«Mañana saldrá el sol» es importante y aporta 0 bits. La información mide sorpresa, no valor.' },
+    { e: 'Usar el logaritmo en base 10 o natural', por: 'La unidad bit exige base 2: una moneda justa da $\\log_2 2 = 1$ bit. Con $\\ln$ saldría 0,69, que no es un bit.' },
+    { e: '«Más símbolos, más entropía»', por: 'Una fuente de 100 símbolos en la que uno sale el 99 % de las veces tiene menos entropía que una moneda justa. Cuentan las probabilidades, no el alfabeto.' },
+    { e: 'Creer que un archivo se puede comprimir indefinidamente', por: 'Un ZIP ya está cerca de la entropía; volver a comprimirlo no gana nada. Y un compresor que redujera <em>todo</em> archivo es imposible: dos archivos distintos acabarían iguales.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

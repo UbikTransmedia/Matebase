@@ -1,6 +1,12 @@
 /* Tema: Teoría de grafos */
 Course.topic('av-grafos', function (p) {
 
+  p.puente('Este bloque trata de lo que se puede contar y calcular con objetos discretos: puntos y ' +
+    'líneas, sucesiones, pasos de un algoritmo, bits, jugadas. Las herramientas son las de siempre, ' +
+    'contar como en [[pe-combinatoria|combinatoria]], sumar y tomar logaritmos, y la idea de la ' +
+    '[[av-topologia|topología]] de que la forma exacta no importa, solo las conexiones. Se empieza por el ' +
+    'objeto más sencillo de todos.', 'Por dónde empezamos');
+
   p.text('Un <strong>grafo</strong> es lo más simple que se puede imaginar: unos puntos ' +
     '(<em>vértices</em>) y unas líneas que los unen (<em>aristas</em>). Nada más. Y con eso se ' +
     'modelan las redes sociales, el metro, internet, las rutas de reparto, las moléculas, los horarios ' +
@@ -10,11 +16,9 @@ Course.topic('av-grafos', function (p) {
     'puntos o si las líneas son rectas o curvas da exactamente igual: es topología pura.');
 
   p.section('Vocabulario mínimo');
-  p.text('Un grafo es lo más sencillo que se puede imaginar: unos puntos y unas líneas que unen algunos ' +
-    'de ellos. Nada más. Lo asombroso es cuántas cosas encajan en esa descripción —una red de metro, ' +
-    'las amistades de una red social, las páginas de internet enlazadas entre sí, las tareas de una ' +
-    'obra con sus dependencias— y que todas se estudian con las mismas herramientas. Antes hace ' +
-    'falta media docena de palabras.');
+  p.text('Que cosas tan distintas como una red de metro, las amistades de una red social o las tareas ' +
+    'de una obra con sus dependencias se estudien con las mismas herramientas exige antes media docena ' +
+    'de palabras.');
 
 
   p.list([
@@ -37,6 +41,12 @@ Course.topic('av-grafos', function (p) {
     'participan dos. Y de ahí sale un corolario curioso: <strong>el número de personas que han dado ' +
     'un número impar de apretones es siempre par</strong>.', 'ok');
 
+  p.comprueba('¿Puede existir un grafo con exactamente un vértice de grado impar?', [
+    { t: 'Sí: basta dibujarlo', ok: false, por: 'Inténtalo: cada arista que añadas cambia el grado de <em>dos</em> vértices. La suma de grados es siempre par, y con un solo impar sería impar.' },
+    { t: 'No: la suma de grados es $2A$, un número par', ok: true, por: 'Si todos los demás grados son pares y hay uno impar, la suma es impar, y $2A$ no puede serlo. Los vértices de grado impar van siempre por parejas.' },
+    { t: 'Solo si el grafo no es conexo', ok: false, por: 'La conexión no influye: el lema del apretón de manos vale para cualquier grafo, conexo o no.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.section('Los puentes de Königsberg');
 
@@ -54,9 +64,23 @@ Course.topic('av-grafos', function (p) {
     '\\text{recorrido euleriano abierto} \\iff \\text{exactamente dos grados impares}'
   ]);
 
+  p.ejemplo({
+    title: 'El sobre abierto, de un trazo',
+    enunciado: 'El «sobre abierto» tiene cinco vértices: las cuatro esquinas de un cuadrado (1, 2, 3, 4) y la punta (5). Sus ocho aristas son los cuatro lados, las dos diagonales y los dos lados de la punta, que une 3 y 4. ¿Se puede dibujar sin levantar el lápiz ni repetir línea?',
+    pasos: [
+      { t: '<strong>Los grados.</strong> Esquinas de abajo, 1 y 2: dos lados y una diagonal cada una, grado 3. Esquinas de arriba, 3 y 4: dos lados, una diagonal y el lado de la punta, grado 4. La punta, 5: grado 2.', antes: 'Cuenta cuántas aristas salen de cada vértice.' },
+      { t: '<strong>Comprobar con el lema.</strong> $3 + 3 + 4 + 4 + 2 = 16 = 2\\cdot 8$ ✓. Si la suma no diera el doble de las aristas, algún grado estaría mal contado.' },
+      { t: '<strong>Los impares.</strong> Hay exactamente dos vértices de grado impar, el 1 y el 2. Por la regla de Euler, se puede recorrer de un trazo, pero solo empezando en uno de ellos y acabando en el otro.', antes: '¿Cuántos grados impares hay? ¿Qué dice la regla?' },
+      { t: '<strong>Por qué.</strong> En un vértice por el que se <em>pasa</em> hay que entrar y salir: sus aristas se gastan de dos en dos, y su grado tiene que ser par. Solo la salida y la llegada pueden ser impares.' },
+      { t: '<strong>Y la casita.</strong> Si se quita la diagonal que une 1 y 3... no: si se quita la diagonal entre las esquinas de abajo, quedan 1 y 2 con grado 2, y los impares pasan a ser 3 y 4. Sigue siendo de un trazo, empezando arriba. Con las dos diagonales quitadas, todos los grados son pares y además se acaba donde se empezó.', antes: 'Quita una arista. ¿Cómo cambian los grados y la respuesta?' }
+    ],
+    cierre: 'No hace falta probar recorridos: basta contar grados. Es la diferencia entre un puzle y un teorema, y es exactamente lo que hizo Euler con los puentes de Königsberg, donde los cuatro vértices son impares.'
+  });
+
   p.demo({
     title: '¿Se puede dibujar de un trazo?',
     intro: 'Un grafo se puede recorrer pasando una sola vez por cada arista si tiene cero o dos vértices de grado impar. Comprueba la regla con estos ejemplos.',
+    predice: 'La estrella de 4 puntas tiene un centro de grado 4 y cuatro puntas de grado 1. ¿Cuántos impares hay? ¿Se podrá dibujar de un trazo?',
     build: function (host, d) {
       var idx = 0;
       var grafos = [
@@ -162,6 +186,7 @@ Course.topic('av-grafos', function (p) {
   p.demo({
     title: 'Camino más corto en una red',
     intro: 'Los números son las distancias de cada tramo. Elige el destino y se marca la ruta más corta desde A, con su longitud total.',
+    predice: 'De A a D hay un camino directo por B de longitud $4 + 5 = 9$ y otro por C de $2 + 8 = 10$. ¿Será alguno de los dos el más corto, o hay uno mejor con más tramos?',
     build: function (host, d) {
       var destino = 5;
       var V = [[1, 3], [3.2, 5.4], [3.4, 1], [5.6, 4.4], [5.8, 1.6], [8, 3.2]];
@@ -252,6 +277,13 @@ Course.topic('av-grafos', function (p) {
     'posibles. Si alguien encontrara un algoritmo rápido, resolvería de paso el problema P vs NP, uno ' +
     'de los siete Problemas del Milenio, con un premio de un millón de dólares.', null, 'Un millón de dólares');
 
+  p.trampas([
+    { e: 'Juzgar un grafo por su dibujo', por: 'Dos dibujos muy distintos pueden ser el mismo grafo, y uno con líneas cruzadas puede ser plano. Solo cuentan los vértices y quién se une con quién.' },
+    { e: 'Buscar el recorrido de un trazo probando', por: 'Con cuatro vértices impares no hay recorrido, y probar nunca lo demuestra. Contar grados lo decide en un segundo.' },
+    { e: '«La ruta más corta es la de menos tramos»', por: 'De A a D, dos tramos suman 9 y tres tramos suman 8. Lo que se minimiza es la longitud total, no el número de paradas.' },
+    { e: 'Confundir euleriano con hamiltoniano', por: 'Euleriano recorre todas las <em>aristas</em>; hamiltoniano, todos los <em>vértices</em>. El primero se decide contando grados; el segundo es de los problemas más difíciles que existen.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Que un problema tenga solución eficiente y su gemelo no la tenga es el corazón de la pregunta ' +
     'abierta más importante de la informática, la de P frente a NP, con un premio de un millón de ' +
@@ -323,12 +355,10 @@ Course.topic('av-grafos', function (p) {
     },
     ask: function (d) {
       return 'Un grafo conexo tiene vértices de grados $' + d.grados.join(',\\ ') + '$. ' +
-        '¿Admite un recorrido que pase una sola vez por cada arista?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> sí, cerrado (vuelve al ' +
-        'inicio) · <code>2</code> sí, pero abierto · <code>3</code> no se puede</span>';
+        '¿Admite un recorrido que pase una sola vez por cada arista?';
     },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny' }],
-    sol: function (d) { return { r: d.ok }; },
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'sí, cerrado (vuelve al inicio)', v: '1' }, { t: 'sí, pero abierto', v: '2' }, { t: 'no se puede', v: '3' }] }],
+    sol: function (d) { return { r: String(d.ok) }; },
     hint: function () { return 'Cuenta cuántos grados impares hay: cero permite recorrido cerrado, dos permiten abierto, más de dos lo impiden.'; },
     steps: function (d) {
       return ['Contamos los vértices de grado impar: hay <strong>' + d.impares + '</strong>.',

@@ -1,11 +1,12 @@
 /* Tema: Complejidad: lo facil, lo dificil y P frente a NP */
 Course.topic('av-complejidad', function (p) {
 
-  p.text('En [[av-computabilidad]] se vio que hay problemas que ningún ordenador puede resolver, ni con todo el ' +
+  p.puente('En [[av-computabilidad]] se vio que hay problemas que ningún ordenador puede resolver, ni con todo el ' +
     'tiempo del mundo. Pero entre los problemas que sí se pueden resolver hay otra frontera, más práctica y ' +
     'igual de profunda: la que separa los que se resuelven <strong>en segundos</strong> de los que no terminarían ' +
     '<strong>antes del fin del universo</strong>, aunque el algoritmo sea correcto y el ordenador, el más rápido ' +
-    'que existe.');
+    'que existe. Para medirla bastan las potencias, los logaritmos y la comparación de infinitos de ' +
+    '[[fn-limites|límites]].');
 
   /* ---------------------------------------------------------------- */
   p.section('El coste de un algoritmo y la notación O');
@@ -31,9 +32,28 @@ Course.topic('av-complejidad', function (p) {
     ['$O(n!)$', 'factorial', 'probar todos los órdenes', 'un número de 2568 cifras']
   ]);
 
+  p.comprueba('Un algoritmo de coste $2^n$ tarda un día con $n = 40$. Se compra un ordenador mil veces más rápido. ¿Hasta qué $n$ llega ahora en un día?', [
+    { t: 'Hasta $n = 40\\,000$: mil veces más', ok: false, por: 'Mil veces más rápido no significa mil veces más grande. Cada unidad de $n$ <em>duplica</em> el trabajo, así que mil veces solo compra $\\log_2 1000 \\approx 10$ unidades.' },
+    { t: 'Hasta $n = 50$: diez más', ok: true, por: '$2^{50} = 2^{40}\\cdot 2^{10} \\approx 2^{40}\\cdot 1000$. La mejora de hardware apenas mueve la frontera; un algoritmo cuadrático con la misma mejora multiplicaría el tamaño por 31.' },
+    { t: 'Hasta $n = 80$: el doble', ok: false, por: 'Doblar $n$ multiplicaría el trabajo por $2^{40}$, un billón. Mil veces más velocidad no llega ni de lejos.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Cuánto tarda de verdad',
+    enunciado: 'Un ordenador hace $10^9$ pasos por segundo. Estimar cuánto tarda un algoritmo $O(n^2)$ con $n = 10^6$ y uno $O(2^n)$ con $n = 30$, $n = 40$ y $n = 60$.',
+    pasos: [
+      { t: '<strong>Cuadrático, un millón de datos.</strong> $n^2 = 10^{12}$ pasos; entre $10^9$ por segundo, $1000$ segundos: unos 17 minutos. Mucho, pero se hace.', antes: '$10^6$ al cuadrado son $10^{12}$. ¿Cuántos segundos son a $10^9$ por segundo?' },
+      { t: '<strong>Exponencial, $n = 30$.</strong> $2^{30} \\approx 10^9$: un segundo. Parece inofensivo.' },
+      { t: '<strong>$n = 40$.</strong> $2^{40} = 2^{30}\\cdot 2^{10} \\approx 10^9\\cdot 1000 = 10^{12}$: mil segundos, los mismos 17 minutos que el cuadrático con un millón de datos. Diez datos más han costado lo mismo que multiplicar por un millón el tamaño en el otro.', antes: 'Cada 10 unidades de $n$, $2^n$ se multiplica por 1024. ¿Cuánto es $2^{40}$?' },
+      { t: '<strong>$n = 60$.</strong> $2^{60} \\approx 10^{18}$ pasos: $10^9$ segundos, unos 32 años. Con $n = 70$, 32 000 años. La frontera de lo posible está entre 40 y 50, y ningún ordenador la mueve más que unos pocos puntos.', antes: '¿Y con $n = 60$? Cuenta cuántos segundos tiene un año, unos $3\\cdot 10^7$.' }
+    ],
+    cierre: 'El cuadrático abarca millones; el exponencial se ahoga en decenas. Esa diferencia no es de grado sino de clase, y es lo que separa P de lo que hay fuera.'
+  });
+
   p.demo({
     title: 'Cuánto tarda cada algoritmo',
     intro: 'Pasos que da cada tipo de algoritmo según el tamaño n, en escala logarítmica: cada unidad del eje vertical es multiplicar por 10. Las líneas horizontales marcan lo que tarda un ordenador que hace mil millones de pasos por segundo en un segundo, un día, un siglo y la edad del universo. Mueve n.',
+    predice: 'Según el ejemplo, $2^n$ tarda un segundo con $n = 30$. ¿En qué $n$ cruzará la línea de «un día»? ¿Y $n!$: antes o después que $2^n$?',
     build: function (host) {
       var n = 30;
       function logFact(x) { var s = 0, k; for (k = 2; k <= Math.floor(x); k++) s += Math.log(k) / Math.LN10; return s + (x - Math.floor(x)) * Math.log(Math.floor(x) + 1) / Math.LN10; }
@@ -104,6 +124,7 @@ Course.topic('av-complejidad', function (p) {
   p.demo({
     title: 'Comprobar es fácil; encontrar, no tanto',
     intro: 'Elige números de la lista para que sumen exactamente 100. Comprobar tu propuesta es inmediato: basta sumar. Encontrarla ya no lo es: con 12 números hay 4096 subconjuntos posibles. Pide al ordenador que los pruebe en orden y mira cuántos intentos le cuesta.',
+    predice: 'Intenta primero encontrar tú una combinación que sume 100. ¿Cuántos intentos te ha costado? Luego mira en qué intento la encuentra el ordenador probando en orden.',
     build: function (host) {
       var nums = [3, 34, 4, 12, 5, 2, 27, 18, 9, 41, 16, 7], objetivo = 100, elegidos = [];
       nums.forEach(function () { elegidos.push(false); });
@@ -164,6 +185,13 @@ Course.topic('av-complejidad', function (p) {
     'verifican sus diseños con programas que resuelven el problema SAT, el primer NP-completo conocido, y que ' +
     'funcionan asombrosamente bien con los casos que aparecen en la práctica, aunque en el peor caso sean ' +
     'exponenciales.');
+
+  p.trampas([
+    { e: 'Medir un algoritmo en segundos', por: 'Los segundos dependen del ordenador. Se cuentan pasos en función de $n$, y se mira cómo crecen: $O(n^2)$ hoy y dentro de veinte años.' },
+    { e: 'Creer que un ordenador más rápido arregla lo exponencial', por: 'Mil veces más velocidad con $2^n$ solo suma 10 al tamaño abarcable. Con $n^2$ lo multiplica por 31. La mejora real siempre es el algoritmo.' },
+    { e: '«Está en NP, luego es difícil»', por: 'NP significa que la solución se <em>comprueba</em> deprisa. Todo P está en NP. Lo difícil (si P ≠ NP) son los NP-completos, no cualquier problema de NP.' },
+    { e: 'Creer que la criptografía está demostrada segura', por: 'Factorizar y el logaritmo discreto se creen difíciles; no está demostrado, ni siquiera que sean NP-completos. Internet descansa sobre una conjetura razonable.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

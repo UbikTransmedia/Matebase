@@ -1,6 +1,11 @@
 /* Tema: Análisis numérico */
 Course.topic('av-numerico', function (p) {
 
+  p.puente('Dos ideas del análisis vuelven aquí como herramientas de trabajo: el teorema de Bolzano de ' +
+    '[[fn-continuidad|continuidad]], que garantiza que hay una raíz, y la recta tangente de ' +
+    '[[fn-derivadas|derivadas]], que dice dónde buscarla. Con ellas se resuelven ecuaciones que no tienen ' +
+    'fórmula, que son casi todas.');
+
   p.text('Casi todo lo que has aprendido a resolver tiene fórmula: la ecuación de segundo grado, las ' +
     'integrales inmediatas, los sistemas lineales. Pero la inmensa mayoría de los problemas reales ' +
     '<strong>no tienen fórmula</strong>. No es que sea difícil encontrarla: es que se ha demostrado ' +
@@ -26,9 +31,23 @@ Course.topic('av-numerico', function (p) {
 
   p.formula('|error| \\le \\frac{b-a}{2^n}', 'tras n pasos');
 
+  p.ejemplo({
+    title: 'Bisección y Newton sobre la misma ecuación',
+    enunciado: 'Resolver $x^3 - x - 2 = 0$ en $[1, 2]$: tres pasos de bisección y tres de Newton desde $x_0 = 2$. La raíz vale $1{,}52138$.',
+    pasos: [
+      { t: '<strong>Bolzano.</strong> $f(1) = -2 < 0$ y $f(2) = 4 > 0$: hay una raíz en $[1, 2]$.' },
+      { t: '<strong>Bisección.</strong> $m = 1{,}5$: $f = -0{,}125 < 0$, la raíz está en $[1{,}5,\\ 2]$. $m = 1{,}75$: $f = 1{,}61 > 0$, queda $[1{,}5,\\ 1{,}75]$. $m = 1{,}625$: $f = 0{,}67 > 0$, queda $[1{,}5,\\ 1{,}625]$. Error garantizado: $\\frac{1}{8} = 0{,}125$.', antes: 'Evalúa $f$ en $1{,}5$. ¿Con qué mitad te quedas?' },
+      { t: '<strong>Newton.</strong> $f\'(x) = 3x^2 - 1$. Desde $x_0 = 2$: $x_1 = 2 - \\frac{4}{11} = 1{,}6364$. $x_2 = 1{,}6364 - \\frac{0{,}7455}{7{,}033} = 1{,}5304$. $x_3 = 1{,}5304 - \\frac{0{,}0540}{6{,}026} = 1{,}5214$.', antes: 'Traza la tangente en $x = 2$: pendiente 11, altura 4. ¿Dónde corta al eje?' },
+      { t: '<strong>Comparar.</strong> Tras tres pasos, la bisección sabe que la raíz está en un intervalo de anchura $0{,}125$; Newton tiene ya cuatro cifras correctas, error $\\approx 10^{-4}$. Un paso más de Newton daría ocho cifras.', antes: '¿Cuántas cifras correctas tiene cada método tras tres pasos?' },
+      { t: '<strong>El precio.</strong> Si Newton hubiera empezado en $x_0 = 0{,}58$, donde $f\' \\approx 0$, la tangente sería casi horizontal y el primer salto se iría a $x_1 \\approx -400$. La bisección no tiene ese problema: es lenta, pero nunca se despista.' }
+    ],
+    cierre: 'Por eso los programas serios combinan los dos: bisección para acercarse sin riesgo y Newton para rematar en tres pasos. Velocidad y robustez, cada una en su sitio.'
+  });
+
   p.demo({
     title: 'Bisección paso a paso',
     intro: 'Cada paso divide el intervalo por la mitad. Es lento pero nunca falla: el error se divide entre dos garantizado.',
+    predice: 'El ejemplo llega a $[1{,}5,\\ 1{,}625]$ en tres pasos. ¿Cuántos pasos harán falta para que el error garantizado baje de 0,001? Piensa en cuántas veces hay que dividir 1 entre 2.',
     build: function (host, d) {
       var f = function (x) { return x * x * x - x - 2; };
       var a0 = 1, b0 = 2;
@@ -98,9 +117,16 @@ Course.topic('av-numerico', function (p) {
     'necesita 4 o 5. Es el algoritmo que usa tu calculadora para las raíces cuadradas.',
     'ok', 'Por qué se usa Newton y no bisección');
 
+  p.comprueba('Newton es muchísimo más rápido que la bisección. ¿Por qué no se usa siempre?', [
+    { t: 'Porque necesita la derivada, y a veces no se tiene', ok: false, por: 'Es una pega real, pero menor: la derivada se puede aproximar numéricamente. El problema grave es otro.' },
+    { t: 'Porque puede no converger: si la tangente es casi horizontal, el salto se va lejos', ok: true, por: 'Cerca de un punto con $f\' \\approx 0$ la tangente corta el eje a kilómetros. Y hay puntos de partida que hacen que el método entre en un ciclo. La bisección nunca falla; Newton hay que vigilarlo.' },
+    { t: 'Porque solo funciona con polinomios', ok: false, por: 'Funciona con cualquier función derivable: $\\cos x - x$, $e^{-x} - x$, lo que sea. Su límite no está en el tipo de función sino en el punto de partida.' }
+  ]);
+
   p.demo({
     title: 'Newton-Raphson',
     intro: 'Desde el punto elegido se traza la tangente y se salta a donde corta el eje. Mira cuántos decimales se ganan en cada paso.',
+    predice: 'Pon el punto de partida en 1,1, cerca de donde la derivada $3x^2 - 1$ es pequeña. ¿El primer salto caerá cerca de la raíz o se irá lejos?',
     build: function (host, d) {
       var f = function (x) { return x * x * x - x - 2; };
       var fp = function (x) { return 3 * x * x - 1; };
@@ -184,6 +210,7 @@ Course.topic('av-numerico', function (p) {
   p.demo({
     title: 'Trapecios contra Simpson',
     intro: 'Aproximaciones de la misma integral. Compara los errores con el mismo número de subintervalos: Simpson gana por goleada.',
+    predice: 'Con $n = 4$, ¿cuántas veces más pequeño crees que será el error de Simpson que el de trapecios: 2, 10, 100? Y al doblar $n$, ¿cuánto baja cada uno?',
     build: function (host, d) {
       var n = 4;
       var f = function (x) { return Math.exp(-x * x); };
@@ -246,6 +273,13 @@ Course.topic('av-numerico', function (p) {
     'en una de las raíces por culpa de la resta $-b+\\sqrt{b^2-4c}$. La solución es calcular esa raíz ' +
     'como $\\frac{2c}{-b-\\sqrt{b^2-4c}}$, que es algebraicamente idéntico y numéricamente muchísimo ' +
     'mejor. Misma matemática, resultados distintos.', 'warn', 'La misma fórmula, mejor escrita');
+
+  p.trampas([
+    { e: 'Dar el punto medio como «la raíz» tras pocos pasos', por: 'Tras 3 pasos en $[1, 2]$ el error puede ser 0,125. La bisección da un intervalo, no un número; la raíz es lo que hay dentro.' },
+    { e: 'Empezar Newton donde $f\' \\approx 0$', por: 'La tangente casi horizontal corta el eje lejísimos. Conviene empezar cerca de la raíz, o dar antes unos pasos de bisección.' },
+    { e: 'Usar Simpson con un número impar de subintervalos', por: 'Simpson agrupa los subintervalos de dos en dos para poner una parábola en cada pareja. Con $n$ impar sobra uno.' },
+    { e: 'Creer que dos fórmulas iguales dan lo mismo en el ordenador', por: 'Restar dos números casi iguales borra cifras. $-b + \\sqrt{b^2 - 4c}$ y $\\frac{2c}{-b - \\sqrt{b^2 - 4c}}$ son idénticas en papel y muy distintas en coma flotante.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('El error numérico ha costado vidas. En 1991, una batería Patriot falló al interceptar un misil ' +
