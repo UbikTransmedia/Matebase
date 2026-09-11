@@ -57,6 +57,9 @@
         </span>
         <button class="mini" id="resetBtn" type="button" title="Borrar el progreso guardado">Reiniciar</button>
       </div>
+      <!-- La version, en la esquina inferior izquierda. El numero vive en
+           assets/js/version.js y lo escribe app.js al arrancar. -->
+      <div class="side__ver" id="version"></div>
     </div>
   </aside>
 
@@ -102,6 +105,7 @@
 </div>
 
 <!-- ============ núcleo (orden obligatorio) ============ -->
+<script src="assets/js/version.js"></script>
 <script src="assets/js/core/util.js"></script>
 <script src="assets/js/core/mathx.js"></script>
 <script src="assets/js/core/mathlib.js"></script>

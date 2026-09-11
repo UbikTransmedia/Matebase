@@ -48,7 +48,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
 <script>
   (function () {
     var t = '?t=' + Date.now();
-    ['core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
+    ['version', 'core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
      'core/shader', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
      'glosario', 'glsl'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
@@ -72,6 +72,11 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     good ? ok(name) : ko(name, got, want);
   }
   function truthy(name, v) { v ? ok(name) : ko(name, v, 'algo verdadero'); }
+
+  /* ---------------- version ---------------- */
+  group('versión');
+  truthy('hay un número de versión', typeof window.MATEBASE_VERSION === 'string' && window.MATEBASE_VERSION !== '');
+  truthy('la versión tiene la forma MAYOR.MENOR.PARCHE', /^\d+\.\d+\.\d+$/.test(String(window.MATEBASE_VERSION)));
 
   /* ---------------- mathlib: enteros ---------------- */
   group('mathlib · aritmética entera');

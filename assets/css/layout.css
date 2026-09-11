@@ -70,6 +70,13 @@
 }
 .side__foot .mini:hover{border-color:var(--accent); color:var(--accent)}
 .side__foot .grow{flex:1}
+/* La version, en la esquina inferior izquierda: se lee si se busca y no
+   compite con nada. */
+.side__ver{
+  margin-top:-2px; font-size:0.6875rem; line-height:1.2; letter-spacing:.01em;
+  color:var(--ink-faint); font-variant-numeric:tabular-nums;
+}
+.side__ver:empty{display:none}
 
 /* Selector de tema: los tres a la vista, y el activo se distingue solo. */
 .themes{

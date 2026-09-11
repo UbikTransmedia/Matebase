@@ -140,6 +140,7 @@ matebase/
 │       ├── curriculum.js ← EL TEMARIO (el único sitio donde se decide qué hay)
 │       ├── glosario.js   ← EL VOCABULARIO (un término por entrada)
 │       ├── glsl.js       ← LA REFERENCIA DEL LENGUAJE DE LOS SHADERS
+│       ├── version.js    ← LA VERSIÓN (se cambia aquí y sale en el pie del índice)
 │       └── core/         ← el motor, compartido por todos los temas
 └── topics/               ← un archivo por tema
 ```

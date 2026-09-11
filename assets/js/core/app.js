@@ -1042,6 +1042,11 @@
         if (!ruta().id) renderHome();
       }
     });
+
+    // La version, en la esquina inferior izquierda del indice. El numero
+    // solo se cambia en version.js.
+    var version = U.$('#version');
+    if (version && global.MATEBASE_VERSION) version.textContent = 'versión ' + global.MATEBASE_VERSION;
     U.$('#burger').addEventListener('click', function () {
       U.$('.side').classList.toggle('is-open');
       U.$('.scrim').classList.toggle('is-on');

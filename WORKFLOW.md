@@ -151,6 +151,18 @@ Cada bloque se entregó en un commit con las pruebas en verde.
 - Un modo profesor para montar simulacros a medida eligiendo temas.
 - Exportar e importar el progreso para cambiar de ordenador.
 
+## Versiones
+
+La versión vive en `assets/js/version.js` y se ve en la esquina inferior izquierda
+del índice. Sigue el esquema MAYOR.MENOR.PARCHE:
+
+- **MAYOR**: cambios que reorganizan el temario u obligan a reiniciar el progreso guardado.
+- **MENOR**: temas, bloques o herramientas nuevas.
+- **PARCHE**: correcciones, sin contenido nuevo.
+
+Se sube en el mismo commit que el cambio, y `tests.html` comprueba que tiene ese
+formato. La primera versión numerada es la 1.0.0, con 164 temas.
+
 ---
 
 ## Cómo añadir un tema (receta completa)
