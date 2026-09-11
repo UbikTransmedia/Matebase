@@ -1,6 +1,11 @@
 /* Tema: La completitud de los reales */
 Course.topic('av-reales', function (p) {
 
+  p.puente('En [[ar-conjuntos|conjuntos numéricos]] se demostró que $\\sqrt 2$ no es racional, y en ' +
+    '[[fn-continuidad|continuidad]] se usó el teorema de Bolzano como si fuera evidente. Este tema junta ' +
+    'las dos cosas: el agujero que deja $\\sqrt 2$ en los racionales es exactamente lo que Bolzano ' +
+    'necesita que no exista. Solo hacen falta las desigualdades y la idea de cota.');
+
   p.text('Todo el bloque de análisis descansa sobre una propiedad de los números reales que nunca se ' +
     'ha enunciado. Cuando dijimos que una función continua que cambia de signo tiene que cortar el ' +
     'eje, o que una sucesión creciente y acotada converge, o que la bisección encuentra la raíz, ' +
@@ -39,9 +44,29 @@ Course.topic('av-reales', function (p) {
       'el 1. Así que $\\sup[0,1) = 1$, aunque el 1 no esté en el conjunto. Cuando el supremo sí ' +
       'pertenece al conjunto, coincide con el máximo.');
 
+  p.comprueba('El conjunto $A = \\{1, \\frac{1}{2}, \\frac{1}{3}, \\frac{1}{4}, \\dots\\}$. ¿Tiene mínimo?', [
+    { t: 'Sí: el 0', ok: false, por: 'El 0 no está en el conjunto: ningún $\\frac{1}{n}$ vale 0. Es el <em>ínfimo</em>, la mayor cota inferior, pero no es mínimo porque no pertenece.' },
+    { t: 'No: para cualquier elemento hay otro más pequeño', ok: true, por: 'Dado $\\frac{1}{n}$, el siguiente $\\frac{1}{n+1}$ es menor y está en $A$. No hay elemento mínimo. El ínfimo es 0 y queda fuera.' },
+    { t: 'Sí: el último término', ok: false, por: 'No hay último término: la sucesión es infinita. «El más pequeño» tendría que ser un $\\frac{1}{n}$ concreto, y siempre hay otro menor.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Demostrar un supremo',
+    enunciado: 'Probar que $\\sup\\left\\{\\dfrac{n}{n + 1} : n \\in \\mathbb{N}\\right\\} = 1$ y que no es máximo.',
+    pasos: [
+      { t: '<strong>Ver el conjunto.</strong> $\\frac{0}{1} = 0$, $\\frac{1}{2}$, $\\frac{2}{3}$, $\\frac{3}{4}$, … Crece y se acerca a 1.', antes: 'Escribe los cuatro primeros elementos. ¿Hacia dónde van?' },
+      { t: '<strong>1 es cota superior.</strong> $\\frac{n}{n + 1} < 1$ porque el numerador es menor que el denominador. Ningún elemento llega a 1.' },
+      { t: '<strong>Ninguna cota es menor que 1.</strong> Si $c < 1$ fuera cota, todo $\\frac{n}{n+1}$ sería $\\le c$. Pero $\\frac{n}{n + 1} > c$ equivale a $n > \\frac{c}{1 - c}$, y siempre hay un natural así de grande. Ese elemento supera a $c$: $c$ no era cota.', antes: 'Toma una cota candidata $c = 0{,}99$. ¿Encuentras un elemento del conjunto que la supere?' },
+      { t: '<strong>Conclusión.</strong> 1 es cota y ninguna cota es menor: $\\sup = 1$.' },
+      { t: '<strong>No es máximo.</strong> 1 no pertenece al conjunto: $\\frac{n}{n + 1} = 1$ exigiría $n = n + 1$. El borde existe y queda fuera, como en $[0, 1)$.', antes: '¿Hay algún $n$ con $\\frac{n}{n+1} = 1$?' }
+    ],
+    cierre: 'Demostrar un supremo son siempre dos pasos: es cota, y ninguna cota más pequeña sirve. El segundo se hace encontrando un elemento del conjunto que supere a cualquier candidata menor.'
+  });
+
   p.demo({
     title: 'Cotas, supremo y máximo en la recta',
     intro: 'Arrastra el punto para probar cotas. El conjunto está pintado en la recta: una cota tiene que dejar todo el conjunto a su izquierda. Cambia de conjunto y fíjate en cuándo el supremo pertenece y cuándo no.',
+    predice: 'En el tercer conjunto, los racionales con $x^2 < 2$, arrastra la cota hacia la izquierda todo lo que puedas. ¿Podrás parar en una fracción exacta que siga siendo cota? Piensa en qué número está en el borde.',
     build: function (host) {
       var cual = 'cerrado';
       var conj = {
@@ -168,6 +193,7 @@ Course.topic('av-reales', function (p) {
   p.demo({
     title: 'La bisección buscando algo que no está',
     intro: 'Este es exactamente el algoritmo d[[av-numerico|el tema de análisis numérico]], ejecutado sobre x² − 2. Cada paso da dos racionales que encierran la raíz. Fíjate en que los extremos son siempre fracciones y en que nunca llegan: si solo existieran los racionales, este proceso apuntaría a un sitio vacío.',
+    predice: 'Tras 10 pasos el intervalo mide $1/2^{10} \\approx 0{,}001$. ¿Alguno de sus extremos será exactamente $\\sqrt 2$ en algún paso? ¿Por qué no?',
     build: function (host) {
       var pasos = 0;
       var out = W.readout(host, '');
@@ -251,6 +277,13 @@ Course.topic('av-reales', function (p) {
     'conjunto. Si $A$ está acotado inferiormente, el conjunto $-A = \\{-x : x \\in A\\}$ está acotado ' +
     'superiormente, y $\\inf A = -\\sup(-A)$.', null, 'Dos por el precio de uno');
 
+  p.trampas([
+    { e: 'Confundir supremo con máximo', por: 'El supremo es el borde; el máximo, el borde <em>cuando pertenece</em>. $[0, 1)$ tiene supremo 1 y no tiene máximo.' },
+    { e: '«Entre dos racionales hay infinitos, luego no hay huecos»', por: 'Eso es densidad, no completitud. $\\mathbb{Q}$ es denso y tiene un agujero en $\\sqrt 2$: un conjunto acotado sin supremo.' },
+    { e: 'Creer que un conjunto acotado tiene siempre un elemento mayor', por: '$\\{\\frac{n}{n+1}\\}$ está acotado por 1 y ningún elemento es el mayor. Acotado garantiza supremo (en $\\mathbb{R}$), no máximo.' },
+    { e: 'Demostrar un supremo comprobando solo que es cota', por: 'El 2 también es cota de $[0, 1)$ y no es el supremo. Hay que ver además que ninguna cota menor sirve.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -266,30 +299,18 @@ Course.topic('av-reales', function (p) {
     ask: function (d) {
       var abre = d.izq ? '[' : '(', cierra = d.der ? ']' : ')';
       return 'Sea $A = ' + abre + d.a + ',\\ ' + d.b + cierra + '$. Da su ínfimo y su supremo, e ' +
-        'indica si son mínimo y máximo.<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">En las dos últimas casillas escribe ' +
-        '<code>sí</code> o <code>no</code>.</span>';
+        'indica si son mínimo y máximo.';
     },
     fields: [
       { name: 'i', label: 'ínfimo', w: 'tiny' },
       { name: 's', label: 'supremo', w: 'tiny' },
-      { name: 'mi', label: '¿es mínimo?', w: 'tiny', ph: 'sí / no' },
-      { name: 'ma', label: '¿es máximo?', w: 'tiny', ph: 'sí / no' }
+      { name: 'mi', label: '¿es mínimo?', opts: [{ t: 'sí', v: 'si' }, { t: 'no', v: 'no' }] },
+      { name: 'ma', label: '¿es máximo?', opts: [{ t: 'sí', v: 'si' }, { t: 'no', v: 'no' }] }
     ],
     sol: function (d) {
       return { i: d.a, s: d.b, mi: d.izq ? 'si' : 'no', ma: d.der ? 'si' : 'no' };
     },
-    check: function (v, d) {
-      var oi = Ex.same(v.i, d.a, 1e-9), os = Ex.same(v.s, d.b, 1e-9);
-      var qmi = U.eligeOpcion(v.raw.mi, { si: /^s|si\b|es minimo|pertenece/, no: /^n|no\b|no es|no pertenece/ });
-      var qma = U.eligeOpcion(v.raw.ma, { si: /^s|si\b|es maximo|pertenece/, no: /^n|no\b|no es|no pertenece/ });
-      if (!qmi || !qma) {
-        return { ok: false, msg: 'En las dos últimas casillas escribe <strong>sí</strong> o ' +
-          '<strong>no</strong>.', fields: { i: oi, s: os } };
-      }
-      var omi = (qmi === 'si') === d.izq, oma = (qma === 'si') === d.der;
-      return { ok: oi && os && omi && oma, fields: { i: oi, s: os, mi: omi, ma: oma } };
-    },
+    tol: 1e-9,
     hint: function () {
       return 'El supremo es siempre el extremo derecho, esté o no incluido. Que sea <em>máximo</em> ' +
         'depende únicamente de si el corchete está cerrado.';
@@ -369,17 +390,11 @@ Course.topic('av-reales', function (p) {
     ask: function (d) {
       return 'El conjunto $A = ' + d.t + '$ está acotado superiormente. ¿Tiene supremo ' +
         '<strong>dentro de $\\mathbb{Q}$</strong>?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>sí</code> o ' +
-        '<code>no</code>. Recuerda que en $\\mathbb{R}$ siempre lo tendría: la pregunta es si el ' +
+        '<span style="font-size:0.875rem;color:var(--ink-faint)">En $\\mathbb{R}$ siempre lo tendría: la pregunta es si el ' +
         'supremo resulta ser racional.</span>';
     },
-    fields: [{ name: 'q', label: 'Respuesta', w: 'wide', ph: 'sí / no' }],
+    fields: [{ name: 'q', label: 'En ℚ', opts: [{ t: 'sí tiene supremo: es racional', v: 'si' }, { t: 'no: el supremo sería irracional', v: 'no' }] }],
     sol: function (d) { return { q: d.enQ ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, { si: /^s|si\b|tiene|existe|racional/, no: /^n|no\b|no tiene|irracional|no existe/ });
-      if (!q) return { ok: false, msg: 'Responde <strong>sí</strong> o <strong>no</strong>.' };
-      return { ok: (q === 'si') === d.enQ };
-    },
     hint: function () {
       return 'Averigua cuál sería el supremo en $\\mathbb{R}$ y pregúntate después si ese número ' +
         'concreto es una fracción.';

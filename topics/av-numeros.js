@@ -1,6 +1,11 @@
 /* Tema: Teoría de números */
 Course.topic('av-numeros', function (p) {
 
+  p.puente('Este bloque vuelve a los objetos más básicos del curso, los números enteros y los conjuntos, ' +
+    'para preguntar por su estructura y por sus límites. Hacen falta la [[ar-divisibilidad|divisibilidad]] ' +
+    'y los primos de aritmética, las potencias y la demostración por reducción al absurdo. Con eso se ' +
+    'llega desde el reloj de pared hasta el cifrado de una conexión segura.', 'Por dónde empezamos');
+
   p.text('Gauss la llamó «la reina de las matemáticas». Estudia los números enteros, que son el objeto ' +
     'más simple que existe, y contiene los problemas más difíciles que se conocen. Durante siglos fue ' +
     'el ejemplo perfecto de matemática sin aplicación posible. Hoy protege todas tus contraseñas.');
@@ -22,9 +27,16 @@ Course.topic('av-numeros', function (p) {
     'multiplicar en el mundo modular con toda libertad. El resto del resultado solo depende de los ' +
     'restos de partida.');
 
+  p.comprueba('¿Cuánto vale $47\\cdot 38 \\bmod 5$? Intenta no multiplicar 47 por 38.', [
+    { t: '$1$: reduzco primero, $47 \\equiv 2$ y $38 \\equiv 3$, y $2\\cdot 3 = 6 \\equiv 1$', ok: true, por: 'El resto del producto solo depende de los restos. Y en efecto, $47\\cdot 38 = 1786 = 5\\cdot 357 + 1$.' },
+    { t: '$6$: $2\\cdot 3 = 6$', ok: false, por: 'Falta el último paso: 6 no es un resto módulo 5. Se vuelve a reducir: $6 \\equiv 1$.' },
+    { t: 'Hay que multiplicar entero: $1786 \\bmod 5 = 1$', ok: false, por: 'Sale lo mismo, pero con una multiplicación grande que no hacía falta. Con números de 300 cifras, reducir antes es la diferencia entre poder y no poder.' }
+  ]);
+
   p.demo({
     title: 'El reloj modular',
     intro: 'Ve sumando el mismo paso una y otra vez. Fíjate en cuándo se visitan todos los números y cuándo se cae en un ciclo corto.',
+    predice: 'Módulo 12, con paso 5 se visitan los 12 números. Con paso 4, ¿cuántos se visitarán antes de repetir? ¿Y con paso 7? Piensa en el máximo común divisor con 12.',
     build: function (host, d) {
       var n = 12, paso = 5, k = 0;
       var out = W.readout(host, '');
@@ -99,6 +111,7 @@ Course.topic('av-numeros', function (p) {
   p.demo({
     title: 'Cómo se reparten los primos',
     intro: 'La cuenta real de primos frente a la estimación x/ln(x). Amplía el rango y verás que la proporción se ajusta cada vez mejor.',
+    predice: 'Hasta 200 hay 46 primos. Hasta 5000, ¿habrá unos 1150 (25 veces más), o bastantes menos? La estimación $x/\\ln x$ te da la pista.',
     build: function (host, d) {
       var N = 200;
       var out = W.readout(host, '');
@@ -210,6 +223,26 @@ Course.topic('av-numeros', function (p) {
     'sabe que nadie ha encontrado cómo hacerlo rápido en cuarenta años de intentos. Y un ordenador ' +
     'cuántico suficientemente grande podría hacerlo con el algoritmo de Shor. De ahí que se esté ' +
     'trabajando ya en criptografía poscuántica.');
+
+  p.ejemplo({
+    title: 'RSA con números de juguete',
+    enunciado: 'Construir un sistema RSA con $p = 3$ y $q = 11$, cifrar el mensaje $m = 4$ y descifrarlo.',
+    pasos: [
+      { t: '<strong>Las claves.</strong> $n = 3\\cdot 11 = 33$ y $\\varphi(n) = 2\\cdot 10 = 20$. Se elige $e = 3$, que no comparte factores con 20. La clave pública es $(33, 3)$.', antes: '¿Qué condición tiene que cumplir $e$ respecto de $\\varphi(n)$?' },
+      { t: '<strong>La clave privada.</strong> Hace falta $d$ con $3d \\equiv 1 \\pmod{20}$. Probando: $3\\cdot 7 = 21 \\equiv 1$. Así que $d = 7$. Solo quien conoce $\\varphi(n) = 20$ puede hacer esta cuenta, y para eso hay que conocer $p$ y $q$.', antes: 'Busca un número que multiplicado por 3 dé resto 1 al dividir entre 20.' },
+      { t: '<strong>Cifrar.</strong> $c = 4^3 \\bmod 33 = 64 \\bmod 33 = 31$. El mensaje viaja como 31.' },
+      { t: '<strong>Descifrar.</strong> $31^7 \\bmod 33$. Sin calcular $31^7$: como $31 \\equiv -2$, es $(-2)^7 = -128$, y $-128 + 4\\cdot 33 = 4$. Recuperado el 4 ✓.', antes: '$31^7$ tiene once cifras. ¿Cómo lo evitas? Fíjate en que $31 \\equiv -2 \\pmod{33}$.' },
+      { t: '<strong>Por qué funciona.</strong> $c^d = m^{ed} = m^{21} = m^{20}\\cdot m$, y $m^{20} \\equiv 1 \\pmod{33}$ por una versión del pequeño teorema de Fermat con $\\varphi(n)$ en lugar de $p - 1$. Queda $m$.' }
+    ],
+    cierre: 'Con $n = 33$ cualquiera factoriza y calcula $d$ en un segundo. Con $n$ de 600 cifras, $e$ y $n$ se publican tranquilamente: nadie sabe pasar de $n$ a $\\varphi(n)$ sin factorizar.'
+  });
+
+  p.trampas([
+    { e: 'Calcular la potencia entera y reducir al final', por: '$5^{40}$ tiene 28 cifras. Reduciendo en cada paso nunca se pasa del módulo, y el resultado es el mismo.' },
+    { e: 'Dar un resto negativo o mayor que el módulo', por: '$-3 \\bmod 7$ es 4, no $-3$. El resto vive entre 0 y $n - 1$.' },
+    { e: 'Aplicar Fermat con un módulo que no es primo', por: '$a^{p-1} \\equiv 1$ exige $p$ primo. Con $n = 15$: $2^{14} \\bmod 15 = 4$, no 1. Para compuestos se usa $\\varphi(n)$.' },
+    { e: 'Creer que RSA es seguro porque «está demostrado»', por: 'No hay demostración de que factorizar sea difícil: solo cuarenta años sin encontrar el método. Un ordenador cuántico grande lo rompería.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.hist('<strong>Sophie Germain</strong> aprendió matemáticas sola, en la biblioteca de su padre, durante la ' +

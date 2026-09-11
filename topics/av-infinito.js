@@ -1,6 +1,11 @@
 /* Tema: El infinito: cardinalidad y Cantor */
 Course.topic('av-infinito', function (p) {
 
+  p.puente('El tema anterior distinguía $\\mathbb{Q}$ de $\\mathbb{R}$ por una propiedad. Este los distingue ' +
+    'por su <em>tamaño</em>, y para eso hace falta una sola idea de [[lg-conjuntos|conjuntos]]: la ' +
+    'biyección, emparejar sin que sobre nadie. Aplicada a conjuntos infinitos, esa idea da resultados ' +
+    'que contradicen la intuición y que se demuestran en cinco líneas.');
+
   p.text('¿Hay más números naturales o más números pares? La respuesta intuitiva —«naturales, ' +
     'evidentemente, porque los pares son la mitad»— es <strong>falsa</strong>. Y demostrarlo obliga a ' +
     'repensar qué significa «más».');
@@ -14,9 +19,29 @@ Course.topic('av-infinito', function (p) {
     'Esa es la definición, y es la única que funciona también para conjuntos infinitos. Cantor la tomó ' +
     'en serio y las consecuencias fueron demoledoras.', 'ok', 'La definición de Cantor');
 
+  p.comprueba('Los múltiplos de 1000 son uno de cada mil naturales. ¿Hay menos múltiplos de 1000 que naturales?', [
+    { t: 'Sí: son la milésima parte', ok: false, por: '«La milésima parte» tiene sentido en un tramo finito. En el infinito, lo que cuenta es si se pueden emparejar, y $n \\mapsto 1000n$ los empareja sin que sobre ninguno.' },
+    { t: 'No: $n \\mapsto 1000n$ es una biyección', ok: true, por: 'A cada natural le toca un múltiplo de 1000 y a cada múltiplo un natural. Mismo cardinal, $\\aleph_0$. Un conjunto infinito se empareja con partes propias de sí mismo: esa es su definición.' },
+    { t: 'No se puede comparar: los dos son infinitos', ok: false, por: 'Sí se puede: comparar es buscar una biyección. Entre $\\mathbb{N}$ y $\\mathbb{R}$ no la hay, y por eso hay infinitos distintos.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Numerar los enteros',
+    enunciado: 'Demostrar que $\\mathbb{Z}$ es numerable dando una biyección explícita con $\\mathbb{N} = \\{0, 1, 2, \\dots\\}$, y comprobarla.',
+    pasos: [
+      { t: '<strong>El problema.</strong> Recorrer los enteros «en orden» no funciona: si se empieza por el 0 y se va hacia la derecha, los negativos no reciben nunca número. Hay que ir en zigzag.', antes: '¿Por qué no sirve listar $0, 1, 2, 3, \\dots$ y «luego» los negativos?' },
+      { t: '<strong>La lista.</strong> $0, 1, -1, 2, -2, 3, -3, \\dots$: a los naturales pares les tocan los enteros no negativos y a los impares, los negativos.' },
+      { t: '<strong>La fórmula.</strong> $f(n) = \\frac{n}{2}$ si $n$ es par, y $f(n) = -\\frac{n + 1}{2}$ si es impar. Así $f(0) = 0$, $f(1) = -1$, $f(2) = 1$, $f(3) = -2$, $f(4) = 2$.', antes: 'Escribe una fórmula que dé la lista. ¿Qué le toca al 6? ¿Y al 7?' },
+      { t: '<strong>Es biyección.</strong> Ningún entero se repite: los pares dan positivos distintos y los impares negativos distintos. Y ninguno falta: el entero $k > 0$ es $f(2k)$, el 0 es $f(0)$ y el $-k$ es $f(2k - 1)$.', antes: '¿A qué natural le corresponde el $-7$? ¿Y el $5$?' },
+      { t: '<strong>Conclusión.</strong> $|\\mathbb{Z}| = |\\mathbb{N}| = \\aleph_0$, aunque $\\mathbb{Z}$ «parezca el doble».' }
+    ],
+    cierre: 'Con la misma idea, recorriendo en diagonal, se numeran las fracciones. Y con la diagonal de Cantor se demuestra que con los reales no se puede: ahí la lista, sea cual sea, siempre deja alguno fuera.'
+  });
+
   p.demo({
     title: 'Emparejar infinitos',
     intro: 'Cada emparejamiento es una biyección entre ℕ y un conjunto aparentemente más pequeño (o más grande). Si existe la biyección, tienen el mismo cardinal.',
+    predice: 'Elige «enteros» y mira la fórmula del zigzag del ejemplo. ¿Qué entero le tocará al natural 9? Calcúlalo antes de mirar.',
     build: function (host, d) {
       var cual = 'pares';
       var casos = {
@@ -80,6 +105,7 @@ Course.topic('av-infinito', function (p) {
   p.demo({
     title: 'Recorrer las fracciones en diagonal',
     intro: 'Colocamos todas las fracciones en una tabla infinita y las recorremos por diagonales, saltando las repetidas. Así se numeran todas.',
+    predice: 'La fracción $\\frac{2}{2}$ está en la segunda diagonal. ¿Recibirá número, o se saltará? ¿Y $\\frac{3}{1}$: en qué diagonal está y qué número le tocará?',
     build: function (host, d) {
       var pasos = 10;
       var caja = U.el('div');
@@ -140,6 +166,7 @@ Course.topic('av-infinito', function (p) {
   p.demo({
     title: 'Construir el número que falta',
     intro: 'Una lista cualquiera de reales. El número diagonal se fabrica cambiando la cifra marcada de cada fila, y por construcción no coincide con ninguno.',
+    predice: 'Si añadieras el número diagonal $d$ a la lista como fila 9, ¿quedaría la lista completa? Piensa qué haría el argumento con la nueva lista.',
     build: function (host, d) {
       var semilla = 1;
       var caja = U.el('div', { style: { fontFamily: 'var(--mono)', fontSize: '14px', lineHeight: '1.9', margin: '8px 0' } });
@@ -221,6 +248,13 @@ Course.topic('av-infinito', function (p) {
     'sufrió depresiones graves y murió en 1918 en un sanatorio. Hilbert lo defendió con una frase que ' +
     'se hizo famosa: «Nadie podrá expulsarnos del paraíso que Cantor ha creado para nosotros».');
 
+  p.trampas([
+    { e: '«Los pares son la mitad de los naturales»', por: 'En cualquier tramo finito, sí. En el infinito lo que cuenta es la biyección, y $n \\mapsto 2n$ la da. Mismo cardinal.' },
+    { e: 'Creer que «infinito» es un solo tamaño', por: '$\\mathbb{N}$ y $\\mathbb{R}$ son infinitos y no se pueden emparejar: hay infinitos distintos, y una torre sin fin de ellos.' },
+    { e: 'Arreglar la lista de reales añadiendo el número diagonal', por: 'La nueva lista tiene su propio número diagonal, que tampoco está. El argumento vale para <em>cualquier</em> lista, incluida la arreglada.' },
+    { e: '«Denso, luego no numerable»', por: '$\\mathbb{Q}$ es denso, entre dos racionales hay infinitos, y aun así es numerable: el recorrido en diagonal los alcanza todos. Densidad y cardinal son cosas distintas.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -242,16 +276,10 @@ Course.topic('av-infinito', function (p) {
       return { s: c.s, t: c.t, por: c.por };
     },
     ask: function (d) {
-      return '¿Es numerable el conjunto de <strong>' + d.s + '</strong>?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
+      return '¿Es numerable el conjunto de <strong>' + d.s + '</strong>?';
     },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'sí, es numerable', v: 'si' }, { t: 'no', v: 'no' }] }],
     sol: function (d) { return { r: d.t === 1 ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var t = v.raw.r.trim().toLowerCase().replace(/[íÍ]/g, 'i');
-      if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe <code>si</code> o <code>no</code>.' };
-      return (t === 'si') === (d.t === 1);
-    },
     hint: function () { return 'Numerable significa que se puede poner en una lista infinita sin dejarse ninguno. Los que salen de $\\mathbb{R}$ o de conjuntos de partes no lo son.'; },
     steps: function (d) {
       return ['Un conjunto es numerable si existe una biyección con $\\mathbb{N}$, es decir, si se puede listar.',

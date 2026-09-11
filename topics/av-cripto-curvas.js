@@ -1,6 +1,11 @@
 /* Tema: Criptografia moderna: Diffie-Hellman y curvas elipticas */
 Course.topic('av-cripto-curvas', function (p) {
 
+  p.puente('Los dos temas anteriores dejan las herramientas: la aritmética modular con sus potencias y el ' +
+    'concepto de grupo. Este tema las usa para algo que parece imposible: que dos personas acuerden un ' +
+    'secreto hablando en público. Y termina con un grupo nuevo, el de los puntos de una curva, que es ' +
+    'el que protege hoy la mayoría de las conexiones.');
+
   p.text('Durante siglos, toda la criptografía tuvo el mismo problema: para enviarse mensajes secretos, dos ' +
     'personas tenían que haber acordado antes una clave, en persona o por un mensajero de confianza. Internet no ' +
     'funciona así. Tu navegador habla con un banco al que nunca ha visto, por cables que cualquiera puede ' +
@@ -30,9 +35,29 @@ Course.topic('av-cripto-curvas', function (p) {
     'acaban con la misma mezcla de tres colores, y quien vio pasar las dos mezclas intermedias no sabe «desmezclar» ' +
     'la pintura para sacar los colores secretos.', 'ok', 'La analogía de la pintura');
 
+  p.comprueba('Un espía ve $p$, $g$, $A = g^a \\bmod p$ y $B = g^b \\bmod p$. ¿Puede calcular la clave multiplicando $A\\cdot B \\bmod p$?', [
+    { t: 'Sí: $A\\cdot B = g^a\\cdot g^b = g^{a+b}$, que es la clave', ok: false, por: '$g^{a+b}$ no es la clave. La clave es $g^{ab}$: Alicia eleva $B$ a $a$, no lo multiplica por $A$. El espía obtiene un número que no le sirve.' },
+    { t: 'No: obtiene $g^{a+b}$, y la clave es $g^{ab}$', ok: true, por: 'Para pasar de $g^a$ a $g^{ab}$ hace falta conocer $b$, y $b$ nunca viaja. Sacarlo de $B$ es el logaritmo discreto, que nadie sabe hacer deprisa.' },
+    { t: 'Sí, si conoce $g$ y $p$', ok: false, por: '$g$ y $p$ son públicos por diseño; conocerlos no ayuda. Lo que falta es un exponente secreto, y eso no se despeja.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un intercambio completo con $p = 23$',
+    enunciado: 'Con $p = 23$ y $g = 5$, Alicia elige $a = 6$ y Benito $b = 15$. Calcular lo que envía cada uno y la clave común, sin manejar números grandes.',
+    pasos: [
+      { t: '<strong>Potencias de 5 módulo 23, reduciendo en cada paso.</strong> $5^1 = 5$, $5^2 = 25 \\equiv 2$, $5^3 \\equiv 10$, $5^4 \\equiv 50 \\equiv 4$, $5^5 \\equiv 20$, $5^6 \\equiv 100 \\equiv 8$. Alicia envía $A = 8$.', antes: 'Multiplica por 5 y reduce módulo 23 seis veces. ¿Qué sale?' },
+      { t: '<strong>Benito.</strong> $5^{15} = 5^6\\cdot 5^6\\cdot 5^3 \\equiv 8\\cdot 8\\cdot 10 = 640 \\equiv 640 - 27\\cdot 23 = 19$. Benito envía $B = 19$.', antes: 'No hagas 15 multiplicaciones: usa que $5^{15} = 5^6\\cdot 5^6\\cdot 5^3$ y los restos ya calculados.' },
+      { t: '<strong>Alicia calcula la clave.</strong> $K = 19^6 \\bmod 23$. Como $19 \\equiv -4$: $(-4)^6 = 4096 = 178\\cdot 23 + 2$. $K = 2$.', antes: '$19^6$ es enorme. Fíjate en que $19 \\equiv -4$: ¿qué potencia queda?' },
+      { t: '<strong>Benito calcula la clave.</strong> $8^{15} \\bmod 23$: $8^2 = 64 \\equiv 18$, $8^4 \\equiv 18^2 = 324 \\equiv 2$, $8^8 \\equiv 4$, y $8^{15} = 8^8\\cdot 8^4\\cdot 8^2\\cdot 8 \\equiv 4\\cdot 2\\cdot 18\\cdot 8 = 1152 \\equiv 2$. $K = 2$ ✓. Coinciden sin haberse enviado nunca el 2.' },
+      { t: '<strong>El espía.</strong> Ve $23, 5, 8, 19$. Para obtener 2 tendría que encontrar $a$ con $5^a \\equiv 8$: probando, $a = 6$. Con $p$ de 23 es un juego; con $p$ de 600 cifras, probar exponentes lleva más que la edad del universo.' }
+    ],
+    cierre: 'Toda la cuenta son multiplicaciones y restos, al alcance de cualquiera. La asimetría está en que elevar es rápido y «des-elevar», el logaritmo discreto, no tiene atajo conocido.'
+  });
+
   p.demo({
     title: 'Diffie-Hellman con números pequeños',
     intro: 'Todo lo que aparece en la columna del medio viaja por un canal público: cualquiera lo ve. Cambia los números secretos de Alicia y Benito y comprueba que las dos claves que calculan siempre coinciden.',
+    predice: 'Los valores iniciales son los del ejemplo: $A = 8$, $B = 19$, $K = 2$. Si Alicia cambia su secreto a $a = 7$, ¿cambiará solo $A$, solo $K$, o los dos?',
     build: function (host) {
       var P = 23, G = 5, a = 6, b = 15;
       var PRIMOS = { 23: 5, 47: 5, 97: 5 };
@@ -67,6 +92,7 @@ Course.topic('av-cripto-curvas', function (p) {
   p.demo({
     title: 'Las potencias, desordenadas',
     intro: 'Cada punto es la potencia gᵏ mod p, para k = 1, 2, 3… Con números reales, las potencias formarían una curva exponencial suave, y con ella se leería el exponente. Aquí los puntos saltan sin orden aparente: por eso no hay atajo para volver del resultado al exponente.',
+    predice: 'Sin el módulo, las potencias de 5 crecerían como una exponencial. Con el módulo, ¿crees que los puntos seguirán alguna tendencia, o se repartirán como al azar?',
     build: function (host) {
       var P = 97, G = 5;
       var out = W.readout(host, '');
@@ -111,6 +137,7 @@ Course.topic('av-cripto-curvas', function (p) {
   p.demo({
     title: 'Sumar dos puntos con una recta',
     intro: 'La curva y² = x³ − x + 1. Elige la abscisa de P y de Q y si están en la rama de arriba o en la de abajo. La recta que los une corta a la curva en un tercer punto; su reflejo es P + Q. Pon los dos puntos en el mismo sitio para ver la tangente.',
+    predice: 'Pon $P$ y $Q$ con la misma $x$, uno arriba y otro abajo. La recta que los une es vertical: ¿dónde cortará a la curva por tercera vez? ¿Qué será entonces $P + Q$?',
     build: function (host) {
       var xp = -1, xq = 0.5, sp = 1, sq = 1;
       var RAIZ = -1.324718;
@@ -164,10 +191,37 @@ Course.topic('av-cripto-curvas', function (p) {
     'mensajería cifrada lo repiten constantemente para renovar sus claves, y las firmas de las transacciones de ' +
     'muchas criptomonedas usan una curva elíptica concreta, llamada secp256k1.');
 
+  p.trampas([
+    { e: 'Creer que la clave es $A\\cdot B$ o $g^{a+b}$', por: 'Es $g^{ab}$: cada uno eleva lo que recibe a su propio secreto. Con $a + b$ el espía la tendría multiplicando.' },
+    { e: 'Calcular $g^a$ entero y reducir al final', por: '$5^{15}$ ya tiene once cifras; con exponentes reales, miles. Reducir en cada multiplicación mantiene todo por debajo de $p$.' },
+    { e: 'Pensar que el logaritmo discreto se calcula como un logaritmo', por: 'Sin el módulo, $\\log_5 8$ sale en un instante. Con el módulo, las potencias saltan sin orden y no hay más remedio que probar.' },
+    { e: 'Olvidar reducir las coordenadas al sumar puntos módulo $p$', por: 'Las fórmulas dan números negativos o mayores que $p$; el punto de la curva es el resto de cada coordenada, entre 0 y $p - 1$.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
   function potMod(base, e, m) { var res = 1; base %= m; while (e > 0) { if (e & 1) res = res * base % m; base = base * base % m; e = Math.floor(e / 2); } return res; }
+
+  p.exercise({
+    title: 'Una potencia modular, paso a paso',
+    level: 'basico',
+    gen: function (r) {
+      var P = r.pick([7, 11, 13]), G = r.int(2, 5), k = r.int(3, 6);
+      return { P: P, G: G, k: k, v: potMod(G, k, P) };
+    },
+    ask: function (d) { return 'Calcula $' + d.G + '^{' + d.k + '} \\bmod ' + d.P + '$ multiplicando por $' + d.G + '$ y reduciendo en cada paso, sin llegar nunca a un número mayor que $' + (d.G * d.P) + '$.'; },
+    fields: [{ name: 'v', label: 'resto', w: 'tiny' }],
+    sol: function (d) { return { v: d.v }; },
+    errores: [{ si: function (v, d) { return v.v === Math.pow(d.G, d.k) && Math.pow(d.G, d.k) >= d.P; }, msg: 'Esa es la potencia entera. Falta quedarse con el resto al dividir entre el módulo.' }],
+    hint: function () { return 'Cada paso: el resto anterior por la base, y de eso el resto módulo $p$. Nunca hace falta un número grande.'; },
+    steps: function (d) {
+      var v = 1, l = [];
+      for (var i = 1; i <= d.k; i++) { var prev = v; v = v * d.G % d.P; l.push('$' + d.G + '^{' + i + '} \\equiv ' + prev + '\\cdot ' + d.G + ' = ' + (prev * d.G) + ' \\equiv ' + v + '$'); }
+      return l.concat(['Resultado: $' + d.v + '$. Esta es exactamente la cuenta que hace un ordenador con exponentes de cientos de cifras.']);
+    },
+    answer: function (d) { return String(d.v); }
+  });
 
   p.exercise({
     title: 'Un intercambio de claves',

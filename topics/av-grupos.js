@@ -1,10 +1,11 @@
 /* Tema: Teoría de grupos y simetría */
 Course.topic('av-grupos', function (p) {
 
-  p.text('Ya has visto la jugada antes: cuando varias cosas distintas obedecen las mismas reglas, el ' +
-    'matemático se queda con las reglas y tira los objetos. Así nacieron los espacios vectoriales. ' +
-    'Ahora vamos a hacerlo con una estructura todavía más básica y más universal: el ' +
-    '<strong>grupo</strong>.');
+  p.puente('Ya has visto la jugada antes: cuando varias cosas distintas obedecen las mismas reglas, el ' +
+    'matemático se queda con las reglas y tira los objetos. Así nacieron los [[av-espacios|espacios ' +
+    'vectoriales]]. Ahora se hace con una estructura todavía más básica y más universal, el ' +
+    '<strong>grupo</strong>, y el material de partida son los [[ge-transformaciones|movimientos del plano]]: ' +
+    'giros y reflexiones que se componen.');
 
   p.text('Un grupo es un conjunto con <strong>una sola operación</strong> que cumple cuatro condiciones:');
 
@@ -46,9 +47,29 @@ Course.topic('av-grupos', function (p) {
     'esta figura» se convierte en «qué grupo tiene», y eso ya es una pregunta con respuesta exacta.',
     'ok');
 
+  p.comprueba('Los enteros con la <em>resta</em>: cerrada, tiene el 0 y cada número tiene opuesto. ¿Es un grupo?', [
+    { t: 'Sí: cumple cerrada, neutro e inverso', ok: false, por: 'Falta comprobar la asociativa, y falla: $(5 - 3) - 1 = 1$ pero $5 - (3 - 1) = 3$. Y el 0 tampoco es neutro por la izquierda: $0 - 5 = -5 \\ne 5$.' },
+    { t: 'No: la resta no es asociativa', ok: true, por: '$(5 - 3) - 1 \\ne 5 - (3 - 1)$. Una sola condición que falle basta. Con la suma sí es grupo, y restar es sumar el opuesto: la estructura está ahí, pero la operación buena es la suma.' },
+    { t: 'No: la resta no es conmutativa', ok: false, por: 'La conmutativa no está en la lista de condiciones. Muchos grupos no son conmutativos. Lo que falla aquí es la asociativa.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Las seis simetrías del triángulo, compuestas',
+    enunciado: 'Un triángulo equilátero con vértices $A$, $B$, $C$ (en sentido antihorario). Listar sus simetrías, componer dos reflexiones y comprobar que el orden importa.',
+    pasos: [
+      { t: '<strong>Las seis.</strong> Tres giros: $0°$ (no hacer nada), $120°$ y $240°$. Tres reflexiones: por el eje que pasa por $A$, por el de $B$ y por el de $C$. Es el grupo diédrico $D_3$, con $2\\cdot 3 = 6$ elementos.', antes: '¿Cuántos giros dejan el triángulo igual? ¿Y cuántos ejes de simetría tiene?' },
+      { t: '<strong>Una simetría como permutación.</strong> El giro de $120°$ antihorario manda $A \\to B$, $B \\to C$, $C \\to A$. La reflexión por el eje de $A$ deja $A$ fijo e intercambia $B$ y $C$.' },
+      { t: '<strong>Dos reflexiones seguidas.</strong> Primero la reflexión por $A$ ($B \\leftrightarrow C$), después la reflexión por $B$ ($A \\leftrightarrow C$). Seguimos a cada vértice: $A \\to A \\to C$, $B \\to C \\to A$, $C \\to B \\to B$. Resultado: $A \\to C$, $B \\to A$, $C \\to B$, que es el giro de $240°$. Dos reflexiones componen un giro.', antes: 'Sigue el vértice $A$ por las dos reflexiones. ¿Dónde acaba?' },
+      { t: '<strong>Al revés.</strong> Primero por $B$, después por $A$: $A \\to C \\to B$, $B \\to B \\to C$, $C \\to A \\to A$. Es el giro de $120°$. Distinto: el grupo no es conmutativo.', antes: 'Cambia el orden y repite. ¿Sale el mismo giro?' },
+      { t: '<strong>Comprobar el inverso.</strong> Cada reflexión es su propio inverso: aplicarla dos veces devuelve todo a su sitio. El inverso del giro de $120°$ es el de $240°$: juntos suman una vuelta.' }
+    ],
+    cierre: 'Seis elementos, una tabla de $6\\times 6$ composiciones, y todas las propiedades de grupo salen de seguir vértices. La no conmutatividad no es un defecto: es lo que hace interesantes a las simetrías.'
+  });
+
   p.demo({
     title: 'El grupo de simetrías de un polígono',
     intro: 'Aplica giros y reflexiones a la figura. Fíjate en que componer dos siempre da otra del mismo grupo, y en que el orden importa.',
+    predice: 'Pulsa «Girar» y luego «Reflejar», anota dónde queda el vértice A. Vuelve al inicio y hazlo al revés. ¿Quedará A en el mismo sitio?',
     build: function (host, d) {
       var n = 4;
       var giro = 0, reflejado = false;
@@ -117,6 +138,7 @@ Course.topic('av-grupos', function (p) {
   p.demo({
     title: 'Teselar el plano',
     intro: 'Solo tres polígonos regulares pueden cubrir el plano ellos solos. La razón es aritmética: sus ángulos tienen que sumar exactamente 360° alrededor de cada vértice.',
+    predice: 'El ángulo interior del pentágono es 108°. ¿Cuántos caben alrededor de un vértice: tres justos, o tres y sobra hueco? Calcula $360/108$ antes de mover el mando.',
     build: function (host, d) {
       var n = 6;
       var out = W.readout(host, '');
@@ -194,6 +216,13 @@ Course.topic('av-grupos', function (p) {
     'murió con otro encima de la mesa). Tardaron catorce años en publicarse y hoy fundamentan un área ' +
     'entera de las matemáticas.');
 
+  p.trampas([
+    { e: 'Exigir la conmutativa para que algo sea grupo', por: 'No está en la lista. Las simetrías del cuadrado y las matrices invertibles son grupos y no conmutan.' },
+    { e: 'Comprobar el neutro y olvidar los inversos', por: '$\\mathbb{Z}$ con el producto tiene neutro 1, pero $\\frac{1}{2}$ no es entero: no es grupo. Los inversos son la condición que más se cae.' },
+    { e: '«Las simetrías del cuadrado son 4»', por: 'Cuatro giros y cuatro reflexiones: 8. Es fácil olvidar las reflexiones, o contar el giro de 0° como si no fuera nada.' },
+    { e: 'Creer que la fórmula de grado 5 «aún no se ha encontrado»', por: 'Está demostrado que no existe. No es un problema abierto: Galois lo cerró en 1832 con el grupo de simetrías de las raíces.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Que no exista fórmula general para el grado 5 no es que no se haya encontrado: está ' +
     '<strong>demostrado que no puede existir</strong>, y esa demostración inauguró el álgebra ' +
@@ -259,16 +288,10 @@ Course.topic('av-grupos', function (p) {
       return { c: c.c, ok: c.ok, por: c.por };
     },
     ask: function (d) {
-      return '¿Es un grupo ' + d.c + '?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
+      return '¿Es un grupo ' + d.c + '?';
     },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'sí, es un grupo', v: 'si' }, { t: 'no', v: 'no' }] }],
     sol: function (d) { return { r: d.ok ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var t = v.raw.r.trim().toLowerCase().replace(/[íÍ]/g, 'i');
-      if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe <code>si</code> o <code>no</code>.' };
-      return (t === 'si') === !!d.ok;
-    },
     hint: function () { return 'Comprueba las cuatro condiciones por orden: cerrada, asociativa, neutro e inverso. Basta con que falle una.'; },
     steps: function (d) {
       return ['Las cuatro condiciones: cerrada, asociativa, neutro e inverso <em>para todos</em> los elementos.',
@@ -289,16 +312,10 @@ Course.topic('av-grupos', function (p) {
       return { n: n, ang: ang, cabe: cabe, ok: Math.abs(cabe - Math.round(cabe)) < 1e-9 };
     },
     ask: function (d) {
-      return '¿Puede un polígono regular de $' + d.n + '$ lados teselar el plano él solo?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
+      return '¿Puede un polígono regular de $' + d.n + '$ lados teselar el plano él solo?';
     },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
+    fields: [{ name: 'r', label: 'Respuesta', opts: [{ t: 'sí, tesela', v: 'si' }, { t: 'no', v: 'no' }] }],
     sol: function (d) { return { r: d.ok ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var t = v.raw.r.trim().toLowerCase().replace(/[íÍ]/g, 'i');
-      if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe <code>si</code> o <code>no</code>.' };
-      return (t === 'si') === d.ok;
-    },
     hint: function (d) { return 'Calcula el ángulo interior y comprueba si $360$ es múltiplo exacto de él.'; },
     steps: function (d) {
       return ['Ángulo interior: $\\dfrac{(' + d.n + '-2)\\cdot 180}{' + d.n + '} = ' + U.fmt(d.ang, 4) + '^\\circ$.',

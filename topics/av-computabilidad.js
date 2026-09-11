@@ -1,10 +1,11 @@
 /* Tema: Computabilidad: Turing y Gödel */
 Course.topic('av-computabilidad', function (p) {
 
-  p.text('El bloque 0 de este curso empezaba preguntando qué significa que algo sea verdadero, y ' +
-    'construyendo la maquinaria para demostrarlo. Este tema cierra ese arco con las dos preguntas ' +
-    'que quedaron abiertas: <strong>¿se puede demostrar todo lo que es verdad?</strong> y ' +
-    '<strong>¿se puede calcular todo lo que está bien definido?</strong>');
+  p.puente('El curso empezaba, en [[lg-proposiciones|lógica]], preguntando qué significa que algo sea ' +
+    'verdadero y construyendo la maquinaria para demostrarlo. Este tema cierra ese arco con las dos ' +
+    'preguntas que quedaron abiertas: <strong>¿se puede demostrar todo lo que es verdad?</strong> y ' +
+    '<strong>¿se puede calcular todo lo que está bien definido?</strong> Las herramientas son la ' +
+    'reducción al absurdo y la diagonal de Cantor del tema anterior.');
 
   p.text('Las dos respuestas son que no, las dos se obtuvieron en los años treinta y las dos usan ' +
     'el mismo truco: <strong>el argumento diagonal de Cantor</strong>, que ya conoces d[[av-infinito|el tema del ' +
@@ -39,9 +40,22 @@ Course.topic('av-computabilidad', function (p) {
     'pueda calcular</strong>. Tu portátil no puede hacer nada que no pueda hacer esta cosa: puede ' +
     'hacerlo muchísimo más deprisa, que no es lo mismo.');
 
+  p.ejemplo({
+    title: 'Seguir la máquina con el 7',
+    enunciado: 'La máquina de sumar uno tiene seis reglas. En $q_0$ avanza a la derecha sin cambiar nada; al leer el blanco pasa a $q_1$ y retrocede. En $q_1$, un 1 se convierte en 0 y sigue a la izquierda; un 0 o un blanco se convierte en 1 y para. Ejecutarla con la entrada $111_2 = 7$.',
+    pasos: [
+      { t: '<strong>Ir al final.</strong> Cinta $\\_111\\_$, cabezal en el primer 1, estado $q_0$. Tres pasos a la derecha leyendo unos sin tocarlos; en el cuarto lee el blanco, pasa a $q_1$ y retrocede. Cuatro pasos.', antes: '¿Cuántos pasos da $q_0$ antes de encontrar el blanco?' },
+      { t: '<strong>El acarreo.</strong> En $q_1$ lee el último 1: lo cambia por 0 y va a la izquierda. Otro 1: 0. Otro 1: 0. Tres pasos más; la cinta es $\\_000\\_$ y el cabezal está sobre el blanco de la izquierda.', antes: '$7 + 1 = 8$, y en binario $111 \\to 1000$: ¿cuántos unos hay que convertir en ceros?' },
+      { t: '<strong>Cerrar.</strong> $q_1$ lee el blanco, escribe 1 y para. Cinta: $1000_2 = 8$ ✓. Un paso más: ocho en total.' },
+      { t: '<strong>Con el 8.</strong> Entrada $1000$. $q_0$: cuatro pasos hasta el blanco, más uno al leerlo. $q_1$: lee el 0 final, lo cambia por 1 y para. Seis pasos, y la cinta dice $1001_2 = 9$ ✓. El acarreo se detiene en el primer cero.', antes: 'Con el 8 no hay acarreo que propagar. ¿Cuántos pasos crees que hacen falta?' }
+    ],
+    cierre: 'La máquina no sabe qué es sumar. Sabe mover un cabezal y cambiar símbolos según seis reglas, y de eso emerge la suma con acarreo. Todo lo que hace un ordenador es, en el fondo, esto: muchísimas veces por segundo.'
+  });
+
   p.demo({
     title: 'Una máquina de Turing en marcha',
     intro: 'Esta máquina suma uno a un número escrito en binario. Cuatro reglas, una cinta y un cabezal: no hay nada más dentro. Dale a los pasos y sigue el cabezal.',
+    predice: 'Pon la entrada 15, que es $1111_2$. ¿Cuántos unos convertirá en ceros el acarreo? ¿Cuántos pasos en total, según la cuenta del ejemplo?',
     build: function (host) {
       var inicial = '1011';
       var paso = 0;
@@ -166,6 +180,12 @@ Course.topic('av-computabilidad', function (p) {
     'pura, de las que a un ingeniero no le sirven de mucho. Turing hizo lo difícil: dar un problema ' +
     'concreto, natural y de interés práctico que ningún programa resuelve.');
 
+  p.comprueba('«El problema de la parada es indecidible.» ¿Significa eso que nunca se puede saber si un programa concreto termina?', [
+    { t: 'Sí: es imposible en todos los casos', ok: false, por: 'Para muchísimos programas concretos se sabe perfectamente: un bucle de 1 a 10 termina, y <code>while(true)</code> no. Lo indecidible es el caso <em>general</em>.' },
+    { t: 'No: lo que no existe es un método único que funcione con todos los programas', ok: true, por: 'Un programa dado se puede analizar y a menudo demostrar que termina. Lo que Turing prohíbe es un <code>PARA</code> que acierte siempre, con cualquier programa y cualquier entrada.' },
+    { t: 'No: basta con ejecutarlo y esperar', ok: false, por: 'Si termina, ejecutar lo confirma. Si no termina, esperar no lo confirma nunca: a la hora de espera no sabes si acabará en un minuto o jamás.' }
+  ]);
+
   p.section('El problema de la parada');
 
   p.text('El problema es este, y merece la pena leerlo dos veces porque parece perfectamente ' +
@@ -191,11 +211,12 @@ Course.topic('av-computabilidad', function (p) {
   p.text('Si para, es porque <code>PARA</code> dijo que no paraba. Si no para, es porque ' +
     '<code>PARA</code> dijo que sí paraba. En los dos casos <code>PARA</code> se equivoca, y habíamos ' +
     'supuesto que nunca se equivoca. La única hipótesis que se puede retirar es la existencia de ' +
-    '<code>PARA</code>. Por reducción al absurdo —la misma técnica del bloque 0—, no existe.');
+    '<code>PARA</code>. Por reducción al absurdo —la misma técnica de [[lg-demostracion|las demostraciones]]—, no existe.');
 
   p.demo({
     title: 'La contradicción de REBELDE',
     intro: 'Elige qué responde el oráculo PARA cuando se le pregunta por REBELDE consigo mismo, y sigue la cadena de consecuencias. Las dos ramas acaban en el mismo sitio.',
+    predice: 'Antes de pulsar: si PARA dice «sí para», ¿qué hace REBELDE por definición? ¿Y eso contradice lo que dijo PARA?',
     build: function (host) {
       var resp = 'si';
       var out = W.readout(host, '');
@@ -324,6 +345,13 @@ Course.topic('av-computabilidad', function (p) {
     'localizar con precisión. Saber exactamente dónde termina lo que se puede calcular es, en sí ' +
     'mismo, una de las cosas que se pueden calcular.');
 
+  p.trampas([
+    { e: '«Indecidible» leído como «nunca se puede saber»', por: 'Se refiere al caso general. Para un programa concreto muchas veces se demuestra que termina. Lo imposible es un método universal.' },
+    { e: 'Resolver la parada ejecutando el programa', por: 'Si para, lo ves. Si no para, nunca lo sabes: la espera no termina. El método tiene que responder en tiempo finito en los dos casos.' },
+    { e: 'Creer que Gödel demuestra que las matemáticas son inconsistentes', por: 'Demuestra que la consistencia no se puede probar <em>desde dentro</em>. Las matemáticas siguieron funcionando igual al día siguiente.' },
+    { e: '«Los humanos ven la verdad de $G$, luego superan a las máquinas»', por: 'Nada garantiza que un cerebro sea consistente ni que vea la verdad de su propia sentencia de Gödel. El argumento se ha propuesto muchas veces y no se sostiene.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.hist('Un siglo antes que Turing, <strong>Ada Lovelace</strong> ya había pensado en qué puede y qué no puede hacer ' +
     'una máquina que calcula. En 1843 tradujo un artículo sobre la Máquina Analítica de Charles Babbage, un ordenador ' +
@@ -362,18 +390,10 @@ Course.topic('av-computabilidad', function (p) {
     ask: function (d) {
       return '¿Es numerable el conjunto de <strong>' + d.t + '</strong>?<br>' +
         '<span style="font-size:0.875rem;color:var(--ink-faint)">Numerable = se puede poner en una ' +
-        'lista infinita indexada por los naturales. Escribe <code>sí</code> o <code>no</code>.</span>';
+        'lista infinita indexada por los naturales.</span>';
     },
-    fields: [{ name: 'q', label: 'Respuesta', w: 'wide', ph: 'sí / no' }],
+    fields: [{ name: 'q', label: 'Respuesta', opts: [{ t: 'sí, es numerable', v: 'si' }, { t: 'no', v: 'no' }] }],
     sol: function (d) { return { q: d.num ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        si: /^s|si\b|numerable|contable|se puede/,
-        no: /^n|no\b|no numerable|incontable|no se puede/
-      });
-      if (!q) return { ok: false, msg: 'Responde <strong>sí</strong> o <strong>no</strong>.' };
-      return { ok: (q === 'si') === d.num };
-    },
     hint: function () {
       return 'Pregúntate si cada elemento se puede describir con un <strong>texto finito</strong>. Si ' +
         'sí, es numerable. Si hace falta una cantidad infinita de información, casi seguro que no.';
@@ -459,18 +479,10 @@ Course.topic('av-computabilidad', function (p) {
     ask: function (d) {
       return '¿Es <strong>decidible</strong> la siguiente pregunta?<br><br>«' + d.t + '»<br>' +
         '<span style="font-size:0.875rem;color:var(--ink-faint)">Decidible = existe un algoritmo que ' +
-        'siempre responde bien y siempre termina. Escribe <code>sí</code> o <code>no</code>.</span>';
+        'siempre responde bien y siempre termina.</span>';
     },
-    fields: [{ name: 'q', label: 'Respuesta', w: 'wide', ph: 'sí / no' }],
+    fields: [{ name: 'q', label: 'Es', opts: [{ t: 'decidible', v: 'si' }, { t: 'indecidible', v: 'no' }] }],
     sol: function (d) { return { q: d.dec ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        si: /^s|si\b|decidible|hay algoritmo|se puede/,
-        no: /^n|no\b|indecidible|no se puede|imposible/
-      });
-      if (!q) return { ok: false, msg: 'Responde <strong>sí</strong> o <strong>no</strong>.' };
-      return { ok: (q === 'si') === d.dec };
-    },
     hint: function () {
       return 'La regla práctica del teorema de Rice: si la pregunta es sobre <em>cómo está escrito</em> ' +
         'el programa, suele ser decidible. Si es sobre <em>qué hace al ejecutarse</em>, casi nunca lo es.';
