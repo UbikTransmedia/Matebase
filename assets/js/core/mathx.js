@@ -38,7 +38,8 @@
   var OPS = {
     cdot: '·', times: '×', div: '÷', pm: '±', mp: '∓', ast: '∗', star: '⋆',
     cup: '∪', cap: '∩', setminus: '∖', oplus: '⊕', ominus: '⊖', otimes: '⊗',
-    circ: '∘', wedge: '∧', vee: '∨', land: '∧', lor: '∨', bigcirc: '◯'
+    circ: '∘', wedge: '∧', vee: '∨', land: '∧', lor: '∨', bigcirc: '◯',
+    Vert: '‖', parallel: '∥'
   };
 
   var RELS = {
