@@ -511,6 +511,9 @@ W.shader(host, {
 ```
 
 - En la pasada de simulación, `iResolution` es el tamaño del estado, no el del lienzo.
+- El estado guarda los **cuatro canales**, el alfa incluido: en esa pasada el color
+  no va a la pantalla, así que un fluido puede llevar velocidad en `rg`, densidad
+  en `b` y tinta en `a`. La función `vista` recibe los cuatro.
 - **Siembra siempre en el primer fotograma** con `step(iFrame, 0.5)`. El estado
   empieza a cero y, sin siembra, la auditoría lo detecta como imagen lisa.
 - «Volver al original» reinicia el contador de fotogramas y vuelve a sembrar.

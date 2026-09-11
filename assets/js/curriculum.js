@@ -1067,6 +1067,12 @@ window.CURRICULUM = [
         req: ['gfx-derivadas', 'cib-autoorganizacion', 'av-edp']
       },
       {
+        id: 'gfx-fluidos', t: 'Fluidos: tinta, humo y remolinos',
+        r: 'Transportar mirando hacia atrás, corrientes sin divergencia y un chorro de humo en un shader con memoria.',
+        o: ['Advección semilagrangiana: mirar hacia atrás', 'Campos sin divergencia con ruido rizado', 'Presión, viscosidad y un fluido de una sola pasada'],
+        req: ['gfx-buffers', 'av-vectorial', 'gfx-ruido']
+      },
+      {
         id: 'gfx-tunel', t: 'El túnel',
         r: 'El efecto que definió una época: polares, una división y la ilusión de profundidad infinita.',
         o: ['Uno partido por erre es profundidad', 'Vestir la pared sin tener texturas', 'Curvar el túnel y hacerlo respirar'],

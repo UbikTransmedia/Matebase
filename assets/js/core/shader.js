@@ -62,10 +62,24 @@
     '  gl_FragColor = vec4(color.rgb, 1.0);\n' +
     '}\n';
 
-  function fuenteCompleta(codigo, mandos) {
+  /* En la pasada de simulacion de un visor con memoria el color no va a la
+     pantalla sino al estado, y ahi el cuarto canal es un numero mas: se
+     guarda tal cual, como en los buffers de Shadertoy. Forzarlo a 1 dejaba
+     el estado con tres canales utiles aunque el tema prometiera cuatro. */
+  var CIERRE_ESTADO =
+    '\nvoid main(){\n' +
+    '  vec4 color = vec4(0.0, 0.0, 0.0, 1.0);\n' +
+    '  mainImage(color, gl_FragCoord.xy);\n' +
+    '  gl_FragColor = color;\n' +
+    '}\n';
+
+  function fuenteCompleta(codigo, mandos, estado) {
     var pre = PREAMBULO.slice();
     (mandos || []).forEach(function (m) { pre.push('uniform float ' + m.n + ';'); });
-    return { texto: pre.join('\n') + '\n' + codigo + CIERRE, saltadas: pre.length + 1 };
+    return {
+      texto: pre.join('\n') + '\n' + codigo + (estado ? CIERRE_ESTADO : CIERRE),
+      saltadas: pre.length + 1
+    };
   }
 
   /* ---------------- contexto auxiliar compartido ----------------
@@ -84,8 +98,8 @@
   }
 
   /** Compila y devuelve {ok, errores:[{linea, msg}]}. No pinta nada. */
-  function compila(gl, codigo, mandos) {
-    var f = fuenteCompleta(codigo, mandos);
+  function compila(gl, codigo, mandos, estado) {
+    var f = fuenteCompleta(codigo, mandos, estado);
     var sh = gl.createShader(gl.FRAGMENT_SHADER);
     gl.shaderSource(sh, f.texto);
     gl.compileShader(sh);
@@ -820,7 +834,7 @@
   Visor.prototype.recompila = function () {
     var gl = this.gl;
     if (!gl) return;
-    var r = compila(gl, this.codigo(), this.mandos);
+    var r = compila(gl, this.codigo(), this.mandos, this.buffer);
     if (!r.ok) {
       this.muestraErrores(r.errores);
       return false;
