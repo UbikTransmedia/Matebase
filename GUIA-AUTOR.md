@@ -515,6 +515,30 @@ W.shader(host, {
   empieza a cero y, sin siembra, la auditoría lo detecta como imagen lisa.
 - «Volver al original» reinicia el contador de fotogramas y vuelve a sembrar.
 
+### Shaders con imagen
+
+Con `imagen: true`, el visor pone en `iChannel1` una foto que pinta el propio
+curso —un paisaje de 800 × 400 con un cartel de letras, colores y grises— y
+añade el botón **Usar la cámara**, que la cambia por la imagen de la cámara del
+alumno, como en un espejo.
+
+```js
+W.shader(host, {
+  id: 'gfx-filtros-1', imagen: true,
+  codigo: '... texture2D(iChannel1, uv) ... iChannelResolution[1].xy ...'
+});
+```
+
+- `iChannelResolution[1].xy` es el tamaño en píxeles de la imagen: hace falta
+  para no deformarla (escalarla hasta cubrir el lienzo) y para leer a un vecino,
+  que está a `1.0 / iChannelResolution[1].xy` en coordenadas de 0 a 1.
+- La cámara solo se pide al pulsar el botón, se apaga en cuanto el visor sale de
+  pantalla y su imagen no sale del ordenador.
+- **El contexto auxiliar pone siempre la foto en el canal 1**: la auditoría ve
+  los filtros con imagen y `W.glslIguales` corrige ejercicios de filtros
+  comparando lo que cada respuesta hace con la foto. Se puede combinar con
+  `buffer: true`, y entonces la simulación tiene la foto a mano.
+
 ### Corregir un ejercicio de código
 
 `W.glslIguales(respuesta, referencia, { tam, tol, valores, t })` compila los dos

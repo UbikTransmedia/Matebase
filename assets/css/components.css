@@ -486,6 +486,8 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
 .shd__err.is-bien .shd__ln{background:color-mix(in srgb, var(--ok) 22%, transparent)}
 
 .shd__pie{display:flex; flex-wrap:wrap; gap:9px; margin-top:11px; align-items:center}
+.shd__cam{font-size:0.75rem; color:var(--ink-faint); line-height:1.4}
+.shd__cam:empty{display:none}
 .shd--sinwebgl .shd__pie .btn{display:none}
 
 /* Un shader se lee mejor ancho: en el escritorio, que respire. */

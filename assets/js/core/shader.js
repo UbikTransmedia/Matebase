@@ -46,6 +46,11 @@
     // los demas no se usa, y declararlo siempre deja pegar cualquier shader
     // de Shadertoy que lo nombre sin tocar nada.
     'uniform sampler2D iChannel0;',
+    // Los visores con imagen (imagen: true) ponen en el canal 1 una foto que
+    // pinta el propio curso, o la camara si el alumno la enciende. El tamano
+    // de la imagen de cada canal va en iChannelResolution, como en Shadertoy.
+    'uniform sampler2D iChannel1;',
+    'uniform vec3  iChannelResolution[4];',
     '#define PI 3.14159265359',
     '#define TAU 6.28318530718'
   ];
@@ -108,6 +113,131 @@
     return r;
   };
 
+  /* ---------------- la foto del curso ----------------
+     Los filtros de imagen necesitan una imagen, y el curso no puede traer
+     archivos ni pedirlos por la red. Se pinta una con el Canvas 2D: un paisaje
+     con cielo, sol, montañas, un lago y una casa, y encima una carta de colores
+     y unas letras, que es donde se ve si un filtro respeta los tonos y los
+     bordes. Se pinta una sola vez; cada contexto WebGL la sube a su textura. */
+  var FOTO = null;
+  function foto() {
+    if (FOTO) return FOTO;
+    /* 2:1, como casi todos los visores, y lo importante en la franja central:
+       al cubrir un lienzo mas apaisado se recorta por arriba y por abajo. */
+    var an = 800, al = 400, x, k;
+    var c = document.createElement('canvas');
+    c.width = an; c.height = al;
+    FOTO = c;
+    var g = c.getContext('2d');
+    if (!g) return c;
+    var semilla = 7;
+    function azar() { semilla = (semilla * 16807) % 2147483647; return semilla / 2147483647; }
+
+    // cielo, sol y nubes
+    var cielo = g.createLinearGradient(0, 0, 0, 260);
+    cielo.addColorStop(0, '#1f4f96'); cielo.addColorStop(0.55, '#6fa6dc'); cielo.addColorStop(1, '#f4c592');
+    g.fillStyle = cielo; g.fillRect(0, 0, an, 270);
+    var halo = g.createRadialGradient(330, 105, 8, 330, 105, 105);
+    halo.addColorStop(0, 'rgba(255,250,225,1)'); halo.addColorStop(0.22, 'rgba(255,236,170,0.9)');
+    halo.addColorStop(1, 'rgba(255,220,150,0)');
+    g.fillStyle = halo; g.beginPath(); g.arc(330, 105, 105, 0, Math.PI * 2); g.fill();
+    g.fillStyle = 'rgba(255,255,255,0.78)';
+    [[120, 58, 60, 16], [166, 50, 42, 13], [470, 78, 70, 15], [690, 38, 54, 12]].forEach(function (n) {
+      g.beginPath(); g.ellipse(n[0], n[1], n[2], n[3], 0, 0, Math.PI * 2); g.fill();
+    });
+
+    // dos sierras: la lejana, azulada por el aire; la cercana, verde
+    function sierra(base, amp, frec, fase, color) {
+      g.fillStyle = color; g.beginPath(); g.moveTo(0, 280);
+      for (var xx = 0; xx <= an; xx += 8) {
+        g.lineTo(xx, base - amp * (0.6 * Math.abs(Math.sin(xx * frec + fase)) +
+          0.4 * Math.abs(Math.sin(xx * frec * 2.7 + fase * 1.9))));
+      }
+      g.lineTo(an, 280); g.closePath(); g.fill();
+    }
+    sierra(218, 96, 0.009, 0.6, '#7d93b8');
+    sierra(246, 60, 0.014, 2.1, '#4f7156');
+
+    // casa y pinos en la orilla
+    g.fillStyle = '#e8dcc2'; g.fillRect(70, 206, 74, 56);
+    g.fillStyle = '#b3432f'; g.beginPath(); g.moveTo(62, 210); g.lineTo(107, 172); g.lineTo(152, 210); g.closePath(); g.fill();
+    g.fillStyle = '#5a3b2a'; g.fillRect(98, 232, 16, 30);
+    g.fillStyle = '#ffd66b'; g.fillRect(78, 220, 14, 12); g.fillRect(122, 220, 14, 12);
+    function pino(px, py, h) {
+      g.fillStyle = '#4a3322'; g.fillRect(px - 2, py - h * 0.2, 4, h * 0.2);
+      g.fillStyle = '#1f4a2c';
+      for (var i = 0; i < 3; i++) {
+        g.beginPath();
+        g.moveTo(px - h * (0.32 - i * 0.07), py - h * (0.18 + i * 0.22));
+        g.lineTo(px, py - h * (0.6 + i * 0.2));
+        g.lineTo(px + h * (0.32 - i * 0.07), py - h * (0.18 + i * 0.22));
+        g.closePath(); g.fill();
+      }
+    }
+    [[26, 80], [48, 62], [180, 55], [470, 70], [494, 52]].forEach(function (t) { pino(t[0], 262, t[1]); });
+
+    // el lago, con el reflejo del sol y el de la casa
+    var agua = g.createLinearGradient(0, 262, 0, 334);
+    agua.addColorStop(0, '#9bb9cf'); agua.addColorStop(1, '#2c5673');
+    g.fillStyle = agua; g.fillRect(0, 262, an, 72);
+    g.globalAlpha = 0.28; g.fillStyle = '#e8dcc2'; g.fillRect(70, 264, 74, 26); g.globalAlpha = 1;
+    for (k = 0; k < 14; k++) {
+      g.fillStyle = 'rgba(255,240,200,' + (0.55 - k * 0.035).toFixed(3) + ')';
+      g.fillRect(306 + azar() * 12 - k * 0.5, 266 + k * 5, 38 - k * 1.2 + azar() * 10, 2);
+    }
+
+    // el prado, con briznas
+    var prado = g.createLinearGradient(0, 326, 0, al);
+    prado.addColorStop(0, '#5f8f3e'); prado.addColorStop(1, '#2f5a26');
+    g.fillStyle = prado; g.beginPath(); g.moveTo(0, 334);
+    for (x = 0; x <= an; x += 20) g.lineTo(x, 327 + 6 * Math.sin(x * 0.02));
+    g.lineTo(an, al); g.lineTo(0, al); g.closePath(); g.fill();
+    g.lineWidth = 1;
+    for (k = 0; k < 360; k++) {
+      var hx = azar() * an, hy = 336 + azar() * 62;
+      g.strokeStyle = azar() < 0.5 ? 'rgba(30,60,20,0.55)' : 'rgba(160,200,95,0.5)';
+      g.beginPath(); g.moveTo(hx, hy); g.lineTo(hx + (azar() - 0.5) * 4, hy - 4 - azar() * 6); g.stroke();
+    }
+
+    // un cartel en la orilla: letras, carta de colores y escala de grises, que
+    // es donde se ve si un filtro respeta los bordes y los tonos
+    g.fillStyle = '#5a3b2a'; g.fillRect(566, 226, 8, 44); g.fillRect(726, 226, 8, 44);
+    g.fillStyle = '#26303a'; g.fillRect(534, 118, 232, 112);
+    g.fillStyle = '#f4f1ea'; g.fillRect(540, 124, 220, 100);
+    g.font = 'bold 34px "Trebuchet MS", Arial, sans-serif';
+    g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+    g.fillStyle = '#1c2530'; g.fillText('MATEBASE', 650, 160);
+    ['#d62728', '#ff7f0e', '#f2d024', '#2ca02c', '#1f77b4', '#9467bd'].forEach(function (t, i) {
+      g.fillStyle = t; g.fillRect(548 + i * 34.5, 170, 32, 22);
+    });
+    for (k = 0; k < 6; k++) {
+      var v = Math.round(k * 255 / 5);
+      g.fillStyle = 'rgb(' + v + ',' + v + ',' + v + ')'; g.fillRect(548 + k * 34.5, 196, 32, 20);
+    }
+    return c;
+  }
+
+  /** Sube a una textura una imagen, un canvas o un video. Se voltea en vertical
+      para que uv = (0, 0) sea la esquina de abajo a la izquierda, como
+      fragCoord y como en Shadertoy. Usa la unidad de textura activa. */
+  function subeImagen(gl, tex, fuente) {
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, fuente);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+  }
+
+  function texturaImagen(gl, fuente) {
+    var t = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, t);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    subeImagen(gl, t, fuente);
+    return t;
+  }
+
   /* ---------------- pintar en el contexto auxiliar ---------------- */
   function pintaEnAux(codigo, mandos, valores, tam, t) {
     var gl = auxGL();
@@ -133,6 +263,17 @@
     gl.uniform1f(gl.getUniformLocation(pr, 'iTime'), t || 0);
     gl.uniform1f(gl.getUniformLocation(pr, 'iFrame'), 0);
     gl.uniform4f(gl.getUniformLocation(pr, 'iMouse'), 0, 0, 0, 0);
+    // La foto va siempre en el canal 1: asi se auditan y se corrigen los
+    // filtros de imagen, que sin imagen pintarian un negro liso.
+    gl.activeTexture(gl.TEXTURE1);
+    if (!gl.__foto) gl.__foto = texturaImagen(gl, foto());
+    gl.bindTexture(gl.TEXTURE_2D, gl.__foto);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    var uc1 = gl.getUniformLocation(pr, 'iChannel1');
+    if (uc1) gl.uniform1i(uc1, 1);
+    var ucr = gl.getUniformLocation(pr, 'iChannelResolution[1]');
+    if (ucr) gl.uniform3f(ucr, FOTO.width, FOTO.height, 1);
     (mandos || []).forEach(function (m) {
       var u = gl.getUniformLocation(pr, m.n);
       if (u) gl.uniform1f(u, (valores && valores[m.n] !== undefined) ? valores[m.n] : m.value);
@@ -185,7 +326,8 @@
            'normalize faceforward reflect refract matrixCompMult lessThan ' +
            'lessThanEqual greaterThan greaterThanEqual equal notEqual any ' +
            'all not texture2D textureCube dFdx dFdy fwidth',
-      uni: 'iResolution iTime iMouse iFrame iChannel0 PI TAU gl_FragCoord gl_FragColor ' +
+      uni: 'iResolution iTime iMouse iFrame iChannel0 iChannel1 iChannelResolution PI TAU ' +
+           'gl_FragCoord gl_FragColor ' +
            'gl_Position gl_PointSize gl_PointCoord gl_FrontFacing'
     };
     Object.keys(grupos).forEach(function (clase) {
@@ -287,6 +429,9 @@
     this.escala = o.escala || 0.5;
     this.pasos = Math.max(1, o.pasos || 1);
     this.tex = [null, null]; this.fb = [null, null];
+    /* Con imagen: en iChannel1 hay una foto, o la camara si se enciende. */
+    this.imagen = !!o.imagen;
+    this.texImg = null; this.cam = null;
     this.build(host);
   }
 
@@ -382,6 +527,22 @@
       this.bYa.addEventListener('click', function () { self.recompila(); self.guarda(); });
       pie.insertBefore(this.bYa, pie.firstChild);
     }
+    /* La camara solo se pide al pulsar, y su imagen no sale del ordenador:
+       se pinta en la tarjeta grafica y ahi se queda. */
+    if (this.imagen && global.navigator && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      this.bCam = U.el('button.btn', {
+        type: 'button', text: 'Usar la cámara',
+        title: 'Aplicar el shader a la imagen de tu cámara en lugar de a la foto'
+      });
+      this.bCam.addEventListener('click', function () {
+        if (self.cam) self.apagaCamara(); else self.enciendeCamara();
+      });
+      pie.appendChild(this.bCam);
+    }
+    if (this.imagen) {
+      this.camEstado = U.el('span.shd__cam', { role: 'status', 'aria-live': 'polite' });
+      pie.appendChild(this.camEstado);
+    }
     this.el.appendChild(pie);
 
     if (o.nota) W.hint(this.el, o.nota);
@@ -403,7 +564,8 @@
     if (global.IntersectionObserver) {
       this.io = new IntersectionObserver(function (ents) {
         ents.forEach(function (en) {
-          if (en.isIntersecting) self.despierta(); else self.duerme();
+          if (en.isIntersecting) self.despierta();
+          else { self.duerme(); self.apagaCamara(); }     // sin mirar, sin camara
         });
       }, { rootMargin: '120px' });
       this.io.observe(this.stage);
@@ -491,6 +653,13 @@
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
 
     if (this.buffer) this.preparaBuffer();
+    if (this.imagen) {
+      gl.activeTexture(gl.TEXTURE1);
+      this.texImg = texturaImagen(gl, foto());
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, null);
+      this.imgW = FOTO.width; this.imgH = FOTO.height;
+    }
 
     var self = this;
     this._resize = function () { self.mide(); };
@@ -615,6 +784,8 @@
     if (this.u.f) gl.uniform1f(this.u.f, this.frame);
     if (this.u.m) gl.uniform4f(this.u.m, this.raton[0] * esc, this.raton[1] * esc, this.raton[2] * esc, this.raton[3] * esc);
     if (this.u.ch) gl.uniform1i(this.u.ch, 0);
+    if (this.u.cr0) gl.uniform3f(this.u.cr0, this.tw, this.th, 1);
+    this.canalImagen();
     this.mandos.forEach(function (m) {
       if (self.um[m.n]) gl.uniform1f(self.um[m.n], self.valores[m.n]);
     });
@@ -623,6 +794,7 @@
   Visor.prototype.pintaBuffer = function () {
     var gl = this.gl;
     if (!this.tex[0]) this.texturas();
+    this.actualizaCamara();
     this.usa(this.prog);
     for (var k = 0; k < this.pasos; k++) {
       gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb[1]);
@@ -674,7 +846,10 @@
       t: gl.getUniformLocation(pr, 'iTime'),
       m: gl.getUniformLocation(pr, 'iMouse'),
       f: gl.getUniformLocation(pr, 'iFrame'),
-      ch: gl.getUniformLocation(pr, 'iChannel0')
+      ch: gl.getUniformLocation(pr, 'iChannel0'),
+      ch1: gl.getUniformLocation(pr, 'iChannel1'),
+      cr0: gl.getUniformLocation(pr, 'iChannelResolution[0]'),
+      cr1: gl.getUniformLocation(pr, 'iChannelResolution[1]')
     };
     var self = this;
     this.um = {};
@@ -700,6 +875,91 @@
     this.el.classList.remove('shd--roto');
   };
 
+  /* ---------------- la imagen y la camara ---------------- */
+
+  /** Deja la imagen en la unidad 1 para el programa en uso. */
+  Visor.prototype.canalImagen = function () {
+    var gl = this.gl;
+    if (!this.imagen || !this.texImg || !this.u) return;
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, this.texImg);
+    gl.activeTexture(gl.TEXTURE0);
+    if (this.u.ch1) gl.uniform1i(this.u.ch1, 1);
+    if (this.u.cr1) gl.uniform3f(this.u.cr1, this.imgW, this.imgH, 1);
+  };
+
+  /** Copia el fotograma de la camara en la textura de la imagen, dado la
+      vuelta como un espejo, que es como uno espera verse. */
+  Visor.prototype.actualizaCamara = function () {
+    var cam = this.cam, gl = this.gl;
+    if (!cam || !gl || !cam.video || cam.video.readyState < 2) return;
+    if (!this.el.isConnected) { this.apagaCamara(); return; }
+    var vw = cam.video.videoWidth, vh = cam.video.videoHeight;
+    if (!vw || !vh) return;
+    var an = Math.min(640, vw), al = Math.round(an * vh / vw);
+    if (cam.lienzo.width !== an || cam.lienzo.height !== al) { cam.lienzo.width = an; cam.lienzo.height = al; }
+    cam.ctx.save();
+    cam.ctx.translate(an, 0); cam.ctx.scale(-1, 1);
+    cam.ctx.drawImage(cam.video, 0, 0, an, al);
+    cam.ctx.restore();
+    gl.activeTexture(gl.TEXTURE1);
+    subeImagen(gl, this.texImg, cam.lienzo);
+    gl.activeTexture(gl.TEXTURE0);
+    this.imgW = an; this.imgH = al;
+  };
+
+  Visor.prototype.estadoCamara = function (msg) {
+    if (this.camEstado) this.camEstado.textContent = msg;
+  };
+
+  Visor.prototype.enciendeCamara = function () {
+    var self = this;
+    if (this.cam || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+    this.estadoCamara('Pidiendo permiso para usar la cámara…');
+    navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 640 }, height: { ideal: 480 } }, audio: false })
+      .then(function (flujo) {
+        if (!self.el.isConnected || self.gl === false) {
+          flujo.getTracks().forEach(function (t) { t.stop(); });
+          return;
+        }
+        var video = document.createElement('video');
+        video.muted = true;
+        video.setAttribute('playsinline', '');
+        video.srcObject = flujo;
+        var pr = video.play();
+        if (pr && pr.catch) pr.catch(function () { });
+        var lienzo = document.createElement('canvas');
+        self.cam = { flujo: flujo, video: video, lienzo: lienzo, ctx: lienzo.getContext('2d') };
+        if (self.bCam) self.bCam.textContent = 'Volver a la foto';
+        self.estadoCamara('Cámara encendida. La imagen no sale de tu ordenador.');
+        // con la camara encendida lo natural es verla moverse
+        self.pausadoPorMano = false;
+        if (!self.corriendo) self.play();
+        self.pintaBoton();
+      })
+      .catch(function (e) {
+        var denegado = e && (e.name === 'NotAllowedError' || e.name === 'SecurityError');
+        self.estadoCamara('No se ha podido abrir la cámara' +
+          (denegado ? ': el navegador no ha dado permiso.' : '.') + ' Se sigue usando la foto.');
+      });
+  };
+
+  Visor.prototype.apagaCamara = function () {
+    if (!this.cam) return;
+    this.cam.flujo.getTracks().forEach(function (t) { t.stop(); });
+    this.cam.video.srcObject = null;
+    this.cam = null;
+    if (this.gl && this.texImg) {
+      this.gl.activeTexture(this.gl.TEXTURE1);
+      subeImagen(this.gl, this.texImg, foto());
+      this.gl.activeTexture(this.gl.TEXTURE0);
+      this.imgW = FOTO.width; this.imgH = FOTO.height;
+    }
+    if (this.bCam) this.bCam.textContent = 'Usar la cámara';
+    this.estadoCamara('');
+    if (this.gl && !this.corriendo) this.pinta();
+  };
+
   /* ---------------- pintado ---------------- */
 
   Visor.prototype.pinta = function () {
@@ -715,6 +975,8 @@
     this.mandos.forEach(function (m) {
       if (self.um[m.n]) gl.uniform1f(self.um[m.n], self.valores[m.n]);
     });
+    this.actualizaCamara();
+    this.canalImagen();
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     this.frame++;
   };
@@ -798,6 +1060,8 @@
   /* Las palabras que el coloreado reconoce. tests.html comprueba que cada
      una tiene su entrada en la referencia GLSL del panel lateral. */
   W.glslLexico = LEXICO;
+  /** La foto que ven los visores con imagen (un canvas de 800 x 400). */
+  W.glslFoto = foto;
   W.pintaBloques = pintaBloques;
   W.glslIguales = iguales;
   W.glslPreambulo = PREAMBULO;

@@ -1109,6 +1109,12 @@ window.CURRICULUM = [
         req: ['gfx-color']
       },
       {
+        id: 'gfx-filtros', t: 'Filtros de cámara: la imagen como función',
+        r: 'Blanco y negro, sepia, desenfoque, bordes y trama de puntos, sobre una foto o sobre tu cámara.',
+        o: ['Leer una imagen con texture2D', 'Filtros de un píxel: brillo, contraste y color', 'Convolución: desenfoque, nitidez y bordes'],
+        req: ['gfx-post', 'gfx-derivadas', 'cib-filtrado']
+      },
+      {
         id: 'gfx-directo', t: 'La actuación',
         r: 'Del ejercicio al directo: reglas simples, complejidad epatante, y adónde ir después.',
         o: ['Componer un shader por capas', 'Parámetros como mandos de una actuación', 'Herramientas libres y comunidad'],
