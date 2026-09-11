@@ -262,6 +262,13 @@ Course.topic('lg-proposiciones', function (p) {
     'un número mayor que todos, y es falso. Las mismas palabras en distinto orden significan cosas ' +
     'muy distintas.', 'warn', 'Cuantificadores anidados');
 
+  p.trampas([
+    { e: 'Negar «todos» con «ninguno»', por: 'La negación de «todos los números son pares» es «alguno no es par», no «ninguno es par». Basta un contraejemplo para negar un «todos».' },
+    { e: 'Leer una implicación como equivalencia', por: '«Si llueve, me mojo» no dice que si me mojo, llueva: puede ser la ducha. El recíproco es otra afirmación, y hay que demostrarlo aparte.' },
+    { e: 'Dar por falsa una implicación con antecedente falso', por: '«Si 2 es impar, entonces 3 es par» es verdadera: de algo falso se sigue cualquier cosa. La implicación solo falla con antecedente verdadero y consecuente falso.' },
+    { e: 'Leer «o» como exclusivo', por: 'En matemáticas «p o q» es verdadero también cuando lo son las dos. «$x < 5$ o $x > 2$» lo cumplen todos los números.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Los cuantificadores son la letra pequeña de los contratos y de los programas. <em>«Todos los ' +
     'pedidos se entregan en 24 h»</em> se rompe con <strong>un</strong> contraejemplo; <em>«existe ' +

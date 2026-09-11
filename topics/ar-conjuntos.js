@@ -1,6 +1,11 @@
 /* Tema: Conjuntos numéricos y la recta real */
 Course.topic('ar-conjuntos', function (p) {
 
+  p.puente('Los temas anteriores presentaron cada tipo de número por separado: [[ar-naturales|naturales]], ' +
+    '[[ar-enteros|enteros]], [[ar-fracciones|fracciones]] y [[ar-decimales|decimales]]. Este los junta en ' +
+    'una sola recta y añade los que faltaban, los irracionales, con la ' +
+    '[[lg-demostracion|reducción al absurdo]] que ya conoces.');
+
   p.text('Este tema cierra el bloque de aritmética juntando todo lo anterior en una sola historia. ' +
     'Porque los tipos de número no se inventaron por capricho: cada uno apareció cuando el anterior ' +
     'se quedó corto para responder a una pregunta razonable.');
@@ -153,6 +158,7 @@ Course.topic('ar-conjuntos', function (p) {
 
   p.demo({
     title: 'Un intervalo como entorno de un punto',
+    predice: 'Con centro 2 y radio 0,5, ¿qué intervalo saldrá? ¿Y qué desigualdad con valor absoluto lo describe? Escríbelas antes de mover los mandos.',
     intro: 'Mueve el centro y el radio. La condición con valor absoluto y el intervalo son la misma cosa dicha de dos maneras.',
     build: function (host, d) {
       var c = 2, r = 1.5;
@@ -181,6 +187,13 @@ Course.topic('ar-conjuntos', function (p) {
       paint();
     }
   });
+
+  p.trampas([
+    { e: 'Tomar $1{,}41$ por $\\sqrt 2$', por: '$1{,}41 = \\frac{141}{100}$ es un racional que se le acerca, y $1{,}41^2 = 1{,}9881$. $\\sqrt 2$ no es ninguna fracción: por eso hizo falta un tipo de número nuevo.' },
+    { e: 'Confundir paréntesis y corchete', por: '$(2, 5]$ contiene al 5 y no al 2. El corchete incluye el extremo; el paréntesis lo deja fuera. En la recta, punto relleno o hueco.' },
+    { e: 'Buscar «el siguiente» de un número real', por: 'Entre dos reales cualesquiera hay infinitos: no existe el que viene justo después de 2. Eso solo pasa en los naturales y los enteros.' },
+    { e: 'Creer que los irracionales son excepciones raras', por: 'Son la inmensa mayoría de la recta: $\\sqrt 2$, $\\sqrt 3$, $\\pi$, $e$ y casi todos los demás. Los racionales están apretados y aun así no llenan nada.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Fuera del aula, casi nada se especifica con un número exacto: se especifica con un intervalo. ' +

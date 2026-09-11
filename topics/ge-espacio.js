@@ -288,6 +288,7 @@ Course.topic('ge-espacio', function (p) {
 
   p.demo({
     title: 'Las cinco maneras de colocar tres planos',
+    predice: 'Tres planos paralelos y distintos: ¿qué rango tendrá la matriz de coeficientes, 1, 2 o 3? ¿Y la ampliada? Elige después esa configuración y compara.',
     intro: 'Elige una configuración y gira el dibujo. Debajo, los rangos que la delatan: el dibujo y la cuenta cuentan la misma historia.',
     build: function (host) {
       var CASOS = {

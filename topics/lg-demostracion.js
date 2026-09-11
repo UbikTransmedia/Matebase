@@ -1,6 +1,11 @@
 /* Tema: Métodos de demostración e inducción */
 Course.topic('lg-demostracion', function (p) {
 
+  p.puente('Con proposiciones y [[lg-conjuntos|conjuntos]] ya se puede afirmar; este tema enseña a ' +
+    'saber si una afirmación es cierta sin comprobarla en todos los casos. Las herramientas son las ' +
+    'conectivas de [[lg-proposiciones|lógica]], en especial la implicación y su contrarrecíproca, y una ' +
+    'idea nueva: el dominó de la inducción.');
+
   p.text('Esto es lo que separa a las matemáticas de todas las demás ciencias. Un físico comprueba una ' +
     'ley en un millón de experimentos y la da por buena hasta que aparezca algo mejor. Un matemático ' +
     'no: o lo <strong>demuestra</strong>, y entonces es cierto para siempre y sin excepciones, o no lo ' +
@@ -12,6 +17,7 @@ Course.topic('lg-demostracion', function (p) {
 
   p.demo({
     title: 'Un patrón que aguanta 40 casos y luego se rompe',
+    predice: 'Antes de subir $n$: ¿en qué $n$ crees que fallará $n^2 + n + 41$? Pista: prueba a factorizar el resultado cuando $n = 40$.',
     intro: 'La fórmula n² + n + 41 da números primos una y otra vez. Ve subiendo n. ¿Cuántos casos harían falta para convencerte?',
     build: function (host, d) {
       var n = 0;
@@ -141,6 +147,7 @@ Course.topic('lg-demostracion', function (p) {
 
   p.demo({
     title: 'El dominó de la inducción',
+    predice: 'Si quitas el caso base pero dejas el paso inductivo, ¿caerá alguna ficha? Y si rompes el paso en la ficha 5, ¿cuántas caen: ninguna, cinco o todas menos la quinta?',
     intro: 'Quita el caso base o rompe el paso inductivo y mira qué pasa. Hacen falta los dos: ninguno sobra.',
     build: function (host, d) {
       var base = true, paso = true, roto = 7;

@@ -1,6 +1,11 @@
 /* Tema: Conjuntos y aplicaciones */
 Course.topic('lg-conjuntos', function (p) {
 
+  p.puente('Las proposiciones del tema anterior decían si algo es verdadero o falso. Este tema ' +
+    'agrupa objetos, y descubre que las dos cosas son la misma: pertenecer a un conjunto es que una ' +
+    'proposición sea verdadera. Las conectivas «y», «o» y «no» de [[lg-proposiciones|lógica]] se ' +
+    'convierten en intersección, unión y complementario.');
+
   p.text('En el tema anterior aprendiste a decidir si una afirmación es verdadera o falsa. Ahora vamos ' +
     'a hacer algo que parece mucho más modesto —agrupar cosas— y que resulta ser más potente. Fíjate ' +
     'en que la pregunta <em>«¿es verdad que 3 es impar?»</em> y la pregunta <em>«¿está el 3 en el ' +
@@ -265,6 +270,7 @@ Course.topic('lg-conjuntos', function (p) {
 
   p.demo({
     title: 'Los cuatro casos posibles',
+    predice: 'Si $A$ tiene 3 elementos y $B$ tiene 2, ¿puede haber una aplicación inyectiva de $A$ en $B$? ¿Y una sobreyectiva? Decide antes de mirar las flechas.',
     intro: 'Cada flecha lleva un elemento de A a uno de B. Fíjate en si hay destinos compartidos (no inyectiva) o destinos vacíos (no sobreyectiva).',
     build: function (host, d) {
       var tipo = 'bi';
@@ -331,6 +337,13 @@ Course.topic('lg-conjuntos', function (p) {
     'en su versión ingenua: si consideramos «el conjunto de todos los conjuntos que no se contienen a ' +
     'sí mismos», ¿se contiene a sí mismo? Cualquier respuesta lleva a contradicción. Fue necesario ' +
     'refundar la teoría con axiomas más cuidadosos, y de esa crisis salió la lógica matemática moderna.');
+
+  p.trampas([
+    { e: 'Confundir pertenecer con estar incluido', por: '$3 \\in \\{1, 3\\}$, pero $\\{3\\} \\subset \\{1, 3\\}$: el elemento pertenece, el conjunto se incluye. Y $\\varnothing \\subset A$ siempre, aunque no pertenezca.' },
+    { e: 'Aplicar De Morgan sin cambiar la operación', por: 'El complementario de $A \\cap B$ es $\\overline{A} \\cup \\overline{B}$: la intersección se convierte en unión. Con un diagrama de Venn se ve en un segundo.' },
+    { e: 'Contar la unión sumando', por: 'Con $|A| = 5$, $|B| = 4$ y dos elementos comunes, $|A \\cup B| = 5 + 4 - 2 = 7$. Sumar sin restar cuenta dos veces los comunes.' },
+    { e: 'Llamar aplicación a cualquier flecha', por: 'Cada elemento de $A$ tiene que tener exactamente una imagen. Uno sin flecha, o con dos, no es una aplicación por mucho que el dibujo lo parezca.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Que una aplicación sea inyectiva es lo que hace que un identificador sirva: si dos personas ' +

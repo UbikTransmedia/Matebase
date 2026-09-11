@@ -162,6 +162,7 @@ Course.topic('ar-divisibilidad', function (p) {
 
   p.demo({
     title: 'Fábrica de descomposiciones',
+    predice: '¿Cuántos divisores tiene 36? Cuenta los que puedas de cabeza y luego compara. ¿Y 37? ¿Y 64?',
     intro: 'Elige un número y mira de qué primos está hecho, cuántos divisores tiene y por qué.',
     build: function (host, d) {
       var out = W.readout(host, '');
@@ -224,6 +225,13 @@ Course.topic('ar-divisibilidad', function (p) {
     { t: 'A los 4 segundos, el m.c.d.', ok: false, por: 'A los 4 segundos no ha destellado ninguno de los dos. «Volver a coincidir» pide un múltiplo común, no un divisor.' },
     { t: 'A los 60 segundos, el m.c.m.', ok: true, por: '60 es el primer número que es múltiplo de 12 y de 20 a la vez: el primero destella en el 12, 24, 36, 48, 60 y el segundo en el 20, 40, 60.' },
     { t: 'A los 240 segundos, el producto', ok: false, por: 'A los 240 también coinciden, pero ya lo han hecho antes, a los 60. El producto solo es el primer encuentro cuando los dos números no tienen factores comunes.' }
+  ]);
+
+  p.trampas([
+    { e: 'Contar el 1 entre los primos', por: 'Tiene un solo divisor, y un primo tiene exactamente dos. Si el 1 fuera primo, $6 = 2\\cdot 3 = 1\\cdot 2\\cdot 3 = 1\\cdot 1\\cdot 2\\cdot 3$ y la descomposición dejaría de ser única.' },
+    { e: 'Mirar la última cifra para el 3', por: '21 acaba en 1 y es múltiplo de 3. Para el 3 y el 9 se suman las cifras; la última cifra solo decide el 2, el 5 y el 10.' },
+    { e: 'Dar 91 por primo', por: '$91 = 7\\cdot 13$. Hay que probar los primos hasta $\\sqrt{91} \\approx 9{,}5$: el 2, el 3, el 5 y el 7. Con el 7 ya cae.' },
+    { e: 'Calcular el m.c.m. multiplicando', por: '$\\operatorname{mcm}(4, 6) = 12$, no 24. El producto es $\\operatorname{mcd}\\cdot\\operatorname{mcm}$: solo coinciden cuando el m.c.d. es 1.' }
   ]);
 
   /* ================= EJERCICIOS ================= */

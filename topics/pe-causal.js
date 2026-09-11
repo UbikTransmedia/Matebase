@@ -43,6 +43,7 @@ Course.topic('pe-causal', function (p) {
 
   p.demo({
     title: 'El esquema de una confusión',
+    predice: 'Las ventas de helados y los ahogamientos suben y bajan juntos. Antes de elegir esquema: ¿cuál de los tres explica esa correlación sin que uno cause al otro?',
     intro: 'Tres formas distintas de que dos variables aparezcan correlacionadas. Solo una de ellas es causalidad. Cambia de esquema y fíjate en la dirección de las flechas: ahí está toda la diferencia.',
     build: function (host) {
       var cual = 'conf';

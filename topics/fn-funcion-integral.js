@@ -176,6 +176,7 @@ Course.topic('fn-funcion-integral', function (p) {
 
   p.demo({
     title: 'Girar una curva',
+    predice: 'Al girar la recta $y = x$ entre 0 y 1 sale un cono. ¿Su volumen será la mitad del cilindro de radio 1 y altura 1, o un tercio? Piensa en cómo crecen los discos.',
     intro: 'Elige la curva y gira el dibujo arrastrándolo. Los anillos son algunos de los discos de los que está hecho el cuerpo; el volumen es la suma de todos ellos.',
     build: function (host) {
       var CASOS = {

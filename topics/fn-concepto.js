@@ -197,6 +197,7 @@ Course.topic('fn-concepto', function (p) {
 
   p.demo({
     title: 'Una función y su inversa, reflejadas',
+    predice: 'Si una función y su inversa se cortan, ¿dónde tiene que estar el punto de corte? Piensa en qué puntos quedan fijos al reflejar en la diagonal.',
     intro: 'Elige una función. Su inversa, a trazos, es su reflejo en la diagonal y = x: cada punto (a, b) de una se convierte en el punto (b, a) de la otra.',
     build: function (host) {
       var FN = {

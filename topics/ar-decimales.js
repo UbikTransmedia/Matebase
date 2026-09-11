@@ -155,6 +155,13 @@ Course.topic('ar-decimales', function (p) {
     { t: 'La del bebé: 200 g sobre 4 kg es un 5 %', ok: true, por: 'El error relativo del bebé es $\\frac{0{,}2}{4} = 5\\,\\%$, casi cuarenta veces mayor que el del coche. Es el que dice si la medida sirve.' }
   ]);
 
+  p.trampas([
+    { e: 'Dar $0{,}3$ por igual a $\\frac{1}{3}$', por: '$\\frac{1}{3} = 0{,}333\\ldots$, periódico. $0{,}3$ es $\\frac{3}{10}$, otro número. La diferencia es pequeña, pero al multiplicar por 3 se nota: 0,9 frente a 1.' },
+    { e: 'Comparar decimales por el número de cifras', por: '$0{,}45$ tiene más cifras que $0{,}5$ y es menor. Se comparan cifra a cifra desde la izquierda, rellenando con ceros: 0,45 frente a 0,50.' },
+    { e: 'Fracción generatriz sin restar el anteperiodo', por: '$0{,}2\\overline{3} = \\frac{23 - 2}{90} = \\frac{21}{90} = \\frac{7}{30}$. Poner $\\frac{23}{99}$ es tratarlo como si el periodo empezara en la primera cifra.' },
+    { e: 'Pensar que $0{,}\\overline{9}$ es un poco menos que 1', por: 'Su generatriz es $\\frac{9}{9} = 1$. Son el mismo número escrito de dos maneras, igual que $\\frac{1}{2}$ y $0{,}5$.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('El error relativo es lo que decide si una medida sirve. Equivocarse en un centímetro midiendo ' +
     'una habitación es irrelevante; el mismo centímetro en la pieza de un motor la convierte en ' +

@@ -131,6 +131,7 @@ Course.topic('pe-condicionada', function (p) {
 
   p.demo({
     title: 'Leer una tabla de contingencia',
+    predice: 'Pon las cuatro casillas iguales, 25 cada una. ¿Serán independientes $A$ y $B$? ¿Y con 40, 10, 10, 40?',
     intro: 'Cambia las cuatro casillas. Las probabilidades se recalculan leyendo la tabla, y abajo se comprueba si los dos sucesos son independientes: si P(A ∩ B) coincide con P(A)·P(B).',
     build: function (host) {
       var c = { ab: 30, anb: 70, nab: 20, nanb: 80 };
@@ -171,6 +172,7 @@ Course.topic('pe-condicionada', function (p) {
 
   p.demo({
     title: 'Diagrama de árbol',
+    predice: 'Si la fábrica con más defectos produce solo el 10 % de las piezas, ¿la probabilidad total de defecto estará más cerca de su tasa o de la de la otra fábrica?',
     intro: 'Dos fábricas producen la misma pieza con distinta tasa de defectos. Mueve los mandos y sigue las ramas.',
     build: function (host, d) {
       var pf1 = 0.6, d1 = 0.02, d2 = 0.05;

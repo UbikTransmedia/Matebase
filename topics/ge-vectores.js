@@ -83,6 +83,7 @@ Course.topic('ge-vectores', function (p) {
 
   p.demo({
     title: 'Sumar vectores',
+    predice: 'Pon los dos vectores iguales, $(2, 1)$ los dos. ¿Qué suma saldrá? Y si el segundo es $(-2, -1)$, ¿dónde caerá la flecha verde?',
     intro: 'Arrastra las puntas de los dos vectores. La flecha verde es la suma: es la diagonal del paralelogramo que forman.',
     build: function (host, d) {
       var out = W.readout(host, '');

@@ -29,6 +29,7 @@ Course.topic('al-polinomios', function (p) {
 
   p.demo({
     title: 'Multiplicar polinomios en una tabla',
+    predice: 'Al multiplicar un polinomio de grado 2 por uno de grado 3, ¿cuántas casillas tendrá la tabla y de qué grado será el resultado?',
     intro: 'Cada casilla es el producto de un término por otro. Después solo hay que sumar las diagonales, que son los términos del mismo grado.',
     build: function (host, d) {
       var A = [1, -2, 3], B = [2, 1];      // A: x^2-2x+3, B: 2x+1

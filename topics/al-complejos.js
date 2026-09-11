@@ -221,6 +221,7 @@ Course.topic('al-complejos', function (p) {
 
   p.demo({
     title: 'Las raíces forman un polígono',
+    predice: 'Con $n = 4$ y $z = 16$, ¿qué radio tendrán las raíces y cuántos grados habrá entre dos consecutivas? Piensa en $\\sqrt[4]{16}$ y en $360/4$.',
     intro: 'Las n raíces n-ésimas de un complejo z. Cambia n y el complejo de partida: siempre quedan repartidas por una circunferencia, como los vértices de un polígono regular. La raíz con k = 0 va en otro color.',
     build: function (host) {
       var n = 5, rr = 8, alfa = 60;

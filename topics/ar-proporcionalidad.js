@@ -53,6 +53,7 @@ Course.topic('ar-proporcionalidad', function (p) {
 
   p.demo({
     title: 'Directa frente a inversa',
+    predice: 'Si en la directa duplicas $x$, ¿qué le pasa a $y$? ¿Y en la inversa? Anota las dos respuestas y compruébalas en la gráfica.',
     intro: 'La proporcionalidad directa es una recta que pasa por el origen. La inversa es una hipérbola: cuando una crece, la otra se hunde.',
     build: function (host, d) {
       var k = 6, modo = 'directa';
@@ -179,6 +180,13 @@ Course.topic('ar-proporcionalidad', function (p) {
     'C_{\\text{simple}} = C_0\\,(1 + r\\,t)',
     'C_{\\text{compuesto}} = C_0\\,(1 + r)^{t}'
   ], 'r en tantos por uno, t en periodos');
+
+  p.trampas([
+    { e: 'Regla de tres para todo', por: 'Dos grifos llenan un depósito en 6 horas; cuatro grifos no tardan 12, tardan 3. Antes de la regla de tres hay que preguntar si es directa o inversa.' },
+    { e: 'Sumar porcentajes encadenados', por: 'Subir un 20 % y bajar un 20 % no deja igual: 200 → 240 → 192. Cada porcentaje se aplica sobre la cantidad del momento.' },
+    { e: 'Quitar el IVA restando el 21 %', por: 'Un precio de 121 € con IVA no sale de $121 - 25{,}41$. El 21 % se añadió sobre el precio sin IVA: se divide entre 1,21 y salen 100 €.' },
+    { e: 'Tratar el interés compuesto como simple', por: '1 000 € al 5 % durante 2 años: simple, 1 100 €; compuesto, $1000\\cdot 1{,}05^2 = 1\\,102{,}5$ €. Los intereses del primer año también producen intereses.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('El interés compuesto es la razón de que una hipoteca a 30 años cueste mucho más que el dinero ' +

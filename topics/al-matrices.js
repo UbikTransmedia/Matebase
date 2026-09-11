@@ -195,6 +195,7 @@ Course.topic('al-matrices', function (p) {
 
   p.demo({
     title: 'Girar y luego estirar no es estirar y luego girar',
+    predice: 'Girar 90° el cuadrado y después estirar en horizontal, ¿dará un rectángulo tumbado o de pie? ¿Y estirar primero y girar después?',
     intro: 'A es un giro de 90° y B estira el eje horizontal al doble. El cuadrado azul se transforma con el producto elegido. Cambia el orden y compara: el resultado no es el mismo, y por eso A·B ≠ B·A.',
     build: function (host) {
       var orden = 'AB';
@@ -262,6 +263,7 @@ Course.topic('al-matrices', function (p) {
 
   p.demo({
     title: 'El determinante es un área',
+    predice: 'Pon los dos vectores en la misma dirección. ¿Cuánto valdrá el área? ¿Y el determinante? Después invierte el orden de los dos: ¿cambia el área, el signo, o nada?',
     intro: 'Arrastra los dos vectores. El área del paralelogramo que forman es exactamente el valor absoluto del determinante.',
     build: function (host, d) {
       var out = W.readout(host, '');

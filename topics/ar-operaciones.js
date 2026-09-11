@@ -107,6 +107,7 @@ Course.topic('ar-operaciones', function (p) {
 
   p.demo({
     title: 'Desmontar una expresión paso a paso',
+    predice: 'Antes de pulsar: en $3 + 4\\cdot 2^2$, ¿qué se hace primero? ¿Cuánto sale al final: 19, 28 o 196?',
     intro: 'Pulsa «Siguiente paso» y ve cómo se deshace la expresión respetando la jerarquía.',
     build: function (host, d) {
       var pasos = [

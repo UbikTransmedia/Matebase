@@ -213,6 +213,7 @@ Course.topic('al-determinantes', function (p) {
 
   p.demo({
     title: 'El rango con un parámetro',
+    predice: 'El determinante es un polinomio en $k$ de grado 3 como mucho: ¿en cuántos valores de $k$ podrá bajar el rango, uno, dos o tres? ¿Y en alguno bajará hasta 1?',
     intro: 'Mueve k. Casi siempre el rango es 3; solo en los valores que anulan el determinante baja, y no baja igual en todos.',
     build: function (host) {
       var k = 0;

@@ -54,6 +54,7 @@ Course.topic('ar-magnitudes', function (p) {
 
   p.demo({
     title: 'Conversor con las unidades a la vista',
+    predice: 'Para pasar de km/h a m/s, ¿el número se hará más grande o más pequeño? ¿Por qué factor, aproximadamente: 3,6 o su inverso?',
     intro: 'Elige de qué unidad a cuál. Fíjate en cómo se cancelan las unidades y en qué queda al final.',
     build: function (host, d) {
       var val = 72, de = 'km/h', a = 'm/s';
@@ -180,6 +181,13 @@ Course.topic('ar-magnitudes', function (p) {
     'equivocado no se detecta así). Pero una fórmula dimensionalmente incorrecta está ' +
     '<strong>seguro</strong> mal. Es un filtro que cuesta diez segundos y salva exámenes enteros.',
     'ok');
+
+  p.trampas([
+    { e: 'Convertir áreas con el factor de las longitudes', por: '1 m son 100 cm, pero 1 m² son $100^2 = 10\\,000$ cm². El factor se eleva al cuadrado, y al cubo para volúmenes.' },
+    { e: 'Sumar cantidades en unidades distintas', por: '3 km + 200 m no son 203 de nada. Primero a la misma unidad: 3 000 m + 200 m = 3 200 m.' },
+    { e: 'Dar más cifras de las que se han medido', por: '$2{,}3$ m × $1{,}1$ m da 2,53 m² en la calculadora, pero las medidas tenían dos cifras significativas: el resultado es 2,5 m².' },
+    { e: 'Aceptar una fórmula sin mirar sus dimensiones', por: '$e = v\\,t^2$ no puede ser una longitud: $\\frac{\\text{m}}{\\text{s}}\\cdot\\text{s}^2 = \\text{m}\\cdot\\text{s}$. Un análisis de un minuto descarta fórmulas que parecen razonables.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Esto es un detector de errores gratuito. Si al despejar una fórmula te queda una velocidad ' +

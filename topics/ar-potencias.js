@@ -206,6 +206,7 @@ Course.topic('ar-potencias', function (p) {
 
   p.demo({
     title: 'Mover la coma',
+    predice: 'Con $3{,}2\\cdot 10^4$, ¿hacia dónde se mueve la coma y cuántos sitios? ¿Y con $10^{-3}$? Escribe los dos números antes de mover el mando.',
     intro: 'Cambia el exponente y mira cómo se desplaza la coma. Es literalmente lo único que hace la notación científica.',
     build: function (host, d) {
       var mant = 5.3, ex = 8;
@@ -227,6 +228,13 @@ Course.topic('ar-potencias', function (p) {
       paint();
     }
   });
+
+  p.trampas([
+    { e: 'Multiplicar los exponentes al multiplicar potencias', por: '$2^3\\cdot 2^4 = 2^7 = 128$, no $2^{12}$. Los exponentes se suman; se multiplican solo en la potencia de una potencia, $(2^3)^4$.' },
+    { e: '$(a + b)^2 = a^2 + b^2$', por: 'Con $a = 3$ y $b = 4$: $49$ frente a $25$. Falta el doble producto: $(a + b)^2 = a^2 + 2ab + b^2$.' },
+    { e: 'Repartir la raíz en una suma', por: '$\\sqrt{9 + 16} = 5$, no $3 + 4 = 7$. La raíz se reparte en productos y cocientes, nunca en sumas.' },
+    { e: 'Notación científica con mantisa de dos cifras enteras', por: '$32\\cdot 10^3$ vale lo mismo que $3{,}2\\cdot 10^4$, pero solo la segunda está normalizada: la mantisa va entre 1 y 10.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Sin notación científica no se puede trabajar en ciencia: el radio de un átomo es $10^{-10}$ m y ' +

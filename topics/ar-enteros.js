@@ -45,6 +45,7 @@ Course.topic('ar-enteros', function (p) {
 
   p.demo({
     title: 'La recta de los enteros',
+    predice: 'Coloca los puntos en $-7$ y en $3$. ¿Cuál es mayor? ¿Cuál tiene mayor valor absoluto? ¿A qué distancia están?',
     intro: 'Arrastra los dos puntos. Observa el orden, el valor absoluto y la distancia entre ellos.',
     build: function (host, d) {
       var out = W.readout(host, '');

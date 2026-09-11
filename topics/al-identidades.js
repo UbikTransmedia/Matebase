@@ -124,6 +124,7 @@ Course.topic('al-identidades', function (p) {
 
   p.demo({
     title: 'De las raíces a los factores',
+    predice: 'Pon las raíces en $2$ y en $-2$. ¿Qué polinomio saldrá desarrollado? ¿Tendrá término en $x$?',
     intro: 'Mueve las dos raíces y observa cómo la parábola corta el eje justo ahí, y cómo cambia el polinomio desarrollado.',
     build: function (host, d) {
       var out = W.readout(host, '');

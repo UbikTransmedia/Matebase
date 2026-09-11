@@ -168,6 +168,7 @@ Course.topic('av-caos', function (p) {
 
   p.demo({
     title: 'Diagrama de bifurcación',
+    predice: 'Entre $r = 3$ y $r \\approx 3{,}57$ la población pasa de 2 a 4 a 8 valores. ¿Cada duplicación tardará lo mismo en $r$ que la anterior, o cada vez menos?',
     intro: 'Cada línea vertical de puntos son los destinos posibles de la población para esa fertilidad. Amplía la zona con los botones y verás que dentro del caos vuelven a aparecer ventanas ordenadas.',
     build: function (host, d) {
       var r0 = 2.4, r1 = 4;

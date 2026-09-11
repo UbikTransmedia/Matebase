@@ -127,6 +127,7 @@ Course.topic('ar-fracciones', function (p) {
 
   p.demo({
     title: 'Sumar fracciones con dibujo',
+    predice: 'Para sumar $\\frac{1}{2} + \\frac{1}{3}$, ¿en cuántos trozos iguales habrá que partir el tercer rectángulo? ¿Y cuántos de esos trozos ocupará la suma?',
     intro: 'Los dos primeros rectángulos tienen trozos de distinto tamaño; el tercero los reparte a todos igual, y por eso ya se pueden juntar.',
     build: function (host, d) {
       var a = 1, b = 2, c = 1, e = 3;

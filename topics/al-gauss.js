@@ -177,6 +177,7 @@ Course.topic('al-gauss', function (p) {
 
   p.demo({
     title: 'El sistema del ejemplo, en el espacio',
+    predice: 'El sistema de arriba tiene solución única: ¿los tres planos se cortarán en un punto o en una recta? Y en la variante sin solución, ¿qué se verá: tres planos paralelos o tres rectas de corte paralelas?',
     intro: 'Los tres planos del sistema de arriba, y dos variantes en las que se cambia solo la tercera ecuación. Gira el dibujo para ver dónde se cortan, si es que se cortan.',
     build: function (host) {
       var CASOS = {

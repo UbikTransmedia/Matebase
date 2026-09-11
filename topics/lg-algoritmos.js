@@ -130,6 +130,7 @@ Course.topic('lg-algoritmos', function (p) {
 
   p.demo({
     title: 'Te adivino el número',
+    predice: 'Piensa el 100. ¿Cuántas preguntas necesitará el algoritmo: 7, 50 o 100? ¿Y si piensas el 1, tardará menos?',
     intro: 'Piensa un número entero del 1 al 100, sin decirlo. Contesta a cada propuesta y el algoritmo lo encontrará en 7 preguntas como mucho.',
     build: function (host) {
       var lo, hi, g, n;
@@ -173,6 +174,13 @@ Course.topic('lg-algoritmos', function (p) {
     'con algoritmos que se basan en las ondas de [[av-fourier]], y cada conexión segura de internet ' +
     'ejecuta el algoritmo de Euclides con números de cientos de cifras. En el examen, lo que se pide es ' +
     'más modesto pero es lo mismo: leer un algoritmo, seguir su traza y decir qué hace.');
+
+  p.trampas([
+    { e: 'Llamar algoritmo a algo que puede no terminar', por: '«Suma 1 hasta que salga un cuadrado perfecto» termina; «suma 2 a un impar hasta que sea par» no termina nunca. La parada garantizada es parte de la definición.' },
+    { e: 'Restar en Euclides en vez de dividir', por: 'Funciona, pero con 1 000 y 1 da mil vueltas. El resto de la división hace de golpe todas esas restas: dos vueltas.' },
+    { e: 'Buscar de uno en uno en una lista ordenada', por: 'Partir por la mitad encuentra un número del 1 al 1 000 en 10 preguntas. De uno en uno pueden hacer falta 1 000. El orden es información, y se desperdicia si no se usa.' },
+    { e: 'Medir el coste con un cronómetro', por: 'Un algoritmo cuadrático tarda cuatro veces más con el doble de datos, en cualquier máquina. Lo que importa es cómo crece el tiempo, no cuánto tarda hoy.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

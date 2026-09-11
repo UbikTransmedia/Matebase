@@ -1,6 +1,10 @@
 /* Tema: Resolver problemas y modelizar */
 Course.topic('lg-problemas', function (p) {
 
+  p.puente('Los tres temas anteriores dieron el idioma: proposiciones, conjuntos y ' +
+    '[[lg-demostracion|demostraciones]]. Este da el método para cuando el problema no viene con etiqueta, ' +
+    'y sirve para todo el curso: las heurísticas no dependen de ninguna técnica concreta.');
+
   p.text('Casi todo lo que se estudia en matemáticas son técnicas para resolver problemas que ya tienen ' +
     'nombre: ecuaciones de segundo grado, sistemas, derivadas. Pero en un examen, y fuera de él, los ' +
     'problemas no llegan con la etiqueta puesta. Llegan como un párrafo que no se parece a ninguno de los ' +
@@ -108,6 +112,7 @@ Course.topic('lg-problemas', function (p) {
 
   p.demo({
     title: 'El tablero de ajedrez mutilado',
+    predice: 'Quita las dos esquinas opuestas, que son del mismo color. ¿Se podrá cubrir el resto con dominós? ¿Y si quitas dos casillas vecinas?',
     intro: 'Se quitan dos casillas de un tablero de 8×8. ¿Se puede cubrir el resto con fichas de dominó, cada una de dos casillas? Elige qué casillas quitar y cuenta los colores: cada ficha tapa siempre una blanca y una negra.',
     build: function (host) {
       var CASOS = {
@@ -179,6 +184,13 @@ Course.topic('lg-problemas', function (p) {
     'errores de cada supuesto tienden a compensarse y el resultado suele acertar el orden de magnitud. Ese ' +
     'tipo de estimación rápida es una destreza muy buscada en ingeniería, en consultoría y en ciencia: ' +
     'antes de un cálculo largo, saber qué resultado sería razonable.');
+
+  p.trampas([
+    { e: 'Empezar a calcular antes de entender', por: 'Releer, dibujar y decir con tus palabras qué se pide cuesta un minuto y evita resolver otro problema distinto del que hay.' },
+    { e: 'Dar un patrón por demostrado', por: 'Las regiones del círculo dan 1, 2, 4, 8, 16… y luego 31. Cinco casos que encajan no demuestran nada; solo sugieren qué demostrar.' },
+    { e: 'No comprobar el resultado con el enunciado', por: '3,5 personas, una longitud negativa o una probabilidad de 1,4 avisan de un error antes que cualquier revisión de las cuentas.' },
+    { e: 'Cerrar el problema en cuanto sale', por: 'La mirada atrás es la fase que más enseña: ¿se podía hacer de otra manera? ¿Sirve el método para otros problemas? Ahí es donde el problema se convierte en técnica.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

@@ -105,6 +105,7 @@ Course.topic('ar-naturales', function (p) {
 
   p.demo({
     title: 'La recta numérica',
+    predice: 'Entre 7 y 8, ¿cuántos naturales hay? ¿Y entre 7 y 800? ¿Se acaban en algún momento a la derecha?',
     intro: 'Arrastra el punto azul. Fíjate en que entre dos naturales consecutivos no hay ningún otro natural: los naturales son un rosario de cuentas separadas.',
     build: function (host, d) {
       var out = W.readout(host, '');
@@ -151,6 +152,13 @@ Course.topic('ar-naturales', function (p) {
     ],
     cierre: 'El caso que despista es el 9: redondear $2\\,951$ a la decena sube el 5 a 6 sin problema, pero redondear $2\\,995$ a la decena convierte el 99 en 100 y da $3\\,000$. Se arrastra igual que en una suma.'
   });
+
+  p.trampas([
+    { e: 'Leer 3 005 como «trescientos cinco»', por: 'Cada cero ocupa un sitio y vale por él: 3 005 son tres mil cinco. Sin los ceros el 3 caería en las centenas.' },
+    { e: 'Redondear 1 449 a las centenas mirando la última cifra', por: 'Se mira la cifra siguiente a la que se redondea, la de las decenas: 4, así que 1 400. Mirar el 9 del final lleva a 1 500, que está más lejos.' },
+    { e: 'Confundir truncar con redondear', por: '1 999 a las centenas: truncado, 1 900; redondeado, 2 000. Truncar siempre baja; redondear va al más cercano.' },
+    { e: 'Buscar un natural entre 7 y 8', por: 'No lo hay: los naturales son cuentas separadas. Entre dos consecutivos no cabe ninguno, por mucho que se amplíe la recta.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Redondear no es «hacer trampa»: es una decisión con consecuencias. Un supermercado que redondea ' +

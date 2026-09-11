@@ -114,6 +114,7 @@ Course.topic('tr-funciones', function (p) {
 
   p.demo({
     title: 'Las tres funciones juntas',
+    predice: '¿Dónde crees que la tangente se dispara: donde el seno vale 0 o donde el coseno vale 0? ¿Cada cuántos grados se repite la tangente?',
     intro: 'Compara las tres. Fíjate en que la tangente se dispara justo donde el coseno cruza el cero.',
     build: function (host, d) {
       var ver = { sen: true, cos: true, tg: false };

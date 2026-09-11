@@ -151,6 +151,7 @@ Course.topic('pe-descriptiva', function (p) {
 
   p.demo({
     title: 'De los datos al diagrama de barras',
+    predice: 'En 30 partidos con muchos 0 y 1 y algún 5, ¿la media quedará por encima o por debajo de la mediana? ¿Y la moda?',
     intro: 'Estos son los goles marcados en 30 partidos. Cambia el conjunto de datos y observa cómo se mueven la media, la mediana y la moda.',
     build: function (host, d) {
       var datos = [0, 1, 1, 2, 0, 3, 2, 1, 4, 2, 1, 0, 2, 3, 1, 2, 5, 1, 0, 2, 3, 1, 2, 1, 0, 4, 2, 1, 3, 2];

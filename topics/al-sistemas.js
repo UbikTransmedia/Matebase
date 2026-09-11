@@ -142,6 +142,13 @@ Course.topic('al-sistemas', function (p) {
     { t: 'Incompatible', ok: true, por: '$\\frac{1}{2} = \\frac{1}{2} \\ne \\frac{3}{8}$: rectas paralelas distintas. Dicho en palabras: si $x + y = 3$, entonces $2x + 2y = 6$, nunca 8.' }
   ]);
 
+  p.trampas([
+    { e: 'Sumar las ecuaciones sin preparar los coeficientes', por: 'Para reducir hace falta que una incógnita tenga coeficientes opuestos: se multiplica antes una ecuación, o las dos. Sumar a pelo casi nunca elimina nada.' },
+    { e: 'Leer $0 = 0$ como «no tiene solución»', por: 'Es lo contrario: la ecuación ha desaparecido y quedan infinitas soluciones. El incompatible es $0 = 5$, algo falso.' },
+    { e: 'Comprobar la solución en una sola ecuación', por: 'La solución tiene que cumplir las dos. Un error en la sustitución pasa desapercibido si solo se mira la ecuación de la que se despejó.' },
+    { e: 'Dividir por un parámetro que puede valer 0', por: 'Al discutir un sistema con $a$, el caso $a = 0$ se estudia aparte: dividir por él en los demás casos no vale ahí.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Clasificar antes de resolver ahorra trabajo y evita disparates. Un sistema incompatible en una ' +
     'mezcla química significa que la receta pedida es imposible con esos ingredientes; uno ' +
