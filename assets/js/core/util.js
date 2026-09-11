@@ -113,12 +113,25 @@
 
   /* ---------------- Formato ---------------- */
 
+  /* Redondeo decimal "de colegio": la mitad se aleja del cero (-2,5 -> -3,
+     no -2 como hace Math.round) y se desplaza la coma con notacion
+     exponencial en vez de multiplicar, porque 1.005 * 100 da 100.49999...
+     en binario y Math.round lo bajaba a 1,00 cuando debia dar 1,01. */
+  function redondea(x, d) {
+    if (!isFinite(x)) return x;
+    var neg = x < 0, a = Math.abs(x);
+    var e = String(a).indexOf('e') < 0 ? Number(a + 'e' + d) : NaN;
+    if (!isFinite(e)) e = a * Math.pow(10, d);
+    var r = Number(Math.round(e) + 'e-' + d);
+    if (!isFinite(r)) r = Math.round(e) / Math.pow(10, d);
+    return r === 0 ? 0 : (neg ? -r : r);
+  }
+
   /** Numero con coma decimal (convencion espanola). */
   U.fmt = function (x, dec) {
     if (!isFinite(x)) return x > 0 ? '∞' : '-∞';
     var d = (dec === undefined) ? 4 : dec;
-    var v = Math.round(x * Math.pow(10, d)) / Math.pow(10, d);
-    if (Object.is(v, -0)) v = 0;
+    var v = redondea(x, d);
     var s = (dec === undefined) ? String(v) : v.toFixed(d);
     return s.replace('.', ',');
   };
@@ -126,7 +139,7 @@
   U.fmts = function (x, dec) { return (x < 0 ? '' : '+') + U.fmt(x, dec); };
 
   U.clamp = function (v, a, b) { return v < a ? a : (v > b ? b : v); };
-  U.round = function (v, d) { var p = Math.pow(10, d || 0); return Math.round(v * p) / p; };
+  U.round = function (v, d) { return redondea(v, d || 0); };
   U.sum = function (a) { var s = 0; for (var i = 0; i < a.length; i++) s += a[i]; return s; };
   U.near = function (a, b, tol) { return Math.abs(a - b) <= (tol === undefined ? 1e-9 : tol); };
 

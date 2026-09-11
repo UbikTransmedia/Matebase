@@ -57,6 +57,55 @@
     return Math.abs(got - want) <= t * (1 + Math.abs(want));
   };
 
+  /* La tolerancia relativa de Ex.same no casa con un enunciado que pide "N
+     decimales": cerca de cero rechaza la respuesta bien redondeada (0,3333
+     frente a 1/3 con tol 1e-6) y con valores grandes acepta de mas. Un
+     ejercicio que pide decimales declara `dec`, y uno cuya respuesta se mueve
+     por varios ordenes de magnitud (una cota de error, un periodo) declara
+     `rel`. Cada una puede ser un numero, para todos los campos, o un objeto
+     {campo: valor}. */
+
+  /** Correcto si el error absoluto no pasa de medio decimal de los pedidos. */
+  Ex.sameDec = function (got, want, dec) {
+    if (isNaN(got)) return false;
+    return Math.abs(got - want) <= 0.5 * Math.pow(10, -dec) * (1 + 1e-6);
+  };
+
+  /** Correcto si el error relativo no pasa de `rel`. */
+  Ex.sameRel = function (got, want, rel) {
+    if (isNaN(got)) return false;
+    return Math.abs(got - want) <= rel * Math.abs(want) + 1e-12;
+  };
+
+  function opcionCampo(spec, prop, name) {
+    var o = spec[prop];
+    if (o === undefined || o === null) return null;
+    if (typeof o === 'number') return o;
+    return (o[name] === undefined || o[name] === null) ? null : o[name];
+  }
+
+  /** Compara campo a campo lo tecleado (v, de Pregunta#values) con la
+   *  solucion, con el criterio que declare el ejercicio: dec, rel o tol. */
+  Ex.compara = function (spec, v, want) {
+    var fields = {}, ok = true;
+    for (var n in want) {
+      var w = want[n], bien;
+      if (typeof w === 'string') bien = Ex.same(v.raw[n], w);
+      else {
+        var dec = opcionCampo(spec, 'dec', n), rel = opcionCampo(spec, 'rel', n);
+        // Con dec o rel, una tol explicita se suma como segunda via: sirve
+        // para admitir ademas el error relativo de un calculo encadenado.
+        var porTol = spec.tol !== undefined && Ex.same(v[n], w, spec.tol);
+        if (dec !== null) bien = Ex.sameDec(v[n], w, dec) || porTol;
+        else if (rel !== null) bien = Ex.sameRel(v[n], w, rel) || porTol;
+        else bien = Ex.same(v[n], w, spec.tol);
+      }
+      fields[n] = bien;
+      if (!bien) ok = false;
+    }
+    return { ok: ok, fields: fields };
+  };
+
   /** Conjunto de soluciones sin importar el orden: "3; -1" */
   Ex.sameSet = function (rawList, want, tol) {
     var got = String(rawList).split(/[;]/).map(function (s) { return ML.tryEval(s); });
@@ -370,13 +419,9 @@
     try {
       if (s.check) res = s.check(v, this.data);
       else {
-        var want = s.sol(this.data), all = true;
-        for (var n in want) {
-          var ok = Ex.same(typeof want[n] === 'string' ? v.raw[n] : v[n], want[n], s.tol);
-          this.mark(n, ok);
-          if (!ok) all = false;
-        }
-        res = all;
+        var cmp = Ex.compara(s, v, s.sol(this.data));
+        for (var n in cmp.fields) this.mark(n, cmp.fields[n]);
+        res = cmp.ok;
       }
     } catch (e) {
       res = { ok: false, msg: 'No he podido leer la respuesta. Revisa lo que has escrito.' };

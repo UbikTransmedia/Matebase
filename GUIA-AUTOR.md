@@ -249,7 +249,9 @@ p.exercise({
   fields: [{ name: 'x', label: 'x =', w: 'tiny' }],   // o function(d){...}
   sol:    function (d) { return { x: 3 }; },    // corrección automática
   check:  function (v, d) { ... },              // opcional: corrección a medida
-  tol:    1e-6,
+  tol:    1e-6,                                 // error admitido: tol · (1 + |solución|)
+  dec:    4,                                    // o bien: el enunciado pide 4 decimales
+  rel:    1e-3,                                 // o bien: error relativo (cotas, periodos…)
   hint:   function (d) { return 'pista'; },
   steps:  function (d) { return ['paso 1', 'paso 2']; },
   answer: function (d) { return 'x = 3'; }
@@ -260,6 +262,19 @@ p.exercise({
   acepta `3/4`, `2^10`, `pi/6`, `sqrt(2)`, `-2,5`, `5!`…).
 - `v.raw[nombre]` es la cadena tal cual, para respuestas de texto.
 - `check` devuelve `true`/`false` o `{ ok, msg, fields }`.
+- **Tolerancia.** Por defecto se acepta un error de `tol · (1 + |solución|)`,
+  con `tol = 1e-6`: vale para respuestas exactas (enteros, fracciones). Si el
+  enunciado pide «N decimales», declara `dec: N` y se aceptará cualquier
+  respuesta a medio decimal de la exacta, sea cual sea su tamaño (con `tol`
+  una solución cercana a cero rechazaría la respuesta bien redondeada, y una
+  grande aceptaría de más). Si la respuesta puede ser muy pequeña o muy grande
+  (una cota de error, un periodo en segundos), declara `rel: 1e-3` y se mide
+  el error relativo. Tanto `dec` como `rel` admiten un objeto por campo:
+  `dec: { T: 6, w: 4 }`. Si junto a `dec` o `rel` se deja también una `tol`,
+  vale cualquiera de los dos criterios: así un cálculo encadenado (un ángulo
+  por arco coseno, una exponencial que se redondea por el camino) no se
+  rechaza por una milésima. La auditoría de `tests.html` avisa si un
+  enunciado pide decimales y el ejercicio no declara `dec` ni `rel`.
 
 > **Si la respuesta es una de pocas palabras, no la pidas como texto: usa un
 > grupo `opts`.** Dentro/fuera, positiva/negativa, sí/no, A/B/C/D: se corrige

@@ -591,14 +591,23 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           ? String(want[k]).replace('.', ',')
           : String(want[k]);
       }
-      var res = u.check ? u.check(v, d) : (function () {
-        for (var n in want) {
-          if (!Ex.same(typeof want[n] === 'string' ? v.raw[n] : v[n], want[n], u.tol)) return false;
-        }
-        return true;
-      })();
+      var res = u.check ? u.check(v, d) : Ex.compara(u, v, want);
       if (res && typeof res === 'object') res = res.ok;
       if (!res) c.malCheck++;
+
+      /* Si el enunciado pide N decimales, una respuesta bien redondeada
+         tiene hasta medio decimal de error. Con la tolerancia relativa
+         de Ex.same, cerca de cero eso se rechaza: el ejercicio tiene que
+         declarar `dec` (o corregir a medida). */
+      if (!u.check && u.dec === undefined && u.rel === undefined && u.ask) {
+        var pide = String(u.ask(d)).toLowerCase()
+          .match(/\b(un|uno|dos|tres|cuatro|cinco|seis|\d)\s+decimal/);
+        if (pide) {
+          var N = { un: 1, uno: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6 }[pide[1]] || +pide[1];
+          var t = u.tol === undefined ? 1e-6 : u.tol;
+          if (t < 0.5 * Math.pow(10, -N)) c.decimales = N;
+        }
+      }
 
       /* En un campo de elección, la solución tiene que ser una de las
          opciones que se ofrecen: si no, el ejercicio es imposible. */
@@ -645,7 +654,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       var fallos = [];
       (specs || []).forEach(function (s, idx) {
         var etiqueta = (s.partes ? 'problema ' : 'ej.') + (idx + 1) + ' («' + (s.title || '') + '»)';
-        var c = { malCheck: 0, malTex: 0, tragaTodo: 0, malOpc: 0, malErr: 0, otros: [] };
+        var c = { malCheck: 0, malTex: 0, tragaTodo: 0, malOpc: 0, malErr: 0, decimales: 0, otros: [] };
         var excep = '';
         if (s.partes && !s.partes.length) excep = 'un problema sin apartados';
         for (var i = 0; i < 40 && !excep; i++) {
@@ -668,6 +677,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
         else if (c.tragaTodo) fallos.push(etiqueta + ': el corrector acepta respuestas vacías o sin contenido');
         else if (c.malOpc) fallos.push(etiqueta + ': la solución no está entre las opciones que se ofrecen');
         else if (c.malErr) fallos.push(etiqueta + ': un «error típico» salta con la respuesta correcta');
+        else if (c.decimales) fallos.push(etiqueta + ': pide ' + c.decimales + ' ' + U.plural(c.decimales, 'decimal', 'decimales') + ' pero su tolerancia rechazaría una respuesta bien redondeada; declara dec: ' + c.decimales);
         else if (c.otros.length) fallos.push(etiqueta + ': ' + c.otros[0]);
       });
       return fallos;
