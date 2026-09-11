@@ -599,6 +599,39 @@ cerrarla y pulsar otra vez el que ya se ve la cierra. La referencia vive en
 
 ---
 
+## La caja de herramientas de criptografía (`CR`)
+
+El bloque de criptografía se apoya en `assets/js/core/cripto.js`, igual que el
+gráfico se apoya en `shader.js`. Expone `window.CR` con criptografía **de
+verdad**, para que las demos ejecuten lo que explican, no una imitación:
+
+- **Texto y clásicos**: `CR.limpia` `CR.cesar` `CR.afin` `CR.vigenere`
+  `CR.columnas` `CR.hill`, `CR.frecuencias` `CR.ic` `CR.chi2` `CR.kasiski`.
+- **Enteros**: `CR.egcd` `CR.inv` `CR.potMod` (y `CR.potModTraza`) `CR.mulMod`
+  (correcta hasta módulos de $2^{52}$), `CR.millerRabin` `CR.primoProbable`
+  `CR.primoAleatorio` `CR.crt` `CR.orden`.
+- **Bits y bytes**: `CR.bits` `CR.hex` `CR.bytes` `CR.texto` `CR.xor`
+  `CR.hamming`, y para pintarlos `CR.bitsHtml` `CR.hexHtml`.
+- **Primitivas reales**: `CR.sha256` `CR.hmac`, la S-box y `CR.aes.cifra`
+  (con traza de cada paso), los modos `CR.ecb/cbc/ctr`, `CR.gf` (GF(2⁸)),
+  `CR.enigma`, `CR.curva` (elípticas mod p), `CR.lagrange` (Shamir),
+  `CR.paillier` (homomórfico), `CR.lfsr`, `CR.spn`, `CR.feistel`.
+- **Controles**: `W.texto(host, {label, value, on, multilinea, corto})` para
+  escribir mensajes y claves, y `W.mono(host)` (con `.set(html)` y `.texto(str)`)
+  para paneles monoespaciados que respetan los saltos de línea.
+
+`tests.html` comprueba `CR` contra vectores oficiales: SHA-256, HMAC (RFC 4231),
+AES-128 (FIPS-197), GF(2⁸), Enigma I, curvas, Shamir y Paillier. El bloque usa
+la **piel** `cr` (cobre), declarada con `piel: 'cr'` en `curriculum.js` y sus
+tokens `--cr*` en `base.css`.
+
+> **Cuidado con los `msg` de `errores`.** Se evalúan al construir la página, así
+> que no pueden llevar `d`: `msg: 'texto fijo'`, y si necesitas el dato, va en
+> `steps` o en un `check` (que sí reciben `d`). Es el mismo error que en cualquier
+> tema, pero aquí, con tantas cadenas largas, es fácil colarlo.
+
+---
+
 ## Matemáticas de apoyo (`ML`) y utilidades (`U`)
 
 `ML.gcd` `ML.lcm` `ML.isPrime` `ML.factorize` `ML.factorTex` `ML.divisors`

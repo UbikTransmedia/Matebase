@@ -83,8 +83,9 @@ asignatura.
 | 13. Discreta y computacional | 6 | grafos, recurrencias, complejidad y P frente a NP, cálculo numérico, información, teoría de juegos |
 | 14. Cibernética | 15 | realimentación y bloques, PID, dinámica de sistemas, Kalman, perceptrón, refuerzo, autoorganización, sistema viable, segundo orden |
 | 15. Programación gráfica | 33 | shaders GLSL: del píxel al raymarching, con ratón, curvas, texto, mosaicos, disco de Poincaré, trazado de rayos, cámara, shaders con memoria y fluidos, terreno, texturas sólidas, nubes y filtros de cámara |
+| 16. Criptografía | 36 | del cifrado de César a lo poscuántico: frecuencias, Vigenère, Enigma, la libreta de un solo uso, AES paso a paso, hash, RSA, curvas elípticas, firmas, conocimiento cero, cadenas de bloques, Shor y BB84, con la criptografía real ejecutándose en el navegador |
 
-**164 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
+**200 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
 se haya explicado antes, y cada tema declara cuáles necesita; `tests.html`
 comprueba que todos esos requisitos van antes en el temario.
 

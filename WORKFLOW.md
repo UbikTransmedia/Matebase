@@ -25,7 +25,7 @@ Se abre haciendo doble clic en `index.html`. **Sin servidor local, sin internet,
 
 ## Fase 1 — Temario (cerrada) → `assets/js/curriculum.js`
 
-16 bloques, 164 temas, en progresión estricta. El orden es el contrato pedagógico:
+17 bloques, 200 temas, en progresión estricta. El orden es el contrato pedagógico:
 ningún tema usa una herramienta que no se haya explicado antes, y `tests.html`
 comprueba que los requisitos declarados de cada tema van antes que él.
 
@@ -52,7 +52,8 @@ comprueba que los requisitos declarados de cada tema van antes que él.
 12. **Estructuras, números e infinito** (6).
 13. **Discreta y computacional** (6).
 14. **Cibernética** (15).
-15. **Programación gráfica** (27), con piel propia.
+15. **Programación gráfica** (33), con piel propia.
+16. **Criptografía** (36), con piel propia — de César a lo poscuántico, con la criptografía real (SHA-256, AES, curvas, RSA) ejecutándose en el navegador desde `assets/js/core/cripto.js`.
 
 Cada tema declara `id`, `t` (título), `r` (resumen), `o` (objetivos) y `req`
 (requisitos); los de 2.º, además, `curso: '2B'` e `itin` (`['MII']`, `['MCS']` o
