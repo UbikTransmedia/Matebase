@@ -1,6 +1,11 @@
 /* Tema: Descomposicion en valores singulares */
 Course.topic('av-svd', function (p) {
 
+  p.puente('Del tema de autovalores se usa lo esencial: la ecuación característica y la idea de diagonalizar. ' +
+    'Y se añade una propiedad nueva: las matrices simétricas, como $A^tA$, tienen siempre autovalores reales ' +
+    'no negativos y autovectores perpendiculares. Con eso se construye una descomposición que, a diferencia ' +
+    'de la anterior, existe para cualquier matriz.');
+
   p.text('Los [[av-lineal|autovalores]] tienen un problema: solo existen para matrices cuadradas, y no todas los tienen ' +
     'reales ni tienen suficientes autovectores. Hay una descomposición que no falla nunca, que existe para ' +
     '<strong>cualquier matriz</strong>, cuadrada o no, y que dice algo muy visual: toda transformación lineal es un giro, ' +
@@ -23,9 +28,29 @@ Course.topic('av-svd', function (p) {
     'Leída de derecha a izquierda: $V^t$ gira el espacio hasta que las direcciones $\\vec v_i$ caen sobre los ejes, $\\Sigma$ estira cada eje por $\\sigma_i$, y $U$ gira el resultado a su posición final.<br><br>' +
     '$A^tA$ es simétrica, y las matrices simétricas tienen siempre autovalores reales no negativos y autovectores perpendiculares: por eso la descomposición existe siempre.');
 
+  p.comprueba('$A = \\begin{pmatrix} 3 & 0 \\\\ 0 & -2 \\end{pmatrix}$. ¿Cuáles son sus valores singulares?', [
+    { t: '$3$ y $-2$', ok: false, por: 'Los valores singulares son longitudes de semiejes: nunca negativos. El signo menos es una simetría, y se la quedan $U$ o $V$.' },
+    { t: '$3$ y $2$', ok: true, por: '$A^tA = \\begin{pmatrix} 9 & 0 \\\\ 0 & 4 \\end{pmatrix}$, con autovalores 9 y 4; sus raíces son 3 y 2. La circunferencia unidad se convierte en una elipse de semiejes 3 y 2.' },
+    { t: '$9$ y $4$', ok: false, por: 'Esos son los autovalores de $A^tA$. Los valores singulares son sus raíces cuadradas: 3 y 2.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Una descomposición a mano',
+    enunciado: 'Calcular los valores y vectores singulares de $A = \\begin{pmatrix} 3 & 0 \\\\ 4 & 5 \\end{pmatrix}$.',
+    pasos: [
+      { t: '<strong>$A^tA$.</strong> $A^t = \\begin{pmatrix} 3 & 4 \\\\ 0 & 5 \\end{pmatrix}$, así que $A^tA = \\begin{pmatrix} 9 + 16 & 0 + 20 \\\\ 0 + 20 & 0 + 25 \\end{pmatrix} = \\begin{pmatrix} 25 & 20 \\\\ 20 & 25 \\end{pmatrix}$. Simétrica, como tiene que ser.' },
+      { t: '<strong>Sus autovalores.</strong> Traza 50, determinante $625 - 400 = 225$: $\\lambda^2 - 50\\lambda + 225 = 0$, raíces $\\lambda = 45$ y $\\lambda = 5$. Valores singulares: $\\sigma_1 = \\sqrt{45} \\approx 6{,}708$ y $\\sigma_2 = \\sqrt{5} \\approx 2{,}236$.', antes: 'Ecuación característica de $A^tA$. ¿Qué raíces salen? ¿Y qué hay que hacerles?' },
+      { t: '<strong>Comprobación.</strong> $\\sigma_1\\sigma_2 = \\sqrt{225} = 15 = |\\det A| = |15 - 0|$ ✓. El área de la elipse es $\\pi\\sigma_1\\sigma_2 = 15\\pi$, quince veces la del círculo.' },
+      { t: '<strong>Los $\\vec v_i$: autovectores de $A^tA$.</strong> Para $\\lambda = 45$: $(25 - 45)x + 20y = 0$, o sea $y = x$: $\\vec v_1 = \\frac{1}{\\sqrt 2}(1, 1)$. Para $\\lambda = 5$: $20x + 20y = 0$: $\\vec v_2 = \\frac{1}{\\sqrt 2}(1, -1)$. Perpendiculares, como toca en una simétrica.', antes: 'Resuelve $(A^tA - \\lambda I)\\vec v = 0$ para cada $\\lambda$. ¿Salen perpendiculares?' },
+      { t: '<strong>Los $\\vec u_i$: a dónde van.</strong> $A\\vec v_1 = \\frac{1}{\\sqrt 2}(3, 9)$, de longitud $\\sqrt{90/2} = \\sqrt{45} = \\sigma_1$ ✓; normalizando, $\\vec u_1 = \\frac{1}{\\sqrt{10}}(1, 3)$. $A\\vec v_2 = \\frac{1}{\\sqrt 2}(3, -1)$, de longitud $\\sqrt{10/2} = \\sqrt 5 = \\sigma_2$ ✓; $\\vec u_2 = \\frac{1}{\\sqrt{10}}(3, -1)$. Y $\\vec u_1\\cdot\\vec u_2 = 3 - 3 = 0$: también perpendiculares.', antes: 'Aplica $A$ a $\\vec v_1$. ¿Qué longitud debe tener el resultado?' }
+    ],
+    cierre: 'Leído como transformación: $V^t$ gira las diagonales del plano hasta los ejes, $\\Sigma$ estira por 6,7 y 2,2, y $U$ gira el resultado. Fíjate en que los autovalores de $A$, que son 3 y 5, no son sus valores singulares: solo coinciden en matrices simétricas con autovalores no negativos.'
+  });
+
   p.demo({
     title: 'El círculo que se convierte en elipse',
     intro: 'Mueve las cuatro entradas de la matriz. La circunferencia de puntos se transforma en la elipse. Las dos direcciones marcadas en la circunferencia son perpendiculares, y la matriz las lleva a los ejes de la elipse, también perpendiculares. Las longitudes de esos ejes son los valores singulares.',
+    predice: 'Pon la identidad, $\\begin{pmatrix} 1 & 0 \\\\ 0 & 1 \\end{pmatrix}$: ¿qué «elipse» saldrá y cuánto valdrán $\\sigma_1$ y $\\sigma_2$? Y con $\\begin{pmatrix} 1 & 1 \\\\ 1 & 1 \\end{pmatrix}$: ¿qué le pasará a $\\sigma_2$?',
     build: function (host) {
       var M = [[1.5, 0.8], [0.3, 1]];
       var out = W.readout(host, '');
@@ -84,6 +109,7 @@ Course.topic('av-svd', function (p) {
   p.demo({
     title: 'Comprimir una imagen',
     intro: 'Una imagen de 48 por 48 píxeles es una matriz de 2304 números. A la derecha se reconstruye con solo los k valores singulares mayores. Con muy pocos ya se reconoce la forma; con una docena casi no se distingue del original, y guarda muchos menos números. Abajo, los valores singulares, que caen muy deprisa.',
+    predice: 'Con $k = 1$ la reconstrucción es una sola matriz de rango 1, un producto columna por fila. ¿Qué crees que se verá: la cara, o solo franjas horizontales y verticales? ¿A partir de qué $k$ se distinguirán los ojos?',
     build: function (host) {
       var N = 48, k = 3, i, j, m;
       var A = [];
@@ -186,6 +212,13 @@ Course.topic('av-svd', function (p) {
     'pocas que expliquen casi todo, es una descomposición en valores singulares. Los buscadores la han usado para ' +
     'encontrar documentos relacionados aunque no compartan palabras, los sistemas de recomendación para adivinar qué te ' +
     'gustará, y en física cuántica mide cuánto entrelazamiento hay entre dos partes de un sistema.');
+
+  p.trampas([
+    { e: 'Dar un valor singular negativo', por: 'Son longitudes de semiejes. Los signos se los quedan las matrices ortogonales $U$ y $V$.' },
+    { e: 'Tomar los autovalores de $A$ como valores singulares', por: '$\\begin{pmatrix} 3 & 0 \\\\ 4 & 5 \\end{pmatrix}$ tiene autovalores 3 y 5, y valores singulares $\\sqrt{45}$ y $\\sqrt 5$. Solo coinciden en matrices simétricas con autovalores no negativos.' },
+    { e: 'Olvidar la raíz cuadrada', por: 'Los autovalores de $A^tA$ son los <em>cuadrados</em> de los valores singulares. Comprobación rápida: $\\sigma_1\\sigma_2\\cdots = |\\det A|$.' },
+    { e: 'Guardar cada matriz $\\vec u_i\\vec v_i^t$ entera al comprimir', por: 'Es de rango 1: basta con los dos vectores y $\\sigma_i$. Para una imagen $m\\times n$, cada término cuesta $m + n + 1$ números, no $mn$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

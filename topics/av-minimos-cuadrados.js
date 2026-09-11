@@ -1,11 +1,12 @@
 /* Tema: Minimos cuadrados y proyecciones */
 Course.topic('av-minimos-cuadrados', function (p) {
 
-  p.text('Se miden tres puntos que deberían estar en una recta, y no lo están: toda medida tiene error. La recta ' +
+  p.puente('Se miden tres puntos que deberían estar en una recta, y no lo están: toda medida tiene error. La recta ' +
     '$y = c_0 + c_1 t$ tendría que cumplir tres ecuaciones con solo dos incógnitas, y un sistema así casi nunca ' +
     'tiene solución. En [[pe-bidimensional]] se resolvía con la recta de regresión y una fórmula que había que ' +
     'creerse. Este tema explica de dónde sale: es una <strong>proyección</strong>, la misma idea de la sombra de un ' +
-    'vector, llevada a espacios de más dimensiones.');
+    'vector del [[ge-vectores|producto escalar]], llevada a espacios de más dimensiones. Hacen falta el ' +
+    'producto escalar, la traspuesta y la inversa de una matriz.');
 
   /* ---------------------------------------------------------------- */
   p.section('Un sistema que no tiene solución');
@@ -25,6 +26,12 @@ Course.topic('av-minimos-cuadrados', function (p) {
     '$|\\vec r|^2$ es la suma de los cuadrados de los errores de cada medida, eso es exactamente minimizar la suma de ' +
     'cuadrados.');
 
+  p.comprueba('Tres medidas $(0, 1)$, $(1, 3)$, $(2, 2)$ y la recta $y = 1 + t$, que pasa por las dos primeras. ¿Es la recta de mínimos cuadrados?', [
+    { t: 'Sí: pasa por dos de los tres puntos', ok: false, por: 'Pasar por puntos no es el criterio. Su residuo es $(0, 1, -1)$, con $|\\vec r|^2 = 2$. La recta $y = \\frac{3}{2} + \\frac{1}{2}t$ no pasa por ninguno y tiene $|\\vec r|^2 = \\frac{3}{2}$: menor.' },
+    { t: 'No: el residuo $(0, 1, -1)$ no es perpendicular a la columna $(0, 1, 2)$', ok: true, por: '$(0, 1, 2)\\cdot(0, 1, -1) = -1 \\ne 0$, así que el residuo no es perpendicular al espacio columna y se puede mejorar. La de mínimos cuadrados, $y = \\frac{3}{2} + \\frac{1}{2}t$, tiene residuo $(-\\frac{1}{2}, 1, -\\frac{1}{2})$, perpendicular a las dos columnas.' },
+    { t: 'No se puede saber sin dibujar', ok: false, por: 'Se puede saber con dos productos escalares: el residuo tiene que ser perpendicular a todas las columnas de $A$. Aquí falla con la segunda.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.section('Proyección ortogonal sobre un subespacio');
 
@@ -40,9 +47,23 @@ Course.topic('av-minimos-cuadrados', function (p) {
     '[[al-inversa|inversa]]: $\\hat x = (A^tA)^{-1}A^t\\vec b$.<br><br>Con dos incógnitas, desarrollar estas ecuaciones da ' +
     'exactamente las fórmulas de la recta de regresión.');
 
+  p.ejemplo({
+    title: 'Las ecuaciones normales, con números',
+    enunciado: 'Ajustar la recta $y = c_0 + c_1 t$ a las medidas $(0, 1)$, $(1, 3)$ y $(2, 2)$.',
+    pasos: [
+      { t: '<strong>Plantear.</strong> $A = \\begin{pmatrix} 1 & 0 \\\\ 1 & 1 \\\\ 1 & 2 \\end{pmatrix}$, $\\vec b = \\begin{pmatrix} 1 \\\\ 3 \\\\ 2 \\end{pmatrix}$. Tres ecuaciones, dos incógnitas, y los puntos no están alineados: el sistema $A\\vec x = \\vec b$ es incompatible.', antes: '¿Tiene solución exacta? Mira si los tres puntos están en una recta.' },
+      { t: '<strong>Las ecuaciones normales.</strong> $A^tA = \\begin{pmatrix} 3 & 3 \\\\ 3 & 5 \\end{pmatrix}$ y $A^t\\vec b = \\begin{pmatrix} 1 + 3 + 2 \\\\ 0 + 3 + 4 \\end{pmatrix} = \\begin{pmatrix} 6 \\\\ 7 \\end{pmatrix}$.', antes: 'Calcula $A^tA$: es $2\\times 2$ y simétrica. ¿Qué entradas salen?' },
+      { t: '<strong>Resolver.</strong> $\\begin{cases} 3c_0 + 3c_1 = 6 \\\\ 3c_0 + 5c_1 = 7 \\end{cases}$. Restando, $2c_1 = 1$: $c_1 = \\frac{1}{2}$ y $c_0 = \\frac{3}{2}$. La recta es $y = \\frac{3}{2} + \\frac{1}{2}t$.' },
+      { t: '<strong>El residuo.</strong> Predicciones $1{,}5$, $2$, $2{,}5$; residuo $\\vec r = (-\\frac{1}{2}, 1, -\\frac{1}{2})$. Perpendicular a $(1, 1, 1)$: $-\\frac{1}{2} + 1 - \\frac{1}{2} = 0$ ✓. Y a $(0, 1, 2)$: $0 + 1 - 1 = 0$ ✓. $|\\vec r|^2 = \\frac{3}{2}$.', antes: 'Calcula el residuo y sus dos productos escalares con las columnas. ¿Qué tienen que dar?' },
+      { t: '<strong>Comprobar con la regresión.</strong> $\\overline{t} = 1$, $\\overline{y} = 2$, $\\sigma_{ty} = \\frac{(-1)(-1) + 0 + (1)(0)}{3} = \\frac{1}{3}$, $\\sigma_t^2 = \\frac{2}{3}$. Pendiente $\\frac{1/3}{2/3} = \\frac{1}{2}$ ✓, y pasa por $(1, 2)$: $\\frac{3}{2} + \\frac{1}{2} = 2$ ✓.', antes: 'La fórmula de la recta de regresión debería dar lo mismo. Compruébalo.' }
+    ],
+    cierre: 'La fórmula de regresión y las ecuaciones normales son la misma cosa. La ventaja de la segunda es que no cambia al pasar a parábolas, a senos o a diez variables: solo cambia la matriz $A$.'
+  });
+
   p.demo({
     title: 'Dos vistas del mismo ajuste',
     intro: 'Tres medidas tomadas en t = −1, 0 y 1. Arriba, en el espacio: el vector de medidas b no está en el plano de las columnas de A; su proyección p es el punto del plano más cercano, y el segmento rojo, el residuo, perpendicular al plano. Abajo, lo mismo como ajuste: la recta de mínimos cuadrados y el error de cada medida. Mueve las medidas y arrastra la vista 3D para girarla.',
+    predice: 'Pon las tres medidas alineadas, por ejemplo 0, 1 y 2. ¿Qué pasará con el segmento rojo? ¿Dónde estará entonces $\\vec b$ respecto del plano?',
     build: function (host) {
       var y = [1, 3, 2];
       var out = W.readout(host, '');
@@ -110,8 +131,37 @@ Course.topic('av-minimos-cuadrados', function (p) {
     'resolviendo un sistema sobredeterminado por mínimos cuadrados. Las cámaras de los móviles calibran sus lentes igual, ' +
     'y la regresión lineal, la versión más sencilla del aprendizaje automático, es literalmente este tema.');
 
+  p.trampas([
+    { e: 'Buscar la recta que pasa por más puntos', por: 'El criterio es la suma de cuadrados, no el número de aciertos. La recta de mínimos cuadrados puede no pasar por ninguno.' },
+    { e: 'Dividir por $|\\vec a|$ al proyectar sobre $\\vec a$', por: 'La longitud de la sombra es $\\frac{\\vec a\\cdot\\vec b}{|\\vec a|}$; el coeficiente que multiplica a $\\vec a$ es $\\frac{\\vec a\\cdot\\vec b}{|\\vec a|^2}$. Son cosas distintas salvo que $|\\vec a| = 1$.' },
+    { e: 'Olvidar la columna de unos', por: 'Sin ella no hay $c_0$ y la recta pasa por el origen a la fuerza. La columna de unos es el término independiente.' },
+    { e: '«Más coeficientes, mejor ajuste»', por: 'Mejor ajuste a <em>estos</em> datos, ruido incluido. Con tantos coeficientes como datos el residuo es cero y el modelo no ha aprendido nada: ha memorizado.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
+
+  p.exercise({
+    title: 'Las dimensiones del sistema',
+    level: 'basico',
+    gen: function (r) {
+      var n = r.pick([4, 5, 6, 8, 10, 12]), g = r.pick([1, 2, 3]);
+      return { n: n, g: g, cols: g + 1 };
+    },
+    ask: function (d) {
+      var modelo = ['$y = c_0 + c_1 t$', '$y = c_0 + c_1 t + c_2 t^2$', '$y = c_0 + c_1 t + c_2 t^2 + c_3 t^3$'][d.g - 1];
+      return 'Se ajusta el modelo ' + modelo + ' a $' + d.n + '$ medidas. ¿Cuántas filas y columnas tiene $A$? ¿De qué orden es $A^tA$?';
+    },
+    fields: [{ name: 'f', label: 'filas de A', w: 'tiny' }, { name: 'c', label: 'columnas de A', w: 'tiny' }, { name: 'o', label: 'orden de AᵗA', w: 'tiny' }],
+    sol: function (d) { return { f: d.n, c: d.cols, o: d.cols }; },
+    errores: [{ si: function (v, d) { return d.n !== d.cols && v.o === d.n; }, msg: '$A^tA$ tiene tantas filas como columnas tiene $A$: una por coeficiente, no una por medida. Eso es lo que hace que sea pequeña aunque haya miles de datos.' }],
+    hint: function () { return ['Una fila por medida; una columna por coeficiente (la primera, de unos).', '$A^t$ es de $(\\text{coef}) \\times (\\text{medidas})$, así que $A^tA$ es cuadrada de orden el número de coeficientes.']; },
+    steps: function (d) {
+      return ['Cada medida da una ecuación: $' + d.n + '$ filas.', 'Cada coeficiente, una columna: unos, $t_i$' + (d.g >= 2 ? ', $t_i^2$' : '') + (d.g >= 3 ? ', $t_i^3$' : '') + ': $' + d.cols + '$ columnas.',
+        '$A^tA$ es $' + d.cols + '\\times' + d.cols + '$: el sistema de las ecuaciones normales tiene tantas ecuaciones como incógnitas, sean cuantas sean las medidas.'];
+    },
+    answer: function (d) { return d.n + ' × ' + d.cols + '; AᵗA de orden ' + d.cols; }
+  });
 
   p.exercise({
     title: 'Las ecuaciones normales',

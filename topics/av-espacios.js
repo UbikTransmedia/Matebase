@@ -1,6 +1,12 @@
 /* Tema: Espacios vectoriales y aplicaciones lineales */
 Course.topic('av-espacios', function (p) {
 
+  p.puente('Este bloque vuelve sobre las matrices y los vectores de 2.º con otra pregunta: no «cómo se ' +
+    'calcula» sino «qué es». Hacen falta tres cosas ya vistas: los vectores del plano y del espacio, el ' +
+    'producto de matrices y el rango por Gauss. Con ellas, una matriz deja de ser una tabla y pasa a ' +
+    'ser una transformación, y ese cambio de mirada es lo que sostiene todo lo que sigue.',
+    'Por dónde empezamos');
+
   p.text('Ya sabes sumar vectores del plano y multiplicarlos por números. Ya sabes sumar polinomios y ' +
     'multiplicarlos por números. Ya sabes sumar matrices y multiplicarlas por números. Y en los tres ' +
     'casos las reglas son <strong>exactamente las mismas</strong>.');
@@ -38,9 +44,16 @@ Course.topic('av-espacios', function (p) {
   p.text('En palabras: son <strong>independientes</strong> si la única forma de combinarlos para llegar ' +
     'a cero es no usar ninguno. Si son dependientes, alguno sobra: se puede escribir con los demás.');
 
+  p.comprueba('Tres vectores del plano, $(1, 0)$, $(0, 1)$ y $(2, 3)$. ¿Son linealmente independientes?', [
+    { t: 'Sí: ninguno es múltiplo de otro', ok: false, por: '«Ninguno es múltiplo de otro» solo sirve para dos vectores. Con tres, la pregunta es si alguno es combinación de los demás, y $(2, 3) = 2\\cdot(1, 0) + 3\\cdot(0, 1)$.' },
+      { t: 'No: en el plano nunca puede haber tres independientes', ok: true, por: 'La dimensión de $\\mathbb{R}^2$ es 2: cualquier tercer vector es combinación de una base. Aquí $2(1,0) + 3(0,1) - (2,3) = \\vec 0$ es una combinación no trivial que da cero.' },
+    { t: 'Depende de cómo se ordenen', ok: false, por: 'La independencia no depende del orden. Tres vectores en un espacio de dimensión 2 son siempre dependientes.' }
+  ]);
+
   p.demo({
     title: 'Cuánto espacio generan dos vectores',
     intro: 'Arrastra los dos vectores. Mientras apunten en direcciones distintas, sus combinaciones llenan todo el plano. Alinéalos y verás cómo el espacio generado se derrumba a una recta.',
+    predice: 'Pon $\\vec v_1 = (2, 1)$ y $\\vec v_2 = (4, 2)$. ¿Qué valdrá el determinante y qué quedará del plano sombreado? ¿Y con $(2, 1)$ y $(-4, -2)$?',
     build: function (host, d) {
       var out = W.readout(host, '');
       W.board(host, {
@@ -132,9 +145,22 @@ Course.topic('av-espacios', function (p) {
       'Por eso una matriz de dos por dos contiene toda la información de un giro, y por eso se puede ' +
       'componer transformaciones multiplicando.');
 
+  p.ejemplo({
+    title: 'De lo que hace a la matriz, y de la matriz a lo que hace',
+    enunciado: 'Una aplicación lineal del plano lleva $(1, 0)$ a $(2, 1)$ y $(0, 1)$ a $(-1, 1)$. Escribir su matriz, calcular la imagen de $(3, 2)$ y decir qué le hace al área.',
+    pasos: [
+      { t: '<strong>La matriz.</strong> Las imágenes de la base van por <em>columnas</em>: $A = \\begin{pmatrix} 2 & -1 \\\\ 1 & 1 \\end{pmatrix}$. Primera columna $(2, 1)$, segunda $(-1, 1)$.', antes: '¿Filas o columnas? Piensa en $A\\cdot(1, 0)^t$: ¿qué devuelve?' },
+      { t: '<strong>Comprobación.</strong> $A\\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix} = \\begin{pmatrix} 2 \\\\ 1 \\end{pmatrix}$ ✓. Multiplicar por $(1, 0)$ extrae la primera columna: por eso van ahí.' },
+      { t: '<strong>Imagen de $(3, 2)$.</strong> Dos maneras. Multiplicando: $A\\begin{pmatrix} 3 \\\\ 2 \\end{pmatrix} = \\begin{pmatrix} 6 - 2 \\\\ 3 + 2 \\end{pmatrix} = \\begin{pmatrix} 4 \\\\ 5 \\end{pmatrix}$. O por linealidad: $f(3, 2) = 3f(1, 0) + 2f(0, 1) = 3(2, 1) + 2(-1, 1) = (4, 5)$. Lo mismo.', antes: 'Sin multiplicar: $(3, 2) = 3(1, 0) + 2(0, 1)$. ¿Qué vale entonces $f(3, 2)$?' },
+      { t: '<strong>El área.</strong> $\\det A = 2\\cdot 1 - (-1)\\cdot 1 = 3$. El cuadrado unidad se convierte en un paralelogramo de área 3: la aplicación triplica las áreas. Como el determinante es positivo, no da la vuelta al plano.', antes: '¿Qué mide el determinante de una transformación?' }
+    ],
+    cierre: 'Una matriz 2×2 son cuatro números, pero leídos bien son dos flechas: dónde van $\\vec e_1$ y $\\vec e_2$. Todo lo demás, imágenes, áreas, inversa, se deduce de esas dos.'
+  });
+
   p.demo({
     title: 'Deformar el plano',
     intro: 'La cuadrícula gris es el plano de partida; la de color, su imagen. Fíjate en las dos primeras columnas de la matriz: son exactamente a dónde van los vectores (1,0) y (0,1).',
+    predice: 'Elige «cizalla», $\\begin{pmatrix} 1 & 1 \\\\ 0 & 1 \\end{pmatrix}$. ¿Dónde irá $(0, 1)$? ¿Cambiará el área del cuadrado? Piensa en el determinante antes de mirar.',
     build: function (host, d) {
       var M = [[1, 0], [0, 1]];
       var out = W.readout(host, '');
@@ -227,6 +253,13 @@ Course.topic('av-espacios', function (p) {
     'es, en este lenguaje, que el núcleo sea solo el cero. Rouché-Frobenius era esto disfrazado.',
     'ok', 'Todo encaja');
 
+  p.trampas([
+    { e: 'Poner las imágenes de la base por filas', por: '$A\\cdot(1, 0)^t$ devuelve la primera <em>columna</em>. Si $f(1, 0) = (2, 1)$, la primera columna es $(2, 1)$, no la primera fila.' },
+    { e: '«Tres vectores del plano, ninguno múltiplo de otro, luego independientes»', por: 'En dimensión 2 no caben tres independientes. Con más de dos vectores hay que mirar si alguno es combinación de los demás, no solo si es múltiplo.' },
+    { e: 'Confundir el espacio de llegada con la imagen', por: '$f: \\mathbb{R}^3 \\to \\mathbb{R}^5$ puede tener imagen de dimensión 2. El teorema del rango usa la dimensión del espacio de <em>partida</em>.' },
+    { e: 'Creer que una aplicación lineal puede mover el origen', por: '$f(\\vec 0) = f(0\\cdot\\vec v) = 0\\cdot f(\\vec v) = \\vec 0$. Una traslación no es lineal: por eso los gráficos usan una coordenada más.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('El núcleo es «lo que se pierde por el camino». Si una transformación tiene núcleo no trivial, ' +
     'distintos datos de entrada acaban dando la misma salida y ya no se puede volver atrás: eso es ' +
@@ -248,16 +281,10 @@ Course.topic('av-espacios', function (p) {
       return { u: u, v: v, det: det, indep: Math.abs(det) > 1e-9 };
     },
     ask: function (d) {
-      return '¿Son linealmente independientes $\\vec{u} = (' + d.u + ')$ y $\\vec{v} = (' + d.v + ')$?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>si</code> o <code>no</code>.</span>';
+      return '¿Son linealmente independientes $\\vec{u} = (' + d.u + ')$ y $\\vec{v} = (' + d.v + ')$?';
     },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny', ph: 'si / no' }],
+    fields: [{ name: 'r', label: 'Los vectores son', opts: [{ t: 'independientes', v: 'si' }, { t: 'dependientes', v: 'no' }] }],
     sol: function (d) { return { r: d.indep ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var t = v.raw.r.trim().toLowerCase().replace(/[íÍ]/g, 'i');
-      if (t !== 'si' && t !== 'no') return { ok: false, msg: 'Escribe <code>si</code> o <code>no</code>.' };
-      return (t === 'si') === d.indep;
-    },
     hint: function () { return 'En el plano, dos vectores son independientes si el determinante que forman no es cero.'; },
     steps: function (d) {
       return ['Montamos el determinante con los dos vectores: $\\begin{vmatrix}' + d.u[0] + ' & ' + d.u[1] +

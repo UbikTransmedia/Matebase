@@ -1,6 +1,11 @@
 /* Tema: Cadenas de Markov y procesos estocásticos */
 Course.topic('av-markov', function (p) {
 
+  p.puente('De probabilidad se usa la probabilidad total, sumar caminos, y de este bloque la ' +
+    'diagonalización: elevar una matriz a una potencia grande. Este tema junta las dos cosas: un proceso ' +
+    'con azar cuya evolución consiste en multiplicar por la misma matriz una y otra vez, y cuyo destino ' +
+    'a largo plazo es un autovector.');
+
   p.text('Un <strong>proceso estocástico</strong> es un sistema que evoluciona en el tiempo con una ' +
     'componente de azar. Y hay un tipo especialmente manejable, que es además el que aparece por todas ' +
     'partes: aquel en que <strong>el futuro depende solo del presente, no de cómo se llegó a él</strong>.');
@@ -21,6 +26,12 @@ Course.topic('av-markov', function (p) {
   p.note('Cada <strong>fila suma 1</strong>: si estás en un estado, con probabilidad total 1 acabarás ' +
     'en alguno (quizá en el mismo). Una matriz así se llama <em>estocástica</em>.', null);
 
+  p.comprueba('Con el convenio de este tema (cada fila es un estado de partida), ¿cuál de estas puede ser una matriz de transición?', [
+    { t: '$\\begin{pmatrix} 0{,}7 & 0{,}3 \\\\ 0{,}5 & 0{,}5 \\end{pmatrix}$', ok: true, por: 'Todas las entradas están entre 0 y 1 y cada fila suma 1: desde el estado 1 se va al 1 con 0,7 y al 2 con 0,3; desde el 2, mitad y mitad.' },
+    { t: '$\\begin{pmatrix} 0{,}7 & 0{,}5 \\\\ 0{,}3 & 0{,}5 \\end{pmatrix}$', ok: false, por: 'Las filas suman 1,2 y 0,8. Aquí suman 1 las <em>columnas</em>: sería la traspuesta de una matriz de transición. Hay libros que usan ese convenio; en este tema, filas.' },
+    { t: '$\\begin{pmatrix} 1{,}2 & -0{,}2 \\\\ 0{,}5 & 0{,}5 \\end{pmatrix}$', ok: false, por: 'La primera fila suma 1, pero tiene una probabilidad negativa y otra mayor que 1. Cada entrada tiene que ser una probabilidad.' }
+  ]);
+
   p.formula('\\vec{x}_{n+1} = \\vec{x}_n \\cdot P \\qquad \\vec{x}_n = \\vec{x}_0 \\cdot P^{\\,n}',
     'evolución del vector de estado');
 
@@ -31,6 +42,7 @@ Course.topic('av-markov', function (p) {
   p.demo({
     title: 'El tiempo de mañana',
     intro: 'Un modelo climático de juguete con dos estados. Avanza días y observa cómo la predicción se olvida del punto de partida.',
+    predice: 'Empezando con sol, la probabilidad de sol bajará hacia la línea estacionaria. Si empiezas con lluvia, ¿subirá hacia ese mismo valor o hacia otro? ¿Cuántos días crees que tarda en olvidar el origen: 3, 10, 50?',
     build: function (host, d) {
       var pss = 0.8, pll = 0.4;   // P(sol|sol), P(lluvia|lluvia)
       var x = [1, 0], dia = 0;
@@ -102,6 +114,19 @@ Course.topic('av-markov', function (p) {
     'menor que 1: por eso las demás componentes se apagan y solo sobrevive la estacionaria. Ese es el ' +
     'motivo matemático de que el sistema olvide su origen.', 'ok', 'Es un problema de autovalores');
 
+  p.ejemplo({
+    title: 'La estacionaria de un modelo de dos estados',
+    enunciado: 'Con $P = \\begin{pmatrix} 0{,}8 & 0{,}2 \\\\ 0{,}6 & 0{,}4 \\end{pmatrix}$ (filas: hoy sol, hoy lluvia), hallar la distribución estacionaria, comprobarla y ver en $P^2$ cómo empieza el olvido.',
+    pasos: [
+      { t: '<strong>La ecuación $\\vec\\pi P = \\vec\\pi$.</strong> Con $\\vec\\pi = (s, l)$: $s = 0{,}8s + 0{,}6l$ y $l = 0{,}2s + 0{,}4l$. Las dos dicen lo mismo, $0{,}2s = 0{,}6l$, es decir, $s = 3l$. Con $s + l = 1$: $4l = 1$, así que $l = 0{,}25$ y $s = 0{,}75$.', antes: 'Escribe $(s, l)\\cdot P = (s, l)$ componente a componente. ¿Por qué salen dos ecuaciones equivalentes?' },
+      { t: '<strong>Comprobar.</strong> $(0{,}75,\\ 0{,}25)\\cdot P = (0{,}6 + 0{,}15,\\ 0{,}15 + 0{,}1) = (0{,}75,\\ 0{,}25)$ ✓. Un paso más y no cambia nada.' },
+      { t: '<strong>Como flujo.</strong> Sale de sol hacia lluvia $0{,}75\\cdot 0{,}2 = 0{,}15$; sale de lluvia hacia sol $0{,}25\\cdot 0{,}6 = 0{,}15$. Iguales: lo que entra compensa lo que sale. Es la forma rápida de resolver cadenas de dos estados.', antes: 'Calcula cuánta probabilidad cruza en cada sentido. ¿Qué relación tienen?' },
+      { t: '<strong>Dos pasos.</strong> $P^2 = \\begin{pmatrix} 0{,}64 + 0{,}12 & 0{,}16 + 0{,}08 \\\\ 0{,}48 + 0{,}24 & 0{,}12 + 0{,}16 \\end{pmatrix} = \\begin{pmatrix} 0{,}76 & 0{,}24 \\\\ 0{,}72 & 0{,}28 \\end{pmatrix}$. Las dos filas ya se parecen: a los dos días, la probabilidad de sol es 0,76 si hoy hay sol y 0,72 si llueve. Con muchos días, las dos filas serán $(0{,}75,\\ 0{,}25)$.', antes: '¿Qué significa que las dos filas de $P^n$ se vayan pareciendo?' },
+      { t: '<strong>Por qué tan rápido.</strong> Traza $1{,}2$, determinante $0{,}32 - 0{,}12 = 0{,}2$: $\\lambda^2 - 1{,}2\\lambda + 0{,}2 = 0$, raíces $\\lambda = 1$ y $\\lambda = 0{,}2$. El 1 es la estacionaria; el 0,2 se apaga como $0{,}2^n$: cada día, el recuerdo del punto de partida se multiplica por 0,2.' }
+    ],
+    cierre: 'La estacionaria no depende de dónde se empiece, solo de $P$. Y la velocidad del olvido la marca el segundo autovalor: con $\\lambda_2 = 0{,}9$ se tardarían semanas; con $0{,}2$, tres días.'
+  });
+
   p.text('Y de ahí sale una de las aplicaciones más rentables de la historia: <strong>PageRank</strong>. ' +
     'Google modeló al internauta como un paseante aleatorio que va saltando de enlace en enlace. La ' +
     'distribución estacionaria de esa cadena dice qué porcentaje del tiempo pasa en cada página, y eso ' +
@@ -122,6 +147,7 @@ Course.topic('av-markov', function (p) {
   p.demo({
     title: 'La ruina del jugador',
     intro: 'Un jugador apuesta 1 € por partida hasta arruinarse o alcanzar su objetivo. Los dos extremos son estados absorbentes. Mira cómo cambia su probabilidad de éxito.',
+    predice: 'Con juego justo y 5 € de un objetivo de 10, la probabilidad es el 50 %. Si bajas la probabilidad de ganar cada partida a 0,45, ¿la de alcanzar el objetivo bajará al 45 %, o mucho más?',
     build: function (host, d) {
       var N = 10, k = 5, prob = 0.5;
       var out = W.readout(host, '');
@@ -171,6 +197,13 @@ Course.topic('av-markov', function (p) {
     '<em>dependientes</em>. Para probarlo, analizó las 20 000 primeras letras de <em>Eugenio Oneguin</em> ' +
     'de Pushkin, contando con qué probabilidad una vocal sigue a una consonante. Es, literalmente, el ' +
     'primer modelo estadístico de un texto: el tatarabuelo de los modelos de lenguaje actuales.');
+
+  p.trampas([
+    { e: 'Mezclar el convenio de filas con el de columnas', por: 'Aquí las filas suman 1 y se multiplica $\\vec x\\cdot P$ con $\\vec x$ fila. Si un libro pone $P\\vec x$ con columnas que suman 1, su matriz es la traspuesta de esta.' },
+    { e: '«En la estacionaria el sistema se para»', por: 'Sigue saltando entre estados cada día. Lo que no cambia son las <em>proporciones</em>: el flujo que entra en cada estado iguala al que sale.' },
+    { e: 'Creer que la estacionaria depende del punto de partida', por: 'Depende solo de $P$. El punto de partida se olvida a la velocidad del segundo autovalor.' },
+    { e: '«Con juego justo no se puede arruinar uno»', por: 'Contra un rival con más dinero, la ruina llega casi seguro aunque cada partida sea justa: la probabilidad de éxito es solo la fracción del objetivo que ya se tiene.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Un estado absorbente es aquel del que no se sale, y por eso modela finales: un cliente que se ' +

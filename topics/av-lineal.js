@@ -1,6 +1,11 @@
 /* Tema: Álgebra lineal: autovalores */
 Course.topic('av-lineal', function (p) {
 
+  p.puente('El tema anterior dejó dicho que una matriz es una transformación del plano: sus columnas son ' +
+    'a dónde van los vectores de la base. Aquí se hace la pregunta siguiente: ¿hay direcciones que la ' +
+    'transformación respeta? Para responderla hacen falta el determinante de 2.º y la ecuación de ' +
+    'segundo grado; para el final del tema, también los [[al-complejos|números complejos]].');
+
   p.text('En [[al-matrices|el tema de matrices]] las viste como tablas de números. Hay una manera mucho más ' +
     'iluminadora de entenderlas: <strong>una matriz es una transformación del espacio</strong>. ' +
     'Coge el plano entero, lo estira, lo comprime, lo gira y lo tuerce, todo a la vez.');
@@ -18,9 +23,16 @@ Course.topic('av-lineal', function (p) {
     'direcciones en las que la matriz se comporta como una simple multiplicación. Encontrarlas ' +
     'simplifica enormemente cualquier problema.', 'ok');
 
+  p.comprueba('$A = \\begin{pmatrix} 3 & 0 \\\\ 0 & 1 \\end{pmatrix}$ y $\\vec v = (1, 1)$. ¿Es $\\vec v$ un autovector de $A$?', [
+    { t: 'Sí: $A\\vec v = (3, 1)$, más largo que $\\vec v$', ok: false, por: 'Más largo no basta: tiene que apuntar en la <em>misma dirección</em>. $(3, 1)$ no es múltiplo de $(1, 1)$: la matriz ha torcido el vector.' },
+    { t: 'No: $A\\vec v = (3, 1)$ no es múltiplo de $(1, 1)$', ok: true, por: 'Un autovector sale de la matriz apuntando a donde apuntaba. Los de esta matriz son los ejes: $(1, 0)$ con $\\lambda = 3$ y $(0, 1)$ con $\\lambda = 1$.' },
+    { t: 'Sí, con autovalor 3', ok: false, por: '$3\\vec v = (3, 3)$, y $A\\vec v = (3, 1)$. No coinciden: la segunda componente solo se ha multiplicado por 1.' }
+  ]);
+
   p.demo({
     title: 'Buscar las direcciones que no se tuercen',
     intro: 'Gira el vector azul y observa su imagen en rojo. Casi siempre apuntan a sitios distintos; en unas pocas direcciones, se alinean. Esas son los autovectores.',
+    predice: 'Para $\\begin{pmatrix} 2 & 1 \\\\ 1 & 2 \\end{pmatrix}$: ¿en qué dirección crees que se alinearán? Prueba mentalmente $(1, 1)$ y $(1, -1)$ antes de mover el mando.',
     build: function (host, d) {
       var M = [[2, 1], [1, 2]];
       var ang = 0.6;
@@ -91,6 +103,20 @@ Course.topic('av-lineal', function (p) {
     '\\lambda_1 \\cdot \\lambda_2 = \\det A'
   ], 'comprobación rápida');
 
+  p.ejemplo({
+    title: 'Autovalores y autovectores de una matriz 2×2, de principio a fin',
+    enunciado: 'Hallar los autovalores y autovectores de $A = \\begin{pmatrix} 2 & 1 \\\\ 1 & 2 \\end{pmatrix}$ y escribir $A = PDP^{-1}$.',
+    pasos: [
+      { t: '<strong>Ecuación característica.</strong> Traza $= 4$, determinante $= 3$: $\\lambda^2 - 4\\lambda + 3 = 0$, es decir, $(\\lambda - 1)(\\lambda - 3) = 0$. Autovalores $\\lambda_1 = 3$ y $\\lambda_2 = 1$.', antes: 'Traza y determinante. ¿Qué ecuación de segundo grado sale?' },
+      { t: '<strong>Comprobación rápida.</strong> $3 + 1 = 4$, la traza ✓; $3\\cdot 1 = 3$, el determinante ✓.' },
+      { t: '<strong>Autovector de $\\lambda = 3$.</strong> $(A - 3I)\\vec v = \\vec 0$: $\\begin{pmatrix} -1 & 1 \\\\ 1 & -1 \\end{pmatrix}\\begin{pmatrix} x \\\\ y \\end{pmatrix} = \\vec 0$, o sea, $-x + y = 0$. Vale $\\vec v_1 = (1, 1)$. Las dos filas dicen lo mismo: es lo esperable, porque el determinante de $A - 3I$ es cero.', antes: 'Resta 3 en la diagonal y resuelve. ¿Por qué salen dos ecuaciones iguales?' },
+      { t: '<strong>Autovector de $\\lambda = 1$.</strong> $(A - I)\\vec v = \\vec 0$: $x + y = 0$. Vale $\\vec v_2 = (1, -1)$.' },
+      { t: '<strong>Comprobar.</strong> $A\\begin{pmatrix} 1 \\\\ 1 \\end{pmatrix} = \\begin{pmatrix} 3 \\\\ 3 \\end{pmatrix} = 3\\vec v_1$ ✓ y $A\\begin{pmatrix} 1 \\\\ -1 \\end{pmatrix} = \\begin{pmatrix} 1 \\\\ -1 \\end{pmatrix} = 1\\cdot\\vec v_2$ ✓.', antes: 'Multiplica $A$ por cada autovector. ¿Sale el múltiplo esperado?' },
+      { t: '<strong>Diagonalizar.</strong> $P = \\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}$ (autovectores por columnas), $D = \\begin{pmatrix} 3 & 0 \\\\ 0 & 1 \\end{pmatrix}$. En la base $\\{\\vec v_1, \\vec v_2\\}$ la matriz solo estira: por 3 en una diagonal del plano, por 1 en la otra.' }
+    ],
+    cierre: 'Esta es la matriz de la primera demo: sus autovectores son las diagonales $(1, 1)$ y $(1, -1)$, que es donde el vector azul y el rojo se alineaban. Y $A^{10} = PD^{10}P^{-1}$ con $D^{10} = \\operatorname{diag}(3^{10}, 1)$: sin diagonalizar habría que multiplicar diez veces.'
+  });
+
   p.section('Diagonalización');
 
   p.text('Si una matriz $n\\times n$ tiene $n$ autovectores independientes, se puede escribir así:');
@@ -140,6 +166,7 @@ Course.topic('av-lineal', function (p) {
   p.demo({
     title: 'La espiral de los autovalores complejos',
     intro: 'Se aplica la matriz una y otra vez a un punto de partida. Cada aplicación gira un ángulo θ y estira por r, los dos datos del autovalor complejo. Pon r justo en 1 y el punto da vueltas sin acercarse ni alejarse.',
+    predice: 'Con $r = 0{,}93$ y $\\theta = 25^\\circ$ el punto cae en espiral. Si pones $\\theta = 180^\\circ$, ¿seguirá siendo una espiral o se convertirá en otra cosa? ¿Y con $\\theta = 0$?',
     build: function (host) {
       var rr = 0.93, th = 25;
       var out = W.readout(host, '');
@@ -165,6 +192,14 @@ Course.topic('av-lineal', function (p) {
       pinta();
     }
   });
+
+  p.trampas([
+    { e: '«$A\\vec v$ es más largo, luego $\\vec v$ es autovector»', por: 'Tiene que salir en la <em>misma dirección</em>. Más largo pero torcido no es autovector.' },
+    { e: 'Dar $\\lambda = 0$ por imposible', por: 'Es un autovalor perfectamente válido: su autovector va a parar al origen. Aparece siempre que $\\det A = 0$.' },
+    { e: 'Extrañarse de que $(A - \\lambda I)\\vec v = \\vec 0$ dé ecuaciones repetidas', por: 'Es obligatorio: $\\det(A - \\lambda I) = 0$ justo para que el sistema tenga soluciones distintas de cero. Si salen independientes, el $\\lambda$ está mal.' },
+    { e: 'Poner los autovectores de $P$ en otro orden que los autovalores de $D$', por: 'La columna $i$ de $P$ tiene que ir con el elemento $i$ de $D$. Cambiar el orden de unos sin los otros da $PDP^{-1} \\ne A$.' },
+    { e: 'Concluir que un giro «no tiene autovalores»', por: 'No los tiene reales. Los tiene complejos, $a \\pm bi$, y su módulo y argumento dicen cuánto estira y cuánto gira.' }
+  ]);
 
   p.section('Practica');
 
