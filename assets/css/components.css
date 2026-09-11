@@ -408,6 +408,51 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
 }
 [data-piel="gfx"] .hdr__over{color:var(--gfx-ink); font-weight:700}
 
+/* --- bloque de criptografía: piel de cobre y sus controles --- */
+[data-piel="cr"]{
+  --accent:var(--cr);
+  --accent-soft:var(--cr-soft);
+  --accent-ink:var(--cr-ink);
+  --on-accent:var(--cr-on);
+}
+[data-piel="cr"] .hdr__over{color:var(--cr-ink); font-weight:700}
+.cr-fld{margin:10px 0 4px; width:100%}
+.cr-fld--corto{width:auto; display:inline-flex; margin-right:14px}
+.cr-fld input, .cr-fld textarea{
+  display:block; font:inherit; font-size:0.9375rem; font-family:var(--mono); width:100%;
+  box-sizing:border-box; padding:7px 10px; margin-top:4px; letter-spacing:.04em;
+  border:1.5px solid var(--line); border-radius:9px; background:var(--bg-alt); color:var(--ink);
+}
+.cr-fld--corto input{width:160px}
+.cr-fld textarea{min-height:66px; resize:vertical; line-height:1.5}
+.cr-fld input:focus, .cr-fld textarea:focus{border-color:var(--accent); outline:none}
+.cr-mono{white-space:pre-wrap; word-break:break-word; letter-spacing:.03em}
+.cr-mono b{color:var(--accent)}
+.cr-mono .cr-dif{color:var(--bad); font-weight:700}
+.cr-mono .cr-ok{color:var(--ok); font-weight:700}
+.cr-mono .cr-tenue{color:var(--ink-faint)}
+.cr-bits{font-family:var(--mono); letter-spacing:.1em}
+.cr-bits .b1{color:var(--accent); font-weight:700}
+.cr-bits .b0{color:var(--ink-faint)}
+.cr-bits .cr-dif{background:var(--bad-soft); color:var(--bad); border-radius:3px}
+.cr-letras{display:flex; flex-wrap:wrap; gap:3px; margin:10px 0 4px}
+.cr-letras span{display:inline-flex; flex-direction:column; align-items:center; min-width:22px;
+  font-family:var(--mono); font-size:0.8125rem; border:1px solid var(--line-soft); border-radius:6px;
+  padding:2px 3px; background:var(--panel); line-height:1.35}
+.cr-letras span b{color:var(--accent)}
+.cr-letras span i{font-style:normal; color:var(--ink-faint); font-size:0.7rem}
+.cr-letras span.is-on{background:var(--accent-soft); border-color:var(--accent)}
+.cr-estado{display:grid; grid-template-columns:repeat(4, auto); gap:3px; width:max-content;
+  font-family:var(--mono); font-size:0.8125rem; margin:6px 0}
+.cr-estado span{padding:3px 7px; background:var(--panel); border:1px solid var(--line-soft);
+  border-radius:5px; text-align:center; min-width:22px}
+.cr-estado span.is-dif{background:var(--accent-soft); color:var(--accent-ink); font-weight:700}
+.cr-partes{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0}
+@media (max-width:640px){ .cr-partes{grid-template-columns:1fr} }
+.cr-parte{border:1px solid var(--line-soft); border-radius:10px; padding:9px 12px; background:var(--panel)}
+.cr-parte h5{margin:0 0 6px; font-size:0.8125rem; color:var(--accent-ink); text-transform:uppercase; letter-spacing:.05em}
+.cr-parte--pub{grid-column:1 / -1; background:var(--panel-2); border-style:dashed}
+
 /* --- el visor de shaders --- */
 .shd{margin:22px 0 8px}
 .shd__stage{

@@ -49,7 +49,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   (function () {
     var t = '?t=' + Date.now();
     ['version', 'core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
-     'core/shader', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
+     'core/shader', 'core/cripto', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
      'glosario', 'glsl'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
@@ -77,6 +77,48 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   group('versión');
   truthy('hay un número de versión', typeof window.MATEBASE_VERSION === 'string' && window.MATEBASE_VERSION !== '');
   truthy('la versión tiene la forma MAYOR.MENOR.PARCHE', /^\d+\.\d+\.\d+$/.test(String(window.MATEBASE_VERSION)));
+
+  /* ---------------- cripto: vectores de prueba oficiales ---------------- */
+  group('cripto · vectores de prueba');
+  eq('SHA-256 de "abc"', CR.sha256('abc'), 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad');
+  eq('SHA-256 de la cadena vacía', CR.sha256(''), 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+  eq('SHA-256 de un mensaje de dos bloques', CR.sha256('abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq'),
+    '248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1');
+  eq('HMAC-SHA256 (RFC 4231 caso 2)', CR.hmac('Jefe', 'what do ya want for nothing?'),
+    '5bdcc146bf60754e6a042426089575c75a003f089d2739839dec58b964ec3843');
+  eq('GF(2^8): 57 · 83 = c1 (FIPS-197)', CR.gf.mul(0x57, 0x83), 0xc1);
+  eq('GF(2^8): 57 · 13 = fe', CR.gf.mul(0x57, 0x13), 0xfe);
+  eq('S-box de AES: S(00) = 63', CR.aes.SBOX[0], 0x63);
+  eq('S-box de AES: S(53) = ed', CR.aes.SBOX[0x53], 0xed);
+  eq('AES-128 (FIPS-197 C.1)', CR.hex(CR.aes.cifra(CR.deHex('00112233445566778899aabbccddeeff'), CR.deHex('000102030405060708090a0b0c0d0e0f')).salida),
+    '69c4e0d86a7b0430d8cdb78070b4c55a');
+  eq('AES-128 descifra lo que cifra', CR.hex(CR.aes.descifra(CR.deHex('69c4e0d86a7b0430d8cdb78070b4c55a'), CR.deHex('000102030405060708090a0b0c0d0e0f'))),
+    '00112233445566778899aabbccddeeff');
+  eq('CBC descifra lo que cifra', CR.texto(CR.quitaRelleno(CR.cbcDescifra(CR.cbc(CR.rellena(CR.bytes('Un mensaje de más de un bloque.')), CR.deHex('000102030405060708090a0b0c0d0e0f'), CR.deHex('0f0e0d0c0b0a09080706050403020100')), CR.deHex('000102030405060708090a0b0c0d0e0f'), CR.deHex('0f0e0d0c0b0a09080706050403020100')))),
+    'Un mensaje de más de un bloque.');
+  eq('Enigma I-II-III, B, AAA: AAAAA → BDZGO', CR.enigma({}).cifra('AAAAA').salida, 'BDZGO');
+  eq('Enigma es involutiva', CR.enigma({ rotores: ['III', 'I', 'II'], posiciones: 'QEV', anillos: 'BCD', clavijas: 'AB CD EF' }).cifra(CR.enigma({ rotores: ['III', 'I', 'II'], posiciones: 'QEV', anillos: 'BCD', clavijas: 'AB CD EF' }).cifra('MATEBASE').salida).salida, 'MATEBASE');
+  eq('inverso de 7 módulo 26', CR.inv(7, 26), 15);
+  eq('4 no tiene inverso módulo 26', CR.inv(4, 26), null);
+  eq('potencia modular grande sin perder cifras', CR.potMod(3, 1000000, 1000000007), 64935414);
+  eq('mulMod más allá de 2^53', CR.mulMod(4000000000000000, 4000000000000000, 4000000000000037), 1369);
+  truthy('561 engaña a Fermat pero no a Miller-Rabin', CR.potMod(2, 560, 561) === 1 && CR.millerRabin(561, 2).compuesto);
+  truthy('1 000 000 007 es primo probable', CR.primoProbable(1000000007));
+  eq('teorema chino del resto', CR.crt([2, 3, 2], [3, 5, 7]), 23);
+  eq('Vigenère ida y vuelta', CR.vigenere(CR.vigenere('ATAQUE AL AMANECER', 'LIMON'), 'LIMON', true), 'ATAQUEALAMANECER');
+  eq('afín: descifrar deshace cifrar', CR.afinInv(CR.afin('CRIPTO', 5, 8), 5, 8), 'CRIPTO');
+  eq('transposición por columnas ida y vuelta', CR.columnas(CR.columnas('NOS VEMOS EN EL PUENTE', 'CLAVE'), 'CLAVE', true).replace(/X+$/, ''), 'NOSVEMOSENELPUENTE');
+  eq('Hill: la inversa deshace la matriz', CR.hill(CR.hill('HOLA', [[3, 3], [2, 5]]), CR.hillInv([[3, 3], [2, 5]])), 'HOLA');
+  eq('LFSR x^4 + x^3 + 1 tiene periodo 15', (function () { var s = CR.lfsr([1, 0, 0, 0], [3, 0], 30).estados.map(function (e) { return e.join(''); }); return s.indexOf(s[0], 1); })(), 15);
+  truthy('LFSR x^4 + x^2 + 1 (no primitivo) tiene periodo corto', (function () { var s = CR.lfsr([1, 0, 0, 0], [2, 0], 30).estados.map(function (e) { return e.join(''); }); var per = s.indexOf(s[0], 1); return per > 0 && per < 15; })());
+  eq('Enigma I-II-III, B, AAA: HELLOWORLD → ILBDAAMTAZ', CR.enigma({}).cifra('HELLOWORLD').salida, 'ILBDAAMTAZ');
+  eq('curva y² = x³ + 2x + 2 mod 17: 19·G = ∞', CR.curva(2, 2, 17).mult(19, [5, 1]), null);
+  eq('curva: (5,1) + (5,1) = (6,3)', CR.curva(2, 2, 17).txt(CR.curva(2, 2, 17).suma([5, 1], [5, 1])), '(6, 3)');
+  eq('Shamir: tres partes recuperan el secreto', CR.lagrange([[1, CR.polinomioMod([42, 7, 11], 1, 251)], [2, CR.polinomioMod([42, 7, 11], 2, 251)], [3, CR.polinomioMod([42, 7, 11], 3, 251)]], 0, 251), 42);
+  eq('Paillier suma cifrados', (function () { var P = CR.paillier(61, 53); return P.descifra(P.suma(P.cifra(17, 5), P.cifra(25, 9))); })(), 42);
+  eq('UTF-8 ida y vuelta', CR.texto(CR.bytes('Año: ñ, €, 😀')), 'Año: ñ, €, 😀');
+  eq('SPN: la permutación es involutiva', CR.spn.permuta(CR.spn.permuta(0xA5C3)), 0xA5C3);
+  eq('Feistel: descifrar deshace cifrar', CR.feistel.descifra(CR.feistel.cifra(0xBEEF, [0x12, 0x34, 0x56, 0x78]).salida, [0x12, 0x34, 0x56, 0x78]).salida, 0xBEEF);
 
   /* ---------------- mathlib: enteros ---------------- */
   group('mathlib · aritmética entera');

@@ -355,6 +355,11 @@
 .blk[data-piel="gfx"] .blk__btn{color:var(--gfx-ink)}
 .blk[data-piel="gfx"] .tpc.is-active{background:var(--gfx-soft); color:var(--gfx-ink)}
 .blk[data-piel="gfx"] .blk__list{border-left-color:color-mix(in srgb, var(--gfx) 30%, transparent)}
+/* --- bloque de criptografía: la misma idea, en cobre --- */
+.blk[data-piel="cr"] .blk__num{background:var(--cr-soft); color:var(--cr-ink)}
+.blk[data-piel="cr"] .blk__btn{color:var(--cr-ink)}
+.blk[data-piel="cr"] .tpc.is-active{background:var(--cr-soft); color:var(--cr-ink)}
+.blk[data-piel="cr"] .blk__list{border-left-color:color-mix(in srgb, var(--cr) 30%, transparent)}
 
 
 /* --- qué temario muestra el índice ---

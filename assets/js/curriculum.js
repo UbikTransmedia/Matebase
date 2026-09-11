@@ -1151,5 +1151,229 @@ window.CURRICULUM = [
         req: ['gfx-post', 'gfx-luz']
       }
     ]
+  },
+
+  /* ================= 16. CRIPTOGRAFÍA ================= */
+  {
+    id: 'cr', n: 16, title: 'Criptografía', piel: 'cr', curso: 'AMP',
+    desc: 'Guardar un secreto delante de quien lo quiere. Del disco de César a las curvas elípticas y a lo que resistirá a un ordenador cuántico, con la aritmética modular, las matrices, la probabilidad y los polinomios del curso trabajando de verdad: cada cifrado se rompe y se repara aquí mismo.',
+    temas: [
+      {
+        id: 'cr-secretos', t: 'Qué es un secreto: mensaje, clave y adversario',
+        r: 'El vocabulario y las reglas del juego: quién habla, quién escucha, qué se esconde y qué no.',
+        o: ['Cifrar, codificar y esconder no son lo mismo', 'El principio de Kerckhoffs: el secreto está en la clave', 'Contar claves: el espacio de claves'],
+        req: ['lg-conjuntos', 'pe-combinatoria']
+      },
+      {
+        id: 'cr-cesar', t: 'El cifrado de César: sumar en un reloj de 26 horas',
+        r: 'Desplazar el alfabeto es sumar módulo 26, y romperlo es probar 25 llaves.',
+        o: ['Cifrar y descifrar con la aritmética del reloj', 'La fuerza bruta', 'Por qué 26 claves no protegen nada'],
+        req: ['cr-secretos', 'av-numeros']
+      },
+      {
+        id: 'cr-frecuencias', t: 'Análisis de frecuencias: el idioma delata la clave',
+        r: 'Con 26! alfabetos posibles, la sustitución parecía irrompible. Al-Kindi la rompió contando letras.',
+        o: ['Sustitución monoalfabética y su espacio de claves', 'Las frecuencias del castellano', 'Romper un César y una sustitución con estadística'],
+        req: ['cr-cesar', 'pe-descriptiva']
+      },
+      {
+        id: 'cr-afin', t: 'El cifrado afín y el inverso modular',
+        r: 'Multiplicar y sumar módulo 26, y la condición para poder deshacerlo.',
+        o: ['La función $y = ax + b \\bmod 26$', 'Cuándo $a$ tiene inverso: el máximo común divisor', 'Euclides extendido para encontrarlo'],
+        req: ['cr-cesar', 'ar-divisibilidad']
+      },
+      {
+        id: 'cr-vigenere', t: 'Vigenère y cómo se rompe: Kasiski y el índice de coincidencia',
+        r: 'Una clave que cambia de letra en letra confundió a Europa tres siglos, hasta que se midió la periodicidad.',
+        o: ['Cifrado polialfabético con una palabra clave', 'Distancias entre repeticiones y el máximo común divisor', 'El índice de coincidencia como detector de idioma'],
+        req: ['cr-frecuencias', 'ar-divisibilidad']
+      },
+      {
+        id: 'cr-transposicion', t: 'Transposición: desordenar en vez de sustituir',
+        r: 'La escítala y las columnas: las letras son las mismas, en otro orden. Permutaciones con nombre y apellido.',
+        o: ['Transposición por columnas con palabra clave', 'La clave como permutación', 'Cifrados producto: sustituir y transponer'],
+        req: ['cr-cesar', 'pe-combinatoria']
+      },
+      {
+        id: 'cr-hill', t: 'El cifrado de Hill: matrices módulo 26',
+        r: 'Cifrar de dos en dos letras con una matriz, y por qué el determinante decide si se puede descifrar.',
+        o: ['Bloques de letras como vectores', 'La inversa de una matriz módulo 26', 'Difusión: una letra cambia varias'],
+        req: ['cr-afin', 'al-inversa']
+      },
+      {
+        id: 'cr-vernam', t: 'La libreta de un solo uso: el único cifrado perfecto',
+        r: 'XOR con una clave tan larga como el mensaje, y el teorema de Shannon de que no se puede hacer mejor.',
+        o: ['Bits, bytes y la operación XOR', 'Secreto perfecto: el cifrado no dice nada del mensaje', 'Por qué reutilizar la libreta lo arruina todo'],
+        req: ['cr-secretos', 'av-informacion']
+      },
+      {
+        id: 'cr-enigma', t: 'Enigma: permutaciones que giran',
+        r: 'Tres rotores, un reflector y un tablero de clavijas: la máquina, su matemática y la grieta por la que se rompió.',
+        o: ['Un rotor es una permutación; girarlo, conjugarla', 'El reflector: por qué ninguna letra se cifra en sí misma', 'Rejewski, los ciclos y la bomba de Turing'],
+        req: ['cr-transposicion', 'av-grupos']
+      },
+      {
+        id: 'cr-entropia', t: 'Aleatoriedad, entropía y contraseñas',
+        r: 'Cuánto cuesta adivinar: bits de entropía, generadores de números y por qué «aleatorio» no basta.',
+        o: ['El logaritmo en base 2 del número de claves', 'Contraseñas: longitud, alfabeto y diccionarios', 'Generadores pseudoaleatorios y sus patrones'],
+        req: ['cr-vernam', 'fn-exp-log']
+      },
+      {
+        id: 'cr-flujo', t: 'Cifrado de flujo: fabricar la libreta con un registro',
+        r: 'Un LFSR estira una clave corta en un chorro de bits, y su linealidad es también su talón de Aquiles.',
+        o: ['Registros de desplazamiento con realimentación lineal', 'Periodo máximo y polinomios primitivos', 'Cifrar con un flujo y por qué no repetir el nonce'],
+        req: ['cr-entropia', 'al-polinomios']
+      },
+      {
+        id: 'cr-bloque', t: 'Cifrado por bloques: confusión y difusión',
+        r: 'Cajas de sustitución, permutaciones y rondas: la receta de Shannon para que cada bit dependa de todos.',
+        o: ['Redes de sustitución y permutación', 'El efecto avalancha', 'Cuántas rondas hacen falta'],
+        req: ['cr-hill', 'cr-vernam']
+      },
+      {
+        id: 'cr-feistel', t: 'Redes de Feistel y DES',
+        r: 'Una estructura que se deshace sola aunque su función interna no tenga inversa, y la historia de la clave de 56 bits.',
+        o: ['La ronda de Feistel y su inversa', 'DES, 3DES y el ataque del encuentro a medio camino', 'Cuándo una clave se queda corta'],
+        req: ['cr-bloque']
+      },
+      {
+        id: 'cr-galois', t: 'Los bytes como polinomios: el cuerpo de 256 elementos',
+        r: 'Sumar es XOR y multiplicar es reducir módulo un polinomio: la aritmética que hay dentro de AES y de los códigos QR.',
+        o: ['Polinomios con coeficientes 0 y 1', 'Multiplicar módulo $x^8 + x^4 + x^3 + x + 1$', 'Inversos en un cuerpo finito'],
+        req: ['cr-bloque', 'al-polinomios']
+      },
+      {
+        id: 'cr-aes', t: 'AES: el cifrado del mundo, paso a paso',
+        r: 'Diez rondas de cuatro operaciones sobre una rejilla de 16 bytes. Se ve entera, byte a byte.',
+        o: ['SubBytes, ShiftRows, MixColumns y AddRoundKey', 'La expansión de la clave', 'Por qué es rápido y por qué se confía en él'],
+        req: ['cr-galois', 'cr-feistel']
+      },
+      {
+        id: 'cr-modos', t: 'Modos de operación: el pingüino que se veía a través del cifrado',
+        r: 'Un bloque cifra 16 bytes; un mensaje tiene miles. Cómo encadenarlos decide si el cifrado protege algo.',
+        o: ['ECB y por qué delata las imágenes', 'CBC: encadenar con el bloque anterior y el vector inicial', 'CTR: un cifrado de bloque convertido en flujo'],
+        req: ['cr-aes']
+      },
+      {
+        id: 'cr-hash', t: 'Funciones hash: la huella digital de los datos',
+        r: 'Resumir cualquier cosa en 256 bits sin que nadie pueda fabricar dos cosas con el mismo resumen.',
+        o: ['Preimagen, segunda preimagen y colisión', 'La paradoja del cumpleaños y los $2^{n/2}$', 'SHA-256 en directo'],
+        req: ['cr-aes', 'pe-probabilidad']
+      },
+      {
+        id: 'cr-mac', t: 'Autenticar: que nadie cambie el mensaje',
+        r: 'Cifrar no impide alterar. Los códigos de autenticación y HMAC ponen un sello que solo se puede fabricar con la clave.',
+        o: ['Cambiar un cifrado sin descifrarlo', 'MAC y HMAC', 'Cifrar y después sellar: el cifrado autenticado'],
+        req: ['cr-hash', 'cr-modos']
+      },
+      {
+        id: 'cr-contrasenas', t: 'Guardar contraseñas: sal y lentitud',
+        r: 'Cómo un servidor comprueba tu contraseña sin conocerla, y qué pasa cuando le roban la base de datos.',
+        o: ['Hash de contraseñas y ataques de diccionario', 'La sal contra las tablas precalculadas', 'Hashes lentos a propósito: el factor de coste'],
+        req: ['cr-hash', 'cr-entropia']
+      },
+      {
+        id: 'cr-modular', t: 'Herramientas modulares: Euclides extendido, potencias y el teorema chino',
+        r: 'Los tres algoritmos que hacen posible la clave pública, con la cuenta de cuánto cuesta cada uno.',
+        o: ['El inverso modular con la tabla de Euclides', 'Exponenciación por cuadrados sucesivos', 'El teorema chino del resto'],
+        req: ['cr-afin', 'av-numeros']
+      },
+      {
+        id: 'cr-primos', t: 'Fabricar primos de 300 cifras',
+        r: 'El test de Fermat, los números que lo engañan y Miller-Rabin, que no se deja: primos con probabilidad de error menor que un rayo.',
+        o: ['El test de Fermat y los números de Carmichael', 'Miller-Rabin y los testigos', 'Cuántos intentos hacen falta: la densidad de los primos'],
+        req: ['cr-modular', 'pe-probabilidad']
+      },
+      {
+        id: 'cr-rsa', t: 'RSA a fondo',
+        r: 'Generar las claves, cifrar por bloques, descifrar más deprisa con el teorema chino y ver por qué el RSA de libro no basta.',
+        o: ['Claves con $e = 65537$', 'Descifrado con el teorema chino del resto', 'Maleabilidad y relleno: por qué se añade aleatoriedad'],
+        req: ['cr-primos', 'av-numeros']
+      },
+      {
+        id: 'cr-factorizar', t: 'Romper RSA: factorizar',
+        r: 'De la división por tentativa a Pollard rho: cuánto cuesta cada método y por qué las claves miden 2048 bits.',
+        o: ['El método de Fermat y los primos demasiado cercanos', 'Pollard rho: cumpleaños en la factorización', 'Los récords y el tamaño de las claves'],
+        req: ['cr-rsa']
+      },
+      {
+        id: 'cr-logdiscreto', t: 'El logaritmo discreto a fondo: ElGamal y el hombre en el medio',
+        r: 'Generadores, órdenes, el ataque de paso de bebé y paso de gigante, el cifrado de ElGamal y por qué Diffie-Hellman necesita firmas.',
+        o: ['Generadores y primos seguros', 'Paso de bebé, paso de gigante: $\\sqrt{p}$ en vez de $p$', 'ElGamal y el ataque del hombre en el medio'],
+        req: ['av-cripto-curvas', 'cr-modular']
+      },
+      {
+        id: 'cr-firmas', t: 'Firmas digitales',
+        r: 'Firmar es descifrar: cómo se demuestra la autoría de un mensaje y por qué se firma el hash, no el mensaje.',
+        o: ['Firmar con la clave privada y verificar con la pública', 'Por qué se firma el hash', 'Firmas con logaritmo discreto y el desastre del nonce repetido'],
+        req: ['cr-rsa', 'cr-hash']
+      },
+      {
+        id: 'cr-curvas', t: 'Curvas elípticas en la práctica',
+        r: 'Contar puntos, multiplicar por doblado y suma, y por qué 256 bits de curva valen por 3072 de RSA.',
+        o: ['Los puntos de una curva módulo $p$ y el teorema de Hasse', 'Doblar y sumar: $kG$ en $\\log_2 k$ pasos', 'ECDH, las curvas con nombre y los tamaños de clave'],
+        req: ['av-cripto-curvas', 'cr-logdiscreto']
+      },
+      {
+        id: 'cr-certificados', t: 'Certificados y el candado del navegador',
+        r: 'Qué pasa en los primeros milisegundos de una conexión segura: firmas, cadenas de confianza y claves de sesión.',
+        o: ['Un certificado es una firma sobre una clave pública', 'La cadena de confianza y las autoridades', 'El apretón de manos de TLS'],
+        req: ['cr-firmas', 'cr-logdiscreto', 'cr-mac']
+      },
+      {
+        id: 'cr-compartir', t: 'Compartir un secreto: el esquema de Shamir',
+        r: 'Repartir una clave entre cinco personas de modo que tres cualesquiera la recuperen y dos no sepan nada. Es interpolar un polinomio.',
+        o: ['Un polinomio de grado $k - 1$ pasa por $k$ puntos', 'Partes, umbral y recuperación con Lagrange', 'Por qué $k - 1$ partes no dicen nada'],
+        req: ['cr-modular', 'al-polinomios']
+      },
+      {
+        id: 'cr-conocimiento-cero', t: 'Pruebas de conocimiento cero y compromisos',
+        r: 'Demostrar que sabes un secreto sin revelar nada de él, y comprometerse con una elección antes de enseñarla.',
+        o: ['La cueva de Alí Babá y la probabilidad de engañar', 'El protocolo de Schnorr: compromiso, reto y respuesta', 'Compromisos con hash y lanzar una moneda por teléfono'],
+        req: ['cr-logdiscreto', 'cr-hash', 'pe-probabilidad']
+      },
+      {
+        id: 'cr-cadena', t: 'Cadenas de bloques y árboles de Merkle',
+        r: 'Encadenar hashes para que nadie pueda cambiar el pasado, y demostrar que un dato está en un millón con veinte hashes.',
+        o: ['La cadena de hashes y la prueba de trabajo', 'Dificultad y número esperado de intentos', 'Árboles de Merkle y pruebas de pertenencia'],
+        req: ['cr-hash', 'cr-conocimiento-cero']
+      },
+      {
+        id: 'cr-canales', t: 'Ataques por canales laterales: cuando el reloj habla',
+        r: 'La matemática era perfecta y el sistema cayó igual: el tiempo, los errores y las malas implementaciones.',
+        o: ['Comparar contraseñas en tiempo constante', 'El oráculo de relleno', 'Claves repetidas, aleatoriedad rota y otros desastres reales'],
+        req: ['cr-mac', 'cr-contrasenas', 'pe-inferencia']
+      },
+      {
+        id: 'cr-homomorfico', t: 'Calcular sobre datos cifrados: cifrado homomórfico',
+        r: 'Sumar votos sin abrir ningún sobre: el cifrado de Paillier y la idea del cifrado totalmente homomórfico.',
+        o: ['RSA multiplica; Paillier suma', 'Un recuento electoral cifrado', 'Hasta dónde llega hoy el cifrado homomórfico'],
+        req: ['cr-rsa', 'cr-modular']
+      },
+      {
+        id: 'cr-cuantico', t: 'El ordenador cuántico y el algoritmo de Shor',
+        r: 'Factorizar es encontrar un periodo, y un ordenador cuántico encuentra periodos. Qué rompe, qué no y cuándo.',
+        o: ['De la factorización al orden de un número', 'Encontrar el periodo con una transformada de Fourier', 'Grover y las claves simétricas'],
+        req: ['cr-factorizar', 'av-fourier']
+      },
+      {
+        id: 'cr-poscuantico', t: 'Criptografía poscuántica: retículos y firmas con hash',
+        r: 'Lo que ya sustituye a RSA en los navegadores: aprender con errores, y firmar con una función hash.',
+        o: ['Retículos y el vector más cercano', 'Cifrar un bit con aprendizaje con errores', 'Firmas de Lamport'],
+        req: ['cr-cuantico', 'av-espacios']
+      },
+      {
+        id: 'cr-bb84', t: 'Distribución cuántica de claves: BB84',
+        r: 'Enviar una clave con fotones de modo que espiar se note. Es probabilidad, y se simula entera.',
+        o: ['Bases, medidas y el bit que se destruye al mirarlo', 'Cribar la clave: la mitad se tira', 'La espía introduce un 25 % de errores'],
+        req: ['cr-poscuantico', 'pe-binomial']
+      },
+      {
+        id: 'cr-bolsillo', t: 'La criptografía en tu bolsillo',
+        r: 'Lo que ocurre cuando envías un mensaje: trinquetes, secreto hacia delante, tarjetas, llaves de acceso y las reglas para no meter la pata.',
+        o: ['El doble trinquete de la mensajería cifrada', 'Secreto hacia delante', 'Las diez reglas del que no es criptógrafo'],
+        req: ['cr-certificados', 'cr-bb84']
+      }
+    ]
   }
 ];
