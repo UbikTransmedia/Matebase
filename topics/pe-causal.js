@@ -1,10 +1,11 @@
 /* Tema: Inferencia causal */
 Course.topic('pe-causal', function (p) {
 
-  p.text('En [[pe-bidimensional|el tema de regresión]] apareció una advertencia en mayúsculas: <strong>correlación no ' +
+  p.puente('En [[pe-bidimensional|el tema de regresión]] apareció una advertencia en mayúsculas: <strong>correlación no ' +
     'implica causalidad</strong>. Es cierta, es importante y se repite en todas partes. También es, ' +
     'tal como suele contarse, profundamente insatisfactoria, porque deja al alumno con el ' +
-    'escepticismo y sin la herramienta.');
+    'escepticismo y sin la herramienta. Este tema pone la herramienta, y para ello usa dos cosas ya ' +
+    'vistas: la tabla de contingencia y el muestreo aleatorio.');
 
   p.text('Si dos cosas van juntas y eso no basta para decir que una causa la otra, ¿entonces qué? ' +
     'Porque alguna manera habrá de averiguarlo: los médicos deciden qué fármaco recetar, los ' +
@@ -30,7 +31,7 @@ Course.topic('pe-causal', function (p) {
     'distintas</strong>. Quien toma vitaminas por su cuenta es también quien hace deporte, quien va ' +
     'al médico y quien tiene dinero para comprarlas. La correlación mide el paquete entero.');
 
-  p.note('Esta distinción ya salió en el bloque de cibernética, con la caja negra: allí se decía que ' +
+  p.note('Esta distinción ya salió en [[cib-caja-negra|el tema de la caja negra]]: allí se decía que ' +
     'un economista no abre el mercado, sino que sube un tipo de interés y observa. Eso es exactamente ' +
     'intervenir. La inferencia causal es la teoría de qué se puede concluir cuando <em>no</em> puedes ' +
     'intervenir y solo tienes lo que ya ha pasado.', null, 'Un eco de la cibernética');
@@ -118,6 +119,12 @@ Course.topic('pe-causal', function (p) {
     'sobre la supuesta causa y sobre el supuesto efecto. Su firma es inconfundible: la correlación ' +
     'es real, los datos son correctos, y la conclusión es falsa.');
 
+  p.comprueba('En los meses en que se venden más helados hay más ahogamientos. Si un ayuntamiento prohibiera los helados, ¿bajarían los ahogamientos?', [
+    { t: 'No: los dos dependen del calor, y quitar uno no toca al otro', ok: true, por: 'El calor lleva a la gente al agua y a comprar helados. Intervenir sobre los helados no cambia el calor ni los baños: la correlación desaparecería y los ahogamientos, no.' },
+    { t: 'Algo sí: la correlación es muy fuerte', ok: false, por: 'La fuerza de la correlación no dice nada sobre la dirección de las flechas. Aquí no hay flecha entre helados y ahogamientos; las dos salen del calor.' },
+    { t: 'No se puede saber sin más datos', ok: false, por: 'Sí se puede, con lo que ya se sabe del mundo: el calor explica las dos cosas. Identificar la variable de confusión es lo que zanja la pregunta, no más datos de lo mismo.' }
+  ]);
+
   p.util('El caso con más consecuencias de la historia reciente: durante décadas se observó que las ' +
     'mujeres que tomaban terapia hormonal sustitutiva tenían menos enfermedad coronaria, y se recetó ' +
     'masivamente por esa razón. En 2002, un ensayo aleatorizado con más de 16 000 participantes ' +
@@ -136,6 +143,7 @@ Course.topic('pe-causal', function (p) {
   p.demo({
     title: 'El mismo dato, dos conclusiones opuestas',
     intro: 'Dos tratamientos para una piedra en el riñón. Mira primero el total y decide cuál es mejor. Después separa por tamaño de la piedra y vuelve a decidir. Los datos son reales, del estudio de Charig de 1986.',
+    predice: 'Antes de separar: si A gana en piedras pequeñas y también en piedras grandes, ¿puede perder en el total? Apuesta sí o no, y luego pulsa «separar por tamaño».',
     build: function (host) {
       var separado = false;
       var datos = {
@@ -244,6 +252,7 @@ Course.topic('pe-causal', function (p) {
   p.demo({
     title: 'Repartir a suertes equilibra lo que no has medido',
     intro: 'Hay una variable oculta que influye en el resultado y que nadie ha medido. Compara qué pasa cuando los grupos se forman por elección propia y cuando se forman por sorteo. Genera muestras nuevas y mira la diferencia de comportamiento.',
+    predice: 'Con «cada uno elige», ¿la diferencia entre grupos en la variable oculta será grande o pequeña? Y con el sorteo, ¿se hará exactamente cero o solo pequeña? ¿Qué pasará al subir los participantes?',
     build: function (host) {
       var n = 100, modo = 'auto', semilla = 1;
       var out = W.readout(host, '');
@@ -360,6 +369,26 @@ Course.topic('pe-causal', function (p) {
     '¿Qué tercera variable podría explicar las dos cosas a la vez?</strong> Con eso basta para ' +
     'clasificar correctamente la mayoría de las noticias, y para no cambiar de dieta cada seis meses.');
 
+  p.ejemplo({
+    title: 'Un titular pasado por las tres preguntas',
+    enunciado: '«Los adolescentes que desayunan sacan mejores notas», dice un estudio con 5000 alumnos. ¿Hay que obligar a desayunar para subir las notas?',
+    pasos: [
+      { t: '<strong>¿Experimento u observación?</strong> Observación: nadie decidió quién desayunaba. Cada familia hace lo que hace, y el estudio ha anotado el resultado. Lo que se ha medido es una correlación.', antes: '¿Alguien asignó quién desayunaba y quién no, o se limitaron a mirar?' },
+      { t: '<strong>¿Comparado con qué?</strong> Con los alumnos que no desayunan. La pregunta es si esos dos grupos son comparables en todo lo demás, y probablemente no lo son.', antes: '¿Los que desayunan y los que no se diferencian solo en el desayuno?' },
+      { t: '<strong>¿Qué tercera variable?</strong> El entorno familiar. En una casa con horarios, dinero y atención hay desayuno y hay apoyo al estudio. Las dos cosas salen de lo mismo: es la estructura del helado y los ahogamientos.', antes: 'Piensa qué tipo de casa produce a la vez desayunos y buenas notas.' },
+      { t: '<strong>Lo que no se puede descartar.</strong> Que el desayuno ayude algo, de verdad, por sí mismo. Los datos observacionales no lo confirman ni lo niegan: miden el paquete entero.' },
+      { t: '<strong>Cómo se zanjaría.</strong> Con un ensayo aleatorizado: se sortean colegios que reciben desayuno gratuito y se comparan las notas con los que no. Se han hecho ensayos así con programas de desayuno escolar, y los efectos encontrados son mucho más modestos que la correlación de los estudios observacionales.', antes: '¿Qué diseño respondería a la pregunta de verdad?' }
+    ],
+    cierre: 'Tres preguntas, dos minutos, y el titular pasa de «causa» a «asociación con una confusión evidente». Ni descartarlo del todo ni creérselo: pedir el experimento.'
+  });
+
+  p.trampas([
+    { e: '«Correlación no implica causalidad», y ahí se queda', por: 'Es el principio, no el final. Hay herramientas: aleatorizar, buscar la confusión, el mecanismo, la dosis-respuesta. El tabaco causa cáncer y nunca hubo un ensayo aleatorizado.' },
+    { e: 'Creer que aleatorizar hace los grupos idénticos', por: 'Los hace <em>comparables</em>: quedan diferencias por azar, pero de tamaño conocido y calculable. Por eso un ensayo puede dar un intervalo de confianza.' },
+    { e: 'Separar siempre por la tercera variable', por: 'Solo si es una causa previa, como el tamaño de la piedra. Si es una consecuencia del tratamiento, separar por ella es justamente el error. Lo deciden las flechas, no los números.' },
+    { e: 'Fiarse de «controlado por edad y renta»', por: 'Tapa las confusiones que se le ocurrieron al autor. Las que no midió siguen ahí. Solo el sorteo las equilibra todas, incluidas las desconocidas.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -392,29 +421,15 @@ Course.topic('pe-causal', function (p) {
       return r.pick(casos);
     },
     ask: function (d) {
-      return '«' + d.txt + '»<br><br>¿Qué explica mejor esta asociación?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Escribe <code>causa</code> si es ' +
-        'causalidad real, <code>confusión</code> si hay una tercera variable, <code>inversa</code> si ' +
-        'la causa va al revés, o <code>selección</code> si los datos están filtrados.</span>';
+      return '«' + d.txt + '»<br><br>¿Qué explica mejor esta asociación?';
     },
-    fields: [{ name: 'q', label: 'Diagnóstico', w: 'wide', ph: 'causa / confusión / inversa / selección' }],
-    sol: function (d) {
-      return { q: { conf: 'confusion', causa: 'causa', inversa: 'inversa', seleccion: 'seleccion' }[d.tipo] };
-    },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        confusion: /confusi|tercera variable|confundi|variable oculta/,
-        inversa: /inversa|al reves|revés|reves|reciproc/,
-        seleccion: /selecci|superviv|filtrad|sesgo de selecci|muestra sesgada/,
-        causa: /^causa|causalidad real|causa real|si causa|es causal/
-      });
-      if (!q) {
-        return { ok: false, msg: 'Escribe una de las cuatro: <strong>causa</strong>, ' +
-          '<strong>confusión</strong>, <strong>inversa</strong> o <strong>selección</strong>.' };
-      }
-      var esperado = { conf: 'confusion', causa: 'causa', inversa: 'inversa', seleccion: 'seleccion' }[d.tipo];
-      return { ok: q === esperado };
-    },
+    fields: [{ name: 'q', label: 'Diagnóstico', opts: [
+      { t: 'causalidad real', v: 'causa' },
+      { t: 'una variable de confusión', v: 'conf' },
+      { t: 'causalidad inversa', v: 'inversa' },
+      { t: 'sesgo de selección', v: 'seleccion' }
+    ] }],
+    sol: function (d) { return { q: d.tipo }; },
     hint: function () {
       return 'Pregúntate: ¿hay algo que cause las dos cosas a la vez? ¿Podría la flecha ir al revés? ' +
         '¿Estoy viendo todos los casos o solo los que superaron un filtro?';
@@ -448,27 +463,16 @@ Course.topic('pe-causal', function (p) {
       return r.pick(casos);
     },
     ask: function (d) {
-      return d.txt + '<br><br>¿Qué precaución falta?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Responde con una palabra: ' +
-        '<code>control</code>, <code>azar</code>, <code>placebo</code>, <code>ciego</code> o ' +
-        '<code>registro</code>.</span>';
+      return d.txt + '<br><br>¿Qué precaución falta?';
     },
-    fields: [{ name: 'q', label: 'Falta…', w: 'wide' }],
+    fields: [{ name: 'q', label: 'Falta…', opts: [
+      { t: 'el grupo de control', v: 'control' },
+      { t: 'la aleatorización', v: 'azar' },
+      { t: 'el placebo', v: 'placebo' },
+      { t: 'el doble ciego', v: 'ciego' },
+      { t: 'el registro previo', v: 'registro' }
+    ] }],
     sol: function (d) { return { q: d.falta }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        control: /control|comparaci|grupo de control|testigo/,
-        azar: /azar|aleatoriz|sorteo|al azar/,
-        placebo: /placebo/,
-        ciego: /ciego|cegamiento|enmascara/,
-        registro: /registro|preregistr|declarar|multiples pruebas|multiple/
-      });
-      if (!q) {
-        return { ok: false, msg: 'Responde con una de las cinco palabras: control, azar, placebo, ' +
-          'ciego o registro.' };
-      }
-      return { ok: q === d.falta };
-    },
     hint: function () {
       return 'Pregúntate qué habría pasado sin hacer nada, si los grupos son comparables, si alguien ' +
         'sabe qué está recibiendo, y si se decidió antes qué se iba a medir.';

@@ -1,6 +1,12 @@
 /* Tema: Distribución normal */
 Course.topic('pe-normal', function (p) {
 
+  p.puente('El tema anterior dejó la herramienta: en una variable continua la probabilidad es el área ' +
+    'bajo la densidad, y $F$ acumula por la izquierda. Aquí se aplica a la densidad más importante de ' +
+    'todas, la campana. Como no tiene primitiva elemental, las áreas se leen en una tabla; y para que ' +
+    'baste una sola tabla se usa un truco de aritmética elemental: restar la media y dividir por la ' +
+    'desviación típica.');
+
   p.text('Muchísimas magnitudes del mundo real —alturas, errores de medida, notas, presión arterial— ' +
     'se reparten con la misma forma: la mayoría de los valores agrupados alrededor de un centro y ' +
     'cada vez menos casos a medida que nos alejamos. Esa forma de campana es la ' +
@@ -19,6 +25,7 @@ Course.topic('pe-normal', function (p) {
   p.demo({
     title: 'La campana y sus dos parámetros',
     intro: 'μ mueve la campana; σ la ensancha o la estrecha. El área total bajo la curva es siempre 1.',
+    predice: 'Si duplicas $\\sigma$ de 1 a 2, ¿la campana se hará el doble de alta o la mitad? Piensa en que el área total tiene que seguir valiendo 1.',
     build: function (host, d) {
       var mu = 0, sd = 1;
       var out = W.readout(host, '');
@@ -83,9 +90,16 @@ Course.topic('pe-normal', function (p) {
     'Un $z=2$ significa «dos sigmas por encima de la media», y eso significa lo mismo en cualquier ' +
     'contexto: en alturas, en notas o en presión arterial.');
 
+  p.comprueba('Ana saca un 7 en un examen con media 5 y $\\sigma = 2$. Bruno saca un 8 en otro con media 7 y $\\sigma = 0{,}5$. ¿Quién ha hecho un examen relativamente mejor?', [
+    { t: 'Bruno: su nota está a 2 desviaciones típicas por encima de la media', ok: true, por: '$z_{\\text{Bruno}} = \\frac{8 - 7}{0{,}5} = 2$ frente a $z_{\\text{Ana}} = \\frac{7 - 5}{2} = 1$. En su grupo, un 8 es excepcional; en el de Ana, un 7 es bueno sin más.' },
+    { t: 'Ana: supera la media en 2 puntos y Bruno solo en 1', ok: false, por: 'Los puntos brutos no comparan exámenes distintos. En unidades de $\\sigma$, Ana está a 1 y Bruno a 2: para eso se tipifica.' },
+    { t: 'Los dos igual: ambos superan la media', ok: false, por: 'Superar la media es lo de menos; la pregunta es por cuánto en relación con la dispersión. Ahí Bruno gana con claridad.' }
+  ]);
+
   p.demo({
     title: 'Área bajo la campana',
     intro: 'Mueve los límites y lee la probabilidad como el área sombreada. Esto es exactamente lo que hace la tabla de la N(0,1).',
+    predice: 'Con límites $-1$ y $1$ el área es 0,683. Si pones $-2$ y $2$, ¿cuánto crees que saldrá? ¿Y de 0 a 4?',
     build: function (host, d) {
       var a = -1, b = 1;
       var out = W.readout(host, '');
@@ -150,6 +164,18 @@ Course.topic('pe-normal', function (p) {
   p.table(['$p$', '0,75', '0,80', '0,90', '0,95', '0,975', '0,99'],
     [['$z_p$', '0,67', '0,84', '1,28', '1,645', '1,96', '2,33']]);
 
+  p.ejemplo({
+    title: 'Una normal de la vida real, en tres preguntas',
+    enunciado: 'La estatura de una población sigue una $N(170,\\ 8)$ cm. (a) ¿Qué proporción mide más de 180 cm? (b) ¿Y entre 160 y 180? (c) ¿Qué estatura deja por debajo al 90 % de la población?',
+    pasos: [
+      { t: '<strong>(a) Tipificar.</strong> $z = \\dfrac{180 - 170}{8} = 1{,}25$. Entonces $P(X > 180) = P(Z > 1{,}25) = 1 - \\Phi(1{,}25) = 1 - 0{,}8944 = 0{,}1056$: un 10,6 %.', antes: 'Tipifica primero. ¿A cuántas sigmas por encima de la media está 180?' },
+      { t: '<strong>(b) Dos límites.</strong> $z_1 = \\dfrac{160 - 170}{8} = -1{,}25$ y $z_2 = 1{,}25$. $P = \\Phi(1{,}25) - \\Phi(-1{,}25) = 0{,}8944 - (1 - 0{,}8944) = 0{,}7888$: un 78,9 %.', antes: '$\\Phi(-1{,}25)$ no viene en la tabla. ¿Cómo lo sacas?' },
+      { t: '<strong>(c) Al revés.</strong> Se busca $0{,}90$ <em>dentro</em> de la tabla: le corresponde $z = 1{,}28$. Se deshace la tipificación: $k = 170 + 1{,}28\\cdot 8 = 180{,}2$ cm.', antes: 'Ahora te dan la probabilidad y piden el valor. ¿Qué se busca en la tabla y dónde?' },
+      { t: '<strong>Comprobar el sentido.</strong> (a) dice que un 10,6 % supera 180; (c) dice que 180,2 deja al 10 % por encima. Coinciden casi exactamente ✓.' }
+    ],
+    cierre: 'Tres preguntas, un solo movimiento: pasar de $X$ a $Z$, o de $Z$ a $X$, con $z = (x - \\mu)/\\sigma$. La tabla hace el resto, y la simetría cubre los $z$ negativos.'
+  });
+
   /* ---------------------------------------------------------------- */
   p.util('Tipificar es poner en una escala común cosas medidas en unidades distintas, y eso lo hace ' +
     'posible comparar lo incomparable: si tu nota de Matemáticas está a 1,5 desviaciones por encima ' +
@@ -167,6 +193,13 @@ Course.topic('pe-normal', function (p) {
   p.note('Al pasar de una variable discreta a una continua conviene aplicar la <strong>corrección de ' +
     'continuidad</strong>: $P(X = 12)$ se traduce en $P(11{,}5 \\le X \\le 12{,}5)$, porque el 12 ' +
     'discreto ocupa una barra de anchura 1.', null, 'Corrección de continuidad');
+
+  p.trampas([
+    { e: 'Buscar $\\Phi(-1{,}3)$ en la tabla y no encontrarlo', por: 'La tabla solo trae $z$ positivos. Por simetría, $\\Phi(-1{,}3) = 1 - \\Phi(1{,}3) = 1 - 0{,}9032 = 0{,}0968$.' },
+    { e: 'Dar $\\Phi(z)$ cuando piden $P(X > k)$', por: 'La tabla acumula por la <em>izquierda</em>. Lo que queda a la derecha es $1 - \\Phi(z)$.' },
+    { e: 'Comparar resultados de grupos distintos por los puntos brutos', por: 'Un 7 con $\\sigma = 2$ y un 8 con $\\sigma = 0{,}5$ no se comparan hasta tipificar: $z = 1$ frente a $z = 2$.' },
+    { e: 'Aproximar la binomial sin corrección de continuidad', por: 'El 12 discreto ocupa una barra de 11,5 a 12,5. $P(X \\le 12)$ se traduce en $P(X \\le 12{,}5)$ en la normal.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('La campana de Gauss aparece en todas partes por una razón profunda: cuando muchos efectos ' +

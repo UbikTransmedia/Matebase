@@ -1,6 +1,11 @@
 /* Tema: Probabilidad condicionada y Bayes */
 Course.topic('pe-condicionada', function (p) {
 
+  p.puente('En el tema anterior la probabilidad era una fracción con todos los casos posibles en el ' +
+    'denominador. Aquí cambia el denominador: cuando se sabe algo, los casos posibles se reducen a los ' +
+    'compatibles con esa información. Es la misma regla de Laplace con un «todo» más pequeño, y de ' +
+    'ese cambio de denominador sale el teorema de Bayes.');
+
   p.text('¿Cambia la probabilidad de algo si te dan información nueva? Casi siempre sí. La ' +
     '<strong>probabilidad condicionada</strong> $P(A|B)$ es la probabilidad de $A$ <em>sabiendo que ' +
     'ha ocurrido $B$</em>.');
@@ -14,6 +19,7 @@ Course.topic('pe-condicionada', function (p) {
   p.demo({
     title: 'Condicionar es reducir el mundo',
     intro: 'La caja entera son todos los casos. Al saber que ha ocurrido B, el mundo se reduce a la franja azul, y A pasa a medirse solo dentro de ella.',
+    predice: 'En este dibujo $A$ es una franja horizontal y $B$ una vertical: $A$ ocupa la misma proporción dentro de $B$ que fuera. ¿Qué valdrá entonces $P(A|B)$ comparado con $P(A)$? ¿Cambiará al mover $P(B)$?',
     build: function (host, d) {
       var pa = 0.4, pb = 0.5;
       var condicionado = false;
@@ -88,6 +94,12 @@ Course.topic('pe-condicionada', function (p) {
     'Incompatibles significa que no pueden ocurrir a la vez ($P(A\\cap B)=0$), y eso los hace ' +
     'máximamente <em>dependientes</em>: si ocurre uno, sabes con certeza que el otro no ha ocurrido. ' +
     'Son conceptos casi opuestos.', 'warn', 'Independiente ≠ incompatible');
+
+  p.comprueba('$P(A) = 0{,}3$, $P(B) = 0{,}4$ y $P(A\\cap B) = 0{,}12$. ¿Son $A$ y $B$ independientes?', [
+    { t: 'Sí', ok: true, por: '$P(A)\\cdot P(B) = 0{,}3\\cdot 0{,}4 = 0{,}12 = P(A\\cap B)$. Y también $P(A|B) = \\frac{0{,}12}{0{,}4} = 0{,}3 = P(A)$: saber $B$ no cambia nada.' },
+    { t: 'No: la intersección no es cero', ok: false, por: 'Intersección cero sería <em>incompatibles</em>, que es otra cosa. Independientes exige $P(A\\cap B) = P(A)P(B)$, y aquí se cumple.' },
+    { t: 'No se puede saber sin más datos', ok: false, por: 'Basta comparar $P(A\\cap B)$ con $P(A)\\cdot P(B)$: $0{,}12$ y $0{,}12$. Coinciden, luego son independientes.' }
+  ]);
 
   p.sub('Con y sin reemplazamiento');
 
@@ -223,9 +235,23 @@ Course.topic('pe-condicionada', function (p) {
     'ser del 99 %, y la probabilidad de estar enfermo habiendo dado positivo, del 16 %. No es magia: ' +
     'depende de cuánta gente sana hay, que son muchísimos más.', 'warn', 'La falacia del fiscal');
 
+  p.ejemplo({
+    title: 'Bayes con el test médico, número a número',
+    enunciado: 'Una enfermedad afecta al 1 % de la población. El test detecta al 99 % de los enfermos y da negativo al 95 % de los sanos. Una persona da positivo: ¿probabilidad de que esté enferma?',
+    pasos: [
+      { t: '<strong>Nombrar.</strong> $E$ = enfermo, $+$ = positivo. Datos: $P(E) = 0{,}01$, $P(+|E) = 0{,}99$, $P(+|\\overline{E}) = 1 - 0{,}95 = 0{,}05$. Se pide $P(E|+)$: la condicionada al revés.', antes: '¿Qué probabilidad te dan y cuál te piden? ¿Están en el mismo sentido?' },
+      { t: '<strong>Los dos caminos hasta el positivo.</strong> Enfermo y positivo: $0{,}01\\cdot 0{,}99 = 0{,}0099$. Sano y positivo (falso positivo): $0{,}99\\cdot 0{,}05 = 0{,}0495$.', antes: 'Un positivo puede venir de un enfermo o de un sano. Calcula cada rama.' },
+      { t: '<strong>Probabilidad total de positivo.</strong> $P(+) = 0{,}0099 + 0{,}0495 = 0{,}0594$. Fíjate: los falsos positivos son cinco veces más que los verdaderos.', antes: '¿Cuál de las dos ramas pesa más? ¿Por qué, si el test es tan bueno?' },
+      { t: '<strong>Bayes.</strong> $P(E|+) = \\dfrac{0{,}0099}{0{,}0594} = 0{,}1667$: un 16,7 %.' },
+      { t: '<strong>En personas, para creérselo.</strong> De 10 000: 100 enfermos, de los que 99 dan positivo; 9900 sanos, de los que $5\\,\\%$ = 495 dan positivo. Entre los 594 positivos, solo 99 están enfermos: $\\frac{99}{594} = 16{,}7\\,\\%$ ✓.', antes: 'Rehaz la cuenta con 10 000 personas. ¿Cuántos positivos habrá y cuántos de ellos enfermos?' }
+    ],
+    cierre: 'El test es bueno; lo que engaña es que los sanos son 99 veces más que los enfermos, y un 5 % de muchos es más que un 99 % de pocos. Con prevalencia del 10 % la misma cuenta daría un 69 %.'
+  });
+
   p.demo({
     title: 'El test médico que engaña',
     intro: 'Un test muy fiable aplicado a una enfermedad rara produce muchos más falsos positivos que verdaderos. Mueve la prevalencia y compruébalo.',
+    predice: 'Con prevalencia del 1 %, ¿qué crees que ocurre al subirla al 10 %: la probabilidad de estar enfermo dado un positivo se multiplica por 10, por más de 10 o por menos?',
     build: function (host, d) {
       var prev = 0.01, sens = 0.99, esp = 0.95;
       var out = W.readout(host, '');
@@ -261,6 +287,13 @@ Course.topic('pe-condicionada', function (p) {
     }
   });
 
+  p.trampas([
+    { e: '$P(A|B) = P(B|A)$', por: '«Positivo si enfermo» era 99 %; «enfermo si positivo», 16,7 %. Son preguntas distintas con denominadores distintos.' },
+    { e: '«Independientes» e «incompatibles» como sinónimos', por: 'Incompatibles: no pueden darse a la vez, así que uno informa totalmente del otro. Independientes: uno no informa nada del otro. Casi opuestos.' },
+    { e: 'Dividir por el total general en una condicionada', por: 'En una tabla, $P(F|H)$ se divide por el total de la <em>fila</em> de $H$, no por el total de la tabla. Lo que se sabe fija el denominador.' },
+    { e: 'Olvidar una rama en la probabilidad total', por: 'El suceso puede llegar por todos los caminos: si hay tres máquinas, tres ramas. Con una menos, el denominador de Bayes sale mal.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.util('Bayes es el teorema que más malentendidos evita, y aquí se cierra el aviso que quedó abierto en ' +
     'el primer tema del curso. Imagina una prueba que acierta el 99 % de las veces para una ' +
@@ -277,6 +310,41 @@ Course.topic('pe-condicionada', function (p) {
     'spam, del diagnóstico automático y de buena parte del aprendizaje automático.');
 
   p.section('Practica');
+
+  p.exercise({
+    title: 'Leer una condicionada en la tabla',
+    level: 'basico',
+    gen: function (r) {
+      var ab = r.int(10, 40), anb = r.int(10, 60), nab = r.int(10, 40), nanb = r.int(10, 60);
+      var N = ab + anb + nab + nanb, fA = ab + anb, cB = ab + nab;
+      var cual = r.pick(['AdadoB', 'BdadoA']);
+      var v = cual === 'AdadoB' ? ab / cB : ab / fA;
+      return { ab: ab, anb: anb, nab: nab, nanb: nanb, N: N, fA: fA, cB: cB, cual: cual, v: v };
+    },
+    ask: function (d) {
+      return 'En un grupo de ' + d.N + ' personas se anota si tienen coche ($C$) y si viven en el centro ($Z$):' +
+        '<div class="tbl-wrap"><table class="tbl"><thead><tr><th></th><th class="num">Z</th><th class="num">no Z</th><th class="num">Total</th></tr></thead><tbody>' +
+        '<tr><td>C</td><td class="num">' + d.ab + '</td><td class="num">' + d.anb + '</td><td class="num">' + d.fA + '</td></tr>' +
+        '<tr><td>no C</td><td class="num">' + d.nab + '</td><td class="num">' + d.nanb + '</td><td class="num">' + (d.N - d.fA) + '</td></tr>' +
+        '<tr><td>Total</td><td class="num">' + d.cB + '</td><td class="num">' + (d.N - d.cB) + '</td><td class="num">' + d.N + '</td></tr></tbody></table></div>' +
+        (d.cual === 'AdadoB' ? 'Se elige a alguien que vive en el centro. ¿Probabilidad de que tenga coche? (cuatro decimales)'
+          : 'Se elige a alguien con coche. ¿Probabilidad de que viva en el centro? (cuatro decimales)');
+    },
+    fields: [{ name: 'v', label: 'Probabilidad', w: 'wide' }],
+    sol: function (d) { return { v: U.round(d.v, 6) }; },
+    tol: 3e-4,
+    errores: [
+      { si: function (v, d) { return Math.abs(v.v - d.ab / d.N) < 1e-4; }, msg: 'Has dividido por el total general: eso es $P(C\\cap Z)$. Lo que se sabe reduce el mundo a una fila o una columna.' },
+      { si: function (v, d) { var otro = d.cual === 'AdadoB' ? d.ab / d.fA : d.ab / d.cB; return Math.abs(otro - d.v) > 1e-4 && Math.abs(v.v - otro) < 1e-4; }, msg: 'Has condicionado al revés. Lo que se <em>sabe</em> es lo que va en el denominador.' }
+    ],
+    hint: function (d) { return d.cual === 'AdadoB' ? 'Se sabe que vive en el centro: el mundo es la columna de $Z$. Casilla $C$ y $Z$ entre el total de esa columna.' : 'Se sabe que tiene coche: el mundo es la fila de $C$. Casilla $C$ y $Z$ entre el total de esa fila.'; },
+    steps: function (d) {
+      return [d.cual === 'AdadoB'
+        ? '$P(C|Z) = \\dfrac{' + d.ab + '}{' + d.cB + '} \\approx ' + U.fmt(d.v, 4) + '$: la casilla entre el total de la columna de $Z$.'
+        : '$P(Z|C) = \\dfrac{' + d.ab + '}{' + d.fA + '} \\approx ' + U.fmt(d.v, 4) + '$: la casilla entre el total de la fila de $C$.'];
+    },
+    answer: function (d) { return U.fmt(d.v, 4); }
+  });
 
   p.exercise({
     title: 'Probabilidad condicionada',

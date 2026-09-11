@@ -1,9 +1,10 @@
 /* Tema: Regresión y correlación */
 Course.topic('pe-bidimensional', function (p) {
 
-  p.text('Hasta ahora describíamos <em>una</em> variable. Ahora medimos <strong>dos cosas de cada ' +
-    'individuo</strong> —altura y peso, horas de estudio y nota, publicidad y ventas— y preguntamos: ' +
-    '¿van juntas? ¿Cuánto? ¿Se puede predecir una a partir de la otra?');
+  p.puente('Hasta ahora describíamos <em>una</em> variable, con su media y su desviación típica. Ahora ' +
+    'medimos <strong>dos cosas de cada individuo</strong> —altura y peso, horas de estudio y nota, ' +
+    'publicidad y ventas— y preguntamos: ¿van juntas? ¿Cuánto? ¿Se puede predecir una a partir de la ' +
+    'otra? La respuesta usa la recta $y = mx + n$ de funciones, ahora ajustada a una nube de puntos.');
 
   p.section('La nube de puntos');
 
@@ -13,6 +14,7 @@ Course.topic('pe-bidimensional', function (p) {
   p.demo({
     title: 'Nube de puntos y recta de regresión',
     intro: 'Cambia la dispersión y la pendiente. Observa cómo el coeficiente de correlación responde a la forma de la nube.',
+    predice: 'Pon la pendiente real en 0: ¿qué $r$ saldrá? Y con pendiente $-1$ y el ruido al mínimo: ¿$r$ se acercará a $1$, a $-1$ o a $0$?',
     build: function (host, d) {
       var pend = 1, ruido = 1, n = 40;
       var datos = [];
@@ -94,6 +96,12 @@ Course.topic('pe-bidimensional', function (p) {
     'una parábola perfecta tienen $r \\approx 0$ y sin embargo están perfectamente relacionados. ' +
     'Por eso hay que dibujar siempre la nube antes de fiarse de $r$.', 'warn');
 
+  p.comprueba('Entre la temperatura del día y las ventas de sopa se obtiene $r = -0{,}95$. ¿Qué significa?', [
+    { t: 'Relación fuerte: a más calor, menos sopa', ok: true, por: 'El signo negativo dice que una sube cuando la otra baja; el valor cercano a $-1$ dice que lo hacen de forma casi perfectamente lineal.' },
+    { t: 'Relación débil, porque es negativo', ok: false, por: 'La fuerza la da el valor absoluto, $0{,}95$, que es altísimo. El signo solo indica el sentido.' },
+    { t: 'No hay relación', ok: false, por: '$r \\approx 0$ sería «sin relación lineal». $-0{,}95$ está casi en el extremo: relación muy fuerte.' }
+  ]);
+
   p.util('El coeficiente de correlación se usa a diario para decidir dónde poner el dinero. Un fondo de ' +
     'inversión no busca los activos que más suben, sino activos <strong>poco correlacionados entre ' +
     'sí</strong>: si todo lo que tienes sube y baja a la vez, no has diversificado nada, solo has ' +
@@ -124,6 +132,20 @@ Course.topic('pe-bidimensional', function (p) {
   p.text('Sirve para <strong>predecir</strong>: dado un valor de $x$, estimar el $y$ correspondiente. ' +
     'Pero la predicción solo es fiable si $|r|$ es alto y si $x$ está dentro del rango observado.');
 
+  p.ejemplo({
+    title: 'De cuatro puntos a la recta, y de la recta a una predicción',
+    enunciado: 'Horas de estudio y nota de cuatro alumnos: $(1, 2)$, $(2, 3)$, $(3, 5)$, $(4, 6)$. Hallar la recta de regresión, $r$, y predecir la nota con 5 horas.',
+    pasos: [
+      { t: '<strong>Medias.</strong> $\\overline{x} = \\dfrac{1 + 2 + 3 + 4}{4} = 2{,}5$ y $\\overline{y} = \\dfrac{2 + 3 + 5 + 6}{4} = 4$. La recta pasará por $(2{,}5;\\ 4)$.' },
+      { t: '<strong>Covarianza.</strong> Desviaciones en $x$: $-1{,}5, -0{,}5, 0{,}5, 1{,}5$; en $y$: $-2, -1, 1, 2$. Productos: $3, 0{,}5, 0{,}5, 3$, que suman 7. $\\sigma_{xy} = \\dfrac{7}{4} = 1{,}75$.', antes: 'Multiplica cada desviación en $x$ por la de $y$ del mismo alumno. ¿Todos los productos salen positivos? ¿Por qué?' },
+      { t: '<strong>Varianzas.</strong> $\\sigma_x^2 = \\dfrac{2{,}25 + 0{,}25 + 0{,}25 + 2{,}25}{4} = 1{,}25$ y $\\sigma_y^2 = \\dfrac{4 + 1 + 1 + 4}{4} = 2{,}5$.' },
+      { t: '<strong>Recta.</strong> Pendiente $\\dfrac{\\sigma_{xy}}{\\sigma_x^2} = \\dfrac{1{,}75}{1{,}25} = 1{,}4$. Por el centro: $y - 4 = 1{,}4(x - 2{,}5)$, es decir, $y = 1{,}4x + 0{,}5$. Cada hora de estudio «vale» 1,4 puntos.', antes: 'Con la pendiente y el punto $(\\overline{x}, \\overline{y})$, escribe la recta.' },
+      { t: '<strong>Correlación.</strong> $r = \\dfrac{1{,}75}{\\sqrt{1{,}25}\\cdot\\sqrt{2{,}5}} = \\dfrac{1{,}75}{1{,}768} = 0{,}99$: casi perfecta. La predicción será fiable.' },
+      { t: '<strong>Predecir.</strong> Con $x = 5$: $y = 1{,}4\\cdot 5 + 0{,}5 = 7{,}5$. Fiable por $r$ alto, pero $5$ queda justo fuera del rango observado $[1, 4]$: es una extrapolación corta, aceptable con cautela.', antes: '¿Está $x = 5$ dentro del rango de los datos? ¿Qué implica?' }
+    ],
+    cierre: 'Cuatro cuentas —medias, covarianza, varianzas, pendiente— y sale todo: la recta, la fuerza de la relación y la predicción. Comprobación útil: la recta tiene que pasar por $(\\overline{x}, \\overline{y})$, y aquí $1{,}4\\cdot 2{,}5 + 0{,}5 = 4$ ✓.'
+  });
+
   p.note('<strong>Correlación no implica causalidad.</strong> El consumo de helados y los ahogamientos ' +
     'están altísimamente correlacionados, y no es que el helado ahogue: los dos dependen de una ' +
     'tercera variable, el calor. Esta frase es la más importante de todo el bloque de estadística y ' +
@@ -132,6 +154,13 @@ Course.topic('pe-bidimensional', function (p) {
     'los médicos recetan y los ingenieros deciden. El último tema de este bloque, ' +
     '[[pe-causal|<strong>Inferencia causal</strong>]], va justamente de eso.',
     'warn', 'La advertencia fundamental');
+
+  p.trampas([
+    { e: '«$r = 0$, luego las variables no tienen nada que ver»', por: 'Solo dice que no hay relación <em>lineal</em>. Una parábola perfecta da $r \\approx 0$.' },
+    { e: '«$r = 0{,}9$, luego $x$ causa $y$»', por: 'Correlación no es causalidad. Helados y ahogamientos: los dos dependen del calor.' },
+    { e: 'Predecir con la recta muy fuera del rango de los datos', por: 'La recta se ajustó entre 1 y 4 horas; con 40 horas daría una nota de 56. Fuera del rango, la relación puede dejar de ser lineal.' },
+    { e: 'Confundir la pendiente con $r$', por: 'La pendiente tiene unidades (puntos por hora) y puede valer 100; $r$ no tiene unidades y está entre $-1$ y $1$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('La recta de regresión es el modelo predictivo más sencillo que existe y sigue siendo de los más ' +
@@ -160,6 +189,28 @@ Course.topic('pe-bidimensional', function (p) {
     wrap.appendChild(t);
     host.appendChild(wrap);
   }
+
+  p.exercise({
+    title: 'El signo de la correlación',
+    level: 'basico',
+    gen: function (r) {
+      var b = r.pick([-3, -2, 2, 3]);
+      var x = [1, 2, 3, 4, 5], y = x.map(function (v) { return 10 + b * v + r.int(-1, 1); });
+      var rr = ML.corr(x, y);
+      if (Math.abs(rr) < 0.7) return null;
+      return { x: x, y: y, signo: rr > 0 ? 'pos' : 'neg', r: rr };
+    },
+    ask: function () { return 'Sin calcular nada, ¿de qué signo es la correlación entre estas dos variables?'; },
+    show: tablaHTML,
+    fields: [{ name: 's', label: 'La correlación es', opts: [{ t: 'positiva', v: 'pos' }, { t: 'negativa', v: 'neg' }] }],
+    sol: function (d) { return { s: d.signo }; },
+    hint: function () { return 'Mira si al crecer $x$ la $y$ tiende a crecer o a decrecer.'; },
+    steps: function (d) {
+      return ['Al pasar $x$ de 1 a 5, $y$ va de $' + d.y[0] + '$ a $' + d.y[4] + '$: ' + (d.signo === 'pos' ? 'crece' : 'decrece') + '.',
+        'Correlación <strong>' + (d.signo === 'pos' ? 'positiva' : 'negativa') + '</strong>. Calculada, $r = ' + U.fmt(d.r, 3) + '$.'];
+    },
+    answer: function (d) { return d.signo === 'pos' ? 'Positiva' : 'Negativa'; }
+  });
 
   p.exercise({
     title: 'Covarianza',
@@ -244,13 +295,14 @@ Course.topic('pe-bidimensional', function (p) {
       return { t: c.t, ok: c.ok };
     },
     ask: function (d) {
-      return d.t + '<br><span style="font-size:0.875rem;color:var(--ink-faint)">¿Qué conclusión es la ' +
-        'correcta? <code>1</code>: hay relación lineal fuerte y tiene sentido usar la regresión. ' +
-        '<code>2</code>: hay relación, pero no lineal, así que $r$ engaña. ' +
-        '<code>3</code>: hay correlación pero seguramente por una tercera variable oculta.</span>';
+      return d.t + '<br>¿Qué conclusión es la correcta?';
     },
-    fields: [{ name: 'c', label: 'Conclusión', w: 'tiny' }],
-    sol: function (d) { return { c: d.ok }; },
+    fields: [{ name: 'c', label: 'Conclusión', opts: [
+      { t: 'Hay relación lineal fuerte y tiene sentido usar la regresión', v: '1' },
+      { t: 'Hay relación, pero no lineal: $r$ engaña', v: '2' },
+      { t: 'Hay correlación, pero seguramente por una tercera variable oculta', v: '3' }
+    ] }],
+    sol: function (d) { return { c: String(d.ok) }; },
     hint: function () { return 'Pregúntate siempre: ¿tiene sentido que una cause la otra, o hay algo detrás que explique las dos?'; },
     steps: function (d) {
       return ['La correlación mide asociación <strong>lineal</strong>, nada más.',

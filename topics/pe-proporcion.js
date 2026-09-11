@@ -4,11 +4,12 @@ Course.topic('pe-proporcion', function (p) {
   var Z = { 90: 1.645, 95: 1.96, 99: 2.575 };
   function pct(x) { return U.fmt(100 * x, 2) + '\\,\\%'; }
 
-  p.text('En el tema de [[pe-inferencia|muestreo]] se estimaba una media: la estatura media, el gasto ' +
+  p.puente('En el tema de [[pe-inferencia|muestreo]] se estimaba una media: la estatura media, el gasto ' +
     'medio. Pero la mayoría de las cifras que se leen en un periódico no son medias sino ' +
     '<strong>porcentajes</strong>: el 34 % votaría a tal partido, el 12 % de las piezas sale defectuosa, ' +
     'el 61 % de los pacientes mejora. Y siempre con la coletilla: <em>«margen de error de ±3 puntos»</em>. ' +
-    'Este tema explica de dónde sale esa coletilla.');
+    'Este tema explica de dónde sale esa coletilla, con la misma receta del intervalo para la media y ' +
+    'la desviación típica de la binomial dividida por $n$.');
 
   /* ---------------------------------------------------------------- */
   p.section('La proporción muestral');
@@ -29,6 +30,7 @@ Course.topic('pe-proporcion', function (p) {
   p.demo({
     title: 'Mil encuestas a la vez',
     intro: 'Una población en la que el 40 % opina «sí». Se hacen muchas encuestas de n personas y se dibuja cuántas dan cada porcentaje. Sube n: la campana se estrecha alrededor del 40 % verdadero.',
+    predice: 'Con $n = 100$ la desviación típica de $\\hat{p}$ es de unos 5 puntos. Si subes $n$ a 400, ¿se quedará en la mitad o en la cuarta parte?',
     build: function (host) {
       var pv = 0.4, n = 100;
       var caja = U.el('div');
@@ -81,6 +83,7 @@ Course.topic('pe-proporcion', function (p) {
   p.demo({
     title: 'El margen de error de una encuesta',
     intro: 'Una encuesta con n entrevistas en la que el p̂ dice «sí». Mueve el tamaño y la confianza y mira cómo se estira o se encoge el intervalo. Fíjate en cuánto cuesta ganar un solo punto de precisión.',
+    predice: 'Con $n = 1000$ el margen es de unos 3 puntos. ¿Cuántas entrevistas crees que hacen falta para bajarlo a 1 punto? ¿2000? ¿3000? ¿9000?',
     build: function (host) {
       var ph = 0.34, n = 1000, conf = 95;
       var out = W.readout(host, '');
@@ -125,6 +128,31 @@ Course.topic('pe-proporcion', function (p) {
     'ese valor, para un margen de ±3 puntos al 95 % hacen falta $\\frac{1{,}96^2\\cdot 0{,}25}{0{,}03^2} ' +
     '\\approx 1067$ entrevistas. Por eso tantas encuestas son «de unas mil personas».', 'ok',
     'El número mágico de las encuestas');
+
+  p.comprueba('Una encuesta a 1000 personas da un 52 % a favor de una medida, con margen de ±3 puntos al 95 %. ¿Se puede afirmar que hay mayoría a favor?', [
+    { t: 'Sí: 52 es más que 50', ok: false, por: 'El 52 % es la muestra, no la población. El intervalo es $(49\\,\\%, 55\\,\\%)$ y contiene el 50 %: la proporción real podría estar por debajo.' },
+    { t: 'No: el intervalo $(49\\,\\%, 55\\,\\%)$ contiene el 50 %', ok: true, por: 'Los datos son compatibles con una mayoría a favor y con una mayoría en contra. Haría falta más muestra, o un resultado más alejado del 50 %.' },
+    { t: 'No se puede saber sin conocer la proporción real', ok: false, por: 'Para eso está el intervalo: acota la proporción real sin conocerla. Y aquí la acotación incluye el 50 %, así que no hay conclusión firme.' }
+  ]);
+
+  p.ejemplo({
+    title: 'La coletilla de la encuesta, calculada',
+    enunciado: 'En una encuesta a 1200 personas, 420 dicen que votarán a cierto partido. Dar la estimación con su margen al 95 % y calcular cuántas entrevistas harían falta para un margen de ±1 punto.',
+    pasos: [
+      { t: '<strong>Proporción muestral.</strong> $\\hat{p} = \\dfrac{420}{1200} = 0{,}35$.', antes: 'Casos favorables entre el total de la muestra.' },
+      { t: '<strong>Margen.</strong> $E = 1{,}96\\sqrt{\\dfrac{0{,}35\\cdot 0{,}65}{1200}} = 1{,}96\\sqrt{0{,}0001896} = 1{,}96\\cdot 0{,}01377 = 0{,}027$: ±2,7 puntos.', antes: 'Calcula primero lo de dentro de la raíz: $0{,}35\\cdot 0{,}65/1200$.' },
+      { t: '<strong>Intervalo.</strong> $(0{,}35 - 0{,}027;\\ 0{,}35 + 0{,}027) = (0{,}323;\\ 0{,}377)$: entre el 32,3 % y el 37,7 %. Así se publica: «35 %, con un margen de error de ±2,7 puntos».' },
+      { t: '<strong>Para ±1 punto.</strong> $n \\ge \\dfrac{1{,}96^2\\cdot 0{,}35\\cdot 0{,}65}{0{,}01^2} = \\dfrac{3{,}8416\\cdot 0{,}2275}{0{,}0001} = 8740$ entrevistas. Más de siete veces la muestra para reducir el margen a algo más de un tercio.', antes: 'El margen va con $1/\\sqrt{n}$. Para dividirlo entre 2,7, ¿por cuánto hay que multiplicar $n$?' }
+    ],
+    cierre: 'Comprobación: $2{,}7^2 \\approx 7{,}3$, y $8740/1200 \\approx 7{,}3$ ✓. La precisión se paga al cuadrado, y por eso casi nadie hace encuestas de 9000 personas.'
+  });
+
+  p.trampas([
+    { e: 'Publicar el porcentaje sin el margen', por: 'Un 52 % con ±3 puntos no es una mayoría: es un empate técnico. Sin el margen, la cifra no dice nada.' },
+    { e: 'Olvidar la raíz cuadrada en el margen', por: '$0{,}35\\cdot 0{,}65/1200 = 0{,}00019$ no es el margen: su raíz, 0,0138, sí. Sin la raíz el intervalo sale ridículamente estrecho.' },
+    { e: 'Leer el margen en tanto por uno como si fueran puntos', por: '$E = 0{,}027$ son 2,7 puntos porcentuales, no 0,027 puntos.' },
+    { e: 'Creer que el margen depende del tamaño de la población', por: 'Depende de $n$, las entrevistas, no de cuánta gente hay en el país. Mil personas estiman igual de bien un millón que cincuenta millones.' }
+  ]);
 
   p.hist('Pierre-Simon Laplace hizo en 1786 lo que hoy se llamaría una encuesta por muestreo, sin ' +
     'encuestar a nadie. Quería saber cuántos habitantes tenía Francia sin hacer un censo, que costaba ' +

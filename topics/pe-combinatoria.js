@@ -1,6 +1,11 @@
 /* Tema: Combinatoria */
 Course.topic('pe-combinatoria', function (p) {
 
+  p.puente('Contar es lo primero que se aprende en matemáticas, y aquí se aprende a contar sin enumerar: ' +
+    'cuántas cosas hay cuando son demasiadas para listarlas. Solo hace falta multiplicar, el factorial ' +
+    'que viste al ordenar y los conjuntos de lógica. Es la herramienta que la probabilidad necesita ' +
+    'para contar casos favorables y posibles.');
+
   p.text('La combinatoria responde a una pregunta engañosamente simple: <strong>¿de cuántas maneras ' +
     'se puede hacer algo?</strong> Es imprescindible para la probabilidad, porque la regla de Laplace ' +
     'exige contar casos favorables y casos posibles.');
@@ -38,9 +43,28 @@ Course.topic('pe-combinatoria', function (p) {
     'que te las repartan) son combinaciones. Un «código PIN» son variaciones con repetición; una ' +
     'quiniela de 6 números, combinaciones.', 'ok', 'La pregunta que decide');
 
+  p.comprueba('De 5 amigos se eligen 3 para una foto en fila. ¿Qué tipo de recuento es?', [
+    { t: 'Combinaciones: $\\binom{5}{3} = 10$', ok: false, por: 'En una fila el orden importa: Ana-Bea-Cris no es la misma foto que Cris-Bea-Ana. Las combinaciones ignoran el orden.' },
+    { t: 'Variaciones: $5\\cdot 4\\cdot 3 = 60$', ok: true, por: 'Importa el orden, no se repite nadie y no entran todos. Primer puesto 5 opciones, segundo 4, tercero 3.' },
+    { t: 'Permutaciones: $5! = 120$', ok: false, por: 'Permutaciones sería si posaran los cinco. Aquí solo posan tres.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Las tres preguntas, con las mismas letras',
+    enunciado: 'Con las cinco vocales: ¿cuántas «palabras» de 3 letras distintas se pueden formar? ¿Y si se pueden repetir letras? ¿Y cuántos grupos de 3 vocales hay, sin importar el orden?',
+    pasos: [
+      { t: '<strong>Palabras con letras distintas.</strong> ¿Importa el orden? Sí (AEI ≠ IEA). ¿Repetición? No. ¿Entran todas? No. Variaciones: $V_{5,3} = 5\\cdot 4\\cdot 3 = 60$.', antes: 'Responde a las tres preguntas para el primer caso.' },
+      { t: '<strong>Con repetición.</strong> Cada posición admite cualquiera de las 5: $5\\cdot 5\\cdot 5 = 125$. Salen más que antes porque ahora también valen AAA o AEA.', antes: '¿Cada posición tiene cuántas opciones ahora?' },
+      { t: '<strong>Grupos sin orden.</strong> Un grupo como $\\{A, E, I\\}$ cuenta una vez, aunque se pueda escribir de $3! = 6$ maneras. Combinaciones: $\\binom{5}{3} = \\dfrac{60}{6} = 10$.', antes: 'Cada grupo de 3 letras se puede ordenar de $3! = 6$ formas. ¿Cómo pasas de 60 palabras a grupos?' },
+      { t: '<strong>Comprobar contando.</strong> Los 10 grupos: AEI, AEO, AEU, AIO, AIU, AOU, EIO, EIU, EOU, IOU. Diez, y ni uno más.' }
+    ],
+    cierre: 'Las tres respuestas están ligadas: $V = C\\cdot n!$ (cada combinación genera $n!$ variaciones) y $VR \\ge V$ (repetir añade casos). Si los números no cumplen eso, algo está mal.'
+  });
+
   p.demo({
     title: 'Contar de verdad los casos',
     intro: 'Con pocos elementos se pueden enumerar todos. Compara lo que sale al contar a mano con lo que dice la fórmula.',
+    predice: 'Con $m = 4$ y $n = 2$ las variaciones dan 12. ¿Las combinaciones serán más o menos? ¿Cuántas veces menos? Piensa en cuántas ordenaciones tiene cada pareja.',
     build: function (host, d) {
       var m = 4, n = 2, tipo = 'V';
       var letras = ['A', 'B', 'C', 'D', 'E', 'F'];
@@ -121,6 +145,7 @@ Course.topic('pe-combinatoria', function (p) {
   p.demo({
     title: 'El triángulo de Pascal',
     intro: 'Cada número es la suma de los dos de encima. Y cada fila son los números combinatorios: la fila n contiene todos los C(n,k).',
+    predice: 'La fila 5 es $1, 5, 10, 10, 5, 1$ y suma 32. ¿Cuánto sumará la fila 6 sin calcularla? ¿Y cuánto valdrá su número central?',
     build: function (host, d) {
       var filas = 8;
       var caja = U.el('div', { style: { textAlign: 'center', fontFamily: 'var(--mono)', fontSize: '13px', margin: '8px 0' } });
@@ -148,6 +173,13 @@ Course.topic('pe-combinatoria', function (p) {
       paint();
     }
   });
+
+  p.trampas([
+    { e: 'Usar combinaciones cuando el orden importa', por: 'Un podio, una contraseña, una palabra: el orden distingue casos. Las combinaciones los juntan y salen menos de los que hay.' },
+    { e: '$VR_{m,n} = n^m$', por: 'Es $m^n$: los $m$ símbolos disponibles, elevados a las $n$ posiciones. Con 10 dígitos y 4 posiciones, $10^4 = 10\\,000$ PIN, no $4^{10}$.' },
+    { e: '$0! = 0$', por: '$0! = 1$: hay exactamente una manera de no ordenar nada. Sin eso, $\\binom{n}{n}$ daría división por cero.' },
+    { e: 'Olvidar dividir por $n!$ al pasar de variaciones a combinaciones', por: 'Cada grupo se ha contado $n!$ veces, una por cada orden. $\\binom{5}{3} = \\frac{60}{3!} = 10$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.hist('El triángulo que en Europa lleva el nombre de Pascal aparece en un tratado chino de Yang Hui de ' +
@@ -282,13 +314,13 @@ Course.topic('pe-combinatoria', function (p) {
       return { t: c.t, ok: c.ok };
     },
     ask: function (d) {
-      return '<em>' + d.t + '</em><br>¿Qué tipo de problema combinatorio es?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)"><code>1</code> variaciones · ' +
-        '<code>2</code> variaciones con repetición · <code>3</code> combinaciones · ' +
-        '<code>4</code> permutaciones.</span>';
+      return '<em>' + d.t + '</em><br>¿Qué tipo de problema combinatorio es?';
     },
-    fields: [{ name: 't', label: 'Tipo', w: 'tiny' }],
-    sol: function (d) { return { t: d.ok }; },
+    fields: [{ name: 't', label: 'Tipo', opts: [
+      { t: 'variaciones', v: '1' }, { t: 'variaciones con repetición', v: '2' },
+      { t: 'combinaciones', v: '3' }, { t: 'permutaciones', v: '4' }
+    ] }],
+    sol: function (d) { return { t: String(d.ok) }; },
     hint: function () { return 'Pregúntate: ¿importa el orden? ¿se repiten elementos? ¿entran todos?'; },
     steps: function (d) {
       return ['¿Importa el orden? Si no importa, son <strong>combinaciones</strong>.',

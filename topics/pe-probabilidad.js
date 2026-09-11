@@ -1,6 +1,11 @@
 /* Tema: Probabilidad */
 Course.topic('pe-probabilidad', function (p) {
 
+  p.puente('Con la combinatoria sabes contar casos, y con los conjuntos de lógica sabes hablar de ' +
+    'uniones, intersecciones y complementarios. La probabilidad junta las dos cosas: un suceso es un ' +
+    'conjunto de resultados, y su probabilidad, una fracción de casos. Todo lo que sigue —Bayes, la ' +
+    'binomial, la normal— se apoya en las tres propiedades de este tema.');
+
   p.text('Un <strong>experimento aleatorio</strong> es aquel cuyo resultado no se puede predecir aunque ' +
     'se repita en las mismas condiciones: lanzar un dado, sacar una carta, medir cuántos coches pasan ' +
     'en un minuto. La probabilidad es la rama que pone números a esa incertidumbre.');
@@ -25,9 +30,16 @@ Course.topic('pe-probabilidad', function (p) {
     'los casos son <strong>equiprobables</strong>. Con un dado trucado no funciona, y con la pregunta ' +
     '«¿lloverá mañana?» tampoco: no hay dos casos igualmente probables ahí.', 'warn', 'La letra pequeña de Laplace');
 
+  p.comprueba('Se lanzan dos dados. ¿Cuál es la probabilidad de que sumen 7?', [
+    { t: '$\\dfrac{1}{11}$: hay 11 sumas posibles, de 2 a 12', ok: false, por: 'Las sumas no son equiprobables: el 2 solo sale con (1,1) y el 7 de seis maneras. Laplace exige casos igual de probables, y esos son los 36 pares.' },
+    { t: '$\\dfrac{6}{36} = \\dfrac{1}{6}$', ok: true, por: 'Los 36 pares $(a, b)$ sí son equiprobables. Suman 7 seis de ellos: (1,6), (2,5), (3,4), (4,3), (5,2), (6,1).' },
+    { t: '$\\dfrac{1}{12}$', ok: false, por: 'Ni 12 casos posibles ni 1 favorable. Los casos equiprobables son los 36 pares y 6 suman 7.' }
+  ]);
+
   p.demo({
     title: 'La frecuencia se acerca a la probabilidad',
     intro: 'Lanza el dado muchas veces. Al principio las barras están desiguales; con miles de tiradas se van igualando. Eso es la ley de los grandes números.',
+    predice: 'Con una tirada, una barra vale 1 y las demás 0. ¿Con 100 tiradas estarán ya casi igualadas? ¿Cuántas crees que hacen falta para que la mayor desviación baje de 0,01?',
     build: function (host, d) {
       var caras = [0, 0, 0, 0, 0, 0];
       var total = 0;
@@ -85,7 +97,7 @@ Course.topic('pe-probabilidad', function (p) {
   p.text('Un suceso no es más que un conjunto de resultados —«sacar par» es el conjunto $\\{2,4,6\\}$—, y ' +
     'por eso todo lo que aprendiste sobre conjuntos vale aquí sin cambiar nada, solo con otro ' +
     'vocabulario. Esta tabla es el diccionario entre las dos formas de hablar; si te suena a lo que ' +
-    'ya viste en el bloque 0, es exactamente eso.');
+    'ya viste en [[lg-conjuntos|el tema de conjuntos]], es exactamente eso.');
 
 
   p.table(['Notación', 'Nombre', 'Significa'],
@@ -120,9 +132,22 @@ Course.topic('pe-probabilidad', function (p) {
     'siempre es más rápido calcular la probabilidad de «<em>ninguno</em>» y restar de 1. ' +
     '$P(\\text{al menos uno}) = 1 - P(\\text{ninguno})$.', 'ok', 'El paso al contrario');
 
+  p.ejemplo({
+    title: 'Una unión con solapamiento',
+    enunciado: 'De una baraja española de 40 cartas se saca una. ¿Probabilidad de que sea oro o figura?',
+    pasos: [
+      { t: '<strong>Cada suceso por separado.</strong> Oros: 10 de 40, $P(O) = \\dfrac{10}{40}$. Figuras (sota, caballo, rey de cada palo): 12 de 40, $P(F) = \\dfrac{12}{40}$.' },
+      { t: '<strong>¿Se solapan?</strong> Sí: hay tres cartas que son oro <em>y</em> figura, la sota, el caballo y el rey de oros. $P(O\\cap F) = \\dfrac{3}{40}$.', antes: '¿Hay alguna carta que sea las dos cosas a la vez? ¿Cuántas?' },
+      { t: '<strong>La unión.</strong> $P(O\\cup F) = \\dfrac{10}{40} + \\dfrac{12}{40} - \\dfrac{3}{40} = \\dfrac{19}{40} = 0{,}475$.', antes: 'Si sumaras $\\frac{10}{40} + \\frac{12}{40}$ sin más, ¿qué cartas estarías contando dos veces?' },
+      { t: '<strong>Comprobar contando.</strong> Cartas que son oro o figura: los 10 oros más las 9 figuras de los otros tres palos $= 19$ ✓.' }
+    ],
+    cierre: 'Contar directamente (19 cartas) y aplicar la fórmula dan lo mismo, y eso es lo que justifica la fórmula: la resta quita lo que se había contado dos veces.'
+  });
+
   p.demo({
     title: 'La paradoja de los cumpleaños',
     intro: '¿Cuánta gente hace falta en una sala para que sea más probable que no que dos compartan cumpleaños? La respuesta sorprende a casi todo el mundo.',
+    predice: 'Antes de mover nada: ¿cuántas personas crees que hacen falta para que la probabilidad pase del 50 %? ¿Más de 100? ¿Unas 50? Apunta tu número y luego mira.',
     build: function (host, d) {
       var n = 23;
       var out = W.readout(host, '');
@@ -154,6 +179,13 @@ Course.topic('pe-probabilidad', function (p) {
       paint();
     }
   });
+
+  p.trampas([
+    { e: '$P(A\\cup B) = P(A) + P(B)$ siempre', por: 'Solo si son incompatibles. Si se solapan, lo común se cuenta dos veces y hay que restarlo.' },
+    { e: 'Aplicar Laplace a casos que no son equiprobables', por: '«Llueve o no llueve, luego 50 %» es el ejemplo clásico. Las sumas de dos dados, otro: el 7 sale seis veces más que el 2.' },
+    { e: 'Una probabilidad mayor que 1 o negativa', por: 'Toda probabilidad está entre 0 y 1. Si sale 1,3, algo se ha sumado de más.' },
+    { e: 'Calcular «al menos uno» sumando los casos de 1, 2, 3…', por: 'Es larguísimo y propenso a errores. Se calcula «ninguno» y se resta de 1.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('Estas propiedades son la base del cálculo de riesgos, que es una industria entera. Una ' +

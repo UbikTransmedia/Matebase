@@ -1,6 +1,11 @@
 /* Tema: Distribución binomial */
 Course.topic('pe-binomial', function (p) {
 
+  p.puente('Tres piezas ya conocidas encajan aquí: la independencia del tema anterior (para ' +
+    'multiplicar probabilidades), el número combinatorio (para contar de cuántas maneras se reparten ' +
+    'los éxitos) y las potencias. Con ellas se construye la primera <em>distribución</em> con nombre ' +
+    'propio, la que cuenta aciertos en intentos repetidos.');
+
   p.text('Una <strong>variable aleatoria</strong> asigna un número a cada resultado de un experimento: ' +
     'el número de caras al lanzar 10 monedas, el número de piezas defectuosas en un lote, los aciertos ' +
     'en un test. Si los valores posibles se pueden contar, la variable es <strong>discreta</strong>.');
@@ -19,6 +24,11 @@ Course.topic('pe-binomial', function (p) {
     'Las repeticiones son <strong>independientes</strong>.'
   ], true);
 
+  p.comprueba('Se sacan 5 cartas de una baraja <em>sin devolverlas</em> y se cuenta cuántos ases salen. ¿Es binomial?', [
+    { t: 'Sí: 5 repeticiones con dos resultados, as o no as', ok: false, por: 'Falla la tercera condición: la probabilidad de as cambia en cada extracción (si sale un as, quedan menos). No es constante, y las extracciones no son independientes.' },
+    { t: 'No: la probabilidad de éxito cambia de una carta a la siguiente', ok: true, por: 'Sin reemplazamiento, $p$ no es constante y las repeticiones dependen unas de otras. Con reemplazamiento (devolviendo la carta) sí sería $B(5, \\frac{4}{40})$.' }
+  ]);
+
   p.formula('X \\sim B(n, p)', 'la variable sigue una distribución binomial');
 
   p.formula('P(X = k) = \\binom{n}{k}\\,p^k\\,(1-p)^{n-k}', 'función de probabilidad');
@@ -32,9 +42,22 @@ Course.topic('pe-binomial', function (p) {
     '\\sigma = \\sqrt{n\\,p\\,(1-p)}'
   ], 'media y desviación típica');
 
+  p.ejemplo({
+    title: 'Una binomial pequeña, entera',
+    enunciado: 'Un tirador acierta el 30 % de sus tiros y dispara 5 veces. Calcular $P(X = 2)$, $P(X \\ge 1)$ y el número medio de aciertos.',
+    pasos: [
+      { t: '<strong>Comprobar que es binomial.</strong> 5 repeticiones, cada una acierto o fallo, $p = 0{,}3$ constante, tiros independientes: $X \\sim B(5;\\ 0{,}3)$.', antes: 'Repasa las cuatro condiciones. ¿Se cumplen?' },
+      { t: '<strong>Exactamente 2 aciertos.</strong> $P(X = 2) = \\binom{5}{2}\\,0{,}3^2\\,0{,}7^3 = 10\\cdot 0{,}09\\cdot 0{,}343 = 0{,}3087$.', antes: '¿De cuántas maneras se pueden repartir 2 aciertos entre 5 tiros? Ese es el combinatorio.' },
+      { t: '<strong>Al menos uno.</strong> Por el contrario: $P(X \\ge 1) = 1 - P(X = 0) = 1 - 0{,}7^5 = 1 - 0{,}16807 = 0{,}8319$.', antes: '«Al menos uno»: ¿sumar cinco términos o restar uno de 1?' },
+      { t: '<strong>Media.</strong> $\\mu = np = 5\\cdot 0{,}3 = 1{,}5$ aciertos por serie de cinco. Y $\\sigma = \\sqrt{5\\cdot 0{,}3\\cdot 0{,}7} = \\sqrt{1{,}05} \\approx 1{,}02$.' }
+    ],
+    cierre: 'Sin el combinatorio, $P(X = 2)$ habría salido $0{,}0309$, diez veces menos: sería la probabilidad de acertar <em>exactamente los dos primeros</em>, una sola de las diez formas posibles.'
+  });
+
   p.demo({
     title: 'La forma de la binomial',
     intro: 'Cambia el número de repeticiones y la probabilidad de éxito. Fíjate en cómo se desplaza el pico y en que con n grande la forma se parece cada vez más a una campana.',
+    predice: 'Con $n = 10$ y $p = 0{,}5$ el pico está en 5 y la figura es simétrica. Si pones $p = 0{,}2$, ¿dónde estará el pico? ¿Seguirá siendo simétrica?',
     build: function (host, d) {
       var n = 10, prob = 0.5;
       var host2 = U.el('div');
@@ -98,6 +121,13 @@ Course.topic('pe-binomial', function (p) {
 
   p.note('«Al menos $k$» y «más de $k$» conviene calcularlos siempre <strong>por el contrario</strong>: ' +
     'suele haber muchos menos términos que sumar.', 'ok');
+
+  p.trampas([
+    { e: 'Olvidar el número combinatorio', por: '$p^k(1-p)^{n-k}$ es la probabilidad de <em>una</em> secuencia concreta. Hay $\\binom{n}{k}$ secuencias con $k$ éxitos.' },
+    { e: '«Al menos 3» como $P(X = 3)$', por: 'Al menos 3 incluye 3, 4, 5… Se calcula $1 - P(X \\le 2)$.' },
+    { e: 'Binomial en extracciones sin reemplazamiento', por: 'Si $p$ cambia de un intento al siguiente, no es binomial. Se usa la condicionada, o combinatoria.' },
+    { e: '$\\sigma = np(1 - p)$', por: 'Eso es la varianza. La desviación típica lleva raíz: $\\sqrt{np(1-p)}$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

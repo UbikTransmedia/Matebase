@@ -1,6 +1,12 @@
 /* Tema: Estadística descriptiva */
 Course.topic('pe-descriptiva', function (p) {
 
+  p.puente('Hasta aquí las matemáticas trabajaban con números exactos y funciones. Este bloque trabaja ' +
+    'con <em>datos</em>: muchos números medidos, con ruido, que hay que resumir sin mentir. Las ' +
+    'herramientas son las de aritmética —sumar, dividir, porcentajes, raíces— y las gráficas de ' +
+    'funciones, pero la pregunta cambia: ya no es «cuánto vale», sino «qué dicen estos datos».',
+    'Por dónde empezamos');
+
   p.text('La estadística descriptiva hace una cosa concreta: coger un montón de datos y resumirlos en ' +
     'unos pocos números que se puedan entender de un vistazo. Nada de adivinar el futuro (eso es ' +
     'inferencia); solo describir lo que hay.');
@@ -36,6 +42,12 @@ Course.topic('pe-descriptiva', function (p) {
     'La mediana describe mucho mejor a esa plantilla. Cuando alguien te dé una media, pregunta ' +
     'siempre por la dispersión.', 'warn', 'Por qué la media a veces miente');
 
+  p.comprueba('Cinco pisos de una calle cuestan 2, 3, 3, 4 y 50 (en cientos de miles). ¿Qué número describe mejor «lo que cuesta un piso ahí»?', [
+    { t: 'La media, 12,4', ok: false, por: 'Ningún piso cuesta cerca de 12,4: el 50 arrastra la media hacia arriba. Cuatro de los cinco cuestan entre 2 y 4.' },
+    { t: 'La mediana, 3', ok: true, por: 'Ordenados, el del medio es 3, y describe a la mayoría. El 50 es un atípico que la mediana ignora.' },
+    { t: 'La moda, 3', ok: false, por: 'La moda coincide aquí con la mediana, pero por casualidad: con datos 2, 3, 4, 5, 50 no habría moda y la mediana seguiría siendo útil.' }
+  ]);
+
   p.util('La diferencia entre media y mediana es un asunto político. Si diez personas ganan 1000 € y una ' +
     'gana un millón, la media dice que cobran unos 91 000 € y la mediana dice 1000 €: solo una de ' +
     'las dos describe la vida de esa gente. Por eso los informes de salarios y de precios de ' +
@@ -66,6 +78,7 @@ Course.topic('pe-descriptiva', function (p) {
   p.demo({
     title: 'Misma media, distinta dispersión',
     intro: 'Los dos grupos tienen exactamente la misma media. Sube la dispersión del segundo y mira cómo se separan los datos sin que la media se mueva.',
+    predice: 'Si bajas la dispersión del grupo B hasta 0, ¿dónde caerán sus siete puntos? ¿Y cuánto valdrá su desviación típica?',
     build: function (host, d) {
       var disp = 1;
       var base = [5, 5, 6, 6, 6, 7, 7];
@@ -104,6 +117,19 @@ Course.topic('pe-descriptiva', function (p) {
       });
       paint();
     }
+  });
+
+  p.ejemplo({
+    title: 'Los cuatro números de un conjunto pequeño',
+    enunciado: 'Cinco alumnos han tardado 4, 7, 7, 9 y 13 minutos en un problema. Calcular media, mediana, moda y desviación típica.',
+    pasos: [
+      { t: '<strong>Media.</strong> Suma $4 + 7 + 7 + 9 + 13 = 40$; entre 5: $\\overline{x} = 8$ minutos.', antes: 'Suma y divide. ¿Cuánto sale?' },
+      { t: '<strong>Mediana y moda.</strong> Ya están ordenados; el del medio (tercero de cinco) es 7. La moda también es 7, el único que se repite.', antes: '¿Hace falta ordenar? ¿Cuál es el dato central?' },
+      { t: '<strong>Desviaciones.</strong> Cada dato menos la media: $-4, -1, -1, 1, 5$. Suman cero, como siempre: por eso no sirven tal cual para medir dispersión.', antes: 'Resta la media a cada dato. ¿Cuánto suman las cinco diferencias?' },
+      { t: '<strong>Varianza.</strong> Al cuadrado: $16, 1, 1, 1, 25$, que suman 44. Entre 5: $\\sigma^2 = 8{,}8$ minutos².' },
+      { t: '<strong>Desviación típica.</strong> $\\sigma = \\sqrt{8{,}8} \\approx 2{,}97$ minutos: un alumno «típico» se aleja unos 3 minutos de los 8 de media.', antes: '¿Por qué hace falta la raíz? Mira las unidades de la varianza.' }
+    ],
+    cierre: 'Media 8, mediana 7: la media está un poco por encima porque el 13 tira de ella. Con un dato de 40 en vez de 13, la media subiría a 13,4 y la mediana seguiría en 7.'
   });
 
   /* ---------------------------------------------------------------- */
@@ -182,6 +208,7 @@ Course.topic('pe-descriptiva', function (p) {
   p.demo({
     title: 'El diagrama de caja',
     intro: 'La caja va de Q₁ a Q₃, con una raya en la mediana; los bigotes llegan hasta el dato más extremo que no es atípico, y los atípicos se marcan sueltos. Añade un dato disparatado y mira qué se mueve y qué no.',
+    predice: 'Antes de añadir el 60: ¿qué se moverá más, la media o la mediana? ¿Y la caja cambiará de tamaño o casi no?',
     build: function (host) {
       var base = [12, 15, 17, 18, 18, 20, 21, 22, 24, 25, 27, 30], extra = 'nada';
       function cuartil(ord, k) {
@@ -218,6 +245,13 @@ Course.topic('pe-descriptiva', function (p) {
       pinta();
     }
   });
+
+  p.trampas([
+    { e: 'Calcular la mediana sin ordenar', por: 'La mediana es el dato central <em>de los ordenados</em>. Con 5, 1, 9 la mediana es 5, no 1.' },
+    { e: '«La media siempre es el mejor resumen»', por: 'Con un dato disparado, la media describe a nadie. Salarios, precios de vivienda, tiempos de espera: mediana.' },
+    { e: 'Dar la varianza como desviación típica', por: 'La varianza está en unidades al cuadrado (minutos²). La desviación típica es su raíz y vuelve a las unidades de los datos.' },
+    { e: 'Comparar desviaciones típicas de grupos con medias muy distintas', por: 'Una $\\sigma$ de 5 es enorme si la media es 10 y diminuta si es 1000. Se compara el coeficiente de variación $\\sigma/\\overline{x}$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.hist('Los gráficos estadísticos son un invento sorprendentemente tardío: William Playfair publicó el ' +
@@ -423,15 +457,10 @@ Course.topic('pe-descriptiva', function (p) {
     },
     ask: function (d) {
       return 'Grupo A: $' + d.a.join(',\\ ') + '$<br>Grupo B: $' + d.b.join(',\\ ') + '$<br>' +
-        '¿Cuál de los dos es <strong>relativamente</strong> más disperso? Escribe <code>A</code> o <code>B</code>.';
+        '¿Cuál de los dos es <strong>relativamente</strong> más disperso?';
     },
-    fields: [{ name: 'g', label: 'Grupo', w: 'tiny' }],
+    fields: [{ name: 'g', label: 'Más disperso', opts: [{ t: 'el grupo A', v: 'A' }, { t: 'el grupo B', v: 'B' }] }],
     sol: function (d) { return { g: d.mayor }; },
-    check: function (v, d) {
-      var t = v.raw.g.trim().toUpperCase();
-      if (t !== 'A' && t !== 'B') return { ok: false, msg: 'Escribe <code>A</code> o <code>B</code>.' };
-      return t === d.mayor;
-    },
     hint: function () { return 'Las medias son muy distintas, así que comparar desviaciones típicas a pelo engaña. Usa el coeficiente de variación $CV = \\sigma/\\overline{x}$.'; },
     steps: function (d) {
       return ['Grupo A: media $' + U.fmt(ML.mean(d.a), 3) + '$, $\\sigma = ' + U.fmt(ML.sd(d.a), 3) + '$, ' +

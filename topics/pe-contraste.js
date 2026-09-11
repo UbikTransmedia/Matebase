@@ -4,15 +4,17 @@ Course.topic('pe-contraste', function (p) {
   var ZB = { 10: 1.645, 5: 1.96, 1: 2.575 };   // bilateral: z_{α/2}
   var ZU = { 10: 1.28, 5: 1.645, 1: 2.33 };    // unilateral: z_α
 
+  p.puente('Se apoya en todo lo anterior: la [[pe-normal|normal]], la distribución de la ' +
+    '[[pe-inferencia|media muestral]] y la de la [[pe-proporcion|proporción muestral]]. El estadístico ' +
+    'que aparece aquí es la misma $z$ de tipificar, y el valor crítico sale de la misma tabla. Lo nuevo ' +
+    'es la lógica de la decisión, que se parece más a un juicio que a un cálculo.');
+
   p.text('Un intervalo de confianza responde a <em>«¿cuánto vale?»</em>. Un contraste de hipótesis ' +
     'responde a otra pregunta, la que se hace cuando alguien afirma algo: <em>«¿es verdad?»</em>. El ' +
     'fabricante dice que sus bombillas duran 1000 horas; el alcalde, que el 60 % de los vecinos apoya ' +
     'su plan; el laboratorio, que su fármaco funciona. Con una muestra no se puede demostrar nada, pero ' +
     'sí se puede decidir si los datos son <strong>compatibles</strong> con la afirmación o si la ' +
     'contradicen, y además saber con qué probabilidad nos equivocamos al decidir.');
-
-  p.text('Se apoya en todo lo anterior: la [[pe-normal|normal]], la distribución de la ' +
-    '[[pe-inferencia|media muestral]] y la de la [[pe-proporcion|proporción muestral]].');
 
   /* ---------------------------------------------------------------- */
   p.section('Las dos hipótesis');
@@ -32,6 +34,12 @@ Course.topic('pe-contraste', function (p) {
     'demostrar que es cierta: un acusado absuelto por falta de pruebas no queda demostrado inocente.',
     null, 'Nunca se «acepta» del todo');
 
+  p.comprueba('Un contraste al 5 % <em>no rechaza</em> $H_0: \\mu = 500$. ¿Qué se ha demostrado?', [
+    { t: 'Que la media vale 500', ok: false, por: 'No rechazar no es demostrar. Los datos son compatibles con 500, pero también con 498 o con 503. Un absuelto por falta de pruebas no queda demostrado inocente.' },
+    { t: 'Nada en firme: los datos no bastan para descartar que sea 500', ok: true, por: 'Es exactamente lo que dice el resultado, y no más. Con una muestra mayor podría rechazarse, o no.' },
+    { t: 'Que la media no es 500, aunque con poca seguridad', ok: false, por: 'Al revés: la sospecha era que no fuera 500, y esa sospecha no ha encontrado apoyo suficiente en los datos.' }
+  ]);
+
   /* ---------------------------------------------------------------- */
   p.section('Nivel de significación y región de rechazo');
 
@@ -46,6 +54,7 @@ Course.topic('pe-contraste', function (p) {
   p.demo({
     title: 'Dónde cae el estadístico',
     intro: 'La campana es la distribución del estadístico si H₀ fuera cierta. Las zonas rojas son la región de rechazo. Mueve el valor observado y cambia el tipo de contraste y el nivel: la misma z puede rechazar en uno y no en otro.',
+    predice: 'El $z$ observado es 1,8 y $\\alpha = 5\\,\\%$. Antes de tocar nada: ¿rechazará el contraste bilateral? ¿Y el unilateral por la derecha? Los valores críticos están en la tabla de arriba.',
     build: function (host) {
       var tipo = 'bi', alfa = 5, zobs = 1.8;
       var out = W.readout(host, '');
@@ -98,6 +107,19 @@ Course.topic('pe-contraste', function (p) {
     'Escribir la conclusión <strong>en el contexto del problema</strong>, con palabras.'
   ], true);
 
+  p.ejemplo({
+    title: 'Un contraste con los cinco pasos',
+    enunciado: 'Un fabricante afirma que sus bombillas duran de media 1000 horas, con $\\sigma = 60$. Una asociación de consumidores sospecha que duran menos y prueba 36 bombillas: la media sale 978 horas. ¿Tiene razón la asociación, al 5 %?',
+    pasos: [
+      { t: '<strong>Hipótesis.</strong> $H_0: \\mu \\ge 1000$ (lo que afirma el fabricante) y $H_1: \\mu < 1000$ (la sospecha). Unilateral por la izquierda.', antes: '¿Qué va en $H_0$ y qué en $H_1$? ¿Bilateral o unilateral?' },
+      { t: '<strong>Región de rechazo.</strong> Unilateral al 5 %: $z_\\alpha = 1{,}645$. Se rechaza $H_0$ si $z < -1{,}645$.' },
+      { t: '<strong>Estadístico.</strong> $z = \\dfrac{978 - 1000}{60/\\sqrt{36}} = \\dfrac{-22}{10} = -2{,}2$.', antes: 'Ojo al denominador: es $\\sigma/\\sqrt{n}$, la desviación de la media, no $\\sigma$.' },
+      { t: '<strong>Decisión.</strong> $-2{,}2 < -1{,}645$: cae en la región de rechazo. Se rechaza $H_0$.' },
+      { t: '<strong>Conclusión con palabras.</strong> Con un nivel de significación del 5 %, hay pruebas de que las bombillas duran menos de lo que afirma el fabricante.', antes: 'Escríbelo en el contexto del problema, sin $z$ ni $H_0$.' }
+    ],
+    cierre: 'Con $\\alpha = 1\\,\\%$ el valor crítico sería 2,33 y $-2{,}2$ no llegaría: no se rechazaría. El mismo dato, otra decisión. Por eso el nivel se fija <em>antes</em> de mirar los datos, no después.'
+  });
+
   /* ---------------------------------------------------------------- */
   p.section('Los dos errores posibles');
 
@@ -115,6 +137,14 @@ Course.topic('pe-contraste', function (p) {
     'menor que $\\alpha$, se rechaza $H_0$. Un p-valor de 0,03 no significa «un 3 % de probabilidad de que ' +
     '$H_0$ sea cierta»: significa que, si lo fuera, un resultado así saldría 3 veces de cada 100.',
     'ok', 'El p-valor, en una frase');
+
+  p.trampas([
+    { e: 'Poner la sospecha en $H_0$', por: '$H_0$ es lo que se da por bueno mientras no haya pruebas, y lleva la igualdad. La sospecha es $H_1$: es lo que hay que demostrar.' },
+    { e: 'Elegir bilateral o unilateral después de ver los datos', por: 'Con $z = 1{,}8$ al 5 %, el bilateral no rechaza y el unilateral sí. Elegir a posteriori es hacer trampa: el tipo de contraste lo fija la pregunta, antes.' },
+    { e: 'Usar $\\sigma$ en lugar de $\\sigma/\\sqrt{n}$', por: 'Con $\\sigma = 60$ y $n = 36$, el estadístico sale $-0{,}37$ en vez de $-2{,}2$: nada se rechazaría nunca.' },
+    { e: 'Leer «no se rechaza $H_0$» como «$H_0$ es cierta»', por: 'Solo dice que los datos no bastan para descartarla. Un juicio sin pruebas absuelve; no demuestra inocencia.' },
+    { e: 'Poner $\\hat{p}$ en la raíz del contraste de proporción', por: 'Se razona <em>suponiendo $H_0$ cierta</em>, así que va $p_0$. En el intervalo de confianza, que no supone nada, iba $\\hat{p}$.' }
+  ]);
 
   p.hist('El primer contraste de hipótesis de la historia se publicó en 1710. John Arbuthnot, médico de ' +
     'la reina Ana de Inglaterra, revisó los registros de bautismos de Londres de los 82 años anteriores ' +

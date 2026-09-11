@@ -1,6 +1,11 @@
 /* Tema: Muestreo e inferencia */
 Course.topic('pe-inferencia', function (p) {
 
+  p.puente('Todo lo anterior converge aquí. De la descriptiva viene la media de una muestra; de la ' +
+    'normal, la campana y su tabla; del tema de variables continuas, que una probabilidad es un ' +
+    'área. Con esas tres piezas se responde a la pregunta que da sentido al bloque: ¿qué se puede ' +
+    'decir de una población entera mirando solo una muestra?');
+
   p.text('Aquí la estadística da su salto más ambicioso. Hasta ahora describíamos datos que teníamos ' +
     'delante. La <strong>inferencia</strong> pretende algo mucho más difícil: <em>decir cómo es toda ' +
     'la población habiendo mirado solo una parte</em>, y además <strong>medir cuánto podemos ' +
@@ -12,10 +17,8 @@ Course.topic('pe-inferencia', function (p) {
   p.section('Muestreo');
   p.text('Toda la inferencia se apoya en una apuesta: mirar una parte para hablar del todo. Preguntar a ' +
     'mil personas para describir a millones parece temerario, y sin embargo funciona, siempre que la ' +
-    'parte elegida no esté sesgada. La palabra clave es <strong>representativa</strong>, y la ' +
-    'historia guarda un aviso célebre: en 1936 una revista estadounidense predijo con dos millones ' +
-    'de respuestas que Landon ganaría a Roosevelt. Se equivocó estrepitosamente porque preguntó por ' +
-    'teléfono en plena Depresión, es decir, solo a quien podía permitirse uno.');
+    'parte elegida no esté sesgada. La palabra clave es <strong>representativa</strong>, y lo que ' +
+    'pasa cuando falta lo cuenta la historia de más abajo.');
 
 
   p.list([
@@ -53,9 +56,16 @@ Course.topic('pe-inferencia', function (p) {
     'encuestas se quedan en 1000-2000 personas: pasar de 1000 a 4000 solo mejora el margen de error ' +
     'a la mitad, y cuesta cuatro veces más.', 'ok', 'Por qué las encuestas son de 1000 personas');
 
+  p.comprueba('Con una muestra de 100 personas, la desviación típica de la media sale 2 cm. ¿Cuánta muestra hace falta para bajarla a 1 cm?', [
+    { t: '200 personas', ok: false, por: 'Duplicar $n$ solo divide el error entre $\\sqrt{2} \\approx 1{,}41$: bajaría a 1,41 cm, no a 1.' },
+    { t: '400 personas', ok: true, por: 'El error va con $1/\\sqrt{n}$. Para dividirlo entre 2 hay que multiplicar $n$ por 4: $\\sqrt{400} = 20$, el doble de $\\sqrt{100} = 10$.' },
+    { t: '1000 personas', ok: false, por: 'Más de lo necesario: con 400 ya basta. Con 1000 el error bajaría a $2\\cdot\\sqrt{100/1000} \\approx 0{,}63$ cm.' }
+  ]);
+
   p.demo({
     title: 'Muchas muestras, muchas medias',
     intro: 'La población de fondo no tiene forma de campana. Aun así, las medias de sus muestras sí la tienen: eso es el teorema central del límite.',
+    predice: 'La población es un tobogán: muchos unos, pocos seises. Con $n = 1$ el histograma de las medias tiene esa misma forma. ¿A partir de qué $n$ crees que ya parece una campana? ¿5? ¿30?',
     build: function (host, d) {
       var n = 5, muestras = 500;
       var host2 = U.el('div');
@@ -137,9 +147,23 @@ Course.topic('pe-inferencia', function (p) {
   p.formula('E = z_{\\alpha/2}\\frac{\\sigma}{\\sqrt{n}} \\quad\\Longrightarrow\\quad n \\ge \\left(\\frac{z_{\\alpha/2}\\,\\sigma}{E}\\right)^2',
     'error máximo y tamaño de muestra necesario');
 
+  p.ejemplo({
+    title: 'Un intervalo de confianza de principio a fin',
+    enunciado: 'La estatura de una población tiene $\\sigma = 8$ cm. En una muestra de 64 personas la media sale 172 cm. Construir el intervalo al 95 % y decir cuánta muestra haría falta para un error máximo de 1 cm.',
+    pasos: [
+      { t: '<strong>Error típico de la media.</strong> $\\dfrac{\\sigma}{\\sqrt{n}} = \\dfrac{8}{\\sqrt{64}} = \\dfrac{8}{8} = 1$ cm. Un individuo se desvía unos 8 cm de la media; la media de 64, solo 1.', antes: 'Primero: ¿cuánto varía la media de una muestra de 64? No es 8.' },
+      { t: '<strong>Margen al 95 %.</strong> $E = 1{,}96\\cdot 1 = 1{,}96$ cm.' },
+      { t: '<strong>Intervalo.</strong> $(172 - 1{,}96;\\ 172 + 1{,}96) = (170{,}04;\\ 173{,}96)$.', antes: 'Media, más y menos el margen.' },
+      { t: '<strong>Qué significa.</strong> Si se repitiera el muestreo muchas veces, el 95 % de los intervalos construidos así contendría la media real. No dice «la media está ahí con probabilidad 0,95»: la media es un número fijo y este intervalo la contiene o no.' },
+      { t: '<strong>Para un error de 1 cm.</strong> $n \\ge \\left(\\dfrac{1{,}96\\cdot 8}{1}\\right)^2 = 15{,}68^2 = 245{,}9$, o sea, 246 personas. Casi cuatro veces más muestra para la mitad de error.', antes: 'Para bajar el error de 1,96 a 1, ¿cuánta muestra? Despeja $n$ en la fórmula.' }
+    ],
+    cierre: 'El $\\sqrt{n}$ manda: 64 personas dan $\\pm 1{,}96$ cm y 246 dan $\\pm 1$ cm. Para $\\pm 0{,}5$ harían falta unas 984. Cada mejora cuesta cuatro veces la anterior.'
+  });
+
   p.demo({
     title: 'Confianza, tamaño y amplitud',
     intro: 'Los tres factores que determinan la anchura del intervalo. Fíjate en cuánta muestra hay que añadir para estrecharlo un poco.',
+    predice: 'Pasa de $n = 100$ a $n = 400$: ¿el intervalo se estrechará a la mitad o a la cuarta parte? Y del 95 % al 99 %: ¿más ancho o más estrecho?',
     build: function (host, d) {
       var media = 170, sd = 10, n = 100, conf = 95;
       var zs = { 90: 1.645, 95: 1.96, 99: 2.575 };
@@ -196,6 +220,13 @@ Course.topic('pe-inferencia', function (p) {
   p.note('Un contraste nunca «demuestra» la hipótesis nula, igual que un juicio no demuestra la ' +
     'inocencia: solo dice que no hay pruebas suficientes para condenar. Es exactamente la misma ' +
     'lógica, y con los mismos dos tipos de error posibles.', null, 'Inocente hasta que se demuestre lo contrario');
+
+  p.trampas([
+    { e: '«Hay un 95 % de probabilidad de que la media esté en el intervalo»', por: 'La media es fija; el intervalo es lo aleatorio. El 95 % es la tasa de acierto del método a la larga.' },
+    { e: 'Usar $\\sigma$ en vez de $\\sigma/\\sqrt{n}$', por: 'Lo que se estima es la media, y la media de una muestra varía mucho menos que un individuo. Sin la raíz, el intervalo sale $\\sqrt{n}$ veces más ancho de lo debido.' },
+    { e: 'Duplicar la muestra para reducir el error a la mitad', por: 'El error va con $1/\\sqrt{n}$: duplicar $n$ solo lo divide entre 1,41. Para la mitad hay que cuadruplicar.' },
+    { e: 'Arreglar una muestra sesgada haciéndola más grande', por: 'Dos millones de respuestas sesgadas fallaron donde acertaron cincuenta mil bien elegidas. El tamaño reduce el azar, no el sesgo.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.util('El contraste de hipótesis es el procedimiento con el que se aprueba un medicamento, se valida ' +
@@ -281,24 +312,26 @@ Course.topic('pe-inferencia', function (p) {
       var c = r.pick(casos);
       return { t: c.t, ok: c.ok };
     },
-    ask: function (d) {
-      return d.t + '<br><span style="font-size:0.875rem;color:var(--ink-faint)">' +
-        '<code>1</code> ese valor queda fuera del intervalo, así que los datos no lo respaldan · ' +
-        '<code>2</code> no, la media es un valor fijo: el 95 % se refiere al método, no a este intervalo · ' +
-        '<code>3</code> se hace más ancho · ' +
-        '<code>4</code> se reduce a la mitad</span>';
-    },
-    fields: [{ name: 'r', label: 'Respuesta', w: 'tiny' }],
-    sol: function (d) { return { r: d.ok }; },
+    ask: function (d) { return d.t; },
+    fields: [{ name: 'r', label: 'Respuesta', opts: [
+      { t: 'ese valor queda fuera del intervalo, así que los datos no lo respaldan', v: '1' },
+      { t: 'no: la media es un valor fijo; el 95 % se refiere al método, no a este intervalo', v: '2' },
+      { t: 'se hace más ancho', v: '3' },
+      { t: 'se reduce a la mitad', v: '4' }
+    ] }],
+    sol: function (d) { return { r: String(d.ok) }; },
     hint: function () { return 'Recuerda: más confianza exige más margen, y el error va con $\\sqrt{n}$.'; },
     steps: function (d) {
+      var resp = ['', 'el 180 queda fuera del intervalo: los datos no lo respaldan',
+        'no: la media es fija y el 95 % se refiere al método',
+        'se hace más ancho', 'se reduce a la mitad'];
       return ['El nivel de confianza es una propiedad del <em>procedimiento</em>: el 95 % de los ' +
         'intervalos construidos así contendrían la media real.',
         'Más confianza ⟹ intervalo más ancho (hace falta más margen para acertar más veces).',
         'Y como $E = z\\frac{\\sigma}{\\sqrt{n}}$, multiplicar $n$ por 4 divide el error entre 2.',
-        'La respuesta correcta aquí es la <strong>' + d.ok + '</strong>.'];
+        'Aquí la respuesta es: <strong>' + resp[d.ok] + '</strong>.'];
     },
-    answer: function (d) { return 'Opción ' + d.ok; }
+    answer: function (d) { return ['', 'Fuera del intervalo', 'No: el 95 % es del método', 'Más ancho', 'A la mitad'][d.ok]; }
   });
 
   p.exercise({

@@ -1,10 +1,12 @@
 /* Tema: Variables aleatorias continuas */
 Course.topic('pe-continuas', function (p) {
 
-  p.text('Hasta ahora, todas las variables aleatorias de este bloque se podían contar: cuántas caras ' +
+  p.puente('Hasta ahora, todas las variables aleatorias de este bloque se podían contar: cuántas caras ' +
     'en diez tiradas, cuántas piezas defectuosas en un lote, cuántos aciertos en un examen tipo test. ' +
     'Son variables <strong>discretas</strong>: sus valores posibles se pueden listar, y a cada uno se ' +
-    'le asigna una probabilidad.');
+    'le asigna una probabilidad. Este tema necesita además una herramienta de análisis: la integral ' +
+    'definida como área bajo una curva. Si la tienes oxidada, conviene repasar ' +
+    '[[fn-integral-def|el tema de la integral definida]] antes de seguir.');
 
   p.text('Pero muchísimas cosas que se miden no son así. La estatura de una persona, el tiempo que ' +
     'tarda en fundirse una bombilla, el error de un instrumento: no toman valores sueltos, sino ' +
@@ -27,6 +29,12 @@ Course.topic('pe-continuas', function (p) {
     'sí lo tiene preguntar «¿cuál es la probabilidad de que mida entre 1,74 y 1,76?». Todas las ' +
     'preguntas útiles son de este segundo tipo.', 'ok', 'El cambio de mentalidad');
 
+  p.comprueba('Una variable continua $X$ mide el tiempo de espera en una cola. ¿Cuánto vale $P(X = 3)$, tres minutos exactos?', [
+    { t: 'Cero', ok: true, por: 'Hay infinitos valores posibles en cualquier tramo; un punto exacto no tiene área. Lo que sí tiene probabilidad es «entre 2,9 y 3,1».' },
+    { t: 'Muy pequeña, pero positiva', ok: false, por: 'Si cada punto tuviera una probabilidad positiva, por pequeña que fuese, infinitos puntos sumarían más de 1. Es exactamente cero.' },
+    { t: 'Lo que valga la densidad, $f(3)$', ok: false, por: '$f(3)$ es una densidad, no una probabilidad: puede valer 2 o 0,001. La probabilidad de un tramo es el área, y la de un punto, cero.' }
+  ]);
+
   p.text('Y como consecuencia cómoda: en una variable continua da exactamente igual poner $<$ o ' +
     '$\\le$, porque los extremos no aportan nada. Esto no vale en las discretas, donde $P(X\\le 3)$ ' +
     'y $P(X<3)$ se diferencian en todo $P(X=3)$.');
@@ -44,6 +52,7 @@ Course.topic('pe-continuas', function (p) {
   p.demo({
     title: 'El histograma que se convierte en curva',
     intro: 'Aumenta el número de clases y mira cómo el escalonado se suaviza. La curva no es un dibujo decorativo: es el límite del histograma cuando las barras se hacen infinitamente estrechas.',
+    predice: 'Con 8 clases y 400 datos el histograma es tosco. Si subes solo las clases a 60 sin tocar los datos, ¿se pegará a la curva o saldrá peor? ¿Por qué?',
     build: function (host) {
       var clases = 8, n = 400;
       var r = U.rng(20240501);
@@ -135,9 +144,23 @@ Course.topic('pe-continuas', function (p) {
     '1 sin ningún problema. Lo que nunca pasa de 1 es el área. La palabra correcta es la de la ' +
     'física: densidad es masa por unidad de longitud, no masa.', 'warn', 'Qué es y qué no es f(x)');
 
+  p.ejemplo({
+    title: 'Una densidad de principio a fin',
+    enunciado: 'Sea $f(x) = kx$ en $[0, 2]$ y $0$ fuera. Hallar $k$ para que sea una densidad, calcular $P(1 \\le X \\le 2)$ y la esperanza.',
+    pasos: [
+      { t: '<strong>Área 1.</strong> $\\displaystyle\\int_0^2 kx\\,dx = k\\left[\\frac{x^2}{2}\\right]_0^2 = 2k$. Para que valga 1, $k = \\dfrac{1}{2}$. Y $f(x) = x/2 \\ge 0$ en el intervalo: es una densidad.', antes: '¿Qué condición fija el valor de $k$? Plantea la integral.' },
+      { t: '<strong>La probabilidad del tramo.</strong> $P(1 \\le X \\le 2) = \\displaystyle\\int_1^2 \\frac{x}{2}\\,dx = \\left[\\frac{x^2}{4}\\right]_1^2 = 1 - \\frac{1}{4} = \\frac{3}{4}$.', antes: 'La densidad crece con $x$. ¿Es más probable la mitad izquierda o la derecha del intervalo?' },
+      { t: '<strong>Sin integrar, para comprobar.</strong> Bajo $f$ hay un triángulo de área 1. El tramo $[0, 1]$ es un triángulo de base 1 y altura $f(1) = 1/2$: área $1/4$. Lo que queda para $[1, 2]$ es $3/4$ ✓.' },
+      { t: '<strong>Esperanza.</strong> $\\mu = \\displaystyle\\int_0^2 x\\cdot\\frac{x}{2}\\,dx = \\left[\\frac{x^3}{6}\\right]_0^2 = \\frac{8}{6} = \\frac{4}{3} \\approx 1{,}33$. Mayor que 1, el centro del intervalo, porque la masa está cargada a la derecha.', antes: '¿La media caerá en el centro del intervalo, a la izquierda o a la derecha?' },
+      { t: '<strong>La función de distribución.</strong> $F(x) = \\displaystyle\\int_0^x \\frac{t}{2}\\,dt = \\frac{x^2}{4}$ en $[0, 2]$. Comprobaciones: $F(2) = 1$ ✓ y $F\'(x) = x/2 = f(x)$ ✓. Con ella, $P(1 \\le X \\le 2) = F(2) - F(1) = 1 - 1/4$, lo mismo de antes.' }
+    ],
+    cierre: 'Todo el tema en un ejemplo: $k$ sale de que el área valga 1, la probabilidad es un área, la esperanza es una integral con una $x$ de más, y $F$ es la primitiva que acumula. Ninguna cuenta nueva: integrales de potencias.'
+  });
+
   p.demo({
     title: 'El área es la probabilidad',
     intro: 'Arrastra los dos extremos y mira cómo cambia el área sombreada. Ese número es literalmente la probabilidad de caer en ese tramo. Cambia también de densidad: la maquinaria es la misma para todas.',
+    predice: 'En la uniforme en $[0, 4]$, ¿cuánto vale el área entre 1 y 3 sin integrar nada? Y si juntas $a$ y $b$ hasta que casi se toquen, ¿hacia qué valor va el área?',
     build: function (host) {
       var cual = 'uni';
       var dens = {
@@ -295,6 +318,13 @@ Course.topic('pe-continuas', function (p) {
     'accidente y falso para cosas que se desgastan, como un neumático: por eso en fiabilidad se usan ' +
     'otras distribuciones cuando hay envejecimiento.', 'warn', 'La falta de memoria');
 
+  p.trampas([
+    { e: 'Leer $f(x)$ como «la probabilidad de que salga $x$»', por: 'Es una densidad: masa por unidad de longitud. Puede valer 3. La probabilidad de un punto es 0 y la de un tramo es el área.' },
+    { e: 'Preocuparse por $<$ frente a $\\le$', por: 'En una continua da igual: el extremo no aporta área. En una discreta sí cambia, en todo $P(X = k)$.' },
+    { e: 'Olvidar comprobar que el área total vale 1', por: 'Una función positiva no es una densidad hasta que se ajusta la constante. $f(x) = x$ en $[0, 2]$ tiene área 2: hay que dividirla entre 2.' },
+    { e: 'Calcular la esperanza como $\\int f(x)\\,dx$', por: 'Eso da 1 siempre. La esperanza lleva una $x$ multiplicando: $\\int x\\,f(x)\\,dx$, igual que $\\sum x_i\\,p_i$ en las discretas.' }
+  ]);
+
   p.hist('Que la probabilidad continua necesitaba integrales no fue evidente. Durante el siglo XVIII ' +
     'se manejaban «probabilidades geométricas» con argumentos de área ad hoc, y de ahí salió en 1777 ' +
     'la aguja de Buffon, que estima $\\pi$ tirando una aguja sobre un suelo de tablas. Laplace ' +
@@ -325,22 +355,14 @@ Course.topic('pe-continuas', function (p) {
     },
     ask: function (d) {
       return 'Sea $f(x) = ' + U.fmt(d.k, 4) + 'x$ en el intervalo $[0, ' + d.b + ']$ y $f(x)=0$ ' +
-        'fuera. ¿Es una función de densidad?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Calcula el área total y escribe ' +
-        '<code>sí</code> o <code>no</code>.</span>';
+        'fuera. Calcula el área total bajo $f$ y decide si es una función de densidad.';
     },
     fields: [
       { name: 'a', label: 'Área total', w: 'tiny' },
-      { name: 'q', label: '¿Es densidad?', w: 'tiny', ph: 'sí / no' }
+      { name: 'q', label: '¿Es densidad?', opts: [{ t: 'sí', v: 'si' }, { t: 'no', v: 'no' }] }
     ],
     sol: function (d) { return { a: U.round(d.area, 6), q: d.ok ? 'si' : 'no' }; },
-    check: function (v, d) {
-      var areaOk = Ex.same(v.a, d.area, 1e-3);
-      var q = U.eligeOpcion(v.raw.q, { si: /^s|si|es densidad|valida|cumple/, no: /^n|no|no es|no cumple/ });
-      if (!q) return { ok: false, msg: 'En la segunda casilla escribe <strong>sí</strong> o <strong>no</strong>.', fields: { a: areaOk } };
-      var qOk = (q === 'si') === d.ok;
-      return { ok: areaOk && qOk, fields: { a: areaOk, q: qOk } };
-    },
+    tol: 1e-3,
     hint: function (d) {
       return 'El área bajo una recta que sale del origen es la del triángulo: $\\frac{base \\cdot ' +
         'altura}{2}$. La base es ' + d.b + ' y la altura es $f(' + d.b + ')$.';
