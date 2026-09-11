@@ -1,6 +1,10 @@
 /* Tema: El túnel */
 Course.topic('gfx-tunel', function (p) {
 
+  p.puente('Los temas anteriores dibujaban en el plano. Este da la primera sensación de profundidad ' +
+    'con una sola división, que sale de la [[ge-semejanza|semejanza de triángulos]]. Con las polares de ' +
+    '[[gfx-coordenadas|coordenadas]] y la repetición, la pantalla se convierte en la pared de un tubo.');
+
   p.text('Si has visto una <em>demo</em> de los años noventa, has visto un túnel. Era el efecto ' +
     'obligatorio, el que todo el mundo programaba para demostrar que sabía, y sigue apareciendo en ' +
     'pantallas de conciertos treinta años después. Da la impresión de que hay una geometría ' +
@@ -16,6 +20,12 @@ Course.topic('gfx-tunel', function (p) {
     'la perspectiva, despejada',
     'Donde $f$ es la distancia del ojo al plano de la pantalla. Lo que importa es la forma: la ' +
       'profundidad es <strong>inversamente proporcional</strong> al radio en pantalla.');
+
+  p.comprueba('Dos píxeles del túnel: uno a $r = 0{,}1$ del centro y otro a $r = 0{,}2$. ¿Cuál mira más lejos, y cuánto más?', [
+    { t: 'El de $0{,}1$, el doble de lejos', ok: true, por: 'Profundidad $z = k/r$: la mitad de radio es el doble de profundidad. Cuanto más pegado al centro, más lejos mira, y en el centro exacto mira al infinito.' },
+    { t: 'El de $0{,}2$, el doble de lejos', ok: false, por: 'Al revés: el radio grande es la pared que tienes al lado. La relación es inversa, no directa.' },
+    { t: 'Los dos igual: depende del ángulo, no del radio', ok: false, por: 'El ángulo dice en qué gajo de la pared estás; la profundidad la decide solo el radio.' }
+  ]);
 
   p.text('Y esa es toda la técnica. En vez de calcular dónde cae cada punto de la pared, se hace al ' +
     'revés: para cada píxel, se mira a qué distancia del centro está y se deduce a qué profundidad ' +
@@ -33,9 +43,23 @@ Course.topic('gfx-tunel', function (p) {
     'hacia ti, que es exactamente lo mismo que avanzar. Y es el mismo truco del tema del ' +
     '[[gfx-tiempo|tiempo]]: no se mueve nada, se desplaza el sitio desde el que se pregunta.');
 
+  p.ejemplo({
+    title: 'Dónde caen los anillos y cuánto se mueven',
+    enunciado: 'Con $k = 0{,}25$, los anillos de la pared están en $v = 1, 2, 3, 4$. Calcular a qué radio de pantalla se ve cada uno, y cuánto se desplaza el primero y el cuarto cuando el tiempo avanza $0{,}5$.',
+    pasos: [
+      { t: '<strong>Despejar.</strong> $v = k/r$, así que $r = k/v$: $0{,}25,\\ 0{,}125,\\ 0{,}083,\\ 0{,}0625$. Cada anillo está a la mitad de distancia del centro que... no, a $1/v$: se apiñan hacia el centro cada vez más deprisa.', antes: 'Invierte la fórmula y sustituye $v = 1, 2, 3, 4$.' },
+      { t: '<strong>La separación.</strong> Entre el 1 y el 2 hay $0{,}125$ de pantalla; entre el 3 y el 4, $0{,}021$. Misma distancia real, seis veces menos pantalla: eso es la perspectiva.' },
+      { t: '<strong>Avanzar 0,5.</strong> Ahora $v = k/r + 0{,}5$. El anillo $v = 1$ está donde $k/r = 0{,}5$: $r = 0{,}5$. Ha pasado de $0{,}25$ a $0{,}5$: se ha movido $0{,}25$ de pantalla.', antes: 'Con el $+0{,}5$, ¿qué $r$ cumple $k/r + 0{,}5 = 1$?' },
+      { t: '<strong>El lejano.</strong> El anillo $v = 4$ está donde $k/r = 3{,}5$: $r = 0{,}0714$. Ha pasado de $0{,}0625$ a $0{,}0714$: se ha movido $0{,}009$. Veintiocho veces menos que el cercano.', antes: 'Lo mismo para $v = 4$. ¿Cuánto se ha desplazado?' },
+      { t: '<strong>Lo que enseña.</strong> Nadie ha programado que lo lejano se mueva despacio. Sale de la división: es el paralaje, y es lo que hace que el ojo lea profundidad de verdad.' }
+    ],
+    cierre: 'Una división coloca los anillos y decide su velocidad aparente. El ajedrez, el humo o lo que se pinte encima solo tiene que usar $(u, v)$; el resto lo hace $1/r$.'
+  });
+
   p.demo({
     title: 'El túnel mínimo',
     intro: 'Doce líneas. Una división, un ajedrez y un oscurecimiento hacia el centro. Prueba a poner la velocidad en negativo para retroceder, y mira qué pasa con el ajedrez cuando los anillos no son un número entero.',
+    predice: 'Con velocidad negativa, ¿los anillos irán hacia el centro o saldrán de él? Y si subes $k$, ¿el tubo parecerá más ancho o más estrecho?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-tun-1', alto: 340,
@@ -91,6 +115,7 @@ Course.topic('gfx-tunel', function (p) {
   p.demo({
     title: 'El túnel vestido',
     intro: 'La misma división, con humo procedural en la pared, niebla en la distancia y una curva. El mando de curvatura es el que convierte un tubo recto en algo por lo que apetece viajar.',
+    predice: 'Con curvatura 0, ¿dónde estará el punto de fuga? Al subirla, ¿se moverá el fondo del túnel, las paredes, o las dos cosas?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-tun-2', alto: 380,
@@ -190,6 +215,13 @@ Course.topic('gfx-tunel', function (p) {
     'punto de una textura había que leer. Cambiabas la tabla y tenías otro efecto. Este bloque entero ' +
     'no es más que aquella idea, con la tabla sustituida por una fórmula que se recalcula sesenta ' +
     'veces por segundo.');
+
+  p.trampas([
+    { e: 'Dejar que $r$ llegue a cero', por: '$k/r$ se dispara y <code>float</code> se rinde: anillos parpadeantes en el centro. Se apaga la imagen allí, o se suma un pelín al radio.' },
+    { e: 'Usar el ángulo sin dividir por $2\\pi$', por: 'Las coordenadas de la pared tienen que dar la vuelta completa en una unidad. Si no, el número de gajos no cuadra y aparece una costura donde el ángulo salta de $\\pi$ a $-\\pi$.' },
+    { e: 'Buscar la geometría tridimensional', por: 'No hay cilindro en ninguna parte: hay un mapa de cada píxel a un punto de una superficie inventada. Cambiar el denominador cambia la superficie entera.' },
+    { e: 'Curvar el túnel de verdad', por: 'Basta con mover el centro de la proyección. Es una trampa que el ojo compra y cuesta una línea; la geometría correcta costaría un trazador de rayos.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

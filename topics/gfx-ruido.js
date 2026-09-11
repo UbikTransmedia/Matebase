@@ -1,6 +1,10 @@
 /* Tema: Azar sin azar: ruido */
 Course.topic('gfx-ruido', function (p) {
 
+  p.puente('Formas y colores perfectos delatan a la máquina. Este tema fabrica desorden reproducible: ' +
+    'un hash que amplifica diferencias como el [[av-caos|caos determinista]], la interpolación de ' +
+    '[[gfx-decidir|mix]] para suavizarlo y una [[fn-series|serie geométrica]] para sumar octavas.');
+
   p.text('Todo lo que has dibujado hasta ahora es perfecto, y por eso se nota que es una máquina la ' +
     'que lo dibuja. Las nubes no son círculos, el mármol no es una rejilla, la corteza de un árbol ' +
     'no tiene simetría. Para que una imagen parezca de este mundo hace falta <strong>desorden</strong>, ' +
@@ -24,6 +28,7 @@ Course.topic('gfx-ruido', function (p) {
   p.demo({
     title: 'Nieve determinista',
     intro: 'Cada píxel calcula un número entre 0 y 1 a partir de su propia coordenada. Parece ruido de televisor, pero está congelado: no cambia con el tiempo porque no depende del tiempo.',
+    predice: 'Con grano 80 se ven cuadraditos. Si subes el grano a 300, ¿serán más grandes o más pequeños? Y si escribieras <code>iTime</code> dentro del hash, ¿qué pasaría con la imagen?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-rui-1', alto: 280,
@@ -71,6 +76,12 @@ Course.topic('gfx-ruido', function (p) {
     'granos diferentes en dos ordenadores. Para dibujar da igual. Para criptografía o para simular, ' +
     'jamás.', 'warn', 'No es aleatorio de verdad');
 
+  p.comprueba('Quieres nubes y tienes la estática de arriba. ¿Por qué no basta con bajar el grano?', [
+    { t: 'Porque dos puntos vecinos no se parecen en nada; hay que sortear en pocos puntos e interpolar entre ellos', ok: true, por: 'Una nube es continua: la densidad cambia poco de un punto al de al lado. El hash da valores sin relación entre vecinos. Sorteando solo en los vértices de una rejilla y mezclando por dentro, la continuidad aparece.' },
+    { t: 'Porque el hash no admite decimales', ok: false, por: 'Los admite, y con ellos da un valor distinto por píxel: justo el problema. Lo que falta no es precisión, es parecido entre vecinos.' },
+    { t: 'Porque con grano fino cuesta demasiado', ok: false, por: 'Cuesta lo mismo: un hash por píxel. El ruido suave cuesta más, cuatro hashes y tres mezclas, y aun así es lo que se usa, porque el problema no es el coste.' }
+  ]);
+
   p.section('De la estática a las nubes');
 
   p.text('El ruido de arriba no sirve para casi nada: es demasiado brusco. En la naturaleza los ' +
@@ -97,6 +108,7 @@ Course.topic('gfx-ruido', function (p) {
   p.demo({
     title: 'Ruido de valor',
     intro: 'Sortea en los vértices e interpola por dentro. El mando «suavizado» apaga y enciende la curva de smoothstep: con él a cero se ven las costuras de la rejilla; con él a uno, desaparecen.',
+    predice: 'Con suavizado 0, ¿dónde se verán las costuras: en los bordes de las celdas o en sus centros? ¿Serán saltos de valor o solo cambios bruscos de pendiente?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-rui-2', alto: 300,
@@ -159,6 +171,7 @@ Course.topic('gfx-ruido', function (p) {
   p.demo({
     title: 'Valor frente a gradiente',
     intro: 'A la izquierda, ruido de valor; a la derecha, ruido de gradiente, con la misma escala. Activa la rejilla: en el de valor, las zonas más claras y más oscuras se pegan a las esquinas; en el de gradiente, las esquinas son grises medios y las manchas se reparten libremente.',
+    predice: 'Activa la rejilla: ¿en cuál de las dos mitades todas las esquinas serán del mismo gris? Piensa en qué vale el producto escalar cuando el vector es cero.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-ruido-gradiente', alto: 280,
@@ -233,9 +246,23 @@ Course.topic('gfx-ruido', function (p) {
     '$\\frac{1-g^n}{1-g}$, que con $g = 0{,}5$ y muchas octavas tiende a 2. Por eso los shaders ' +
     'suelen dividir el resultado entre ese número: para que vuelva a caber entre 0 y 1.');
 
+  p.ejemplo({
+    title: 'Tres octavas, a mano',
+    enunciado: 'En un punto, el ruido vale $0{,}6$ a escala 1, $0{,}3$ al doble y $0{,}8$ al cuádruple. Calcular el fbm de tres octavas con ganancia $0{,}5$ y con ganancia $0{,}7$, normalizado.',
+    pasos: [
+      { t: '<strong>Ganancia 0,5.</strong> Amplitudes $1,\\ 0{,}5,\\ 0{,}25$. Suma: $1\\cdot 0{,}6 + 0{,}5\\cdot 0{,}3 + 0{,}25\\cdot 0{,}8 = 0{,}95$.', antes: 'Cada octava pesa la mitad que la anterior. Multiplica y suma.' },
+      { t: '<strong>Normalizar.</strong> El máximo posible es la suma de amplitudes, $1 + 0{,}5 + 0{,}25 = 1{,}75 = \\frac{1 - 0{,}5^3}{1 - 0{,}5}$. Resultado: $0{,}95 / 1{,}75 \\approx 0{,}54$.', antes: '¿Cuánto valdría la suma si los tres ruidos valieran 1?' },
+      { t: '<strong>Ganancia 0,7.</strong> Amplitudes $1,\\ 0{,}7,\\ 0{,}49$. Suma: $0{,}6 + 0{,}21 + 0{,}392 = 1{,}202$. Máximo: $2{,}19$. Resultado: $\\approx 0{,}55$.', antes: 'Repite con 0,7. ¿Cambia mucho el resultado normalizado?' },
+      { t: '<strong>Lo que sí cambia.</strong> Con ganancia 0,5 la octava fina aporta el 14 % del total; con 0,7, el 22 %. El valor apenas se mueve, pero el detalle fino pesa más: por eso la ganancia alta da roca y la baja, algodón.' },
+      { t: '<strong>Con infinitas octavas.</strong> Con $g = 0{,}5$ el máximo tiende a $\\frac{1}{1 - 0{,}5} = 2$; con $0{,}7$, a $3{,}33$. Con $g \\ge 1$ la serie no converge y el fbm no se puede normalizar: por eso la ganancia es siempre menor que 1.' }
+    ],
+    cierre: 'El fbm es una serie geométrica de ruidos. La razón decide cuánto pesa el detalle, y saber sumarla es lo que permite devolver el resultado a $[0, 1]$.'
+  });
+
   p.demo({
     title: 'Nubes con octavas',
     intro: 'Sube las octavas de una en una y mira cómo el detalle se va metiendo dentro del detalle. Con una octava es la mancha de antes; con seis, es una nube.',
+    predice: 'Con 1 octava, ¿cómo serán las nubes? Al pasar a 6, ¿qué cambiará: el tamaño de las manchas grandes o el detalle de sus bordes?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-rui-3', alto: 320,
@@ -311,6 +338,13 @@ Course.topic('gfx-ruido', function (p) {
     'concedidos a una función matemática. El ruido que ves aquí es el <em>de valor</em>, más simple ' +
     'que el de Perlin —que interpola gradientes en vez de valores— pero de la misma familia y con la ' +
     'misma intención.');
+
+  p.trampas([
+    { e: 'Usar el hash del seno para algo serio', por: 'Falla las pruebas estadísticas y el seno de argumentos enormes se calcula distinto en cada tarjeta. Para dibujar sirve; para simular o cifrar, nunca.' },
+    { e: 'Sortear un valor por píxel y esperar nubes', por: 'Sale estática: vecinos sin relación. Las nubes exigen sortear en los vértices de una rejilla e interpolar por dentro.' },
+    { e: 'Interpolar con $f$ a secas', por: 'La pendiente cambia de golpe al cruzar cada borde de celda y se ve un enrejado. La curva $f^2(3 - 2f)$ lleva la pendiente a cero en los vértices y lo borra.' },
+    { e: 'Olvidar normalizar el fbm', por: 'Con ganancia 0,5 y muchas octavas la suma llega casi a 2 y el color se satura a blanco. Se divide entre la suma de amplitudes, $\\frac{1 - g^n}{1 - g}$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

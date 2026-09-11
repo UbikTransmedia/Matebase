@@ -1,6 +1,10 @@
 /* Tema: Modelar con distancias */
 Course.topic('gfx-escena', function (p) {
 
+  p.puente('Con una esfera y un suelo se ve; para modelar hace falta un taller. El mínimo suave es ' +
+    'un [[gfx-decidir|mix]] con un pellizco parabólico, la repetición es el [[gfx-repetir|mod]] de la ' +
+    'rejilla llevado a tres dimensiones, y torcer es girar con un ángulo que depende de la altura.');
+
   p.text('En el tema de [[gfx-raymarching|raymarching]] montaste una esfera y un suelo. Con eso ya ' +
     'se ve en tres dimensiones, pero no se <em>modela</em>: para construir algo que merezca mirarse ' +
     'hacen falta unas cuantas herramientas más, y todas son de la misma familia. Este tema es el ' +
@@ -25,9 +29,28 @@ Course.topic('gfx-escena', function (p) {
     'valores <strong>y además resta un pellizco</strong>: ese $-k\\,h(1-h)$ es una parábola que vale ' +
     'cero en los extremos y $k/4$ en el centro, y es exactamente lo que crea el cuello.');
 
+  p.comprueba('Un punto está a $0{,}1$ de las dos esferas a la vez, $a = b = 0{,}1$, con $k = 0{,}4$. ¿El mínimo suave da más o menos que el mínimo normal?', [
+    { t: 'Menos: 0 frente a 0,1', ok: true, por: 'Con $a = b$, $h = \\frac{1}{2}$ y el pellizco vale $k/4 = 0{,}1$: $\\operatorname{smin} = 0{,}1 - 0{,}1 = 0$. El punto está justo en la superficie del cuello, aunque a 0,1 de cada esfera. Ahí se ha creado materia.' },
+    { t: 'Igual: los dos valen 0,1', ok: false, por: 'Serían iguales lejos de la zona de fusión. Justo donde empatan es donde la resta es máxima: es la definición del cuello.' },
+    { t: 'Más: el suavizado aleja la superficie', ok: false, por: 'Al revés: el pellizco se resta. La superficie se acerca al punto, es decir, los cuerpos se hinchan entre sí.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un mínimo suave y una repetición, con números',
+    enunciado: 'Calcular $\\operatorname{smin}(0{,}3,\\ 0{,}1,\\ 0{,}4)$ y $\\operatorname{smin}(0{,}9,\\ 0{,}1,\\ 0{,}4)$. Después, en el bosque con separación $2{,}6$ y grosor $0{,}32$, la distancia a la columna desde $\\vec p = (5{,}3,\\ 0,\\ -2{,}1)$.',
+    pasos: [
+      { t: '<strong>Primer smin.</strong> $h = \\operatorname{clamp}(0{,}5 + 0{,}5\\cdot\\frac{0{,}1 - 0{,}3}{0{,}4}) = 0{,}25$. $\\operatorname{mix}(0{,}1,\\ 0{,}3,\\ 0{,}25) = 0{,}15$. Pellizco: $0{,}4\\cdot 0{,}25\\cdot 0{,}75 = 0{,}075$. Resultado: $0{,}075$, frente al mínimo normal de $0{,}1$.', antes: 'Primero $h$, luego la interpolación, luego resta el pellizco.' },
+      { t: '<strong>Segundo smin.</strong> $h = 0{,}5 + 0{,}5\\cdot\\frac{-0{,}8}{0{,}4} = -0{,}5 \\to 0$. Sin pellizco: $\\operatorname{smin} = 0{,}1 = \\min$. Lejos de la zona de fusión el suavizado no hace nada.', antes: '¿Qué $h$ sale? ¿Toca un extremo?' },
+      { t: '<strong>La celda.</strong> $\\operatorname{mod}(5{,}3,\\ 2{,}6) = 5{,}3 - 2\\cdot 2{,}6 = 0{,}1$; centrado, $q_x = 0{,}1 - 1{,}3 = -1{,}2$. $\\operatorname{mod}(-2{,}1,\\ 2{,}6) = -2{,}1 + 2{,}6 = 0{,}5$; $q_z = 0{,}5 - 1{,}3 = -0{,}8$.', antes: 'El mod de GLSL da resto positivo también con negativos.' },
+      { t: '<strong>La columna.</strong> $|(q_x, q_z)| = \\sqrt{1{,}44 + 0{,}64} = 1{,}442$; $d = 1{,}442 - 0{,}32 = 1{,}122$. El punto está a $1{,}12$ de la columna de su celda, y esa es la que manda porque las demás están más lejos.' }
+    ],
+    cierre: 'El pellizco solo actúa donde las dos distancias se parecen, y la repetición solo necesita un resto. Dos cuentas pequeñas que juntas dan un bosque de columnas fundidas con el suelo.'
+  });
+
   p.demo({
     title: 'Dos gotas que se buscan',
     intro: 'Dos esferas que se acercan y se separan. El mando k es la anchura de la fusión: con cero es un min normal y se cruzan como dos piedras; súbelo y se comportan como mercurio.',
+    predice: 'Con $k = 0$ y separación 1,1, ¿las esferas se cortan? Sus radios suman 1,25. Y con $k = 0{,}5$ y separación 1,5, ¿aparecerá cuello aunque no se toquen?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-esc-1', alto: 340,
@@ -140,6 +163,7 @@ Course.topic('gfx-escena', function (p) {
   p.demo({
     title: 'El bosque',
     intro: 'Una columna, un suelo, una repetición y una torsión. Todo lo que ves cabe en quince líneas y no hay ni un objeto guardado en memoria. Mueve la torsión despacio.',
+    predice: 'Con torsión 0 las columnas son rectas. Con 0,3, ¿se retorcerán todas igual, o las lejanas al centro se inclinarán más que las cercanas? Piensa en qué gira: el plano entero.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-esc-2', alto: 380,
@@ -243,6 +267,13 @@ Course.topic('gfx-escena', function (p) {
     'superficies implícitas. El <code>smin</code> concreto que estás usando, la versión polinómica, ' +
     'lo popularizó Íñigo Quílez cuarenta años después, y su gracia es que no tiene ni una raíz ni una ' +
     'exponencial: dos productos y una interpolación.');
+
+  p.trampas([
+    { e: 'Subir $k$ sin acortar el paso', por: 'El smin devuelve menos que la distancia real en la zona de fusión: el rayo puede pasarse. Con $k$ grande, avanza con <code>t += 0.7 * h</code>.' },
+    { e: 'Repetir una figura que no cabe en su celda', por: 'El rayo nunca mira a la celda vecina: la figura se corta en la costura. Con columnas de radio 0,32 y celdas de 2,6 sobra sitio; con radio 1,4, no.' },
+    { e: 'Torcer o añadir relieve y seguir avanzando a paso completo', por: 'La función deja de ser una distancia exacta y aparecen agujeros. Regla: después de deformar, multiplica el paso por 0,5 o 0,7.' },
+    { e: 'Esperar que $\\operatorname{smin}$ cambie algo lejos de la unión', por: 'Solo actúa en la franja de anchura $k$ donde las dos distancias se parecen. Lejos, $h$ toca 0 o 1 y el resultado es el mínimo normal.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

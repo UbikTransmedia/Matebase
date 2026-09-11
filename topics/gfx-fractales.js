@@ -1,6 +1,11 @@
 /* Tema: Fractales: iterar en el plano complejo */
 Course.topic('gfx-fractales', function (p) {
 
+  p.puente('Una [[fn-sucesiones|sucesión por recurrencia]] con [[al-complejos|números complejos]], ' +
+    'iterada en cada píxel: eso es todo el tema. El criterio de escape es una desigualdad, el ' +
+    'coloreado suave un [[fn-exp-log|logaritmo]], y el fractal de Newton es el ' +
+    '[[av-numerico|método de Newton]] mirado desde el plano complejo.');
+
   p.text('Este tema es la demostración más limpia que conozco de la idea que atraviesa el bloque ' +
     'entero: <strong>una regla ridículamente simple puede producir una complejidad sin fondo</strong>. ' +
     'La regla que vas a usar es <em>eleva al cuadrado y suma</em>. No hay más. Y lo que sale de ahí ' +
@@ -30,6 +35,12 @@ Course.topic('gfx-fractales', function (p) {
     'líneas, y es lo que convierte un problema sobre el infinito en un bucle que termina.', null,
     'El radio de escape');
 
+  p.comprueba('Con $c = -1$ la sucesión es $0,\\ -1,\\ 0,\\ -1,\\ \\dots$ ¿Está $c = -1$ en el conjunto de Mandelbrot?', [
+    { t: 'Sí: la órbita alterna entre 0 y $-1$ para siempre y nunca escapa', ok: true, por: '$0^2 - 1 = -1$ y $(-1)^2 - 1 = 0$: un ciclo de periodo 2. El módulo nunca pasa de 1, así que no se dispara. Es uno de los pocos puntos en que se puede saber sin iterar hasta el infinito.' },
+    { t: 'No: $-1$ es negativo', ok: false, por: 'El signo no tiene nada que ver. Lo que decide es si el módulo se dispara, y aquí se queda en 1.' },
+    { t: 'No se puede saber: harían falta infinitas vueltas', ok: false, por: 'En general, «dentro» solo se comprueba hasta donde se itera. Pero cuando la órbita entra en un ciclo exacto, como aquí, se sabe con certeza.' }
+  ]);
+
   p.section('Multiplicar complejos en un shader');
 
   p.text('GLSL no conoce los números complejos, pero un <code>vec2</code> es exactamente un par de ' +
@@ -40,9 +51,23 @@ Course.topic('gfx-fractales', function (p) {
   p.text('Elevar al cuadrado es aún más corto: $z^2 = (x^2 - y^2) + 2xy\\,i$. Dos multiplicaciones y ' +
     'una resta, y con eso ya tienes todo el fractal.');
 
+  p.ejemplo({
+    title: 'Dos valores de $c$, iterados a mano',
+    enunciado: 'Iterar $z \\to z^2 + c$ desde $z_0 = 0$ para $c = 1$ y para $c = -0{,}5 + 0{,}5i$, y decidir qué píxel se pinta de color y cuál de negro.',
+    pasos: [
+      { t: '<strong>$c = 1$.</strong> $z_1 = 1$, $z_2 = 2$, $z_3 = 5$. En la tercera vuelta el módulo pasa de 2: escapa. El píxel de $c = 1$ recibe el color de «vuelta 3».', antes: 'Con $c$ real todo queda en la recta. ¿En qué vuelta pasa de 2?' },
+      { t: '<strong>$c = -0{,}5 + 0{,}5i$, primera vuelta.</strong> $z_1 = c$, de módulo $0{,}707$.' },
+      { t: '<strong>Segunda.</strong> $c^2 = (0{,}25 - 0{,}25) + 2(-0{,}5)(0{,}5)\\,i = -0{,}5i$. $z_2 = -0{,}5i + c = -0{,}5 + 0i$.', antes: 'Cuadrado: $(x^2 - y^2,\\ 2xy)$. Luego suma $c$.' },
+      { t: '<strong>Tercera y cuarta.</strong> $z_3 = 0{,}25 + c = -0{,}25 + 0{,}5i$. $z_4 = (0{,}0625 - 0{,}25,\\ -0{,}25) + c = -0{,}6875 + 0{,}25i$, de módulo $0{,}73$. Cuatro vueltas y sigue pequeño: de momento, dentro.', antes: 'Dos vueltas más. ¿Crece el módulo?' },
+      { t: '<strong>Lo que se sabe y lo que no.</strong> Que $c = 1$ escapa está demostrado: pasó de 2. Que $c = -0{,}5 + 0{,}5i$ no escapa solo se ha comprobado hasta la vuelta 4; con 90 iteraciones sigue sin escapar, y el píxel se pinta de negro. «Dentro» siempre es «todavía dentro».' }
+    ],
+    cierre: 'Dos vueltas para el cuadrado complejo, una suma, una comparación. Cada píxel de la imagen ha hecho exactamente esto, con su propio $c$, hasta noventa veces.'
+  });
+
   p.demo({
     title: 'Mandelbrot',
     intro: 'Cada píxel es un valor de c, y su color dice cuántas vueltas aguantó antes de dispararse. Sube las iteraciones y mira crecer el detalle del borde: nunca se acaba. Con el zoom alto hará falta subirlas mucho.',
+    predice: 'Con 90 iteraciones el borde se ve con detalle. Al bajar a 8, ¿la zona negra se hará más grande o más pequeña? Piensa en qué píxeles «todavía no han escapado».',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-fra-1', alto: 360,
@@ -118,6 +143,7 @@ Course.topic('gfx-fractales', function (p) {
   p.demo({
     title: 'Julia, con c en tus manos',
     intro: 'Mueve c por el plano y mira cómo se transforma la figura. Acércalo al borde del Mandelbrot (por ejemplo, a −0,74 + 0,15 i) y aparecen las formas más retorcidas; aléjalo y todo se deshace en polvo.',
+    predice: 'Pon $c = 0$: la regla queda $z \\to z^2$. ¿Qué figura saldrá? Piensa en qué módulos crecen y cuáles no al elevar al cuadrado.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-fra-2', alto: 360,
@@ -191,6 +217,7 @@ Course.topic('gfx-fractales', function (p) {
   p.demo({
     title: 'Las tres cuencas de Newton',
     intro: 'Cada píxel es un punto de partida; su color, la raíz a la que llega; y lo oscuro, cuántos pasos tarda. Acércate a una frontera: nunca hay solo dos colores. La relajación multiplica el paso de Newton por un factor: con valores distintos de 1 las cuencas se retuercen.',
+    predice: 'Antes de acercarte: ¿habrá alguna frontera en la que solo se toquen dos colores? Busca una y luego mira si el tercero aparece al ampliar.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-fractales-newton', alto: 320,
@@ -247,6 +274,13 @@ Course.topic('gfx-fractales', function (p) {
     'idea de fondo —iterar una función y estudiar qué se escapa— es de Gaston Julia y Pierre Fatou, ' +
     'que la desarrollaron hacia 1918 <em>sin haber visto jamás un dibujo</em>: pasaron sesenta años ' +
     'entre la teoría y la primera imagen.');
+
+  p.trampas([
+    { e: 'Iterar sin criterio de escape', por: 'Sin el «si $|z| > 2$, paro», los números se desbordan y el bucle gasta todas las vueltas en píxeles que ya estaban decididos. El radio 2 es lo que hace terminar el problema.' },
+    { e: 'Tomar «no ha escapado» por «está dentro»', por: 'Solo se ha comprobado hasta la vuelta en que se paró. Subir las iteraciones afina el borde precisamente porque algunos de esos píxeles escapan más tarde.' },
+    { e: 'Hacer zoom sin límite', por: 'Los <code>float</code> de la tarjeta tienen unos siete dígitos: pasado cierto aumento, píxeles vecinos reciben el mismo $c$ y la imagen se vuelve bloques. Es redondeo, no la figura.' },
+    { e: 'Olvidar el 2 del producto complejo', por: '$(x + yi)^2 = (x^2 - y^2) + 2xy\\,i$. Sin el 2, la figura que sale no es el Mandelbrot, aunque se le parezca de lejos.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
@@ -320,30 +354,14 @@ Course.topic('gfx-fractales', function (p) {
     ask: function (d) {
       return 'Toma $c = ' + U.fmt(d.a, 2) + (d.b < 0 ? ' - ' + U.fmt(-d.b, 2) : ' + ' + U.fmt(d.b, 2)) +
         'i$ e itera desde $z_0 = 0$ hasta un máximo de 40 vueltas.<br><br>¿<strong>Escapa</strong> ' +
-        '(el módulo pasa de 2) o se queda dentro? Escribe <em>escapa</em> o <em>dentro</em>. Y si ' +
-        'escapa, ¿en qué vuelta lo hace? (si no escapa, pon 40)';
+        '(el módulo pasa de 2) o se queda dentro? Y si escapa, ¿en qué vuelta lo hace? (si no escapa, pon 40)';
     },
     fields: [
-      { name: 'q', label: 'escapa / dentro', w: 'small' },
+      { name: 'q', label: 'La sucesión', opts: [{ t: 'escapa: el módulo pasa de 2', v: 'escapa' }, { t: 'se queda dentro', v: 'dentro' }] },
       { name: 'n', label: 'vuelta', w: 'tiny' }
     ],
     sol: function (d) { return { q: d.esc ? 'escapa' : 'dentro', n: d.n }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        escapa: /escap|fuera|se dispara|diverg|explota|se va/,
-        dentro: /dentro|acotad|converg|se queda|atrapad|preso/
-      });
-      if (q === null) return { ok: false, msg: 'Contesta <em>escapa</em> o <em>dentro</em>.' };
-      var n = parseFloat(String(v.raw.n).replace(',', '.'));
-      if (q !== (d.esc ? 'escapa' : 'dentro')) {
-        return { ok: false, msg: 'La otra. Itera un par de vueltas más y mira el módulo.' };
-      }
-      if (!(Math.abs(n - d.n) < 0.5)) {
-        return { ok: false, msg: 'La respuesta de escape o no escape es correcta, pero la vuelta no. ' +
-          'Cuenta desde 1: la primera aplicación de la regla es la vuelta 1.' };
-      }
-      return { ok: true };
-    },
+    errores: [{ si: function (v, d) { return d.esc && v.n === d.n - 1; }, msg: 'Cuenta desde 1: la primera aplicación de la regla es la vuelta 1.' }],
     hint: function () {
       return 'Basta con ir calculando y mirar el módulo al cuadrado, que es $x^2 + y^2$: si pasa de ' +
         '4, ya ha escapado. Algunos valores se quedan quietos para siempre (mira qué pasa con $c = 0$ ' +

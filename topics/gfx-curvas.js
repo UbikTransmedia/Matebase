@@ -1,6 +1,11 @@
 /* Tema: Curvas: segmentos, Bezier y suavizado */
 Course.topic('gfx-curvas', function (p) {
 
+  p.puente('Círculos y rectángulos tienen una distancia inmediata; letras e iconos, no. Este tema ' +
+    'cierra ese hueco con la [[ge-vectores|proyección]] de un vector sobre otro para los segmentos, dos ' +
+    'rondas de interpolación para las curvas de Bézier, y el polinomio de smoothstep visto ahora como ' +
+    'movimiento y no como borde.');
+
   p.text('Hasta ahora el shader sabía dibujar lo que tiene una distancia fácil: círculos, rectángulos, ' +
     'anillos. Pero casi todo lo que se ve en una pantalla —letras, iconos, trazos— está hecho de ' +
     '<strong>curvas</strong>. Este tema añade tres piezas: la distancia a un segmento, las curvas de Bézier ' +
@@ -25,9 +30,23 @@ Course.topic('gfx-curvas', function (p) {
     '$\\operatorname{clamp}(x, 0, 1)$ deja $x$ tal cual si está entre 0 y 1, y si no lo recorta al extremo más cercano.<br><br>' +
     'En GLSL son tres líneas: <code>vec2 pa = p - a, ba = b - a; float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0); return length(pa - ba * h);</code>');
 
+  p.ejemplo({
+    title: 'La distancia a un segmento, con y sin recorte',
+    enunciado: 'Segmento de $\\vec a = (0, 0)$ a $\\vec b = (4, 0)$. Calcular la distancia desde $\\vec p = (2, 3)$ y desde $\\vec p = (5, 2)$.',
+    pasos: [
+      { t: '<strong>Desde $(2, 3)$.</strong> $\\vec p - \\vec a = (2, 3)$, $\\vec b - \\vec a = (4, 0)$. $h = \\dfrac{2\\cdot 4 + 3\\cdot 0}{16} = 0{,}5$: dentro de $[0, 1]$, no hay que recortar.', antes: 'Producto escalar de los dos vectores partido por el cuadrado de la longitud del segmento.' },
+      { t: '<strong>El punto más cercano.</strong> $\\vec a + 0{,}5\\,(4, 0) = (2, 0)$. Distancia: $|(2, 3) - (2, 0)| = 3$. Es la perpendicular, como se espera.' },
+      { t: '<strong>Desde $(5, 2)$.</strong> $h = \\dfrac{5\\cdot 4 + 2\\cdot 0}{16} = 1{,}25$. Se sale: recortado, $h = 1$.', antes: 'Calcula $h$. ¿Está entre 0 y 1?' },
+      { t: '<strong>El punto más cercano es un extremo.</strong> $\\vec a + 1\\cdot(4, 0) = (4, 0) = \\vec b$. Distancia: $|(5, 2) - (4, 0)| = \\sqrt{1 + 4} \\approx 2{,}236$.' },
+      { t: '<strong>Sin recortar habría salido mal.</strong> Con $h = 1{,}25$ el punto sería $(5, 0)$ y la distancia 2: es la distancia a la <em>recta</em>, que pasa por donde el segmento ya no existe.', antes: '¿Qué distancia saldría con $h = 1{,}25$? ¿A qué corresponde?' }
+    ],
+    cierre: 'El clamp es lo que convierte la distancia a una recta en la distancia a un segmento. Por eso las barras salen con las puntas redondeadas: cerca de los extremos, la distancia se mide al punto.'
+  });
+
   p.demo({
     title: 'El punto más cercano del segmento',
     intro: 'Mueve los extremos A y B y el punto P. La sombra de P sobre la recta marca la fracción h del segmento. Cuando h se sale de 0 a 1, el punto más cercano ya no es la sombra, sino un extremo: por eso hay que recortar.',
+    predice: 'Lleva P más allá de B, por la derecha: ¿la distancia se medirá a la recta o al punto B? ¿Qué valdrá $h$ recortado?',
     build: function (host) {
       var out = W.readout(host, '');
       W.board(host, {
@@ -58,6 +77,7 @@ Course.topic('gfx-curvas', function (p) {
   p.demo({
     title: 'Una estrella de segmentos',
     intro: 'Cada punta de la estrella son dos segmentos, y la figura entera es el mínimo de todas sus distancias. El halo sale gratis: es un brillo que decrece con la distancia. Cambia el número de puntas, cuánto se hunden los vértices interiores y el grosor.',
+    predice: 'Con hundimiento 1, ¿qué figura saldrá con 5 puntas? ¿Y con hundimiento 0,2?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-curvas-1', alto: 300,
@@ -120,9 +140,16 @@ Course.topic('gfx-curvas', function (p) {
     'curva es una media ponderada de los puntos de control, y por eso la curva queda dentro del polígono que forman.<br><br>' +
     'En GLSL, la cuadrática es <code>mix(mix(P0, P1, t), mix(P1, P2, t), t)</code>: dos rondas de interpolación.');
 
+  p.comprueba('Bézier cuadrática con $P_0 = (0, 0)$, $P_1 = (1, 2)$ y $P_2 = (2, 0)$. ¿Pasa la curva por $P_1$?', [
+    { t: 'No: en $t = 0{,}5$ pasa por $(1, 1)$, a mitad de altura', ok: true, por: '$\\frac{1}{4}P_0 + \\frac{1}{2}P_1 + \\frac{1}{4}P_2 = (1, 1)$. El punto de control tira de la curva hacia él, pero solo llega a la mitad. Es la diferencia entre un punto de control y un punto de paso.' },
+    { t: 'Sí, en $t = 0{,}5$', ok: false, por: 'En $t = 0{,}5$ el coeficiente de $P_1$ es $\\frac{1}{2}$, y los extremos ponen el otro medio. Sale $(1, 1)$, no $(1, 2)$.' },
+    { t: 'Sí, pero para otro valor de $t$', ok: false, por: 'La altura máxima de la curva es 1, en $t = 0{,}5$. Ningún $t$ llega a 2: la curva queda dentro del triángulo de control, y lejos de su vértice.' }
+  ]);
+
   p.demo({
     title: 'La construcción de De Casteljau',
     intro: 'Arrastra los puntos de control. Para cada t se interpola en cada lado del polígono de control; luego entre los puntos obtenidos; y así hasta que queda uno solo, que es el punto de la curva. Mueve t y mira cómo ese punto recorre la curva.',
+    predice: 'Con $t = 0{,}5$ en la cuadrática, ¿el punto rojo caerá sobre $P_1$, o a medio camino entre $P_1$ y el segmento $P_0P_2$?',
     build: function (host) {
       var t = 0.4, grado = 2;
       var out = W.readout(host, '');
@@ -201,6 +228,7 @@ Course.topic('gfx-curvas', function (p) {
   p.demo({
     title: 'Cuatro formas de llegar',
     intro: 'Las cuatro bolas hacen el mismo recorrido en el mismo tiempo, de ida y vuelta. De arriba abajo: lineal, entrada suave, salida suave y smoothstep. Fíjate en cómo cambia la sensación de peso aunque todas tarden lo mismo.',
+    predice: 'Las cuatro tardan lo mismo. A mitad de camino, ¿cuál va más deprisa: la lineal o la de smoothstep? Piensa en $f\'(1/2) = 3/2$.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-curvas-2', alto: 280,
@@ -239,6 +267,13 @@ Course.topic('gfx-curvas', function (p) {
       });
     }
   });
+
+  p.trampas([
+    { e: 'No recortar $h$', por: 'Da la distancia a la recta entera, no al segmento. El punto $(5, 2)$ quedaría a 2 del segmento de $(0, 0)$ a $(4, 0)$, cuando está a 2,24 de su extremo.' },
+    { e: 'Esperar que la curva pase por los puntos de control', por: 'Solo pasa por el primero y el último; los del medio tiran de ella. Con $P_1 = (1, 2)$ la curva llega como mucho a altura 1.' },
+    { e: 'Aplicar el polinomio sin llevar $x$ a $[0, 1]$', por: '<code>smoothstep(0.2, 0.6, 0.4)</code> vale 0,5, no $3\\cdot 0{,}4^2 - 2\\cdot 0{,}4^3 = 0{,}352$. Primero $t = (x - e_0)/(e_1 - e_0)$.' },
+    { e: 'Creer que smoothstep quita todos los saltos', por: 'Suaviza la subida de 0 a 1, pero si el reloj es <code>fract(iTime)</code>, al llegar a 1 vuelve a 0 de golpe. Para ir y volver hace falta un reloj triangular.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

@@ -1,6 +1,11 @@
 /* Tema: El shader que recuerda */
 Course.topic('gfx-buffers', function (p) {
 
+  p.puente('Este tema rompe la regla de [[gfx-tiempo|tiempo]]: con memoria, el shader se convierte en ' +
+    'un bucle de [[cib-realimentacion|realimentación]] y calcula cada fotograma a partir del anterior. ' +
+    'Vuelven la Vida de [[cib-autoorganizacion|autoorganización]], la [[av-edp|ecuación del calor]] y ' +
+    'la estabilidad del [[av-edo-numerico|método de Euler]], ahora en paralelo en cada píxel.');
+
   p.text('En [[gfx-tiempo]] quedó escrita una regla: un shader <strong>no recuerda el fotograma anterior</strong>. ' +
     'Todo movimiento es una fórmula del tiempo. Este tema rompe esa regla. Con un truco sencillo —pintar en una ' +
     'imagen invisible y leerla en el fotograma siguiente—, el shader puede calcular cada fotograma <em>a partir ' +
@@ -29,9 +34,23 @@ Course.topic('gfx-buffers', function (p) {
     '<strong>«Volver al original» vuelve a sembrar.</strong> Reinicia el contador de fotogramas, y la simulación empieza de nuevo.'
   ]);
 
+  p.ejemplo({
+    title: 'Cuánto dura una estela',
+    enunciado: 'Cada fotograma multiplica lo que había por la memoria $m$ y dibuja la bola encima. ¿Cuántos fotogramas tarda un punto de la estela en bajar del 10 % de su brillo con $m = 0{,}96$? ¿Y con $m = 0{,}8$? A 60 fotogramas por segundo, ¿cuánto es eso en tiempo?',
+    pasos: [
+      { t: '<strong>La ley.</strong> Tras $n$ fotogramas queda $m^n$ del brillo: una progresión geométrica de razón $m$, un fotograma por término.' },
+      { t: '<strong>Con $m = 0{,}96$.</strong> $0{,}96^n = 0{,}1 \\Rightarrow n = \\frac{\\ln 0{,}1}{\\ln 0{,}96} = \\frac{-2{,}303}{-0{,}0408} \\approx 56$ fotogramas. Casi un segundo.', antes: 'Despeja $n$ con logaritmos.' },
+      { t: '<strong>Con $m = 0{,}8$.</strong> $n = \\frac{-2{,}303}{-0{,}223} \\approx 10$ fotogramas: una sexta parte de segundo. La estela apenas se ve.', antes: 'Repite con 0,8. ¿Cuántas veces más corta?' },
+      { t: '<strong>Con $m = 1$.</strong> $\\ln 1 = 0$: no hay solución. Nunca baja: la estela se queda para siempre, y si en vez de <code>max</code> se suma, la luz se acumula sin límite.' },
+      { t: '<strong>La misma cuenta, al revés.</strong> Para que la estela dure 2 segundos, 120 fotogramas: $m = 0{,}1^{1/120} \\approx 0{,}981$. Así se elige la memoria a partir de lo que se quiere ver.', antes: 'Si quieres que dure 120 fotogramas, ¿qué $m$ hace falta?' }
+    ],
+    cierre: 'La memoria es la razón de una progresión geométrica, y su logaritmo decide la duración. Es la misma cuenta de la desintegración radiactiva, con fotogramas en vez de años.'
+  });
+
   p.demo({
     title: 'Estelas',
     intro: 'En cada fotograma se lee lo que había, se oscurece un poco y se dibuja la bola encima. Lo que queda detrás es la memoria desvaneciéndose: una estela. Con memoria 1 la estela no se borraría nunca; con 0,8 dura unos pocos fotogramas.',
+    predice: 'Con memoria 0,96, ¿la estela durará medio segundo, un segundo o cinco? Según el ejemplo, ¿en cuántos fotogramas baja del 10 %?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-buffers-1', alto: 300, buffer: true, escala: 0.5,
@@ -76,9 +95,16 @@ Course.topic('gfx-buffers', function (p) {
     'la diferencia con 3 es menor que medio solo si $n$ vale 3.<br><br>Con 3 vecinas se está viva al paso siguiente, ' +
     'estuviera la celda viva o no; con 2, solo si ya lo estaba. El máximo hace de «o».');
 
+  p.comprueba('Se borra la línea de siembra del shader de la Vida. ¿Qué se ve?', [
+    { t: 'Nada, nunca: la memoria empieza a cero, ninguna celda tiene 3 vecinas vivas y nada nace', ok: true, por: 'Sin estado inicial no hay de qué partir: la regla de Conway aplicada a un tablero vacío devuelve un tablero vacío, fotograma tras fotograma. Por eso <code>iFrame</code> y la siembra son imprescindibles.' },
+    { t: 'Ruido, porque la memoria empieza con basura', ok: false, por: 'La memoria empieza a cero, no con basura. Y aunque fuera basura, sería un estado inicial: precisamente lo que la siembra pone a propósito.' },
+    { t: 'Lo mismo, porque la densidad ya está en el mando', ok: false, por: 'El mando solo se lee en la línea de siembra. Sin ella, la densidad no entra en ningún cálculo.' }
+  ]);
+
   p.demo({
     title: 'La Vida en la tarjeta gráfica',
     intro: 'Cada píxel del estado es una celda. En verde vivo, las celdas vivas; en azul oscuro, el rastro de por dónde ha habido vida. La densidad solo cuenta al sembrar: cámbiala y pulsa «Volver al original» para otra partida.',
+    predice: 'Con densidad 0,3, ¿al cabo de unos segundos quedará la pantalla llena, vacía, o con restos quietos y osciladores? ¿Y con densidad 0,8?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-buffers-vida', alto: 320, buffer: true, escala: 0.25,
@@ -134,6 +160,7 @@ Course.topic('gfx-buffers', function (p) {
   p.demo({
     title: 'Calor que se reparte',
     intro: 'Unas manchas de calor iniciales y una fuente que se pasea. El calor se difunde y las manchas se suavizan. Sube α por encima de 0,25 y mira qué pasa: aparece un tablero de puntos que se descontrola. No es un fallo del shader; es la inestabilidad del método.',
+    predice: 'Sube α a 0,3: ¿qué patrón aparecerá y por qué justo ese? Calcula $1 - 8\\cdot 0{,}3$.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-buffers-calor', alto: 300, buffer: true, escala: 0.5, pasos: 4,
@@ -176,6 +203,7 @@ Course.topic('gfx-buffers', function (p) {
   p.demo({
     title: 'Manchas de Turing a pantalla completa',
     intro: 'Cada píxel guarda dos concentraciones en sus canales rojo y verde. Cada fotograma da ocho pasos de reacción y difusión. Prueba F = 0,0367 y k = 0,0649 para ver manchas que se dividen, y vuelve al original para sembrar de nuevo.',
+    predice: 'Con la receta por defecto salen laberintos. Al pasar a F = 0,0367 y k = 0,0649, ¿las manchas se unirán en corales o se dividirán como células?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-buffers-turing', alto: 320, buffer: true, escala: 0.5, pasos: 8,
@@ -221,6 +249,13 @@ Course.topic('gfx-buffers', function (p) {
     'Así se simularon fluidos, humo y reacciones químicas mucho más deprisa que en el procesador. De esa costumbre ' +
     'nació la computación de propósito general en tarjetas gráficas, que hoy sostiene buena parte de la ' +
     'simulación científica y el entrenamiento de las redes neuronales.');
+
+  p.trampas([
+    { e: 'No sembrar', por: 'La memoria empieza a cero. Sin un estado inicial escrito con <code>iFrame</code>, la Vida no nace y el calor no se reparte: no hay nada que evolucionar.' },
+    { e: 'Leer al vecino sumando 1 a <code>uv</code>', por: '<code>uv</code> va de 0 a 1: sumar 1 se sale de la textura. El vecino está a un píxel, <code>(fragCoord + vec2(1.0, 0.0)) / iResolution.xy</code>.' },
+    { e: 'Subir $\\alpha$ para que el calor se reparta antes', por: 'Con $\\alpha > \\frac{1}{4}$ el tablero de ajedrez se multiplica por $|1 - 8\\alpha| > 1$ y crece sin control. Es la inestabilidad de Euler, en dos dimensiones.' },
+    { e: 'Usar el estado directamente como color', por: 'El estado son concentraciones o temperaturas, con valores que pueden ser negativos o mayores que 1. La función <code>vista</code> los traduce a color; sin ella se ve recortado y engaña.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

@@ -1,6 +1,11 @@
 /* Tema: Decidir sin bifurcar */
 Course.topic('gfx-decidir', function (p) {
 
+  p.puente('Con la distancia en la mano, este tema explica cómo decidir sin <code>if</code>, con la ' +
+    'interpolación lineal, y cómo combinar figuras con <code>min</code> y <code>max</code>. Detrás están ' +
+    'las [[lg-conjuntos|operaciones de conjuntos]], unión, intersección y diferencia, escritas con dos ' +
+    'funciones.');
+
   p.text('En un programa normal, decidir es fácil: <code>if</code>, y ya está. En un shader ese ' +
     '<code>if</code> es sospechoso, y conviene entender por qué antes de aprender a evitarlo.');
 
@@ -37,6 +42,7 @@ Course.topic('gfx-decidir', function (p) {
   p.demo({
     title: 'Componer una escena por capas',
     intro: 'Tres figuras apiladas, cada una con un mix. El orden importa: lo último que se mezcla queda encima. Es el modelo mental del bloque entero, y es el mismo que usa cualquier programa de dibujo con capas.',
+    predice: 'Si intercambias las líneas del círculo amarillo y el rosa, ¿cuál quedará encima? Y con separación 0, ¿de qué color se verá el único círculo?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-dec-1', alto: 300,
@@ -74,7 +80,7 @@ Course.topic('gfx-decidir', function (p) {
   p.section('min y max: unir y cortar figuras');
 
   p.text('Aquí ocurre algo elegante. Si tienes las distancias de dos figuras, las operaciones de ' +
-    'conjuntos del bloque 0 salen solas:');
+    '[[lg-conjuntos|conjuntos]] salen solas:');
 
   p.table(['Operación', 'Con distancias', 'Qué hace'], [
     ['Unión $A \\cup B$', '<code>min(dA, dB)</code>', 'la figura resultante son las dos juntas'],
@@ -86,11 +92,31 @@ Course.topic('gfx-decidir', function (p) {
   p.text('Por qué funciona: estar dentro de la unión significa estar dentro de alguna de las dos, y ' +
     '«dentro» es «distancia negativa», así que basta quedarse con <strong>la más pequeña</strong>. Y ' +
     'estar en la intersección es estar dentro de las dos, o sea, que hasta la más grande sea ' +
-    'negativa. Las tablas de verdad del bloque 0, escritas con dos funciones.');
+    'negativa. Las [[lg-proposiciones|tablas de verdad]] de lógica, escritas con dos funciones.');
+
+  p.comprueba('Dos círculos $A$ y $B$ se solapan. En un píxel de la zona común, $d_A = -0{,}1$ y $d_B = -0{,}04$. ¿Está ese píxel dentro de la diferencia $A \\setminus B$?', [
+    { t: 'No: $\\max(d_A, -d_B) = 0{,}04 > 0$', ok: true, por: 'Está en $B$, y la diferencia le quita a $A$ todo lo que es de $B$. El signo cambiado de $d_B$ lo convierte en positivo, y el máximo lo expulsa.' },
+    { t: 'Sí: $\\max(d_A, d_B) = -0{,}04 < 0$', ok: false, por: 'Eso es la intersección, sin cambiar el signo. Para la diferencia se niega la segunda distancia.' },
+    { t: 'Sí: $\\min(d_A, d_B) = -0{,}1 < 0$', ok: false, por: 'Eso es la unión: dentro de alguna de las dos. La diferencia es más exigente: dentro de $A$ <em>y fuera</em> de $B$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un anillo con min y max',
+    enunciado: 'Un anillo es un círculo de radio 0,3 al que se le quita otro de radio 0,2. Escribir su distancia y calcularla en $p = (0{,}25,\\ 0)$, en $(0{,}1,\\ 0)$ y en $(0{,}35,\\ 0)$.',
+    pasos: [
+      { t: '<strong>Las dos distancias.</strong> $d_A = |p| - 0{,}3$ (el grande) y $d_B = |p| - 0{,}2$ (el hueco). El anillo es $A \\setminus B$: $d = \\max(d_A,\\ -d_B)$.', antes: '¿Qué operación de conjuntos es «A sin B»? ¿Con qué función se escribe?' },
+      { t: '<strong>En $(0{,}25,\\ 0)$.</strong> $d_A = -0{,}05$, $d_B = 0{,}05$. $\\max(-0{,}05,\\ -0{,}05) = -0{,}05$: dentro del anillo.' },
+      { t: '<strong>En $(0{,}1,\\ 0)$.</strong> $d_A = -0{,}2$, $d_B = -0{,}1$. $\\max(-0{,}2,\\ 0{,}1) = 0{,}1$: fuera. Está dentro del círculo grande, pero también dentro del hueco, y el signo cambiado de $d_B$ lo expulsa.', antes: 'Este píxel está dentro de los dos círculos. ¿Qué signo tiene $-d_B$?' },
+      { t: '<strong>En $(0{,}35,\\ 0)$.</strong> $d_A = 0{,}05$, $d_B = 0{,}15$. $\\max(0{,}05,\\ -0{,}15) = 0{,}05$: fuera, por el lado exterior.' },
+      { t: '<strong>Al color.</strong> $c = \\operatorname{mix}(\\text{fondo},\\ \\text{tinta},\\ 1 - \\operatorname{smoothstep}(0,\\ 0{,}01,\\ d))$. En el primer píxel el peso es 1, tinta; en los otros dos, 0, fondo. Sin un solo <code>if</code>.' }
+    ],
+    cierre: 'El mismo píxel puede estar dentro de $A$ y fuera de $A \\setminus B$. Con distancias, esa lógica cabe en un <code>max</code> y un signo, y el borde suave sale gratis.'
+  });
 
   p.demo({
     title: 'Unir, cortar y agujerear',
     intro: 'Dos figuras y las tres operaciones. Mueve el deslizador para acercarlas y fíjate en cómo se funden en la unión y desaparecen en la intersección.',
+    predice: 'Con separación 0,4 y la intersección, ¿qué se verá? Y con separación 0 y la intersección, ¿qué forma queda: círculo, cuadrado o algo intermedio?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-dec-2', alto: 300,
@@ -132,7 +158,7 @@ Course.topic('gfx-decidir', function (p) {
     ['<code>sign(x)</code>', '$-1$, $0$ o $1$', 'quedarse solo con el signo'],
     ['<code>fract(x)</code>', 'parte decimal', 'repetición, en el tema siguiente'],
     ['<code>floor(x)</code>', 'parte entera por abajo', 'contar en qué celda estás'],
-    ['<code>dot(a, b)</code>', 'producto escalar', 'proyecciones y ángulos, del bloque 3']
+    ['<code>dot(a, b)</code>', '[[ge-vectores|producto escalar]]', 'proyecciones y ángulos']
   ]);
 
   p.note('El <code>abs</code> merece una mirada aparte, porque es el truco de simetría más barato ' +
@@ -146,6 +172,13 @@ Course.topic('gfx-decidir', function (p) {
     'difuminada y mezclada por debajo; el cristal esmerilado de un panel es una mezcla entre lo que ' +
     'hay detrás y un color. Cuando una aplicación se ve «bien hecha», casi siempre es que alguien ha ' +
     'compuesto con cuidado media docena de <code>mix</code>.');
+
+  p.trampas([
+    { e: 'Escribir <code>if (length(p) < 0.3)</code> para pintar un círculo', por: 'Funciona, pero bifurca según el píxel, cuesta a la tarjeta y el borde sale duro. Con <code>mix</code> y <code>smoothstep</code> se decide igual y el borde queda limpio.' },
+    { e: 'Usar <code>max</code> para unir', por: 'Dentro es negativo. Estar en alguna de las dos figuras es que <em>alguna</em> distancia sea negativa: el mínimo. El máximo exige que lo sean las dos, y eso es la intersección.' },
+    { e: 'Olvidar el signo en la diferencia', por: '<code>max(dA, dB)</code> deja la zona común; para quitar $B$ hay que negarla: <code>max(dA, -dB)</code>. El píxel de $d_B = -0{,}04$ pasa a $+0{,}04$ y sale.' },
+    { e: 'Dejar que el peso del mix se salga de $[0, 1]$', por: 'Con $t = 1{,}5$ el color se extrapola y sale fuera de rango. <code>step</code>, <code>smoothstep</code> y <code>clamp</code> devuelven pesos válidos; una resta a pelo, no.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.hist('Construir figuras complicadas uniendo, cortando y restando formas sencillas tiene nombre: ' +
@@ -202,16 +235,10 @@ Course.topic('gfx-decidir', function (p) {
     },
     fields: [
       { name: 'd', label: 'el valor', w: 'tiny' },
-      { name: 'q', label: 'dentro / fuera', w: 'tiny', ph: 'dentro / fuera' }
+      { name: 'q', label: 'El píxel queda', opts: [{ t: 'dentro', v: 'dentro' }, { t: 'fuera', v: 'fuera' }] }
     ],
     sol: function (d) { return { d: U.round(d.d, 6), q: d.d < 0 ? 'dentro' : 'fuera' }; },
-    check: function (v, d) {
-      var okD = Ex.same(v.d, d.d, 1e-3);
-      var q = U.eligeOpcion(v.raw.q, { dentro: /dentro|interior|negativ/, fuera: /fuera|exterior|positiv/ });
-      if (!q) return { ok: false, msg: 'En la segunda casilla, <strong>dentro</strong> o <strong>fuera</strong>.', fields: { d: okD } };
-      var okQ = (q === 'dentro') === (d.d < 0);
-      return { ok: okD && okQ, fields: { d: okD, q: okQ } };
-    },
+    tol: 1e-3,
     hint: function (d) {
       return 'Unión es <code>min</code>, intersección es <code>max</code>, y la diferencia cambia el ' +
         'signo de la segunda antes del <code>max</code>. Negativo significa dentro.';
@@ -315,7 +342,7 @@ Course.topic('gfx-decidir', function (p) {
     'Un <code>if</code> que depende de la posición del píxel divide el trabajo de la tarjeta y tira la mitad. Se decide con aritmética.',
     '<code>mix(a, b, t)</code> es la interpolación lineal, y con ella se elige color sin bifurcar —y con bordes suaves de regalo—.',
     'Componer una escena es apilar <code>mix</code>: cada uno es una capa, y el último queda encima.',
-    'Con distancias, <code>min</code> es la <strong>unión</strong>, <code>max</code> la <strong>intersección</strong> y <code>max(a, -b)</code> la <strong>diferencia</strong>: las operaciones de conjuntos del bloque 0.',
+    'Con distancias, <code>min</code> es la <strong>unión</strong>, <code>max</code> la <strong>intersección</strong> y <code>max(a, -b)</code> la <strong>diferencia</strong>: las operaciones de conjuntos de lógica.',
     '<code>abs</code> es un espejo: <code>p.x = abs(p.x)</code> duplica simétricamente lo que dibujes.'
   ]);
 });

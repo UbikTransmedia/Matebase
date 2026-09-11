@@ -1,6 +1,11 @@
 /* Tema: Raymarching: 3D con una fórmula */
 Course.topic('gfx-raymarching', function (p) {
 
+  p.puente('El trazado resolvía la ecuación del choque; este tema no la resuelve: avanza. La ' +
+    '[[gfx-distancia|distancia con signo]] del plano pasa a tres dimensiones sin cambiar una letra, el ' +
+    'avance seguro es un método iterativo como los de [[av-numerico|cálculo numérico]], y la normal es ' +
+    'el [[av-vectorial|gradiente]] del campo.');
+
   p.text('Un ordenador dibuja objetos en tres dimensiones partiéndolos en triángulos: miles, ' +
     'millones de triangulitos guardados en memoria, cada uno con sus tres vértices. Es lo que hace ' +
     'un videojuego. Aquí vamos a dibujar en tres dimensiones <strong>sin un solo triángulo y sin ' +
@@ -60,14 +65,34 @@ Course.topic('gfx-raymarching', function (p) {
     'Si no, haces $t = t + d$ y vuelves a preguntar.'
   ], true);
 
+  p.comprueba('En el punto actual, la escena dice $d = 0{,}8$. ¿Cuánto puede avanzar el rayo sin riesgo de atravesar nada?', [
+    { t: 'Exactamente $0{,}8$, vaya en la dirección que vaya', ok: true, por: 'La distancia es al objeto más cercano en <em>cualquier</em> dirección. Dentro de esa esfera de radio 0,8 no hay nada: el rayo puede recorrerla entera. Por eso se llama esfera trazada.' },
+    { t: 'Solo un poco, porque no se sabe hacia dónde está el objeto', ok: false, por: 'No hace falta saberlo. La garantía es «no hay nada a menos de 0,8», y eso vale para todas las direcciones a la vez.' },
+    { t: 'Hasta que $d$ llegue a cero, sin límite', ok: false, por: 'Más allá de 0,8 podría haber algo: la escena no ha prometido nada sobre lo que hay más lejos. Se avanza 0,8 y se vuelve a preguntar.' }
+  ]);
+
   p.text('Se llama <strong>esfera trazada</strong> (<em>sphere tracing</em>) porque en cada paso ' +
     'estás usando la mayor esfera vacía que cabe alrededor de ti. Y converge rápido: normalmente ' +
     'bastan veinte o treinta preguntas por píxel. Es, en el fondo, un método iterativo de los del ' +
     '[[av-numerico|cálculo numérico]]: te acercas a la solución sin resolver nunca la ecuación.');
 
+  p.ejemplo({
+    title: 'Un rayo que avanza a ciegas',
+    enunciado: 'Escena $\\min(|\\vec p - (0, 0, 5)| - 1,\\ p_y + 1)$: una esfera de radio 1 en $z = 5$ y un suelo en $y = -1$. Rayo desde el origen en la dirección $(0, 0, 1)$. Seguir el avance hasta chocar y calcular la normal en el choque.',
+    pasos: [
+      { t: '<strong>$t = 0$.</strong> Esfera: $5 - 1 = 4$. Suelo: $0 + 1 = 1$. La escena devuelve el menor, 1. Se avanza 1.', antes: 'Evalúa las dos distancias en el origen. ¿Cuál manda?' },
+      { t: '<strong>$t = 1, 2, 3$.</strong> El suelo sigue a 1 (el rayo va a altura 0) y la esfera a $3, 2, 1$. En cada paso la escena devuelve 1: el suelo limita el avance aunque el rayo nunca vaya a tocarlo.', antes: '¿Qué devuelve la escena en $t = 3$? ¿Quién está limitando?' },
+      { t: '<strong>$t = 4$.</strong> Esfera: $|(0, 0, 4) - (0, 0, 5)| - 1 = 0$. Choque en $\\vec P = (0, 0, 4)$, tras cuatro pasos. Sin el suelo habría llegado en un solo paso de 4.' },
+      { t: '<strong>La normal.</strong> Gradiente de $|\\vec p - \\vec c| - 1$ en $\\vec P$: $(\\vec P - \\vec c)/|\\vec P - \\vec c| = (0, 0, -1)$. Apunta hacia el ojo, como corresponde a la cara frontal de la esfera.', antes: 'La normal de una esfera es el vector del centro al punto, normalizado.' },
+      { t: '<strong>Lo que enseña.</strong> Cada paso es seguro, pero el paso lo fija el objeto más cercano, sea o no el que se va a tocar. Y el método nunca se pasa: llega a $\\vec P$ exactamente, sin cruzar la superficie.' }
+    ],
+    cierre: 'Cuatro preguntas a la escena, ninguna ecuación resuelta. Con una escena de cien objetos la cuenta sería la misma: preguntar, avanzar, preguntar.'
+  });
+
   p.demo({
     title: 'Los pasos, uno a uno',
     intro: 'Una esfera y un suelo. El mando de pasos limita cuántas preguntas puede hacer cada rayo: con pocos, los rayos que pasan rozando la esfera se quedan a medio camino y aparece una sombra fantasma. Los colores muestran cuántos pasos ha necesitado cada píxel.',
+    predice: 'Con pasos máximos 8, ¿qué zona quedará sin dibujar: el centro de la esfera, su contorno o el suelo lejano? Piensa en dónde los pasos son diminutos.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-ray-1', alto: 330,
@@ -137,6 +162,7 @@ Course.topic('gfx-raymarching', function (p) {
   p.demo({
     title: 'Una escena iluminada',
     intro: 'La misma esfera, ahora con luz, sombra proyectada y suelo de baldosas. Es lo mismo de antes más treinta líneas: todo lo que ves sale de la función mapa, que ocupa cinco renglones.',
+    predice: 'Sube la altura de la luz al máximo: ¿la sombra de la esfera se hará más corta o más larga? ¿Y si la bajas a 0,5?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-ray-2', alto: 360,
@@ -244,6 +270,13 @@ Course.topic('gfx-raymarching', function (p) {
     'convirtió en un lenguaje fue Íñigo Quílez, que publicó un catálogo abierto de funciones de ' +
     'distancia —esfera, caja, toro, cápsula, y las operaciones para combinarlas— que hoy usa todo el ' +
     'mundo. Buena parte de lo que se ve en Shadertoy es ese catálogo, recombinado.');
+
+  p.trampas([
+    { e: 'Devolver una distancia mayor que la real', por: 'El rayo avanza más de lo seguro y atraviesa la superficie: agujeros. Pasa al escalar el espacio sin dividir la distancia, o al deformar. Remedio: avanzar <code>t += 0.7 * h</code>.' },
+    { e: 'Lanzar la sombra desde el punto exacto', por: 'Ahí $h \\approx 0$ y el bucle cree que ha chocado nada más salir: sombra moteada por toda la superficie. Se despega el origen por la normal, $\\vec P + 0{,}01\\,\\vec n$.' },
+    { e: 'Poner pocos pasos para ir más deprisa', por: 'Los rayos rasantes avanzan a pasitos y se agotan sin chocar: aparece un halo fantasma alrededor de las siluetas. El mapa de coste lo enseña en rojo.' },
+    { e: 'Usar el gradiente sin normalizar', por: 'Las diferencias finitas dan un vector proporcional a $2\\varepsilon$, minúsculo. El producto escalar con la luz saldría casi cero y todo se vería negro.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

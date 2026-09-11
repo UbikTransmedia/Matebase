@@ -1,6 +1,10 @@
 /* Tema: La actuación */
 Course.topic('gfx-directo', function (p) {
 
+  p.puente('Último tema del curso, y no hay técnica nueva: se apilan las capas con el ' +
+    '[[gfx-decidir|mix]] de siempre, se suman cuando son luz, se atan varios parámetros a un solo mando ' +
+    'y se fabrica un pulso con <code>fract</code> y una potencia. Es el oficio de juntar lo que ya sabes.');
+
   p.text('Último tema del bloque y del curso. Aquí no hay técnica nueva: hay ' +
     '<strong>oficio</strong>. Cómo se junta todo lo anterior en una pieza que aguante mirándose diez ' +
     'minutos, cómo se toca en directo delante de gente, y adónde ir cuando esto se quede pequeño.');
@@ -18,6 +22,12 @@ Course.topic('gfx-directo', function (p) {
       'superpone dos capas. Encadenada, apila tantas como quieras: se empieza por el fondo y se van ' +
       'poniendo cosas encima.');
 
+  p.comprueba('Dos focos iluminan la misma pared. ¿Qué hace la luz del segundo con la del primero?', [
+    { t: 'Se suma: la pared queda más iluminada que con uno solo', ok: true, por: 'La luz se acumula. Por eso las capas que representan luz se componen sumando, y por eso una composición aditiva puede pasar de 1 y necesita comprimir el tono al final.' },
+    { t: 'La tapa: el foco más cercano gana', ok: false, por: 'Eso es lo que hace la materia: un objeto delante oculta al de detrás. La luz no oculta luz. Tapar es para materia; sumar, para luz.' },
+    { t: 'Se promedian: la pared queda a medio camino', ok: false, por: 'Promediar daría menos luz que el foco más fuerte solo, y eso no ocurre. Dos focos son más luz que uno.' }
+  ]);
+
   p.text('Hay una segunda forma de juntar capas que en visuales se usa muchísimo: ' +
     '<strong>sumar</strong> en vez de tapar. Sumar es lo que hace la luz de verdad —dos focos sobre ' +
     'la misma pared dan más luz, no uno de los dos— y da ese aspecto de brillo y de neón que no se ' +
@@ -26,6 +36,7 @@ Course.topic('gfx-directo', function (p) {
   p.demo({
     title: 'Tres capas y una mesa de luces',
     intro: 'Fondo, plano medio y frente, con un mando de peso para cada uno y un interruptor para pasar de tapar a sumar. Ponlos todos a cero y súbelos de uno en uno para ver qué aporta cada capa.',
+    predice: 'Con «sumar» activado y los tres pesos a 1, ¿la roseta ocultará la rejilla o la encenderá? Y al desactivarlo, ¿qué cambia donde se cruzan?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-dir-1', alto: 380,
@@ -145,9 +156,23 @@ Course.topic('gfx-directo', function (p) {
     'salto de color, un desplazamiento de la cámara. Con dos o tres cosas latiendo a la vez y una ' +
     'sola de ellas latiendo a la mitad de velocidad, ya hay algo que parece compuesto.');
 
+  p.ejemplo({
+    title: 'Un pulso, un macro y tres capas, con números',
+    enunciado: 'A 120 pulsos por minuto con $k = 6$, calcular la envolvente en $t = 1{,}05$ y en $t = 1{,}3$. Con el macro $m = 0{,}5$, calcular frecuencia, giro y saturación. Y componer un canal: fondo $0{,}2$, capa media $0{,}6$ con máscara $0{,}5$, frente $1$ con máscara $0{,}3$, tapando y sumando.',
+    pasos: [
+      { t: '<strong>El pulso.</strong> 120 por minuto son 2 por segundo. En $t = 1{,}05$: $2{,}1$ pulsos, parte decimal $0{,}1$, envolvente $0{,}9^6 = 0{,}53$: acaba de sonar el golpe. En $t = 1{,}3$: parte decimal $0{,}6$, envolvente $0{,}4^6 = 0{,}004$: apagado, esperando el siguiente.', antes: 'Multiplica $t$ por 2, quédate con la parte decimal y aplica $(1 - f)^6$.' },
+      { t: '<strong>El macro.</strong> Frecuencia $2 + 6\\cdot 0{,}5 = 5$. Giro $0{,}2 + 1{,}5\\cdot 0{,}25 = 0{,}575$. Saturación $1 - 0{,}3 = 0{,}7$. A medio recorrido, el giro no está a medio camino: el cuadrado lo retrasa.' },
+      { t: '<strong>Tapando.</strong> $\\operatorname{mix}(0{,}2,\\ 0{,}6,\\ 0{,}5) = 0{,}4$. Luego $\\operatorname{mix}(0{,}4,\\ 1,\\ 0{,}3) = 0{,}58$. Nunca se sale del rango de los valores que entran.', antes: 'Dos mix encadenados: el resultado del primero es lo que va debajo del segundo.' },
+      { t: '<strong>Sumando.</strong> $0{,}2 + 0{,}6\\cdot 0{,}5 + 1\\cdot 0{,}3 = 0{,}8$. Con una capa más se pasaría de 1: por eso las composiciones aditivas acaban en $c/(1 + c)$, que aquí daría $0{,}44$.', antes: 'Fondo más cada capa por su máscara.' },
+      { t: '<strong>Lo que enseña.</strong> Tapar conserva el rango; sumar lo desborda y hace falta comprimir. Un mando no lineal reparte el control donde hace falta. Y el pulso es una parte decimal y una potencia.' }
+    ],
+    cierre: 'Ninguna cuenta nueva: interpolaciones, sumas, una potencia y una parte decimal. La diferencia entre un ejercicio y una actuación está en cómo se combinan y en qué mando las mueve.'
+  });
+
   p.demo({
     title: 'El set',
     intro: 'Aquí está casi todo el bloque a la vez: túnel, ruido torcido, simetría, paleta de cosenos, luz y última pasada. El mando de intensidad es un macro: mueve seis parámetros de golpe. Súbelo despacio y déjalo correr.',
+    predice: 'Con 120 bpm, ¿cuántos golpes verás por segundo? Y al pasar la intensidad de 0,5 a 1, ¿la torsión será el doble o casi el triple? Piensa en $m^2$.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-dir-2', alto: 420,
@@ -303,6 +328,13 @@ Course.topic('gfx-directo', function (p) {
     'su cuenta. De ahí salió una cultura entera —competiciones, categorías por tamaño, cuarenta años ' +
     'de archivo público— que en 2020 Alemania declaró patrimonio cultural inmaterial, la primera vez ' +
     'que una cultura digital recibe esa consideración.');
+
+  p.trampas([
+    { e: 'Sumar capas sin comprimir el tono al final', por: 'Tres capas de luz pasan de 1 con facilidad, y lo que se pasa sale como un manchón blanco. La composición aditiva acaba siempre en $c/(1 + c)$.' },
+    { e: 'Tapar lo que es luz', por: 'Una roseta luminosa que <em>oculta</em> la rejilla parece un recorte de cartulina. Sumada, la enciende: es lo que hace la luz de verdad.' },
+    { e: 'Hacer todos los mandos lineales', por: 'Un mando lineal gasta la mitad del recorrido donde el efecto apenas se nota. Elevar al cuadrado, o usar un logaritmo, pone el control fino donde hace falta.' },
+    { e: 'Suponer dónde se va el tiempo', por: 'Casi nunca está donde uno cree. El mapa de coste, pintar de rojo los píxeles que dan más pasos, se escribe en tres líneas y no falla.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

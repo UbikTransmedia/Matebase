@@ -1,6 +1,11 @@
 /* Tema: Mosaicos: Truchet, hexagonos y teselados */
 Course.topic('gfx-mosaicos', function (p) {
 
+  p.puente('Repetir, sembrar al azar y plegar: este tema junta las tres ideas para cubrir el plano con ' +
+    'baldosas. Hacen falta [[gfx-repetir|fract y floor]], un hash por celda, los ' +
+    '[[ge-angulos|ángulos interiores]] de un polígono y un poco de [[pe-combinatoria|combinatoria]] ' +
+    'para contar mosaicos.');
+
   p.text('Cubrir el suelo con baldosas sin dejar huecos ni montar unas sobre otras es uno de los problemas ' +
     'geométricos más antiguos y más decorativos que existen. En un shader es además uno de los más ' +
     'agradecidos: con [[gfx-repetir|fract y floor]] se reparte el plano en celdas, con un ' +
@@ -28,9 +33,16 @@ Course.topic('gfx-mosaicos', function (p) {
     'Con $n$ celdas y dos posiciones por celda hay $2^n$ mosaicos distintos: una cuadrícula de 10 por 10 ya da más ' +
     'de $10^{30}$.');
 
+  p.comprueba('Cada celda elige su orientación al azar sin mirar a las vecinas. ¿Por qué los arcos de Truchet empalman siempre?', [
+    { t: 'Porque cada arco acaba en el punto medio de un lado, y ese punto es el mismo para las dos baldosas que lo comparten', ok: true, por: 'Los arcos son cuartos de circunferencia de radio medio lado, centrados en esquinas: llegan exactamente al centro de cada lado. Gire como gire la baldosa, sus cuatro puntos de salida son los mismos.' },
+    { t: 'Porque el hash da el mismo resultado en las dos celdas vecinas', ok: false, por: 'No lo da: cada celda tiene su propio hash y su propia moneda. El empalme no depende de la moneda, sino de dónde acaban los arcos.' },
+    { t: 'No siempre empalman: a veces se cortan', ok: false, por: 'Nunca se cortan. Es la propiedad que hace interesante la baldosa: cualquier combinación de orientaciones produce caminos continuos.' }
+  ]);
+
   p.demo({
     title: 'Truchet: arcos o diagonales',
     intro: 'Cada celda tira su moneda y coloca la baldosa girada o no. Con arcos salen caminos curvos que nunca se cortan; con diagonales, un laberinto. Cambia la semilla: es otro sorteo, otro mosaico.',
+    predice: 'Con celdas al mínimo, 3, ¿cuántas baldosas caben a lo alto? Y al cambiar la semilla, ¿cambiará el número de baldosas o solo su orientación?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-mosaicos-1', alto: 300,
@@ -92,6 +104,7 @@ Course.topic('gfx-mosaicos', function (p) {
   p.demo({
     title: 'Un panal que late',
     intro: 'Cada hexágono sabe cuál es su centro y cuánto le falta para el borde. Con el centro se sortea su color; con la distancia al borde se dibuja la junta. Sube el latido para que cada celda palpite con su propio desfase.',
+    predice: 'Con la junta a 0, ¿se seguirán distinguiendo los hexágonos? ¿Qué los separa entonces?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-mosaicos-2', alto: 300,
@@ -152,9 +165,23 @@ Course.topic('gfx-mosaicos', function (p) {
     'cuando $n - 2$ divide a 4: $n - 2 = 1, 2, 4$. <strong>Solo triángulos, cuadrados y hexágonos</strong> ' +
     'teselan el plano, con 6, 4 y 3 copias por vértice.');
 
+  p.ejemplo({
+    title: 'Pentágonos, hexágonos y octógonos alrededor de un vértice',
+    enunciado: 'Decidir si copias iguales de un pentágono, un hexágono o un octógono regular cubren el plano, y contar los mosaicos de Truchet de una cuadrícula de 3 × 3.',
+    pasos: [
+      { t: '<strong>Pentágono.</strong> $\\alpha_5 = \\frac{3\\cdot 180°}{5} = 108°$. $360 / 108 = 3{,}33$: tres pentágonos dejan un hueco de $36°$ y el cuarto se monta. No tesela.', antes: 'Ángulo interior de un polígono de 5 lados. ¿Cabe un número entero de veces en 360°?' },
+      { t: '<strong>Hexágono.</strong> $\\alpha_6 = \\frac{4\\cdot 180°}{6} = 120°$. $360 / 120 = 3$: exacto. Tesela, tres por vértice: el panal.' },
+      { t: '<strong>Octógono.</strong> $\\alpha_8 = \\frac{6\\cdot 180°}{8} = 135°$. $360 / 135 = 2{,}67$: dos octógonos dejan $90°$, justo un cuadrado. Solo no tesela, pero octógonos y cuadrados juntos sí: es el suelo de muchas cocinas.', antes: '¿Cuánto queda tras dos octógonos? ¿Qué polígono regular tiene ese ángulo?' },
+      { t: '<strong>La fórmula.</strong> $k = 2 + \\frac{4}{n - 2}$: para $n = 5$, $2 + \\frac{4}{3}$; para $n = 6$, $2 + 1 = 3$; para $n = 8$, $2 + \\frac{4}{6}$. Entero solo si $n - 2$ divide a 4.' },
+      { t: '<strong>Truchet 3 × 3.</strong> Nueve celdas, dos orientaciones cada una: $2^9 = 512$ mosaicos. Con 4 orientaciones serían $4^9 = 262\\,144$. Se multiplica por celda, no se suma.', antes: 'Cada celda elige por su cuenta. ¿Se suman o se multiplican las opciones?' }
+    ],
+    cierre: 'Un ángulo y una división deciden qué tesela; una potencia cuenta cuántos mosaicos hay. Con eso el shader no necesita saber nada más de geometría.'
+  });
+
   p.demo({
     title: 'Polígonos alrededor de un vértice',
     intro: 'Se colocan copias de un polígono regular alrededor de un vértice común, una detrás de otra. Solo cierran sin hueco ni solape si el ángulo interior cabe un número exacto de veces en 360°. La copia que se monta sale en rojo. Recorre n.',
+    predice: 'Con $n = 5$, ¿cuántas copias cabrán sin montarse, 3 o 4? ¿Sobrará hueco o se montará la última? Y con $n = 12$, ¿cuántas caben?',
     build: function (host) {
       var n = 5;
       var out = W.readout(host, '');
@@ -201,6 +228,13 @@ Course.topic('gfx-mosaicos', function (p) {
     'Los mosaicos generados por celdas se usan hoy para crear niveles de videojuegos, estampados textiles y ' +
     'texturas de materiales, y los hexágonos para los mapas de juegos de estrategia, donde las seis casillas ' +
     'vecinas están todas a la misma distancia.');
+
+  p.trampas([
+    { e: 'Sumar las orientaciones de cada celda', por: 'Cada celda elige con independencia de las demás, y las opciones se multiplican: $2^9 = 512$ para 3 × 3, no $2\\cdot 9 = 18$.' },
+    { e: 'Usar el ángulo exterior', por: '$360/n$ es lo que se gira al recorrer el borde. El interior es $180 - 360/n$: para el hexágono, $120°$, y ese es el que tiene que caber en $360°$.' },
+    { e: 'Dar por hecho que el pentágono tesela', por: '$108°$ no divide a $360°$: tres dejan un hueco de $36°$. Los mosaicos con pentágonos que existen usan pentágonos irregulares.' },
+    { e: 'Programar los hexágonos con una sola cuadrícula', por: 'Los centros forman dos cuadrículas rectangulares desplazadas media celda. Con una sola quedan huecos: hay que calcular el centro más cercano de cada una y quedarse con el mejor.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

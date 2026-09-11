@@ -1,6 +1,11 @@
 /* Tema: Distancia: dibujar sin dibujar */
 Course.topic('gfx-distancia', function (p) {
 
+  p.puente('Con la coordenada ya centrada, este tema da la idea central del bloque: no pintar la ' +
+    'figura, sino medir a qué distancia está cada píxel de ella. La herramienta es la ' +
+    '[[ge-vectores|definición de circunferencia]] como lugar de puntos a distancia fija, y una ' +
+    'función definida a trozos para convertir la distancia en color.');
+
   p.text('Este es el tema central del bloque. Si solo te llevas una idea de aquí, que sea esta, ' +
     'porque de ella cuelgan los ocho temas siguientes y buena parte de los gráficos por ordenador ' +
     'de los últimos veinte años.');
@@ -11,8 +16,8 @@ Course.topic('gfx-distancia', function (p) {
 
   p.text('A esa función que devuelve la distancia se la llama <strong>función de distancia con ' +
     'signo</strong> —SDF, por sus siglas en inglés—. Negativa dentro de la figura, cero justo en el ' +
-    'borde, positiva fuera. Y aquí está lo bonito: la de un círculo la sabes escribir desde el ' +
-    'bloque 3.');
+    'borde, positiva fuera. Y aquí está lo bonito: la de un círculo la sabes escribir desde ' +
+    '[[ge-vectores|geometría]].');
 
   p.formula('d(\\mathbf{p}) = |\\mathbf{p}| - r', 'distancia con signo a un círculo de radio r',
     'Se dice: <em>«de de pe es igual al módulo de pe, menos erre»</em>.<br><br>Léela despacio, ' +
@@ -22,9 +27,16 @@ Course.topic('gfx-distancia', function (p) {
       'estás dos décimas dentro. Y si sale exactamente 0, estás en la circunferencia.<br><br>En GLSL ' +
       'es una línea: <code>float d = length(p) - 0.3;</code>');
 
+  p.comprueba('En un píxel, la distancia con signo a un círculo vale $d = -0{,}05$. ¿Qué se sabe?', [
+    { t: 'Que está dentro, a 0,05 del borde', ok: true, por: 'El signo dice dentro; el valor absoluto, a cuánto del borde. No dice nada del centro: ese dato ya se restó.' },
+    { t: 'Que está a 0,05 del centro', ok: false, por: 'La distancia al centro es $|p|$; $d$ es $|p|$ menos el radio, o sea la distancia al <em>borde</em>. Para saber la del centro haría falta el radio.' },
+    { t: 'Que está fuera, porque una distancia no puede ser negativa', ok: false, por: 'Justo el signo es la información: negativo es dentro. Por eso se llama distancia «con signo».' }
+  ]);
+
   p.demo({
     title: 'El campo de distancias, a la vista',
     intro: 'Antes de dibujar el círculo, mira el número con el que se dibuja. Cada píxel muestra su distancia al borde: azul dentro, naranja fuera, y una línea donde vale cero. Ese mapa es lo que hay debajo de todas las figuras del bloque.',
+    predice: 'Antes de mover el radio: ¿los anillos estarán más juntos dentro del círculo, fuera, o igual de espaciados a los dos lados del borde?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-dist-1', alto: 300,
@@ -61,7 +73,7 @@ Course.topic('gfx-distancia', function (p) {
   p.text('Fíjate en que <strong>el campo existe en toda la pantalla</strong>, no solo donde está la ' +
     'figura. Cada píxel del universo sabe a qué distancia está del círculo. Esa información de más ' +
     '—que a primera vista parece un desperdicio— es la que permite hacer bordes suaves, sombras, ' +
-    'contornos, uniones de figuras y, en el tema 10, geometría tridimensional entera.');
+    'contornos, uniones de figuras y, en [[gfx-raymarching|el tema de raymarching]], geometría tridimensional entera.');
 
   p.section('De la distancia al color: step');
 
@@ -70,8 +82,8 @@ Course.topic('gfx-distancia', function (p) {
 
   p.formula('\\operatorname{step}(borde,\\ x) = \\begin{cases} 0 & \\text{si } x < borde \\\\ 1 & \\text{si } x \\ge borde \\end{cases}',
     'la función escalón',
-    'Se dice: <em>«step de borde, equis»</em>, y se lee como una función definida a trozos de las ' +
-      'del bloque 5.<br><br>Cuidado con el orden de los argumentos, que es el que menos se espera: ' +
+    'Se dice: <em>«step de borde, equis»</em>, y se lee como una [[fn-concepto|función definida a trozos]].' +
+      '<br><br>Cuidado con el orden de los argumentos, que es el que menos se espera: ' +
       '<strong>primero el umbral y después el valor</strong>. <code>step(0.3, d)</code> significa ' +
       '«¿es <code>d</code> mayor o igual que 0,3?».<br><br>Devuelve un número, 0 o 1, no un ' +
       'booleano. Y eso es a propósito: al ser un número se puede multiplicar, sumar y mezclar, que es ' +
@@ -99,9 +111,22 @@ Course.topic('gfx-distancia', function (p) {
       'nula en los dos sitios. Cuatro condiciones, cuatro coeficientes, grado 3. Es exactamente el ' +
       'razonamiento del tema de Taylor, resuelto al revés.');
 
+  p.ejemplo({
+    title: 'Tres píxeles y un círculo',
+    enunciado: 'Círculo de radio 0,3 dibujado con $v = 1 - \\operatorname{smoothstep}(0,\\ 0{,}01,\\ d)$. Calcular $d$ y $v$ en $p = (0{,}2,\\ 0{,}15)$, en $p = (0{,}24,\\ 0{,}18)$ y en $p = (0{,}3,\\ 0{,}05)$.',
+    pasos: [
+      { t: '<strong>Primero.</strong> $|p| = \\sqrt{0{,}04 + 0{,}0225} = 0{,}25$; $d = 0{,}25 - 0{,}3 = -0{,}05$. Dentro. Como $d < 0$, smoothstep vale 0 y $v = 1$: blanco.', antes: 'Pitágoras, resta el radio y mira el signo.' },
+      { t: '<strong>Segundo.</strong> $|p| = \\sqrt{0{,}0576 + 0{,}0324} = 0{,}3$; $d = 0$. Justo en el borde. Smoothstep en su extremo inferior vale 0: $v = 1$, todavía blanco.' },
+      { t: '<strong>Tercero.</strong> $|p| = \\sqrt{0{,}09 + 0{,}0025} \\approx 0{,}3041$; $d \\approx 0{,}0041$. Fuera, pero dentro de la franja de 0,01. $t \\approx 0{,}41$, $3t^2 - 2t^3 \\approx 0{,}37$ y $v \\approx 0{,}63$: un gris claro.', antes: 'Este cae en la transición. Calcula $t = d / 0{,}01$ y el polinomio.' },
+      { t: '<strong>Y uno más allá.</strong> En $p = (0{,}32,\\ 0)$, $d = 0{,}02 > 0{,}01$: smoothstep vale 1 y $v = 0$, negro.' }
+    ],
+    cierre: 'Blanco, blanco, gris, negro: el borde no es una línea sino una franja de una centésima donde el color cambia de forma continua. Esa franja, de unos pocos píxeles, es el antialiasing.'
+  });
+
   p.demo({
     title: 'Duro contra suave',
     intro: 'El mismo círculo con las dos funciones. Acerca el borde con el deslizador de anchura y mira los dientes de sierra aparecer y desaparecer. En movimiento la diferencia es todavía más brutal que parada.',
+    predice: 'Con anchura 0,02 y una pantalla de 300 píxeles de alto, ¿cuántos píxeles ocupará la transición? Multiplica.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-dist-2', alto: 280,
@@ -163,6 +188,13 @@ Course.topic('gfx-distancia', function (p) {
     'ocupa este párrafo repetido veinte veces—. Quílez cofundó después Shadertoy y publicó las ' +
     'fórmulas de distancia que usa hoy todo el mundo.');
 
+  p.trampas([
+    { e: 'Escribir <code>step(d, 0.3)</code> queriendo decir «$d$ mayor que 0,3»', por: 'El primer argumento es el umbral: <code>step(d, 0.3)</code> pregunta si $0{,}3 \\ge d$. Es el orden contrario al que uno espera, y da la imagen en negativo.' },
+    { e: 'Restar el radio al cuadrado', por: '<code>dot(p, p) - r * r</code> vale cero en el borde, pero no mide distancias: crece con el cuadrado. Los bordes suaves salen de anchura variable y las uniones se deforman.' },
+    { e: 'Poner el segundo argumento de smoothstep muy grande', por: 'Con <code>smoothstep(0.0, 0.2, d)</code> la transición ocupa dos décimas de pantalla: el círculo se ve borroso, no suavizado. La franja tiene que medir uno o dos píxeles.' },
+    { e: 'Creer que fuera de la figura el campo no importa', por: 'Es al revés: el valor de $d$ lejos del borde es lo que permite hacer halos, sombras, contornos y, más adelante, avanzar rayos en tres dimensiones.' }
+  ]);
+
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
 
@@ -183,19 +215,10 @@ Course.topic('gfx-distancia', function (p) {
     },
     fields: [
       { name: 'd', label: 'd', w: 'tiny' },
-      { name: 'q', label: 'dentro / fuera', w: 'tiny', ph: 'dentro / fuera' }
+      { name: 'q', label: 'El píxel está', opts: [{ t: 'dentro', v: 'dentro' }, { t: 'fuera', v: 'fuera' }] }
     ],
     sol: function (d) { return { d: U.round(d.d, 8), q: d.d < 0 ? 'dentro' : 'fuera' }; },
-    check: function (v, d) {
-      var okD = Ex.same(v.d, d.d, 3e-4);
-      var q = U.eligeOpcion(v.raw.q, { dentro: /dentro|interior|negativ/, fuera: /fuera|exterior|positiv/ });
-      if (!q) {
-        return { ok: false, msg: 'En la segunda casilla escribe <strong>dentro</strong> o ' +
-          '<strong>fuera</strong>.', fields: { d: okD } };
-      }
-      var okQ = (q === 'dentro') === (d.d < 0);
-      return { ok: okD && okQ, fields: { d: okD, q: okQ } };
-    },
+    tol: 3e-4,
     hint: function () {
       return 'Primero la distancia al centro con Pitágoras, y después le restas el radio. El signo ' +
         'del resultado es la respuesta: negativo es dentro.';

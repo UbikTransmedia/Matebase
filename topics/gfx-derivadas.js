@@ -1,6 +1,11 @@
 /* Tema: Derivar dentro del shader */
 Course.topic('gfx-derivadas', function (p) {
 
+  p.puente('La [[fn-derivadas|derivada]] entra en el shader como se calcula en la práctica: restando ' +
+    'vecinos, igual que en [[av-numerico|cálculo numérico]], con el paso fijado en un píxel. Con ella ' +
+    'el borde suave se mide solo, y un campo de alturas se convierte en relieve iluminado con un ' +
+    '[[ge-vectores|producto escalar]].');
+
   p.text('Hasta ahora hemos puesto los bordes suaves a mano: <code>smoothstep(0.0, 0.02, d)</code>, ' +
     'y ese <code>0.02</code> salió de probar hasta que quedó bien. Funciona en un tamaño y falla en ' +
     'todos los demás. Si haces zoom, el borde se vuelve una nube; si te alejas, vuelve a ser una ' +
@@ -55,9 +60,29 @@ Course.topic('gfx-derivadas', function (p) {
     'pequeña y el borde se estrecha. Si se aleja, pasa lo contrario. El número mágico ha ' +
     'desaparecido: el borde mide un píxel a cualquier escala, para siempre.');
 
+  p.comprueba('Se acerca la cámara: una unidad de $p$ pasa a ocupar el doble de píxeles. Con la anchura fija de $0{,}02$, ¿qué le pasa al borde?', [
+    { t: 'Ocupa el doble de píxeles: se ve más borroso', ok: true, por: 'La anchura está en unidades de $p$, y ahora cada unidad son más píxeles. El borde se ensancha en pantalla. Al alejarse pasa lo contrario: cabe en menos de un píxel y vuelve la escalera.' },
+    { t: 'Ocupa la mitad: se ve escalonado', ok: false, por: 'Eso ocurre al alejarse, cuando una unidad son menos píxeles. Al acercarse, $0{,}02$ abarca más píxeles, no menos.' },
+    { t: 'No cambia: 0,02 es 0,02', ok: false, por: 'Es 0,02 en unidades de $p$, no en píxeles. Lo que ve el ojo son píxeles, y la conversión depende del zoom. Por eso hace falta <code>fwidth</code>.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Cuántos píxeles mide un borde de 0,02',
+    enunciado: 'Ventana de 480 píxeles de alto y $\\vec p = \\text{zoom}\\cdot\\text{fragCoord}/\\text{iResolution.y}$. Calcular cuántos píxeles ocupa un borde de anchura fija $0{,}02$ con zoom 8, con zoom 40 y con zoom 1, y qué hace <code>fwidth</code> en cada caso.',
+    pasos: [
+      { t: '<strong>Unidades por píxel.</strong> Al avanzar un píxel, $p$ avanza $\\text{zoom}/480$. Con zoom 8: $0{,}0167$. Eso es, aproximadamente, <code>dFdx(p.x)</code>.', antes: '¿Cuánto cambia $p_x$ entre dos píxeles vecinos?' },
+      { t: '<strong>Zoom 8.</strong> $0{,}02 / 0{,}0167 = 1{,}2$ píxeles. El borde a mano acierta: por eso el número parecía bueno.' },
+      { t: '<strong>Zoom 40.</strong> $40/480 = 0{,}0833$ por píxel; $0{,}02 / 0{,}0833 = 0{,}24$ píxeles. Menos de un píxel: el suavizado no llega a verse y vuelve la escalera.', antes: 'Al alejarse, cada píxel abarca más unidades. ¿Cuántos píxeles ocupa ahora 0,02?' },
+      { t: '<strong>Zoom 1.</strong> $1/480 = 0{,}0021$; $0{,}02 / 0{,}0021 \\approx 9{,}6$ píxeles. Casi diez píxeles de transición: el círculo se ve desenfocado.' },
+      { t: '<strong>Con fwidth.</strong> $w = $ <code>fwidth(d)</code> vale, en cada caso, lo que cambia $d$ en un píxel: $0{,}0167$, $0{,}0833$ y $0{,}0021$. La transición de $-w$ a $w$ ocupa siempre unos dos píxeles. Sin tocar nada.', antes: '¿Qué valor toma $w$ en cada zoom? ¿Cuántos píxeles ocupa $2w$?' }
+    ],
+    cierre: 'El número escrito a mano solo acierta en un zoom. La derivada del hardware mide la escala en cada píxel, y con ella el borde tiene siempre el mismo grosor en pantalla.'
+  });
+
   p.demo({
     title: 'A mano contra automático',
     intro: 'La misma rejilla de círculos, con el zoom en tus manos. La mitad izquierda usa una anchura fija escrita a mano; la derecha, fwidth. Aleja el zoom y mira cuál de las dos se rompe.',
+    predice: 'Con zoom 6 y ancho 0,02 los dos lados se parecen. Al subir el zoom a 40, ¿cuál se rompe, y se rompe en escalera o en borrón?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-der-1', alto: 320,
@@ -113,6 +138,7 @@ Course.topic('gfx-derivadas', function (p) {
   p.demo({
     title: 'Iluminar el ruido',
     intro: 'El mismo fbm de nubes del tema anterior, pero ahora leído como altura y alumbrado con una luz que gira. Deja de parecer una mancha y pasa a parecer terreno.',
+    predice: 'Con relieve 0,1 el terreno es casi plano. ¿Se notará más el giro de la luz con relieve alto o bajo? ¿Qué componente de la normal domina cuando el relieve es bajo?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-der-2', alto: 330,
@@ -187,6 +213,13 @@ Course.topic('gfx-derivadas', function (p) {
     'la luz. Diez años después, las tarjetas empezaron a agrupar píxeles en cuadros de dos por dos ' +
     'por razones de eficiencia, sin pensar en derivadas, y alguien se dio cuenta de que aquella ' +
     'decisión de ingeniería regalaba gratis un operador diferencial.');
+
+  p.trampas([
+    { e: 'Llamar a <code>dFdx</code> dentro de un <code>if</code> que separa píxeles del mismo cuadro', por: 'Si el compañero de cuadro no llegó a esa línea, no hay nada que restar y sale basura. Se calcula siempre, fuera del <code>if</code>, y luego se elige.' },
+    { e: 'Olvidar los valores absolutos en <code>fwidth</code>', por: '$\\operatorname{dFdx} + \\operatorname{dFdy}$ puede dar cero con dos cambios opuestos. <code>fwidth</code> suma los valores absolutos: mide cuánto cambia, no hacia dónde.' },
+    { e: 'Dejar una anchura fija «que queda bien»', por: 'Queda bien en un zoom. Con el doble se ve borrosa y con la mitad, escalonada. Con <code>fwidth(d)</code> mide siempre un píxel.' },
+    { e: 'Esperar que el bump mapping cambie la silueta', por: 'La superficie sigue plana; solo cambia hacia dónde dice que mira cada punto. En el borde de la figura la mentira se ve: sigue recto.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

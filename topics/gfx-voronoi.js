@@ -1,6 +1,10 @@
 /* Tema: Voronoi: el patrón de las células */
 Course.topic('gfx-voronoi', function (p) {
 
+  p.puente('La rejilla del tema de repetición ponía una figura en cada celda; este tema pone un punto ' +
+    'y pregunta cuál queda más cerca. Las fronteras que salen son [[ge-rectas|mediatrices]], y cambiar ' +
+    'la [[av-espacios|norma]] con la que se mide cambia la forma de las celdas.');
+
   p.text('Hay un patrón que aparece en sitios que no tienen nada que ver entre sí: las manchas de ' +
     'una jirafa, las escamas de una piña, el barro seco de una charca, las burbujas de una espuma, ' +
     'los granos de un metal visto al microscopio, las celdas de un panal y el reparto de las galaxias ' +
@@ -22,6 +26,18 @@ Course.topic('gfx-voronoi', function (p) {
     '<strong>triangulación de Delaunay</strong>, que es un [[av-grafos|grafo]] con propiedades muy ' +
     'buenas: es la triangulación que evita los triángulos afilados. Las dos construcciones son la ' +
     'misma información vista del derecho y del revés.', null, 'Voronoi y Delaunay');
+
+  p.ejemplo({
+    title: 'Tres semillas y un píxel',
+    enunciado: 'Semillas $A = (0, 0)$, $B = (2, 0)$ y $C = (0, 2)$. Para el píxel $(0{,}8,\\ 0{,}9)$, calcular $F_1$, $F_2$, la celda ganadora y la lectura $F_2 - F_1$. Repetir con la distancia Manhattan.',
+    pasos: [
+      { t: '<strong>Las tres distancias.</strong> A $A$: $\\sqrt{0{,}64 + 0{,}81} = \\sqrt{1{,}45} \\approx 1{,}204$. A $B$: $\\sqrt{1{,}44 + 0{,}81} = 1{,}5$. A $C$: $\\sqrt{0{,}64 + 1{,}21} \\approx 1{,}360$.', antes: 'Pitágoras tres veces.' },
+      { t: '<strong>Ordenar.</strong> $F_1 = 1{,}204$ (gana $A$), $F_2 = 1{,}360$ ($C$). El píxel está en la celda de $A$.' },
+      { t: '<strong>La grieta.</strong> $F_2 - F_1 = 0{,}156$: pequeño, el píxel está cerca de la frontera entre $A$ y $C$. Esa frontera es la mediatriz de $AC$, la recta $y = 1$, y el píxel está a $0{,}1$ de ella. La resta no da 0,1 exacto: es una aproximación, siempre algo mayor.', antes: '¿Cuál es la mediatriz de $A$ y $C$? ¿A qué distancia está el píxel de ella?' },
+      { t: '<strong>Con Manhattan.</strong> A $A$: $0{,}8 + 0{,}9 = 1{,}7$. A $B$: $1{,}2 + 0{,}9 = 2{,}1$. A $C$: $0{,}8 + 1{,}1 = 1{,}9$. Sigue ganando $A$, pero las fronteras ya no son las mismas rectas: salen tramos a 45° y las celdas cambian de forma.', antes: 'Suma de valores absolutos en vez de raíz de cuadrados. ¿Cambia el ganador?' }
+    ],
+    cierre: 'El mismo píxel, las mismas semillas, y dos mosaicos distintos según cómo se mida. El bucle del shader hace exactamente esto, nueve veces por píxel.'
+  });
 
   p.section('Hacerlo en un shader: sembrar sin lista');
 
@@ -45,6 +61,7 @@ Course.topic('gfx-voronoi', function (p) {
   p.demo({
     title: 'Sembrar y preguntar',
     intro: 'Cada celda siembra un punto y cada píxel busca el más cercano de las nueve celdas vecinas. El brillo es la distancia a ese punto; los puntos negros son las semillas. Enciende el movimiento y mira cómo las fronteras se reorganizan solas.',
+    predice: 'Con las semillas quietas, ¿las fronteras entre celdas serán rectas o curvas? ¿Y habrá alguna celda con un lado curvo?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-vor-1', alto: 340,
@@ -118,9 +135,16 @@ Course.topic('gfx-voronoi', function (p) {
     'más gruesas; hay una versión exacta que necesita un segundo recorrido, pero para dibujar casi ' +
     'nunca compensa.');
 
+  p.comprueba('En un píxel, $F_2 - F_1 = 0$. ¿Dónde está?', [
+    { t: 'Justo en la frontera entre dos celdas: las dos semillas más cercanas empatan', ok: true, por: 'La frontera es el lugar donde no hay ganador claro. Por eso pintar «oscuro donde $F_2 - F_1$ es pequeño» dibuja las grietas.' },
+    { t: 'Encima de una semilla', ok: false, por: 'Ahí $F_1 = 0$, pero $F_2$ es la distancia a la siguiente semilla, mayor que cero. La resta es máxima, no nula.' },
+    { t: 'En el centro de una celda', ok: false, por: 'El centro de una celda es donde la semilla queda más claramente ganadora: la segunda está lejos y la resta es grande.' }
+  ]);
+
   p.demo({
     title: 'Grietas, mosaico y piel',
     intro: 'El mismo bucle, mostrando cada una de las tres cosas. Cambia el modo y verás que la estructura por debajo es siempre idéntica: solo cambia qué se lee de ella.',
+    predice: 'En modo grietas con grosor 0,08, ¿las esquinas donde se juntan tres celdas saldrán igual de finas que los lados, o más gruesas? Piensa en cuántas distancias empatan allí.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-vor-2', alto: 360,
@@ -212,6 +236,13 @@ Course.topic('gfx-voronoi', function (p) {
     'para lo que estás haciendo aquí; por eso a este patrón se le llama a veces «ruido de Worley». Y ' +
     'aquel mapa del cólera de John Snow sigue siendo, siglo y medio después, el ejemplo de manual de ' +
     'cómo un dibujo bien pensado gana una discusión.');
+
+  p.trampas([
+    { e: 'Mirar solo la semilla de la propia celda', por: 'Un píxel pegado al borde derecho puede tener más cerca la semilla de la celda vecina. Sin las nueve celdas aparecen costuras rectas siguiendo la rejilla.' },
+    { e: 'Olvidar sumar <code>g</code> a la semilla vecina', por: 'La semilla de la celda de al lado se mide desde <em>su</em> origen, una unidad más allá: el vector es <code>g + o - dentro</code>. Sin el <code>g</code>, todas las vecinas parecen estar en la celda propia.' },
+    { e: 'Tomar $F_2 - F_1$ como distancia exacta a la frontera', por: 'Es una aproximación: da 0,156 donde la distancia real es 0,1. Por eso las esquinas de tres celdas salen más gruesas. Para dibujar, casi siempre basta.' },
+    { e: 'Creer que cambiar la norma mueve las semillas', por: 'Las semillas no se tocan: cambia cómo se mide, y con ello quién gana en cada píxel. Manhattan y Chebyshev dan celdas de otra forma con la misma siembra.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

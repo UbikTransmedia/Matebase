@@ -1,6 +1,10 @@
 /* Tema: Repetir el espacio: fract y mod */
 Course.topic('gfx-repetir', function (p) {
 
+  p.puente('Con una figura y sus transformaciones, este tema la multiplica sin bucles: pliega el ' +
+    'espacio con la parte decimal. Detrás está la [[av-numeros|aritmética modular]], la del reloj, y la ' +
+    'pareja <code>floor</code> y <code>fract</code> que ya usó el tablero de ajedrez del primer tema.');
+
   p.text('Quieres dibujar mil círculos. En un programa normal harías un bucle de mil vueltas. En un ' +
     'shader hay un camino mucho mejor, y es de los que cambian la manera de pensar: ' +
     '<strong>no repitas la figura, repite el espacio</strong>.');
@@ -22,9 +26,29 @@ Course.topic('gfx-repetir', function (p) {
   p.text('Y esa es toda la magia. Si le aplicas <code>fract</code> a la coordenada antes de dibujar, ' +
     'el plano infinito se convierte en infinitas copias del cuadrado unidad.');
 
+  p.comprueba('¿Cuánto vale <code>fract(-0.3)</code>?', [
+    { t: '0,7', ok: true, por: '$\\lfloor -0{,}3 \\rfloor = -1$, y $-0{,}3 - (-1) = 0{,}7$. Fract siempre cae en $[0, 1)$, también con negativos: por eso pliega la mitad izquierda de la pantalla igual que la derecha.' },
+    { t: '$-0{,}3$', ok: false, por: 'Eso sería «quitar la parte entera» tomando 0 como parte entera. Pero <code>floor</code> va hacia abajo: la de $-0{,}3$ es $-1$.' },
+    { t: '0,3', ok: false, por: 'Eso es el valor absoluto de la parte decimal, que no es lo que hace fract. Con $-0{,}3$ sale 0,7: el diente de sierra no se refleja en el cero, continúa.' }
+  ]);
+
+  p.ejemplo({
+    title: 'La receta, con un píxel',
+    enunciado: 'Rejilla de $n = 4$ celdas con un círculo de radio 0,3 en cada una, borde $v = 1 - \\operatorname{smoothstep}(0,\\ 0{,}02,\\ d)$. Seguir el píxel $p = (0{,}3,\\ -0{,}1)$ hasta su color.',
+    pasos: [
+      { t: '<strong>Estirar.</strong> $p \\cdot 4 = (1{,}2,\\ -0{,}4)$. Ahora una unidad es una celda.' },
+      { t: '<strong>En qué celda.</strong> $\\lfloor (1{,}2,\\ -0{,}4) \\rfloor = (1,\\ -1)$. Ojo al $-1$: la parte entera por abajo de $-0{,}4$ es $-1$, no $0$.', antes: 'Parte entera por abajo de cada componente. Cuidado con el negativo.' },
+      { t: '<strong>Dónde dentro de ella.</strong> $\\operatorname{fract} = (1{,}2 - 1,\\ -0{,}4 - (-1)) = (0{,}2,\\ 0{,}6)$. Centrado: $(0{,}2 - 0{,}5,\\ 0{,}6 - 0{,}5) = (-0{,}3,\\ 0{,}1)$.', antes: 'Resta la parte entera y después 0,5.' },
+      { t: '<strong>La distancia.</strong> $|(-0{,}3,\\ 0{,}1)| = \\sqrt{0{,}09 + 0{,}01} \\approx 0{,}316$; $d = 0{,}316 - 0{,}3 = 0{,}016$. Justo fuera del círculo, dentro de la franja de 0,02: $t = 0{,}8$, $3t^2 - 2t^3 = 0{,}896$ y $v \\approx 0{,}1$. Casi negro, en el borde.', antes: '¿Está dentro o fuera del círculo de su celda? ¿A cuánto del borde?' },
+      { t: '<strong>Lo que no se ha hecho.</strong> Ningún bucle, ninguna lista de 16 centros. El píxel de la celda $(1, -1)$ ha hecho la misma cuenta que el de la $(0, 0)$, con su propio fract.' }
+    ],
+    cierre: 'Estirar, plegar, centrar, y luego la distancia de siempre. El número de celda, $(1, -1)$, solo hace falta si se quiere que esa celda sea distinta de las demás.'
+  });
+
   p.demo({
     title: 'Plegar el plano',
     intro: 'Un círculo, uno solo, escrito una vez. Sube el número de repeticiones y mira aparecer una rejilla: no se ha dibujado ni un círculo más, se ha encogido el espacio.',
+    predice: 'Con 4 celdas y radio 0,5, ¿los círculos se tocarán, se solaparán o quedarán separados? Y con radio 0,6, ¿qué pasará en las costuras?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-rep-1', alto: 300,
@@ -73,6 +97,7 @@ Course.topic('gfx-repetir', function (p) {
   p.demo({
     title: 'Cada celda, distinta',
     intro: 'La misma rejilla, pero ahora cada celda consulta su número de fila y columna para decidir su tamaño y su desfase. Un latido que recorre la pantalla en diagonal, sin un solo bucle.',
+    predice: 'Con retardo 0, ¿qué verás? Y con retardo $\\pi \\approx 3{,}14$, celdas vecinas en fase opuesta: ¿qué patrón hará la rejilla?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-rep-2', alto: 300,
@@ -139,6 +164,13 @@ Course.topic('gfx-repetir', function (p) {
     'pero en gráficos se popularizó con la demoscene por pura necesidad: repetir un objeto exige ' +
     'guardarlo muchas veces o recorrerlo con un bucle, y en 4 kilobytes no sobra ni una instrucción. ' +
     'Plegar la coordenada cuesta una línea y da infinitas copias.');
+
+  p.trampas([
+    { e: 'Suponer que <code>fract</code> de un negativo es negativo', por: '<code>fract(-0.3)</code> vale 0,7 porque <code>floor(-0.3)</code> es $-1$. Sin eso, la mitad izquierda de la pantalla se plegaría distinta que la derecha.' },
+    { e: 'Olvidar el <code>- 0.5</code> después de plegar', por: 'La figura se dibuja en la esquina de cada celda, cortada en cuatro trozos por las costuras. El $-0{,}5$ pone el origen en el centro de la celda.' },
+    { e: 'Dibujar una figura mayor que su celda', por: 'El píxel no ve la celda vecina: la figura se corta en la costura. Con radio 0,5 los círculos de una rejilla se tocan; con 0,6, se recortan.' },
+    { e: 'Cambiar los papeles de floor y fract', por: '<code>floor</code> numera la celda y <code>fract</code> sitúa dentro de ella. Dibujar con <code>floor</code> da un valor constante en cada celda: bloques lisos, ninguna figura.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

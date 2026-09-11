@@ -1,6 +1,10 @@
 /* Tema: La última pasada */
 Course.topic('gfx-post', function (p) {
 
+  p.puente('La imagen ya está calculada; este tema trabaja solo sobre el color final. Casi todo es ' +
+    'multiplicar por un factor que depende de la posición, más una [[av-informacion|cuantización]] ' +
+    'que explica las bandas de un degradado y una curva de saturación para comprimir el tono.');
+
   p.text('Ya tienes la imagen. Está bien construida, bien iluminada, y aun así se nota que sale de ' +
     'un ordenador: demasiado limpia, demasiado uniforme, sin ningún accidente. Lo que falta es la ' +
     '<strong>última pasada</strong>, el puñado de operaciones que se aplican <em>sobre el color ya ' +
@@ -40,6 +44,7 @@ Course.topic('gfx-post', function (p) {
   p.demo({
     title: 'La mesa de mezclas',
     intro: 'Una escena sencilla debajo y seis mandos encima. Empieza con todos a cero, sube el primero, luego el segundo. La última pasada se construye así, un mando cada vez.',
+    predice: 'Pon todo a cero salvo la exposición, a 4: ¿el centro de la roseta saldrá blanco plano o conservará color? Piensa en $c/(1 + c)$.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-pos-1', alto: 380,
@@ -123,6 +128,12 @@ Course.topic('gfx-post', function (p) {
     'distintos disponibles en todo ese recorrido, así que aparecen 25 franjas de 16 píxeles cada una. ' +
     'Es [[av-informacion|cuantización]] pura y dura, la de la teoría de la información.');
 
+  p.comprueba('Sumar ruido a una imagen la ensucia. ¿Cómo puede entonces arreglar las bandas de un degradado?', [
+    { t: 'Porque es menor que medio escalón y el ojo promedia píxeles vecinos: ve el valor intermedio que la pantalla no tiene', ok: true, por: 'Los píxeles de una misma franja caen unos al nivel de arriba y otros al de abajo, en proporción a lo cerca que estaban de cada uno. A distancia, la media es el valor exacto. Se cambia una banda visible por un grano invisible.' },
+    { t: 'Porque el ruido añade niveles nuevos a la pantalla', ok: false, por: 'La pantalla sigue teniendo 256 niveles. El tramado no añade ninguno: reparte el error entre vecinos para que el ojo haga la media.' },
+    { t: 'No las arregla: solo las mueve de sitio', ok: false, por: 'Las disuelve. Un borde de banda recto, que el ojo detecta enseguida, se convierte en una mezcla de puntos sin borde.' }
+  ]);
+
   p.text('La solución es preciosa por lo contraintuitiva: <strong>añadir ruido</strong>. Se le suma a ' +
     'cada píxel menos de medio escalón de ruido antes de cuantizar, y eso hace que los píxeles de una ' +
     'misma franja caigan unos a un lado y otros al otro. Vistos a distancia, el ojo promedia y ve el ' +
@@ -132,6 +143,7 @@ Course.topic('gfx-post', function (p) {
   p.demo({
     title: 'Bandas y tramado',
     intro: 'Un degradado oscuro, que es donde peor se porta la cuantización. Baja los niveles a 8 o 16 para exagerar el problema, y luego enciende el tramado: el ruido que se añade es menor que un escalón, y aun así hace desaparecer las franjas.',
+    predice: 'Con 8 niveles y tramado 0, el degradado de abajo va de 0,02 a 0,24 en el rojo. ¿Cuántas bandas verás: 2, 3 o 20? Multiplica el recorrido por los niveles.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-pos-2', alto: 300,
@@ -199,6 +211,19 @@ Course.topic('gfx-post', function (p) {
   p.text('Combinada con la exposición —multiplicar por un número antes de comprimir— tienes los dos ' +
     'mandos de una cámara, y son los que deciden si la imagen respira o está reventada.');
 
+  p.ejemplo({
+    title: 'Tres cuentas del acabado',
+    enunciado: 'Calcular el factor de viñeta en $uv = (0{,}9,\\ 0{,}5)$ con exponente $0{,}35$; la compresión de Reinhard de un valor $3$ y de un valor $0{,}2$, este último también con exposición doble; y cuántas bandas tiene un degradado de $0$ a $0{,}1$ en 400 píxeles.',
+    pasos: [
+      { t: '<strong>Viñeta.</strong> $v = 16\\cdot 0{,}9\\cdot 0{,}5\\cdot 0{,}1\\cdot 0{,}5 = 0{,}36$. Factor: $0{,}36^{0{,}35} = e^{0{,}35\\ln 0{,}36} = e^{-0{,}358} \\approx 0{,}70$. Cerca del borde derecho se pierde un 30 %; con exponente 1 se perdería un 64 %.', antes: 'Producto de las cuatro distancias a los bordes, por 16, y la potencia.' },
+      { t: '<strong>Reinhard con 3.</strong> $3 / (1 + 3) = 0{,}75$. Un valor que se salía tres veces del rango cabe ahora, y sigue siendo más claro que cualquier valor menor: no se ha recortado nada.' },
+      { t: '<strong>Reinhard con 0,2.</strong> $0{,}2 / 1{,}2 = 0{,}167$. Los valores pequeños apenas se tocan. Con exposición doble: $0{,}4 / 1{,}4 = 0{,}286$. Subir la exposición aclara los oscuros mucho más que los claros.', antes: 'Aplica $c/(1 + c)$ a 0,2 y a 0,4.' },
+      { t: '<strong>Bandas.</strong> Escalón de $1/255 \\approx 0{,}0039$. En un recorrido de 0,1 caben $25{,}5$ valores distintos. Repartidos en 400 píxeles: bandas de $15{,}7$ píxeles, perfectamente visibles.', antes: '¿Cuántos escalones de $1/255$ caben en 0,1? ¿Cuántos píxeles toca a cada uno?' },
+      { t: '<strong>Con tramado.</strong> Se suma a cada píxel menos de medio escalón, $\\pm 0{,}002$, y se cuantiza. Los píxeles de cada banda se reparten entre dos niveles y el ojo ve 400 valores donde solo había 25.' }
+    ],
+    cierre: 'Una potencia, un cociente y una división: el acabado no necesita más matemáticas que estas. Lo que necesita es aplicarlas en el orden del camino de la luz.'
+  });
+
   p.util('Todo esto es la capa que el cine añade en la sala de etalonaje, y en los videojuegos es lo ' +
     'que la gente suele desactivar en el menú de opciones. Fuera del entretenimiento, la ' +
     'compresión de tono es la que hace que la foto del móvil se parezca a lo que viste con los ojos, ' +
@@ -211,6 +236,13 @@ Course.topic('gfx-post', function (p) {
     'buena: durante cuarenta años se buscó cómo <em>quitarle</em> defectos a las imágenes digitales, ' +
     'y ahora se dedican ciclos de cálculo a devolvérselos, porque una imagen sin grano, sin viñeta y ' +
     'sin aberración le resulta al ojo menos real que una con ellos.');
+
+  p.trampas([
+    { e: 'Recortar los valores mayores que 1', por: 'Todo lo que se pasa se convierte en un manchón blanco plano. $c/(1 + c)$ los mete en el rango sin cortar y conserva las diferencias entre ellos.' },
+    { e: 'Poner el grano antes de la compresión', por: 'El grano imita la película o el sensor: va al final, en el espacio de la pantalla. Si se comprime después, el grano de las zonas claras se aplasta y desaparece.' },
+    { e: 'Tramar con más de un escalón de ruido', por: 'Entonces sí se ve el ruido, y además sigue habiendo bandas. La cantidad justa es menos de medio escalón: suficiente para repartir y no más.' },
+    { e: 'Olvidar el 16 de la viñeta', por: 'Sin él, en el centro $v = 1/16$ y toda la imagen se oscurece. El 16 normaliza para que el centro valga 1 y solo se oscurezcan las esquinas.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

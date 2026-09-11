@@ -1,6 +1,11 @@
 /* Tema: El raton entra en la ecuacion */
 Course.topic('gfx-raton', function (p) {
 
+  p.puente('Hasta aquí la función del píxel dependía solo de su posición. Este tema le añade una ' +
+    'entrada más, la posición del puntero, y todo se reduce a lo que ya sabes: llevar dos puntos al ' +
+    'mismo sistema de coordenadas y medir la [[gfx-distancia|distancia]] entre ellos. Al final aparece ' +
+    'la [[pe-normal|campana de Gauss]] como peso.');
+
   p.text('Hasta aquí, el shader contestaba a una sola pregunta: de qué color es este píxel. Con ' +
     '<code>iMouse</code>, la pregunta incluye además <strong>dónde tienes el dedo</strong>. La fórmula no ' +
     'cambia de naturaleza: sigue siendo una función, pero ahora con una entrada que controlas tú en tiempo ' +
@@ -32,6 +37,25 @@ Course.topic('gfx-raton', function (p) {
     'misma unidad.<br><br>En GLSL: <code>vec2 m = (iMouse.xy - 0.5 * iResolution.xy) / iResolution.y;</code><br><br>' +
     'A partir de ahí, <code>length(p - m)</code> es la distancia de cada píxel al ratón.');
 
+  p.comprueba('Ventana de 800 × 400 con el puntero en el centro exacto. ¿Cuánto valen <code>iMouse.xy</code> y $\\vec m$?', [
+    { t: '$(400, 200)$ y $(0, 0)$', ok: true, por: '<code>iMouse</code> viene en píxeles desde la esquina inferior izquierda; al restarle media pantalla y dividir por 400 queda el origen, igual que le pasa a la $p$ del píxel central.' },
+    { t: '$(0{,}5,\\ 0{,}5)$ y $(0, 0)$', ok: false, por: '<code>iMouse</code> no está normalizado: son píxeles. El $(0{,}5, 0{,}5)$ sería <code>iMouse.xy / iResolution.xy</code>, que aquí no se usa.' },
+    { t: '$(400, 200)$ y $(0{,}5,\\ 0{,}5)$', ok: false, por: 'La transformación de $\\vec m$ resta media pantalla antes de dividir: el centro se va al $(0, 0)$, no al $(0{,}5, 0{,}5)$.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Cuánta luz llega, a mano',
+    enunciado: 'Linterna con alcance $a = 0{,}2$ y luz $= a^2 / (d^2 + a^2)$. Calcular la fracción de luz en un píxel desplazado $(0{,}2,\\ 0{,}15)$ respecto del puntero, en uno justo debajo, en uno a distancia 0,2 y en uno a 0,4.',
+    pasos: [
+      { t: '<strong>La distancia al cuadrado.</strong> $d^2 = 0{,}2^2 + 0{,}15^2 = 0{,}0625$. No hace falta la raíz: la fórmula usa $d^2$.', antes: 'Suma los cuadrados de las dos componentes.' },
+      { t: '<strong>La luz.</strong> $\\dfrac{0{,}04}{0{,}0625 + 0{,}04} = \\dfrac{0{,}04}{0{,}1025} \\approx 0{,}39$. Llega algo más de un tercio.', antes: 'Sustituye en $a^2 / (d^2 + a^2)$.' },
+      { t: '<strong>Bajo el puntero.</strong> $d = 0$: $0{,}04 / 0{,}04 = 1$. Toda la luz, y sin dividir por cero gracias al $a^2$ del denominador.' },
+      { t: '<strong>A una distancia igual al alcance.</strong> $d = 0{,}2$: $0{,}04 / 0{,}08 = 0{,}5$. Exactamente la mitad: eso es lo que significa «alcance».' },
+      { t: '<strong>Al doble.</strong> $d = 0{,}4$: $0{,}04 / 0{,}20 = 0{,}2$. Un quinto, no un cuarto de la luz de $d = 0{,}2$: cerca del centro la caída es más suave que un $1/d^2$ puro, y lejos se le parece.', antes: 'Con $d = 0{,}4$, ¿sale un cuarto de lo que salía en $d = 0{,}2$?' }
+    ],
+    cierre: 'Es la ley del inverso del cuadrado, amansada con un $a^2$ para que no se dispare en el centro. Ese sumando es lo que hace que «alcance» signifique «donde queda la mitad».'
+  });
+
   p.note('Si no puedes usar el ratón o una pantalla táctil, cada ejemplo de este tema trae deslizadores que ' +
     'mueven lo mismo. Mandan ellos hasta que haces el primer clic en la imagen; a partir de ahí, manda el ' +
     'puntero. En el código se ve cómo: se mira si <code>iMouse.zw</code> ha dejado de valer cero.', 'ok', 'Sin ratón también se puede');
@@ -39,6 +63,7 @@ Course.topic('gfx-raton', function (p) {
   p.demo({
     title: 'Una linterna',
     intro: 'Haz clic y arrastra sobre la imagen: la luz sigue al puntero. La cantidad de luz cae con la distancia al cuadrado, como la de una bombilla de verdad. El alcance decide lo deprisa que se apaga.',
+    predice: 'Con alcance 0,18, ¿a qué distancia del puntero llega justo la mitad de la luz? Y al doblar el alcance, ¿la mancha iluminada será el doble de ancha o cuatro veces?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-raton-1', alto: 300,
@@ -90,6 +115,7 @@ Course.topic('gfx-raton', function (p) {
   p.demo({
     title: 'Una lupa',
     intro: 'Arrastra la lupa por encima de la rejilla. Nada del dibujo cambia: lo que cambia son las coordenadas con las que se pregunta a cada píxel. Sube el aumento y el radio para ver cómo se curvan las líneas.',
+    predice: 'Un píxel justo en el centro de la lupa, ¿con qué coordenada se dibuja: con la suya o con la del centro? Y uno a tres radios de distancia, ¿se deforma algo?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-raton-2', alto: 300,
@@ -138,6 +164,7 @@ Course.topic('gfx-raton', function (p) {
   p.demo({
     title: 'Seleccionar un rectángulo',
     intro: 'Haz clic en un punto y arrastra. El punto naranja es donde hiciste clic (iMouse.zw) y el verde, donde estás (iMouse.xy). El color del marco depende de la distancia entre los dos.',
+    predice: 'Si arrastras hacia abajo a la izquierda desde el punto de clic, ¿el rectángulo se dibujará igual de bien que hacia arriba a la derecha? Piensa en qué hacen <code>min</code> y <code>max</code>.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-raton-3', alto: 280,
@@ -179,6 +206,13 @@ Course.topic('gfx-raton', function (p) {
     'líneas y círculos con un lápiz óptico apoyado sobre el monitor. El ratón llegó poco después: Douglas ' +
     'Engelbart lo presentó en 1968, en una demostración que se recuerda como «la madre de todas las ' +
     'demostraciones», con una caja de madera con dos ruedas por debajo.');
+
+  p.trampas([
+    { e: 'Comparar <code>iMouse.xy</code> en píxeles con la <code>p</code> centrada', por: 'Son dos sistemas distintos: uno va de 0 a 800 y el otro de $-1$ a $1$. La distancia sale de cientos de unidades y no se ve nada.' },
+    { e: 'Normalizar el ratón dividiendo cada componente por la suya', por: 'La $p$ del píxel se divide entera por el alto; si el ratón se divide por <code>iResolution.xy</code>, queda en otra escala en horizontal y la linterna se desplaza respecto del puntero.' },
+    { e: 'No prever el primer instante', por: 'Antes de cualquier clic <code>iMouse</code> vale cero: la luz aparece en la esquina inferior izquierda. Se comprueba <code>iMouse.zw</code> y se usa un valor por defecto mientras tanto.' },
+    { e: 'Iluminar con $1/d$ en vez de $1/d^2$', por: 'Con $1/d$ la luz se reparte muy lejos y deja de parecer una bombilla. Y sin el $a^2$ sumado, en $d = 0$ se divide por cero.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

@@ -1,6 +1,11 @@
 /* Tema: El tiempo entra en la ecuación */
 Course.topic('gfx-tiempo', function (p) {
 
+  p.puente('El tema anterior decidía; este mueve. La única variable nueva es el tiempo, y toda la ' +
+    'animación sale del oscilador que ya conoces, $A\\,\\operatorname{sen}(\\omega t + \\varphi) + k$: ' +
+    'amplitud, frecuencia, fase y centro. La novedad es sumarle al tiempo algo que depende de la ' +
+    'posición, y ver aparecer una onda que viaja.');
+
   p.text('Hasta ahora los shaders eran estampas. Con una variable más se ponen en movimiento, y esa ' +
     'variable es <code>iTime</code>: los segundos que llevan corriendo, en decimales.');
 
@@ -16,7 +21,7 @@ Course.topic('gfx-tiempo', function (p) {
 
   p.section('Todo el movimiento sale de un seno');
 
-  p.text('Y aquí es donde el bloque 4 se cobra la deuda. Para que algo vaya y venga sin salirse ' +
+  p.text('Y aquí es donde [[tr-funciones|la trigonometría]] se cobra la deuda. Para que algo vaya y venga sin salirse ' +
     'nunca, la herramienta es la de siempre:');
 
   p.formula('y = A\\,\\operatorname{sen}(\\omega t + \\varphi) + k', 'el oscilador',
@@ -31,9 +36,29 @@ Course.topic('gfx-tiempo', function (p) {
     'casi siempre se escribe <code>0.5 + 0.5 * sin(...)</code>. Eso lo lleva al rango bueno sin ' +
     'pensar.');
 
+  p.comprueba('Un shader pinta el rojo con <code>float r = sin(iTime);</code>, sin el $0{,}5 + 0{,}5$. ¿Qué se ve?', [
+    { t: 'Rojo que sube y baja, pero negro durante la mitad de cada ciclo', ok: true, por: 'Cuando el seno es negativo el canal se recorta a 0: no hay «rojo negativo». La mitad del tiempo la pantalla está negra y la otra mitad sube hasta rojo puro.' },
+    { t: 'Rojo que sube y baja entre negro y rojo, sin cortes', ok: false, por: 'Eso es lo que hace $0{,}5 + 0{,}5\\operatorname{sen}$. Sin el ajuste, el seno pasa medio ciclo por debajo de cero, donde el color no puede seguirlo.' },
+    { t: 'Un error de compilación', ok: false, por: 'Compila sin problema: un color fuera de rango no es un error, se recorta al mostrarlo. Por eso el fallo es silencioso.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Diseñar un movimiento a partir de lo que se quiere ver',
+    enunciado: 'Un círculo debe subir y bajar entre $y = -0{,}3$ e $y = 0{,}3$, completando un ciclo cada 2 segundos, y estar arriba del todo en $t = 0$. Escribir $c_y(t)$. Después, un brillo que pulse entre 0,2 y 1 al mismo ritmo.',
+    pasos: [
+      { t: '<strong>Amplitud y centro.</strong> Va de $-0{,}3$ a $0{,}3$: centro $k = 0$ y amplitud $A = 0{,}3$.', antes: '¿Alrededor de qué valor oscila y cuánto se aleja?' },
+      { t: '<strong>Frecuencia.</strong> Periodo $T = 2$ s, así que $\\omega = 2\\pi / T = \\pi$. Comprobación: en $t = 2$ el argumento ha avanzado $2\\pi$, una vuelta.', antes: 'Un ciclo cada 2 segundos: ¿cuánto tiene que valer $\\omega$ para que $\\omega \\cdot 2 = 2\\pi$?' },
+      { t: '<strong>Fase.</strong> En $t = 0$ tiene que estar arriba, $c_y = 0{,}3$, o sea $\\operatorname{sen}(\\varphi) = 1$: $\\varphi = \\pi/2$. Resultado: $c_y = 0{,}3\\,\\operatorname{sen}(\\pi t + \\pi/2)$, que es lo mismo que $0{,}3\\cos(\\pi t)$.', antes: '¿Qué ángulo tiene seno 1?' },
+      { t: '<strong>En GLSL.</strong> <code>float cy = 0.3 * sin(PI * iTime + PI * 0.5);</code> y después <code>length(p - vec2(0.0, cy)) - radio</code>.' },
+      { t: '<strong>El brillo.</strong> Entre 0,2 y 1: centro $0{,}6$ y amplitud $0{,}4$. Mismo ritmo y misma fase: <code>0.6 + 0.4 * sin(PI * iTime + PI * 0.5)</code>. Brilla al máximo cuando está arriba.' }
+    ],
+    cierre: 'Primero se decide qué se quiere ver, y las cuatro letras salen solas: los extremos dan $A$ y $k$, el periodo da $\\omega$, el instante inicial da $\\varphi$.'
+  });
+
   p.demo({
     title: 'Los cuatro mandos de una onda',
-    intro: 'Un círculo que late y se mueve. Toca amplitud, frecuencia y fase por separado hasta que veas qué hace cada una: son las mismas cuatro letras de la onda del bloque 4, aquí con consecuencias visibles.',
+    intro: 'Un círculo que late y se mueve. Toca amplitud, frecuencia y fase por separado hasta que veas qué hace cada una: son las mismas cuatro letras de la onda de trigonometría, aquí con consecuencias visibles.',
+    predice: 'Con frecuencia 1,6, ¿cuántos segundos tarda el círculo en ir y volver? Calcula $2\\pi / 1{,}6$ antes de cronometrarlo.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-tiempo-1', alto: 300,
@@ -81,6 +106,7 @@ Course.topic('gfx-tiempo', function (p) {
   p.demo({
     title: 'Ondas en el agua',
     intro: 'Nadie ha programado una onda que viaje. Cada píxel oscila en su sitio con un retraso proporcional a su distancia al centro, y el viaje lo pone tu ojo. Cambia entre distancia y coordenada para ver ondas circulares o rectas.',
+    predice: 'Con longitud de onda 22 y velocidad 3, el argumento es $22 s - 3t$. Sigue una cresta: ¿los anillos saldrán del centro o irán hacia él?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-tiempo-2', alto: 300,
@@ -130,6 +156,13 @@ Course.topic('gfx-tiempo', function (p) {
     '<em>armonía digital</em>, y sostenía que las relaciones que hacen bella una imagen en ' +
     'movimiento son las mismas que hacen consonante un acorde. En este tema estás haciendo lo mismo ' +
     'que él, con una tarjeta gráfica en vez de un motor de guerra.');
+
+  p.trampas([
+    { e: 'Usar el seno directamente como color', por: 'La mitad del ciclo es negativo y se recorta a negro. Siempre $0{,}5 + 0{,}5\\operatorname{sen}$, o la amplitud y el centro que toquen.' },
+    { e: 'Intentar «mover un poco» respecto del fotograma anterior', por: 'El shader no lo recuerda. La posición es una función de <code>iTime</code>: en el segundo $t$ la pelota está donde dice la fórmula, y punto.' },
+    { e: 'Confundir frecuencia con periodo', por: '<code>sin(2.0 * iTime)</code> no tarda 2 segundos: tarda $2\\pi/2 \\approx 3{,}14$. Para un ciclo de $T$ segundos, $\\omega = 2\\pi/T$.' },
+    { e: 'Equivocar el signo del tiempo en una onda', por: 'En $\\operatorname{sen}(kr - vt)$ los anillos salen del centro; en $\\operatorname{sen}(kr + vt)$ van hacia él. Sigue una cresta para saberlo.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

@@ -1,6 +1,10 @@
 /* Tema: Torcer el espacio */
 Course.topic('gfx-warp', function (p) {
 
+  p.puente('El tema de matrices transformaba la coordenada con giros y escalados; este la transforma ' +
+    'con cualquier función. Es una [[fn-concepto|composición de funciones]], y el desplazamiento que ' +
+    'se suma es un [[av-vectorial|campo vectorial]] sobre el plano: una flecha en cada punto.');
+
   p.text('En el tema de [[gfx-matrices|matrices]] apareció la idea que descoloca a todo el mundo: ' +
     'para mover una figura no se toca la figura, se toca la coordenada. Ahí lo hicimos con giros y ' +
     'escalados, que son transformaciones rígidas y previsibles. Ahora vamos a hacerlo ' +
@@ -21,9 +25,16 @@ Course.topic('gfx-warp', function (p) {
     'que se dibujan. Y como $g$ puede ser cualquier función, la lista de efectos que salen de esta ' +
     'línea es prácticamente infinita.');
 
+  p.comprueba('Se dibuja una rejilla de líneas horizontales y verticales, y antes se hace $q_x = p_x + 0{,}3\\,\\operatorname{sen}(5 p_y)$, sin tocar $q_y$. ¿Qué líneas se curvan?', [
+    { t: 'Las verticales: cada altura desplaza la $x$ una cantidad distinta', ok: true, por: 'Una línea vertical es «$x$ constante». Si a cada altura se le suma un desplazamiento diferente, deja de ser constante y ondula. Las horizontales son «$y$ constante», y $y$ no se ha tocado.' },
+    { t: 'Las horizontales, porque el seno depende de $p_y$', ok: false, por: 'El seno depende de $y$, pero lo que modifica es $x$. Una recta horizontal sigue teniendo la misma $y$ en todos sus puntos: sigue recta.' },
+    { t: 'Las dos', ok: false, por: 'Para curvar también las horizontales haría falta un desplazamiento en $y$, como el segundo seno de la demo.' }
+  ]);
+
   p.demo({
     title: 'Una rejilla que se retuerce',
     intro: 'La rejilla del tema de repetición, sin tocar. Lo único que cambia es dónde se pregunta: cada punto se desplaza un poco según un seno de su otra coordenada. Sube la amplitud despacio.',
+    predice: 'Si subes la frecuencia al doble, ¿habrá el doble de ondulaciones o serán el doble de altas? ¿Y qué mando las haría más altas?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-war-1', alto: 320,
@@ -67,6 +78,18 @@ Course.topic('gfx-warp', function (p) {
     '<em>izquierda</em>, no hacia la derecha. Es la misma inversión de las matrices: no mueves la ' +
     'figura, mueves el sitio desde el que preguntas.', 'warn', 'Otra vez al revés');
 
+  p.ejemplo({
+    title: 'Dónde pregunta un píxel y dónde aparece la figura',
+    enunciado: 'El shader hace $\\vec q = \\vec p + 0{,}2\\,(\\operatorname{sen} 3p_y,\\ \\operatorname{sen} 3p_x)$ y luego dibuja con $\\vec q$. Calcular $\\vec q$ para $\\vec p = (0{,}5,\\ 1)$. Después, decir dónde aparece un círculo centrado en el origen si en lugar de eso se hace $\\vec q = \\vec p + (0{,}3,\\ 0)$.',
+    pasos: [
+      { t: '<strong>El desplazamiento.</strong> $\\operatorname{sen}(3\\cdot 1) = \\operatorname{sen} 3 \\approx 0{,}141$ y $\\operatorname{sen}(3\\cdot 0{,}5) = \\operatorname{sen} 1{,}5 \\approx 0{,}997$. En radianes, como siempre.', antes: 'Ojo al cruce: la componente $x$ usa $p_y$ y la $y$ usa $p_x$.' },
+      { t: '<strong>La coordenada nueva.</strong> $q_x = 0{,}5 + 0{,}2\\cdot 0{,}141 = 0{,}528$; $q_y = 1 + 0{,}2\\cdot 0{,}997 = 1{,}199$. El píxel de $(0{,}5, 1)$ pinta lo que la función tenga en $(0{,}528,\\ 1{,}199)$.' },
+      { t: '<strong>Un desplazamiento constante.</strong> Con $\\vec q = \\vec p + (0{,}3,\\ 0)$ el círculo se dibuja donde $|\\vec q| < r$, es decir, donde $|\\vec p + (0{,}3, 0)| < r$: alrededor de $\\vec p = (-0{,}3,\\ 0)$. Aparece a la <em>izquierda</em>.', antes: '¿Qué $\\vec p$ hace que $\\vec q$ sea el origen?' },
+      { t: '<strong>Por qué al revés.</strong> No se ha movido el círculo: se ha cambiado dónde pregunta cada píxel. El píxel de la izquierda pregunta 0,3 más a la derecha, y allí encuentra el centro. Es la misma inversión de las matrices, ahora con cualquier $g$.' }
+    ],
+    cierre: 'Dos cuentas: una para saber dónde pregunta un píxel concreto, otra para saber dónde acaba una figura. Las dos salen de la misma línea, $\\vec q = \\vec p + g(\\vec p)$, leída en los dos sentidos.'
+  });
+
   p.section('Ruido dentro del ruido');
 
   p.text('Ahora sustituye ese seno por el ruido fractal del tema del [[gfx-ruido|ruido]]. El ' +
@@ -84,6 +107,7 @@ Course.topic('gfx-warp', function (p) {
   p.demo({
     title: 'Cero, una, dos vueltas',
     intro: 'El mismo fbm de las nubes, deformado por sí mismo. El mando de vueltas es el importante: con cero es la mancha de siempre; con una aparecen las corrientes; con dos, los remolinos que ningún ruido produce por su cuenta.',
+    predice: 'Con 0 vueltas es el fbm de siempre. ¿Crees que el cambio de 1 a 2 vueltas se notará más o menos que el de 0 a 1? Anótalo y compara.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-war-2', alto: 360,
@@ -181,6 +205,13 @@ Course.topic('gfx-warp', function (p) {
     'Ken Perlin otra vez: en su artículo de 1985 ya proponía usar el ruido para desplazar las ' +
     'coordenadas de una textura de mármol, y dejó escrita en dos líneas la técnica que treinta años ' +
     'después seguiría dando de comer a media demoscene.');
+
+  p.trampas([
+    { e: 'Esperar que la figura se mueva hacia donde apunta $g$', por: 'Va al revés: sumar $(0{,}3, 0)$ a la coordenada manda la figura 0,3 a la izquierda. Se mueve el sitio desde el que se pregunta, no el dibujo.' },
+    { e: 'Usar el mismo ruido para las dos componentes', por: 'Entonces $g$ apunta siempre en diagonal, $(n, n)$, y la deformación es un estiramiento en una sola dirección. Hacen falta dos ruidos distintos, por ejemplo desplazando la entrada del segundo.' },
+    { e: 'Escribir <code>desplaza(p)</code> en la segunda vuelta', por: 'La segunda vuelta tuerce lo ya torcido: <code>q = p + fuerza * desplaza(q)</code>, con $q$ dentro. Con $p$ se repite la primera vuelta y no aparecen remolinos.' },
+    { e: 'Subir la fuerza sin límite', por: 'Dos píxeles distintos acaban preguntando en el mismo sitio, la transformación deja de ser invertible y aparecen pliegues y espejos. A veces es el efecto buscado; casi siempre no.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

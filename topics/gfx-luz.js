@@ -1,6 +1,11 @@
 /* Tema: Luz, sombra y aire */
 Course.topic('gfx-luz', function (p) {
 
+  p.puente('Ya sabes dónde choca cada rayo. Este tema reparte la luz con cinco términos: el ' +
+    '[[ge-vectores|producto escalar]] de Lambert, un cociente que mide ángulos para la penumbra, unos ' +
+    'pasos por la normal para los rincones, una potencia para el brillo y la [[fn-exp-log|exponencial]] ' +
+    'de Beer-Lambert para el aire.');
+
   p.text('Tienes una escena y sabes dónde choca cada rayo. Lo que separa una maqueta de plástico de ' +
     'una imagen que engaña al ojo no es la geometría: es <strong>cómo se reparte la luz</strong>. Y ' +
     'resulta que casi todo se consigue con cinco términos, cada uno de dos o tres líneas, que se ' +
@@ -11,6 +16,12 @@ Course.topic('gfx-luz', function (p) {
   p.text('La <strong>luz difusa</strong> es el [[ge-vectores|producto escalar]] entre la normal y la ' +
     'dirección hacia la luz. Cuanto más de frente mire la superficie a la luz, más recibe; cuando le ' +
     'da de lado, casi nada; cuando le da por detrás, cero.');
+
+  p.comprueba('Se escribe la difusa como $\\vec n\\cdot\\vec l$ a secas, sin el $\\max$ con cero. ¿Qué pasa en las caras que dan la espalda a la luz?', [
+    { t: 'Reciben luz negativa, que se resta al ambiente: salen agujeros negros donde debería haber sombra', ok: true, por: 'El producto escalar es negativo cuando la normal mira al lado contrario. Sumado a la luz ambiente, la oscurece por debajo de lo posible. El $\\max$ dice «por detrás no llega nada», que es lo físico.' },
+    { t: 'Nada: la tarjeta recorta los negativos sola', ok: false, por: 'Recorta al final, al mostrar el color. Pero antes ese valor negativo se ha sumado al ambiente y lo ha comido: la sombra sale más oscura que el ambiente, y eso no ocurre en el mundo.' },
+    { t: 'Se iluminan por el otro lado', ok: false, por: 'Luz negativa no es luz por detrás: es una resta. Para iluminar por detrás haría falta otra fuente con su propio producto escalar.' }
+  ]);
 
   p.formula('I_{\\text{dif}} = \\max\\bigl(\\vec{n}\\cdot\\vec{l},\\ 0\\bigr)', 'ley de Lambert',
     'El $\\max$ con cero no es un detalle técnico: sin él, las superficies que dan la espalda a la ' +
@@ -37,15 +48,31 @@ Course.topic('gfx-luz', function (p) {
     'penumbra por el ángulo');
 
   p.text('El motivo es geométrico y perfectamente honesto: $h/t$ es aproximadamente el ' +
-    '<strong>ángulo</strong> bajo el que el rayo ha visto el obstáculo. Si pasó muy cerca ($h$ ' +
-    'pequeña) de algo que estaba muy lejos ($t$ grande), el obstáculo tapaba un pedacito del sol y la ' +
-    'sombra es tenue. Si pasó cerca de algo que tenía al lado, lo tapaba casi todo. El $k$ hace de ' +
-    'tamaño de la fuente: un $k$ alto es un foco pequeño y sombras duras; un $k$ bajo, un cielo ' +
-    'nublado.');
+    '<strong>ángulo</strong> bajo el que el rayo ha visto el obstáculo, medido desde el punto que se ' +
+    'quiere iluminar. Si pasó a $h$ de algo lejano ($t$ grande), ese ángulo es pequeño: el obstáculo ' +
+    'tapa casi todo el sol y la sombra es densa. Si pasó a la misma $h$ de algo que tenía al lado, el ' +
+    'ángulo es grande y apenas tapa nada. Por eso, para un mismo obstáculo, los puntos del suelo más ' +
+    'alejados de él tienen una penumbra más ancha: la franja de $h$ que da valores intermedios crece ' +
+    'con $t$. El $k$ hace de tamaño de la fuente: un $k$ alto es un foco pequeño y sombras duras; un ' +
+    '$k$ bajo, un cielo nublado.');
+
+  p.ejemplo({
+    title: 'Lambert, penumbra y niebla, con números',
+    enunciado: 'Normal $\\vec n = (0,\\ 0{,}8,\\ 0{,}6)$, luz $\\vec l = (0{,}6,\\ 0{,}8,\\ 0)$, color base $0{,}8$ y ambiente $0{,}15$. Calcular la difusa y el color. Después, con $k = 8$, la sombra suave si el rayo pasa a $h = 0{,}05$ de un obstáculo en $t = 0{,}5$ y en $t = 2$. Por último, la niebla con $\\beta = 0{,}1$ a distancia 5 y 20.',
+    pasos: [
+      { t: '<strong>Difusa.</strong> $\\vec n\\cdot\\vec l = 0 + 0{,}64 + 0 = 0{,}64$. Positivo: la cara mira hacia la luz. Color: $0{,}8\\,(0{,}15 + 0{,}64) = 0{,}632$.', antes: 'Producto escalar, y luego albedo por (ambiente más difusa).' },
+      { t: '<strong>Penumbra cerca.</strong> $k\\,h/t = 8\\cdot 0{,}05 / 0{,}5 = 0{,}8$: llega el 80 % de la luz. El obstáculo está al lado y a 0,05 apenas tapa sol.' },
+      { t: '<strong>Penumbra lejos.</strong> $8\\cdot 0{,}05 / 2 = 0{,}2$: llega el 20 %. La misma $h$, cuatro veces más lejos, tapa cuatro veces más ángulo. Para recuperar el 80 % a esa distancia haría falta pasar a $h = 0{,}2$.', antes: 'Misma $h$, $t$ cuatro veces mayor. ¿Qué sale?' },
+      { t: '<strong>Niebla.</strong> A distancia 5: $1 - e^{-0{,}5} = 0{,}39$, el color es un 39 % aire. A 20: $1 - e^{-2} = 0{,}86$: casi todo aire. A partir de $\\ln 2 / \\beta \\approx 7$ unidades, más de la mitad.', antes: 'Aplica $1 - e^{-\\beta t}$ a las dos distancias.' },
+      { t: '<strong>En orden.</strong> $c = \\text{base}\\,(\\text{amb}\\cdot\\text{oclusión} + \\text{dif}\\cdot\\text{sombra})$, luego el especular y el Fresnel sumados, y la niebla la última. Cada término tiene su sitio.' }
+    ],
+    cierre: 'Cinco cuentas de una línea. Ninguna es difícil; lo que hace la imagen es sumarlas en el orden correcto.'
+  });
 
   p.demo({
     title: 'De la sombra de cuchillo al día nublado',
     intro: 'Dos esferas sobre un suelo. El mando k cambia el tamaño aparente de la fuente de luz: bájalo y mira cómo la sombra se despega del objeto y se abre a medida que se aleja, igual que las de verdad.',
+    predice: 'Con dureza 64, ¿la sombra tendrá borde de cuchillo o penumbra? Bájala a 2: ¿la sombra se estrechará o se ensanchará al alejarse de la esfera que la proyecta?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-luz-1', alto: 360,
@@ -170,6 +197,7 @@ Course.topic('gfx-luz', function (p) {
   p.demo({
     title: 'Capa a capa',
     intro: 'La misma escena, con los términos entrando de uno en uno. Sube el mando despacio y fíjate en qué añade cada capa: es lo mismo que hace un director de fotografía al montar una iluminación.',
+    predice: 'Al pasar de 3 capas a 4 no se añade ninguna luz. ¿Dónde se notará: en el cielo, en las zonas planas del suelo, o donde la bola toca el suelo?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-luz-2', alto: 380,
@@ -301,6 +329,13 @@ Course.topic('gfx-luz', function (p) {
     'evita calcular el vector reflejado. Fresnel es de 1823 y describe cuánta luz refleja una ' +
     'superficie según el ángulo; la aproximación de la quinta potencia es de Christophe Schlick, ' +
     '1994. Es decir: dos siglos y medio de óptica resumidos en cinco líneas de shader.');
+
+  p.trampas([
+    { e: 'Quitar el $\\max$ de la difusa', por: 'Las caras de espaldas reciben luz negativa y se comen el ambiente: agujeros negros. Por detrás no llega nada, y eso es un cero, no un número negativo.' },
+    { e: 'Multiplicar la oclusión a toda la luz', por: 'La oclusión mide cuánto cielo llega a un rincón: solo afecta al ambiente. El foco directo no se oculta por los rincones, se oculta por la sombra.' },
+    { e: 'Meter la niebla antes del especular', por: 'El aire está entre la escena y el ojo: va después de todo. Si no, los brillos atraviesan la niebla intactos y delatan el error.' },
+    { e: 'Empezar el rayo de sombra en $t = 0$', por: 'Sobre la propia superficie $h \\approx 0$ y todo queda en sombra. Se arranca un poco más allá, $t = 0{,}03$, y desde un punto despegado por la normal.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

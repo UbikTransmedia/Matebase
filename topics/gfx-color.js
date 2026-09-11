@@ -1,6 +1,10 @@
 /* Tema: El color como función */
 Course.topic('gfx-color', function (p) {
 
+  p.puente('Hasta aquí, formas en gris. Este tema da color con tres ideas conocidas: una ' +
+    '[[tr-funciones|onda]] por canal con fases distintas, una potencia que separa el valor guardado de ' +
+    'la luz real, y el tono como ángulo de las [[gfx-coordenadas|coordenadas polares]].');
+
   p.text('Llevas siete temas dibujando formas y todas han salido de un gris o de un color puesto a ' +
     'ojo. Toca hablar del color en serio, porque es lo que separa un ejercicio de una imagen, y ' +
     'porque esconde dos ideas matemáticas que casi nadie cuenta: una que <strong>regala paletas</strong> ' +
@@ -34,9 +38,16 @@ Course.topic('gfx-color', function (p) {
     'un momento distinto y sale un arcoíris completo. Es exactamente el desfase que estudiaste en ' +
     '[[tr-funciones|funciones trigonométricas]], usado como generador de color.');
 
+  p.comprueba('Una paleta de cosenos con las tres fases iguales, $\\vec d = (0, 0, 0)$. ¿Qué produce?', [
+    { t: 'Solo grises: los tres canales suben y bajan a la vez', ok: true, por: 'Si rojo, verde y azul valen siempre lo mismo, el color es gris. El tono aparece cuando un canal va por delante de otro: la fase es el color.' },
+    { t: 'Un arcoíris', ok: false, por: 'El arcoíris exige que cada canal alcance su máximo en un momento distinto: fases 0, un tercio y dos tercios. Con las tres iguales no hay tono.' },
+    { t: 'Un color liso', ok: false, por: 'Sigue variando con $t$: va de claro a oscuro y vuelve. Lo que no varía es el tono, porque nunca lo hay.' }
+  ]);
+
   p.demo({
     title: 'El taller de paletas',
     intro: 'La franja de abajo es la paleta pura, de t = 0 a t = 1. Arriba, la misma paleta aplicada a unos anillos. Empieza moviendo solo las fases y mira cómo cambia el tono sin tocar nada más.',
+    predice: 'Si pones las fases del verde y del azul a 0, ¿qué verás en la franja? Y con frecuencia 2, ¿cuántas veces se repetirá el arcoíris de izquierda a derecha?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-col-1', alto: 340,
@@ -108,9 +119,22 @@ Course.topic('gfx-color', function (p) {
     'sentido en luz, no en valores</strong>. Si mezclas los valores directamente estás promediando ' +
     'la escala equivocada, y por eso el punto medio sale más oscuro de lo que debería.');
 
+  p.ejemplo({
+    title: 'Tres colores de la paleta y una mezcla honesta',
+    enunciado: 'Paleta con $\\vec a = \\vec b = 0{,}5$, $\\vec f = 1$ y $\\vec d = (0,\\ \\tfrac{1}{3},\\ \\tfrac{2}{3})$. Evaluarla en $t = 0$ y en $t = \\tfrac{1}{3}$. Después, mezclar a partes iguales rojo puro y verde puro, en valores y en luz.',
+    pasos: [
+      { t: '<strong>En $t = 0$.</strong> Rojo: $0{,}5 + 0{,}5\\cos 0 = 1$. Verde: $0{,}5 + 0{,}5\\cos\\frac{2\\pi}{3} = 0{,}25$. Azul: $0{,}5 + 0{,}5\\cos\\frac{4\\pi}{3} = 0{,}25$. Un rojo con algo de gris.', antes: 'Cada canal, la misma fórmula; solo cambia la fase.' },
+      { t: '<strong>En $t = \\frac{1}{3}$.</strong> Rojo: $\\cos\\frac{2\\pi}{3} \\to 0{,}25$. Verde: $\\cos\\frac{4\\pi}{3} \\to 0{,}25$. Azul: $\\cos 2\\pi \\to 1$. Ahora manda el azul: su fase de $\\frac{2}{3}$ hace que alcance el máximo un tercio de ciclo después que el rojo.', antes: 'Suma $\\frac{1}{3}$ a cada fase antes del coseno. ¿Qué canal vale 1?' },
+      { t: '<strong>Mezcla en valores.</strong> $\\frac{(1, 0, 0) + (0, 1, 0)}{2} = (0{,}5,\\ 0{,}5,\\ 0)$. En luz eso es $0{,}5^{2{,}2} \\approx 0{,}22$ por canal: un amarillo con la quinta parte de la luz. El caqui.' },
+      { t: '<strong>Mezcla en luz.</strong> Rojo puro y verde puro ya están a luz 1. Media en luz: $(0{,}5,\\ 0{,}5,\\ 0)$. De vuelta a valores: $0{,}5^{1/2{,}2} \\approx 0{,}73$. Hay que mandar $(0{,}73,\\ 0{,}73,\\ 0)$: un amarillo con la mitad de la luz, que es lo que se pedía.', antes: 'Pasa a luz, promedia, y vuelve con la potencia $1/2{,}2$.' }
+    ],
+    cierre: 'Las dos mezclas difieren en 0,23 por canal, y esa diferencia separa un degradado sucio de uno limpio. La paleta de cosenos no tiene este problema porque no mezcla: calcula cada color directamente.'
+  });
+
   p.demo({
     title: 'La misma mezcla, dos veces',
     intro: 'Dos degradados idénticos entre los mismos dos colores. El de arriba mezcla los valores tal cual; el de abajo pasa a luz, mezcla, y vuelve. Mira el centro de cada uno.',
+    predice: 'Con negro a blanco y gamma 2,2, ¿el gris del centro del degradado de abajo será más claro o más oscuro que el de arriba? ¿Valdrá 0,5 o 0,73?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-col-2', alto: 300,
@@ -186,6 +210,7 @@ Course.topic('gfx-color', function (p) {
   p.demo({
     title: 'La rueda de colores',
     intro: 'El ángulo de cada punto es su tono y la distancia al centro, su saturación: en el centro, blanco; en el borde, el color puro. Baja el brillo para ver cómo todo tiende al negro, y hazla girar: girar la rueda es sumar una constante al tono.',
+    predice: 'Con brillo 1, ¿de qué color es el centro exacto de la rueda? Y si la giras media vuelta, ¿qué color ocupará el sitio del rojo?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-color-hsv', alto: 300,
@@ -250,6 +275,13 @@ Course.topic('gfx-color', function (p) {
     'llevó la contraria con un tratado entero. Y en 1931 la CIE midió por fin la respuesta del ojo ' +
     'humano promediando a diecisiete observadores británicos, cuyos ojos siguen siendo, noventa años ' +
     'después, el patrón con el que tu pantalla decide qué es el rojo.');
+
+  p.trampas([
+    { e: 'Mezclar colores promediando los valores', por: 'Rojo y verde a medias dan $(0{,}5, 0{,}5, 0)$, que en luz es un 22 %: caqui. Se pasa a luz con la potencia 2,2, se promedia allí y se vuelve.' },
+    { e: 'Creer que el gris medio es 0,5', por: 'A la vista, la mitad entre negro y blanco es 0,73, porque $0{,}73^{2{,}2} \\approx 0{,}5$. Una imagen reducida promediando valores sale más oscura.' },
+    { e: 'Calcular el gris como promedio de los tres canales', por: 'El ojo pesa mucho más el verde: la luminancia es $0{,}21 R + 0{,}72 G + 0{,}07 B$. Un azul puro es mucho más oscuro que un verde puro con el mismo valor.' },
+    { e: 'Buscar el tono en la amplitud o el centro', por: 'Con las tres fases iguales solo hay grises, por mucho que se muevan $a$ y $b$. El tono está en el desfase entre canales, y en nada más.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

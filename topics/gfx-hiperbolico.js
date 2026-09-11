@@ -1,6 +1,11 @@
 /* Tema: El disco de Poincare en un shader */
 Course.topic('gfx-hiperbolico', function (p) {
 
+  p.puente('La [[av-noeuclidea|geometría no euclídea]] se dibuja aquí con herramientas conocidas: un ' +
+    '[[fn-exp-log|logaritmo]] para medir distancias, [[al-complejos|números complejos]] para moverse y ' +
+    'las reflexiones del caleidoscopio para teselar. Lo único nuevo es que el borde del dibujo está ' +
+    'infinitamente lejos.');
+
   p.text('En [[av-noeuclidea]] apareció una geometría en la que por un punto exterior a una recta pasan ' +
     'infinitas paralelas, los triángulos suman menos de $180^\\circ$ y el espacio «crece» mucho más deprisa que ' +
     'el plano. Parece imposible de dibujar, porque no cabe en una hoja sin deformarse. Pero hay una manera de ' +
@@ -22,9 +27,16 @@ Course.topic('gfx-hiperbolico', function (p) {
     'borde está a distancia infinita.<br><br>Por ejemplo, $|z| = 0{,}9$ está a distancia $\\ln 19 \\approx 2{,}94$, y ' +
     '$|z| = 0{,}99$, a $\\ln 199 \\approx 5{,}29$.');
 
+  p.comprueba('En el dibujo, $|z| = 0{,}9$ está al doble de distancia del centro que $|z| = 0{,}5$, menos de dos veces. ¿Y en la geometría del disco?', [
+    { t: 'Casi tres veces más lejos: $\\ln 19 \\approx 2{,}94$ frente a $\\ln 3 \\approx 1{,}10$', ok: true, por: 'Las distancias se estiran hacia el borde. El mismo trozo de dibujo vale más cuanto más cerca está del borde, y en el propio borde vale infinito.' },
+    { t: 'Al doble, como en el dibujo', ok: false, por: 'Eso sería si el disco fuera un plano a escala. No lo es: la escala cambia con el radio, y por eso una regla euclídea engaña.' },
+    { t: 'Igual de lejos: el disco solo deforma ángulos', ok: false, por: 'El disco de Poincaré conserva los ángulos, pero las distancias sí las cambia: es lo que permite meter un plano infinito en un círculo.' }
+  ]);
+
   p.demo({
     title: 'Casillas del mismo tamaño',
     intro: 'Un tablero en coordenadas polares hiperbólicas: cada anillo está a la misma distancia hiperbólica del siguiente. Todas las casillas de un mismo anillo son iguales, aunque a nuestros ojos se encojan hacia el borde. Nunca se llega al borde: siempre caben más anillos.',
+    predice: 'Con paso 0,6, ¿cuántos anillos completos habrá entre el centro y $|z| = 0{,}9$? Divide $2{,}94$ entre $0{,}6$.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-hiperbolico-1', alto: 320,
@@ -73,6 +85,19 @@ Course.topic('gfx-hiperbolico', function (p) {
     'pero en la geometría del disco no han cambiado de tamaño.<br><br>En GLSL, con un <code>vec2</code> por complejo, ' +
     'hacen falta el producto y la división de complejos.');
 
+  p.ejemplo({
+    title: 'Dos puntos del disco y una traslación',
+    enunciado: 'Calcular la distancia hiperbólica al centro de $|z| = 0{,}5$ y de $|z| = 0{,}9$. Aplicar la traslación $f_a$ con $a = 0{,}5$ a $z = 0{,}9$ y a $z = 0$, y comprobar que la distancia entre los dos puntos no ha cambiado.',
+    pasos: [
+      { t: '<strong>Distancias al centro.</strong> $d_H(0{,}5) = \\ln\\frac{1{,}5}{0{,}5} = \\ln 3 \\approx 1{,}099$. $d_H(0{,}9) = \\ln\\frac{1{,}9}{0{,}1} = \\ln 19 \\approx 2{,}944$.', antes: 'Aplica $\\ln\\frac{1 + |z|}{1 - |z|}$ a los dos.' },
+      { t: '<strong>Distancia entre ellos.</strong> Están en el mismo diámetro: $2{,}944 - 1{,}099 = 1{,}845$.' },
+      { t: '<strong>La traslación.</strong> Con $a$ real, $f_a(z) = \\frac{z - a}{1 - a z}$. $f_a(0{,}9) = \\frac{0{,}4}{1 - 0{,}45} = \\frac{0{,}4}{0{,}55} \\approx 0{,}727$. $f_a(0) = \\frac{-0{,}5}{1} = -0{,}5$. Y $f_a(0{,}5) = 0$: el punto $a$ ha ido al centro.', antes: 'Calcula $f_a$ en 0,9, en 0 y en 0,5.' },
+      { t: '<strong>Comprobación.</strong> $d_H(0{,}727) = \\ln\\frac{1{,}727}{0{,}273} \\approx 1{,}845$. La distancia entre las imágenes de 0,5 (ahora en 0) y de 0,9 (ahora en 0,727) es la misma de antes.', antes: '¿A qué distancia hiperbólica del centro queda 0,727?' },
+      { t: '<strong>Lo que ve el ojo.</strong> El segmento medía 0,4 en el dibujo y ahora mide 0,727: parece más largo porque está cerca del centro, donde las cosas se ven grandes. En el disco no ha cambiado nada.' }
+    ],
+    cierre: 'Una transformación de Möbius deforma el dibujo y conserva la geometría. Es lo que hace el mando de movimiento de la demo: los polígonos siguen siendo iguales mientras cambian de tamaño ante tus ojos.'
+  });
+
   /* ---------------------------------------------------------------- */
   p.section('Teselados hiperbólicos por reflexiones');
 
@@ -98,6 +123,7 @@ Course.topic('gfx-hiperbolico', function (p) {
   p.demo({
     title: 'Un teselado hiperbólico en movimiento',
     intro: 'Elige cuántos lados tienen los polígonos y cuántos se juntan en cada vértice. El shader dobla cada píxel con reflexiones hasta el triángulo fundamental y lo colorea según haya hecho un número par o impar de reflexiones. Sube el movimiento para trasladarte por el plano hiperbólico con una transformación de Möbius: todos los polígonos son iguales, aunque no lo parezca.',
+    predice: 'Con $p = 7$ y $q = 3$, en cada vértice se juntan tres heptágonos y sus ángulos suman $360°$. ¿Cuánto mide cada ángulo del heptágono hiperbólico? ¿Y cuánto mediría en el plano?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-hiperbolico-2', alto: 340,
@@ -171,6 +197,13 @@ Course.topic('gfx-hiperbolico', function (p) {
     'como un árbol genealógico o las relaciones entre palabras, crecen exponencialmente, igual que el plano ' +
     'hiperbólico. Por eso se representan mucho mejor en un disco de Poincaré que en un plano, y hay sistemas de ' +
     'aprendizaje automático que colocan los datos en espacios hiperbólicos.');
+
+  p.trampas([
+    { e: 'Medir con la regla sobre el dibujo', por: 'La distancia euclídea $|z|$ no es la del disco. $|z| = 0{,}9$ está a $\\ln 19 \\approx 2{,}94$ del centro, y $|z| = 0{,}99$, a $5{,}29$: el borde no se alcanza nunca.' },
+    { e: 'Trasladar sumando un vector', por: 'Sumar saca puntos del disco y no conserva distancias. La traslación hiperbólica es $\\frac{z - a}{1 - \\overline{a} z}$, un cociente que devuelve el disco a sí mismo.' },
+    { e: 'Usar el logaritmo decimal', por: 'La fórmula lleva el neperiano. Con $\\log_{10}$ todas las distancias salen 2,3 veces más pequeñas.' },
+    { e: 'Pedir un teselado con $\\frac{1}{p} + \\frac{1}{q} \\ge \\frac{1}{2}$', por: 'Con cuadrados de cuatro en cuatro se tesela el plano, y con triángulos de tres en tres, la esfera. En el disco solo existen los pares con la suma menor que $\\frac{1}{2}$; la raíz de la fórmula deja de existir en los demás.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

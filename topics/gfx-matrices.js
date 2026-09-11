@@ -1,6 +1,10 @@
 /* Tema: Matrices que giran el mundo */
 Course.topic('gfx-matrices', function (p) {
 
+  p.puente('Mover, escalar y girar son las transformaciones del [[av-espacios|álgebra lineal]]. Este ' +
+    'tema las pone en el shader y descubre que van al revés: se transforma la pregunta, no la figura. ' +
+    'Con el plegado del tema anterior aplicado al ángulo en vez de a la coordenada, sale un caleidoscopio.');
+
   p.text('Girar una figura en un shader tiene una vuelta de tuerca que descoloca a todo el mundo la ' +
     'primera vez, y que una vez entendida ilumina el bloque entero. Vamos a por ella despacio.');
 
@@ -37,6 +41,25 @@ Course.topic('gfx-matrices', function (p) {
     ['sea el doble de grande', '<code>p = p / 2.0;</code>', 'se divide, no se multiplica']
   ]);
 
+  p.comprueba('Un cuadrado centrado en el origen tiene que aparecer desplazado 0,2 a la derecha. ¿Qué se hace con $p$ antes de dibujar?', [
+    { t: 'Restar: <code>p = p - vec2(0.2, 0.0)</code>', ok: true, por: 'El píxel que está en $(0{,}2,\\ 0)$ pregunta qué habría en $(0, 0)$, que es el centro del cuadrado: ahí aparece. Se transforma la pregunta, y por eso va al revés.' },
+    { t: 'Sumar: <code>p = p + vec2(0.2, 0.0)</code>', ok: false, por: 'Así el píxel de $(-0{,}2,\\ 0)$ es el que ve el centro: el cuadrado aparece a la izquierda. Es el error de intuición típico de este tema.' },
+    { t: 'Multiplicar: <code>p = p * 0.2</code>', ok: false, por: 'Eso escala: la coordenada se encoge y el cuadrado se ve cinco veces más grande, sin moverse.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Girar la coordenada 45° y ver qué pasa con una línea',
+    enunciado: 'El shader dibuja la franja vertical $|p_x| < 0{,}02$. Antes de dibujar hace <code>p = rot(PI/4.0) * p</code>. Calcular la matriz, aplicarla a un píxel y decir qué línea se ve.',
+    pasos: [
+      { t: '<strong>La matriz.</strong> $\\cos 45° = \\operatorname{sen} 45° \\approx 0{,}707$. <code>mat2(c, s, -s, c)</code> se llena por columnas: primera columna $(0{,}707,\\ 0{,}707)$, segunda $(-0{,}707,\\ 0{,}707)$. Es $R(45°)$.', antes: 'Escribe las dos columnas. ¿Dónde cae el signo menos?' },
+      { t: '<strong>Un píxel.</strong> $p = (1, 0)$: $q = (0{,}707\\cdot 1 - 0{,}707\\cdot 0,\\ 0{,}707\\cdot 1 + 0{,}707\\cdot 0) = (0{,}707,\\ 0{,}707)$. La coordenada ha girado $+45°$, en sentido antihorario.' },
+      { t: '<strong>La condición.</strong> En general $q_x = 0{,}707\\,(x - y)$. La franja $|q_x| < 0{,}02$ es $|x - y| < 0{,}028$: los píxeles con $x \\approx y$.', antes: 'Escribe $q_x$ en función de $x$ e $y$. ¿Qué píxeles cumplen $|q_x| < 0{,}02$?' },
+      { t: '<strong>Lo que se ve.</strong> La recta $y = x$: una diagonal de abajo a la izquierda a arriba a la derecha. La vertical se ha inclinado $45°$ hacia la derecha, es decir, ha girado $-45°$, en sentido horario.' },
+      { t: '<strong>La lección.</strong> Se giró la coordenada $+45°$ y la figura giró $-45°$. Con una rotación de $90°$ o de $180°$ no se nota, por la simetría de la línea; con $30°$ sí.' }
+    ],
+    cierre: 'Cada píxel no se mueve: pregunta qué habría en otro sitio. Girar la pregunta en un sentido enseña la figura girada en el otro.'
+  });
+
   p.text('En la práctica el signo del giro pocas veces importa —una rotación es simétrica— y casi ' +
     'nadie escribe el menos. Pero cuando combines varias transformaciones y algo salga al revés, la ' +
     'explicación es esta.');
@@ -44,6 +67,7 @@ Course.topic('gfx-matrices', function (p) {
   p.demo({
     title: 'Girar, escalar, mover',
     intro: 'Las tres transformaciones sobre un cuadrado. Fíjate en el orden: cambia si mueves antes o después de girar, porque componer transformaciones no es conmutativo. Eso también viene del álgebra lineal.',
+    predice: 'Con giro 0 y desplazamiento 0,3, ¿a qué lado aparecerá el cuadrado? Luego pon giro 1,57 y compara los dos órdenes: ¿en cuál se queda a la derecha y en cuál se va arriba?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-mat-1', alto: 300,
@@ -100,6 +124,7 @@ Course.topic('gfx-matrices', function (p) {
   p.demo({
     title: 'Caleidoscopio',
     intro: 'Se pasa a polares, se pliega el ángulo en sectores iguales y se dibuja una sola figura. La simetría no está dibujada: está en el plegado. Sube los sectores y mira lo que pasa.',
+    predice: 'Con 6 sectores, ¿cuántas copias del círculo pequeño verás: 6 o 12? Piensa en el <code>abs</code> que hace de espejo dentro de cada sector.',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-mat-2', alto: 320,
@@ -151,6 +176,13 @@ Course.topic('gfx-matrices', function (p) {
     'números que se multiplican. Cuando Cayley definió el producto de matrices lo hizo <em>para ' +
     'que</em> componer transformaciones fuera multiplicar: por eso el producto es como es, y por eso ' +
     'no es conmutativo, porque componer giros y traslaciones tampoco lo es.');
+
+  p.trampas([
+    { e: 'Rellenar <code>mat2</code> por filas', por: 'GLSL va por columnas: <code>mat2(c, s, -s, c)</code>. Puesto por filas, el giro sale en sentido contrario y nadie se da cuenta hasta que se combina con otra cosa.' },
+    { e: 'Sumar para mover a la derecha', por: '<code>p + vec2(0.2, 0.0)</code> manda la figura a la izquierda. Se transforma la coordenada, no la figura: para mover a la derecha se resta.' },
+    { e: 'Escalar la coordenada y olvidar reescalar $d$', por: 'Con <code>p / 2.0</code> las distancias salen a la mitad y el borde suave se ve el doble de grueso. Se multiplica $d$ por la escala al final.' },
+    { e: 'Suponer que el orden da igual', por: 'Mover la coordenada y luego girarla hace que la figura gire sobre sí misma, desplazada; girar y luego mover la hace orbitar alrededor del centro. $AB \\ne BA$, y aquí se ve.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
@@ -213,23 +245,10 @@ Course.topic('gfx-matrices', function (p) {
     ask: function (d) {
       return 'Antes de dibujar una figura centrada en el origen, el shader hace:<br>' +
         '<pre class="shd__mini">' + d.cod + '</pre>' +
-        '¿Qué le pasa a la figura?<br>' +
-        '<span style="font-size:0.875rem;color:var(--ink-faint)">Responde: <code>derecha</code>, ' +
-        '<code>izquierda</code>, <code>arriba</code>, <code>mayor</code> o <code>menor</code>.</span>';
+        '¿Qué le pasa a la figura?';
     },
-    fields: [{ name: 'q', label: 'La figura se ve…', w: 'wide' }],
+    fields: [{ name: 'q', label: 'La figura se ve', opts: [{ t: 'desplazada a la derecha', v: 'derecha' }, { t: 'desplazada a la izquierda', v: 'izquierda' }, { t: 'desplazada hacia arriba', v: 'arriba' }, { t: 'más grande', v: 'mayor' }, { t: 'más pequeña', v: 'menor' }] }],
     sol: function (d) { return { q: d.q }; },
-    check: function (v, d) {
-      var q = U.eligeOpcion(v.raw.q, {
-        derecha: /derecha|hacia la derecha/,
-        izquierda: /izquierda|hacia la izquierda/,
-        arriba: /arriba|hacia arriba|sube/,
-        mayor: /mayor|grande|crece|aumenta|zoom/,
-        menor: /menor|pequen|encoge|reduce|disminuye/
-      });
-      if (!q) return { ok: false, msg: 'Responde con una: derecha, izquierda, arriba, mayor o menor.' };
-      return { ok: q === d.q };
-    },
     hint: function () {
       return 'Todo va al revés: lo que le haces a la coordenada, la figura lo hace en sentido ' +
         'contrario. Restar mueve la figura en la dirección positiva; dividir la agranda.';

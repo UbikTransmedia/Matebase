@@ -1,6 +1,10 @@
 /* Tema: Caleidoscopios */
 Course.topic('gfx-simetria', function (p) {
 
+  p.puente('El caleidoscopio del tema de matrices vuelve aquí desmontado en dos piezas: <code>abs</code> ' +
+    'es un espejo y <code>mod</code> pliega el ángulo. Detrás están los [[av-grupos|grupos]] cíclico y ' +
+    'diédrico, que aquí se cuentan mirando cuántas copias salen.');
+
   p.text('Un caleidoscopio es un tubo con dos espejos dentro y cuatro cristales rotos en el fondo. ' +
     'Lo que hace que sea hipnótico no son los cristales: es la simetría. Vamos a construir uno, y de ' +
     'paso vas a ver que <strong>toda la simetría de este bloque cabe en dos funciones</strong> que ya ' +
@@ -18,6 +22,12 @@ Course.topic('gfx-simetria', function (p) {
   p.text('Y como siempre en este bloque, la figura no se entera: sigues dibujando lo que quieras y el ' +
     'espejo aparece solo. Dibuja algo asimétrico a la derecha y automáticamente hay una copia ' +
     'reflejada a la izquierda, gratis.');
+
+  p.comprueba('Se hace <code>p.x = abs(p.x)</code> y después se dibuja un círculo centrado en $(-0{,}3,\\ 0)$. ¿Qué se ve?', [
+    { t: 'Nada: tras el abs ningún píxel pregunta por una $x$ negativa, y el círculo queda donde nadie mira', ok: true, por: 'El espejo copia la mitad derecha en la izquierda. Lo que esté dibujado en $x < 0$ no lo ve ningún píxel. Para que aparezca reflejado hay que dibujarlo en $x > 0$.' },
+    { t: 'Dos círculos, en $x = \\pm 0{,}3$', ok: false, por: 'Eso pasaría con el círculo en $(+0{,}3, 0)$. El abs solo pregunta por la mitad positiva del plano.' },
+    { t: 'Un círculo a la izquierda, sin reflejo', ok: false, por: 'Los píxeles de la izquierda ya no preguntan por su propia posición: preguntan por la simétrica, que está a la derecha, donde no hay círculo.' }
+  ]);
 
   p.section('Girar y plegar: simetría de orden n');
 
@@ -40,9 +50,23 @@ Course.topic('gfx-simetria', function (p) {
     'mismo y las copias se duplican: pasas de $n$ a $2n$. Eso es un caleidoscopio de verdad, con sus ' +
     'dos espejos.');
 
+  p.ejemplo({
+    title: 'Plegar dos ángulos con orden 6',
+    enunciado: 'Simetría de orden $n = 6$: sector de $60°$. Plegar los ángulos $150°$ y $-100°$ sin espejo y con espejo, y contar las copias en cada caso.',
+    pasos: [
+      { t: '<strong>150° sin espejo.</strong> $\\operatorname{mod}(150, 60) = 30$; centrado: $30 - 30 = 0°$. El píxel a $150°$ pregunta como si estuviera a $0°$, sobre el eje del sector.', antes: 'Resto de dividir entre 60 y luego resta medio sector.' },
+      { t: '<strong>−100° sin espejo.</strong> El <code>mod</code> de GLSL da resto positivo: $-100 - 60\\cdot\\lfloor -100/60 \\rfloor = -100 + 120 = 20$. Centrado: $20 - 30 = -10°$.', antes: 'Con negativos, $\\lfloor -1{,}67 \\rfloor = -2$. ¿Qué resto sale?' },
+      { t: '<strong>Con espejo.</strong> Se aplica <code>abs</code>: $0° \\to 0°$ y $-10° \\to 10°$. Los ángulos negativos del sector se reflejan sobre los positivos: solo se usa media cuña de $30°$.' },
+      { t: '<strong>Copias.</strong> Sin espejo, cada sector recibe una copia: 6. Con espejo, cada sector es una copia y su reflejo: 12. El sector fundamental mide $60°$ en el primer caso y $30°$ en el segundo.', antes: '¿Cuántos sectores hay y cuántas copias caben en cada uno?' },
+      { t: '<strong>El radio.</strong> En ningún paso se ha tocado: los dos píxeles siguen a la misma distancia del centro. Plegar el ángulo mueve por circunferencias, nunca por radios.' }
+    ],
+    cierre: 'Dos líneas, <code>mod</code> y <code>abs</code>, y un motivo cualquiera se convierte en el grupo $C_6$ o en el $D_6$. La diferencia entre los dos grupos es un valor absoluto.'
+  });
+
   p.demo({
     title: 'De un garabato a una roseta',
     intro: 'El dibujo del fondo es deliberadamente feo y asimétrico: tres manchas puestas a voluntad. Sube el orden de la simetría y mira lo que pasa. El motivo no cambia ni un píxel; lo único que cambia es desde dónde se pregunta.',
+    predice: 'Con orden 6 y espejo, ¿cuántas copias de la mancha grande verás? ¿Y si quitas el espejo?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-sim-1', alto: 340,
@@ -105,6 +129,7 @@ Course.topic('gfx-simetria', function (p) {
   p.demo({
     title: 'El tubo, los espejos y los cristales',
     intro: 'Debajo hay humo procedural en movimiento. Encima, el pliegue. El mando de torsión hace que el ángulo del pliegue dependa del radio, que es lo que produce esos brazos en espiral que ningún caleidoscopio real puede hacer.',
+    predice: 'Con torsión 0 los brazos son rectos. Con torsión 1,1, ¿se curvarán todos en el mismo sentido o alternarán? ¿Y con torsión negativa?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-sim-2', alto: 380,
@@ -197,6 +222,13 @@ Course.topic('gfx-simetria', function (p) {
     'la Alhambra en 1922 y en 1936, copió mosaicos a mano durante días y volvió a casa a inventarse ' +
     'los suyos; no sabía matemáticas, pero derivó por su cuenta la clasificación completa de las ' +
     'maneras de rellenar el plano.');
+
+  p.trampas([
+    { e: 'Dibujar el motivo en la zona que el espejo no mira', por: 'Tras <code>p.x = abs(p.x)</code> nadie pregunta por $x < 0$. Un círculo en $(-0{,}3, 0)$ desaparece. El motivo va en la mitad positiva, y el espejo hace el resto.' },
+    { e: 'Plegar sin restar medio sector', por: '<code>mod(a, TAU/n)</code> deja el sector de 0 a $2\\pi/n$, con el motivo pegado a un borde. Al añadir el espejo, la reflexión cae en el sitio equivocado. El $-\\pi/n$ centra la cuña.' },
+    { e: 'Contar $n$ copias con espejo', por: 'El <code>abs</code> duplica: cada sector contiene una copia y su reflejo. Con orden 6 y espejo hay 12, y el sector fundamental mide $30°$.' },
+    { e: 'Poner algo justo en el centro', por: 'El origen es donde se juntan todas las copias: cualquier cosa allí sale como un nudo. Los caleidoscopios buenos empujan el motivo hacia fuera o tapan el centro.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

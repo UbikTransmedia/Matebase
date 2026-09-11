@@ -1,6 +1,10 @@
 /* Tema: El lienzo es un plano cartesiano */
 Course.topic('gfx-coordenadas', function (p) {
 
+  p.puente('El tema anterior normalizó la coordenada. Este la centra, corrige el aspecto y la pasa a ' +
+    'polares. Las herramientas son las del [[ge-vectores|plano y los vectores]]: el módulo y el ángulo ' +
+    'con signo. Nada nuevo, solo dónde se pone el origen y con qué se divide.');
+
   p.text('En el tema anterior normalizamos la coordenada y salió un cuadrado de 0 a 1. Sirve para ' +
     'empezar, pero tiene dos defectos que hay que arreglar antes de dibujar nada serio: ' +
     '<strong>el origen está en una esquina</strong> y <strong>la imagen se deforma</strong> si la ' +
@@ -18,7 +22,7 @@ Course.topic('gfx-coordenadas', function (p) {
   p.formula('\\mathbf{p} = \\mathbf{uv} - 0{,}5', 'centrar');
 
   p.text('Ahora el centro de la pantalla es el $(0,0)$, la izquierda es $-0{,}5$ y la derecha ' +
-    '$+0{,}5$. Es el plano cartesiano del bloque 3, con el mismo convenio de signos que llevas ' +
+    '$+0{,}5$. Es el plano cartesiano de [[ge-vectores|geometría]], con el mismo convenio de signos que llevas ' +
     'usando desde entonces.');
 
   p.section('El problema del aspecto');
@@ -41,9 +45,28 @@ Course.topic('gfx-coordenadas', function (p) {
       'siempre, y la $x$ se sale de ese rango en las pantallas anchas. Eso no es un fallo: es ' +
       'justamente lo que quieres, porque significa que hay más sitio a los lados.');
 
+  p.comprueba('Pantalla de 1000 × 500 con la normalización buena, la que divide por el alto. ¿Entre qué valores va $p_x$?', [
+    { t: 'De $-1$ a $1$', ok: true, por: 'La pantalla es el doble de ancha que alta: $p_x = (x - 500)/500$ va de $-1$ a $1$ mientras $p_y$ va de $-0{,}5$ a $0{,}5$. Hay más sitio a los lados, y eso es lo correcto.' },
+    { t: 'De $-0{,}5$ a $0{,}5$, como $p_y$', ok: false, por: 'Eso pasaría dividiendo la $x$ por el ancho, y entonces una unidad horizontal mediría el doble que una vertical: el círculo saldría ovalado.' },
+    { t: 'De 0 a 1', ok: false, por: 'Ese es el rango sin centrar. Al restar media pantalla, el origen se va al centro y los valores se reparten a los dos lados.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un píxel, centrado y en polares',
+    enunciado: 'Ventana de 1000 × 500 y píxel $(900, 100)$. Calcular $\\mathbf{p}$ con la normalización buena, pasarlo a polares y comparar con la normalización mala.',
+    pasos: [
+      { t: '<strong>Centrar y dividir por el alto.</strong> $p = \\left(\\dfrac{900 - 500}{500},\\ \\dfrac{100 - 250}{500}\\right) = (0{,}8,\\ -0{,}3)$.', antes: 'Resta media pantalla a cada componente y divide las dos entre 500.' },
+      { t: '<strong>Dónde cae.</strong> A la derecha del centro y un poco por debajo. Fíjate en que $p_x = 0{,}8$ se sale de $[-0{,}5, 0{,}5]$: la pantalla es el doble de ancha que alta y la $x$ llega hasta $\\pm 1$.' },
+      { t: '<strong>Polares.</strong> $r = \\sqrt{0{,}64 + 0{,}09} = \\sqrt{0{,}73} \\approx 0{,}854$. $\\theta = \\operatorname{atan2}(-0{,}3,\\ 0{,}8) \\approx -0{,}359$ rad, unos $-20{,}6°$: cuarto cuadrante.', antes: 'Pitágoras para $r$ y la arcotangente de dos argumentos para el ángulo.' },
+      { t: '<strong>Con la normalización mala.</strong> $uv - 0{,}5 = (0{,}9 - 0{,}5,\\ 0{,}2 - 0{,}5) = (0{,}4,\\ -0{,}3)$. La $y$ coincide y la $x$ vale la mitad: en horizontal una unidad son 1000 píxeles y en vertical 500. Un círculo dibujado con esta $p$ se estira al doble de ancho.', antes: 'Divide la $x$ por 1000 y la $y$ por 500. ¿Qué componente cambia?' }
+    ],
+    cierre: 'La diferencia entre las dos normalizaciones es un solo divisor. Con el bueno, $r$ mide lo mismo en cualquier dirección y el círculo sale redondo.'
+  });
+
   p.demo({
     title: 'El círculo que se deforma',
     intro: 'El mismo shader con las dos maneras de normalizar. Con el deslizador a la izquierda divide cada eje por lo suyo y el círculo sale ovalado; a la derecha divide los dos por el alto y sale redondo. Estira la ventana del navegador para verlo mejor.',
+    predice: 'Antes de mover el mando: en una ventana el doble de ancha que alta, ¿cuánto más ancho que alto saldrá el «círculo» con la normalización mala?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-coord-1', alto: 260,
@@ -72,7 +95,7 @@ Course.topic('gfx-coordenadas', function (p) {
   });
 
   p.note('Ese <code>length(p)</code> merece que te pares. Es literalmente ' +
-    '$\\sqrt{p_x^2 + p_y^2}$, el módulo de un vector del bloque 3. Y la condición «estoy a menos de ' +
+    '$\\sqrt{p_x^2 + p_y^2}$, el [[ge-vectores|módulo de un vector]]. Y la condición «estoy a menos de ' +
     '0,3 del centro» es la definición de circunferencia que aprendiste allí: el conjunto de puntos ' +
     'que están a una distancia fija de otro. Aquí, esa definición <strong>es</strong> el programa.',
     null, 'La definición de circunferencia, ejecutándose');
@@ -92,11 +115,12 @@ Course.topic('gfx-coordenadas', function (p) {
       'no es la arcotangente de toda la vida. Es la versión que mira los signos de los dos números ' +
       'para saber en qué cuadrante estás, y por eso devuelve un ángulo completo de $-\\pi$ a $\\pi$ ' +
       'en lugar de medio. Con un solo argumento no podría distinguir el primer cuadrante del ' +
-      'tercero.<br><br>El ángulo sale en <strong>radianes</strong>, como en el bloque 4.');
+      'tercero.<br><br>El ángulo sale en <strong>radianes</strong>, como en [[tr-circunferencia|trigonometría]].');
 
   p.demo({
     title: 'Ángulo y distancia, pintados',
     intro: 'A la izquierda se pinta la distancia al centro; a la derecha, el ángulo. Míralos por separado y luego combínalos: con esas dos cantidades se construye casi todo lo que gira.',
+    predice: 'Con 5 brazos y espiral 0, ¿cuántas veces se repite la onda alrededor del centro? Y si pones brazos en 1, ¿qué crees que verás?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-coord-2', alto: 280,
@@ -138,6 +162,13 @@ Course.topic('gfx-coordenadas', function (p) {
     'siglos apuntando estrellas así, porque en el cielo no hay ejes pero sí hay un horizonte y un ' +
     'norte. Que hoy sirvan para dibujar una espiral en una tarjeta gráfica es la misma idea, con ' +
     'quince siglos de por medio.');
+
+  p.trampas([
+    { e: 'Dividir cada eje por su tamaño', por: 'Sale un cuadrado de 0 a 1 que no es cuadrado: en una pantalla de 800 × 400 una unidad horizontal mide el doble de píxeles que una vertical. El círculo sale ovalado.' },
+    { e: 'Olvidar el $-0{,}5$ y dibujar centrado', por: 'Con <code>fragCoord / iResolution.y</code> a secas el origen sigue en la esquina y el círculo aparece abajo a la izquierda, cortado por los bordes.' },
+    { e: 'Usar <code>atan(p.y / p.x)</code> con un solo argumento', por: 'Solo devuelve ángulos entre $-\\pi/2$ y $\\pi/2$ y confunde el primer cuadrante con el tercero. Con dos argumentos mira los signos y da la vuelta completa.' },
+    { e: 'Pensar en grados', por: 'Todo lo trigonométrico del shader va en radianes. Girar «45» es girar 45 radianes: unas siete vueltas y pico.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

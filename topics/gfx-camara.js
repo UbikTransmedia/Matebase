@@ -1,6 +1,10 @@
 /* Tema: La camara: una base con el producto vectorial */
 Course.topic('gfx-camara', function (p) {
 
+  p.puente('El trazador miraba siempre hacia $-z$. Este tema construye la mirada con el ' +
+    '[[ge-espacio-vectores|producto vectorial]]: tres vectores perpendiculares y, con ellos, el rayo de ' +
+    'cada píxel. El foco y el campo de visión se relacionan por una [[tr-razones|tangente]].');
+
   p.text('En el [[gfx-trazado|trazador de rayos]] el ojo miraba siempre en la misma dirección, hacia $-z$, y el ' +
     'rayo de cada píxel se construía con <code>vec3(p, -foco)</code>. Eso sirve para empezar, pero una cámara de ' +
     'verdad mira a donde se le pide: a un objeto, desde arriba, dando vueltas alrededor. Para eso hace falta ' +
@@ -33,9 +37,29 @@ Course.topic('gfx-camara', function (p) {
     'real, y los programas lo evitan inclinando un poco la vertical de referencia o no dejando que la cámara llegue ' +
     'a esa posición.', 'warn', 'Mirar al cielo');
 
+  p.comprueba('Se cambia $\\vec f\\times\\vec a$ por $\\vec a\\times\\vec f$ y se deja el resto igual. ¿Qué le pasa a la imagen?', [
+    { t: 'Gira media vuelta: $\\vec r$ y $\\vec u$ cambian los dos de sentido', ok: true, por: 'El producto vectorial es anticonmutativo: $\\vec r$ se invierte. Y como $\\vec u = \\vec r\\times\\vec f$ se calcula a partir de $\\vec r$, también se invierte. Derecha e izquierda, arriba y abajo: media vuelta.' },
+    { t: 'Se refleja como en un espejo', ok: false, por: 'Eso pasaría si solo cambiara $\\vec r$. Pero $\\vec u$ depende de $\\vec r$ y cambia con él: dos inversiones son un giro, no un espejo.' },
+    { t: 'No cambia: el producto vectorial es conmutativo', ok: false, por: 'No lo es: $\\vec a\\times\\vec f = -\\vec f\\times\\vec a$. El orden decide el sentido, y aquí se ve en pantalla.' }
+  ]);
+
+  p.ejemplo({
+    title: 'La base de una cámara, con números',
+    enunciado: 'Ojo en $\\vec o = (3, 0, 4)$ mirando al origen, vertical $\\vec a = (0, 1, 0)$. Calcular $\\vec f$, $\\vec r$ y $\\vec u$, el rayo del píxel $\\vec p = (0{,}5,\\ 0)$ con foco $1{,}5$, y el campo de visión.',
+    pasos: [
+      { t: '<strong>Hacia delante.</strong> $\\vec t - \\vec o = (-3, 0, -4)$, de módulo 5: $\\vec f = (-0{,}6,\\ 0,\\ -0{,}8)$.', antes: 'Del ojo al objetivo, dividido por su módulo.' },
+      { t: '<strong>La derecha.</strong> $\\vec f\\times\\vec a = (f_y a_z - f_z a_y,\\ f_z a_x - f_x a_z,\\ f_x a_y - f_y a_x) = (0{,}8,\\ 0,\\ -0{,}6)$. Ya mide 1: $\\vec r = (0{,}8, 0, -0{,}6)$.', antes: 'Producto vectorial con la vertical. ¿Hace falta normalizar?' },
+      { t: '<strong>La arriba.</strong> $\\vec u = \\vec r\\times\\vec f = (0,\\ 0{,}36 + 0{,}64,\\ 0) = (0, 1, 0)$. Sale la vertical del mundo porque la cámara está a la altura del objetivo; si mirara desde arriba, $\\vec u$ se inclinaría.' },
+      { t: '<strong>El rayo del píxel.</strong> $0{,}5\\,\\vec r + 0\\,\\vec u + 1{,}5\\,\\vec f = (0{,}4, 0, -0{,}3) + (-0{,}9, 0, -1{,}2) = (-0{,}5,\\ 0,\\ -1{,}5)$. Normalizado: $(-0{,}316,\\ 0,\\ -0{,}949)$.', antes: 'Combina los tres vectores con los pesos $p_x$, $p_y$ y el foco.' },
+      { t: '<strong>El campo.</strong> $2\\operatorname{arctg}\\frac{0{,}5}{1{,}5} = 2\\cdot 18{,}4° = 36{,}9°$. Un objetivo normal. Con foco $0{,}5$ serían $90°$: gran angular.' }
+    ],
+    cierre: 'Tres vectores perpendiculares y una combinación lineal por píxel. Comprobación rápida: $\\vec f\\cdot\\vec r = -0{,}48 + 0{,}48 = 0$, como tiene que ser.'
+  });
+
   p.demo({
     title: 'La base de la cámara, vista desde arriba',
     intro: 'Vista cenital: el ojo, el objetivo y los dos vectores horizontales de la base, f hacia delante y r hacia la derecha. El tercero, u, apunta hacia ti, fuera del papel. Da vueltas con el ojo y cambia el foco: las líneas de puntos son los rayos de los bordes de la imagen.',
+    predice: 'Con el foco a 0,5, ¿qué ángulo formarán los dos rayos de puntos: 45° o 90°? Calcula $2\\operatorname{arctg}(0{,}5/0{,}5)$.',
     build: function (host) {
       var ang = -60, foco = 1.5;
       var out = W.readout(host, '');
@@ -82,6 +106,7 @@ Course.topic('gfx-camara', function (p) {
   p.demo({
     title: 'Una cámara que da vueltas',
     intro: 'Tres esferas sobre un suelo, vistas por una cámara que siempre mira al centro. Mueve la órbita y la altura del ojo, y cambia el foco: con foco corto las esferas de los lados se estiran; con foco largo todo se aplana. Activa el giro para que la cámara orbite sola.',
+    predice: 'Con foco 4, ¿las esferas de los lados se verán estiradas o casi iguales que la del centro? ¿Y con foco 0,5?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-camara-1', alto: 320,
@@ -151,6 +176,13 @@ Course.topic('gfx-camara', function (p) {
     'con un espejo y un agujero: mirando por detrás de la tabla, la pintura encajaba con el edificio real. En ' +
     '1435, Leon Battista Alberti lo convirtió en método en su tratado <em>De pictura</em>: una ventana, un ojo y ' +
     'rayos rectos que la atraviesan. Un shader con cámara hace exactamente eso, píxel a píxel.');
+
+  p.trampas([
+    { e: 'Cambiar el orden del producto vectorial', por: '$\\vec a\\times\\vec f = -\\vec f\\times\\vec a$. Con $\\vec r$ invertido, $\\vec u$ también se invierte y la imagen sale girada media vuelta.' },
+    { e: 'Mirar justo hacia arriba', por: '$\\vec f$ paralelo a $\\vec a$ da $\\vec f\\times\\vec a = \\vec 0$, que no se puede normalizar: la derecha queda indefinida. Se inclina un poco la vertical o se evita esa posición.' },
+    { e: 'No normalizar $\\vec f$', por: 'Si $\\vec f$ mide 5, el foco efectivo se multiplica por 5 y el campo de visión se estrecha sin que nadie lo haya pedido.' },
+    { e: 'Poner el ángulo de la órbita en grados', por: '<code>cos</code> y <code>sin</code> trabajan en radianes. Con 90 «grados» la cámara da más de catorce vueltas.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');

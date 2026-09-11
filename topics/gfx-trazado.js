@@ -1,6 +1,11 @@
 /* Tema: Trazado de rayos: la geometria de 2.o, dibujando */
 Course.topic('gfx-trazado', function (p) {
 
+  p.puente('El túnel fingía la profundidad; este tema la calcula. Cada píxel lanza una ' +
+    '[[ge-espacio|recta paramétrica]] desde el ojo, chocar con una esfera es una ' +
+    '[[al-ec2|ecuación de segundo grado]] cuyo discriminante decide si se ve, y reflejar es restar dos ' +
+    'veces una [[ge-vectores|proyección]].');
+
   p.text('Hay una manera de fabricar imágenes en tres dimensiones que no necesita triángulos, ni proyecciones ' +
     'complicadas, ni saber nada de tarjetas gráficas. Para cada píxel se lanza un rayo desde el ojo que pasa ' +
     'por ese píxel, se busca el primer objeto con el que choca y se pinta el píxel del color de ese objeto, ' +
@@ -37,9 +42,29 @@ Course.topic('gfx-trazado', function (p) {
     '$t = -b - \\sqrt{b^2 - k}$.<br><br>En el punto de choque, la <strong>normal</strong> es $\\vec n = \\frac{\\vec P - \\vec c}{r}$, ' +
     'y la iluminación difusa es $\\max(\\vec n\\cdot\\vec \\ell,\\ 0)$, con $\\vec \\ell$ la dirección hacia la luz.');
 
+  p.comprueba('El discriminante sale positivo, pero las dos soluciones $t$ son negativas. ¿Qué ve el píxel?', [
+    { t: 'Nada de la esfera: está detrás del ojo', ok: true, por: 'La recta corta la esfera, pero en la mitad que queda a la espalda. Solo cuentan los $t \\ge 0$: por eso el rayo es media recta y no una recta entera.' },
+    { t: 'La esfera, por el corte más cercano', ok: false, por: 'El corte más cercano tiene $t < 0$: habría que retroceder para llegar a él. El ojo no ve hacia atrás.' },
+    { t: 'El interior de la esfera', ok: false, por: 'Eso pasa cuando una solución es negativa y la otra positiva: el ojo está dentro. Con las dos negativas, la esfera entera queda detrás.' }
+  ]);
+
+  p.ejemplo({
+    title: 'Un rayo, una esfera y una luz, con números',
+    enunciado: 'Ojo en el origen, rayo $\\vec d = (0, 0, -1)$, esfera de centro $\\vec c = (1, 0, -5)$ y radio 2, luz en la dirección $\\vec \\ell = (-1, 1, 1)/\\sqrt 3$. Decidir si hay choque, dónde, cuánta luz difusa recibe y hacia dónde rebota el rayo.',
+    pasos: [
+      { t: '<strong>Los coeficientes.</strong> $\\vec o - \\vec c = (-1, 0, 5)$. $b = \\vec d\\cdot(\\vec o - \\vec c) = -5$. $k = |(-1, 0, 5)|^2 - 4 = 26 - 4 = 22$.', antes: 'Calcula $b$ y $k$ con las fórmulas de arriba.' },
+      { t: '<strong>El discriminante.</strong> $b^2 - k = 25 - 22 = 3 > 0$: hay choque. $t = -b - \\sqrt 3 = 5 - 1{,}732 = 3{,}268$. El otro corte, $5 + 1{,}732$, es la salida por detrás.' },
+      { t: '<strong>El punto y la normal.</strong> $\\vec P = 3{,}268\\,\\vec d = (0, 0, -3{,}268)$. $\\vec n = (\\vec P - \\vec c)/2 = (-1, 0, 1{,}732)/2 = (-0{,}5,\\ 0,\\ 0{,}866)$. Mide 1, como debe.', antes: 'Resta el centro y divide por el radio.' },
+      { t: '<strong>La luz.</strong> $\\vec \\ell = (-0{,}577, 0{,}577, 0{,}577)$. $\\vec n\\cdot\\vec \\ell = 0{,}289 + 0 + 0{,}5 = 0{,}789$. Recibe el 79 % de la luz: la cara mira bastante hacia ella.', antes: 'Producto escalar de la normal con la dirección de la luz.' },
+      { t: '<strong>El rebote.</strong> $\\vec d\\cdot\\vec n = -0{,}866$. $\\vec R = \\vec d - 2(-0{,}866)\\,\\vec n = (0, 0, -1) + 1{,}732\\,(-0{,}5, 0, 0{,}866) = (-0{,}866,\\ 0,\\ 0{,}5)$. Sigue midiendo 1 y vuelve hacia el ojo, desviado a la izquierda: lo que vería un espejo ahí.' }
+    ],
+    cierre: 'Segundo grado, un módulo, dos productos escalares y una resta. Con eso se ha decidido qué ve el píxel, cómo de iluminado y qué reflejaría. Es toda la geometría analítica de Bachillerato en un solo píxel.'
+  });
+
   p.demo({
     title: 'El discriminante decide',
     intro: 'Un corte en dos dimensiones: el ojo, un rayo y la esfera, que aquí se ve como un círculo. Gira el rayo y mueve el centro. Con el discriminante negativo el rayo pasa de largo; con él positivo hay dos cortes, y el píxel ve el primero, en rojo.',
+    predice: 'Con el centro en $(5,\\ 0{,}8)$ y radio 1,5, ¿a partir de qué ángulo dejará el rayo de tocar la esfera: unos 15°, unos 25° o más de 30°? Estímalo antes de mover el mando.',
     build: function (host) {
       var ang = 8;
       var out = W.readout(host, '');
@@ -90,6 +115,7 @@ Course.topic('gfx-trazado', function (p) {
   p.demo({
     title: 'Una esfera, un suelo y una luz',
     intro: 'Cada píxel lanza un rayo: si choca con la esfera, se ilumina con la normal y se mezcla con lo que vería rebotado; si choca con el suelo, se mira si la esfera le tapa la luz. Todo son las dos intersecciones de arriba. Sube el reflejo y cambia el foco.',
+    predice: 'Con reflejo 0, ¿qué parte de la esfera será más clara: la de arriba a la izquierda o la de abajo? Y con reflejo 1, ¿qué se verá en la mitad superior de la esfera?',
     build: function (host) {
       W.shader(host, {
         id: 'gfx-trazado-1', alto: 320,
@@ -155,6 +181,13 @@ Course.topic('gfx-trazado', function (p) {
     'miles de rayos por píxel en direcciones al azar para imitar cómo rebota la luz de verdad. Los arquitectos ' +
     'las usan para ver cómo entrará el sol en un edificio antes de construirlo, y los ingenieros de ópticas, ' +
     'para diseñar lentes.');
+
+  p.trampas([
+    { e: 'Quedarse con el segundo corte', por: '$-b + \\sqrt{b^2 - k}$ es por donde el rayo sale de la esfera. El píxel ve por donde entra: $-b - \\sqrt{b^2 - k}$.' },
+    { e: 'Llamar distancia a $t$ con $\\vec d$ sin normalizar', por: 'Si $\\vec d$ mide 3, cada unidad de $t$ son 3 de distancia. La fórmula simplificada $t^2 + 2bt + k$ exige $\\vec d\\cdot\\vec d = 1$.' },
+    { e: 'Olvidar $t > 0$', por: 'Un plano detrás del ojo da un $t$ negativo perfectamente válido para la recta, pero invisible. Sin la comprobación, el suelo aparece pintado en el cielo.' },
+    { e: 'Lanzar el rayo de sombra desde el punto exacto', por: 'El punto está sobre la superficie, y por redondeo la esfera «se choca consigo misma»: sombra moteada. Se despega el origen un pelín, $\\vec P + 0{,}001\\,\\vec \\ell$.' }
+  ]);
 
   /* ================= EJERCICIOS ================= */
   p.section('Practica');
