@@ -632,6 +632,57 @@ tokens `--cr*` en `base.css`.
 
 ---
 
+## El motor de redes neuronales (`NN`)
+
+Los dos bloques de inteligencia artificial se apoyan en
+`assets/js/core/nn.js`, igual que el gráfico se apoya en `shader.js`. Expone
+`window.NN` con una red **de verdad**: tensores sobre `Float32Array` y
+diferenciación automática en modo inverso, para que las demos entrenen lo que
+el texto explica. Está escrito para leerse, porque `ia-taller` enseña una red
+entera hecha con él.
+
+**Tensores y cinta.** `NN.t(forma, valores)` es un dato; `NN.param(forma, r)`
+un parámetro que el optimizador mueve, inicializado con `U.rng`;
+`NN.constante(forma, valor)` un parámetro que empieza en un valor fijo (sesgos
+a cero, escalas a uno). Cada operación se apunta en una cinta, y
+`NN.atras(perdida, params)` la recorre al revés: eso es la retropropagación
+entera. `NN.limpia()` vacía la cinta antes de cada pasada.
+
+**Operaciones.** `NN.mm` (producto de matrices) · `NN.suma` (con el sesgo
+repartido por filas) · `NN.prod` · `NN.escala` · `NN.trans` · `NN.trozo` ·
+`NN.reforma` · activaciones `NN.relu` `NN.sigmoide` `NN.tanh` `NN.escalon` ·
+`NN.softmax` · `NN.entropiaCruzada(logits, objetivo)` (con el softmax dentro:
+su gradiente es «probabilidad menos lo que debería») · `NN.ecm` · `NN.media` ·
+`NN.conv2d(x, nucleo)` · `NN.agrupa` · `NN.embedding` · `NN.mascaraCausal` ·
+`NN.normaliza`. La **atención** (`NN.atencion(q, k, v, causal)`) y la **celda
+LSTM** (`NN.lstm`) están *compuestas* a partir de las anteriores: se escriben
+como en la pizarra y su vuelta atrás sale sola de las piezas.
+
+**Optimizadores.** `NN.SGD(params, {lr, momento})` y `NN.Adam(params, {lr})`,
+los dos con `.paso()` y con `.lr` modificable desde un deslizador.
+
+**El bucle.** `NN.bucle({host, paso, pinta, porFotograma, hasta})` entrena con
+`requestAnimationFrame` sin congelar la página y se para al salir de pantalla.
+Devuelve `.arranca() .pausa() .para() .reinicia() .activo()`.
+
+> **El bucle nace parado, y tiene que seguir así.** `tests.html` monta todos
+> los temas del curso en un contenedor oculto: si una demo arrancara el
+> entrenamiento al construirse, la auditoría lanzaría decenas de bucles a la
+> vez. Se arranca con un botón. Y **los ejercicios no entrenan nunca**: la
+> auditoría genera cada uno 40 veces.
+
+**Datos por fórmula.** `NN.datos.lunas / circulos / espirales / xor / nubes`,
+todos a partir de `U.rng` con semilla: nada viene de fuera. `NN.deFilas`
+convierte una lista de vectores en tensor, `NN.aciertos` mide la proporción de
+aciertos y `NN.compruebaGradiente` compara con diferencias finitas.
+
+`tests.html` audita **cada operación** contra diferencias finitas, porque una
+vuelta atrás mal escrita no da error: da una red que entrena mal sin decir por
+qué. Los dos bloques usan la **piel** `ia` (verde de fósforo), declarada con
+`piel: 'ia'` en `curriculum.js` y sus tokens `--ia*` en `base.css`.
+
+---
+
 ## Matemáticas de apoyo (`ML`) y utilidades (`U`)
 
 `ML.gcd` `ML.lcm` `ML.isPrime` `ML.factorize` `ML.factorTex` `ML.divisors`
