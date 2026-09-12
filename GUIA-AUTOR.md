@@ -752,6 +752,63 @@ nada se distingue solo por color). Para corregir, `W.programaIguales` es
 
 ---
 
+## El lenguaje (`LEN` y `W.lenguaje`)
+
+`assets/js/core/lenguaje.js` es **Pizca**, el lenguaje que se construye en el
+tramo B. Se llama así porque es lo justo: siete palabras (`sea`, `si`, `sino`,
+`mientras`, `fun`, `vuelve`, `muestra`), cuatro operaciones y seis
+comparaciones. El camino completo es el índice del tramo:
+
+```
+texto  →  tokens  →  árbol  →  ┬→  intérprete  →  salida
+                               └→  ensamblador →  MÁQUINA → salida
+```
+
+**Las dos salidas tienen que ser la misma**, y eso no es un deseo: es la prueba
+diferencial de `tests.html`, que corre la batería entera por los dos caminos —y
+además optimizada— y compara. Es la única forma de saber que el compilador no
+miente, porque un compilador que genera código plausible y equivocado no se
+distingue leyéndolo.
+
+| Función | Qué hace |
+|---|---|
+| `LEN.tokeniza(texto)` | `{tokens, errores}`; cada token con su `linea` |
+| `LEN.analiza(texto)` | descenso recursivo → `{ast, errores, tokens}`. La precedencia sale del orden en que las funciones se llaman unas a otras |
+| `LEN.evalua(ast, o)` | el intérprete: `{salida, pasos, porQue}`. El entorno es una cadena de diccionarios, que es todo lo que significa «ámbito» |
+| `LEN.compila(ast)` | `{texto, errores, huecos}` en ensamblador de `MAQ` |
+| `LEN.optimiza(ast, cuenta)` | pliega constantes y quita código muerto **modificando el árbol**: pásale una `LEN.copia(ast)` si quieres conservar el original |
+| `LEN.corre(texto, o)` | atajo; con `o.compilado` va por la máquina, con `o.optimiza` pasa antes por el optimizador |
+| `LEN.diferencial(texto, o)` | corre por los dos caminos y devuelve `{interpretado, compilado, iguales, asm}` |
+| `LEN.iguales(texto, casos, o)` | corrección por comportamiento; cada caso puede traer un `antes` que pone los datos (`'sea n = 3;\n'`) |
+| `LEN.arbolTexto(ast)` | el árbol escrito con sangría, que es lo que se enseña en el panel |
+| `LEN.EJEMPLOS` | la batería; si uno deja de coincidir por los dos caminos, algo se ha roto |
+
+Tres decisiones que conviene conocer:
+
+- **Pizca es un lenguaje de ocho bits.** Sus números son los de la máquina: de
+  −128 a 127, con vuelta al desbordar, y división entera. El intérprete desborda
+  igual que la CPU **a propósito**; si no, las dos ramas del dibujo darían cosas
+  distintas y la prueba diferencial no valdría nada.
+- **Ni `eval` ni `new Function` con lo que escribe el alumno.** Todo pasa por el
+  analizador de este archivo. Es la regla del curso y además es el tema.
+- **Las funciones se compilan salvando y restaurando sus huecos.** La máquina no
+  sabe leer una celda cuya dirección esté en otra celda, así que no hay marcos de
+  pila de verdad: cada función tiene huecos fijos, y quien llama los guarda en la
+  pila antes de llamar y los devuelve a su sitio al volver. Con eso la recursión
+  funciona —`fib` y `fact` están en la batería—, la pila crece una vez por
+  llamada, que es justo lo que hay que ver, y cuando se pasa de 64 la máquina lo
+  dice. Los **argumentos también van por la pila**, no por celdas temporales:
+  con celdas, `suma(1, suma(2, 3))` se pisaba a sí mismo.
+
+**El widget.** `W.lenguaje(host, {id, texto, nota, tope, paneles, optimiza})`
+pone el editor y **cuatro paneles del mismo texto** —tokens, árbol, ensamblador y
+máquina— que se eligen con fichas. Cuatro columnas no caben en un móvil, y como
+todo sale del mismo sitio, verlas por turnos no pierde nada. El aviso canta
+siempre **las dos salidas** y si coinciden; cuando no, el taller se pone en rojo.
+`paneles` recorta la lista para una demo que solo quiera enseñar uno o dos.
+
+---
+
 ## El motor de redes neuronales (`NN`)
 
 Los dos bloques de inteligencia artificial se apoyan en

@@ -108,6 +108,25 @@ objeto en el array.
 >   lee letra a letra; lo segundo porque convierte `maq-bits` en algo que se toca
 >   —el factorial de 5 cabe y el de 6 no—; lo tercero porque «un programa son
 >   números en celdas» es la idea de von Neumann y aquí se ve en una tabla.
+> - **El lenguaje se llama Pizca** y tiene siete palabras. El encargo pedía «un
+>   nombre corto, de una palabra en castellano»; se eligió éste porque dice lo que
+>   es —una pizca de lenguaje— sin prometer nada que no cumpla.
+> - **Pizca es un lenguaje de ocho bits, y su intérprete desborda igual que la
+>   CPU.** Podría haber usado los números de JavaScript y ser más cómodo, pero
+>   entonces interpretar y compilar darían resultados distintos en cuanto una
+>   cuenta se saliera de rango, y la prueba diferencial —que es lo que sostiene
+>   todo el tramo B— no diría nada.
+> - **Las funciones compiladas no tienen marco de pila, sino huecos fijos que
+>   quien llama salva y restaura.** La máquina no sabe leer una celda cuya
+>   dirección esté en otra celda, y añadirle esa instrucción habría sido la
+>   alternativa. Se prefirió no tocar la máquina ya escrita: con salvar y
+>   restaurar, la recursión funciona igual, la pila crece una vez por llamada
+>   —que es lo que hay que ver— y el tope de 64 avisa. Los argumentos van también
+>   por la pila, no por celdas temporales; con celdas, `suma(1, suma(2, 3))` se
+>   pisaba a sí mismo, y se descubrió probándolo.
+> - **Los cuatro paneles del taller se ven por turnos, con fichas**, y no los
+>   cuatro a la vez. Cuatro columnas no caben en un móvil, y como los cuatro
+>   salen del mismo texto, verlos por turnos no pierde sincronía ninguna.
 > - **El Quine-McCluskey de `maq-normal` vive en el tema, no en el núcleo.** No lo
 >   usa nadie más, y lo que hace falta allí no es minimizar de verdad —eso es un
 >   problema duro— sino poder decir un coste alcanzable sin inventárselo. Por eso

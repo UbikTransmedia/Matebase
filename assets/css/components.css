@@ -592,6 +592,19 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
 .maq__var{font-weight:650}
 .maq__libre{color:var(--ink-faint)}
 
+/* EL TALLER DEL LENGUAJE. Un solo panel a la vez, elegido con fichas: cuatro
+   columnas no caben en un movil y aqui todo sale del mismo texto, asi que
+   verlas por turnos no pierde nada. */
+.len__panel{
+  margin:10px 0 0; padding:11px 13px; border-radius:9px; min-height:80px;
+  max-height:360px; overflow:auto;
+  background:var(--panel-2); border:1px solid var(--line-soft);
+  font-family:var(--mono); font-size:0.7812rem; line-height:1.55;
+  white-space:pre; color:var(--ink);
+}
+.len__panel:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.len--difiere .len__aviso{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+
 /* Los conmutadores de entrada. El estado se ve por el texto («a = 1») ademas
    de por el color, que es la regla de accesibilidad del curso: nada se
    distingue solo por color. */

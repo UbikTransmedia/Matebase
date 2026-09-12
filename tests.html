@@ -49,7 +49,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   (function () {
     var t = '?t=' + Date.now();
     ['version', 'core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
-     'core/shader', 'core/cripto', 'core/nn', 'core/logica', 'core/maquina', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
+     'core/shader', 'core/cripto', 'core/nn', 'core/logica', 'core/maquina', 'core/lenguaje', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
      'glosario', 'glsl'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
@@ -603,6 +603,129 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     boton('↺ Reinicia').click();
     truthy('reiniciar lo devuelve todo a su sitio', con.m.pc === 0 && !con.m.salida.length);
     hm.remove();
+  })();
+
+  /* ---------------- el lenguaje ----------------
+     LA PRUEBA DIFERENCIAL. Interpretar un programa y compilarlo para
+     ejecutarlo en la CPU son dos caminos distintos hacia el mismo sitio,
+     y el tramo B entero se apoya en que llegan al mismo. Si alguna vez
+     dejan de coincidir, es que el compilador miente, y eso no se ve
+     mirando el codigo generado: hay que correr los dos y comparar. */
+  group('el lenguaje · interpretar y compilar dan lo mismo');
+  (function () {
+    if (!window.LEN) { ko('lenguaje.js se carga', 'no está', 'el módulo cargado'); return; }
+
+    Object.keys(LEN.EJEMPLOS).forEach(function (k) {
+      var e = LEN.EJEMPLOS[k];
+      var d = LEN.diferencial(e.texto, { tope: 60000 });
+      eq('«' + e.t + '»: los dos caminos coinciden',
+        d.iguales ? 'sí' : ('interpretado ' + d.interpretado + ' · compilado ' + d.compilado +
+          (d.errores.length ? ' · ' + d.errores[0].msg : '')), 'sí');
+      /* Y también optimizando: una optimización que cambia lo que hace el
+         programa no es una optimización, es un fallo. */
+      var o = LEN.diferencial(e.texto, { tope: 60000, optimiza: true });
+      truthy('«' + e.t + '»: optimizar no cambia el resultado', o.iguales);
+    });
+
+    /* El analizador lexico: cada pieza con su nombre y su linea. */
+    var lx = LEN.tokeniza('sea x = 12;\nmuestra x >= 3;');
+    eq('trocea en las piezas que toca',
+      lx.tokens.filter(function (t) { return t.t !== 'fin'; }).map(function (t) { return t.t; }).join(' '),
+      'palabra nombre op num op palabra nombre op num op');
+    eq('el token de la segunda línea sabe que es la segunda',
+      lx.tokens[5].linea, 2);
+    eq('«>=» es un solo token, no dos', lx.tokens[7].texto, '>=');
+    truthy('los comentarios no llegan al analizador',
+      LEN.tokeniza('muestra 1; # esto no\n').tokens.length === 4);
+
+    /* El arbol: la precedencia sale de la forma, no de un parentesis. */
+    var a1 = LEN.analiza('muestra 2 + 3 * 4;').ast.ss[0].e;
+    truthy('«2 + 3 * 4» pone el * debajo del +', a1.op === '+' && a1.d.op === '*');
+    var a2 = LEN.analiza('muestra (2 + 3) * 4;').ast.ss[0].e;
+    truthy('el paréntesis le da la vuelta al árbol', a2.op === '*' && a2.i.op === '+');
+    var a3 = LEN.analiza('muestra 10 - 3 - 2;').ast.ss[0].e;
+    truthy('la resta se asocia por la izquierda: (10-3)-2',
+      a3.op === '-' && a3.i.op === '-' && a3.d.v === 2);
+    eq('y por eso vale 5', LEN.corre('muestra 10 - 3 - 2;').salida[0], 5);
+
+    /* Errores con la linea que ve el alumno. */
+    eq('un punto y coma que falta se caza', LEN.analiza('sea x = 3').errores[0].linea, 1);
+    eq('y en su línea', LEN.analiza('sea x = 3;\nmuestra (1 + 2;').errores[0].linea, 2);
+    truthy('un carácter que no es del lenguaje se caza',
+      LEN.tokeniza('muestra 3 $ 4;').errores.length === 1);
+    truthy('usar una variable que no existe se dice claro',
+      LEN.corre('muestra z;').porQue.indexOf('«z»') >= 0);
+    truthy('asignar sin declarar dice cómo se declara',
+      LEN.corre('z = 3;').porQue.indexOf('sea z') >= 0);
+
+    /* Nada se cuelga, ni interpretando ni compilando. */
+    truthy('un bucle sin fin interpretado se para y lo dice',
+      LEN.corre('mientras 1 { sea q = 1; }', { tope: 400 }).porQue.indexOf('sin terminar') >= 0);
+    truthy('dividir entre cero se para y lo dice',
+      LEN.corre('muestra 6 / 0;').porQue.indexOf('entre cero') >= 0);
+    truthy('una recursión sin fondo llena la pila de la máquina y se para',
+      LEN.corre('fun f(n) { vuelve f(n) + 1; }\nmuestra f(1);',
+        { compilado: true, tope: 4000 }).porQue.indexOf('pila') >= 0);
+
+    /* Pizca es un lenguaje de ocho bits, y eso tiene que notarse igual
+       por los dos caminos: si no, la prueba diferencial no diria nada. */
+    var db = LEN.diferencial('muestra 100 + 100;');
+    truthy('desbordar da la vuelta, y por los dos caminos igual',
+      db.iguales && db.interpretado[0] === -56);
+    eq('la división tira los decimales', LEN.corre('muestra 20 / 6;').salida[0], 3);
+
+    /* Optimizar: plegar lo que ya se sabe y tirar lo que no se ejecuta. */
+    var cta = { plegadas: 0, muertas: 0 };
+    var ar = LEN.optimiza(LEN.copia(LEN.analiza(
+      'sea x = 2 + 3 * 4;\nsi 1 > 2 { muestra 1; } sino { muestra 9; }\nmientras 0 { muestra 5; }\nmuestra x;').ast), cta);
+    truthy('pliega las cuentas que ya se saben', cta.plegadas === 3);
+    truthy('y tira las dos ramas que no se ejecutan nunca', cta.muertas === 2);
+    eq('el programa plegado sigue escribiendo lo mismo',
+      LEN.corre('sea x = 2 + 3 * 4;\nsi 1 > 2 { muestra 1; } sino { muestra 9; }\nmientras 0 { muestra 5; }\nmuestra x;',
+        { optimiza: true }).salida.join(','), '9,14');
+    truthy('optimizar acorta el ensamblador de verdad', (function () {
+      var t = 'sea x = 2 + 3 * 4;\nsi 1 > 2 { muestra 1; } sino { muestra 9; }\nmuestra x;';
+      var largo = MAQ.ensambla(LEN.compila(LEN.analiza(t).ast).texto).instrucciones;
+      var corto = MAQ.ensambla(LEN.compila(LEN.optimiza(LEN.copia(LEN.analiza(t).ast))).texto).instrucciones;
+      return corto < largo;
+    }()));
+
+    /* Correccion por comportamiento, con un prologo que pone los datos. */
+    var casos = [{ antes: 'sea n = 3;\n', salida: [9] }, { antes: 'sea n = 0;\n', salida: [0] }];
+    truthy('acepta un programa que resuelve',
+      LEN.iguales('muestra n * n;', casos).ok);
+    truthy('acepta otro que resuelve igual escrito distinto',
+      LEN.iguales('sea r = n;\nr = r * n;\nmuestra r;', casos).ok);
+    truthy('rechaza uno que escribe otra cosa',
+      !LEN.iguales('muestra n + n;', casos).ok);
+
+    /* El coloreado no puede alterar el texto. */
+    var pintado = LEN.pinta('sea x = 1; # nota <b>');
+    var plano = pintado.replace(/<[^>]*>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    eq('el coloreado no cambia ni una letra', plano, 'sea x = 1; # nota <b>');
+    truthy('y usa las clases del curso',
+      pintado.indexOf('cod-key') >= 0 && pintado.indexOf('cod-com') >= 0);
+
+    /* El widget: cuatro paneles del mismo texto. */
+    var hl = document.createElement('div');
+    document.body.appendChild(hl);
+    hl.style.cssText = 'position:absolute;left:-9999px;width:760px';
+    var tal = W.lenguaje(hl, { texto: LEN.EJEMPLOS.funcion.texto });
+    truthy('el aviso canta las dos salidas y que coinciden',
+      hl.querySelector('.len__aviso').textContent.indexOf('son lo mismo') >= 0);
+    function ficha(t) {
+      return [].slice.call(hl.querySelectorAll('.chip')).filter(function (c) { return c.textContent.trim() === t; })[0];
+    }
+    truthy('el panel de tokens enseña tokens', hl.querySelector('.len__panel').textContent.indexOf('palabra  fun') >= 0);
+    ficha('árbol').click();
+    truthy('el panel del árbol enseña el árbol', hl.querySelector('.len__panel').textContent.indexOf('llamar doble') >= 0);
+    ficha('ensamblador').click();
+    truthy('el panel del ensamblador enseña ensamblador de la máquina',
+      hl.querySelector('.len__panel').textContent.indexOf('LLAMA f_doble') >= 0);
+    ficha('máquina').click();
+    truthy('el panel de la máquina enseña lo que escribe',
+      hl.querySelector('.len__panel').textContent.indexOf('8, 12') >= 0);
+    hl.remove();
   })();
 
   /* ---------------- mathlib: enteros ---------------- */
