@@ -133,6 +133,13 @@ Course.topic('av-sistemas-dinamicos', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.note('Hay una vuelta de tuerca que no consiste en estudiar un sistema dado, sino en ' +
+    '<strong>fabricarlo</strong>. Si se eligen los parámetros para que los atractores caigan ' +
+    'exactamente donde uno quiere, el sistema se convierte en una memoria: se le da un estado parecido ' +
+    'a uno guardado y él solo se desliza hasta él. Eso es [[ia-hopfield|una red de Hopfield]], y lo que ' +
+    'garantiza que la trayectoria se detiene es una función que solo puede bajar.',
+    'ok', 'Atractores a la carta');
+
   p.util('Distinguir un equilibrio estable de uno inestable es la pregunta central del control ' +
     'automático. Un péndulo colgando es estable y el mismo péndulo invertido no lo es, y sin embargo ' +
     'un patinete eléctrico autoequilibrado mantiene el segundo corrigiendo cien veces por segundo. ' +
