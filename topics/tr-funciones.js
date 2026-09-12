@@ -221,6 +221,14 @@ Course.topic('tr-funciones', function (p) {
     'tenía razón y no supo demostrarlo. La demostración llegó con Fourier, medio siglo después, y ' +
     'también a él se la rechazaron al principio.');
 
+  p.note('Los senos tienen un uso moderno que sorprende. Los modelos de lenguaje procesan todas las ' +
+    'palabras a la vez y, tal cual, no distinguirían el orden: «el perro muerde al hombre» y «el ' +
+    'hombre muerde al perro» les darían lo mismo. Para arreglarlo se le suma a cada palabra una ' +
+    'huella construida con senos y cosenos de frecuencias distintas —las rápidas distinguen posiciones ' +
+    'vecinas y las lentas sitúan en el texto entero—, elegidas de modo que <em>la misma separación ' +
+    'entre dos palabras dé siempre el mismo parecido</em>, esté donde esté la frase. Está en ' +
+    '[[ia-atencion|el tema de la atención]].', null, 'Senos para marcar el sitio');
+
   p.section('Practica');
 
   p.exercise({
