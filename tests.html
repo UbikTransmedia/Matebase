@@ -415,6 +415,68 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     truthy('el biestable recuerda el 0', recuerda0.estable && recuerda0.valores.q === 0);
     truthy('sin historia previa, oscila y se anuncia', sinHistoria.oscila === true);
 
+    /* Y ahora el BANCO, no el simulador. Que LOG.simula sepa recordar no basta:
+       si el banco vuelve a arrancar de cero cada vez que se toca un conmutador,
+       el cerrojo pierde lo guardado en cuanto se suelta la orden y el tema de la
+       memoria enseña lo contrario de lo que dice. La auditoria de temas no ve
+       esto: hay que mover los conmutadores y mirar. */
+    (function () {
+      var hc = document.createElement('div');
+      document.body.appendChild(hc);
+      hc.style.cssText = 'position:absolute;left:-9999px;width:700px';
+      var bc = W.circuito(hc, {
+        texto: 'q = nor(r, qn);\nqn = nor(s, q);', salidas: ['q', 'qn'],
+        memoria: true, inicial: { q: 0, qn: 1 }, tope: 40, reinicia: false
+      });
+      function pulsa(nombre) {
+        [].slice.call(hc.querySelectorAll('.cir__sw')).forEach(function (b) {
+          if (b.textContent.trim().indexOf(nombre + ' =') === 0) b.click();
+        });
+      }
+      function boton(txt) {
+        var b = [].slice.call(hc.querySelectorAll('button')).filter(function (x) { return x.textContent.indexOf(txt) >= 0; })[0];
+        if (b) b.click();
+      }
+      truthy('el banco arranca con lo que se le dio guardado', bc.estado.valores.q === 0 && !bc.estado.oscila);
+      pulsa('s');
+      truthy('poniendo s a 1 el banco guarda un 1', bc.estado.valores.q === 1);
+      pulsa('s');
+      truthy('al soltar s, el banco NO olvida', bc.estado.valores.q === 1 && !bc.estado.oscila);
+      pulsa('r'); pulsa('r');
+      truthy('r borra, y al soltarla tampoco olvida', bc.estado.valores.q === 0 && !bc.estado.oscila);
+      boton('Apagar y encender');
+      truthy('apagar y encender borra lo guardado y vuelve a oscilar', bc.estado.oscila === true);
+
+      /* Con `pausa`, mover un conmutador no resuelve el circuito: deja los
+         cables quietos para poder ver viajar el cambio instante a instante.
+         Sin esto, el paso a paso del tema no ensena nada, porque al soltar el
+         conmutador ya esta todo hecho. */
+      var hp = document.createElement('div');
+      document.body.appendChild(hp);
+      hp.style.cssText = 'position:absolute;left:-9999px;width:700px';
+      var bp = W.circuito(hp, {
+        texto: 'q = nor(r, qn);\nqn = nor(s, q);', salidas: ['q', 'qn'],
+        memoria: true, pausa: true, inicial: { q: 0, qn: 1 }, tope: 40, reinicia: false
+      });
+      function pulsaP(nombre) {
+        [].slice.call(hp.querySelectorAll('.cir__sw')).forEach(function (b) {
+          if (b.textContent.trim().indexOf(nombre + ' =') === 0) b.click();
+        });
+      }
+      function paso() {
+        [].slice.call(hp.querySelectorAll('button')).filter(function (x) { return x.textContent.indexOf('Un instante') >= 0; })[0].click();
+      }
+      pulsaP('s');
+      truthy('en pausa, el conmutador no resuelve el circuito', bp.estado.valores.q === 0 && bp.estado.valores.qn === 1);
+      paso();
+      truthy('primer instante: las dos salidas se van a 0 a la vez', bp.estado.valores.q === 0 && bp.estado.valores.qn === 0);
+      paso();
+      truthy('segundo instante: q sube a 1', bp.estado.valores.q === 1 && bp.estado.valores.qn === 0);
+      paso();
+      truthy('tercer instante: ya no se mueve', bp.estado.valores.q === 1 && bp.estado.valores.qn === 0);
+      hc.remove(); hp.remove();
+    }());
+
     /* Comparar por comportamiento: dos circuitos distintos que hacen lo mismo
        tienen que valer los dos. */
     var XOR = { entradas: ['a', 'b'], salidas: ['y'], filas: [[0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 0]] };

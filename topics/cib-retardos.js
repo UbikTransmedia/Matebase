@@ -133,6 +133,17 @@ Course.topic('cib-retardos', function (p) {
     'también la razón de que conducir con sueño sea tan peligroso: no es que decidas mal, es que ' +
     'decides tarde, y eso basta.');
 
+  p.note('Los retardos de esta ficha son de escala humana: semanas entre el pedido y la entrega, ' +
+    'décimas de segundo entre la cámara y las ruedas. Pero el fenómeno no desaparece al bajar de ' +
+    'escala. Una puerta lógica tarda unos picosegundos en que su salida responda a lo que le llega, y ' +
+    'un cable tarda en transmitir; es poquísimo, pero no es cero, y basta para que un circuito con un ' +
+    'bucle pueda quedarse oscilando en vez de asentarse. En ' +
+    '[[maq-memoria|el bloque de máquinas y lenguajes]] los circuitos se simulan avanzando por ' +
+    'instantes justamente por eso: sin retardo, un anillo de dos puertas no tendría solución y no se ' +
+    'podría hablar de él; con retardo, el mismo anillo o se estabiliza en un valor —y entonces ' +
+    'recuerda— o oscila para siempre, y el simulador lo avisa.', null,
+    'El mismo efecto, a picosegundos');
+
   /* ---------------------------------------------------------------- */
   p.section('Sobrecorrección y oscilación');
 

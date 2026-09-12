@@ -667,11 +667,28 @@ entonces **oscila**, que se anuncia y no se cuelga.
 | `LOG.esTrivial(tabla)` | si la tabla se resuelve con un cable pelado, su negación o una constante. El equivalente al «shader que pinta liso» |
 | `LOG.pinta(texto)` | coloreado de la netlist con los mismos ocho papeles del editor de shaders |
 
-**El widget.** `W.circuito(host, {id, texto, alto, aria, nota, tope})`, con la
-misma forma que `W.shader`: `id` recuerda lo que escribió el alumno, `aria`
-describe el dibujo y `nota` dice qué mirar. Debajo del diagrama va **siempre** la
-tabla: nada existe solo como dibujo. Los conmutadores de entrada muestran su
-estado en el texto (`a = 1`) además de en el color.
+**El widget.** `W.circuito(host, {id, texto, alto, aria, nota, tope, salidas,
+memoria, pausa, inicial})`, con la misma forma que `W.shader`: `id` recuerda lo
+que escribió el alumno, `aria` describe el dibujo y `nota` dice qué mirar. Debajo
+del diagrama va **siempre** la tabla: nada existe solo como dibujo. Los
+conmutadores de entrada muestran su estado en el texto (`a = 1`) además de en el
+color.
+
+`salidas` declara cuáles mirar. Hace falta cuando todos los cables se consumen
+entre sí —un cerrojo, donde cada mitad alimenta a la otra—: allí la regla
+automática no encuentra ninguna salida libre y las enseña todas, que es ruido.
+
+Las tres siguientes solo tienen sentido en un circuito con bucles, y por defecto
+están apagadas para no tocar lo que ya funciona:
+
+| Opción | Para qué |
+|---|---|
+| `memoria: true` | el banco empieza cada simulación **donde acabó la anterior**, en vez de poner todos los cables a cero. Sin esto un cerrojo no puede recordar nada: al soltar la orden volvería a arrancar de cero y oscilaría, y el tema de la memoria enseñaría lo contrario de lo que dice. Añade un botón «⏻ Apagar y encender» que borra lo guardado, que es a la vez el modo de volver a ver la oscilación del arranque y la demostración de que esta memoria es **volátil** |
+| `inicial: {q: 0, qn: 1}` | con qué estado arranca lo guardado. Un cerrojo recién encendido no viene de ningún sitio y oscila; si lo que se quiere enseñar es otra cosa, se le da un pasado |
+| `pausa: true` | mover un conmutador **no** resuelve el circuito: cambia las entradas y deja los cables quietos, esperando a «Un instante». Es la única forma de ver viajar un cambio por dentro del bucle, porque si se estabiliza al soltar el conmutador ya no queda nada que recorrer |
+
+En un circuito sin bucles ninguna hace falta: el estado de partida da igual
+porque siempre converge al mismo sitio.
 
 Para corregir, `W.circuitoIguales` es `LOG.iguales`, y el número de puertas que
 devuelve sirve para la puntuación por coste: «lo has resuelto con 9 puertas; se

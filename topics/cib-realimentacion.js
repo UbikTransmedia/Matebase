@@ -290,6 +290,15 @@ Course.topic('cib-realimentacion', function (p) {
     'comportamiento, medidas— se hacen más fuertes que el positivo. El punto en que se invierte la ' +
     'dominancia es el pico, y por eso el pico llega antes de que empiecen a bajar los casos totales.');
 
+  p.note('Un bucle que se amplifica a sí mismo no siempre acaba descontrolado. Si las únicas ' +
+    'posiciones posibles son dos, lo que hace es quedarse clavado en una: la realimentación positiva ' +
+    'deja de ser explosión y pasa a ser <strong>memoria</strong>. En ' +
+    '[[maq-memoria|el bloque de máquinas y lenguajes]] se monta ese caso con dos puertas lógicas ' +
+    'conectadas en anillo, cada una alimentando a la otra, y se comprueba que el circuito conserva lo ' +
+    'que le pusiste después de que la señal que lo puso haya desaparecido. Eso es un bit de memoria, ' +
+    'y la memoria de un ordenador es ese anillo repetido miles de millones de veces.', null,
+    'Un bucle que recuerda');
+
   p.hist('Wiener era un personaje improbable para fundar una disciplina de ingeniería. Niño prodigio ' +
     'empujado sin piedad por su padre, se doctoró en Harvard a los dieciocho años en lógica ' +
     'matemática. Después de la guerra se negó en redondo a seguir colaborando con los militares: en ' +

@@ -338,6 +338,14 @@
     this.tope = o.tope || 80;
     this.instante = null;        // null = estabilizado; un numero = paso a paso
     this.manual = {};            // conmutadores de entrada
+    /* Con `memoria`, el banco arranca cada simulacion donde acabo la anterior,
+       que es lo que hace un circuito de verdad: mover un conmutador no pone los
+       cables a cero. Sin esto un cerrojo no puede recordar nada, porque al
+       soltar la orden volveria a empezar de cero y oscilaria. Es opcional
+       porque en un circuito sin bucles el estado de partida da igual -siempre
+       converge al mismo sitio- y no conviene cambiar lo que ya funciona. */
+    this.ultimo = o.inicial || null;   // `inicial` permite arrancar con algo guardado
+    this.base = null;            // foto al empezar a ir instante a instante
     this.build(host);
   }
 
@@ -382,7 +390,12 @@
       { t: 'Un instante', on: function () { self.paso(); } },
       { t: '↺ Estabilizar', on: function () { self.instante = null; self.recalcula(); } }
     ];
-    if (o.reinicia !== false) bs.push({ t: '↺ Volver al original', on: function () { self.ed.value = self.original; self.repinta(); self.recalcula(); self.guarda(); } });
+    /* Apagar y encender borra lo guardado y devuelve el circuito al estado en
+       que sale de fabrica, con todos los cables a cero. Es la demostracion de
+       que esta memoria es volatil, y la unica forma de volver a ver la
+       oscilacion del arranque despues de haberle dado un pasado. */
+    if (o.memoria) bs.push({ t: '⏻ Apagar y encender', on: function () { self.ultimo = self.base = null; self.instante = null; self.recalcula(); } });
+    if (o.reinicia !== false) bs.push({ t: '↺ Volver al original', on: function () { self.ed.value = self.original; self.ultimo = o.inicial || null; self.base = null; self.repinta(); self.recalcula(); self.guarda(); } });
     W.buttons(this.el, bs);
 
     /* --- la tabla, que es lo que de verdad dice lo que hace --- */
@@ -424,6 +437,14 @@
   Banco.prototype.recalcula = function () {
     var self = this;
     var c = LOG.analiza(this.ed.value);
+    /* Se pueden declarar las salidas que interesa mirar. Hace falta cuando
+       todos los cables se consumen entre si -un cerrojo, donde cada mitad
+       alimenta a la otra-: alli la regla automatica no encuentra ninguna
+       salida libre y las enseña todas, que es ruido. */
+    if (this.o.salidas && this.o.salidas.length) {
+      var hay = this.o.salidas.filter(function (n) { return c.nodos[n]; });
+      if (hay.length) c.salidas = hay;
+    }
     this.c = c;
     this.el.classList.toggle('cir--roto', c.errores.length > 0);
 
@@ -443,22 +464,34 @@
     this.pintaConmutadores();
 
     this.estado = (this.instante === null)
-      ? LOG.simula(c, this.manual, { tope: this.tope })
+      ? LOG.simula(c, this.manual, { tope: this.tope, inicial: this.desde() })
       : this.hasta(this.instante);
+    /* El estado alcanzado es el punto de partida de la proxima vez. Si oscila
+       no se guarda nada: no hay ningun valor que tenga sentido conservar. */
+    if (this.o.memoria && !this.estado.oscila) this.ultimo = this.estado.valores;
 
     this.pintaAviso();
     this.pintaTabla();
     this.plot.render();
   };
 
+  /** De donde parte la simulacion: lo que quedo la vez anterior, o todo a cero.
+      Yendo paso a paso se parte siempre de la foto tomada al empezar a andar,
+      porque `hasta` rehace los n instantes desde el principio cada vez. */
+  Banco.prototype.desde = function () {
+    if (!this.o.memoria) return null;
+    return this.instante === null ? this.ultimo : this.base;
+  };
+
   /** Simula exactamente `n` instantes, para el paso a paso. */
   Banco.prototype.hasta = function (n) {
-    var r = LOG.simula(this.c, this.manual, { tope: Math.max(1, n) });
+    var r = LOG.simula(this.c, this.manual, { tope: Math.max(1, n), inicial: this.desde() });
     var f = r.historia[Math.min(n, r.historia.length - 1)];
     return { valores: f, oscila: false, estable: false, instantes: n, historia: r.historia, paso: true };
   };
 
   Banco.prototype.paso = function () {
+    if (this.instante === null) this.base = this.ultimo;   // foto del punto de partida
     this.instante = (this.instante === null ? 0 : this.instante) + 1;
     this.recalcula();
   };
@@ -475,7 +508,12 @@
       });
       b.addEventListener('click', function () {
         self.manual[n] = self.manual[n] ? 0 : 1;
-        self.instante = null;
+        /* Con `pausa` el banco no se estabiliza solo al mover un conmutador: deja
+           los cables como estaban y espera a que se le den instantes a mano. Es
+           la unica forma de ver viajar un cambio por dentro del circuito, porque
+           si se estabiliza al soltar el conmutador ya no queda nada que recorrer. */
+        if (self.o.pausa) { self.base = self.ultimo; self.instante = 0; }
+        else self.instante = null;
         self.recalcula();
       });
       self.fila.appendChild(b);
@@ -494,9 +532,13 @@
       this.aviso.textContent = 'Instante ' + e.instantes + ' · ' + val + ' · ' + c.puertas + ' ' +
         (c.puertas === 1 ? 'puerta' : 'puertas');
     } else {
-      this.aviso.textContent = 'Estable tras ' + e.instantes + ' ' +
-        (e.instantes === 1 ? 'instante' : 'instantes') + ' · ' + val + ' · ' + c.puertas + ' ' +
-        (c.puertas === 1 ? 'puerta' : 'puertas');
+      /* Cero instantes significa que nada se movio: con memoria pasa cada vez que
+         el circuito conserva lo que tenia, y «estable tras 0 instantes» se lee
+         raro justo en el momento en que mas importa entenderlo. */
+      this.aviso.textContent = (e.instantes === 0
+        ? 'Estable: no se ha movido nada'
+        : 'Estable tras ' + e.instantes + ' ' + (e.instantes === 1 ? 'instante' : 'instantes')) +
+        ' · ' + val + ' · ' + c.puertas + ' ' + (c.puertas === 1 ? 'puerta' : 'puertas');
     }
   };
 
