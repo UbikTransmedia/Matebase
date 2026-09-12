@@ -602,6 +602,26 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
 .barrita__done{background:var(--ok)}
 .barrita__seen{background:var(--accent); opacity:.42}
 
+/* EL RECORRIDO DE UNA RUTA. Lo que es nucleo de la ruta va en negrita y con
+   marca; lo demas es camino. El estado se ve por el punto de la izquierda Y
+   por el texto del title: nada se distingue solo por color. */
+ol.ruta{margin:12px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:1px}
+.ruta__t{
+  display:flex; align-items:baseline; gap:10px; padding:5px 8px; border-radius:5px;
+  font-size:0.9062rem; position:relative;
+}
+.ruta__t:nth-child(odd){background:var(--panel-2)}
+.ruta__t::before{
+  content:"○"; color:var(--ink-faint); font-size:0.75rem; flex:0 0 auto; width:1em;
+}
+.ruta__t.is-seen::before{content:"◐"; color:var(--accent)}
+.ruta__t.is-done::before{content:"●"; color:var(--ok)}
+.ruta__t.is-nucleo a{font-weight:650}
+.ruta__t.is-nucleo{border-left:2px solid var(--accent); border-radius:0 5px 5px 0}
+.ruta__t a{color:var(--ink); text-decoration:none}
+.ruta__t a:hover{color:var(--accent); text-decoration:underline}
+.ruta__t .ruta__bl{margin-left:auto; font-size:0.75rem; color:var(--ink-faint); white-space:nowrap}
+
 /* EL TALLER DEL LENGUAJE. Un solo panel a la vez, elegido con fichas: cuatro
    columnas no caben en un movil y aqui todo sale del mismo texto, asi que
    verlas por turnos no pierde nada. */

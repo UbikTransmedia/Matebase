@@ -1709,3 +1709,111 @@ window.CURRICULUM = [
     ]
   }
 ];
+
+/* ===================================================================
+   LAS RUTAS DE LA AMPLIACION.
+   Los bloques 0 a 7 se recorren en orden y tienen dos itinerarios de
+   examen. Los 161 temas que vienen despues no: son optativos, no se
+   presuponen entre si, y ahi el orden del temario deja de mandar. Sin
+   una ruta, esa mitad del curso es un catalogo.
+
+   Una ruta NO es una particion del temario: es un recorrido que puede
+   empezar antes de la ampliacion, que se salta lo que no necesita y en
+   el que un mismo tema puede aparecer dos veces. Muchos temas no estan
+   en ninguna.
+
+   COMO SE CONSTRUYE UNA. Se escribe a lo que se quiere llegar -el
+   `nucleo`- y despues se cierra sobre los requisitos de ampliacion que
+   hagan falta, porque mandar a alguien a un tema que da por sabido otro
+   que no ha visto es justo lo que este curso no hace. El resultado se
+   ordena como el temario, que ya respeta los requisitos, y eso da
+   `temas`. `tests.html` comprueba las dos cosas.
+
+   `MIN_POR_TEMA` son 50: lo que cuesta leer un tema y hacer sus
+   ejercicios sin prisa. Se dice para que la estimacion de horas sea
+   comprobable y no un numero caido del cielo.
+   =================================================================== */
+var RUTAS = [
+  {
+    id: 'comp', t: 'Cómo funciona un ordenador',
+    r: 'Del bit y la puerta lógica a un lenguaje que compila, y de ahí a lo que ninguna máquina puede hacer.',
+    para: 'Si programas y quieres entender lo que hay debajo, o si te interesa dónde están los límites de lo calculable.',
+    /* `temas` es el recorrido entero y en orden: la lista de semillas cerrada
+       sobre los requisitos de ampliación que hacían falta, y ordenada como el
+       temario, que ya respeta los requisitos. `nucleo` es a lo que se venía;
+       lo demás es camino. */
+    temas: [
+      'lg-algoritmos', 'fn-exp-log', 'fn-sucesiones', 'av-espacios', 'av-lineal',
+      'av-infinito', 'av-computabilidad', 'av-grafos', 'av-recurrencias', 'av-complejidad',
+      'av-numerico', 'av-informacion', 'cib-realimentacion', 'cib-bloques',
+      'cib-caja-negra', 'cib-variedad', 'cib-control', 'cib-homeostasis', 'cib-retardos',
+      'cib-viable', 'cib-segundo-orden', 'maq-bits', 'maq-puertas', 'maq-sumador',
+      'maq-decidir', 'maq-memoria', 'maq-normal', 'maq-cpu', 'maq-ensamblador',
+      'len-tokens', 'len-gramatica', 'len-arbol', 'len-pila', 'len-variables',
+      'len-funciones', 'len-compilar', 'len-optimizar', 'len-autorreferencia', 'len-taller'
+    ],
+    nucleo: [
+      'lg-algoritmos', 'av-infinito', 'av-computabilidad', 'av-grafos', 'av-recurrencias',
+      'av-complejidad', 'av-numerico', 'av-informacion', 'maq-bits', 'maq-puertas',
+      'maq-sumador', 'maq-decidir', 'maq-memoria', 'maq-normal', 'maq-cpu',
+      'maq-ensamblador', 'len-tokens', 'len-gramatica', 'len-arbol', 'len-pila',
+      'len-variables', 'len-funciones', 'len-compilar', 'len-optimizar',
+      'len-autorreferencia', 'len-taller'
+    ]
+  },
+  {
+    id: 'datos', t: 'Datos y modelos',
+    r: 'De ajustar una recta a mirar por dentro un modelo de lenguaje, pasando por todo lo que hay en medio.',
+    para: 'Si te interesan los datos, el aprendizaje automático, o la estadística que se usa fuera del examen.',
+    /* `temas` es el recorrido entero y en orden: la lista de semillas cerrada
+       sobre los requisitos de ampliación que hacían falta, y ordenada como el
+       temario, que ya respeta los requisitos. `nucleo` es a lo que se venía;
+       lo demás es camino. */
+    temas: [
+      'fn-exp-log', 'fn-sucesiones', 'fn-series', 'pe-bidimensional', 'pe-condicionada',
+      'pe-normal', 'pe-contraste', 'pe-causal', 'av-espacios', 'av-lineal', 'av-pca',
+      'av-minimos-cuadrados', 'av-svd', 'av-markov', 'av-vectorial', 'av-optimizacion',
+      'av-lagrange', 'av-fourier', 'av-convolucion', 'av-numeros', 'av-grupos',
+      'av-infinito', 'av-computabilidad', 'av-numerico', 'av-informacion',
+      'cib-realimentacion', 'cib-bloques', 'cib-caja-negra', 'cib-variedad', 'cib-control',
+      'cib-homeostasis', 'cib-retardos', 'cib-filtrado', 'cib-kalman', 'cib-neurona',
+      'cib-viable', 'cib-segundo-orden', 'ia-que-es', 'ia-distancia', 'ia-arboles',
+      'ia-bayes', 'ia-margen', 'ia-sigmoide', 'ia-perdida', 'ia-red',
+      'ia-retropropagacion', 'ia-generalizar', 'ia-evaluar', 'ia-cnn', 'ia-recurrentes',
+      'ia-tokens', 'ia-atencion', 'ia-llm', 'ia-limites'
+    ],
+    nucleo: [
+      'pe-bidimensional', 'pe-condicionada', 'pe-normal', 'pe-contraste', 'pe-causal',
+      'av-espacios', 'av-lineal', 'av-pca', 'av-minimos-cuadrados', 'av-svd', 'av-markov',
+      'av-optimizacion', 'av-lagrange', 'av-informacion', 'cib-filtrado', 'cib-kalman',
+      'ia-que-es', 'ia-distancia', 'ia-arboles', 'ia-bayes', 'ia-margen', 'ia-sigmoide',
+      'ia-perdida', 'ia-red', 'ia-retropropagacion', 'ia-generalizar', 'ia-evaluar',
+      'ia-cnn', 'ia-recurrentes', 'ia-tokens', 'ia-atencion', 'ia-llm', 'ia-limites'
+    ]
+  },
+  {
+    id: 'pura', t: 'Matemática por dentro',
+    r: 'Estructuras, curvatura, infinito y las ecuaciones que describen el mundo.',
+    para: 'Si vas a estudiar matemáticas o física, o si quieres ver de qué está hecho lo que diste en Bachillerato.',
+    /* `temas` es el recorrido entero y en orden: la lista de semillas cerrada
+       sobre los requisitos de ampliación que hacían falta, y ordenada como el
+       temario, que ya respeta los requisitos. `nucleo` es a lo que se venía;
+       lo demás es camino. */
+    temas: [
+      'lg-demostracion', 'fn-exp-log', 'fn-sucesiones', 'fn-series', 'fn-taylor',
+      'av-espacios', 'av-lineal', 'av-minimos-cuadrados', 'av-svd', 'av-vectorial',
+      'av-optimizacion', 'av-lagrange', 'av-integrales-multiples', 'av-edo',
+      'av-oscilador', 'av-sistemas-dinamicos', 'av-caos', 'av-edp', 'av-fourier',
+      'av-noeuclidea', 'av-geodif', 'av-topologia', 'av-numeros', 'av-grupos',
+      'av-cripto-curvas', 'av-reales', 'av-infinito', 'av-computabilidad'
+    ],
+    nucleo: [
+      'lg-demostracion', 'fn-series', 'fn-taylor', 'av-espacios', 'av-lineal', 'av-svd',
+      'av-vectorial', 'av-lagrange', 'av-integrales-multiples', 'av-edo', 'av-oscilador',
+      'av-sistemas-dinamicos', 'av-caos', 'av-edp', 'av-fourier', 'av-noeuclidea',
+      'av-geodif', 'av-topologia', 'av-numeros', 'av-grupos', 'av-cripto-curvas',
+      'av-reales', 'av-infinito', 'av-computabilidad'
+    ]
+  }
+];
+RUTAS.MIN_POR_TEMA = 50;

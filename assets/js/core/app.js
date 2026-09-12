@@ -525,6 +525,7 @@
       }, 'Temario de ' + ITIN[k].corto));
     });
     if (BYID['pau-mapa']) fila.appendChild(U.el('a.btn', { href: '#/pau-mapa', text: 'Mapa de 2.º y simulacros →' }));
+    fila.appendChild(U.el('a.btn', { href: '#/__rutas', text: 'Rutas de la ampliación →' }));
     fila.appendChild(U.el('a.btn', { href: '#/__progreso', text: 'Progreso y clase →' }));
     p.raw(fila);
 
@@ -564,6 +565,127 @@
     mainEl.scrollTop = 0;
     paintIndex();
   }
+
+  /* ---------------- las rutas de la ampliacion ----------------
+     Los bloques 0 a 7 se recorren en orden y tienen itinerario de examen.
+     Los 161 temas de ampliacion no: son optativos y no se presuponen entre
+     si, asi que sin una ruta son un catalogo. Esta pagina es a la ampliacion
+     lo que el mapa de 2.º es al examen. */
+
+  function horas(n) {
+    var h = n * (RUTAS.MIN_POR_TEMA || 50) / 60;
+    return h < 10 ? (Math.round(h * 2) / 2).toString().replace('.', ',') : String(Math.round(h));
+  }
+
+  function rutaPorId(id) {
+    for (var i = 0; i < RUTAS.length; i++) if (RUTAS[i].id === id) return RUTAS[i];
+    return null;
+  }
+
+  /** El primer tema de la ruta que no esté dominado: por donde seguir. */
+  function siguienteDe(r) {
+    for (var i = 0; i < r.temas.length; i++) {
+      if (Progress.state(r.temas[i]) !== 'done') return r.temas[i];
+    }
+    return null;
+  }
+
+  function cuentaRuta(r) {
+    var vistos = 0, hechos = 0;
+    r.temas.forEach(function (id) {
+      var e = Progress.state(id);
+      if (e) vistos++;
+      if (e === 'done') hechos++;
+    });
+    return { vistos: vistos, hechos: hechos, total: r.temas.length };
+  }
+
+  function tarjetaRuta(r, conLista) {
+    var c = cuentaRuta(r);
+    var card = U.el('div.card');
+    card.appendChild(U.el('div.card__head', null, [
+      U.el('span.card__title', { text: r.t }),
+      U.el('span.card__spacer'),
+      U.el('span.card__score', { text: r.temas.length + ' temas · ≈' + horas(r.temas.length) + ' h' })
+    ]));
+    var bd = U.el('div.card__body');
+    bd.appendChild(U.el('div.prose', { html: '<p>' + r.r + '</p><p><em>' + r.para + '</em></p>' }));
+    bd.appendChild(barra(c.hechos, c.vistos, c.total));
+    bd.appendChild(U.el('p.card__aviso', {
+      text: c.vistos
+        ? c.hechos + ' de ' + c.total + ' dominados, ' + c.vistos + ' empezados.'
+        : 'Sin empezar. Se entra por «' + nombreDe(r.temas[0]) + '».'
+    }));
+    var fila = U.el('div.chips');
+    var sig = siguienteDe(r);
+    if (sig) {
+      fila.appendChild(U.el('a.btn.btn--main', {
+        href: '#/' + sig, text: (c.vistos ? 'Seguir en' : 'Empezar por') + ' «' + nombreDe(sig) + '» →'
+      }));
+    } else {
+      fila.appendChild(U.el('span.card__score', { text: 'Ruta completa ✓' }));
+    }
+    if (!conLista) fila.appendChild(U.el('a.btn', { href: '#/__rutas?r=' + r.id, text: 'Ver el recorrido' }));
+    bd.appendChild(fila);
+
+    if (conLista) {
+      var nuc = {};
+      r.nucleo.forEach(function (x) { nuc[x] = 1; });
+      var ol = U.el('ol.ruta');
+      r.temas.forEach(function (id) {
+        var t = BYID[id];
+        var st = Progress.state(id);
+        var li = U.el('li.ruta__t' + (st ? '.is-' + st : '') + (nuc[id] ? '.is-nucleo' : ''));
+        li.appendChild(U.el('a', { href: '#/' + id, text: t ? t.t : id }));
+        li.appendChild(U.el('span.ruta__bl', { text: t ? ('bloque ' + t._block.n) : '' }));
+        ol.appendChild(li);
+      });
+      bd.appendChild(ol);
+      bd.appendChild(U.el('p.card__aviso', {
+        html: 'Los <strong>marcados</strong> son a lo que se venía; los demás son camino: ' +
+          'temas que estos dan por sabidos y que la ruta incluye para no mandarte a un sitio ' +
+          'donde te falte algo.'
+      }));
+    }
+    card.appendChild(bd);
+    return card;
+  }
+
+  function renderRutas(q) {
+    U.clear(wrapEl);
+    wrapEl.removeAttribute('data-piel');
+    var sola = q && q.r ? rutaPorId(q.r) : null;
+    crumbEl.innerHTML = '<a href="#/">Inicio</a> › ' +
+      (sola ? '<a href="#/__rutas">Rutas</a> › <b>' + sola.t + '</b>' : '<b>Rutas de la ampliación</b>');
+    document.title = (sola ? sola.t : 'Rutas de la ampliación') + ' · Matebase';
+
+    var h = U.el('div.hdr');
+    h.innerHTML = '<h1 tabindex="-1">' + (sola ? sola.t : 'Rutas de la ampliación') + '</h1>' +
+      '<p class="hdr__sub">' + (sola ? sola.r
+        : 'Más allá de 2.º hay ' + FLAT.filter(function (t) { return t.curso === 'AMP'; }).length +
+          ' temas optativos que no se presuponen entre sí. Estas tres rutas los recorren con ' +
+          'sentido: cada una dice a dónde llega y por dónde se pasa.') + '</p>';
+    wrapEl.appendChild(h);
+
+    var p = new Page(wrapEl, { id: '__rutas' });
+
+    if (sola) {
+      p.raw(tarjetaRuta(sola, true));
+      p.raw(U.el('div.chips', null, [U.el('a.btn', { href: '#/__rutas', text: '← Las tres rutas' })]));
+    } else {
+      p.text('No hay que elegir una y casarse con ella: comparten temas, y terminar una deja media ' +
+        'de otra hecha. La estimación de horas sale de contar <strong>' + (RUTAS.MIN_POR_TEMA || 50) +
+        ' minutos por tema</strong>, que es lo que cuesta leerlo y hacer sus ejercicios sin prisa.');
+      RUTAS.forEach(function (r) { p.raw(tarjetaRuta(r, false)); });
+      p.note('Lo que no está en ninguna ruta no es peor: es que no cabía en ningún hilo. Programación ' +
+        'gráfica y criptografía son bloques que se recorren enteros y por su cuenta, y el índice de la ' +
+        'izquierda sigue estando para eso.', null, 'Y lo demás');
+    }
+
+    mainEl.scrollTop = 0;
+    paintIndex();
+  }
+  Course.renderRutas = renderRutas;
 
   /* ---------------- progreso portatil y vista de clase ----------------
      El progreso vive en el navegador. Eso esta bien para quien estudia -no
@@ -1229,6 +1351,7 @@
   function nombreDe(id) {
     if (!id) return 'Inicio';
     if (id === '__progreso') return 'Progreso y clase';
+    if (id === '__rutas') return 'Rutas de la ampliación';
     var t = BYID[id];
     return t ? t.t : id;
   }
@@ -1273,6 +1396,7 @@
     pintarNav();
     if (!r.id) renderHome();
     else if (r.id === '__progreso') renderProgreso();
+    else if (r.id === '__rutas') renderRutas(r.q);
     else renderTopic(r.id, r.q);
     // Al navegar, llevar el foco al titulo: quien usa teclado no tiene que
     // volver a recorrer el indice, y quien usa lector de pantalla se entera

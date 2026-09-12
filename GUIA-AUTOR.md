@@ -809,6 +809,34 @@ siempre **las dos salidas** y si coinciden; cuando no, el taller se pone en rojo
 
 ---
 
+## Las rutas de la ampliación
+
+Los bloques 0 a 7 se recorren en orden y tienen itinerario de examen. Los 161
+temas de ampliación no: son optativos, no se presuponen entre sí, y ahí el orden
+del temario deja de mandar. Sin una ruta, esa mitad del curso es un catálogo.
+
+Las rutas viven en `assets/js/curriculum.js`, al final, en `RUTAS`. Cada una
+declara `id`, `t`, `r` (a dónde llega), `para` (para quién es), `nucleo` y
+`temas`. **Para escribir una nueva:**
+
+1. Haz la lista de a lo que quieres llegar. Eso es el **`nucleo`**.
+2. Ciérrala sobre los requisitos: mientras algún tema de la lista declare un
+   `req` de **ampliación** que no esté, añádelo. Los requisitos de ESO, 1.º y 2.º
+   se dan por sabidos —la ruta es para quien terminó Bachillerato—; los optativos
+   no, porque nadie los ha visto necesariamente.
+3. Ordena el resultado **como el temario**, que ya respeta los requisitos. Eso es
+   **`temas`**.
+
+`tests.html` comprueba las tres cosas: que los temas existen y no se repiten, que
+ningún requisito va detrás de quien lo necesita, y que no falta ningún tema
+optativo del que la ruta dependa. Si añades un `req` a un tema y eso rompe una
+ruta, las pruebas lo dicen con nombres y apellidos.
+
+La página está en `#/__rutas`, y `#/__rutas?r=<id>` abre el recorrido de una. Los
+temas del núcleo salen marcados; los demás se presentan como lo que son: camino.
+
+---
+
 ## El progreso, y cómo sale del navegador
 
 `assets/js/core/progress.js` guarda en `localStorage` lo que el alumno lleva

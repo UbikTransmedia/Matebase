@@ -1117,6 +1117,62 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   anc.remove();
 
   /* --- temas --- */
+  /* ---------------- las rutas de la ampliacion ----------------
+     Una ruta manda al alumno de un tema a otro por su cuenta, asi que tiene
+     que cumplir lo mismo que el temario: nada antes que sus requisitos. Si
+     esto se rompe, la ruta lleva a alguien a un tema que da por sabido algo
+     que no ha visto, que es justo lo que el curso promete no hacer. */
+  group('rutas · el recorrido de la ampliación');
+  (function () {
+    if (!window.RUTAS) { ko('curriculum.js define RUTAS', 'no', 'sí'); return; }
+    var porId = {}, curso = {};
+    CURRICULUM.forEach(function (b) {
+      b.temas.forEach(function (t) {
+        porId[t.id] = t;
+        curso[t.id] = t.curso || b.curso || '';
+      });
+    });
+    truthy('hay al menos tres rutas', RUTAS.length >= 3);
+    truthy('y dicen cuántos minutos cuesta un tema', RUTAS.MIN_POR_TEMA > 0);
+
+    RUTAS.forEach(function (r) {
+      var pre = 'ruta «' + r.t + '»';
+      truthy(pre + ': tiene id, título, resumen y para quién es',
+        !!(r.id && r.t && r.r && r.para));
+
+      var faltan = r.temas.filter(function (id) { return !porId[id]; });
+      eq(pre + ': todos sus temas existen', faltan.join(', ') || 'ninguno inexistente', 'ninguno inexistente');
+
+      var repes = r.temas.filter(function (id, i) { return r.temas.indexOf(id) !== i; });
+      eq(pre + ': sin temas repetidos', repes.join(', ') || 'ninguno', 'ninguno');
+
+      var fuera = r.nucleo.filter(function (id) { return r.temas.indexOf(id) < 0; });
+      eq(pre + ': su núcleo está dentro del recorrido', fuera.join(', ') || 'todo dentro', 'todo dentro');
+
+      /* Lo importante: el orden. */
+      var visto = {}, tarde = [];
+      r.temas.forEach(function (id) {
+        ((porId[id] || {}).req || []).forEach(function (q) {
+          if (r.temas.indexOf(q) >= 0 && !visto[q]) tarde.push(q + ' va después de ' + id);
+        });
+        visto[id] = 1;
+      });
+      eq(pre + ': ningún requisito va detrás de quien lo necesita',
+        tarde.join(' · ') || 'ninguno', 'ninguno');
+
+      /* Y que no falte nada de la ampliación: lo de Bachillerato se da por
+         sabido -la ruta es para quien lo terminó-, lo optativo no. */
+      var huecos = {};
+      r.temas.forEach(function (id) {
+        ((porId[id] || {}).req || []).forEach(function (q) {
+          if (curso[q] === 'AMP' && r.temas.indexOf(q) < 0) huecos[q] = 1;
+        });
+      });
+      eq(pre + ': no da por sabido ningún tema optativo que no incluya',
+        Object.keys(huecos).join(', ') || 'ninguno', 'ninguno');
+    });
+  })();
+
   /* ---------------- progreso portatil ----------------
      CUIDADO: estas pruebas escriben en el progreso de verdad, que es el de
      quien esta mirando la pagina. Se saca una copia al empezar y se devuelve
