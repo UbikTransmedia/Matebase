@@ -113,8 +113,9 @@ Course.topic('av-lagrange', function (p) {
     'tratar sistemas con ligaduras, como un péndulo cuya cuerda no se estira. Irónicamente, la mejor manera de ' +
     'entender por qué funcionan es un dibujo.');
 
-  p.util('Las máquinas de vectores soporte, uno de los métodos clásicos del aprendizaje automático, se entrenan ' +
-    'resolviendo un problema de optimización con restricciones mediante multiplicadores. Las redes eléctricas reparten ' +
+  p.util('[[ia-margen|Las máquinas de vectores soporte]], uno de los métodos clásicos del aprendizaje automático, se entrenan ' +
+    'resolviendo exactamente un problema de este tipo: minimizar la norma de un vector con una restricción por cada ' +
+    'dato, y los multiplicadores que salen distintos de cero señalan los ejemplos que sostienen la frontera. Las redes eléctricas reparten ' +
     'la producción entre centrales minimizando el coste con la restricción de cubrir la demanda, y el multiplicador de ' +
     'esa restricción es, literalmente, el precio de la electricidad en el mercado mayorista.');
 

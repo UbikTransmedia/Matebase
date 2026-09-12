@@ -125,6 +125,12 @@ Course.topic('ge-rectas', function (p) {
 
   p.formula('d(P, r) = \\frac{|A p_1 + B p_2 + C|}{\\sqrt{A^2+B^2}}');
 
+  p.note('Esta fórmula tiene una segunda vida fuera de la geometría. Si los puntos son datos de dos ' +
+    'clases y la recta es la frontera que los separa, esta distancia mide <strong>cuánto margen</strong> ' +
+    'deja la frontera, y elegir la recta que lo hace máximo da uno de los clasificadores clásicos. Se ' +
+    've en [[ia-margen|la frontera con más margen]], donde el denominador $\\sqrt{A^2+B^2}$ es justo lo ' +
+    'que hay que minimizar.', 'ok', 'La misma distancia, clasificando');
+
   p.demo({
     title: 'Distancia de un punto a una recta',
     intro: 'Arrastra el punto y los que definen la recta. El segmento rojo es siempre perpendicular: por eso es el más corto.',
