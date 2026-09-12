@@ -207,6 +207,13 @@ Course.topic('av-computabilidad', function (p) {
     'un minuto o nunca—. Se pide un programa <code>PARA(P, x)</code> que analice el código y ' +
     'responda sí o no, siempre, en tiempo finito.');
 
+  p.note('Antes de leer la demostración conviene tener claro que su pieza central —que un programa pueda ' +
+    'recibir a otro como dato— no es una licencia poética. En ' +
+    '[[len-autorreferencia|el bloque de máquinas y lenguajes]] se construye una máquina donde programa y ' +
+    'datos comparten memoria y se ve a un programa leyéndose a sí mismo, celda a celda. Todo lo que ' +
+    'viene a continuación se apoya en que eso se puede hacer de verdad.',
+    null, 'Un programa como dato de otro');
+
   p.text('Turing demostró en 1936 que ese programa no puede existir. La demostración es corta y usa ' +
     'la diagonal:');
 

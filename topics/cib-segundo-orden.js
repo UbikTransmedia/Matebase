@@ -188,6 +188,15 @@ Course.topic('cib-segundo-orden', function (p) {
     'no se arreglan con más datos.', null, 'Goodhart con un optimizador delante');
 
   /* ---------------------------------------------------------------- */
+  p.note('La autorreferencia tiene una versión maquinal que se puede tocar, y conviene verla para que la ' +
+    'de este tema no quede como una elegancia filosófica. En ' +
+    '[[len-autorreferencia|el bloque de máquinas y lenguajes]] un programa se lee a sí mismo, un ' +
+    'compilador se compila a sí mismo, y de ahí sale un resultado incómodo de verdad: una trampa metida ' +
+    'en un compilador puede reproducirse en todos los compiladores que él compile y <strong>no aparecer ' +
+    'en ningún código fuente</strong>. Es el mismo bucle de este tema —el observador dentro de lo ' +
+    'observado— con consecuencias que se miden en fallos de seguridad.',
+    null, 'La versión de la que no se puede salir mirando');
+
   p.section('Del control a la conversación');
 
   p.text('Esta segunda mirada cambió lo que la disciplina consideraba su objeto. Si el observador no ' +
