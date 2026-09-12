@@ -180,6 +180,13 @@ Course.topic('av-informacion', function (p) {
     'imposible.');
 
   /* ---------------------------------------------------------------- */
+  p.note('Un algoritmo de compresión de 1994 acabó, veintidós años después, decidiendo cómo leen el ' +
+    'texto los modelos de lenguaje. Consiste en buscar el par de símbolos vecinos más frecuente y ' +
+    'sustituirlo por uno nuevo, una y otra vez: exactamente la idea de que comprimir es quedarse con ' +
+    'lo que se repite. En [[ia-tokens|el tema de los tokens]] se ve funcionando, y se ve también que ' +
+    'el tamaño del diccionario que produce es un compromiso entre cuánto ocupa el texto y cuánto ocupa ' +
+    'el propio diccionario.', null, 'Comprimir para poder leer');
+
   p.section('Codificar con la distribución equivocada');
 
   p.text('El teorema anterior dice cuánto ocupa un mensaje codificado <em>bien</em>, o sea, sabiendo las ' +
