@@ -180,6 +180,13 @@ Course.topic('cib-segundo-orden', function (p) {
     'asistencial; si a un desarrollador se le mide por líneas de código, escribe más líneas. El ' +
     'indicador se acopla con lo indicado, y a partir de ahí mide sobre todo el propio acto de medir.');
 
+  p.note('Esta ley se ha vuelto muy concreta con los sistemas que aprenden. Para que un modelo de ' +
+    'lenguaje conteste como se espera, se entrena un evaluador que puntúa respuestas y después se ' +
+    'ajusta el modelo para subir esa puntuación: la medida pasa a ser, literalmente, el objetivo. Y ' +
+    'ocurre lo que dice Goodhart, con el agravante de que un optimizador no se cansa de buscar ' +
+    'atajos. En [[ia-limites|lo que el modelo no puede saber]] se ve junto a los otros dos límites que ' +
+    'no se arreglan con más datos.', null, 'Goodhart con un optimizador delante');
+
   /* ---------------------------------------------------------------- */
   p.section('Del control a la conversación');
 

@@ -116,6 +116,14 @@ Course.topic('pe-causal', function (p) {
     }
   });
 
+  p.note('Esto explica con precisión lo que se suele contar mal sobre los sesgos de los modelos ' +
+    'automáticos. Un modelo ajusta sus predicciones a las correlaciones que hay en los datos, y no ' +
+    'tiene manera de distinguir cuál es causal, porque esa distinción no está en los datos. De ahí una ' +
+    'consecuencia práctica que sorprende: <strong>quitar la variable sensible de la entrada no arregla ' +
+    'nada</strong> si queda cualquier otra correlacionada con ella, porque el modelo la reconstruye. ' +
+    'En [[ia-limites|lo que el modelo no puede saber]] se desarrolla, con lo que sí funciona: mirar el ' +
+    'resultado desglosado por grupos.', null, 'La confusión, dentro de un modelo automático');
+
   p.text('Una <strong>variable de confusión</strong> es una tercera variable que influye a la vez ' +
     'sobre la supuesta causa y sobre el supuesto efecto. Su firma es inconfundible: la correlación ' +
     'es real, los datos son correctos, y la conclusión es falsa.');
