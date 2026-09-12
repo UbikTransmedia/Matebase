@@ -255,8 +255,9 @@ Course.topic('fn-aplicaciones', function (p) {
     'lata de refresco que gasta menos aluminio para un volumen dado, la ruta de reparto más corta, ' +
     'el grosor mínimo de una viga que aguanta la carga, el precio que maximiza el ingreso. En todos ' +
     'los casos el método es el mismo que estás aprendiendo: escribir la magnitud a optimizar en ' +
-    'función de una variable, derivar e igualar a cero. Y es también, literalmente, lo que hace una ' +
-    'inteligencia artificial al entrenarse: buscar el mínimo de una función de error.');
+    'función de una variable, derivar e igualar a cero. Entrenar un modelo es esto mismo con muchas ' +
+    'variables a la vez: se escribe el error en función de sus parámetros y se busca el mínimo. Está ' +
+    'desarrollado en [[ia-que-es|aprender es ajustar números]].');
 
   p.hist('El primer problema de optimización de la historia es una leyenda: Dido, fundadora de Cartago, ' +
     'obtuvo permiso para ocupar la tierra que abarcara una piel de buey, la cortó en tiras finísimas ' +

@@ -147,8 +147,9 @@ Course.topic('av-vectorial', function (p) {
   p.util('El gradiente apunta hacia donde algo crece más deprisa, y por eso es la brújula de casi todo lo ' +
     'que se optimiza hoy. En un mapa de temperaturas señala hacia el calor; en un modelo de ' +
     'aprendizaje automático señala hacia el error, y el entrenamiento consiste en caminar en sentido ' +
-    'contrario. Cada vez que un sistema de inteligencia artificial «aprende» algo, está calculando ' +
-    'gradientes millones de veces.');
+    'contrario. Entrenar un modelo no es otra cosa que repetir eso millones de veces: calcular el ' +
+    'gradiente del error respecto de cada uno de sus parámetros y restarle un poco a cada uno. Está ' +
+    'desarrollado en [[ia-que-es|aprender es ajustar números]].');
 
   p.section('Divergencia y rotacional');
 

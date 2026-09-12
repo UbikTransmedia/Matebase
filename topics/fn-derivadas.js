@@ -310,7 +310,7 @@ Course.topic('fn-derivadas', function (p) {
     'máxima o mínima su tangente queda plana, es decir, <strong>su derivada vale cero</strong>, y eso ' +
     'convierte «encontrar lo mejor» en «resolver una ecuación». Un GPS que calcula la ruta más corta, ' +
     'una aerolínea que reparte plazas para ingresar lo máximo, una fábrica que busca el envase que ' +
-    'gasta menos cartón y hasta el entrenamiento de una inteligencia artificial hacen esto mismo: ' +
+    'gasta menos cartón y hasta [[ia-que-es|el entrenamiento de un modelo]] hacen esto mismo: ' +
     'derivar, igualar a cero y mirar. Es el tema siguiente, y el motivo de que este importe tanto.',
     'Utilidad: encontrar lo mejor');
 

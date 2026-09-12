@@ -129,7 +129,8 @@ Course.topic('av-minimos-cuadrados', function (p) {
 
   p.util('Un receptor GPS suele recibir señal de más satélites de los estrictamente necesarios, y calcula su posición ' +
     'resolviendo un sistema sobredeterminado por mínimos cuadrados. Las cámaras de los móviles calibran sus lentes igual, ' +
-    'y la regresión lineal, la versión más sencilla del aprendizaje automático, es literalmente este tema.');
+    'y la regresión lineal, que es [[ia-que-es|el modelo más sencillo que se puede entrenar]], es literalmente este tema: ' +
+    'dos parámetros y una suma de cuadrados que se minimiza.');
 
   p.trampas([
     { e: 'Buscar la recta que pasa por más puntos', por: 'El criterio es la suma de cuadrados, no el número de aciertos. La recta de mínimos cuadrados puede no pasar por ninguno.' },

@@ -306,7 +306,10 @@ Course.topic('av-optimizacion', function (p) {
   p.note('Merece la pena detenerse aquí. Todo el aprendizaje profundo —los modelos de lenguaje, el ' +
     'reconocimiento de imágenes, los coches autónomos— se apoya en dos cosas que ya conoces: la ' +
     '<strong>regla de la cadena</strong> y la idea de que el gradiente apunta a la máxima pendiente. ' +
-    'La potencia no viene de matemáticas más sofisticadas, sino de aplicar estas a una escala enorme.',
+    'La potencia no viene de matemáticas más sofisticadas, sino de aplicar estas a una escala enorme. ' +
+    'Si quieres ver esa afirmación desarrollada entera, con el vocabulario y los ejemplos, empieza por ' +
+    '[[ia-que-es|aprender es ajustar números]]: allí esta misma cuenta se hace a mano sobre una recta ' +
+    'y después se deja correr sola.',
     'ok', 'De la regla de la cadena a la IA');
 
   p.hist('Cauchy propuso el método en 1847 para resolver sistemas de ecuaciones en astronomía. Durante ' +
