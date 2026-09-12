@@ -173,6 +173,28 @@ Course.topic('cib-filtrado', function (p) {
     'cada sentido.');
 
   /* ---------------------------------------------------------------- */
+  p.sub('La media móvil que no olvida de golpe');
+
+  p.text('La media móvil de ventana $k$ tiene dos inconvenientes prácticos. Hay que guardar los últimos ' +
+    '$k$ valores, y el que sale por detrás <strong>desaparece de golpe</strong>: un dato influye todo ' +
+    'lo mismo durante $k$ pasos y después nada. Existe una variante que no guarda nada y que olvida ' +
+    'poco a poco, y es la que más se usa.');
+
+  p.formula('s_n = \\beta\\,s_{n-1} + (1-\\beta)\\,x_n',
+    'media móvil exponencial',
+    'Se lee: <em>«ese sub ene es beta por ese sub ene menos uno, más uno menos beta por equis sub ' +
+    'ene»</em>.<br><br>Cada valor nuevo entra con peso $1-\\beta$ y todo lo anterior se encoge ' +
+    'multiplicándose por $\\beta$. Desplegando la recurrencia, el dato de hace $k$ pasos pesa ' +
+    '$(1-\\beta)\\beta^k$: una [[fn-sucesiones|progresión geométrica]] de razón $\\beta$, cuyos pesos ' +
+    'suman exactamente 1.<br><br>No hay ventana que guardar: basta un número, $s_{n-1}$. La memoria ' +
+    'efectiva es de unos $\\frac{1}{1-\\beta}$ valores, así que $\\beta = 0{,}9$ recuerda unos diez y ' +
+    '$\\beta = 0{,}99$, unos cien.');
+
+  p.note('Fíjate en que esto es <strong>el bucle del primer tema</strong> otra vez: escrito como ' +
+    '$s_n = s_{n-1} + (1-\\beta)(x_n - s_{n-1})$, es una corrección proporcional al error con ganancia ' +
+    '$K = 1-\\beta$, exactamente la de [[cib-realimentacion|la realimentación]]. Un filtro y un ' +
+    'regulador son la misma ecuación mirada desde dos sitios.', 'ok', 'Otra vez el mismo bucle');
+
   p.note('Esa media móvil tiene un nombre general y una familia entera detrás. Deslizar una lista de ' +
     'pesos sobre una señal, multiplicando y sumando en cada posición, es una ' +
     '<strong>[[av-convolucion|convolución]]</strong>: con los pesos iguales sale esta media, con otros ' +

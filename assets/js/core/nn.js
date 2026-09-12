@@ -274,6 +274,26 @@
     return r;
   };
 
+  /* --- entropia cruzada binaria, sobre una probabilidad ya calculada ---
+     Se le pasa la SALIDA DE LA SIGMOIDE, no la suma ponderada. Su
+     derivada respecto de p lleva un p(1-p) en el denominador que, al
+     encadenarse con la derivada de la sigmoide, se cancela y deja
+     exactamente p - y. Esa cancelacion es lo que explica ia-perdida, y
+     aqui ocurre sola al recorrer el grafo. */
+  NN.entropiaCruzadaBinaria = function (p, y) {
+    var n = p.n, s = 0, i, q;
+    for (i = 0; i < n; i++) {
+      q = Math.min(Math.max(p.v[i], 1e-7), 1 - 1e-7);
+      s += -(y.v[i] * Math.log(q) + (1 - y.v[i]) * Math.log(1 - q));
+    }
+    return nodo([1], new Float32Array([s / n]), [p], function () {
+      for (var j = 0; j < n; j++) {
+        var qq = Math.min(Math.max(p.v[j], 1e-7), 1 - 1e-7);
+        p.g[j] += this.g[0] * (qq - y.v[j]) / (qq * (1 - qq) * n);
+      }
+    });
+  };
+
   /* --- error cuadratico medio --- */
   NN.ecm = function (pred, real) {
     var n = pred.n, s = 0;

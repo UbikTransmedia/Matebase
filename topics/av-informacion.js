@@ -271,7 +271,8 @@ Course.topic('av-informacion', function (p) {
     'una distancia.', 'warn', 'El orden importa');
 
   p.util('La entropía cruzada es, literalmente, la función que se minimiza al entrenar casi cualquier ' +
-    'clasificador: el modelo propone una distribución $q$ sobre las respuestas posibles, la realidad es ' +
+    'clasificador —está desarrollado en [[ia-perdida|medir el error y bajar la ladera]]—: el modelo ' +
+    'propone una distribución $q$ sobre las respuestas posibles, la realidad es ' +
     'una $p$ que vale 1 en la correcta, y entrenar es acercar una a otra. Y la divergencia KL aparece ' +
     'en compresión, en el criterio de selección de modelos de Akaike y en la comparación de secuencias ' +
     'genéticas.');
