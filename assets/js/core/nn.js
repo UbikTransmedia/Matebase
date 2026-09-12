@@ -656,12 +656,14 @@
 
   /* Nubes de puntos generadas por formula: nada viene de fuera. */
   NN.datos = {
-    /* Dos lunas entrelazadas: no separables por una recta. */
+    /* Dos lunas entrelazadas: no separables por una recta.
+       El angulo recorre MEDIA vuelta, no una entera: con una vuelta
+       completa saldrian dos circulos solapados, que es otra cosa. */
     lunas: function (r, n, ruido) {
       ruido = ruido === undefined ? 0.12 : ruido;
       var X = [], y = [];
       for (var i = 0; i < n; i++) {
-        var c = i % 2, t = Math.PI * (i / n) * 2;
+        var c = i % 2, t = Math.PI * (i / n);
         if (c === 0) X.push([Math.cos(t) + r.real(-ruido, ruido, 4), Math.sin(t) + r.real(-ruido, ruido, 4)]);
         else X.push([1 - Math.cos(t) + r.real(-ruido, ruido, 4), 0.5 - Math.sin(t) + r.real(-ruido, ruido, 4)]);
         y.push(c);

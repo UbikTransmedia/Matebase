@@ -223,6 +223,12 @@ Course.topic('gfx-voronoi', function (p) {
     'aquí se ve para qué sirve que existan varias: no son un capricho de matemático, son tres ' +
     'texturas visualmente distintas que salen de cambiar dos caracteres.');
 
+  p.note('Y hay un uso que no tiene nada de decorativo. Si los puntos sembrados son ejemplos ya ' +
+    'clasificados y cada región hereda la etiqueta del suyo, este mismo dibujo es la ' +
+    '<strong>frontera de decisión</strong> de un clasificador: el del vecino más cercano, que a cada ' +
+    'punto nuevo le contesta lo que diga el ejemplo que tenga más cerca. Se ve funcionando en ' +
+    '[[ia-distancia|la primera IA es una distancia]].', 'ok', 'El mismo dibujo, clasificando');
+
   p.util('El diagrama de Voronoi es de las estructuras más reutilizadas que hay. En epidemiología lo ' +
     'usó John Snow en 1854, dibujando qué casas de Londres tenían más cerca la bomba de agua de Broad ' +
     'Street que cualquier otra, y con ese mapa demostró que el cólera iba por el agua. En logística ' +
