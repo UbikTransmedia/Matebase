@@ -168,7 +168,7 @@ El núcleo (`assets/js/core/`) es lo que evita repetir código:
 | `cripto.js` | la criptografía de verdad ejecutándose en el navegador: SHA-256, AES, RSA y curvas elípticas |
 | `nn.js` | redes neuronales de verdad: tensores y diferenciación automática, para que las demos de IA entrenen lo que el texto explica |
 | `logica.js` | el banco de circuitos: netlist escrita en texto, diagrama generado solo, tabla de verdad y un simulador que **avanza por instantes**, porque el biestable es un ciclo y no tendría solución de otro modo |
-| `maquina.js` | la CPU de juguete: dieciséis instrucciones, celdas de 8 bits con signo, programa y datos en la misma memoria, su ensamblador de dos pasadas y un tope de pasos para que nada se cuelgue |
+| `maquina.js` | la CPU de juguete: dieciocho instrucciones, celdas de 8 bits con signo, programa y datos en la misma memoria, su ensamblador de dos pasadas y un tope de pasos para que nada se cuelgue |
 | `lenguaje.js` | **Pizca**: troceador, analizador por descenso recursivo, intérprete, compilador a la CPU de `maquina.js` y optimizador |
 | `app.js` | índice desplegable, buscador con glosario, columna del glosario y la referencia GLSL, itinerarios, enrutado y carga perezosa de temas |
 

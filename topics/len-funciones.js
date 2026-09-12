@@ -97,9 +97,10 @@ Course.topic('len-funciones', function (p) {
   /* ---------------------------------------------------------------- */
   p.section('Cómo se compila una llamada');
 
-  p.text('Aquí hay una limitación honesta que conviene contar. [[maq-cpu|La máquina]] no sabe leer una ' +
-    'celda cuya dirección esté guardada en otra celda, y sin eso no se pueden hacer marcos de llamada ' +
-    'de verdad: no hay forma de decir «la <code>n</code> de <em>esta</em> llamada».');
+  p.text('Aquí hay una decisión honesta que conviene contar. Un marco de llamada de verdad necesita poder ' +
+    'decir «la <code>n</code> de <em>esta</em> llamada», y para eso hace falta calcular direcciones: ' +
+    '[[maq-ensamblador|<code>CARGAI</code> y <code>GUARDAI</code>]], que la máquina sí tiene. El ' +
+    'compilador de este curso <strong>no las usa</strong>, y no por no poder.');
 
   p.text('Lo que hace el compilador de este curso es otra cosa, más simple y suficiente: cada función ' +
     'tiene sus huecos fijos, y <strong>quien llama guarda en la pila lo que había en esos huecos ' +
@@ -111,9 +112,11 @@ Course.topic('len-funciones', function (p) {
     'GUARDA fact_n   ; y a su sitio\nCARGA ret       ; seguir con el resultado</pre>');
 
   p.text('Con eso la recursión funciona exactamente igual, la pila crece una vez por llamada —que es lo ' +
-    'que había que ver— y se paga un precio pequeño en instrucciones. Los compiladores de verdad usan ' +
-    'un registro que apunta al marco actual, que es más elegante y necesita esa instrucción que aquí no ' +
-    'existe.');
+    'que había que ver— y se paga un precio pequeño en instrucciones. La alternativa, que es lo que ' +
+    'hacen los compiladores de verdad, sería reservar los marcos en memoria y llevar un registro que ' +
+    'apunte al de ahora, leyendo cada variable con <code>CARGAI</code>. Es más elegante, gasta menos ' +
+    'pila y cuesta bastante más de leer; aquí se eligió lo segundo a propósito, porque este compilador ' +
+    'está para entenderse. Cambiarlo es, de hecho, el mejor ejercicio que queda del bloque.');
 
   p.ejemplo({
     title: 'Seguir fact(4) marco a marco',

@@ -1,6 +1,6 @@
 /* ===================================================================
    Matebase · maquina.js
-   LA MÁQUINA DE JUGUETE. Una CPU de 8 bits con dieciséis instrucciones,
+   LA MÁQUINA DE JUGUETE. Una CPU de 8 bits con dieciocho instrucciones,
    que es lo que hace falta para que el tramo B del bloque tenga dónde
    aterrizar: el compilador del lenguaje genera exactamente esto.
 
@@ -33,6 +33,11 @@
      un recorrido en postorden y nada más: `izquierda, METE, derecha,
      operación`. El tramo B se apoya entero en esa frase.
 
+   · UNA DIRECCIÓN ES UN DATO. `CARGAI` y `GUARDAI` leen y escriben en la
+     celda cuya dirección está guardada en otra celda. Es la diferencia
+     entre poder nombrar un sitio y poder calcularlo, y es lo que separa
+     «tengo veinte variables» de «tengo una lista».
+
    · NADA SE CUELGA. Todo se ejecuta con un tope de pasos; al llegar, se
      para y se dice por qué. Un bucle infinito es un programa posible, y
      el alumno tiene que poder escribirlo sin romper la página.
@@ -43,13 +48,19 @@
   var MAQ = {};
 
   /* ---------------- el juego de instrucciones ----------------
-     Dieciséis, que es lo que cabe en cuatro bits. `arg` dice si la
-     instrucción ocupa una celda o dos, y `tipo` para qué sirve el
-     argumento, que es lo que permite distinguir una etiqueta mal
+     Dieciocho. Las dieciséis primeras cabían en cuatro bits, que quedaba
+     muy redondo; las dos últimas rompen esa cuenta y hacen falta cinco.
+     Se rompió a sabiendas: con dieciséis no se podía calcular una
+     dirección, y sin eso no hay listas, ni marcos de pila, ni quines.
+     Un bit de más a cambio de todo eso es un buen cambio, y además es
+     exactamente el tipo de decisión que se toma al diseñar un procesador.
+
+     `arg` dice si la instrucción ocupa una celda o dos, y `tipo` para qué
+     sirve el argumento, que es lo que permite distinguir una etiqueta mal
      escrita de una variable nueva. */
   var OPS = [
     { n: 'PARA', arg: false, q: 'detiene la máquina' },
-    { n: 'NUM', arg: true, tipo: 'valor', q: 'pone ese número en el acumulador' },
+    { n: 'NUM', arg: true, tipo: 'valor', q: 'pone ese número en el acumulador; con un nombre, pone la dirección de esa celda' },
     { n: 'CARGA', arg: true, tipo: 'dato', q: 'copia al acumulador lo que hay en esa celda' },
     { n: 'GUARDA', arg: true, tipo: 'dato', q: 'copia el acumulador a esa celda' },
     { n: 'METE', arg: false, q: 'mete el acumulador en la pila' },
@@ -63,7 +74,14 @@
     { n: 'SICERO', arg: true, tipo: 'sitio', q: 'sigue por esa etiqueta solo si el acumulador vale 0' },
     { n: 'LLAMA', arg: true, tipo: 'sitio', q: 'guarda dónde estaba en la pila y salta ahí' },
     { n: 'VUELVE', arg: false, q: 'vuelve a donde dijo la última llamada' },
-    { n: 'MUESTRA', arg: false, q: 'escribe el acumulador en la salida' }
+    { n: 'MUESTRA', arg: false, q: 'escribe el acumulador en la salida' },
+    /* Las dos ultimas llegaron despues, y cambian lo que la maquina PUEDE
+       hacer, no solo lo comoda que es. Sin ellas, una direccion no se puede
+       calcular: hay que escribirla en el programa. Con ellas, una direccion
+       es un dato como otro cualquiera, y de ahi salen las listas, los marcos
+       de pila de verdad y los programas que se escriben a si mismos. */
+    { n: 'CARGAI', arg: true, tipo: 'dato', q: 'mira qué dirección hay en esa celda y carga lo que haya ahí' },
+    { n: 'GUARDAI', arg: true, tipo: 'dato', q: 'mira qué dirección hay en esa celda y guarda el acumulador ahí' }
   ];
   var POR_NOMBRE = {};
   OPS.forEach(function (o, i) { o.cod = i; POR_NOMBRE[o.n] = o; });
@@ -93,7 +111,7 @@
 
   MAQ.ensambla = function (texto) {
     var lineas = String(texto == null ? '' : texto).split('\n');
-    var errores = [], celdas = [], etiquetas = {}, vars = {}, pendientes = [];
+    var errores = [], celdas = [], etiquetas = {}, vars = {}, pendientes = [], tablas = {};
     var dir = 0;
 
     /* --- primera pasada: colocar --- */
@@ -114,6 +132,34 @@
 
       var trozos = linea.split(/\s+/);
       var nom = trozos[0].toUpperCase();
+
+      /* TABLA no es una instruccion: no se ejecuta y no ocupa sitio en el
+         programa. Solo dice «resérvame n celdas seguidas y llámalas asi».
+         Hace falta porque las celdas de datos se reparten de una en una, y
+         sin esto no habria forma de pedir un trozo de memoria continuo,
+         que es lo unico que distingue una lista de veinte variables. */
+      if (nom === 'TABLA') {
+        if (trozos.length !== 3) {
+          errores.push({ linea: num, msg: '«TABLA» se escribe «TABLA nombre tamaño»' });
+          return;
+        }
+        if (!RE_NOM.test(trozos[1])) {
+          errores.push({ linea: num, msg: '«' + trozos[1] + '» no es un nombre válido para una tabla' });
+          return;
+        }
+        var tam = parseInt(trozos[2], 10);
+        if (!/^\d+$/.test(trozos[2]) || tam < 1 || tam > MAQ.CELDAS) {
+          errores.push({ linea: num, msg: 'el tamaño de una tabla es un número entre 1 y ' + MAQ.CELDAS });
+          return;
+        }
+        if (tablas[trozos[1]] !== undefined) {
+          errores.push({ linea: num, msg: 'la tabla «' + trozos[1] + '» ya estaba declarada' });
+          return;
+        }
+        tablas[trozos[1]] = tam;
+        return;
+      }
+
       var op = POR_NOMBRE[nom];
       if (!op) {
         errores.push({ linea: num, msg: 'no existe la instrucción «' + trozos[0] + '». Hay: ' + MAQ.NOMBRES.join(', ') });
@@ -142,8 +188,19 @@
 
     /* --- las variables van detrás del programa, por orden de aparición --- */
     var libre = dir;
+    /* Las tablas van primero, para que sus celdas queden seguidas y no se
+       mezclen con las variables sueltas. */
+    Object.keys(tablas).forEach(function (n) {
+      vars[n] = libre;
+      libre += tablas[n];
+    });
     pendientes.forEach(function (p) {
-      if (p.op.tipo === 'dato' && !/^-?\d+$/.test(p.texto) && RE_NOM.test(p.texto) && vars[p.texto] === undefined) {
+      /* `dato` reserva celda, y `valor` tambien cuando lo que trae es un
+         nombre: `NUM tabla` significa «la DIRECCION de tabla», no su
+         contenido. Sin eso no habria forma de meter una direccion en el
+         acumulador, y las instrucciones indirectas no servirian de nada. */
+      var esNombre = !/^-?\d+$/.test(p.texto) && RE_NOM.test(p.texto);
+      if ((p.op.tipo === 'dato' || p.op.tipo === 'valor') && esNombre && vars[p.texto] === undefined) {
         vars[p.texto] = libre++;
       }
     });
@@ -169,7 +226,10 @@
           errores.push({ linea: p.linea, msg: 'no hay ninguna etiqueta que se llame «' + t + '». Se pone escribiendo «' + t + ':» en su línea' });
           v = 0;
         } else v = etiquetas[t];
-      } else if (p.op.tipo === 'dato') {
+      } else if (p.op.tipo === 'dato' || p.op.tipo === 'valor') {
+        /* En los dos casos sale la direccion de la celda. La diferencia esta
+           en que hace la instruccion con ella: `CARGA x` va a buscar lo que
+           hay ahi; `NUM x` se queda con el numero de la celda. */
         v = vars[t];
       } else {
         errores.push({ linea: p.linea, msg: '«' + p.op.n + '» necesita un número, no el nombre «' + t + '»' });
@@ -185,7 +245,7 @@
 
     return {
       celdas: celdas, imagen: imagen, etiquetas: etiquetas, vars: vars,
-      fin: dir, libre: libre, errores: errores,
+      fin: dir, libre: libre, errores: errores, tablas: tablas,
       instrucciones: celdas.filter(function (c) { return c.argDe === undefined; }).length
     };
   };
@@ -229,6 +289,11 @@
     m.ultima = { dir: m.pc, op: op, arg: arg };
     m.pasos++;
 
+    /* Una direccion siempre cae dentro de la memoria: da la vuelta, como
+       los numeros. Asi un programa mal escrito se porta raro pero no
+       revienta nada, que es la regla de esta maquina. */
+    function celda(v) { return ((v % MAQ.CELDAS) + MAQ.CELDAS) % MAQ.CELDAS; }
+
     function saca() {                            // EJECUTAR
       if (!m.pila.length) { para(m, 'se ha intentado sacar de la pila estando vacía'); return 0; }
       return m.pila.pop();
@@ -243,8 +308,10 @@
          instruccion donde se detuvo, que es la informacion util. */
       case 'PARA': return para(m, 'el programa ha terminado');
       case 'NUM': m.a = ocho(arg); break;
-      case 'CARGA': m.a = m.mem[((arg % MAQ.CELDAS) + MAQ.CELDAS) % MAQ.CELDAS]; break;
-      case 'GUARDA': m.mem[((arg % MAQ.CELDAS) + MAQ.CELDAS) % MAQ.CELDAS] = m.a; break;
+      case 'CARGA': m.a = m.mem[celda(arg)]; break;
+      case 'GUARDA': m.mem[celda(arg)] = m.a; break;
+      case 'CARGAI': m.a = m.mem[celda(m.mem[celda(arg)])]; break;
+      case 'GUARDAI': m.mem[celda(m.mem[celda(arg)])] = m.a; break;
       case 'METE':
         if (m.pila.length >= 64) return para(m, 'la pila se ha llenado: son 64 sitios, y suele pasar cuando una llamada no vuelve nunca');
         m.pila.push(m.a); break;
@@ -391,6 +458,30 @@
       t: 'factorial',
       texto: 'NUM 1\nGUARDA r\nCARGA n\nGUARDA i\nbucle:\nCARGA i\nSICERO fin\nCARGA r\nMETE\nCARGA i\nMULT\nGUARDA r     ; r = r * i\nCARGA i\nMETE\nNUM 1\nRESTA\nGUARDA i     ; i = i - 1\nSALTA bucle\nfin:\nCARGA r\nMUESTRA\nPARA',
       datos: { n: 5 }, salida: [120]
+    },
+    tabla: {
+      t: 'recorrer una lista',
+      texto: 'TABLA t 4\nNUM t\nGUARDA p        ; p apunta al principio\nNUM 5\nGUARDAI p\n' +
+             'CARGA p\nMETE\nNUM 1\nSUMA\nGUARDA p\nNUM 7\nGUARDAI p\n' +
+             'CARGA p\nMETE\nNUM 1\nSUMA\nGUARDA p\nNUM 11\nGUARDAI p\n' +
+             'CARGA p\nMETE\nNUM 1\nSUMA\nGUARDA p\nNUM 13\nGUARDAI p\n' +
+             'NUM t\nGUARDA p\nNUM 0\nGUARDA s\nNUM 0\nGUARDA k\n' +
+             'bucle:\nCARGA k\nMETE\nNUM 4\nMENOR\nSICERO fin\n' +
+             'CARGA s\nMETE\nCARGAI p\nSUMA\nGUARDA s\n' +
+             'CARGA p\nMETE\nNUM 1\nSUMA\nGUARDA p\n' +
+             'CARGA k\nMETE\nNUM 1\nSUMA\nGUARDA k\nSALTA bucle\n' +
+             'fin:\nCARGA s\nMUESTRA\nPARA',
+      datos: null, salida: [36]
+    },
+    quine: {
+      t: 'un programa que se escribe a sí mismo',
+      /* 26 celdas, y escribe exactamente esas 26. El punto fijo se cierra
+         porque el bucle no crece con lo que imprime: sin CARGAI habria que
+         nombrar cada celda en el programa y nunca se alcanzaria. */
+      texto: 'NUM 0\nGUARDA i\nbucle:\nCARGA i\nMETE\nNUM 26\nMENOR\nSICERO fin\n' +
+             'CARGAI i\nMUESTRA\nCARGA i\nMETE\nNUM 1\nSUMA\nGUARDA i\nSALTA bucle\nfin:\nPARA',
+      datos: null,
+      salida: [1, 0, 3, 26, 2, 26, 4, 1, 26, 10, 12, 25, 16, 26, 15, 2, 26, 4, 1, 1, 6, 3, 26, 11, 4, 0]
     },
     doble: {
       t: 'una subrutina que duplica',

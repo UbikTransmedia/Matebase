@@ -251,7 +251,36 @@ botones de widgets de verdad, porque la auditoría de temas no ve un widget roto
 lo aprendimos con el banco de circuitos, que perdía el estado entre pulsaciones
 y hacía que el tema de la memoria enseñara lo contrario de lo que decía.
 
-## Fase 7 — Ideas pendientes (a petición)
+## Fase 7 — Las mejoras del análisis (en curso)
+
+Un DAFO del curso desde dos lecturas —la de quien lo estudia y la de quien lo
+daría en clase— dejó diez mejoras ordenadas por lo que cambian dividido por lo
+que cuestan. Lo que ha salido de aplicarlas, con lo que conviene recordar:
+
+- **El progreso sale del navegador.** Exportar e importar como archivo, y una
+  vista de clase que lee varios a la vez. Al fundir gana lo más avanzado, nunca
+  lo más reciente.
+- **Rutas para la ampliación.** Un `nucleo` de temas, cerrado sobre los
+  requisitos de ampliación y ordenado como el temario. `tests.html` comprueba que
+  ninguna ruta manda a nadie a un tema que dé por sabido otro que no ha visto.
+- **La red, cerrada.** 44 temas no recibían ni un enlace; ahora ninguno, y hay
+  una prueba que lo impide.
+- **Deberes y exámenes sin servidor:** el enlace lleva dentro lo que hace falta.
+- **La instrucción que faltaba.** `CARGAI` y `GUARDAI` cambian lo que la máquina
+  *puede* hacer, no lo cómoda que es, y por eso valían un bit de más en el código
+  de operación. Con ellas hay listas, y el quine dejó de ser imposible: 26 celdas
+  que escriben exactamente esas 26.
+
+> **Por qué el quine merecía romper la cuenta redonda.** El bloque contaba, con
+> una demostración de una línea, que en aquella máquina no podía haber un
+> programa que se escribiera entero: escribir *k* celdas costaba *3k+1*. La
+> demostración era correcta y el tema era bueno. Pero el motivo de fondo no era
+> el tamaño, sino que **una dirección no podía ser un dato**, y eso se arregla
+> con una instrucción. Ahora el tema cuenta las dos cosas —por qué no se podía y
+> por qué ahora sí— y termina con el programa corriendo, que es bastante mejor
+> final que una imposibilidad.
+
+## Fase 8 — Ideas pendientes (a petición)
 
 - Más problemas de examen reales, adaptados por comunidades autónomas.
 - Un modo profesor para montar simulacros a medida eligiendo temas.

@@ -122,6 +122,57 @@ Course.topic('maq-ensamblador', function (p) {
     'tenga [[len-funciones|funciones]].',
     null, 'Para qué sirve exactamente una pila');
 
+  /* ---------------------------------------------------------------- */
+  p.section('Calcular una dirección, no solo escribirla');
+
+  p.text('Queda una limitación que hasta aquí no se ha notado, y que es más grave de lo que parece. En ' +
+    '<code>CARGA x</code>, la dirección está <strong>escrita en el programa</strong>. Se puede nombrar ' +
+    'una celda, pero no calcularla: no hay forma de decir «la celda número lo-que-valga-esto».');
+
+  p.text('Y sin eso no hay listas. Con veinte variables sueltas se puede guardar veinte cosas, pero no ' +
+    'recorrerlas con un bucle: habría que escribir veinte <code>CARGA</code> distintos, uno por nombre. ' +
+    'Una lista no es «muchas variables»: es un trozo de memoria por el que se puede <em>avanzar</em>.');
+
+  p.text('Se arregla con dos instrucciones que hacen un salto de más:');
+
+  p.table(['instrucción', 'qué hace'],
+    [['<code>CARGA p</code>', 'el acumulador toma <strong>lo que hay</strong> en la celda <code>p</code>'],
+     ['<code>CARGAI p</code>', 'mira qué <strong>dirección</strong> hay en <code>p</code> y trae lo que haya <em>ahí</em>'],
+     ['<code>GUARDAI p</code>', 'lo mismo para escribir: guarda el acumulador en la celda que apunta <code>p</code>'],
+     ['<code>NUM x</code>', 'con un nombre en vez de un número, pone en el acumulador la <strong>dirección</strong> de <code>x</code>']]);
+
+  p.note('Esa distinción entre <em>la dirección</em> y <em>lo que hay en ella</em> es el escalón que más ' +
+    'cuesta de todo el bloque, y no porque sea difícil: porque en la vida diaria no se separan. Una ' +
+    'forma de tenerlo claro: <code>NUM x</code> te da el número del portal; <code>CARGA x</code> te da ' +
+    'quién vive dentro. <code>CARGAI p</code> es: «en el papel <code>p</code> hay escrito un número de ' +
+    'portal; ve a ese portal y dime quién vive».',
+    'ok', 'La dirección y lo que hay en ella');
+
+  p.text('Con esas dos, una lista es una tabla de celdas seguidas y un puntero que avanza. Para reservar ' +
+    'las celdas seguidas hay una palabra que no es una instrucción —no se ejecuta, no ocupa sitio en el ' +
+    'programa—: <code>TABLA nombre tamaño</code>.');
+
+  p.demo({
+    title: 'Una lista, rellenada y recorrida',
+    intro: 'Cuatro números escritos en una tabla con GUARDAI, y después sumados recorriéndola con CARGAI y un puntero que avanza. Fíjate en la tabla de memoria: las cuatro celdas de la lista están seguidas, al final. Cambia los números y vuelve a correr.',
+    predice: 'El bucle de la suma tiene una sola instrucción que lee de la lista. ¿Cómo sabe, en cada vuelta, de qué celda leer?',
+    build: function (host) {
+      W.maquina(host, {
+        id: 'ens-lista', tope: 3000,
+        texto: MAQ.EJEMPLOS.tabla.texto,
+        nota: 'El puntero <code>p</code> es una celda que guarda un número de celda. Sumarle uno es «pasar al siguiente», y ahí está toda la idea de una lista. Lo que hace un lenguaje cuando escribes <code>lista[i]</code> es exactamente esto.'
+      });
+    }
+  });
+
+  p.note('Este par de instrucciones no es comodidad: <strong>cambia lo que la máquina puede hacer</strong>. ' +
+    'Sin ellas no hay listas, no hay marcos de pila de verdad —no se puede decir «la variable de ' +
+    '<em>esta</em> llamada»— y no hay programas que se escriban a sí mismos, que es lo que se ve en ' +
+    '[[len-autorreferencia|el último tema del bloque]]. Con ellas el juego pasa de dieciséis ' +
+    'instrucciones a dieciocho, y el código de operación deja de caber en cuatro bits: hacen falta ' +
+    'cinco. Ese bit de más es el precio, y está bien pagado.',
+    'ok', 'Lo que se compra con un bit');
+
   p.ejemplo({
     title: 'Traducir un «mientras» a saltos',
     enunciado: 'Escribir en ensamblador la idea «mientras i sea menor que 3, escribe i y súmale 1», empezando con i valiendo 0.',

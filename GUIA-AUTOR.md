@@ -713,7 +713,21 @@ porque el alumno los va a leer letra a letra:
 
 | Sin argumento | Con argumento |
 |---|---|
-| `PARA` `METE` `SACA` `SUMA` `RESTA` `MULT` `DIV` `MENOR` `VUELVE` `MUESTRA` | `NUM n` `CARGA c` `GUARDA c` `SALTA e` `SICERO e` `LLAMA e` |
+| `PARA` `METE` `SACA` `SUMA` `RESTA` `MULT` `DIV` `MENOR` `VUELVE` `MUESTRA` | `NUM n` `CARGA c` `GUARDA c` `SALTA e` `SICERO e` `LLAMA e` `CARGAI p` `GUARDAI p` |
+
+Más una palabra que **no es una instrucción**: `TABLA nombre tamaño` reserva ese
+número de celdas seguidas y les pone nombre. No se ejecuta y no ocupa sitio en el
+programa; solo pide memoria continua, que es lo único que distingue una lista de
+veinte variables sueltas.
+
+**`CARGAI` y `GUARDAI` leen y escriben en la celda cuya dirección está guardada en
+otra celda**, y `NUM x` con un nombre en vez de un número pone en el acumulador
+**la dirección** de `x`, no su contenido. Esas tres cosas juntas son lo que
+permite calcular una dirección en vez de escribirla, y de ahí salen las listas,
+los marcos de llamada de verdad y los programas que se escriben a sí mismos. Con
+ellas el juego pasa de dieciséis instrucciones a dieciocho y el código de
+operación ya no cabe en cuatro bits: hacen falta cinco. Se rompió esa cuenta
+redonda a sabiendas.
 
 Cuatro decisiones mandan sobre todo lo demás, y conviene conocerlas antes de
 escribir un programa para una demo:
@@ -741,7 +755,13 @@ escribir un programa para una demo:
 | `MAQ.ejecuta(texto, datos, tope)` | atajo: `{errores, salida, a, mem, pasos, porQue, desbordo}` |
 | `MAQ.iguales(texto, casos, o)` | compara **comportamiento**: corre el programa con cada `{datos, salida}` y devuelve `{ok, porQue, instrucciones, pasos}` |
 | `MAQ.pinta(texto)` | coloreado del ensamblador con los mismos ocho papeles |
-| `MAQ.EJEMPLOS` | la batería de programas de referencia (`suma`, `mayor`, `cuenta`, `fact`, `doble`), que además son pruebas: si uno deja de dar lo que da, la CPU está rota |
+| `MAQ.EJEMPLOS` | la batería de programas de referencia (`suma`, `mayor`, `cuenta`, `fact`, `tabla`, `quine`, `doble`), que además son pruebas: si uno deja de dar lo que da, la CPU está rota |
+
+> **El quine.** `MAQ.EJEMPLOS.quine` ocupa 26 celdas y escribe exactamente esas
+> 26. El punto fijo se cierra porque el bucle **no crece con lo que imprime**:
+> con las dieciséis instrucciones de antes había que nombrar cada celda en el
+> programa, escribir *k* celdas costaba *3k+1* y la ecuación no tenía solución.
+> Si tocas una instrucción de sitio, esa prueba se cae, y es a propósito.
 
 **El widget.** `W.maquina(host, {id, texto, datos, alto, aria, nota, tope})`, con
 la misma forma que los otros dos: editor de dos capas, aviso con `aria-live` que

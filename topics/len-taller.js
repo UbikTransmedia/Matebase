@@ -98,18 +98,18 @@ Course.topic('len-taller', function (p) {
   /* ---------------------------------------------------------------- */
   p.section('Qué le falta a Pizca, y qué costaría');
 
-  p.table(['lo que falta', 'qué haría falta para tenerlo'],
-    [['texto', 'que <code>muestra</code> supiera escribir algo que no fueran números, y un tipo de dato más en el árbol'],
-     ['decimales', 'cambiar los números de la máquina; y entonces hay que decidir cuántos bits y qué se redondea'],
-     ['listas', 'leer una celda cuya dirección esté en otra celda: la instrucción que falta en la máquina'],
-     ['funciones de verdad recursivas en memoria', 'la misma instrucción, más un registro que apunte al marco actual'],
-     ['números grandes', 'más de ocho bits por celda, o guardar cada número en varias celdas y sumar a mano']]);
+  p.table(['lo que falta', 'qué haría falta para tenerlo', 'dificultad'],
+    [['texto', 'que <code>muestra</code> supiera escribir algo que no fueran números, y un tipo de dato más en el árbol', 'media'],
+     ['decimales', 'cambiar los números de la máquina; y entonces hay que decidir cuántos bits y qué se redondea', 'alta'],
+     ['listas', 'sintaxis para <code>lista[i]</code>, y compilarla con <code>CARGAI</code> sobre una <code>TABLA</code>: la máquina ya sabe', 'baja'],
+     ['marcos de llamada de verdad', 'un registro que apunte al marco de ahora y leer las variables con <code>CARGAI</code>; la máquina ya sabe', 'media'],
+     ['números grandes', 'más de ocho bits por celda, o guardar cada número en varias celdas y sumar a mano', 'alta']]);
 
-  p.text('Fíjate en que dos de las cinco filas piden <strong>la misma instrucción</strong>: leer una celda ' +
-    'cuya dirección está guardada en otra. No es casualidad. Esa instrucción es lo que convierte las ' +
-    'direcciones en datos, y sin ella no hay listas, ni marcos de pila, ni ' +
-    '[[len-autorreferencia|quines]]. Añadirla a la máquina sería una línea; lo que cambia es todo lo ' +
-    'que pasa a ser posible.');
+  p.text('Fíjate en las dos filas de dificultad baja y media: las dos piden <strong>la misma ' +
+    'instrucción</strong>, y la máquina ya la tiene. Poder calcular una dirección en vez de escribirla ' +
+    'es lo que convierte las direcciones en datos, y de ahí salen las listas, los marcos de pila y ' +
+    '[[len-autorreferencia|los programas que se escriben a sí mismos]]. Lo que falta ahora no está en ' +
+    'la máquina: está en el compilador, y es trabajo de una tarde.');
 
   p.ejemplo({
     title: 'El mismo cálculo, dos veces, y cuál sale más barato',

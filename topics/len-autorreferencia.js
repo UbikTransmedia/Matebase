@@ -28,37 +28,68 @@ Course.topic('len-autorreferencia', function (p) {
   });
 
   p.text('La pregunta natural es la siguiente: si puede escribir tres celdas, ¿podría escribirse ' +
-    '<strong>entero</strong>? A un programa que escribe su propio texto se le llama <em>quine</em>, y ' +
-    'existen en casi todos los lenguajes. En esta máquina, con estas instrucciones, <strong>no</strong>, ' +
-    'y la razón es una cuenta de una línea.');
+    '<strong>entero</strong>? A un programa que escribe su propio texto se le llama <em>quine</em>. La ' +
+    'respuesta corta es que sí, y que cabe en veintiséis celdas; la larga es más interesante, porque ' +
+    'durante buena parte de este bloque la respuesta era que no, y la razón de que ahora sea que sí ' +
+    'cabe en una sola instrucción.');
 
   /* ---------------------------------------------------------------- */
-  p.section('Por qué aquí no se puede: una cuenta');
+  p.section('Por qué con dieciséis instrucciones no se podía');
 
-  p.text('Para escribir una celda hacen falta dos instrucciones, <code>CARGA d</code> y ' +
-    '<code>MUESTRA</code>, que ocupan <strong>tres celdas</strong>: dos la primera —orden y argumento— y ' +
-    'una la segunda. Así que un programa escrito de esa manera, que quiera escribir $k$ celdas, ocupa ' +
-    '$3k$ celdas, más una del <code>PARA</code>.');
+  p.text('Hasta que la máquina tuvo <code>CARGAI</code>, la respuesta era que no, y la razón era una ' +
+    'cuenta de una línea. Para escribir una celda hacían falta dos instrucciones, <code>CARGA d</code> ' +
+    'y <code>MUESTRA</code>, que ocupan <strong>tres celdas</strong>: dos la primera —orden y ' +
+    'argumento— y una la segunda. Un programa que quisiera escribir $k$ celdas de esa manera ocuparía ' +
+    '$3k$, más una del <code>PARA</code>.');
 
   p.formula('\\text{para escribir } k \\text{ celdas ocupa } 3k + 1', 'y necesitaría escribir esas 3k+1');
 
-  p.text('Para escribirse entero haría falta que $k = 3k + 1$, o sea $k = -\\tfrac{1}{2}$. No hay ningún ' +
-    'tamaño que funcione: <strong>crece tres veces más deprisa de lo que alcanza</strong>. Puedes ' +
-    'comprobarlo en la demo de arriba añadiendo pares: con tres pares ocupa 10 celdas y escribe 3; con ' +
-    'siete pares ocupa 22 y escribe 7. La distancia no se cierra, se agranda.');
+  p.text('Para escribirse entero haría falta $k = 3k + 1$, o sea $k = -\\tfrac{1}{2}$. No hay ningún ' +
+    'tamaño que funcione: <strong>crece tres veces más deprisa de lo que alcanza</strong>. Con tres ' +
+    'pares ocupa 10 celdas y escribe 3; con siete pares ocupa 22 y escribe 7. La distancia no se ' +
+    'cierra, se agranda.');
 
-  p.note('Y esto no demuestra que los quines sean imposibles, sino que <strong>este camino</strong> no ' +
-    'lleva a ninguno. El fallo está en intentar guardar una copia de sí mismo: eso siempre es más ' +
-    'grande que el original. Los quines de verdad hacen otra cosa: guardan el texto <strong>una sola ' +
-    'vez</strong> y lo usan <strong>dos</strong>, una como dato que se escribe y otra como instrucciones ' +
-    'que se ejecutan. Ese doble uso es toda la idea, y es lo mismo que hace una célula con su ADN.',
-    'ok', 'Guardarlo una vez, usarlo dos');
+  p.note('Y fíjate en <em>por qué</em> crecía. Cada celda que quería imprimir obligaba a escribir su ' +
+    'dirección en el programa, porque no había forma de calcularla. El fallo no era el tamaño: era que ' +
+    '<strong>una dirección no podía ser un dato</strong>.',
+    'warn', 'Dónde estaba el nudo');
 
-  p.text('Lo que le falta a esta máquina para poder tener quines es una instrucción que lea una celda ' +
-    '<strong>cuya dirección esté en otra celda</strong>. Con eso se podría escribir un bucle que ' +
-    'recorriera la memoria, y el programa dejaría de crecer con lo que quiere escribir. Es la misma ' +
-    'instrucción que faltaba en [[len-funciones|los marcos de llamada]], y no es casualidad: sin ella, ' +
-    'la máquina no puede tratar las direcciones como datos.');
+  /* ---------------------------------------------------------------- */
+  p.section('Y por qué con dieciocho sí');
+
+  p.text('En [[maq-ensamblador|el tema del ensamblador]] aparecieron <code>CARGAI</code> y ' +
+    '<code>GUARDAI</code>, que leen y escriben en la celda cuya dirección está guardada en otra celda. ' +
+    'Con eso, imprimir la memoria deja de ser una lista de órdenes y pasa a ser un <strong>bucle</strong>: ' +
+    'un contador que sube y un <code>CARGAI</code> que lee por donde va.');
+
+  p.text('Y entonces el programa <strong>ya no crece con lo que imprime</strong>. Ocupa lo que ocupe el ' +
+    'bucle, imprima tres celdas o trescientas. La ecuación imposible de antes se convierte en otra que ' +
+    'sí tiene solución: basta con que el número que lleva escrito coincida con el tamaño del programa.');
+
+  p.demo({
+    title: 'El quine, corriendo',
+    intro: 'Veintiséis celdas, y escribe exactamente esas veintiséis. Compara la salida con la columna de valores de la tabla de memoria, celda a celda: son la misma lista. Después cambia el 26 por otro número y mira cómo deja de coincidir.',
+    predice: 'El programa lleva un 26 escrito dentro. ¿Qué crees que pasaría si ocupara 27 celdas y siguiera diciendo 26?',
+    build: function (host) {
+      W.maquina(host, {
+        id: 'auto-quine', tope: 3000,
+        texto: MAQ.EJEMPLOS.quine.texto,
+        nota: 'El <code>26</code> de la sexta celda es el tamaño del propio programa, y es lo único que hay que acertar. La variable <code>i</code> vive en la celda 26, justo detrás: por eso no se imprime a sí misma, y por eso el programa no es un blanco móvil.'
+      });
+    }
+  });
+
+  p.note('Eso que acaba de pasar tiene nombre: es un <strong>punto fijo</strong>. El programa se ha ' +
+    'escrito de forma que una cantidad —su tamaño— sea a la vez un dato que lleva dentro y una ' +
+    'propiedad de sí mismo, y el trabajo consiste en hacer que las dos coincidan. No es una casualidad ' +
+    'afortunada de esta máquina: el <strong>teorema de recursión</strong> de Kleene dice que en ' +
+    'cualquier lenguaje suficientemente potente ese punto fijo <em>siempre</em> existe.',
+    'ok', 'Un punto fijo');
+
+  p.text('Los quines de los lenguajes con texto hacen lo mismo por otro camino, porque ahí no se puede ' +
+    'leer la propia memoria: guardan el texto <strong>una vez</strong> y lo usan <strong>dos</strong>, ' +
+    'una como dato que se escribe y otra como instrucciones que se ejecutan. Ese doble uso es la misma ' +
+    'idea, y es lo que hace una célula con su ADN.');
 
   /* ---------------------------------------------------------------- */
   p.section('El compilador que se compila a sí mismo');
@@ -118,7 +149,7 @@ Course.topic('len-autorreferencia', function (p) {
       { t: '<strong>La cuenta general.</strong> Escribe $k$ y ocupa $3k + 1$: la distancia es $2k + 1$, que <strong>crece</strong> con $k$. Cuantos más pares se añaden, más lejos queda.' },
       { t: '<strong>La conclusión.</strong> No hay ningún $k$ que valga, así que por este camino no hay quine. Lo que falla no es el tamaño: es la idea de guardar una copia, porque una copia más el mecanismo de copiarla siempre es mayor que el original.' }
     ],
-    cierre: 'Los quines de verdad salen de la jugada contraria: guardar el texto una vez y usarlo dos, como dato y como programa. En una máquina que pueda leer una celda cuya dirección esté en otra celda, esto es un bucle de seis instrucciones.'
+    cierre: 'Todo ese crecimiento venía de tener que escribir cada dirección en el programa. En cuanto una dirección se puede calcular —y eso es lo único que añaden <code>CARGAI</code> y <code>GUARDAI</code>—, el programa deja de crecer con lo que imprime y la ecuación imposible se vuelve posible. Un bucle, y ya está.'
   });
 
   p.comprueba('¿Por qué un programa que escribe sus celdas de una en una no puede llegar a escribirse entero?', [
@@ -145,7 +176,7 @@ Course.topic('len-autorreferencia', function (p) {
   p.trampas([
     { e: 'Creer que un quine guarda una copia de su texto', por: 'Sería más grande que él mismo. Lo que hace es guardar el texto una vez y usarlo dos veces, como dato y como instrucciones.' },
     { e: 'Pensar que leer la propia memoria es un truco raro', por: 'Es la consecuencia directa de que programa y datos compartan memoria. Lo raro sería que no se pudiera.' },
-    { e: 'Confundir «no se puede en esta máquina» con «no se puede»', por: 'Aquí no hay quines porque falta una instrucción concreta. En cualquier lenguaje razonable sí los hay, y el teorema de recursión lo garantiza.' },
+    { e: 'Confundir «no se puede así» con «no se puede»', por: 'Lo que era imposible era hacerlo copiando, y en una máquina sin direccionamiento indirecto. En cualquier lenguaje razonable hay quines, y el teorema de recursión de Kleene garantiza que existen siempre.' },
     { e: 'Creer que leer el código fuente basta para confiar en un programa', por: 'Es justamente lo que desmontó Thompson: la trampa puede estar en el compilador, y no aparecer en ningún fuente.' },
     { e: 'Tratar la autorreferencia como un juego de palabras', por: 'Es la herramienta con la que se demuestran los límites de lo calculable. Cantor, Gödel y Turing usan la misma jugada.' }
   ]);
@@ -229,18 +260,18 @@ Course.topic('len-autorreferencia', function (p) {
   });
 
   p.exercise({
-    title: 'Qué haría falta para que aquí hubiera quines',
+    title: 'Qué era lo que faltaba',
     level: 'avanzado',
     gen: function (r) {
       var casos = [
-        { t: 'una instrucción que cargue lo que hay en la celda <strong>cuya dirección está guardada en otra celda</strong>', v: 'si', por: 'Eso es exactamente lo que falta. Con ella se puede escribir un bucle que recorra la memoria, y entonces el programa deja de crecer con el número de celdas que quiere escribir: se queda del mismo tamaño escriba tres o trescientas.' },
+        { t: 'una instrucción que cargue lo que hay en la celda <strong>cuya dirección está guardada en otra celda</strong>', v: 'si', por: 'Eso era exactamente lo que faltaba, y es <code>CARGAI</code>. Con ella el recorrido de la memoria se escribe como un bucle, y entonces el programa deja de crecer con el número de celdas que imprime: ocupa lo mismo escriba tres o trescientas.' },
         { t: 'más memoria: 1024 celdas en vez de 256', v: 'no', por: 'No serviría de nada. El problema no es el límite sino la proporción: ocupar $3k+1$ para escribir $k$ falla con cualquier memoria, por grande que sea.' },
         { t: 'una instrucción que escriba varias celdas de golpe', v: 'no', por: 'Ayudaría con la constante, pero no cambia el fondo: seguiría haciendo falta nombrar cada celda en el programa, y eso sigue creciendo con lo que se quiere escribir.' },
         { t: 'un tope de pasos más alto', v: 'no', por: 'El tope no tiene nada que ver: el programa no se queda sin tiempo, es que no existe ningún tamaño que cuadre.' }
       ];
       return { c: r.pick(casos) };
     },
-    ask: function (d) { return '¿Bastaría esto para que en la máquina del bloque pudiera haber un programa que se escribiera entero?<br><strong>' + d.c.t + '</strong>'; },
+    ask: function (d) { return 'Con las dieciséis instrucciones que la máquina tenía al principio no había forma de escribir un programa que se imprimiera entero. ¿Bastaría esto para conseguirlo?<br><strong>' + d.c.t + '</strong>'; },
     fields: [{ name: 'q', label: 'Bastaría', opts: [{ t: 'sí', v: 'si' }, { t: 'no', v: 'no' }] }],
     sol: function (d) { return { q: d.c.v }; },
     hint: function () { return 'La pregunta clave es: ¿con eso deja el programa de crecer cuando crece el número de celdas que quiere escribir?'; },
@@ -250,9 +281,9 @@ Course.topic('len-autorreferencia', function (p) {
 
   p.keys([
     'Como programa y datos comparten memoria, un programa puede <strong>leerse a sí mismo</strong>: <code>CARGA 0</code> trae su primera instrucción.',
-    'En esta máquina no hay <strong>quines</strong>, y por una cuenta: escribir $k$ celdas cuesta $3k+1$, así que crece más deprisa de lo que alcanza.',
+    'Copiando no se puede: escribir $k$ celdas cuesta $3k+1$, así que el programa crece tres veces más deprisa de lo que alcanza.',
     'Lo que falla es guardar una copia. Un quine de verdad guarda el texto <strong>una vez y lo usa dos</strong>: como dato y como instrucciones, igual que una célula con su ADN.',
-    'Lo que falta en la máquina es una instrucción que lea una celda cuya <strong>dirección esté en otra celda</strong>: la misma que faltaba para los marcos de llamada.',
+    'Lo que lo hace posible es poder leer una celda cuya <strong>dirección esté en otra celda</strong>: con eso el bucle no crece con lo que imprime, y el punto fijo se cierra en 26 celdas.',
     'Un compilador se construye por <strong>bootstrapping</strong>: se reescribe en su propio lenguaje y a partir de ahí se compila a sí mismo.',
     'De ahí sale el aviso de Thompson: una trampa metida en un compilador <strong>puede no aparecer en ningún código fuente</strong>.',
     'La autorreferencia es la herramienta con la que se demuestran los límites: Cantor, Gödel y Turing usan la misma jugada, y el teorema de recursión de Kleene garantiza que los quines existen.'

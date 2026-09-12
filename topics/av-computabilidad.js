@@ -41,7 +41,7 @@ Course.topic('av-computabilidad', function (p) {
     'hacerlo muchísimo más deprisa, que no es lo mismo.');
 
   p.note('Que una definición tan pobre valga para todo se puede ver desde el otro lado. En ' +
-    '[[maq-ensamblador|el bloque de máquinas y lenguajes]] se programa una CPU con dieciséis ' +
+    '[[maq-ensamblador|el bloque de máquinas y lenguajes]] se programa una CPU con dieciocho ' +
     'instrucciones y se llega a la misma conclusión por el camino contrario: en cuanto una máquina sabe ' +
     '<strong>decidir</strong> —saltar si algo vale cero— y <strong>repetir</strong> —saltar hacia ' +
     'atrás—, ya no hay nada calculable fuera de su alcance. Añadirle instrucciones la hace más cómoda y ' +

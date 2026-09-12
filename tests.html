@@ -577,6 +577,38 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     eq('cuenta el coste en instrucciones',
       MAQ.iguales('CARGA x\nMETE\nCARGA y\nSUMA\nMUESTRA\nPARA', casos).instrucciones, 6);
 
+    /* Direccionamiento indirecto: la diferencia entre nombrar un sitio y
+       calcularlo. Sin esto no hay listas, ni marcos de pila, ni quines. */
+    eq('NUM con un nombre da la DIRECCIÓN de esa celda, no su contenido',
+      MAQ.ejecuta('NUM x\nMUESTRA\nPARA').salida[0], MAQ.ensambla('NUM x\nMUESTRA\nPARA').vars.x);
+    truthy('CARGAI trae lo que hay en la celda que apunta otra celda',
+      MAQ.ejecuta('NUM d\nGUARDA p\nNUM 42\nGUARDA d\nCARGAI p\nMUESTRA\nPARA').salida[0] === 42);
+    truthy('GUARDAI escribe en la celda que apunta otra celda',
+      MAQ.ejecuta('NUM d\nGUARDA p\nNUM 7\nGUARDAI p\nCARGA d\nMUESTRA\nPARA').salida[0] === 7);
+    var conTabla = MAQ.ensambla('TABLA t 5\nNUM t\nPARA');
+    truthy('TABLA reserva celdas seguidas y no ocupa sitio en el programa',
+      conTabla.errores.length === 0 && conTabla.tablas.t === 5 && conTabla.vars.t === conTabla.fin);
+    truthy('y las variables sueltas van después de las tablas',
+      MAQ.ensambla('TABLA t 5\nCARGA x\nPARA').vars.x >= MAQ.ensambla('TABLA t 5\nCARGA x\nPARA').vars.t + 5);
+    eq('una TABLA mal escrita se caza en su línea',
+      MAQ.ensambla('TABLA t\nPARA').errores[0].linea, 1);
+
+    /* EL QUINE. En la version de dieciseis instrucciones esto era
+       imposible, y el tema lo demostraba contando: escribir k celdas
+       costaba 3k+1. Con CARGAI el bucle ya no crece con lo que imprime y el
+       punto fijo se cierra en 26. Si esta prueba falla, o se ha movido una
+       instruccion de sitio o el quine ha dejado de serlo. */
+    (function () {
+      var q = MAQ.EJEMPLOS.quine;
+      var a = MAQ.ensambla(q.texto);
+      var r = MAQ.ejecuta(q.texto, null, 4000);
+      eq('el quine ocupa exactamente las celdas que dice imprimir', a.fin, 26);
+      eq('y escribe su propia imagen de memoria, celda a celda',
+        r.salida.join(','), a.imagen.slice(0, a.fin).join(','));
+      truthy('con su variable justo detrás del programa, para no imprimirse',
+        a.vars.i === a.fin);
+    })();
+
     /* El coloreado no puede alterar el texto: se pinta lo que hay. */
     var pintado = MAQ.pinta('bucle: CARGA x ; nota <b>');
     var plano = pintado.replace(/<[^>]*>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');

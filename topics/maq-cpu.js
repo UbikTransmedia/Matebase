@@ -68,7 +68,7 @@ Course.topic('maq-cpu', function (p) {
         id: 'cpu-deco', alto: 250,
         texto: 'na = not(a);\nnb = not(b);\nd0 = and(na, nb);\nd1 = and(na, b);\nd2 = and(a, nb);\nd3 = and(a, b);',
         aria: 'Un decodificador: dos entradas, dos negaciones y cuatro puertas and, una por combinación.',
-        nota: 'Cada línea es un <strong>detector de fila</strong> de los de [[maq-normal|la forma normal]]. Un decodificador no es más que todos los detectores posibles puestos juntos. Para las dieciséis instrucciones de esta máquina harían falta cuatro entradas y dieciséis salidas.'
+        nota: 'Cada línea es un <strong>detector de fila</strong> de los de [[maq-normal|la forma normal]]. Un decodificador no es más que todos los detectores posibles puestos juntos. Para las dieciocho instrucciones de esta máquina harían falta <strong>cinco</strong> entradas y treinta y dos salidas, de las que catorce no se usarían: los tamaños redondos salen en potencias de dos, y un juego de instrucciones casi nunca cae justo.'
       });
     }
   });
@@ -149,7 +149,7 @@ Course.topic('maq-cpu', function (p) {
     { e: 'Creer que la máquina «entiende» la instrucción', por: 'Decodificar es encender un cable. El 6 no significa sumar: el 6 enciende la salida número 6 del decodificador, y a esa salida hay un sumador enchufado.' },
     { e: 'Buscar en la memoria una marca que diga «esto es un dato»', por: 'No existe. Un ordenador se pasa el día distinguiendo instrucciones de datos únicamente por dónde pasa el contador.' },
     { e: 'Confundir el acumulador con la memoria', por: 'El acumulador es un solo registro, el sitio donde se está operando ahora mismo. La memoria son 256 celdas y hay que ir a buscar cada una.' },
-    { e: 'Pensar que hace falta una instrucción por cada cosa que se quiera hacer', por: 'Con las dieciséis de esta máquina se puede calcular cualquier cosa calculable. Lo que cambia con más instrucciones es la comodidad y la velocidad, no lo que se puede hacer.' }
+    { e: 'Pensar que hace falta una instrucción por cada cosa que se quiera hacer', por: 'Con las de esta máquina se puede calcular cualquier cosa calculable. Lo que cambia con más instrucciones suele ser la comodidad y la velocidad… salvo una excepción que verás en [[maq-ensamblador|el tema siguiente]]: poder <em>calcular</em> una dirección, y no solo escribirla, sí cambia lo que se puede hacer.' }
   ]);
 
   /* ================= EJERCICIOS ================= */
