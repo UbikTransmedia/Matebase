@@ -311,6 +311,13 @@ Course.topic('pe-condicionada', function (p) {
     'acusaba de poco riguroso por incorporar creencias previas. Hoy es la base de los filtros de ' +
     'spam, del diagnóstico automático y de buena parte del aprendizaje automático.');
 
+  p.note('Este teorema tuvo una segunda vida inesperada. Si en vez de una enfermedad y un análisis se ' +
+    'ponen «el correo es basura» y «el correo contiene estas palabras», Bayes contesta a la pregunta ' +
+    'que le interesa a tu bandeja de entrada. Hace falta una suposición extra, que las palabras ' +
+    'aparezcan independientemente unas de otras —lo cual es falso y funciona igual—, y con eso sale ' +
+    'el primer sistema de aprendizaje automático que usaron millones de personas a diario: está en ' +
+    '[[ia-bayes|el filtro de spam]].', 'ok', 'Bayes en tu bandeja de entrada');
+
   p.section('Practica');
 
   p.exercise({
