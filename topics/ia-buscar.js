@@ -468,7 +468,7 @@ Course.topic('ia-buscar', function (p) {
       return ['$' + d.b + '^{' + d.d + '} = ' + U.miles(d.hojas) + '$ hojas.',
         'Añadir un turno más lo multiplicaría por ' + d.b + ': eso es lo que hace inviable mirar hasta el final en un juego de verdad.'];
     },
-    answer: function (d) { return U.miles(d.hojas); }
+    answer: function (d) { return '$' + U.miles(d.hojas) + '$'; }
   });
 
   p.exercise({

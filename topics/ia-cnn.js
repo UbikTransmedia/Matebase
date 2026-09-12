@@ -250,7 +250,7 @@ Course.topic('ia-cnn', function (p) {
             : 'Haz clic en la rejilla de la izquierda para dibujar un trazo y ver qué contesta.') + '<br>' +
           '<span style="font-size:0.7812rem;color:var(--ink-faint)">Cuatro filtros de 3×3 son ' +
           '<strong>36 pesos</strong>. Una capa densa de 8×8 a cuatro mapas de 6×6 habría necesitado ' +
-          U.miles(64 * 144) + '.</span>');
+          '$' + U.miles(64 * 144) + '$.</span>');
         plot.render();
       }
       var bucle = NN.bucle({ host: host, porFotograma: 2, paso: paso, pinta: pinta, hasta: 600 });
@@ -374,7 +374,7 @@ Course.topic('ia-cnn', function (p) {
         'La capa: $' + d.porFiltro + ' \\times ' + d.S + ' = ' + U.miles(d.total) + '$.',
         'La profundidad de un filtro la fija lo que <em>mira</em>, no lo que produce.'];
     },
-    answer: function (d) { return d.porFiltro + ' y ' + U.miles(d.total); }
+    answer: function (d) { return d.porFiltro + ' y $' + U.miles(d.total) + '$'; }
   });
 
   p.exercise({
@@ -396,9 +396,9 @@ Course.topic('ia-cnn', function (p) {
     steps: function (d) {
       return ['Compartiendo: $9 \\times ' + d.S + ' = ' + d.conv + '$ pesos.',
         'Sin compartir: $' + (d.H * d.H) + ' \\times ' + (d.lado * d.lado * d.S) + ' = ' + U.miles(d.densa) + '$.',
-        'La razón entre los dos es de ' + U.miles(Math.round(d.densa / d.conv)) + ' a 1, y todo ese ahorro sale de una sola idea: la imagen no cambia de significado al desplazarla.'];
+        'La razón entre los dos es de $' + U.miles(Math.round(d.densa / d.conv)) + '$ a 1, y todo ese ahorro sale de una sola idea: la imagen no cambia de significado al desplazarla.'];
     },
-    answer: function (d) { return d.conv + ' frente a ' + U.miles(d.densa); }
+    answer: function (d) { return d.conv + ' frente a $' + U.miles(d.densa) + '$'; }
   });
 
   p.exercise({

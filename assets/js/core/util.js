@@ -143,11 +143,16 @@
   U.sum = function (a) { var s = 0; for (var i = 0; i < a.length; i++) s += a[i]; return s; };
   U.near = function (a, b, tol) { return Math.abs(a - b) <= (tol === undefined ? 1e-9 : tol); };
 
-  /** Separa los millares con un espacio fino: 571114 -> 571 114 */
+  /** Separa los millares con un espacio fino: 571114 -> 571 114
+      El separador es un U+202F (espacio estrecho inseparable), no el `\,` de
+      LaTeX. `\,` solo es un espacio DENTRO de $...$; fuera, MathX no lo toca y
+      el alumno leia la barra literal («9\,216»). El U+202F se ve igual en los
+      dos sitios, asi que U.miles vale en prosa, dentro de una formula y en un
+      readout sin tener que envolverlo en dolares. */
   U.miles = function (n) {
     var s = String(Math.abs(Math.trunc(n))), out = '';
     for (var i = 0; i < s.length; i++) {
-      if (i > 0 && (s.length - i) % 3 === 0) out += '\\,';
+      if (i > 0 && (s.length - i) % 3 === 0) out += ' ';
       out += s[i];
     }
     return (n < 0 ? '-' : '') + out;

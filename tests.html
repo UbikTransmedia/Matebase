@@ -951,6 +951,12 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       });
       textos.forEach(function (t) {
         if (MathX.inline(String(t)).indexOf('mx-err') >= 0) c.malTex++;
+        /* Un `\,` solo es un espacio fino DENTRO de $...$. Fuera, MathX no lo
+           toca y el alumno ve la barra literal. U.miles ya no lo emite (usa un
+           U+202F, que se ve igual en los dos sitios), así que lo que queda por
+           cazar aquí es el `\,` escrito a mano en prosa.
+           Pasó con «9\,216» en varios enunciados. */
+        if (String(t).replace(/\$[^$]*\$/g, '').indexOf('\\,') >= 0) c.barraSuelta++;
       });
       if (!u.sol) return;
 
@@ -1027,7 +1033,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       var fallos = [];
       (specs || []).forEach(function (s, idx) {
         var etiqueta = (s.partes ? 'problema ' : 'ej.') + (idx + 1) + ' («' + (s.title || '') + '»)';
-        var c = { malCheck: 0, malTex: 0, tragaTodo: 0, malOpc: 0, malErr: 0, decimales: 0, otros: [] };
+        var c = { malCheck: 0, malTex: 0, tragaTodo: 0, malOpc: 0, malErr: 0, decimales: 0, barraSuelta: 0, otros: [] };
         var excep = '';
         if (s.partes && !s.partes.length) excep = 'un problema sin apartados';
         for (var i = 0; i < 40 && !excep; i++) {
@@ -1047,6 +1053,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
         if (excep) fallos.push(etiqueta + ': ' + excep);
         else if (c.malCheck) fallos.push(etiqueta + ': la solución no pasa su corrector ' + c.malCheck + ' veces en 40');
         else if (c.malTex) fallos.push(etiqueta + ': ' + c.malTex + ' fórmulas con comandos LaTeX desconocidos');
+        else if (c.barraSuelta) fallos.push(etiqueta + ': un «\\,» suelto fuera de $...$, que se ve literal; dentro de una fórmula va bien, en prosa no (y U.miles ya trae su propio espacio)');
         else if (c.tragaTodo) fallos.push(etiqueta + ': el corrector acepta respuestas vacías o sin contenido');
         else if (c.malOpc) fallos.push(etiqueta + ': la solución no está entre las opciones que se ofrecen');
         else if (c.malErr) fallos.push(etiqueta + ': un «error típico» salta con la respuesta correcta');

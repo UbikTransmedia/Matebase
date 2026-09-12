@@ -369,7 +369,7 @@ Course.topic('av-infinito', function (p) {
         'Y como el teorema garantiza $|P(A)| > |A|$ <em>siempre</em>, repitiendo el proceso se obtiene ' +
         'una sucesión infinita de infinitos cada vez mayores.'];
     },
-    answer: function (d) { return U.miles(d.res).replace(/\\,/g, ' ') + ' subconjuntos'; }
+    answer: function (d) { return U.miles(d.res) + ' subconjuntos'; }
   });
 
   p.keys([

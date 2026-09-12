@@ -438,9 +438,9 @@ Course.topic('ia-hopfield', function (p) {
     steps: function (d) {
       return ['Capacidad: $0{,}138 \\times ' + U.miles(d.N) + ' \\approx ' + U.miles(d.cap) + '$ patrones.',
         'Pesos: $\\dfrac{' + U.miles(d.N) + ' \\times ' + U.miles(d.N - 1) + '}{2} = ' + U.miles(d.pesos) + '$.',
-        'Gasta ' + U.miles(d.pesos) + ' números para guardar ' + U.miles(d.cap) + ' patrones de ' + U.miles(d.N) + ' bits: como memoria, un derroche.'];
+        'Gasta $' + U.miles(d.pesos) + '$ números para guardar $' + U.miles(d.cap) + '$ patrones de $' + U.miles(d.N) + '$ bits: como memoria, un derroche.'];
     },
-    answer: function (d) { return U.miles(d.cap) + ' patrones, ' + U.miles(d.pesos) + ' pesos'; }
+    answer: function (d) { return '$' + U.miles(d.cap) + '$ patrones, $' + U.miles(d.pesos) + '$ pesos'; }
   });
 
   p.exercise({

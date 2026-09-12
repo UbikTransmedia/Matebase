@@ -695,7 +695,9 @@ exactas: `.add .sub .mul .div .pow .val .tex .toString`) · `ML.polyTex`
 
 `U.rng(semilla)` → `.int(a,b) .nz(a,b) .pm(a,b) .sign() .real(a,b,dec) .pick(arr)
 .bool(p) .shuffle(arr) .sample(arr,n)` · `U.fmt(x,dec)` (coma decimal) ·
-`U.fmts` (con signo) · `U.miles(n)` · `U.round` `U.clamp` `U.sum` `U.plural` ·
+`U.fmts` (con signo) · `U.miles(n)` (millares con espacio fino; se ve igual en
+prosa y dentro de `$...$`, no hace falta envolverlo) · `U.round` `U.clamp`
+`U.sum` `U.plural` ·
 `U.el` `U.add` `U.clear` `U.$` `U.$$`
 
 ---

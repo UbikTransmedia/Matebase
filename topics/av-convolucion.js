@@ -380,9 +380,9 @@ Course.topic('av-convolucion', function (p) {
       return ['Lado: $' + d.H + ' - ' + d.k + ' + 1 = ' + d.lado + '$.',
         'Pesos: $' + d.k + '\\cdot' + d.k + '\\cdot' + d.c + '\\cdot' + d.s + ' = ' + U.miles(d.pesos) + '$.',
         'Compáralo con una capa densa entre las mismas dos cosas, que necesitaría ' +
-        U.miles(d.H * d.H * d.c * d.lado * d.lado * d.s) + ' pesos: los mismos números recorren toda la imagen, y ahí está el ahorro.'];
+        '$' + U.miles(d.H * d.H * d.c * d.lado * d.lado * d.s) + '$ pesos: los mismos números recorren toda la imagen, y ahí está el ahorro.'];
     },
-    answer: function (d) { return d.lado + ' de lado, ' + U.miles(d.pesos) + ' pesos'; }
+    answer: function (d) { return d.lado + ' de lado, $' + U.miles(d.pesos) + '$ pesos'; }
   });
 
   p.exercise({

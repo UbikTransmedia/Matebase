@@ -430,7 +430,7 @@ Course.topic('av-informacion', function (p) {
         '$' + U.miles(d.largo) + ' \\cdot ' + U.fmt(d.H, 0) + ' = ' + U.miles(d.bits) + '$ bits',
         'Equivalen a $' + U.fmt(d.bits / 8, 2) + '$ bytes. Ningún compresor puede bajar de ahí con esta fuente.'];
     },
-    answer: function (d) { return U.miles(d.bits).replace(/\\,/g, ' ') + ' bits'; }
+    answer: function (d) { return U.miles(d.bits) + ' bits'; }
   });
 
   p.exercise({

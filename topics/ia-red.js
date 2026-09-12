@@ -364,7 +364,7 @@ Course.topic('ia-red', function (p) {
         'Sesgos: uno por neurona, $' + d.m + '$.',
         'Total: $' + U.miles(d.pesos) + ' + ' + d.m + ' = ' + U.miles(d.total) + '$.'];
     },
-    answer: function (d) { return U.miles(d.pesos) + ' pesos, ' + U.miles(d.total) + ' en total'; }
+    answer: function (d) { return '$' + U.miles(d.pesos) + '$ pesos, $' + U.miles(d.total) + '$ en total'; }
   });
 
   p.exercise({
@@ -483,7 +483,7 @@ Course.topic('ia-red', function (p) {
         'Total: $' + U.miles(d.total) + '$.',
         'Todos ellos son el vector de coordenadas que el descenso de gradiente va a mover.'];
     },
-    answer: function (d) { return U.miles(d.total) + ' en total'; }
+    answer: function (d) { return '$' + U.miles(d.total) + '$ en total'; }
   });
 
   p.keys([

@@ -376,9 +376,9 @@ Course.topic('ia-retropropagacion', function (p) {
       return ['Evaluaciones: $2 \\times ' + U.miles(d.n) + ' = ' + U.miles(d.difs) + '$.',
         'Tiempo: $' + U.miles(d.difs) + ' \\times ' + d.ms + '$ ms $= ' + U.fmt(d.segDif, 3) + '$ s.',
         'La retropropagación cuesta unas 3 evaluaciones: $' + U.fmt(d.segRetro, 3) + '$ s, unas <strong>' +
-        U.miles(Math.round(d.difs / 3)) + ' veces menos</strong>, y eso por <em>cada</em> paso de entrenamiento.'];
+        '$' + U.miles(Math.round(d.difs / 3)) + '$ veces menos</strong>, y eso por <em>cada</em> paso de entrenamiento.'];
     },
-    answer: function (d) { return U.miles(d.difs) + ' evaluaciones, ' + U.fmt(d.segDif, 3) + ' s'; }
+    answer: function (d) { return '$' + U.miles(d.difs) + '$ evaluaciones, ' + U.fmt(d.segDif, 3) + ' s'; }
   });
 
   p.keys([
