@@ -291,6 +291,12 @@ Course.topic('av-informacion', function (p) {
     'en compresión, en el criterio de selección de modelos de Akaike y en la comparación de secuencias ' +
     'genéticas.');
 
+  p.note('El bit de Shannon es una unidad de sorpresa, y es abstracto a propósito: no dice de qué está ' +
+    'hecho. En [[maq-bits|el bloque de máquinas y lenguajes]] se le pone cuerpo, y resulta ser un ' +
+    'cable con tensión o sin ella. Merece la pena ver las dos caras: aquí un bit es cuánto se aprende ' +
+    'al resolver una duda entre dos opciones igual de probables, y allí es lo que cabe en un hilo de ' +
+    'cobre.', null, 'El bit, con cuerpo');
+
   p.section('Redundancia y corrección de errores');
 
   p.text('El idioma castellano tiene una entropía de aproximadamente <strong>1,5 bits por letra</strong>, ' +

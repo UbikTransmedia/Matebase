@@ -88,6 +88,12 @@ Course.topic('ar-naturales', function (p) {
     'base, pero la idea —cada posición vale una potencia— es la misma que estás usando con las ' +
     'unidades, decenas y centenas.');
 
+  p.note('Ese «cuenta en base 2» se puede ver construido de verdad. En ' +
+    '[[maq-bits|el bloque de máquinas y lenguajes]] los ocho interruptores de un byte se encienden y ' +
+    'se apagan a mano, y a partir de ahí se levanta un ordenador entero: primero las puertas, luego el ' +
+    'sumador, y al final una máquina que ejecuta programas. Todo lo que hay debajo es este valor ' +
+    'posicional con dos símbolos en vez de diez.', null, 'Contar así, hasta el final');
+
   p.section('Ordenar: la recta numérica');
 
   p.text('Los naturales están <strong>ordenados</strong>: dados dos, siempre se puede decir cuál es mayor. ' +
