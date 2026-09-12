@@ -248,6 +248,15 @@ Course.topic('av-edp', function (p) {
     { e: 'Intentar rebobinar la ecuación del calor', por: 'Los modos altos se han apagado a $10^{-5}$: recuperarlos exige multiplicar por $10^5$ cualquier ruido. La ecuación del calor destruye información; la de ondas no.' }
   ]);
 
+  p.note('Esa última trampa tiene una continuación que merece la pena. Los modelos que hoy generan ' +
+    'imágenes se basan en <strong>añadir ruido normal a un dato hasta destruirlo y aprender a deshacer ' +
+    'el camino</strong>, y resulta que añadir ruido normal es exactamente esta ecuación: la varianza ' +
+    'crece como $\\sigma^2 = \\sigma_0^2 + 2kt$. Parecería que sí se rebobina el calor, y no es así. ' +
+    'Como se ve en [[ia-difusion|el tema de difusión]], esos modelos no invierten la ecuación: ' +
+    'aprenden de muchos ejemplos qué resultados son plausibles y eligen uno compatible con el ruido ' +
+    'que reciben. La información destruida no vuelve; se sustituye por otra verosímil.',
+    null, 'Lo que sí se puede hacer con el camino de vuelta');
+
   /* ================= EJERCICIOS ================= */
   p.util('Las ecuaciones en derivadas parciales son las que simulan la realidad continua, y hoy ' +
     'sustituyen a buena parte de los ensayos físicos. Un coche se choca miles de veces en un ' +
