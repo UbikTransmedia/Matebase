@@ -158,6 +158,12 @@ Course.topic('av-integrales-multiples', function (p) {
     'automáticamente con cada pieza, y los escáneres de tomografía reconstruyen el interior del cuerpo invirtiendo ' +
     'integrales de la densidad de los tejidos a lo largo de miles de rectas.');
 
+  p.note('Hay una integral que se calcula así y se ve: la de la luz que atraviesa una nube. El color de ' +
+    'cada píxel es la integral, a lo largo del rayo que entra en el ojo, de lo que cada trocito de ' +
+    'volumen aporta y de lo que tapa lo que hay detrás. En ' +
+    '[[gfx-nubes|la luz dentro de un volumen]] esa integral se aproxima por pasos —que es la suma de ' +
+    'Riemann de toda la vida— y el resultado se mira en pantalla.', null, 'Una integral que se mira');
+
   p.trampas([
     { e: 'Integrar en $y$ y olvidar que $x$ sigue en el resultado', por: '$\\int_0^b x\\,dy = bx$, no $x$: la constante $x$ se multiplica por la longitud del intervalo.' },
     { e: 'Usar los límites del rectángulo en una región que no lo es', por: 'Sobre el triángulo $0 \\le y \\le x$, la $y$ de dentro llega hasta $x$, no hasta 1. Los límites de dentro dependen de la variable de fuera.' },

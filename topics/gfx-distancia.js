@@ -188,6 +188,12 @@ Course.topic('gfx-distancia', function (p) {
     'ocupa este párrafo repetido veinte veces—. Quílez cofundó después Shadertoy y publicó las ' +
     'fórmulas de distancia que usa hoy todo el mundo.');
 
+  p.note('Con distancias se dibujan círculos y cajas, y también <strong>letras</strong>. Guardando en ' +
+    'una textura la distancia al borde de cada carácter en vez de su dibujo, el texto se puede ampliar ' +
+    'sin que se vean los píxeles, girar y dar sombra con las mismas dos líneas de siempre. Está en ' +
+    '[[gfx-texto|letras sin fuentes]], y es la técnica que usan hoy casi todos los videojuegos para ' +
+    'los carteles.', null, 'Y con esto se escriben letras');
+
   p.trampas([
     { e: 'Escribir <code>step(d, 0.3)</code> queriendo decir «$d$ mayor que 0,3»', por: 'El primer argumento es el umbral: <code>step(d, 0.3)</code> pregunta si $0{,}3 \\ge d$. Es el orden contrario al que uno espera, y da la imagen en negativo.' },
     { e: 'Restar el radio al cuadrado', por: '<code>dot(p, p) - r * r</code> vale cero en el borde, pero no mide distancias: crece con el cuadrado. Los bordes suaves salen de anchura variable y las uniones se deforman.' },

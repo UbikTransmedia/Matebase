@@ -106,6 +106,13 @@ Course.topic('av-informacion', function (p) {
     null, 'La entropía, exponenciada');
 
   /* ---------------------------------------------------------------- */
+  p.note('La entropía sirve además para decidir qué preguntar. Si hay que adivinar algo haciendo ' +
+    'preguntas de sí o no, la mejor es la que más baja la entropía de lo que queda por saber, y esa ' +
+    'idea —con ese nombre, <em>ganancia de información</em>— es exactamente cómo se construye un árbol ' +
+    'de decisión: en [[ia-arboles|preguntar lo que más informa]] se eligen las preguntas una a una ' +
+    'midiendo cuánta incertidumbre quitan. Un modelo que se lee en voz alta, construido con la fórmula ' +
+    'de aquí.', null, 'Preguntar bien es bajar la entropía');
+
   p.section('El teorema de codificación');
 
   p.text('Y aquí llega el resultado central, que convierte todo esto en ingeniería:');
@@ -296,6 +303,12 @@ Course.topic('av-informacion', function (p) {
     'cable con tensión o sin ella. Merece la pena ver las dos caras: aquí un bit es cuánto se aprende ' +
     'al resolver una duda entre dos opciones igual de probables, y allí es lo que cabe en un hilo de ' +
     'cobre.', null, 'El bit, con cuerpo');
+
+  p.note('Toda la criptografía empieza con una pregunta que es de este tema: qué sabe el adversario ' +
+    'antes y qué sabe después. En [[cr-secretos|qué es un secreto]] se plantea así de literal —mensaje, ' +
+    'clave y adversario— y la respuesta se mide en bits: un cifrado es perfecto si el mensaje cifrado ' +
+    'no baja ni un bit la incertidumbre de quien lo intercepta. Esa definición es de Shannon, la del ' +
+    'mismo artículo.', null, 'Lo que no se debe aprender');
 
   p.section('Redundancia y corrección de errores');
 

@@ -145,6 +145,13 @@ Course.topic('fn-cuadraticas', function (p) {
     }
   });
 
+  p.note('La parábola no está sola: es una de las cuatro <strong>cónicas</strong>, las curvas que salen ' +
+    'de cortar un cono con un plano. Cambiando el ángulo del corte aparecen la circunferencia, la ' +
+    'elipse y la hipérbola, y todas se escriben con una ecuación de segundo grado en dos variables. ' +
+    'Están en [[ge-conicas|cónicas]], y allí la parábola deja de ser «la gráfica de $x^2$» para ser lo ' +
+    'que de verdad es: el lugar de los puntos que equidistan de un punto y de una recta.',
+    null, 'Una de cuatro');
+
   p.trampas([
     { e: '$x_v = \\dfrac{b}{2a}$', por: 'Lleva signo menos: $x_v = -\\frac{b}{2a}$. Con $b$ negativo el vértice queda a la derecha.' },
     { e: '«$a > 0$, luego tiene máximo»', por: 'Con $a > 0$ la parábola sonríe: el vértice es el punto más <em>bajo</em>, un mínimo.' },

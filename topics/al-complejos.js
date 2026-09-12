@@ -263,6 +263,13 @@ Course.topic('al-complejos', function (p) {
     'exactamente $n$ raíces</strong> (contando multiplicidades). Ninguna ecuación polinómica se queda ' +
     'ya sin solución. Ese fue el premio a inventarse $i$.');
 
+  p.note('Elevar un complejo al cuadrado gira y estira el plano, y eso ya lo sabes hacer. Repite la ' +
+    'operación una y otra vez sobre cada punto, píntalo de un color según lo que tarde en escaparse al ' +
+    'infinito, y sale el conjunto de Mandelbrot. Está hecho en ' +
+    '[[gfx-fractales|iterar en el plano complejo]], con el propio dibujo calculándose píxel a píxel: ' +
+    'la frontera infinitamente detallada no la dibuja nadie, sale de $z \\to z^2 + c$.',
+    null, 'La misma multiplicación, repetida');
+
   p.trampas([
     { e: '$\\sqrt{-4}\\cdot\\sqrt{-9} = \\sqrt{36} = 6$', por: 'La regla $\\sqrt{a}\\sqrt{b} = \\sqrt{ab}$ es solo para positivos. Con $i$: $2i\\cdot 3i = 6i^2 = -6$.' },
     { e: '$i^2 = 1$', por: 'Es $-1$: esa es toda la definición. $i^4$ sí vale 1.' },

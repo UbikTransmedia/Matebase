@@ -175,6 +175,12 @@ Course.topic('lg-algoritmos', function (p) {
     'ejecuta el algoritmo de Euclides con números de cientos de cifras. En el examen, lo que se pide es ' +
     'más modesto pero es lo mismo: leer un algoritmo, seguir su traza y decir qué hace.');
 
+  p.note('Un algoritmo escrito en castellano no lo ejecuta nadie; hace falta un lenguaje, y un lenguaje ' +
+    'es un texto que otro programa traduce. En [[len-taller|el taller del bloque de máquinas y ' +
+    'lenguajes]] se acaba de construir uno entero —siete palabras— con su intérprete y su compilador, ' +
+    'y se puede escribir en él dentro de la propia página. Es el sitio donde estos diagramas se ' +
+    'convierten en algo que corre.', null, 'De la receta al programa');
+
   p.trampas([
     { e: 'Llamar algoritmo a algo que puede no terminar', por: '«Suma 1 hasta que salga un cuadrado perfecto» termina; «suma 2 a un impar hasta que sea par» no termina nunca. La parada garantizada es parte de la definición.' },
     { e: 'Restar en Euclides en vez de dividir', por: 'Funciona, pero con 1 000 y 1 da mil vueltas. El resto de la división hace de golpe todas esas restas: dos vueltas.' },

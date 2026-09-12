@@ -103,6 +103,12 @@ Course.topic('fn-integral-def', function (p) {
     'alumno, que tenía veintiséis años, y se dedicó a la teología. Es uno de los pocos casos ' +
     'documentados de un maestro apartándose voluntariamente para dejar sitio a alguien mejor.');
 
+  p.note('Fíjate en lo que acaba de pasar con las áreas de siempre. En ' +
+    '[[ge-areas|perímetros, áreas y el número π]] cada figura traía su fórmula, y había que fiarse: el ' +
+    'círculo, $\\pi r^2$; el triángulo, base por altura partido por dos. La integral las produce ' +
+    'todas desde un solo principio —sumar rectángulos y afinar—, y de paso da las de las figuras que ' +
+    'no tienen fórmula porque nadie las ha bautizado.', null, 'Las fórmulas de área, de una sola idea');
+
   p.section('Cuidado con los signos');
 
   p.text('La integral definida no es exactamente «el área»: es un <strong>área con signo</strong>. Lo ' +

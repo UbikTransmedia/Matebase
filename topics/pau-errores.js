@@ -94,6 +94,14 @@ Course.topic('pau-errores', function (p) {
     '<strong>Olvidar el contexto.</strong> En un problema con enunciado, el resultado final se da con unidades y con una frase que lo interprete.'
   ]);
 
+  p.note('Esta lista es media herramienta; la otra media es medirse. El ' +
+    '[[pau-mapa|mapa del temario de 2.º]] dice de qué vas y de qué no con tu propio progreso; el ' +
+    '[[pau-formulario|formulario]] se monta solo con las fórmulas de los temas y se imprime para ' +
+    'tenerlo al lado mientras practicas; y los simulacros de ' +
+    '[[pau-simulacro-mii|Matemáticas II]] y de [[pau-simulacro-mcs|MACS II]] sacan preguntas de los ' +
+    'temas, con cronómetro si quieres y sin soluciones hasta entregar. Leer errores ajenos está bien; ' +
+    'cometerlos en un simulacro y no en junio, está mejor.', 'ok', 'Y ahora, medirse');
+
   p.hist('Los grandes matemáticos también se equivocan, y de sus errores se aprende. Pierre de Fermat ' +
     'estaba convencido de que todos los números de la forma $2^{2^n} + 1$ eran primos; lo son los cinco ' +
     'primeros, y en 1732 Leonhard Euler encontró que el siguiente, $4\\,294\\,967\\,297$, es $641 \\cdot ' +

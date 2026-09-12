@@ -183,6 +183,12 @@ Course.topic('av-noeuclidea', function (p) {
     'veintinueve años, encajó tan mal la respuesta que no volvió a publicar nada. Murió en la ' +
     'oscuridad y hoy el aeropuerto de Târgu Mureș lleva su nombre.');
 
+  p.note('El disco de Poincaré se puede dibujar, y no con regla y compás: con una fórmula que decide el ' +
+    'color de cada píxel. En [[gfx-hiperbolico|el disco de Poincaré en un shader]] se monta un ' +
+    'teselado hiperbólico en movimiento, y ahí se ve de golpe lo que cuesta imaginar leyendo: que los ' +
+    'triángulos de los bordes no son más pequeños, es el espacio el que se estira, y que por un punto ' +
+    'exterior caben infinitas paralelas.', null, 'Verlo, no imaginarlo');
+
   p.section('Las tres geometrías');
 
   p.text('Según cuántas paralelas se admitan por un punto exterior, salen tres mundos distintos, y ' +

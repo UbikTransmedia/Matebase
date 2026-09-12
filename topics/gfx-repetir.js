@@ -159,6 +159,12 @@ Course.topic('gfx-repetir', function (p) {
     'grupos de simetría del plano —los que estudiaste en el tema de grupos— se catalogaran mirando ' +
     'los mosaicos de la Alhambra.');
 
+  p.note('Repetir el espacio hacia el fondo, en vez de hacia los lados, produce uno de los efectos más ' +
+    'antiguos y más agradecidos que hay: el <strong>túnel</strong>. Se consigue cambiando a ' +
+    'coordenadas polares y usando el radio como profundidad, con lo que las mismas dos funciones de ' +
+    'este tema pasan a repetir anillos que se acercan. Está en [[gfx-tunel|el túnel]].',
+    null, 'Repetir hacia el fondo');
+
   p.hist('La idea de plegar el espacio en vez de repetir el objeto es vieja en matemáticas —es lo ' +
     'que hace un <em>toro</em> al identificar los bordes de un cuadrado, como viste en topología— ' +
     'pero en gráficos se popularizó con la demoscene por pura necesidad: repetir un objeto exige ' +

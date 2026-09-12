@@ -188,6 +188,13 @@ Course.topic('fn-exp-log', function (p) {
     cierre: 'La «regla del 70» que usan los economistas es esta cuenta hecha de una vez: años para duplicar $\\approx 70 / (\\text{porcentaje})$. Con el 5 %, $70/5 = 14$. Sale de que $\\ln 2 \\approx 0{,}70$.'
   });
 
+  p.note('Todo esto se apoya en algo que se dio por sabido hace mucho: qué es una potencia, qué pasa ' +
+    'cuando el exponente es negativo o fraccionario, y por qué $a^0 = 1$. Si al leer $e^{-kt}$ has ' +
+    'tenido que parar un segundo, merece la pena volver a ' +
+    '[[ar-potencias|potencias, raíces y notación científica]]: la exponencial no es más que aquello con ' +
+    'el exponente suelto, y la notación científica que se usa allí para escribir el tamaño de un átomo ' +
+    'es esta misma función disfrazada.', null, 'De dónde sale el exponente');
+
   p.trampas([
     { e: 'Crecer un 5 % durante 10 años es crecer un 50 %', por: 'Es $1{,}05^{10} = 1{,}63$: un 63 %. El interés se acumula sobre lo acumulado; eso es lo exponencial.' },
     { e: '$2^x = 0$ para algún $x$ muy negativo', por: '$2^{-100}$ es diminuto pero positivo. La exponencial se acerca al eje X sin tocarlo nunca.' },

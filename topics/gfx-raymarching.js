@@ -258,6 +258,12 @@ Course.topic('gfx-raymarching', function (p) {
     'muchas escenas avanzan <code>t += h * 0.7</code>, para ir con cuidado. La segunda: los rayos ' +
     'rasantes cuestan carísimo, como viste en el mapa de coste.', 'warn', 'Cuándo se rompe');
 
+  p.note('Con una esfera no se hace una escena. Lo que viene ahora es el catálogo de operaciones que ' +
+    'convierte funciones de distancia sueltas en un mundo: unir, restar, intersecar, redondear las ' +
+    'juntas y repetir sin copiar nada. Está en [[gfx-escena|modelar con distancias]], y es donde el ' +
+    'raymarching deja de ser una curiosidad y pasa a ser una forma de esculpir.',
+    null, 'De una esfera a una escena');
+
   p.util('Esta técnica no es la que mueve los videojuegos —para eso siguen ganando los triángulos, ' +
     'que las tarjetas dibujan por millones— pero sí es la que domina en la demoscene, en Shadertoy y ' +
     'en el arte generativo, y ha entrado en el cine para volúmenes: nubes, humo y niebla se trazan ' +

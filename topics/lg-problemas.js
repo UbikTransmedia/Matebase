@@ -185,6 +185,12 @@ Course.topic('lg-problemas', function (p) {
     'tipo de estimación rápida es una destreza muy buscada en ingeniería, en consultoría y en ciencia: ' +
     'antes de un cálculo largo, saber qué resultado sería razonable.');
 
+  p.note('Estas cuatro fases valen para cualquier problema. Cuando el problema es un examen, además, hay ' +
+    'una lista de fallos concretos que se repiten año tras año y que cuestan más puntos que no saber: ' +
+    'están recogidos y clasificados en [[pau-errores|los errores que más puntos cuestan]], con la ' +
+    'distinción que casi nunca se explica —equivocarse en una cuenta resta poco; equivocarse en una ' +
+    'idea puede anular el apartado entero—.', null, 'Cuando el problema es un examen');
+
   p.trampas([
     { e: 'Empezar a calcular antes de entender', por: 'Releer, dibujar y decir con tus palabras qué se pide cuesta un minuto y evita resolver otro problema distinto del que hay.' },
     { e: 'Dar un patrón por demostrado', por: 'Las regiones del círculo dan 1, 2, 4, 8, 16… y luego 31. Cinco casos que encajan no demuestran nada; solo sugieren qué demostrar.' },

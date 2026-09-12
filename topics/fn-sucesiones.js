@@ -197,6 +197,12 @@ Course.topic('fn-sucesiones', function (p) {
 
   p.text('Se calculan igual que los límites en el infinito de las funciones: comparando grados.');
 
+  p.note('Cuando la recurrencia no es tan amable como «súmale $d$» o «multiplícalo por $r$» —por ' +
+    'ejemplo $a_n = a_{n-1} + a_{n-2}$, la de Fibonacci— encontrar el término general deja de ser ' +
+    'evidente y hay técnica para ello. En [[av-recurrencias|recurrencias y funciones generadoras]] se ' +
+    'resuelven como se resuelven las ecuaciones: buscando las raíces de un polinomio asociado, que es ' +
+    'el mismo truco que en las ecuaciones diferenciales.', null, 'Cuando la recurrencia se complica');
+
   p.trampas([
     { e: '$a_n = a_1 + n\\cdot d$', por: 'Del término 1 al $n$ hay $n - 1$ saltos, no $n$: $a_n = a_1 + (n-1)d$. Con $n = 1$ tiene que salir $a_1$.' },
     { e: 'Sumar infinitos términos de una geométrica con $r = 2$', por: '$1 + 2 + 4 + 8 + \\cdots$ se va al infinito. La fórmula $\\frac{a_1}{1 - r}$ solo vale con $|r| < 1$; con $r = 2$ daría $-1$, un disparate.' },

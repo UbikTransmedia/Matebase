@@ -241,6 +241,12 @@ Course.topic('av-edp', function (p) {
     'rechazó por absurdo. Bernoulli tenía razón, pero hicieron falta Fourier y otros cien años de ' +
     'análisis para demostrarlo.');
 
+  p.note('La ecuación de Navier-Stokes, que describe un fluido, es de esta familia y no tiene solución ' +
+    'cerrada: se resuelve avanzando en el tiempo por pasos pequeños. Eso es exactamente lo que hace un ' +
+    'shader con memoria, y en [[gfx-fluidos|tinta, humo y remolinos]] hay uno que lo hace a sesenta ' +
+    'imágenes por segundo. Es la forma más rápida que existe de entender por qué una EDP se simula en ' +
+    'vez de resolverse.', null, 'Una EDP que se puede tocar');
+
   p.trampas([
     { e: 'Contar mal las derivadas temporales', por: 'Una en el tiempo: calor, difunde. Dos: ondas, viaja. Ninguna: Laplace, equilibrio. Es lo primero que se mira, antes que cualquier coeficiente.' },
     { e: 'Creer que $u_{xx}$ mide la pendiente', por: 'Mide la <em>curvatura</em>: cuánto se aparta el punto del promedio de sus vecinos. Un perfil en línea recta tiene $u_{xx} = 0$ y no cambia con el tiempo aunque tenga pendiente.' },

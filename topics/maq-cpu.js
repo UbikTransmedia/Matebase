@@ -137,6 +137,13 @@ Course.topic('maq-cpu', function (p) {
     'de que un programa pueda ser dato de otro programa es anterior a todas las máquinas: está en el ' +
     'artículo de Turing de 1936, donde la máquina universal lee la descripción de otra máquina.');
 
+  p.note('Que la máquina tarde distinto según lo que calcula parece inofensivo y no lo es. Si una ' +
+    'comparación de contraseñas se detiene en la primera letra que falla, el <em>tiempo</em> que tarda ' +
+    'dice cuántas letras eran correctas, y con eso se adivina la contraseña letra a letra sin romper ' +
+    'nada. Eso es un ataque por canal lateral, y está en ' +
+    '[[cr-canales|cuando el reloj habla]]: el mismo reloj que aquí es un lujo de diseño, allí es una ' +
+    'fuga de información.', null, 'El reloj, como filtración');
+
   p.trampas([
     { e: 'Pensar que el contador avanza siempre de uno en uno', por: 'Avanza lo que ocupe la instrucción: una celda, o dos si lleva argumento. Y un salto lo pone donde le dé la gana.' },
     { e: 'Creer que la máquina «entiende» la instrucción', por: 'Decodificar es encender un cable. El 6 no significa sumar: el 6 enciende la salida número 6 del decodificador, y a esa salida hay un sumador enchufado.' },

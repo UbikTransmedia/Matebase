@@ -130,6 +130,12 @@ Course.topic('ia-autocodificador', function (p) {
     '<em>PCA no lineal</em>: hace lo mismo, pero sin obligarse a que lo que conserva sea una recta.');
 
   /* ---------------------------------------------------------------- */
+  p.note('Ese resultado tiene un nombre y un teorema detrás. La mejor compresión lineal posible a $k$ ' +
+    'dimensiones es la que dan los $k$ primeros valores singulares, y eso está demostrado en ' +
+    '[[av-svd|la descomposición en valores singulares]]: la SVD no es una técnica más, es el techo ' +
+    'contra el que choca cualquier autocodificador que no use funciones no lineales. Lo que aporta la ' +
+    'no linealidad es pasar de ese techo.', null, 'El techo de lo lineal');
+
   p.section('El problema de generar');
 
   p.text('Hasta aquí todo es compresión. La tentación siguiente es obvia: si el decodificador convierte ' +

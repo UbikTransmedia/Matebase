@@ -269,6 +269,13 @@ Course.topic('av-grafos', function (p) {
     'organiza el orden de las tareas de una obra. Es de los algoritmos que más veces se ejecutan por ' +
     'segundo en el planeta.');
 
+  p.note('Un árbol tiene un uso que parece menor y sostiene buena parte de internet: resumir muchos ' +
+    'datos en un solo número de forma que se pueda demostrar que uno concreto está dentro sin enseñar ' +
+    'los demás. Es el <strong>árbol de Merkle</strong>, con un resumen en cada hoja y la mezcla de los ' +
+    'dos hijos en cada nudo, y está en [[cr-cadena|cadenas de bloques y árboles de Merkle]]. La ' +
+    'comprobación cuesta el logaritmo del número de hojas, que es la altura del árbol.',
+    null, 'Un árbol que demuestra');
+
   p.section('Dos problemas parecidos y muy distintos');
 
   p.text('Un <strong>circuito euleriano</strong> pasa una vez por cada <em>arista</em>; un ' +

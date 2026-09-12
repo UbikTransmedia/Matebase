@@ -151,6 +151,12 @@ Course.topic('cr-certificados', function (p) {
     'y la versión 1.3, de 2018, redujo el apretón de manos a un viaje y eliminó los intercambios sin ' +
     'secreto hacia delante. Cada versión anterior se retiró tras un ataque práctico.');
 
+  p.note('Con esto ya está todo lo que hace falta para entender qué pasa cuando abres el móvil. En ' +
+    '[[cr-bolsillo|la criptografía en tu bolsillo]] se recorre una mañana normal —desbloquear, ' +
+    'conectarse al wifi, mandar un mensaje, pagar— y se señala qué pieza de este bloque trabaja en cada ' +
+    'momento. Es el mejor sitio para comprobar cuánto has aprendido: casi todo lo que sale ya tiene ' +
+    'nombre.', 'ok', 'Todo junto, un martes cualquiera');
+
   p.trampas([
     { e: 'Aceptar un certificado porque «la firma es válida»', por: 'Válida para qué nombre y hasta cuándo. El certificado de Mallory para su web es válido y no sirve para el banco.' },
     { e: 'Cifrar la clave de sesión con la clave del certificado', por: 'Así se hacía: quien robe esa clave descifra todo el tráfico pasado grabado. Con Diffie-Hellman efímero y firma, no. Es el secreto hacia delante.' },

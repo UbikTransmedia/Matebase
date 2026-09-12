@@ -222,6 +222,14 @@ Course.topic('av-grupos', function (p) {
     'murió con otro encima de la mesa). Tardaron catorce años en publicarse y hoy fundamentan un área ' +
     'entera de las matemáticas.');
 
+  p.note('Dos aplicaciones de los grupos, las dos en criptografía. Enigma es un producto de ' +
+    'permutaciones que giran con cada tecla, y en [[cr-enigma|Enigma]] se monta la máquina entera: la ' +
+    'razón de que ninguna letra se cifrara nunca como sí misma —el fallo que la hundió— es una ' +
+    'propiedad del grupo, no un descuido de diseño. Y en ' +
+    '[[cr-homomorfico|calcular sobre datos cifrados]] aparece el homomorfismo en su sentido más ' +
+    'literal: una función que respeta la operación y permite sumar y multiplicar sin descifrar nada.',
+    null, 'Dónde trabajan los grupos');
+
   p.trampas([
     { e: 'Exigir la conmutativa para que algo sea grupo', por: 'No está en la lista. Las simetrías del cuadrado y las matrices invertibles son grupos y no conmutan.' },
     { e: 'Comprobar el neutro y olvidar los inversos', por: '$\\mathbb{Z}$ con el producto tiene neutro 1, pero $\\frac{1}{2}$ no es entero: no es grupo. Los inversos son la condición que más se cae.' },

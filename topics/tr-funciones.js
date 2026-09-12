@@ -201,6 +201,13 @@ Course.topic('tr-funciones', function (p) {
     }
   });
 
+  p.note('Queda una pregunta que este tema no contesta: ¿de dónde salen las ondas? No las dibuja nadie ' +
+    'a mano; aparecen solas en cuanto algo tiene una fuerza que tira hacia el equilibrio ' +
+    'proporcionalmente a lo lejos que esté. Esa frase es una ecuación —$x\'\' = -kx$— y su solución son ' +
+    'exactamente estos senos. Está en [[av-oscilador|la ecuación de segundo orden]], y explica el ' +
+    'péndulo, el muelle, el circuito de la radio y el temblor de un puente.',
+    null, 'Por qué el mundo está lleno de senos');
+
   p.trampas([
     { e: 'El periodo de $\\operatorname{sen}(Bx)$ es $B$', por: 'Es $\\dfrac{2\\pi}{B}$: cuanto mayor es $B$, más apretada la onda y <em>menor</em> el periodo.' },
     { e: 'Amplitud $-3$', por: 'La amplitud es $|A|$, siempre positiva. El signo solo invierte la onda (empieza bajando).' },

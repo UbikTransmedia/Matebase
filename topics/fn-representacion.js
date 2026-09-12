@@ -149,6 +149,11 @@ Course.topic('fn-representacion', function (p) {
     'y a los enfermos de su ciudad.');
 
   /* ---------------------------------------------------------------- */
+  p.note('Las funciones que más se representan en un examen son las racionales, y tienen su propio tema ' +
+    'con las asíntotas contadas despacio: [[fn-racionales|racionales, radicales y a trozos]]. Si al ' +
+    'buscar una asíntota oblicua no te sale, casi siempre es que falta una división de polinomios, no ' +
+    'un límite.', null, 'Las que más caen');
+
   p.section('Problemas inversos: de las propiedades a la fórmula');
 
   p.text('La pregunta también se hace al revés: <em>«halla $a$, $b$ y $c$ para que $f$ tenga un mínimo ' +

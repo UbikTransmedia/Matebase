@@ -186,6 +186,12 @@ Course.topic('av-complejidad', function (p) {
     'funcionan asombrosamente bien con los casos que aparecen en la práctica, aunque en el peor caso sean ' +
     'exponenciales.');
 
+  p.note('Hay una forma de bajar el coste que no cambia el algoritmo: que otro programa reescriba el ' +
+    'tuyo por uno equivalente y más barato. Es lo que hace un compilador al optimizar, y está ' +
+    'construido en [[len-optimizar|plegar constantes y quitar código muerto]], donde además se mide la ' +
+    'mejora en dos números distintos —cuánto ocupa y cuántos pasos da—, que es la distinción que aquí ' +
+    'separa memoria de tiempo.', null, 'Optimizar sin cambiar de algoritmo');
+
   p.trampas([
     { e: 'Medir un algoritmo en segundos', por: 'Los segundos dependen del ordenador. Se cuentan pasos en función de $n$, y se mira cómo crecen: $O(n^2)$ hoy y dentro de veinte años.' },
     { e: 'Creer que un ordenador más rápido arregla lo exponencial', por: 'Mil veces más velocidad con $2^n$ solo suma 10 al tamaño abarcable. Con $n^2$ lo multiplica por 31. La mejora real siempre es el algoritmo.' },

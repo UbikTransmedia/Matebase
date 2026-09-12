@@ -217,6 +217,12 @@ Course.topic('av-vectorial', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.note('Esos teoremas relacionan una integral sobre una región con otra sobre su borde, así que hace ' +
+    'falta saber integrar sobre una región del plano o del espacio, no solo sobre un intervalo. Eso es ' +
+    '[[av-integrales-multiples|las integrales dobles y triples]], y allí aparece la idea que lo hace ' +
+    'manejable: integrar dos veces seguidas, una variable cada vez.',
+    null, 'Integrar sobre una región');
+
   p.section('Los grandes teoremas integrales');
 
   p.text('Los tres resultados que cierran el cálculo vectorial dicen todos <strong>lo mismo con ' +

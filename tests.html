@@ -1801,6 +1801,46 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
         }
       });
       host.remove();
+
+      /* ---------------- la red de enlaces ----------------
+         El curso presume de explicarse a si mismo. Un tema al que no enlaza
+         NADIE no esta roto, pero es invisible: solo se encuentra abriendo su
+         bloque entero en el indice. Esto va aqui, y no arriba, porque hace
+         falta que los temas esten ya cargados para leer su fuente. */
+      group('la red · ningún tema invisible');
+      (function () {
+        var entrantes = {}, salientes = {}, bloqueDe = {}, hay = {};
+        CURRICULUM.forEach(function (b) {
+          b.temas.forEach(function (t) { hay[t.id] = 1; bloqueDe[t.id] = b.n; entrantes[t.id] = 0; });
+        });
+        var total = 0, cruzados = 0;
+        Object.keys(hay).forEach(function (id) {
+          if (!reg[id]) return;
+          var vistos = {};
+          (String(reg[id]).match(/\[\[[a-z0-9-]+[|\]]/g) || []).forEach(function (m) {
+            var dest = m.slice(2).replace(/[|\]]$/, '');
+            if (!hay[dest] || dest === id) return;
+            total++;
+            if (bloqueDe[dest] !== bloqueDe[id]) cruzados++;
+            if (!vistos[dest]) { vistos[dest] = 1; entrantes[dest]++; }
+          });
+          salientes[id] = Object.keys(vistos).length;
+        });
+        var sinEntrada = Object.keys(hay).filter(function (id) { return reg[id] && !entrantes[id]; });
+        eq('ningún tema escrito se queda sin enlaces entrantes',
+          sinEntrada.join(', ') || 'ninguno', 'ninguno');
+        /* Enlaces SALIENTES no se exigen: los primeros temas del curso no
+           tienen a donde apuntar hacia atras, y eso no es un defecto. Se
+           cuentan para que el dato este a la vista, nada mas. */
+        var sinSalida = Object.keys(hay).filter(function (id) { return reg[id] && !salientes[id]; });
+        truthy('la mayoría de los temas enlazan a alguna parte (' +
+          (Object.keys(hay).length - sinSalida.length) + ' de ' + Object.keys(hay).length + ')',
+          sinSalida.length < Object.keys(hay).length / 3);
+        truthy('la mayoría de los enlaces cruzan de bloque (' +
+          Math.round(100 * cruzados / total) + ' % de ' + total + ')', cruzados > total / 2);
+        truthy('y hay más de tres enlaces por tema', total > 3 * Object.keys(hay).length);
+      })();
+
       box.innerHTML = '<div style="margin-bottom:6px;color:var(--ink-soft)">' + escritos +
         ' temas escritos de ' + ids.length + ' previstos' +
         (malos ? ' · <b style="color:var(--bad)">' + malos + ' con errores</b>' : ' · todos se construyen bien') +

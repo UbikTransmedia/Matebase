@@ -219,6 +219,12 @@ Course.topic('ge-espacio-vectores', function (p) {
     }
   });
 
+  p.note('Con el producto vectorial se construye algo muy concreto: una <strong>cámara</strong>. Dados ' +
+    'el punto donde está el ojo, el punto que mira y una idea vaga de dónde está el cielo, dos ' +
+    'productos vectoriales dan los tres vectores perpendiculares que definen la vista. Está montado en ' +
+    '[[gfx-camara|la cámara: una base con el producto vectorial]], y es de los sitios donde esta ' +
+    'operación deja de parecer una regla mnemotécnica.', null, 'Para qué sirve exactamente');
+
   p.hist('El producto vectorial nació dentro de otra cosa. En 1843 William Rowan Hamilton inventó los ' +
     '<em>cuaterniones</em>, números con cuatro componentes, y al multiplicar dos de ellos aparecían, ' +
     'mezclados, un producto escalar y uno vectorial. Durante cuarenta años la física se escribió con ' +

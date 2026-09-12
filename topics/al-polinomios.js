@@ -184,6 +184,12 @@ Course.topic('al-polinomios', function (p) {
     'racionales, las candidatas enteras son siempre <em>divisores del término independiente</em>: ' +
     'no hay que probar al azar.', 'ok', 'La estrategia para factorizar');
 
+  p.note('Un polinomio de grado $k$ queda determinado por $k+1$ puntos, y con $k$ puntos no se sabe ' +
+    'absolutamente nada de él. Esa frase, que aquí parece una curiosidad, es un método para repartir un ' +
+    'secreto entre siete personas de forma que hagan falta tres para reconstruirlo y dos no sirvan de ' +
+    'nada: está en [[cr-compartir|el esquema de Shamir]], y es de los sitios donde una propiedad de ' +
+    'clase se convierte en algo que se usa.', null, 'Los puntos que hacen falta');
+
   p.trampas([
     { e: 'Dividir entre $x + 3$ poniendo $a = 3$', por: 'El esquema está pensado para $x - a$. Como $x + 3 = x - (-3)$, hay que poner $a = -3$.' },
     { e: 'Olvidar el coeficiente que falta', por: 'En $x^3 - 4x + 1$ no hay término en $x^2$: su coeficiente es $0$ y hay que escribirlo en su sitio, $1, 0, -4, 1$. Si se salta, todo se descoloca.' },

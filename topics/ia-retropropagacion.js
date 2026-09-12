@@ -151,6 +151,13 @@ Course.topic('ia-retropropagacion', function (p) {
   ]);
 
   /* ---------------------------------------------------------------- */
+  p.note('Ese grafo por el que va y viene la información tiene una versión con casi un siglo de historia ' +
+    'y otro nombre: el <strong>diagrama de bloques</strong> de la ingeniería de control, donde cada ' +
+    'caja transforma una señal y las flechas la llevan. En ' +
+    '[[cib-bloques|el álgebra de los bucles]] se aprende a simplificarlos —series, paralelos y, sobre ' +
+    'todo, bucles cerrados— con reglas que son las mismas que aquí se aplican a la regla de la cadena. ' +
+    'Quien haya visto una cosa reconoce la otra en dos minutos.', null, 'El mismo grafo, otro siglo');
+
   p.section('Comprobar que no te has equivocado');
 
   p.text('Una vuelta atrás mal escrita no da error: da una red que entrena mal, o despacio, sin decir ' +

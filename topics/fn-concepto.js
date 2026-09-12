@@ -168,6 +168,13 @@ Course.topic('fn-concepto', function (p) {
     }
   });
 
+  p.note('Una función no tiene por qué comerse un número y devolver otro. Puede comerse las dos ' +
+    'coordenadas de un punto de la pantalla y devolver un color, y entonces su gráfica <em>es</em> la ' +
+    'imagen. Eso es un shader, y el bloque de programación gráfica entero se apoya en esa idea: ' +
+    '[[gfx-pixel|el píxel que se pregunta de qué color es]] empieza justo ahí, con una función de dos ' +
+    'variables escrita en tres líneas y un dibujo saliendo de ella.',
+    null, 'Una función cuya gráfica es un cuadro');
+
   p.section('Composición y función inversa');
 
   p.text('Dos funciones se pueden <strong>encadenar</strong>: la salida de una se usa como entrada de la ' +

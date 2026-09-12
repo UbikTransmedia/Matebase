@@ -161,6 +161,13 @@ Course.topic('fn-integral-racional', function (p) {
     'que se apaga o se dispara según su signo. En biología, la ecuación logística del crecimiento de ' +
     'una población se resuelve exactamente con esta descomposición.');
 
+  p.note('Hay una familia entera de integrales que no se resuelve con nada de esto y que se rinde con ' +
+    'un cambio trigonométrico: las que llevan $\\sqrt{a^2 - x^2}$ o $1 + x^2$. El truco consiste en ' +
+    'sustituir $x$ por un seno o una tangente para que la identidad fundamental se lleve la raíz por ' +
+    'delante, y para eso hay que tener a mano las de ' +
+    '[[tr-identidades|identidades y ecuaciones trigonométricas]]. Es el mejor argumento que existe ' +
+    'para no despachar aquel tema como una lista que memorizar.', null, 'La otra caja de herramientas');
+
   p.trampas([
     { e: 'Descomponer sin dividir cuando el grado de arriba es mayor', por: 'La descomposición en fracciones simples exige numerador de menor grado. Primero la división; el cociente se integra aparte.' },
     { e: '$\\int \\dfrac{dx}{x^2 + 4} = \\arctan\\dfrac{x}{2}$', por: 'Falta el $\\frac{1}{k}$: es $\\frac{1}{2}\\arctan\\frac{x}{2}$. Compruébalo derivando: sin el $\\frac{1}{2}$ sale el doble.' },

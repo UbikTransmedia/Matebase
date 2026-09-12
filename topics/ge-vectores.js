@@ -210,6 +210,12 @@ Course.topic('ge-vectores', function (p) {
     }
   });
 
+  p.note('Ese coseno del producto escalar tiene un pariente que resuelve triángulos sin ángulos rectos. ' +
+    'El [[tr-teoremas|teorema del coseno]] es literalmente lo que sale de desarrollar ' +
+    '$|\\vec u - \\vec v|^2$ con la fórmula de arriba: el Pitágoras de toda la vida más un término ' +
+    'de corrección que vale $-2|\\vec u||\\vec v|\\cos\\alpha$ y que desaparece justo cuando el ' +
+    'ángulo es recto. Merece la pena hacer esa cuenta una vez.', null, 'Pitágoras, con corrección');
+
   p.section('Bases y proyecciones');
 
   p.text('Dos vectores del plano que <strong>no son paralelos</strong> forman una <strong>base</strong>: ' +

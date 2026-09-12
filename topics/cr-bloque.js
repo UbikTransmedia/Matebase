@@ -149,6 +149,13 @@ Course.topic('cr-bloque', function (p) {
     'evaluaron los candidatos a AES en 1998, y el ganador, Rijndael, se diseñó demostrando que ' +
     'ninguna de las dos técnicas llegaba más allá de cuatro rondas.');
 
+  p.note('Queda una pregunta práctica: cómo se consigue que una función sea invertible cuando está ' +
+    'hecha de trozos que no lo son. La respuesta es una estructura con nombre, la ' +
+    '<strong>red de Feistel</strong>, que parte el bloque en dos mitades y las cruza de forma que ' +
+    'descifrar es hacer lo mismo al revés <em>usando la misma función</em>, sea o no invertible. Está ' +
+    'en [[cr-feistel|redes de Feistel y DES]], y es el truco que sostuvo el cifrado estándar durante ' +
+    'veinticinco años.', null, 'Cómo se hace invertible');
+
   p.trampas([
     { e: 'Usar una S-box con fórmula', por: 'Si $S(x) = ax + b$, la ronda entera es lineal y todo el cifrado es un Hill grande: se rompe con texto conocido. La S-box tiene que ser una tabla sin ecuación.' },
     { e: 'Ahorrar rondas', por: 'Con dos rondas, una aproximación lineal de la S-box acierta lo bastante como para recuperar la clave. Las rondas se cuentan con el criptoanálisis en la mano, y se añade margen.' },

@@ -148,6 +148,12 @@ Course.topic('gfx-tiempo', function (p) {
     'de una pista de aterrizaje, un letrero de neón que «corre», el aleteo de un banco de peces: ' +
     'siempre lo mismo, un desfase proporcional a la posición.');
 
+  p.note('El tiempo entra en la ecuación igual que entró antes otra variable de fuera: el ratón. En ' +
+    '[[gfx-raton|el ratón entra en la ecuación]] esa variable la mueve una persona en vez de un reloj, ' +
+    'y todo lo que aquí se hace con <code>u_time</code> se puede hacer con ella. Merece la pena ' +
+    'mezclar las dos: una onda que avanza sola y una fase que se controla con el ratón.',
+    null, 'La otra variable de fuera');
+
   p.hist('John Whitney llevaba haciendo esto sin ordenador desde los años cincuenta. Construyó una ' +
     'máquina con piezas de un ordenador analógico de artillería antiaérea de la Segunda Guerra ' +
     'Mundial, y con ella filmaba puntos que giraban a velocidades ligeramente distintas: al ' +

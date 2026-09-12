@@ -140,6 +140,12 @@ Course.topic('fn-lineales', function (p) {
     'fórmula— es de Dirichlet, en 1837, y fue revolucionaria porque permitía funciones que no se ' +
     'pueden escribir. Sin ella no existiría la matemática del siglo XX.');
 
+  p.note('Una función lineal —sin término independiente— es exactamente una <strong>proporcionalidad ' +
+    'directa</strong>: la de las reglas de tres y los porcentajes de ' +
+    '[[ar-proporcionalidad|aquel tema de aritmética]]. La pendiente es la constante de ' +
+    'proporcionalidad, y por eso subir un 20 % y bajar un 20 % no te devuelve donde estabas: son dos ' +
+    'rectas distintas, no una recta y su inversa.', null, 'Ya la conocías con otro nombre');
+
   p.section('Rectas paralelas y perpendiculares');
   p.text('Dos rectas son paralelas cuando suben igual, así que basta con que tengan la misma pendiente: ' +
     'eso no sorprende a nadie. Lo de las perpendiculares es menos evidente y merece una explicación. ' +

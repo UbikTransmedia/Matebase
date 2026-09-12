@@ -261,6 +261,13 @@ Course.topic('cib-variedad', function (p) {
     'general.', null, 'Por qué una cota vale tanto como una igualdad');
 
   /* ---------------------------------------------------------------- */
+  p.note('Llevada hasta el final, esta ley dice cómo tiene que estar organizada una empresa, un ' +
+    'hospital o un ministerio: cada nivel solo puede absorber la variedad que su propia variedad le ' +
+    'permita, así que hay que repartirla. Stafford Beer convirtió esa idea en un modelo con cinco ' +
+    'sistemas que se puede aplicar y auditar, y está en ' +
+    '[[cib-viable|el modelo de sistema viable]]. Es el sitio donde esta ley deja de ser una ' +
+    'observación y pasa a ser una herramienta de diagnóstico.', null, 'La ley, hecha organigrama');
+
   p.section('El teorema del buen regulador');
 
   p.text('Hay un corolario de esta línea de pensamiento que es más profundo todavía y que Ashby ' +

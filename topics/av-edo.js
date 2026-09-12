@@ -152,6 +152,13 @@ Course.topic('av-edo', function (p) {
     'diferencial de segundo orden, porque la aceleración es la derivada segunda de la posición. Toda ' +
     'la física posterior está escrita en este idioma.');
 
+  p.note('Hay una forma de dibujar estas ecuaciones que se entiende antes que la notación: pintar cada ' +
+    'variable como un <strong>depósito</strong> y cada derivada como el <strong>grifo</strong> que lo ' +
+    'llena o lo vacía. Con eso, $y\' = ky$ se lee «el grifo da más cuanto más lleno está el depósito» ' +
+    'sin escribir un solo símbolo. Es como se modelan poblaciones, epidemias e inventarios en ' +
+    '[[cib-dinamica|dinámica de sistemas]], y es una ecuación diferencial con otro dibujo.',
+    null, 'La misma ecuación, dibujada');
+
   p.section('Lineales de primer orden');
   p.text('No todas las ecuaciones se dejan separar. La siguiente familia en dificultad son las lineales, ' +
     'que tienen la incógnita y su derivada apareciendo solo en primer grado. También estas se dejan ' +

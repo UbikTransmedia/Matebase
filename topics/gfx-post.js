@@ -224,6 +224,11 @@ Course.topic('gfx-post', function (p) {
     cierre: 'Una potencia, un cociente y una división: el acabado no necesita más matemáticas que estas. Lo que necesita es aplicarlas en el orden del camino de la luz.'
   });
 
+  p.note('Y con la última pasada puesta, queda lo único que no se puede enseñar escribiendo: tocar. ' +
+    '[[gfx-directo|la actuación]] es un tema para usar todo lo del bloque en vivo, con los mandos ' +
+    'delante y sin objetivo que cumplir, que es como se han hecho siempre las cosas bonitas de este ' +
+    'oficio.', null, 'Lo que queda');
+
   p.util('Todo esto es la capa que el cine añade en la sala de etalonaje, y en los videojuegos es lo ' +
     'que la gente suele desactivar en el menú de opciones. Fuera del entretenimiento, la ' +
     'compresión de tono es la que hace que la foto del móvil se parezca a lo que viste con los ojos, ' +

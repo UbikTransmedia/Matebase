@@ -264,6 +264,12 @@ Course.topic('av-convolucion', function (p) {
     'Cooley y Tukey publicaron en 1965: con él, el teorema de convolución dejó de ser una curiosidad ' +
     'teórica y pasó a ser la manera normal de filtrar cualquier cosa.');
 
+  p.note('La cámara del móvil hace esto con cada foto y en tiempo real: desenfocar es una convolución ' +
+    'con una gaussiana, y detectar bordes es otra con un núcleo que resta. En ' +
+    '[[gfx-filtros|filtros de cámara]] los núcleos se escriben a mano y se ven aplicados sobre vídeo, ' +
+    'con lo que la diferencia entre un desenfoque y un realce deja de ser una tabla de números y pasa ' +
+    'a ser algo que se mira.', null, 'El mismo núcleo, sobre vídeo');
+
   p.trampas([
     { e: 'Olvidar normalizar un núcleo suavizante', por: 'Con la caja de nueve unos sin dividir entre 9, una zona lisa de valor 0,2 sale 1,8: blanco quemado. Los pesos de un promedio tienen que sumar 1.' },
     { e: 'Esperar que la salida mida lo mismo que la entrada', por: 'Con un núcleo de 3 sin salirse, de 40 números salen 38, y de una imagen de 12×12 salen 10×10. Para conservar el tamaño hay que rellenar los bordes, y entonces hay que decidir con qué.' },

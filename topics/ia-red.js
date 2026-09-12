@@ -317,6 +317,12 @@ Course.topic('ia-red', function (p) {
     'inmensa, y eso —que la profundidad es más eficiente que la anchura— es lo que dio nombre al ' +
     'aprendizaje <em>profundo</em>.', 'warn', 'Lo que el teorema no promete');
 
+  p.note('Todos los mandos de este bloque y del siguiente están juntos en un solo sitio: ' +
+    '[[ia-taller|el taller]], donde se eligen los datos, la arquitectura y el optimizador, se entrena ' +
+    'de verdad en el navegador y se mira qué cambia. Es el sitio al que volver cada vez que una ' +
+    'decisión de diseño suene a dogma: casi todas se pueden probar en treinta segundos.',
+    null, 'Donde se prueban todas a la vez');
+
   p.util('La estructura de este tema es, sin exagerar, la de cualquier modelo actual. Un modelo de ' +
     'lenguaje es una pila de bloques en los que lo que más pesa son capas densas exactamente como ' +
     'estas, con una no linealidad entre ellas. Cambian el tamaño, la activación concreta y lo que se ' +
