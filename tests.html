@@ -738,6 +738,46 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     truthy('y usa las clases del curso',
       pintado.indexOf('cod-key') >= 0 && pintado.indexOf('cod-com') >= 0);
 
+    /* El arbol dibujado: la forma es lo que enseña, asi que se comprueba la
+       forma. Y el recorrido tiene que ser postorden, que es de lo que va
+       medio tramo. */
+    (function () {
+      var ha = document.createElement('div');
+      document.body.appendChild(ha);
+      ha.style.cssText = 'position:absolute;left:-9999px;width:700px';
+      var ar = W.arbol(ha, { texto: '2 + 3 * 4' });
+      eq('el árbol de «2 + 3 * 4» tiene cinco nudos', ar.disp.nodos.length, 5);
+      eq('y se recorre en postorden: las hojas antes que su operación',
+        ar.disp.nodos.map(function (m) {
+          var n = m.nodo;
+          return n.t === 'num' ? n.v : (n.t === 'var' ? n.n : n.op);
+        }).join(' '), '2 3 4 * +');
+      truthy('el producto queda por debajo de la suma en el dibujo',
+        ar.disp.nodos[3].prof > ar.disp.nodos[4].prof);
+      var b = [].slice.call(ha.querySelectorAll('button'));
+      function pulsa(t) { b.filter(function (x) { return x.textContent.indexOf(t) >= 0; })[0].click(); }
+      pulsa('↦ Hasta el final');
+      eq('recorrido entero, la pila queda con un solo valor', ar.estado.pila.length, 1);
+      eq('y ese valor es el de la expresión', ar.estado.pila[0], 14);
+      eq('la altura máxima de la pila es la que dice el tema', ar.estado.alto, 3);
+      pulsa('↺ Volver al principio');
+      eq('volver al principio vacía la pila', ar.estado.pila.length, 0);
+
+      /* Una suma encadenada tiene mas numeros y necesita MENOS pila: es el
+         dato que el tema usa para separar tamaño de profundidad. */
+      var ar2 = W.arbol(ha, { texto: '1 + 2 + 3 + 4 + 5' });
+      [].slice.call(ha.querySelectorAll('button')).forEach(function (x) {
+        if (x.textContent.indexOf('Hasta el final') >= 0) x.click();
+      });
+      eq('«1+2+3+4+5» solo necesita dos sitios de pila', ar2.estado.alto, 2);
+      truthy('y da 15', ar2.estado.pila[0] === 15);
+
+      var roto = W.arbol(ha, { texto: '2 +' });
+      truthy('una expresión mal escrita se dice y no se dibuja',
+        roto.el.className.indexOf('arb--roto') >= 0 && !roto.disp);
+      ha.remove();
+    }());
+
     /* El widget: cuatro paneles del mismo texto. */
     var hl = document.createElement('div');
     document.body.appendChild(hl);

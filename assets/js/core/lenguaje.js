@@ -908,6 +908,214 @@
     this.cuerpo.textContent = txt;
   };
 
+  /* ================================================================
+     EL ARBOL DIBUJADO, Y LA PILA
+     El tramo del lenguaje se contaba entero con texto y sangrias, y hay dos
+     cosas que se entienden mucho antes viendolas: la FORMA del arbol -que
+     es donde vive la prioridad- y como sube y baja la PILA al recorrerlo.
+     Las dos son el mismo paseo, asi que van en el mismo instrumento y
+     avanzan a la vez.
+     ================================================================ */
+
+  /** Coloca el arbol: x por recorrido en orden, y por profundidad. */
+  function coloca(nodo, estado) {
+    estado = estado || { x: 0, nodos: [], hondo: 0 };
+    function baja(n, prof) {
+      if (!n) return null;
+      var hijos = [];
+      if (n.t === 'bin') hijos = [n.i, n.d];
+      else if (n.t === 'neg') hijos = [n.e];
+      else if (n.t === 'llamada') hijos = n.args;
+      var izq = hijos.length ? baja(hijos[0], prof + 1) : null;
+      var mio = { nodo: n, prof: prof, x: 0, hijos: [] };
+      if (izq) mio.hijos.push(izq);
+      if (!hijos.length) { mio.x = estado.x++; }
+      else {
+        for (var k = 1; k < hijos.length; k++) {
+          var otro = baja(hijos[k], prof + 1);
+          if (otro) mio.hijos.push(otro);
+        }
+        var xs = mio.hijos.map(function (h) { return h.x; });
+        mio.x = xs.length ? (Math.min.apply(null, xs) + Math.max.apply(null, xs)) / 2 : estado.x++;
+      }
+      estado.hondo = Math.max(estado.hondo, prof);
+      estado.nodos.push(mio);
+      return mio;
+    }
+    /* El recorrido de arriba ya visita los hijos antes que el padre, asi que
+       `nodos` sale en POSTORDEN: el mismo orden en que se evalua y en que se
+       compila. No es una casualidad aprovechada, es de lo que va el tema. */
+    var raiz = baja(nodo, 0);
+    return { raiz: raiz, nodos: estado.nodos, ancho: estado.x, hondo: estado.hondo };
+  }
+
+  /** Que escribe cada nudo. */
+  function etiquetaDe(n) {
+    if (n.t === 'num') return String(n.v);
+    if (n.t === 'var') return n.n;
+    if (n.t === 'bin') return n.op;
+    if (n.t === 'neg') return '−';
+    if (n.t === 'llamada') return n.n + '()';
+    return n.t;
+  }
+  function esHoja(n) { return n.t === 'num' || n.t === 'var'; }
+
+  function Arbol(host, o) {
+    o = o || {};
+    this.o = o;
+    this.texto = o.texto || '2 + 3 * 4';
+    this.paso = 0;
+    this.build(host);
+  }
+
+  Arbol.prototype.build = function (host) {
+    var self = this;
+    this.el = U.el('div.arb');
+    this.el.__arb = this;
+
+    this.ed = U.el('input.card__url.arb__ed', {
+      type: 'text', value: this.texto, spellcheck: 'false',
+      'aria-label': 'Expresión que se dibuja'
+    });
+    this.ed.addEventListener('input', function () {
+      self.texto = self.ed.value; self.paso = 0; self.recalcula();
+    });
+    this.el.appendChild(this.ed);
+
+    this.aviso = U.el('div.arb__aviso', { role: 'status', 'aria-live': 'polite' });
+    this.el.appendChild(this.aviso);
+
+    this.plot = W.plot(this.el, {
+      xmin: 0, xmax: 10, ymin: 0, ymax: 6, height: this.o.alto || 240,
+      axes: false, grid: false,
+      /* `ariaFija` porque aqui no hay ejes: describir un eje horizontal de
+         0 a 3 en un arbol no ayuda a nadie, y el aviso de arriba ya dice en
+         texto por que paso va y como esta la pila. */
+      ariaFija: {
+        role: 'img',
+        label: this.o.aria || 'Árbol de la expresión: las operaciones en los nudos y los números en las hojas, dibujado de abajo arriba.'
+      },
+      draw: function (g) { self.dibuja(g); }
+    });
+
+    this.pila = U.el('div.arb__pila');
+    this.el.appendChild(this.pila);
+
+    W.buttons(this.el, [
+      { t: 'Un paso', on: function () { self.paso++; self.recalcula(); } },
+      { t: '↦ Hasta el final', on: function () { self.paso = 999; self.recalcula(); } },
+      { t: '↺ Volver al principio', on: function () { self.paso = 0; self.recalcula(); } }
+    ]);
+
+    if (this.o.nota) this.el.appendChild(U.el('p.arb__nota', { html: MathX.inline(this.o.nota) }));
+    host.appendChild(this.el);
+    this.recalcula();
+  };
+
+  Arbol.prototype.recalcula = function () {
+    var r = LEN.analiza('muestra ' + this.texto + ';');
+    this.el.classList.toggle('arb--roto', r.errores.length > 0);
+    if (r.errores.length || !r.ast.ss.length) {
+      this.disp = null;
+      this.aviso.textContent = r.errores.length
+        ? 'Línea ' + r.errores[0].linea + ': ' + r.errores[0].msg
+        : 'Escribe una expresión, como «2 + 3 * 4».';
+      U.clear(this.pila);
+      this.plot.render();
+      return;
+    }
+    this.disp = coloca(r.ast.ss[0].e);
+    this.paso = Math.max(0, Math.min(this.paso, this.disp.nodos.length));
+    /* Los limites se fijan AQUI, antes de pintar. Hacerlo dentro de `draw`
+       llegaba tarde: la transformacion de coordenadas ya estaba hecha y el
+       primer dibujo salia con los limites de antes. */
+    var ancho = Math.max(1, this.disp.ancho), hondo = this.disp.hondo;
+    this.plot.o.xmin = -0.7; this.plot.o.xmax = ancho - 0.3;
+    this.plot.o.ymin = -0.6; this.plot.o.ymax = hondo + 0.6;
+    this.simula();
+    this.pintaPila();
+    this.plot.render();
+  };
+
+  /** Recorre el postorden hasta `paso` llevando la pila, como en len-pila. */
+  Arbol.prototype.simula = function () {
+    var pila = [], rpn = [], alto = 0, roto = '';
+    for (var i = 0; i < this.paso && i < this.disp.nodos.length; i++) {
+      var n = this.disp.nodos[i].nodo;
+      rpn.push(etiquetaDe(n));
+      if (esHoja(n)) {
+        pila.push(n.t === 'num' ? ocho(n.v) : NaN);
+      } else if (n.t === 'neg') {
+        var a = pila.pop();
+        pila.push(isNaN(a) ? NaN : ocho(-a));
+      } else if (n.t === 'bin') {
+        var d = pila.pop(), z = pila.pop();
+        if (isNaN(d) || isNaN(z)) pila.push(NaN);
+        else {
+          var v = { '+': z + d, '-': z - d, '*': z * d, '/': d === 0 ? NaN : Math.trunc(z / d) }[n.op];
+          if (v === undefined) v = ({ '<': z < d, '>': z > d, '<=': z <= d, '>=': z >= d, '==': z === d, '!=': z !== d }[n.op]) ? 1 : 0;
+          pila.push(isNaN(v) ? NaN : ocho(v));
+        }
+      } else { pila.push(NaN); roto = 'aquí no se evalúa'; }
+      alto = Math.max(alto, pila.length);
+    }
+    this.estado = { pila: pila, rpn: rpn, alto: alto };
+    var total = this.disp.nodos.length;
+    this.aviso.textContent = this.paso === 0
+      ? 'Sin empezar. ' + total + ' ' + U.plural(total, 'nudo', 'nudos') + ' que visitar, las hojas primero.'
+      : 'Paso ' + this.paso + ' de ' + total + ' · en polaca inversa: ' + rpn.join(' ') +
+        ' · altura máxima de la pila: ' + alto +
+        (this.paso >= total && pila.length === 1 && !isNaN(pila[0]) ? ' · vale ' + pila[0] : '');
+  };
+
+  Arbol.prototype.pintaPila = function () {
+    U.clear(this.pila);
+    this.pila.appendChild(U.el('span.arb__et', { text: 'la pila' }));
+    if (!this.estado.pila.length) {
+      this.pila.appendChild(U.el('span.arb__vacia', { text: 'vacía' }));
+      return;
+    }
+    /* Se dibuja de abajo arriba, como una pila de verdad: lo ultimo en
+       entrar queda a la derecha, que es de donde se saca. */
+    this.estado.pila.forEach(function (v, i, l) {
+      this.pila.appendChild(U.el('span.arb__caja' + (i === l.length - 1 ? '.is-cima' : ''), {
+        text: isNaN(v) ? '?' : String(v)
+      }));
+    }, this);
+  };
+
+  Arbol.prototype.dibuja = function (g) {
+    if (!this.disp) return;
+    var d = this.disp, hondo = d.hondo;
+    function py(prof) { return hondo - prof; }
+    var hechos = {};
+    for (var i = 0; i < this.paso && i < d.nodos.length; i++) hechos[i] = 1;
+    var actual = this.paso > 0 ? d.nodos[this.paso - 1] : null;
+
+    /* Primero las ramas, para que los nudos las tapen. */
+    d.nodos.forEach(function (m) {
+      m.hijos.forEach(function (h) {
+        g.seg(m.x, py(m.prof), h.x, py(h.prof), { color: 'axis', w: 1.4 });
+      });
+    });
+    d.nodos.forEach(function (m, k) {
+      var visto = hechos[k];
+      var esActual = actual === m;
+      var col = esActual ? 2 : (visto ? 'ok' : 'axis');
+      var r = esHoja(m.nodo) ? 0.30 : 0.36;
+      g.circle(m.x, py(m.prof), r, {
+        fill: col, fillAlpha: esActual ? 0.35 : (visto ? 0.22 : 0.08),
+        color: col, w: esActual ? 2.4 : 1.6
+      });
+      g.text(m.x, py(m.prof), etiquetaDe(m.nodo), {
+        align: 'center', size: 13, bold: !esHoja(m.nodo),
+        color: visto || esActual ? 'ink' : 'axis'
+      });
+    });
+  };
+
+  W.arbol = function (host, o) { return new Arbol(host, o); };
+
   W.lenguaje = function (host, o) { return new Taller(host, o); };
   W.programaPizcaIguales = LEN.iguales;
   W.pizcaPinta = LEN.pinta;

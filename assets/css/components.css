@@ -667,6 +667,32 @@ ol.deberes{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direc
 .len__panel:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 .len--difiere .len__aviso{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
 
+/* EL ARBOL DIBUJADO Y SU PILA. Los nudos visitados se distinguen por color y
+   por relleno, y el aviso de arriba dice en texto por que paso va: nada se
+   distingue solo por color. */
+.arb{margin:14px 0}
+.arb__ed{font-family:var(--mono); font-size:0.875rem}
+.arb__aviso{
+  margin:8px 0 2px; padding:7px 11px; border-radius:8px;
+  background:var(--panel-2); border:1px solid var(--line-soft);
+  font-family:var(--mono); font-size:0.8125rem; line-height:1.5; color:var(--ink-soft);
+}
+.arb--roto .arb__aviso{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+.arb--roto .arb__ed{border-color:var(--bad)}
+.arb__pila{display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin:10px 0 2px; min-height:34px}
+.arb__et{
+  font-size:0.75rem; text-transform:uppercase; letter-spacing:.08em;
+  color:var(--ink-faint); margin-right:4px;
+}
+.arb__vacia{font-size:0.8125rem; color:var(--ink-faint); font-style:italic}
+.arb__caja{
+  font-family:var(--mono); font-size:0.875rem; font-weight:600;
+  padding:4px 11px; border-radius:6px; min-width:2.2em; text-align:center;
+  background:var(--panel-2); border:1px solid var(--line);
+}
+.arb__caja.is-cima{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-ink)}
+.arb__nota{margin:8px 0 0; font-size:0.8562rem; color:var(--ink-soft)}
+
 /* Los conmutadores de entrada. El estado se ve por el texto («a = 1») ademas
    de por el color, que es la regla de accesibilidad del curso: nada se
    distingue solo por color. */

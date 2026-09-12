@@ -40,10 +40,9 @@ Course.topic('len-arbol', function (p) {
     intro: 'Escribe expresiones en el editor y mira el árbol que sale. Prueba «2 + 3 * 4» y «(2 + 3) * 4», y después mete paréntesis en sitios raros para ver cómo cambia la forma.',
     predice: '¿Qué crees que saldrá arriba del todo en el árbol de «2 * 3 + 4»: el + o el *?',
     build: function (host) {
-      W.lenguaje(host, {
-        id: 'arb-uno', paneles: ['arbol', 'tokens'], avisa: 'poco',
-        texto: 'muestra 2 + 3 * 4;',
-        nota: 'La operación que queda <strong>arriba del todo</strong> es la que se hace <em>la última</em>, porque necesita que sus dos ramas estén resueltas. La que ata más fuerte acaba abajo.'
+      W.arbol(host, {
+        texto: '2 + 3 * 4', alto: 230,
+        nota: 'La operación que queda <strong>arriba del todo</strong> es la que se hace <em>la última</em>, porque necesita que sus dos ramas estén resueltas. La que ata más fuerte acaba abajo. Los botones recorren el árbol; de eso va [[len-pila|el tema siguiente]].'
       });
     }
   });
@@ -84,10 +83,9 @@ Course.topic('len-arbol', function (p) {
     intro: 'Mira el árbol de «10 - 3 - 2»: el menos de arriba tiene otro menos en su rama izquierda, no en la derecha. Prueba también con divisiones, que es donde más se nota, y con sumas, donde da igual.',
     predice: 'Sin mirar: ¿cuánto vale «20 / 4 / 5», agrupando por la izquierda? ¿Y si se agrupara por la derecha?',
     build: function (host) {
-      W.lenguaje(host, {
-        id: 'arb-asoc', paneles: ['arbol', 'maquina'],
-        texto: 'muestra 10 - 3 - 2;\nmuestra 20 / 4 / 5;',
-        nota: 'Con la suma y el producto la asociatividad no cambia el resultado, y por eso pasa desapercibida. Con la resta y la división sí, y entonces se nota que alguien tuvo que decidirlo.'
+      W.arbol(host, {
+        texto: '10 - 3 - 2', alto: 220,
+        nota: 'Prueba también <code>20 / 4 / 5</code>, y después <code>2 + 3 + 4</code>: con la suma y el producto la asociatividad no cambia el resultado, y por eso pasa desapercibida. Con la resta y la división sí, y entonces se nota que alguien tuvo que decidirlo.'
       });
     }
   });

@@ -42,62 +42,22 @@ Course.topic('len-pila', function (p) {
   ], true);
 
   p.demo({
-    title: 'Evaluar en polaca inversa, paso a paso',
-    intro: 'Escribe una expresión y mira cómo sube y baja la pila. Cada número la hace crecer; cada operación se come dos y deja uno. La altura máxima que alcanza no es un capricho: es la profundidad del árbol.',
-    predice: 'Con «2 3 4 * +», ¿cuántos números llegará a haber en la pila a la vez como máximo: dos, tres o cuatro?',
+    title: 'El árbol y la pila, a la vez',
+    intro: 'Los dos paneles son el mismo paseo. Ve dando pasos: arriba se enciende el nudo que toca —las ramas antes que el nudo— y abajo sube y baja la pila. Cada hoja la hace crecer; cada operación se come dos y deja una. Cambia la expresión y vuelve a empezar.',
+    predice: 'Con «2 + 3 * 4», ¿cuántos números llegará a haber en la pila a la vez como máximo: dos, tres o cuatro?',
     build: function (host) {
-      var texto = '2 + 3 * 4';
-      var out = W.readout(host, '');
-      var traza = U.el('pre.shd__mini');
-      host.appendChild(traza);
-
-      /* Postorden del arbol que ya sabe montar el analizador del curso:
-         aqui no se vuelve a escribir ningun analizador. */
-      function rpn(n, salida) {
-        if (n.t === 'num') { salida.push(String(n.v)); return; }
-        if (n.t === 'var') { salida.push(n.n); return; }
-        if (n.t === 'neg') { salida.push('0'); rpn(n.e, salida); salida.push('-'); return; }
-        rpn(n.i, salida); rpn(n.d, salida); salida.push(n.op);
-      }
-
-      function pinta() {
-        var a = LEN.analiza('muestra ' + texto + ';');
-        if (a.errores.length) {
-          out.set('<span style="color:var(--bad)">' + a.errores[0].msg + '</span>');
-          traza.textContent = '';
-          return;
-        }
-        var lista = [];
-        rpn(a.ast.ss[0].e, lista);
-        var pila = [], lineas = [], alto = 0, roto = '';
-        lista.forEach(function (tk) {
-          if (/^-?\d+$/.test(tk)) { pila.push(parseInt(tk, 10)); }
-          else {
-            if (pila.length < 2) { roto = 'faltan operandos'; return; }
-            var b = pila.pop(), x = pila.pop();
-            var v = tk === '+' ? x + b : tk === '-' ? x - b : tk === '*' ? x * b
-              : tk === '/' ? (b === 0 ? 0 : Math.trunc(x / b)) : (tk === '<' ? (x < b ? 1 : 0) : 0);
-            pila.push(LEN.ocho(v));
-          }
-          alto = Math.max(alto, pila.length);
-          lineas.push(tk + '   →   pila: ' + (pila.length ? pila.join(' · ') : '(vacía)'));
-        });
-        traza.textContent = lineas.join('\n');
-        out.set('En polaca inversa: <strong style="font-family:var(--mono)">' + lista.join(' ') + '</strong>' +
-          '<br>Resultado: <strong>' + (roto ? roto : pila[0]) + '</strong> · altura máxima de la pila: <strong>' + alto + '</strong>');
-      }
-
-      var ed = U.el('input.card__url', { type: 'text', value: texto, 'aria-label': 'expresión a evaluar' });
-      host.appendChild(ed);
-      ed.addEventListener('input', function () { texto = ed.value; pinta(); });
-      W.hint(host, 'Prueba «(2 + 3) * 4» y compara la lista con la de «2 + 3 * 4»: las mismas piezas, otro orden, otro resultado.');
-      pinta();
+      W.arbol(host, {
+        texto: '2 + 3 * 4', alto: 230,
+        nota: 'El aviso va escribiendo la polaca inversa según avanza: es exactamente la lista de nudos por los que ya has pasado, en el orden en que se han visitado. No hay ninguna conversión; la notación <em>es</em> el recorrido.'
+      });
     }
   });
 
-  p.text('Fíjate en la <strong>altura máxima</strong> que alcanza la pila. No es un dato curioso: es ' +
-    'cuántos resultados intermedios hay que recordar a la vez, y por tanto cuántos sitios necesita la ' +
-    'máquina. Un árbol profundo pide una pila alta, y por eso un compilador se fija en eso.');
+  p.text('Fíjate en la <strong>altura máxima</strong> que va anunciando el aviso. No es un dato curioso: ' +
+    'es cuántos resultados intermedios hay que recordar a la vez, y por tanto cuántos sitios necesita ' +
+    'la máquina. Un árbol profundo pide una pila alta, y por eso un compilador se fija en eso. Prueba ' +
+    '<code>1 + 2 + 3 + 4 + 5</code> y después <code>1 + (2 * (3 + 4))</code>: la primera tiene más ' +
+    'números y necesita menos pila.');
 
   /* ---------------------------------------------------------------- */
   p.section('Y ahora la sorpresa: eso ya es el ensamblador');

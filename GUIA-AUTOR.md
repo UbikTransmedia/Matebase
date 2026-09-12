@@ -820,6 +820,17 @@ Tres decisiones que conviene conocer:
   dice. Los **argumentos también van por la pila**, no por celdas temporales:
   con celdas, `suma(1, suma(2, 3))` se pisaba a sí mismo.
 
+**El árbol dibujado.** `W.arbol(host, {texto, alto, aria, nota})` pinta el árbol
+de **una expresión** y lo recorre paso a paso, con la pila debajo. Los dos son el
+mismo paseo, así que avanzan juntos: al encender un nudo, el aviso escribe su
+símbolo en polaca inversa y la pila sube o baja. Sirve para lo que el texto no
+puede: que se vea la **forma** —que es donde vive la prioridad— y la **altura**
+de la pila, que es la profundidad del árbol y no el número de operandos.
+
+La expresión se edita en el propio widget, así que no hace falta `id`: no guarda
+nada. Usa `ariaFija` a propósito, porque aquí describir un eje horizontal de 0 a
+3 no ayudaría a nadie.
+
 **El widget.** `W.lenguaje(host, {id, texto, nota, tope, paneles, optimiza})`
 pone el editor y **cuatro paneles del mismo texto** —tokens, árbol, ensamblador y
 máquina— que se eligen con fichas. Cuatro columnas no caben en un móvil, y como

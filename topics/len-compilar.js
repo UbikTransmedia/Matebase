@@ -66,6 +66,18 @@ Course.topic('len-compilar', function (p) {
     }
   });
 
+  p.demo({
+    title: 'El recorrido, dibujado',
+    intro: 'El mismo paseo del tema de la pila, para tenerlo delante mientras se lee el ensamblador de arriba. Cada vez que se enciende una hoja, el compilador escribe una instrucción que carga algo; cada vez que se enciende un nudo, escribe la operación.',
+    predice: 'Si el compilador escribe las instrucciones en el orden en que se encienden los nudos, ¿cuál es la última instrucción de una expresión?',
+    build: function (host) {
+      W.arbol(host, {
+        texto: '2 + 3 * 4', alto: 220,
+        nota: 'Interpretar es hacer la operación al encender el nudo; compilar es escribirla. Mismo paseo, distinta acción, y por eso los dos programas del curso tienen la misma forma.'
+      });
+    }
+  });
+
   /* ---------------------------------------------------------------- */
   p.section('Las dos tienen que dar lo mismo');
 
