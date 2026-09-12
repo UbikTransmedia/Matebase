@@ -809,6 +809,30 @@ siempre **las dos salidas** y si coinciden; cuando no, el taller se pone en rojo
 
 ---
 
+## Deberes y exámenes, sin servidor
+
+Dos cosas que necesita quien da clase, resueltas con la misma idea: **que el
+enlace lleve dentro lo que hace falta**. No hay cuentas, no hay servidor y no se
+recoge nada.
+
+**Deberes.** Cada ejercicio del curso tiene un botón «+ Deberes» que lo aparta
+*con los números que tenga en ese momento*. La lista vive en el progreso y se
+comparte como `#/__deberes?d=<código>`, donde el código es
+`tema:ejercicio:semilla` separados por `~`. `Ex.codificaDeberes(lista)` y
+`Ex.leeDeberes(texto)` hacen la conversión, y `Ex.deberes()` lee y escribe la
+lista guardada. Quien abre el enlace ve exactamente esos enunciados; el estado
+«resuelto» que aparece al lado es del propio navegador y no viaja.
+
+**Examen de cualquier bloque.** `#/__examen` abre la maquinaria de los simulacros
+—que existía y solo servía para la PAU— a cualquier selección de bloques. Monta
+las `partes` que espera `p.simulacro` con un bloque por parte, y hereda todo lo
+suyo: preferencia por los problemas de apartados, un tema distinto por pregunta
+mientras se pueda, cronómetro opcional y corrección al entregar.
+`#/__examen?b=al,ge&n=2` reproduce la misma configuración, y añadiendo `&s=<n>`
+salen además las **mismas preguntas con los mismos números**.
+
+---
+
 ## Las rutas de la ampliación
 
 Los bloques 0 a 7 se recorren en orden y tienen itinerario de examen. Los 161

@@ -526,6 +526,7 @@
     });
     if (BYID['pau-mapa']) fila.appendChild(U.el('a.btn', { href: '#/pau-mapa', text: 'Mapa de 2.º y simulacros →' }));
     fila.appendChild(U.el('a.btn', { href: '#/__rutas', text: 'Rutas de la ampliación →' }));
+    fila.appendChild(U.el('a.btn', { href: '#/__examen', text: 'Montar un examen →' }));
     fila.appendChild(U.el('a.btn', { href: '#/__progreso', text: 'Progreso y clase →' }));
     p.raw(fila);
 
@@ -565,6 +566,229 @@
     mainEl.scrollTop = 0;
     paintIndex();
   }
+
+  /* ---------------- deberes ----------------
+     Una lista de enunciados concretos -tema, numero y semilla- que se
+     comparte como un enlace. El enlace LLEVA los deberes dentro, asi que no
+     hace falta servidor, ni cuentas, ni recoger nada: el profesor elige,
+     copia y pega; el alumno abre y los tiene, con los mismos numeros. */
+
+  function renderDeberes(q) {
+    U.clear(wrapEl);
+    wrapEl.removeAttribute('data-piel');
+    var recibidos = q && q.d ? Ex.leeDeberes(q.d) : null;
+    var lista = recibidos || Ex.deberes();
+    crumbEl.innerHTML = '<a href="#/">Inicio</a> › <b>Deberes</b>';
+    document.title = 'Deberes · Matebase';
+
+    var h = U.el('div.hdr');
+    h.innerHTML = '<h1 tabindex="-1">Deberes</h1><p class="hdr__sub">' +
+      (recibidos
+        ? 'Alguien te ha pasado esta lista. Son ' + lista.length + ' ' +
+          U.plural(lista.length, 'enunciado', 'enunciados') + ' concretos, con los mismos números ' +
+          'que vio quien la preparó.'
+        : 'Los enunciados que has ido apartando con el botón «+ Deberes». Se comparten en un enlace ' +
+          'que los lleva dentro: quien lo abra verá exactamente estos, con estos números.') +
+      '</p>';
+    wrapEl.appendChild(h);
+
+    var p = new Page(wrapEl, { id: '__deberes' });
+
+    if (!lista.length) {
+      p.note('Todavía no hay ninguno. En cualquier ejercicio del curso, el botón ' +
+        '<strong>+ Deberes</strong> lo aparta con los números que tenga en ese momento. Cuando tengas ' +
+        'los que quieras, vuelve aquí y copia el enlace.', null, 'Cómo se hace una lista');
+      p.raw(U.el('div.chips', null, [U.el('a.btn', { href: '#/', text: '← Al índice' })]));
+      mainEl.scrollTop = 0; paintIndex(); return;
+    }
+
+    var ol = U.el('ol.deberes');
+    lista.forEach(function (d, i) {
+      var t = BYID[d.id];
+      var dom = Progress.dominio(d.id);
+      var ex = (Progress.topic(d.id).ex || {})[d.n];
+      var hecho = ex && ex.ok > 0;
+      var li = U.el('li.deberes__t' + (hecho ? '.is-done' : ''));
+      li.appendChild(U.el('a.deberes__link', {
+        href: '#/' + d.id + '?e=' + d.n + '&s=' + d.s,
+        text: (t ? t.t : d.id) + ' · ejercicio ' + d.n
+      }));
+      li.appendChild(U.el('span.deberes__est', {
+        text: hecho ? 'resuelto alguna vez' : 'pendiente'
+      }));
+      if (!recibidos) {
+        li.appendChild(U.el('button.btn.btn--sm.btn--ghost', {
+          type: 'button', title: 'Quitar de la lista',
+          onclick: function () {
+            var nueva = Ex.deberes().filter(function (x, k) { return k !== i; });
+            Ex.deberes(nueva);
+            renderDeberes(q);
+          }
+        }, '×'));
+      }
+      ol.appendChild(li);
+    });
+    p.raw(ol);
+
+    if (recibidos) {
+      p.note('El estado que ves al lado de cada uno es <strong>tuyo</strong>, y sale de tu progreso en ' +
+        'este navegador: dice si alguna vez has resuelto ese tipo de ejercicio, no si has hecho ' +
+        'exactamente este enunciado. Nadie más lo ve.', null, 'De dónde sale ese «resuelto»');
+      p.raw(U.el('div.chips', null, [
+        U.el('a.btn.btn--main', { href: '#/' + lista[0].id + '?e=' + lista[0].n + '&s=' + lista[0].s, text: 'Empezar por el primero →' }),
+        U.el('button.btn', {
+          type: 'button',
+          onclick: function () { Ex.deberes(lista.slice()); renderDeberes({}); }
+        }, 'Copiarlos a mi lista')
+      ]));
+    } else {
+      p.section('El enlace');
+      var url = location.href.split('#')[0] + '#/__deberes?d=' +
+        encodeURIComponent(Ex.codificaDeberes(lista));
+      var caja = U.el('input.card__url', {
+        type: 'text', readonly: true, value: url, 'aria-label': 'Enlace con estos deberes'
+      });
+      var av = U.el('p.card__aviso');
+      p.raw(U.el('div.chips', null, [
+        U.el('button.btn.btn--main', {
+          type: 'button',
+          onclick: function () {
+            try {
+              navigator.clipboard.writeText(url).then(function () {
+                av.textContent = 'Copiado. Pégalo donde quieras: quien lo abra verá estos mismos enunciados.';
+              }, function () { caja.focus(); caja.select(); });
+            } catch (e) { caja.focus(); caja.select(); }
+          }
+        }, '⧉ Copiar el enlace'),
+        U.el('button.btn', {
+          type: 'button',
+          onclick: function () {
+            if (!global.confirm('¿Vaciar la lista de deberes?')) return;
+            Ex.deberes([]); renderDeberes(q);
+          }
+        }, 'Vaciar')
+      ]));
+      p.raw(caja);
+      p.raw(av);
+      p.note('El enlace lleva los deberes dentro, así que funciona sin servidor y sin cuentas: por ' +
+        'correo, por mensaje o escrito en la pizarra. Lo que <strong>no</strong> lleva es ninguna ' +
+        'respuesta ni ningún dato de nadie.', 'ok', 'Qué viaja en el enlace');
+    }
+
+    mainEl.scrollTop = 0;
+    paintIndex();
+  }
+  Course.renderDeberes = renderDeberes;
+
+  /* ---------------- examen de cualquier bloque ----------------
+     La maquinaria del simulacro existia y solo servia para la PAU. Abrirla a
+     cualquier seleccion de bloques convierte el curso en su propio generador
+     de examenes, y con la misma propiedad util: el enlace de un examen
+     reproduce las mismas preguntas con los mismos numeros. */
+
+  function renderExamen(q) {
+    U.clear(wrapEl);
+    wrapEl.removeAttribute('data-piel');
+    crumbEl.innerHTML = '<a href="#/">Inicio</a> › <b>Examen</b>';
+    document.title = 'Examen de cualquier bloque · Matebase';
+
+    var h = U.el('div.hdr');
+    h.innerHTML = '<h1 tabindex="-1">Examen de cualquier bloque</h1>' +
+      '<p class="hdr__sub">Elige de dónde entran las preguntas y el curso monta un examen: sin ' +
+      'pistas, con cronómetro si quieres, y con la corrección y el paso a paso al entregar.</p>';
+    wrapEl.appendChild(h);
+
+    var elegidos = {};
+    (q && q.b ? String(q.b).split(',') : []).forEach(function (x) { elegidos[x] = 1; });
+    var porBloque = parseInt((q && q.n) || '2', 10);
+    if (isNaN(porBloque) || porBloque < 1) porBloque = 2;
+
+    var p = new Page(wrapEl, { id: '__examen' });
+    var zona = U.el('div');
+
+    var rej = U.el('div.examen__bloques');
+    CURRICULUM.forEach(function (b) {
+      var conEjercicios = b.temas.filter(function (t) { return t.id.indexOf('pau-') !== 0; });
+      if (!conEjercicios.length) return;
+      var idc = 'ex-b-' + b.id;
+      var chk = U.el('input', { type: 'checkbox', id: idc, checked: !!elegidos[b.id] });
+      chk.addEventListener('change', function () {
+        if (chk.checked) elegidos[b.id] = 1; else delete elegidos[b.id];
+        pinta();
+      });
+      rej.appendChild(U.el('label.examen__b', { 'for': idc }, [
+        chk, U.el('span', { html: '<span class="blk__num">' + b.n + '</span> ' + U.escape(b.title) })
+      ]));
+    });
+    p.section('De dónde entran las preguntas');
+    p.raw(rej);
+
+    var fila = U.el('div.chips');
+    W.chips(fila, [1, 2, 3, 4].map(function (n) {
+      return { label: n + (n === 1 ? ' pregunta' : ' preguntas') + ' por bloque', value: String(n) };
+    }), {
+      value: String(porBloque),
+      on: function (v) { porBloque = parseInt(v, 10); pinta(); }
+    });
+    p.raw(fila);
+
+    var resumen = U.el('p.card__aviso');
+    p.raw(resumen);
+    p.raw(U.el('div.chips', null, [
+      U.el('button.btn.btn--main', { type: 'button', onclick: function () { monta(); } }, 'Preparar el examen'),
+      U.el('button.btn', {
+        type: 'button',
+        onclick: function () {
+          var ids = Object.keys(elegidos);
+          if (!ids.length) return;
+          var url = location.href.split('#')[0] + '#/__examen?b=' + ids.join(',') + '&n=' + porBloque;
+          var inp = U.el('input.card__url', { type: 'text', readonly: true, value: url, 'aria-label': 'Enlace de este examen' });
+          U.clear(resumen);
+          resumen.appendChild(U.el('span', { text: 'Enlace de esta configuración: ' }));
+          resumen.appendChild(inp);
+          inp.focus(); inp.select();
+        }
+      }, 'Enlace de esta configuración')
+    ]));
+    p.raw(zona);
+
+    function pinta() {
+      var n = Object.keys(elegidos).length;
+      resumen.textContent = n
+        ? n + ' ' + U.plural(n, 'bloque', 'bloques') + ' · ' + (n * porBloque) + ' preguntas · ≈' +
+          (n * porBloque * 10) + ' minutos'
+        : 'Elige al menos un bloque.';
+    }
+
+    function monta() {
+      U.clear(zona);
+      var ids = Object.keys(elegidos);
+      if (!ids.length) return;
+      var partes = [];
+      CURRICULUM.forEach(function (b) {
+        if (!elegidos[b.id]) return;
+        var temas = b.temas.filter(function (t) { return t.id.indexOf('pau-') !== 0; })
+          .map(function (t) { return t.id; });
+        if (!temas.length) return;
+        partes.push({ titulo: b.title, temas: temas, n: porBloque, min: porBloque * 10 });
+      });
+      var p2 = new Page(zona, { id: '__examen-sim', _q: (q || {}) });
+      p2.node = { _q: q || {} };
+      p2.simulacro({ titulo: 'Examen de ' + partes.length + ' ' + U.plural(partes.length, 'bloque', 'bloques'), partes: partes });
+      if (zona.scrollIntoView) zona.scrollIntoView({ block: 'start' });
+    }
+
+    pinta();
+    if (Object.keys(elegidos).length) monta();
+
+    p.note('Es la misma maquinaria de los simulacros de la PAU, con los bloques abiertos. Las preguntas ' +
+      'salen de los ejercicios de los temas, dando preferencia a los problemas por apartados, y un ' +
+      'tema escogido no repite: primero se reparte entre temas distintos.', null, 'De dónde sale esto');
+
+    mainEl.scrollTop = 0;
+    paintIndex();
+  }
+  Course.renderExamen = renderExamen;
 
   /* ---------------- las rutas de la ampliacion ----------------
      Los bloques 0 a 7 se recorren en orden y tienen itinerario de examen.
@@ -1352,6 +1576,8 @@
     if (!id) return 'Inicio';
     if (id === '__progreso') return 'Progreso y clase';
     if (id === '__rutas') return 'Rutas de la ampliación';
+    if (id === '__deberes') return 'Deberes';
+    if (id === '__examen') return 'Examen';
     var t = BYID[id];
     return t ? t.t : id;
   }
@@ -1397,6 +1623,8 @@
     if (!r.id) renderHome();
     else if (r.id === '__progreso') renderProgreso();
     else if (r.id === '__rutas') renderRutas(r.q);
+    else if (r.id === '__deberes') renderDeberes(r.q);
+    else if (r.id === '__examen') renderExamen(r.q);
     else renderTopic(r.id, r.q);
     // Al navegar, llevar el foco al titulo: quien usa teclado no tiene que
     // volver a recorrer el indice, y quien usa lector de pantalla se entera

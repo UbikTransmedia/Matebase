@@ -1227,6 +1227,22 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       truthy('y reparte por bloques del temario',
         res.bloques && Object.keys(res.bloques).length === CURRICULUM.length);
 
+      /* Los deberes viven en el progreso: una lista de enunciados concretos
+         que viaja dentro de un enlace, sin servidor y sin cuentas. */
+      var lista = [{ id: 'fn-derivadas', n: 2, s: 12345 }, { id: 'maq-bits', n: 1, s: -7 }];
+      var codigo = Ex.codificaDeberes(lista);
+      eq('los deberes se codifican en una cadena corta', codigo, 'fn-derivadas:2:12345~maq-bits:1:-7');
+      var vuelta = Ex.leeDeberes(codigo);
+      truthy('y se vuelven a leer igual, semillas negativas incluidas',
+        vuelta.length === 2 && vuelta[1].s === -7 && vuelta[0].id === 'fn-derivadas');
+      eq('un trozo estropeado se descarta sin tirar el resto',
+        Ex.leeDeberes('fn-derivadas:2:12345~basura~maq-bits:1:9').length, 2);
+      eq('y una cadena que no es nada da una lista vacía', Ex.leeDeberes('~~').length, 0);
+      Ex.deberes(lista);
+      eq('la lista se guarda y se recupera del progreso', Ex.deberes().length, 2);
+      Ex.deberes([]);
+      eq('y se puede vaciar', Ex.deberes().length, 0);
+
       /* Leer el progreso de otro no toca el propio. */
       var mios = Progress.stats().tries;
       Progress.resumen(JSON.parse(txt).t);

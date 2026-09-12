@@ -590,6 +590,58 @@
     return b;
   }
 
+  /* Los deberes son una lista de enunciados concretos -tema, numero y
+     semilla- que se guarda en el progreso y se comparte como un enlace.
+     No hace falta servidor: el enlace LLEVA los deberes dentro. */
+  Ex.deberes = function (lista) {
+    if (lista === undefined) {
+      var crudo = Progress.pref('deberes');
+      return crudo ? Ex.leeDeberes(crudo) : [];
+    }
+    Progress.pref('deberes', Ex.codificaDeberes(lista));
+    U.bus.emit('deberes', lista.length);
+    return lista;
+  };
+  Ex.codificaDeberes = function (lista) {
+    return lista.map(function (d) { return d.id + ':' + d.n + ':' + d.s; }).join('~');
+  };
+  Ex.leeDeberes = function (txt) {
+    return String(txt || '').split('~').map(function (p) {
+      var x = p.split(':');
+      if (x.length !== 3) return null;
+      var n = parseInt(x[1], 10), s = parseInt(x[2], 10);
+      if (!x[0] || isNaN(n) || isNaN(s)) return null;
+      return { id: x[0], n: n, s: s };
+    }).filter(Boolean);
+  };
+
+  function botonDeberes(tarjeta) {
+    var b = U.el('button.btn.btn--sm.btn--ghost', {
+      type: 'button',
+      title: 'Añadir este enunciado, con estos números, a una lista que se comparte como un enlace',
+      html: '&#43; Deberes'
+    });
+    b.addEventListener('click', function () {
+      var lista = Ex.deberes();
+      var ya = lista.filter(function (d) {
+        return d.id === tarjeta.topicId && d.n === tarjeta.index && d.s === tarjeta.seed;
+      }).length;
+      if (ya) {
+        tarjeta.aviso.textContent = 'Ese enunciado ya estaba en la lista.';
+        return;
+      }
+      lista.push({ id: tarjeta.topicId, n: tarjeta.index, s: tarjeta.seed });
+      Ex.deberes(lista);
+      U.clear(tarjeta.aviso);
+      tarjeta.aviso.appendChild(U.el('span', {
+        text: 'Añadido. La lista va por ' + lista.length + ' ' +
+          U.plural(lista.length, 'enunciado', 'enunciados') + '. '
+      }));
+      tarjeta.aviso.appendChild(U.el('a', { href: '#/__deberes', text: 'Ver los deberes y copiar el enlace →' }));
+    });
+    return b;
+  }
+
   /** En un simulacro, de qué tema sale cada pregunta. */
   function origen(tarjeta) {
     if (!tarjeta.o.origen) return null;
@@ -638,7 +690,7 @@
     this.bNew.addEventListener('click', function () { self.regen(); });
     this.aviso = U.el('div.card__aviso', { role: 'status', 'aria-live': 'polite' });
     this.foot = U.el('div.card__foot', null, this.preg.botones().concat([
-      U.el('span.card__spacer'), this.score, botonEnlace(this), this.bNew
+      U.el('span.card__spacer'), this.score, botonEnlace(this), botonDeberes(this), this.bNew
     ]));
 
     U.add(this.el, [this.head, this.body, this.examen ? null : this.foot, this.aviso]);
@@ -745,7 +797,7 @@
     this.bNew.addEventListener('click', function () { self.regen(); });
     this.aviso = U.el('div.card__aviso', { role: 'status', 'aria-live': 'polite' });
     this.foot = U.el('div.card__foot', null, [
-      U.el('span.card__spacer'), this.score, botonEnlace(this), this.bNew
+      U.el('span.card__spacer'), this.score, botonEnlace(this), botonDeberes(this), this.bNew
     ]);
     U.add(this.el, [this.head, this.body, this.examen ? null : this.foot, this.aviso]);
     host.appendChild(this.el);

@@ -622,6 +622,34 @@ ol.ruta{margin:12px 0 0; padding:0; list-style:none; display:flex; flex-directio
 .ruta__t a:hover{color:var(--accent); text-decoration:underline}
 .ruta__t .ruta__bl{margin-left:auto; font-size:0.75rem; color:var(--ink-faint); white-space:nowrap}
 
+/* DEBERES: una lista de enunciados concretos. El estado se dice con palabras
+   ademas de con el color, que es la regla de siempre. */
+ol.deberes{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:2px; counter-reset:d}
+.deberes__t{
+  counter-increment:d; display:flex; align-items:center; gap:11px;
+  padding:8px 12px; border-radius:6px; background:var(--panel-2);
+  border-left:2px solid var(--line);
+}
+.deberes__t::before{
+  content:counter(d); font-family:var(--mono); font-size:0.75rem; font-weight:600;
+  color:var(--ink-faint); flex:0 0 1.4em;
+}
+.deberes__t.is-done{border-left-color:var(--ok)}
+.deberes__link{color:var(--ink); text-decoration:none; font-weight:600}
+.deberes__link:hover{color:var(--accent); text-decoration:underline}
+.deberes__est{margin-left:auto; font-size:0.75rem; color:var(--ink-faint); white-space:nowrap}
+.deberes__t.is-done .deberes__est{color:var(--ok)}
+
+/* EXAMEN de cualquier bloque: rejilla de casillas. */
+.examen__bloques{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:4px 16px; margin:12px 0 4px;
+}
+.examen__b{display:flex; align-items:center; gap:9px; padding:5px 7px; border-radius:6px; cursor:pointer}
+.examen__b:hover{background:var(--panel-2)}
+.examen__b input{width:17px; height:17px; accent-color:var(--accent); flex:0 0 auto}
+.examen__b span{font-size:0.9062rem}
+
 /* EL TALLER DEL LENGUAJE. Un solo panel a la vez, elegido con fichas: cuatro
    columnas no caben en un movil y aqui todo sale del mismo texto, asi que
    verlas por turnos no pierde nada. */
