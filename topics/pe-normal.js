@@ -184,7 +184,9 @@ Course.topic('pe-normal', function (p) {
     'puntuaciones estandarizadas de las pruebas internacionales. Y es lo primero que se le hace a unos ' +
     'datos antes de entrenar cualquier modelo: [[ia-generalizar|normalizar es exactamente tipificar]], ' +
     'columna a columna, para que ninguna mande sobre las demás solo por venir medida en unidades más ' +
-    'grandes.');
+    'grandes. Y hay un sitio donde esta misma fórmula se usa <em>al revés</em>, para fabricar una ' +
+    'normal cualquiera a partir de la estándar: es el truco que permite entrenar ' +
+    '[[ia-autocodificador|un autocodificador variacional]].');
 
   p.section('Aproximación de la binomial');
 
