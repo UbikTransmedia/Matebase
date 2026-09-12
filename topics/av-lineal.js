@@ -131,6 +131,13 @@ Course.topic('av-lineal', function (p) {
     'uno a uno. Así se resuelven las cadenas de Markov, la evolución de poblaciones estructuradas por ' +
     'edad y los sistemas dinámicos lineales.', 'ok', 'Para qué sirve diagonalizar');
 
+  p.note('Y tiene una consecuencia menos amable. Si $|\\lambda| < 1$, entonces $\\lambda^{100}$ es ' +
+    'prácticamente cero, y si $|\\lambda| > 1$ es descomunal: elevar a una potencia grande ' +
+    '<strong>aplasta o dispara</strong>, casi sin término medio. Eso es exactamente lo que le ocurre a ' +
+    'una red que se aplica a sí misma muchas veces, y el motivo de que durante años no se pudieran ' +
+    'aprender dependencias largas. Está en [[ia-recurrentes|las redes con memoria]].',
+    'warn', 'Elevar a una potencia aplasta o dispara');
+
   p.hist('El algoritmo PageRank, con el que Google ordenó la web en 1998, es esencialmente esto: se ' +
     'construye una matriz enorme con los enlaces entre páginas y se busca <strong>su autovector ' +
     'principal</strong>. La importancia de cada página es su componente en ese autovector. Una tesis ' +
