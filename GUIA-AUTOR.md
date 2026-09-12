@@ -632,6 +632,53 @@ tokens `--cr*` en `base.css`.
 
 ---
 
+## El banco de circuitos (`LOG` y `W.circuito`)
+
+El bloque **Máquinas y lenguajes** se apoya en `assets/js/core/logica.js`, que
+expone `window.LOG`. El alumno escribe una **netlist** —una puerta por línea— y
+de ahí salen el diagrama, la tabla de verdad y un simulador.
+
+```
+s = xor(a, b);      // suma
+c = and(a, b);      // acarreo
+```
+
+Se admite `nombre = puerta(a, b)`, `nombre = otroCable` y `nombre = 0` o `1`.
+Puertas: `not and or xor nand nor xnor`; las binarias aceptan más de dos
+entradas. **Entradas** son los nombres que se usan y nunca se definen;
+**salidas**, los que se definen y nadie consume (y si todo se consume —un
+biestable— son salidas todas).
+
+**Por qué se simula por instantes y no en orden topológico.** Un orden
+topológico resolvería cualquier circuito sin ciclos de un tirón, pero entonces
+el biestable no tendría solución, y el biestable es lo que hace que el bloque
+valga la pena. Aquí **todas las puertas calculan a la vez** a partir de los
+valores del instante anterior, que es lo que hace un cable de verdad: tarda. Un
+circuito sin ciclos se estabiliza en tantos instantes como capas tenga; uno con
+ciclos puede estabilizarse —y entonces recuerda— o no estabilizarse nunca, y
+entonces **oscila**, que se anuncia y no se cuelga.
+
+| Función | Qué hace |
+|---|---|
+| `LOG.analiza(texto)` | `{nodos, orden, entradas, salidas, errores, puertas}`; los errores llevan `linea` y `msg` |
+| `LOG.simula(c, entradas, {tope, inicial})` | `{estable, oscila, instantes, valores, historia}`. `inicial` da el estado previo, que es como se enseña que un biestable recuerda |
+| `LOG.tabla(c, o)` | la tabla de verdad completa; una fila que oscile trae `sal: null` |
+| `LOG.iguales(texto, esperada, o)` | compara **comportamiento**, no texto: acepta cualquier circuito equivalente. Devuelve `{ok, porQue, puertas}` |
+| `LOG.esTrivial(tabla)` | si la tabla se resuelve con un cable pelado, su negación o una constante. El equivalente al «shader que pinta liso» |
+| `LOG.pinta(texto)` | coloreado de la netlist con los mismos ocho papeles del editor de shaders |
+
+**El widget.** `W.circuito(host, {id, texto, alto, aria, nota, tope})`, con la
+misma forma que `W.shader`: `id` recuerda lo que escribió el alumno, `aria`
+describe el dibujo y `nota` dice qué mirar. Debajo del diagrama va **siempre** la
+tabla: nada existe solo como dibujo. Los conmutadores de entrada muestran su
+estado en el texto (`a = 1`) además de en el color.
+
+Para corregir, `W.circuitoIguales` es `LOG.iguales`, y el número de puertas que
+devuelve sirve para la puntuación por coste: «lo has resuelto con 9 puertas; se
+puede con 5». Informa, no penaliza.
+
+---
+
 ## El motor de redes neuronales (`NN`)
 
 Los dos bloques de inteligencia artificial se apoyan en

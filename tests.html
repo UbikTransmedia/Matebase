@@ -49,7 +49,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   (function () {
     var t = '?t=' + Date.now();
     ['version', 'core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
-     'core/shader', 'core/cripto', 'core/nn', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
+     'core/shader', 'core/cripto', 'core/nn', 'core/logica', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
      'glosario', 'glsl'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
@@ -367,6 +367,91 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     var b = NN.bucle({ paso: function () { pasos++; } });
     truthy('el bucle de entrenamiento nace parado', !b.activo() && pasos === 0);
     b.pausa();
+  })();
+
+  /* ---------------- circuitos: el banco de logica ----------------
+     Lo que se audita aqui no es el texto de una netlist sino lo que HACE:
+     su tabla de verdad entera. Asi vale cualquier circuito equivalente,
+     igual que W.glslIguales acepta cualquier shader que pinte lo mismo. */
+  group('circuitos · lo que hace cada netlist');
+  (function () {
+    if (!window.LOG) { ko('logica.js se carga', 'no está', 'el módulo cargado'); return; }
+
+    function tablaDe(txt) {
+      var c = LOG.analiza(txt);
+      if (c.errores.length) return 'ERROR: ' + c.errores[0].msg;
+      return LOG.tabla(c).filas.map(function (f) {
+        return f.ent.join('') + '>' + f.sal.map(function (x) { return x === null ? 'o' : x; }).join('');
+      }).join(' ');
+    }
+
+    eq('semisumador: suma y acarreo',
+      tablaDe('s = xor(a, b);\nc = and(a, b);'), '00>00 01>10 10>10 11>01');
+    eq('sumador completo, con el acarreo de entrada',
+      tablaDe('s1 = xor(a, b);\ns = xor(s1, cin);\nc1 = and(a, b);\nc2 = and(s1, cin);\ncout = or(c1, c2);'),
+      '000>00 001>10 010>10 011>01 100>10 101>01 110>01 111>11');
+    eq('multiplexor: elige x o y según sel',
+      tablaDe('na = not(sel);\nt1 = and(x, na);\nt2 = and(y, sel);\nm = or(t1, t2);'),
+      '000>0 001>0 010>1 011>1 100>0 101>1 110>0 111>1');
+    /* nand sola construye todas las demas: si esto falla, el tema de las
+       puertas esta contando algo que no es verdad. */
+    eq('not con una nand', tablaDe('y = nand(a, a);'), '0>1 1>0');
+    eq('and con nands', tablaDe('n = nand(a, b);\ny = nand(n, n);'), '00>0 01>0 10>0 11>1');
+    eq('or con nands', tablaDe('na = nand(a, a);\nnb = nand(b, b);\ny = nand(na, nb);'),
+      '00>0 01>1 10>1 11>1');
+
+    /* El biestable, que es la razon de simular por instantes y no en orden
+       topologico: con las dos entradas a cero RECUERDA lo que tuviera, y sin
+       historia previa oscila. Las dos cosas son contenido de maq-memoria. */
+    var latch = LOG.analiza('q = nor(r, qn);\nqn = nor(s, q);');
+    var pon = LOG.simula(latch, { s: 1, r: 0 }, { tope: 40 });
+    var borra = LOG.simula(latch, { s: 0, r: 1 }, { tope: 40 });
+    var recuerda1 = LOG.simula(latch, { s: 0, r: 0 }, { inicial: { q: 1, qn: 0 }, tope: 40 });
+    var recuerda0 = LOG.simula(latch, { s: 0, r: 0 }, { inicial: { q: 0, qn: 1 }, tope: 40 });
+    var sinHistoria = LOG.simula(latch, { s: 0, r: 0 }, { tope: 40 });
+    truthy('el biestable se pone a 1', pon.estable && pon.valores.q === 1);
+    truthy('el biestable se pone a 0', borra.estable && borra.valores.q === 0);
+    truthy('el biestable recuerda el 1', recuerda1.estable && recuerda1.valores.q === 1);
+    truthy('el biestable recuerda el 0', recuerda0.estable && recuerda0.valores.q === 0);
+    truthy('sin historia previa, oscila y se anuncia', sinHistoria.oscila === true);
+
+    /* Comparar por comportamiento: dos circuitos distintos que hacen lo mismo
+       tienen que valer los dos. */
+    var XOR = { entradas: ['a', 'b'], salidas: ['y'], filas: [[0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 0]] };
+    truthy('acepta el xor directo', LOG.iguales('y = xor(a, b);', XOR).ok);
+    truthy('acepta el mismo xor hecho con cuatro nand',
+      LOG.iguales('n1 = nand(a, b);\nn2 = nand(a, n1);\nn3 = nand(b, n1);\ny = nand(n2, n3);', XOR).ok);
+    truthy('rechaza un and donde se pedia un xor', !LOG.iguales('y = and(a, b);', XOR).ok);
+    truthy('rechaza si se deja una entrada sin usar', !LOG.iguales('y = not(a);', XOR).ok);
+    truthy('una netlist rota se rechaza con su línea', !LOG.iguales('y = xor(a,;', XOR).ok);
+    eq('cuenta el coste en puertas', LOG.iguales('y = xor(a, b);', XOR).puertas, 1);
+
+    /* No trivialidad: el equivalente al «shader que pinta liso». Una tabla que
+       se resuelve copiando una entrada, negandola o con una constante no es un
+       ejercicio, y no puede colarse como enunciado. */
+    function comoTabla(t) {
+      return {
+        entradas: t.entradas, salidas: t.salidas,
+        filas: t.filas.map(function (f) {
+          return { ent: f.slice(0, t.entradas.length), sal: f.slice(t.entradas.length) };
+        })
+      };
+    }
+    truthy('el xor no es trivial', !LOG.esTrivial(comoTabla(XOR)));
+    truthy('copiar una entrada sí lo es',
+      LOG.esTrivial(comoTabla({ entradas: ['a', 'b'], salidas: ['y'], filas: [[0, 0, 0], [0, 1, 0], [1, 0, 1], [1, 1, 1]] })));
+    truthy('una salida constante sí lo es',
+      LOG.esTrivial(comoTabla({ entradas: ['a', 'b'], salidas: ['y'], filas: [[0, 0, 1], [0, 1, 1], [1, 0, 1], [1, 1, 1]] })));
+
+    /* Errores con el numero de linea que ve el alumno. */
+    var mal = LOG.analiza('y = xor(a, b);\nz = chorra(a);');
+    truthy('un nombre de puerta inventado se caza en su línea',
+      mal.errores.length === 1 && mal.errores[0].linea === 2);
+
+    /* El coloreado usa los mismos ocho papeles del editor de shaders. */
+    var html = LOG.pinta('y = xor(a, b); // nota');
+    truthy('la netlist se colorea con las clases del curso',
+      html.indexOf('cod-fun') >= 0 && html.indexOf('cod-com') >= 0 && html.indexOf('<script') < 0);
   })();
 
   /* ---------------- mathlib: enteros ---------------- */

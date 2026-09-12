@@ -535,6 +535,44 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
   .shd__ed{color:CanvasText; background:Canvas}
 }
 
+/* ================= MAQUINAS Y LENGUAJES =================
+   Los tres instrumentos del bloque 15 reutilizan el editor de dos capas de
+   arriba tal cual -mismas medidas, mismos ocho colores, mismo modo de alto
+   contraste- y solo cambian el color del foco: alli es el del bloque de
+   graficos, y aqui tiene que ser el del bloque en el que se este. Se hace
+   con un modificador para no tocar la regla existente. */
+.shd__caja--prog:focus-within{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.cir--roto .shd__caja, .maq--roto .shd__caja, .len--roto .shd__caja{border-color:var(--bad)}
+
+.cir, .maq, .len{margin:14px 0}
+.cir__aviso, .maq__aviso, .len__aviso{
+  margin:8px 0 2px; padding:7px 11px; border-radius:8px;
+  background:var(--panel-2); border:1px solid var(--line-soft);
+  font-family:var(--mono); font-size:0.8125rem; line-height:1.5; color:var(--ink-soft);
+}
+.cir--roto .cir__aviso, .maq--roto .maq__aviso, .len--roto .len__aviso{
+  background:var(--bad-soft); border-color:var(--bad); color:var(--bad);
+}
+.cir__nota, .maq__nota, .len__nota{
+  margin:8px 0 0; font-size:0.8562rem; color:var(--ink-soft);
+}
+.cir__tabla, .maq__tabla{margin-top:10px}
+
+/* Los conmutadores de entrada. El estado se ve por el texto («a = 1») ademas
+   de por el color, que es la regla de accesibilidad del curso: nada se
+   distingue solo por color. */
+.cir__sw{
+  font-family:var(--mono); font-size:0.8125rem; font-weight:600;
+  padding:5px 11px; border-radius:20px; cursor:pointer;
+  border:1.5px solid var(--line); background:var(--panel); color:var(--ink-soft);
+  transition:.12s;
+}
+.cir__sw:hover{border-color:var(--accent)}
+.cir__sw[aria-pressed="true"]{
+  border-color:var(--accent); background:var(--accent-soft); color:var(--accent);
+}
+.cir__sw:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
 .shd__err{
   margin-top:7px; padding:8px 12px; border-radius:8px;
   font-family:var(--mono); font-size:0.7812rem; line-height:1.6;
