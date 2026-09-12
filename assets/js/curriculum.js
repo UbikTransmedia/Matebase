@@ -1525,7 +1525,7 @@ window.CURRICULUM = [
         id: 'ia-gan', t: 'Dos redes jugando: GAN',
         r: 'Un juego de suma cero entre quien falsifica y quien detecta, y por qué es tan inestable.',
         o: ['Generador y discriminador; el discriminador óptimo', 'El generador transforma ruido en datos', 'Por qué oscila: el descenso-ascenso simultáneo gira en espiral'],
-        req: ['av-juegos', 'pe-continuas', 'av-sistemas-dinamicos', 'al-complejos']
+        req: ['av-juegos', 'pe-continuas', 'av-sistemas-dinamicos', 'al-complejos', 'av-informacion', 'ia-autocodificador']
       },
       {
         id: 'ia-difusion', t: 'Generar quitando ruido: difusión',

@@ -332,6 +332,14 @@ Course.topic('av-sistemas-dinamicos', function (p) {
 
   p.note('Todo lo que has visto aquí sobre equilibrios estables tiene una lectura que se desarrolla en [[cib-realimentacion|el tema de realimentación]]. Un equilibrio estable no se mantiene solo: se mantiene porque hay algo que <strong>corrige las desviaciones</strong>, y a ese algo se le llama realimentación negativa. Visto así, la condición de estabilidad que aquí sale de los autovalores es exactamente la que estudió Maxwell en 1868 para averiguar por qué algunas máquinas de vapor se ponían nerviosas.', null, 'Lo que sostiene un equilibrio');
 
+  p.note('El foco inestable —autovalores complejos con módulo mayor que uno— explica un fracaso ' +
+    'concreto del aprendizaje automático. Cuando dos redes se entrenan una contra otra en ' +
+    '[[ia-gan|una red generativa antagónica]], una minimizando lo que la otra maximiza, los dos pasos ' +
+    'dados a la vez no caen hacia el equilibrio: giran a su alrededor abriéndose. Con el juego más ' +
+    'simple posible, $V(x,y) = xy$, la distancia al equilibrio se multiplica por $\\sqrt{1+\\eta^2}$ en ' +
+    'cada paso, y eso es mayor que uno por pequeño que se ponga $\\eta$.',
+    null, 'Cuando el equilibrio se persigue entre dos');
+
   p.keys([
     'El espacio de fases dibuja el estado del sistema, no su evolución temporal: el tiempo se esconde en la trayectoria.',
     'De un vistazo se ve el comportamiento de <strong>todos</strong> los estados iniciales.',

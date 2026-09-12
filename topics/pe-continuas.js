@@ -296,6 +296,13 @@ Course.topic('pe-continuas', function (p) {
     'error de redondeo de una máquina. Y es la que genera tu ordenador cada vez que pide un número ' +
     'al azar: todas las demás distribuciones se fabrican transformando uniformes.');
 
+  p.note('Esa frase —todas las distribuciones se fabrican transformando uniformes— es, literalmente, ' +
+    'el principio de funcionamiento de los generadores de imágenes. En ' +
+    '[[ia-gan|una red generativa antagónica]] el generador recibe un puñado de números uniformes y los ' +
+    'deforma hasta que la distribución de salida se parece a la de los datos. La diferencia con lo que ' +
+    'haces aquí a mano es sólo que la función que deforma no se escribe: se aprende.',
+    null, 'Transformar uniformes, a lo grande');
+
   p.sub('La exponencial');
 
   p.text('Modela el <strong>tiempo hasta que ocurre algo</strong> cuando ese algo no tiene memoria: ' +

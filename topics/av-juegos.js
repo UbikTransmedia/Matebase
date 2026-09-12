@@ -310,6 +310,13 @@ Course.topic('av-juegos', function (p) {
     'ese teorema no habría teoría de juegos en absoluto. En 1944 lo convirtió, con el economista Oskar ' +
     'Morgenstern, en el libro que fundó la disciplina, <em>Theory of Games and Economic Behavior</em>.');
 
+  p.note('El maximin tiene un descendiente inesperado en el aprendizaje automático. En ' +
+    '[[ia-gan|las redes generativas antagónicas]] se enfrentan dos redes en un juego de suma cero: una ' +
+    'fabrica datos falsos y la otra intenta detectarlos, y lo que una gana lo pierde la otra. Lo ' +
+    'llamativo es que el equilibrio de ese juego se puede calcular con lápiz y papel, y resulta ser ' +
+    'exactamente el punto en el que los datos falsos tienen la misma distribución que los verdaderos.',
+    null, 'Un juego de suma cero entre dos redes');
+
   p.section('Juegos repetidos: cuando vuelve a haber mañana');
 
   p.text('Si el dilema del prisionero se juega <strong>una sola vez</strong>, traicionar es lo racional. ' +
