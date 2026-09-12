@@ -89,9 +89,9 @@ asignatura.
 | 18. Inteligencia artificial I: aprender de los datos | 12 | qué es aprender de los datos, búsqueda y poda alfa-beta, vecinos próximos, árboles y bosques, Bayes ingenuo, margen máximo, sigmoide, pérdidas y optimizadores, la red densa, retropropagación, generalizar y evaluar |
 | 19. Inteligencia artificial II: las arquitecturas | 14 | convolucionales, Hopfield, recurrentes y LSTM, autocodificadores y VAE, GAN, difusión, tokens y BPE, n-gramas y perplejidad, vectores de palabras, atención y transformador, un LLM entero, Bellman y Q-learning, los límites, y un taller con todos los mandos |
 
-**228 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
-se haya explicado antes, y cada tema declara cuáles necesita; `tests.html`
-comprueba que todos esos requisitos van antes en el temario.
+**Los 246 temas están escritos**, en progresión estricta: ninguno usa una
+herramienta que no se haya explicado antes, y cada tema declara cuáles necesita;
+`tests.html` comprueba que todos esos requisitos van antes en el temario.
 
 **Los bloques 0 a 6 cubren el temario de matemáticas hasta 2.º de Bachillerato**,
 con los contenidos de Matemáticas II y de MACS II. El **bloque 7** es la bisagra:
@@ -115,14 +115,15 @@ recompila al vuelo, y donde los ejercicios de código se corrigen **comparando l
 pinta tu shader con lo que pinta la solución**. La idea que lo sostiene, que es la
 del curso entero: **reglas simples, complejidad epatante**.
 
-En total, **477 ejemplos interactivos**, **955 ejercicios procedimentales**,
-**39 problemas por apartados**, **226 ejemplos resueltos paso a paso**,
-**253 comprobaciones rápidas**, **311 cuadros de utilidad**, **247 apuntes
+En total, **514 ejemplos interactivos**, **1092 ejercicios procedimentales**,
+**39 problemas por apartados**, **244 ejemplos resueltos paso a paso**,
+**271 comprobaciones rápidas**, **327 cuadros de utilidad**, **263 apuntes
 históricos** —con las matemáticas de Hipatia, Sophie Germain, Sofia Kovalévskaya,
 Ada Lovelace, Emmy Noether, Mary Cartwright, Katherine Johnson, Karen Spärck Jones,
-Donella Meadows o Maryam Mirzakhani—, **59 visores de shaders**, **13 escenas en
-tres dimensiones** que se giran con el ratón o el teclado, y un glosario de
-**417 términos**.
+Grace Hopper, Kathleen Booth, Donella Meadows o Maryam Mirzakhani—, **73 visores de
+shaders**, **13 bancos de circuitos**, **5 consolas de la máquina**, **13 talleres
+del lenguaje**, **14 escenas en tres dimensiones** que se giran con el ratón o el
+teclado, y un glosario de **452 términos**.
 
 El temario vive en `assets/js/curriculum.js`. Si en el futuro se añade un tema
 nuevo al índice sin su archivo, aparece marcado como «en preparación» con sus
@@ -164,6 +165,11 @@ El núcleo (`assets/js/core/`) es lo que evita repetir código:
 | `repaso.js` | las páginas de repaso: mapa del temario, simulacros y formulario, montadas con el contenido de los demás temas |
 | `progress.js` | progreso en `localStorage`: dominio por tipo de ejercicio y repaso espaciado |
 | `shader.js` | visor de shaders GLSL: editor, recompilación al vuelo, errores con su número de línea, comparación de dos shaders píxel a píxel y modo con memoria entre fotogramas |
+| `cripto.js` | la criptografía de verdad ejecutándose en el navegador: SHA-256, AES, RSA y curvas elípticas |
+| `nn.js` | redes neuronales de verdad: tensores y diferenciación automática, para que las demos de IA entrenen lo que el texto explica |
+| `logica.js` | el banco de circuitos: netlist escrita en texto, diagrama generado solo, tabla de verdad y un simulador que **avanza por instantes**, porque el biestable es un ciclo y no tendría solución de otro modo |
+| `maquina.js` | la CPU de juguete: dieciséis instrucciones, celdas de 8 bits con signo, programa y datos en la misma memoria, su ensamblador de dos pasadas y un tope de pasos para que nada se cuelgue |
+| `lenguaje.js` | **Pizca**: troceador, analizador por descenso recursivo, intérprete, compilador a la CPU de `maquina.js` y optimizador |
 | `app.js` | índice desplegable, buscador con glosario, columna del glosario y la referencia GLSL, itinerarios, enrutado y carga perezosa de temas |
 
 Un tema de trigonometría y uno de geometría usan exactamente el mismo código de

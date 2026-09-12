@@ -221,7 +221,37 @@ todos los temas:
 comprobaciones por tema y exige una sola opción correcta y explicación en todas.
 Cada bloque se entregó en un commit con las pruebas en verde.
 
-## Fase 6 — Ideas pendientes (a petición)
+## Fase 6 — Máquinas y lenguajes (cerrada)
+
+Un bloque optativo de 18 temas entre Cibernética y Programación gráfica, con dos
+tramos que se cierran uno sobre otro: **el compilador del tramo B genera el
+ensamblador de la CPU del tramo A**. Con él, el curso llega a **246 temas
+escritos de 246 previstos**.
+
+Tres instrumentos nuevos en el núcleo, con la misma forma de API que `W.shader`:
+
+- **`logica.js`** — el banco de circuitos. Netlist escrita en texto, diagrama
+  generado solo, tabla de verdad entera y un simulador que avanza **por
+  instantes**, no en orden topológico, porque el biestable es un ciclo.
+- **`maquina.js`** — la CPU de juguete. Dieciséis instrucciones con mnemónicos en
+  castellano, celdas de ocho bits con signo, programa y datos en la misma
+  memoria, ensamblador de dos pasadas y un tope de pasos.
+- **`lenguaje.js`** — **Pizca**, siete palabras. Troceador, analizador por
+  descenso recursivo, intérprete, compilador a `maquina.js` y optimizador.
+
+La prueba que sostiene el tramo B es **diferencial**: una batería de once
+programas —con bucles, funciones, recursión y recursión mutua— se interpreta y se
+compila-y-ejecuta en cada pasada de `tests.html`, y las dos salidas se comparan,
+también con el optimizador puesto. Cazó un fallo real del compilador que pasaba
+la vista perfectamente: los argumentos iban por celdas temporales y
+`suma(1, suma(2, 3))` se pisaba a sí mismo.
+
+Las pruebas del bloque suman 462 comprobaciones en total, y varias mueven
+botones de widgets de verdad, porque la auditoría de temas no ve un widget roto:
+lo aprendimos con el banco de circuitos, que perdía el estado entre pulsaciones
+y hacía que el tema de la memoria enseñara lo contrario de lo que decía.
+
+## Fase 7 — Ideas pendientes (a petición)
 
 - Más problemas de examen reales, adaptados por comunidades autónomas.
 - Un modo profesor para montar simulacros a medida eligiendo temas.
