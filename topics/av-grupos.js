@@ -189,6 +189,12 @@ Course.topic('av-grupos', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.note('Hay una aplicación de esto que no es decorativa. Si un conjunto de transformaciones deja ' +
+    'invariante lo que importa de un objeto, cualquier método que lo analice debería respetar esa misma ' +
+    'simetría. Una fotografía no cambia de significado al desplazarla, y de tomarse en serio esa ' +
+    'invariancia —el grupo de las traslaciones— sale la arquitectura que hoy reconoce imágenes: ' +
+    'está en [[ia-cnn|las redes convolucionales]].', 'ok', 'Una simetría que se puede aprovechar');
+
   p.util('Que solo existan 17 formas de repetir un motivo en el plano es un resultado de grupos, y los ' +
     'artesanos de la Alhambra las encontraron todas siglos antes de que nadie lo demostrara. La ' +
     'misma teoría clasifica los 230 grupos cristalográficos del espacio, que es como se identifica ' +

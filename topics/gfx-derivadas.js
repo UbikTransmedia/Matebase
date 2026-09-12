@@ -201,6 +201,12 @@ Course.topic('gfx-derivadas', function (p) {
     '<strong>hacia dónde dice cada punto que mira</strong>, y el ojo se traga el relieve entero. Si ' +
     'miras el borde de la figura, la mentira se cae: sigue siendo recto.', null, 'Relieve de mentira');
 
+  p.note('Restar el valor de un vecino al de otro es aplicar un núcleo de tres números, $(-1, 0, 1)$: ' +
+    'es [[av-convolucion|una convolución]] con el núcleo más pequeño que detecta cambios. Y si en vez ' +
+    'de elegir esos tres números a mano se dejan aprender a partir de ejemplos, sale la primera capa ' +
+    'de [[ia-cnn|una red convolucional]], cuyos filtros acaban pareciéndose muchísimo a este.',
+    'ok', 'Estos tres números también se pueden aprender');
+
   p.util('Las derivadas del hardware están detrás de tres cosas que ves constantemente. La primera, ' +
     'el antialiasing de los bordes en cualquier interfaz moderna. La segunda, el ' +
     '<em>bump mapping</em>: la rugosidad de casi todas las superficies de un videojuego es esto. Y ' +
