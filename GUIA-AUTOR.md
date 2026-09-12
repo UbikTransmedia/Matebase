@@ -858,6 +858,27 @@ Dos detalles que conviene conocer al escribir un tema:
 
 ---
 
+## `tol` no es lo que parece
+
+`Ex.same` compara con una tolerancia **mixta**: acepta un error de
+`tol · (1 + |solución|)`. Eso está pensado para respuestas que se arrastran de un
+cálculo encadenado, y es una trampa en cuanto la respuesta es un número pequeño y
+exacto: un `tol: 0.5` sobre una respuesta que vale 11 admite un error de **seis**,
+así que «6» se da por bueno. El alumno se va convencido de que lo tiene.
+
+**Para contar cosas se declara `dec: 0`**, que es medio punto de tolerancia
+absoluta y punto. `dec` acepta un número —para todos los campos— o un objeto
+`{campo: decimales}`. `tol` se queda para lo que era: admitir el arrastre de un
+cálculo largo.
+
+`tests.html` lo comprueba solo: si las respuestas de un ejercicio son enteras, no
+pasan de 10.000 y la tolerancia acepta **también el entero siguiente**, falla con
+nombre y apellidos. El límite de 10.000 está porque con respuestas enormes —el
+número de claves de un cifrado, una estimación de Fermi— aceptar un entero de
+diferencia es lo correcto: ahí nadie cuenta de uno en uno.
+
+---
+
 ## Un fallo raro, dos veces
 
 La auditoría genera cada ejercicio **40 veces** para ver si su solución pasa su

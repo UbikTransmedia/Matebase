@@ -273,7 +273,7 @@ Course.topic('maq-memoria', function (p) {
     },
     fields: [{ name: 'b', label: 'biestables', w: 'tiny' }, { name: 'p', label: 'puertas nor', w: 'tiny' }],
     sol: function (d) { return { b: d.bits, p: d.puertas }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Un biestable guarda exactamente un bit. Y cada uno son dos <code>nor</code> cruzadas.'; },
     steps: function (d) {
       return ['Un bit por biestable: hacen falta $' + d.bits + '$.',

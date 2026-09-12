@@ -419,7 +419,7 @@ Course.topic('ia-atencion', function (p) {
     },
     fields: [{ name: 'p', label: 'productos', w: 'small' }, { name: 'f', label: 'factor', w: 'tiny' }],
     sol: function (d) { return { p: d.pares, f: d.factor }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { return Math.abs(v.f - d.k) < 0.5 && d.k !== d.factor; }, msg: 'El coste no crece como la longitud sino como su cuadrado: si el contexto se multiplica por $k$, el trabajo se multiplica por $k^2$.' }],
     hint: function (d) { return 'Cada uno de los ' + U.miles(d.n) + ' tokens se compara con todos los demás, incluido él mismo.'; },
     steps: function (d) {
@@ -445,7 +445,7 @@ Course.topic('ia-atencion', function (p) {
     },
     fields: [{ name: 'k', label: 'dimensión por cabeza', w: 'tiny' }, { name: 't', label: 'multiplicaciones', w: 'tiny' }],
     sol: function (d) { return { k: d.dk, t: d.d }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { return Math.abs(v.t - d.dk * d.h * d.h) < 0.5 && d.h !== 1; }, msg: 'Cada cabeza hace $d/h$ multiplicaciones por par, y hay $h$ cabezas: el total es $h \\cdot d/h = d$, el mismo que tendría una sola cabeza grande.' }],
     hint: function () { return 'Las cabezas se reparten la dimensión, no la multiplican.'; },
     steps: function (d) {

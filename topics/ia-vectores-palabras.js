@@ -410,8 +410,7 @@ Course.topic('ia-vectores-palabras', function (p) {
     },
     fields: [{ name: 'n', label: 'números', w: 'small' }, { name: 'm', label: 'MB', w: 'tiny' }],
     sol: function (d) { return { n: d.n, m: U.round(d.mb, 6) }; },
-    dec: { m: 1 },
-    tol: 0.5,
+    dec: { m: 1, n: 0 },
     hint: function () { return 'Un número por cada dimensión y por cada token. Un megabyte son $1\\,048\\,576$ bytes.'; },
     steps: function (d) {
       return ['$' + U.miles(d.V) + ' \\times ' + d.dim + ' = ' + U.miles(d.n) + '$ números.',

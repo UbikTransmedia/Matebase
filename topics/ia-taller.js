@@ -275,7 +275,7 @@ Course.topic('ia-taller', function (p) {
     },
     fields: [{ name: 'p', label: 'pesos', w: 'tiny' }, { name: 's', label: 'sesgos', w: 'tiny' }],
     sol: function (d) { return { p: d.pesos, s: d.sesgos }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { return Math.abs(v.s - d.sesgos - 2) < 0.5 && d.sesgos !== d.sesgos + 2; }, msg: 'La capa de entrada no tiene sesgos: sólo las de llegada.' }],
     hint: function (d) { return 'Cada salto es una matriz «entradas × salidas», y hay un sesgo por cada neurona de llegada.'; },
     steps: function (d) {
@@ -330,7 +330,7 @@ Course.topic('ia-taller', function (p) {
     },
     fields: [{ name: 'm', label: 'multiplicaciones', w: 'small' }],
     sol: function (d) { return { m: d.total }; },
-    tol: 0.5,
+    dec: 0,
     hint: function (d) { return 'Por cada dato: $2\\times' + d.oc + '$ en la primera matriz, luego las intermedias, y $' + d.oc + '\\times1$ al final. Después multiplica por los $' + d.n + '$ datos.'; },
     steps: function (d) {
       return ['Por dato: $2\\cdot' + d.oc + (d.capas > 1 ? ' + ' + (d.capas - 1) + '\\cdot' + d.oc + '^2' : '') + ' + ' + d.oc + ' = ' + U.miles(d.porDato) + '$.',

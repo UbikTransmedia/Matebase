@@ -171,7 +171,7 @@ Course.topic('maq-cpu', function (p) {
     },
     fields: [{ name: 'c', label: 'celdas', w: 'tiny' }],
     sol: function (d) { return { c: d.tot }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { return Math.abs(v.c - d.instr) < 0.5 && d.conArg > 0; },
       msg: 'Has contado una celda por instrucción. Las que llevan argumento ocupan <strong>dos</strong>: una para la orden y otra para lo que va detrás.' }],
     hint: function () { return 'Una celda por instrucción, y una más por cada argumento.'; },
@@ -204,7 +204,7 @@ Course.topic('maq-cpu', function (p) {
     },
     fields: [{ name: 'c', label: 'contador', w: 'tiny' }],
     sol: function (d) { return { c: d.sig }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { return d.c.arg && Math.abs(v.c - (d.dir + 1)) < 0.5; },
       msg: 'Has avanzado una sola celda, y esa instrucción lleva argumento: el argumento ocupa <strong>otra celda</strong>.' }],
     hint: function () { return '<code>CARGA</code>, <code>GUARDA</code>, <code>NUM</code>, <code>SALTA</code>, <code>SICERO</code> y <code>LLAMA</code> llevan argumento y ocupan dos celdas. Las demás, una.'; },
@@ -239,7 +239,7 @@ Course.topic('maq-cpu', function (p) {
     },
     fields: [{ name: 'v', label: 'el número', w: 'tiny' }],
     sol: function (d) { return { v: d.c.val }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Ve colocando las instrucciones desde la celda 0, recordando que las que llevan argumento ocupan dos celdas. Después mira qué cae justo en la que se pregunta.'; },
     steps: function (d) {
       var asm = MAQ.ensambla(d.c.prog);

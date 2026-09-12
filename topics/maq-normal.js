@@ -390,7 +390,7 @@ Course.topic('maq-normal', function (p) {
     },
     fields: [{ name: 'a', label: 'and', w: 'tiny' }, { name: 'o', label: 'or', w: 'tiny' }],
     sol: function (d) { return { a: d.ands, o: d.or }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { return Math.abs(v.a - (1 << d.n)) < 0.5; },
       msg: 'Has contado todas las filas de la tabla. Solo llevan detector las que valen 1, que son ' + '<strong>menos</strong>: las que valen 0 salen solas.' }],
     hint: function () { return 'Un detector por cada fila que vale 1, y un solo <code>or</code> que los junta todos por muchos que sean.'; },
@@ -475,7 +475,7 @@ Course.topic('maq-normal', function (p) {
       { name: 'k', label: 'cables', w: 'tiny' }
     ],
     sol: function (d) { return { q: d.quita, k: 2 }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Compara las dos filas posición a posición: la que cambia es la que sobra, porque el resultado es 1 valga lo que valga.'; },
     steps: function (d) {
       return ['Las filas <code>' + d.f1 + '</code> y <code>' + d.f2 + '</code> coinciden en todo menos en ' +

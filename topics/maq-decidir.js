@@ -221,7 +221,7 @@ Course.topic('maq-decidir', function (p) {
     },
     fields: [{ name: 'p', label: 'puertas', w: 'tiny' }],
     sol: function (d) { return { p: d.total }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { return Math.abs(v.p - d.n) < 0.5; }, msg: 'Te falta el <code>and</code> final, que es el que exige que coincidan <em>todas</em> las posiciones.' }],
     hint: function (d) { return 'Un <code>xnor</code> por cada uno de los ' + d.n + ' bits, y uno más que los junta.'; },
     steps: function (d) {

@@ -198,7 +198,7 @@ Course.topic('len-autorreferencia', function (p) {
     },
     fields: [{ name: 'o', label: 'ocupa', w: 'tiny' }, { name: 'f', label: 'le faltan', w: 'tiny' }],
     sol: function (d) { return { o: d.ocupa, f: d.falta }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return '<code>CARGA d</code> ocupa dos celdas y <code>MUESTRA</code> una: tres por cada celda escrita. Y el <code>PARA</code>, una más.'; },
     steps: function (d) {
       return ['Cada par ocupa 3 celdas: $3 \\times ' + d.k + ' = ' + (3 * d.k) + '$.',
@@ -224,7 +224,7 @@ Course.topic('len-autorreferencia', function (p) {
     },
     fields: [{ name: 'v', label: 'el número', w: 'tiny' }],
     sol: function (d) { return { v: d.v }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Coloca el programa desde la celda 0: <code>CARGA</code> ocupa dos celdas —la orden y su argumento— y <code>MUESTRA</code> una.'; },
     steps: function (d) {
       return ['Colocado desde la celda 0, el programa queda: $' + d.img.join(',\\ ') + '$.',

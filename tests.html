@@ -1616,6 +1616,40 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
         if (vals.indexOf(String(want[f.name])) < 0) c.malOpc++;
       });
 
+      /* LA TOLERANCIA QUE ACEPTA EL ENTERO SIGUIENTE.
+         `Ex.same` usa una tolerancia mixta -`t*(1+|want|)`-, asi que un
+         `tol: 0.5` sobre una respuesta que vale 11 admite un error de SEIS.
+         En un ejercicio de contar cosas eso significa dar por bueno «6»
+         cuando la respuesta es «11», y el alumno se va convencido. Aqui se
+         caza: si todas las respuestas son enteras, sumarle uno tiene que
+         fallar. Los ejercicios de contar declaran `dec: 0`, que es medio
+         punto de tolerancia absoluta y punto. */
+      if (!u.check) {
+        var todasEnteras = true, hayNumero = false;
+        for (var ke in want) {
+          if (typeof want[ke] === 'string') continue;
+          hayNumero = true;
+          if (!isFinite(want[ke]) || Math.abs(want[ke] - Math.round(want[ke])) > 1e-9) todasEnteras = false;
+        }
+        /* Solo cuando ±1 significa algo: con respuestas enormes -el numero de
+           claves de un cifrado, una estimacion de Fermi- la tolerancia por
+           defecto admite un entero de diferencia y hace bien, porque ahi
+           nadie cuenta de uno en uno. */
+        var pequenas = true;
+        for (var kp in want) {
+          if (typeof want[kp] === 'number' && Math.abs(want[kp]) > 10000) pequenas = false;
+        }
+        if (hayNumero && todasEnteras && pequenas) {
+          var vMas = { raw: {} };
+          for (var km in want) {
+            vMas[km] = (typeof want[km] === 'number') ? want[km] + 1 : v[km];
+            vMas.raw[km] = String(vMas[km]);
+          }
+          var rMas = Ex.compara(u, vMas, want);
+          if (rMas && rMas.ok) c.tolFloja++;
+        }
+      }
+
       /* Un «error típico» que salta con la respuesta correcta le diría al
          alumno que ha fallado cuando ha acertado. */
       (u.errores || []).forEach(function (er) {
@@ -1664,7 +1698,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       var fallos = [];
       (specs || []).forEach(function (s, idx) {
         var etiqueta = (s.partes ? 'problema ' : 'ej.') + (idx + 1) + ' («' + (s.title || '') + '»)';
-        var c = { malCheck: 0, malTex: 0, tragaTodo: 0, malOpc: 0, malErr: 0, decimales: 0, barraSuelta: 0, otros: [], semilla: 0 };
+        var c = { malCheck: 0, malTex: 0, tragaTodo: 0, malOpc: 0, malErr: 0, decimales: 0, barraSuelta: 0, tolFloja: 0, otros: [], semilla: 0 };
         var excep = '';
         if (s.partes && !s.partes.length) excep = 'un problema sin apartados';
         /* Cada pasada usa una SEMILLA CONOCIDA. Antes se generaba con
@@ -1694,6 +1728,9 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
         else if (c.barraSuelta) fallos.push(etiqueta + ': un «\\,» suelto fuera de $...$, que se ve literal; dentro de una fórmula va bien, en prosa no (y U.miles ya trae su propio espacio)');
         else if (c.tragaTodo) fallos.push(etiqueta + ': el corrector acepta respuestas vacías o sin contenido');
         else if (c.malOpc) fallos.push(etiqueta + ': la solución no está entre las opciones que se ofrecen');
+        /* Y solo si pasa CASI SIEMPRE: un ejercicio de respuesta decimal cuyo
+           valor cae redondo una vez de cuarenta no es un ejercicio flojo. */
+        else if (c.tolFloja >= 20) fallos.push(etiqueta + ': la respuesta es un número entero y la tolerancia acepta también el entero siguiente; para contar cosas se declara dec: 0' + conSemilla(c));
         else if (c.malErr) fallos.push(etiqueta + ': un «error típico» salta con la respuesta correcta' + conSemilla(c));
         else if (c.decimales) fallos.push(etiqueta + ': pide ' + c.decimales + ' ' + U.plural(c.decimales, 'decimal', 'decimales') + ' pero su tolerancia rechazaría una respuesta bien redondeada; declara dec: ' + c.decimales);
         else if (c.otros.length) fallos.push(etiqueta + ': ' + c.otros[0]);

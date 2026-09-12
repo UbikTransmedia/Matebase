@@ -149,7 +149,7 @@ Course.topic('len-tokens', function (p) {
     },
     fields: [{ name: 'n', label: 'piezas', w: 'tiny' }],
     sol: function (d) { return { n: d.n }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Los espacios no cuentan. Un número entero es una sola pieza aunque tenga varias cifras, y cada símbolo suelto —incluido el punto y coma— es una.'; },
     steps: function (d) {
       var ts = LEN.tokeniza(d.t).tokens.filter(function (x) { return x.t !== 'fin'; });

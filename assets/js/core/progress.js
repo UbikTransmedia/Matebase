@@ -163,6 +163,7 @@
 
   P.reset = function () {
     data.t = {};
+    data.err = {};
     data.ultimo = null;
     save();
     U.bus.emit('progress', null);
@@ -177,6 +178,39 @@
     if (v === undefined) return data.open[id];
     data.open[id] = v; save();
   };
+
+  /* ---------------- los errores tipicos, apuntados ----------------
+     Cada ejercicio sabe reconocer los fallos clasicos de su tema y decirlos
+     por su nombre. Hasta ahora eso se decia y se olvidaba. Apuntarlo
+     convierte el catalogo general de errores frecuentes -que se lee por
+     encima- en la lista de LOS TUYOS, que se lee entera. */
+
+  P.apuntaError = function (tema, n, cual, texto) {
+    if (!data.err) data.err = {};
+    var k = tema + ':' + n + ':' + cual;
+    var e = data.err[k] || (data.err[k] = { tema: tema, n: n, veces: 0, texto: texto });
+    e.veces++;
+    e.cuando = Date.now();
+    if (texto) e.texto = texto;
+    save();
+    return e;
+  };
+
+  /** Los mas repetidos primero; los de hace mucho pesan menos. */
+  P.errores = function (max, mapa) {
+    var m = mapa || data.err || {};
+    var out = [];
+    for (var k in m) out.push(m[k]);
+    var ahora = Date.now();
+    out.sort(function (a, b) {
+      var pa = a.veces - (ahora - (a.cuando || 0)) / (30 * DIA);
+      var pb = b.veces - (ahora - (b.cuando || 0)) / (30 * DIA);
+      return pb - pa;
+    });
+    return max ? out.slice(0, max) : out;
+  };
+
+  P.olvidaErrores = function () { data.err = {}; save(); };
 
   /* ---------------- llevarse el progreso ----------------
      El progreso vive en el navegador, y eso tiene dos consecuencias malas:
@@ -193,6 +227,7 @@
       fecha: new Date().toISOString().slice(0, 10),
       nombre: String(nombre || '').slice(0, 60),
       ultimo: data.ultimo || null,
+      err: data.err || {},
       t: data.t
     });
   };
@@ -235,8 +270,22 @@
           if ((eb.racha || 0) > (ea.racha || 0)) { ea.racha = eb.racha; ea.last = eb.last; ea.prox = eb.prox; }
         }
       }
+      /* Los errores se suman: son la historia de lo que a esta persona se le
+         atraganta, y esa historia no se pisa al traer otro archivo. */
+      if (r.datos.err) {
+        data.err = data.err || {};
+        for (var ke in r.datos.err) {
+          var ea = data.err[ke], eb = r.datos.err[ke];
+          if (!ea) data.err[ke] = eb;
+          else {
+            ea.veces = Math.max(ea.veces || 0, eb.veces || 0);
+            ea.cuando = Math.max(ea.cuando || 0, eb.cuando || 0);
+          }
+        }
+      }
     } else {
       data.t = nuevo;
+      data.err = r.datos.err || {};
       if (r.datos.ultimo) data.ultimo = r.datos.ultimo;
     }
     save();

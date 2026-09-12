@@ -234,7 +234,7 @@ Course.topic('maq-ensamblador', function (p) {
     },
     fields: [{ name: 'c', label: 'celda', w: 'tiny' }],
     sol: function (d) { return { c: d.dir }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Una etiqueta no ocupa ninguna celda: marca dónde cae la instrucción siguiente. Ve sumando: una celda por instrucción, y otra más por cada argumento.'; },
     steps: function (d) {
       return ['Las ' + d.antes + ' ' + U.plural(d.antes, 'instrucción', 'instrucciones') + ' sin argumento ocupan ' + d.antes + '.',

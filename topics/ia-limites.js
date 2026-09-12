@@ -260,7 +260,7 @@ Course.topic('ia-limites', function (p) {
     },
     fields: [{ name: 'a', label: 'registros', w: 'tiny' }],
     sol: function (d) { return { a: d.aciertos }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Es un porcentaje del total de registros.'; },
     steps: function (d) {
       return ['$' + U.miles(d.n) + ' \\times ' + d.pc + '\\ \\% = ' + U.miles(d.aciertos) + '$ registros.',
@@ -283,7 +283,7 @@ Course.topic('ia-limites', function (p) {
     },
     fields: [{ name: 'r', label: 'veces más barato', w: 'small' }],
     sol: function (d) { return { r: d.razon }; },
-    tol: 0.5,
+    dec: 0,
     hint: function (d) { return 'El entrenamiento fueron $2 \\times ' + U.miles(d.lotes) + '$ pasadas en total.'; },
     steps: function (d) {
       return ['Entrenar: $2 \\times ' + U.miles(d.lotes) + ' = ' + U.miles(2 * d.lotes) + '$ pasadas.',

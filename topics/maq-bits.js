@@ -289,7 +289,7 @@ Course.topic('maq-bits', function (p) {
     ask: function (d) { return 'El byte <code>' + d.b + '</code>, leído sin signo, ¿qué número es?'; },
     fields: [{ name: 'n', label: 'decimal', w: 'tiny' }],
     sol: function (d) { return { n: d.n }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { var alReves = parseInt(d.b.split('').reverse().join(''), 2); return alReves !== d.n && Math.abs(v.n - alReves) < 0.5; }, msg: 'Has leído los bits al revés. El de más a la izquierda es el que más pesa, igual que en decimal.' }],
     hint: function () { return 'Los pesos son 128, 64, 32, 16, 8, 4, 2 y 1. Suma los que estén a 1.'; },
     steps: function (d) {
@@ -371,7 +371,7 @@ Course.topic('maq-bits', function (p) {
     },
     fields: [{ name: 'a', label: 'máximo sin signo', w: 'tiny' }, { name: 'b', label: 'máximo con signo', w: 'tiny' }],
     sol: function (d) { return { a: d.sinSigno, b: d.max }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { return Math.abs(v.a - (d.sinSigno + 1)) < 0.5; }, msg: 'Te has pasado por uno: con $k$ bits hay $2^k$ valores, pero el mayor es $2^k - 1$, porque uno de ellos es el cero.' }],
     hint: function (d) { return 'Sin signo van de 0 a $2^{' + d.k + '} - 1$. Con signo, la mitad de las escrituras se van a los negativos.'; },
     steps: function (d) {

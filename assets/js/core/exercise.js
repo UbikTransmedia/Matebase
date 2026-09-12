@@ -458,6 +458,12 @@
       try {
         if (lista[i].si(v, this.data)) {
           var m = typeof lista[i].msg === 'function' ? lista[i].msg(v, this.data) : lista[i].msg;
+          /* Se apunta. El catalogo de errores frecuentes del bloque de
+             repaso deja de ser una lista general y pasa a ser la lista de
+             los TUYOS, que es la unica que se lee con atencion. */
+          if (this.topicId && this.topicId.charAt(0) !== '_') {
+            Progress.apuntaError(this.topicId, this.index || 0, i, quitaMarcas(m));
+          }
           return '<strong>Error típico.</strong> ' + m +
             ' <span class="verdict__mas">Corrígelo y vuelve a comprobar.</span>';
         }
@@ -465,6 +471,12 @@
     }
     return null;
   };
+
+  /* El mensaje de un error trae etiquetas y formulas; para guardarlo y
+     volver a enseñarlo en una lista basta con el texto. */
+  function quitaMarcas(html) {
+    return String(html).replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().slice(0, 160);
+  }
 
   /* Cuando hay varios campos y unos cuantos estan bien, decirlo. No es
      consuelo: es informacion, y le dice al alumno donde mirar. */

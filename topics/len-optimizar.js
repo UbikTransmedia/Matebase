@@ -219,7 +219,7 @@ Course.topic('len-optimizar', function (p) {
     },
     fields: [{ name: 'n', label: 'cuentas', w: 'tiny' }],
     sol: function (d) { return { n: d.n }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Se pliega un nudo cuando sus <strong>dos</strong> ramas son números. Y al plegar uno, el de arriba puede quedarse con dos números y plegarse también: cuenta también ésos.'; },
     steps: function (d) {
       return ['Se va de abajo arriba, plegando cada nudo cuyas dos ramas sean ya números.',
@@ -279,7 +279,7 @@ Course.topic('len-optimizar', function (p) {
     },
     fields: [{ name: 'n', label: 'instrucciones', w: 'tiny' }],
     sol: function (d) { return { n: d.desp }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Optimiza primero el programa mentalmente y compila después lo que queda. Un número suelto son dos instrucciones si hay que mostrarlo, más el <code>PARA</code> del final.'; },
     steps: function (d) {
       var a = LEN.analiza(d.t);

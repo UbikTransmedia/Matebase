@@ -184,7 +184,7 @@ Course.topic('len-compilar', function (p) {
     ask: function (d) { return '¿Cuántas etiquetas hay que inventar para compilar ' + d.c.t + '?'; },
     fields: [{ name: 'n', label: 'etiquetas', w: 'tiny' }],
     sol: function (d) { return { n: d.c.n }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Un <code>si</code> pelado necesita una; con <code>sino</code>, dos. Un <code>mientras</code>, dos siempre. Y las de dentro nunca se comparten con las de fuera.'; },
     steps: function (d) { return [d.c.por]; },
     answer: function (d) { return String(d.c.n); }
@@ -209,7 +209,7 @@ Course.topic('len-compilar', function (p) {
     },
     fields: [{ name: 'n', label: 'instrucciones', w: 'tiny' }],
     sol: function (d) { return { n: d.n }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Ve trozo a trozo: un número es <code>NUM</code>; una variable, <code>CARGA</code>; guardar, <code>GUARDA</code>; una operación, un <code>METE</code> más la operación; y cada <code>si</code> o <code>mientras</code> añade sus saltos. Las etiquetas no cuentan: no son instrucciones.'; },
     steps: function (d) {
       var asm = LEN.compila(LEN.analiza(d.t).ast).texto;

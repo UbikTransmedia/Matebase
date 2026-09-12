@@ -195,7 +195,7 @@ Course.topic('len-pila', function (p) {
     ask: function (d) { return '¿Cuánto vale <code>' + d.c.t + '</code>?'; },
     fields: [{ name: 'v', label: 'vale', w: 'tiny' }],
     sol: function (d) { return { v: d.c.v }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Ve de izquierda a derecha: los números se meten en la pila, y cada operación saca dos y mete el resultado. Cuidado con el orden: el primero que sale es el de la derecha.'; },
     steps: function (d) {
       var pila = [], lineas = [];
@@ -230,7 +230,7 @@ Course.topic('len-pila', function (p) {
     },
     fields: [{ name: 'n', label: 'altura', w: 'tiny' }],
     sol: function (d) { return { n: d.c.n }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { return Math.abs(v.n - d.c.t.replace(/[^0-9]/g, '').length) < 0.5 && d.c.n !== d.c.t.replace(/[^0-9]/g, '').length; },
       msg: 'Has contado los números de la expresión. La pila no llega a tenerlos todos a la vez: cada operación se come dos y deja uno, así que va vaciándose por el camino.' }],
     hint: function () { return 'Escríbela primero en polaca inversa y ve anotando la altura después de cada pieza. La altura depende de la <strong>forma</strong> del árbol, no de cuántos números haya.'; },
@@ -259,7 +259,7 @@ Course.topic('len-pila', function (p) {
     },
     fields: [{ name: 'n', label: 'instrucciones', w: 'tiny' }],
     sol: function (d) { return { n: d.c.n }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Cada hoja da <strong>una</strong> instrucción, y cada nudo da <strong>dos</strong>: el <code>METE</code> de antes de la rama derecha y la operación del final.'; },
     steps: function (d) {
       var asm = LEN.compila(LEN.analiza('muestra ' + d.c.t + ';').ast).texto;

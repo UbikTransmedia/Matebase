@@ -138,6 +138,7 @@
     var partes = o.partes || [];
     var elegidas = partes.map(function () { return true; });
     var conReloj = true;
+    var ajusta = false;
 
     var caja = U.el('div.card.simul');
     caja.appendChild(U.el('div.card__head', null, [
@@ -173,6 +174,15 @@
     cuerpo.appendChild(U.el('label.simul__parte.simul__reloj-op', { 'for': idR }, [
       reloj, U.el('span', { text: 'Con cronómetro (orientativo: al acabar el tiempo avisa, no corta)' })
     ]));
+    var idA = 'simul-' + self.id + '-ajusta';
+    var chkA = U.el('input', { type: 'checkbox', id: idA });
+    chkA.addEventListener('change', function () { ajusta = chkA.checked; resumen(); });
+    cuerpo.appendChild(U.el('label.simul__parte.simul__reloj-op', { 'for': idA }, [
+      chkA, U.el('span', {
+        html: 'Ajustado a lo que llevas hecho <span class="simul__de">entran antes las preguntas que ' +
+          'no has resuelto nunca y las de los temas que aún no dominas</span>'
+      })
+    ]));
     var info = U.el('p.simul__info');
     cuerpo.appendChild(info);
     var bEmpezar = U.el('button.btn.btn--main', { type: 'button', text: 'Empezar el simulacro' });
@@ -190,7 +200,8 @@
     function resumen() {
       var n = 0;
       partes.forEach(function (pt, i) { if (elegidas[i]) n += pt.n; });
-      info.textContent = n ? n + ' preguntas' + (conReloj ? ' · ' + minutos() + ' minutos' : ' · sin límite de tiempo')
+      info.textContent = n ? n + ' preguntas' + (conReloj ? ' · ' + minutos() + ' minutos' : ' · sin límite de tiempo') +
+          (ajusta ? ' · ajustado a tus fallos' : ' · al azar')
         : 'Elige al menos un bloque.';
       bEmpezar.disabled = !n;
     }
@@ -203,12 +214,34 @@
       semillaPedida = NaN;              // la segunda vez, otro examen
     });
 
+    /* Cuanto le hace falta a ESTA persona una pregunta: 2 si nunca la ha
+       resuelto, 1 si el tema no esta dominado, 0 si va sobrado. Es lo que
+       convierte un examen al azar en uno que insiste donde duele. */
+    function falta(c) {
+      var t = Progress.topic(c.tid);
+      var e = (t.ex || {})[c.it.n];
+      if (!e || !e.ok) return 2;
+      if (Progress.state(c.tid) !== 'done') return 1;
+      return 0;
+    }
+
     function escoge(cands, n, rng) {
       var pau = rng.shuffle(cands.filter(function (c) {
         return c.it.tipo === 'problema' || c.it.spec.level !== 'basico';
       }));
       pau.sort(function (a, b) { return (b.it.tipo === 'problema') - (a.it.tipo === 'problema'); });
+      /* Ajustar NO cambia el tipo de pregunta que entra -siguen mandando los
+         problemas por apartados, que es lo que se parece a la PAU-: cambia
+         cual, dentro de las que ya cabian. */
+      if (ajusta) {
+        var peso = function (a, b) { return falta(b) - falta(a); };
+        pau.sort(function (a, b) {
+          var d = (b.it.tipo === 'problema') - (a.it.tipo === 'problema');
+          return d || peso(a, b);
+        });
+      }
       var resto = rng.shuffle(cands.filter(function (c) { return pau.indexOf(c) < 0; }));
+      if (ajusta) resto.sort(function (a, b) { return falta(b) - falta(a); });
       var out = [], usados = {};
       // primero, a ser posible, un tema distinto por pregunta
       [pau, resto].forEach(function (l) {
@@ -276,7 +309,16 @@
           var card = c.it.tipo === 'problema'
             ? Ex.problema(host, c.it.spec, c.tid, c.it.n, op)
             : Ex.card(host, c.it.spec, c.tid, c.it.n, op);
-          tarjetas.push({ card: card, parte: g.parte, tid: c.tid, n: c.it.n, titulo: c.it.spec.title || '' });
+          var reg = { card: card, parte: g.parte, tid: c.tid, n: c.it.n, titulo: c.it.spec.title || '', num: num };
+          /* Cuando se toca por primera vez una pregunta y cuando se toca por
+             ultima. Con eso, al corregir se puede decir en cual se fue el
+             tiempo, que es lo que de verdad hay que aprender a repartir. */
+          host.addEventListener('input', function () {
+            var t = Date.now();
+            if (!reg.t0) reg.t0 = t;
+            reg.t1 = t;
+          });
+          tarjetas.push(reg);
         });
       });
 
@@ -288,9 +330,10 @@
       zona.addEventListener('click', function () { setTimeout(cuenta, 0); });
       cuenta();
 
+      var arranque = Date.now();
       var intervalo = null;
       if (conReloj) {
-        var limite = Date.now() + minutos() * 60000;
+        var limite = arranque + minutos() * 60000;
         var tic = function () {
           if (!relojEl.isConnected) { clearInterval(intervalo); return; }
           var resta = Math.max(0, limite - Date.now());
@@ -338,6 +381,42 @@
             }).join('<br>') : 'nada: todo bien') + '</td></tr>';
         });
         html += '</tbody></table></div>';
+        /* EL REPARTO DEL TIEMPO. En un examen no basta con saber: hay que
+           saber cuando soltar una pregunta. Se dice en que se fue el tiempo
+           con lo unico que se puede medir sin inventarse nada: cuando se
+           toco cada pregunta por primera y por ultima vez. */
+        var tocadas = tarjetas.filter(function (t) { return t.t0; });
+        if (tocadas.length >= 2) {
+          var minutosTotal = (Date.now() - arranque) / 60000;
+          var conTiempo = tocadas.map(function (t) {
+            return { num: t.num, tid: t.tid, mins: (t.t1 - t.t0) / 60000, desde: (t.t0 - arranque) / 60000 };
+          }).sort(function (a, b) { return b.mins - a.mins; });
+          var lenta = conTiempo[0];
+          var presupuesto = minutos();
+          var porPregunta = presupuesto / total;
+          /* Un solo criterio de redondeo para todo el parrafo: por debajo de
+             diez minutos, con un decimal. Decir «unos 1 min» arriba y «0,1
+             min» abajo para la misma pregunta es peor que no decir nada. */
+          function mm(x) { return x < 10 ? U.fmt(x, 1) : U.fmt(x, 0); }
+          html += '<div class="simul__tiempo"><strong>El reparto del tiempo.</strong> ' +
+            'Has tardado <strong>' + mm(minutosTotal) + ' min</strong>' +
+            (conReloj ? ' de los ' + presupuesto + ' del examen' : '') + '. ' +
+            (lenta.mins < 0.5
+              ? 'Ninguna pregunta te ha llevado ni medio minuto, así que aquí no hay mucho que mirar: ' +
+                'el reparto del tiempo se ve cuando el examen se hace de verdad.'
+              : 'Donde más rato estuviste fue en la <strong>pregunta ' + lenta.num + '</strong>, ' +
+                mm(lenta.mins) + ' min' +
+                (lenta.mins > porPregunta * 2
+                  ? ', más del doble de los ' + mm(porPregunta) + ' que le tocaban. En un examen de ' +
+                    'verdad, ése es el momento de dejarla a medias, hacer las demás y volver.'
+                  : ', y le tocaban ' + mm(porPregunta) + ': dentro de lo razonable.')) +
+            '<br><span class="simul__tiempo-det">' +
+            conTiempo.slice(0, 5).map(function (x) {
+              return 'p' + x.num + ': ' + mm(x.mins) + ' min';
+            }).join(' · ') +
+            '</span></div>';
+        }
+
         html += '<p class="simul__nota-pie">Cada pregunta vale lo mismo; en los problemas por apartados ' +
           'cuenta la parte acertada. Las soluciones paso a paso están ya abiertas debajo de cada ' +
           'pregunta. Lo que falles volverá a salirte en «Para repasar hoy», en la portada.</p>';

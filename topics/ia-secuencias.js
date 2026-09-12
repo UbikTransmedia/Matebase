@@ -364,7 +364,7 @@ Course.topic('ia-secuencias', function (p) {
     },
     fields: [{ name: 'p', label: 'probabilidades', w: 'small' }],
     sol: function (d) { return { p: d.par }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { var soloCtx = Math.pow(d.V, d.n); return Math.abs(soloCtx - d.par) > 0.5 && Math.abs(v.p - soloCtx) < 0.5; }, msg: 'Eso es el número de contextos posibles. Cada contexto necesita además una probabilidad por cada símbolo del alfabeto, así que hay que multiplicar otra vez por el tamaño del alfabeto.' }],
     hint: function (d) { return 'Hay $' + d.V + '^{' + d.n + '}$ contextos posibles, y cada uno necesita una probabilidad por cada uno de los $' + d.V + '$ símbolos.'; },
     steps: function (d) {

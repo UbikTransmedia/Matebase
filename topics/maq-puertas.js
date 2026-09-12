@@ -262,7 +262,7 @@ Course.topic('maq-puertas', function (p) {
     },
     fields: [{ name: 'f', label: 'filas', w: 'tiny' }, { name: 't', label: 'tablas posibles', w: 'small' }],
     sol: function (d) { return { f: d.filas, t: d.tablas }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { return Math.abs(v.t - Math.pow(2, d.n)) < 0.5 && d.n > 1; }, msg: 'Eso son las filas, no las tablas. Cada fila puede sacar 0 o 1 independientemente, así que hay dos opciones por fila.' }],
     hint: function (d) { return 'Cada entrada puede valer 0 o 1, así que hay $2^{' + d.n + '}$ filas. Y luego cada fila puede sacar 0 o 1.'; },
     steps: function (d) {

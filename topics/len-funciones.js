@@ -177,7 +177,7 @@ Course.topic('len-funciones', function (p) {
     },
     fields: [{ name: 'm', label: 'marcos', w: 'tiny' }],
     sol: function (d) { return { m: d.marcos }; },
-    tol: 0.5,
+    dec: 0,
     hint: function (d) { return 'La recursión baja de ' + d.n + ' en ' + d.n + ' hasta llegar al caso base, que es el 1. Cuenta cuántos valores distintos de <code>n</code> hay esperando.'; },
     steps: function (d) {
       var lista = [];
@@ -207,7 +207,7 @@ Course.topic('len-funciones', function (p) {
     },
     fields: [{ name: 'v', label: 'devuelve', w: 'tiny' }],
     sol: function (d) { return { v: d.v }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Baja hasta el caso base anotando lo que queda pendiente en cada marco, y después sube resolviendo las cuentas al revés.'; },
     steps: function (d) {
       var r = LEN.corre(d.f + '\nmuestra f(' + d.n + ');');

@@ -177,7 +177,7 @@ Course.topic('len-variables', function (p) {
     },
     fields: [{ name: 'x', label: 'x', w: 'tiny' }, { name: 'y', label: 'y', w: 'tiny' }],
     sol: function (d) { return { x: d.x, y: d.y }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Ve línea a línea. En cada una, evalúa primero el lado derecho con los valores que hay en ese momento, y solo después guarda.'; },
     steps: function (d) {
       var r = LEN.corre(d.t + '\nmuestra x;\nmuestra y;');
@@ -227,7 +227,7 @@ Course.topic('len-variables', function (p) {
     ask: function (d) { return '¿Qué escribe este programa?<pre class="shd__mini">' + d.t + '</pre>'; },
     fields: [{ name: 'a', label: 'lo primero', w: 'tiny' }, { name: 'b', label: 'lo segundo', w: 'tiny' }],
     sol: function (d) { return { a: d.s[0], b: d.s[1] }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'Dentro de la función, busca el nombre primero en su propio entorno —sus parámetros— y solo si no está, fuera. Y recuerda que la llamada no toca nada de fuera.'; },
     steps: function (d) {
       var r = LEN.corre(d.t);

@@ -196,7 +196,7 @@ Course.topic('len-arbol', function (p) {
     ask: function (d) { return 'Según el árbol que monta el analizador, ¿cuánto vale <code>' + d.t + '</code>?'; },
     fields: [{ name: 'v', label: 'vale', w: 'tiny' }],
     sol: function (d) { return { v: d.v }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'El producto ata más que la suma, y la resta se agrupa por la izquierda: <code>a - b - c</code> es <code>(a - b) - c</code>.'; },
     steps: function (d) {
       var a = LEN.analiza('muestra ' + d.t + ';').ast.ss[0].e;
@@ -229,7 +229,7 @@ Course.topic('len-arbol', function (p) {
       { name: 'd', label: 'por la derecha', w: 'tiny' }
     ],
     sol: function (d) { return { i: d.c.izq, d: d.c.der }; },
-    tol: 0.5,
+    dec: 0,
     hint: function (d) { return 'Por la izquierda es poner el paréntesis en las dos primeras: <code>(' + d.c.t.split(' ').slice(0, 3).join(' ') + ') ...</code>. Por la derecha, en las dos últimas.'; },
     steps: function (d) {
       var ts = d.c.t.split(' ');

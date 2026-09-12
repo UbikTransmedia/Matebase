@@ -344,7 +344,7 @@ Course.topic('ia-llm', function (p) {
     },
     fields: [{ name: 'p', label: 'pares', w: 'small' }, { name: 'f', label: 'factor', w: 'tiny' }],
     sol: function (d) { return { p: d.pares, f: d.factor }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { return Math.abs(v.f - d.k) < 0.5 && d.k !== d.factor; }, msg: 'El coste va con el cuadrado: si la ventana se multiplica por $k$, los pares se multiplican por $k^2$.' }],
     hint: function (d) { return 'Cada token se compara con los ' + U.miles(d.n) + '.'; },
     steps: function (d) {

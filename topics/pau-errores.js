@@ -40,6 +40,62 @@ Course.topic('pau-errores', function (p) {
   });
 
   /* ---------------------------------------------------------------- */
+  p.section('Los tuyos');
+
+  p.text('Lo que viene después es el catálogo general. Esto de aquí es otra cosa: ' +
+    '<strong>los errores que has cometido tú</strong>. Cada ejercicio del curso sabe reconocer los ' +
+    'fallos clásicos de su tema, y cuando uno salta queda apuntado aquí, con cuántas veces y en qué ' +
+    'tema. No sale de ninguna parte más que de tu propio navegador, y no lo ve nadie.');
+
+  p.demo({
+    title: 'Tu lista',
+    intro: 'Se rehace sola según practicas. Si está vacía, es que todavía no has cometido ninguno de los errores que el curso sabe reconocer —o que no has hecho ejercicios suficientes—.',
+    predice: 'Antes de mirar: ¿cuál dirías que es el error que más repites?',
+    build: function (host) {
+      var out = W.readout(host, '');
+      var caja = U.el('div');
+      host.appendChild(caja);
+
+      function pinta() {
+        var lista = Progress.errores(8);
+        U.clear(caja);
+        if (!lista.length) {
+          out.set('Todavía no hay ninguno apuntado.');
+          caja.appendChild(U.el('p.card__aviso', {
+            html: 'En cuanto un ejercicio te diga «<strong>Error típico</strong>», aparecerá aquí. ' +
+              'Merece la pena volver a esta página después de una sesión de práctica.'
+          }));
+          return;
+        }
+        var total = lista.reduce(function (a, e) { return a + e.veces; }, 0);
+        out.set('<strong>' + lista.length + '</strong> ' +
+          U.plural(lista.length, 'error distinto', 'errores distintos') + ', ' + total + ' ' +
+          U.plural(total, 'vez en total', 'veces en total') + '. Los más repetidos, arriba.');
+        var ol = U.el('ol.deberes');
+        lista.forEach(function (e) {
+          var li = U.el('li.deberes__t');
+          li.appendChild(U.el('a.deberes__link', { href: '#/' + e.tema + '?e=' + e.n, text: e.texto || 'Error típico' }));
+          li.appendChild(U.el('span.deberes__est', {
+            text: e.veces + ' ' + U.plural(e.veces, 'vez', 'veces')
+          }));
+          ol.appendChild(li);
+        });
+        caja.appendChild(ol);
+        caja.appendChild(U.el('p.card__aviso', {
+          text: 'Cada uno enlaza al ejercicio donde salió. Hacerlo dos veces seguidas sin que salte es ' +
+            'la única forma de saber que se ha ido.'
+        }));
+      }
+
+      W.buttons(host, [
+        { t: '↻ Actualizar', on: pinta },
+        { t: 'Olvidar la lista', on: function () { Progress.olvidaErrores(); pinta(); } }
+      ]);
+      pinta();
+    }
+  });
+
+  /* ---------------------------------------------------------------- */
   p.section('Álgebra: matrices y sistemas');
 
   p.table(['El error', 'Por qué falla', 'Lo correcto', 'Tema'], [

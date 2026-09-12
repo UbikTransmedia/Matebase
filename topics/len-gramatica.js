@@ -250,7 +250,7 @@ Course.topic('len-gramatica', function (p) {
     },
     fields: [{ name: 'n', label: 'reglas', w: 'tiny' }],
     sol: function (d) { return { n: d.c.n }; },
-    tol: 0.5,
+    dec: 0,
     hint: function () { return 'El orden de las capas, de fuera adentro: expresion, comparacion, suma, producto, unario, atomo.'; },
     steps: function (d) { return [d.c.por]; },
     answer: function (d) { return String(d.c.n); }

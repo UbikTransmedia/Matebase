@@ -272,7 +272,7 @@ Course.topic('maq-sumador', function (p) {
     },
     fields: [{ name: 'p', label: 'puertas', w: 'tiny' }, { name: 'i', label: 'instantes', w: 'tiny' }],
     sol: function (d) { return { p: d.puertas, i: d.instantes }; },
-    tol: 0.5,
+    dec: 0,
     errores: [{ si: function (v, d) { return Math.abs(v.i - d.puertas) < 0.5 && d.puertas !== d.instantes; }, msg: 'Has contado puertas donde se pedían instantes. Las puertas que no dependen unas de otras trabajan a la vez: lo que tarda es la cadena más larga, no el total.' }],
     hint: function (d) { return 'Las puertas son cinco por columna. El retardo es el que impone el acarreo, que atraviesa una columna detrás de otra.'; },
     steps: function (d) {
