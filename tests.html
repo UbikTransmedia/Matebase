@@ -522,6 +522,46 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     else ok('cada entrada apunta a un tema real (' + GLOSARIO.length + ' entradas)');
   }
 
+  /* ---------------- se puede escribir en las casillas ---------------- */
+  /* El boton «?» de la fila de respuesta lleva un ::after invisible que le
+     agranda la zona sensible. Ese pseudoelemento va con position:absolute, o
+     sea que se ancla al ancestro POSICIONADO mas cercano; y como el boton
+     estaba en `static`, ese ancestro acababa siendo `.ans`, la fila entera.
+     Resultado: un rectangulo invisible con z-index 3 tapaba las casillas de
+     TODO el curso, y al pulsar se abria la ayuda en vez de poder escribir.
+     La auditoria de ejercicios no lo veia, porque comprueba correctores y no
+     clics. Esta prueba monta la fila de respuesta de verdad, a la vista, y
+     pregunta quien recibe el clic en cada sitio. */
+  group('rellenar los ejercicios');
+  (function () {
+    var caja = U.el('div');
+    caja.style.cssText = 'position:fixed; left:0; top:0; width:520px; z-index:99999; background:var(--bg,#fff)';
+    caja.innerHTML = '<div class="ans">' +
+      '<div class="fld fld--tiny"><label for="__sonda">Valor</label>' +
+      '<input id="__sonda" type="text"><span class="fld__marca" aria-hidden="true"></span></div>' +
+      '<div class="ans__como"><button class="fbox__help" type="button">?</button></div></div>';
+    document.body.appendChild(caja);
+    var inp = caja.querySelector('input'), bot = caja.querySelector('.fbox__help');
+    function recibeElClic(el) {
+      var r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return null;
+      return document.elementFromPoint(Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2));
+    }
+    var enCasilla = recibeElClic(inp), enBoton = recibeElClic(bot);
+    if (!enCasilla || !enBoton) {
+      ko('la fila de respuesta se monta con tamaño', 'las cajas salen a cero', 'algo que se pueda pulsar');
+    } else {
+      truthy('al pulsar la casilla, el clic llega a la casilla', enCasilla === inp);
+      truthy('al pulsar el «?», el clic llega al «?»', enBoton === bot);
+      /* Y la zona ampliada del boton tiene que seguir funcionando: a 6 px a su
+         izquierda todavia se le acierta, que es para lo que se puso. */
+      var rb = bot.getBoundingClientRect();
+      var alLado = document.elementFromPoint(Math.round(rb.left - 6), Math.round(rb.top + rb.height / 2));
+      truthy('el «?» conserva su zona sensible ampliada', alLado === bot);
+    }
+    document.body.removeChild(caja);
+  })();
+
   /* ---------------- referencia GLSL ---------------- */
   /* Lo que muestra la columna derecha al pulsar «GLSL». Cada ejemplo se
      compila de verdad, porque una referencia con ejemplos que no compilan

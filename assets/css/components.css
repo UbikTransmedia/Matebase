@@ -350,7 +350,14 @@ table.tbl td.num,table.tbl th.num{text-align:right; font-variant-numeric:tabular
    pero en la fila de las casillas y en el flujo, no flotando en la esquina. */
 .ans{position:relative}
 .ans__como{position:static; display:flex; align-items:center; order:99}
-.ans__como .fbox__help{position:static; flex:0 0 auto; cursor:pointer}
+/* `relative` y no `static`: el boton lleva un ::after con inset:-7px que le
+   agranda la zona sensible, y ese pseudoelemento se ancla al ancestro
+   posicionado mas cercano. Con `static` ese ancestro era `.ans`, o sea la
+   fila entera, asi que un rectangulo invisible con z-index:3 tapaba las
+   casillas y no se podia escribir en ellas: el clic abria la ayuda. Con
+   `relative` el ancla vuelve a ser el propio boton, que es lo que se queria,
+   y la posicion en el flex no cambia. */
+.ans__como .fbox__help{position:relative; flex:0 0 auto; cursor:pointer}
 /* El panel se abre en su sitio y empuja lo de abajo. Flotando se salia por
    arriba de la tarjeta, que recorta con overflow:hidden. */
 .ans__panel{
