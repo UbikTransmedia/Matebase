@@ -5,3 +5,6 @@
 *.log
 Thumbs.db
 desktop.ini
+
+# paginas de usar y tirar (previsualizar con antichache, contar cifras)
+__*.html

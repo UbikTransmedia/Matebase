@@ -971,6 +971,70 @@ ninguno**: se leen, se suman en una tabla y desaparecen al recargar.
 
 ---
 
+## Un idioma más, pero solo por fuera
+
+El curso está escrito en castellano y esa es su lengua. Traducir 246 temas de
+prosa matemática no es un archivo más: es escribir el curso otra vez, y hacerlo a
+medias deja algo peor que no hacerlo, porque el alumno no sabe qué se va a
+encontrar al abrir cada tema. Así que lo traducido es **la interfaz y el
+temario** —lo que hace falta para orientarse— y la prosa se queda donde está, con
+un aviso encima del tema que lo dice sin rodeos.
+
+Esa frontera es la decisión de diseño; el resto es mecánica.
+
+**Un idioma es un archivo.** `assets/js/i18n/en.js` no toca ni una línea del
+curso: registra un diccionario y ya está.
+
+```js
+I18N.add('en', {
+  nombre: 'English',          // cómo se llama el idioma EN ese idioma
+  lang:   'en',               // el atributo lang= del documento
+  ui:  { 'Glosario': 'Glossary', 'Buscar un tema…': 'Search for a topic…' },
+  cur: {
+    '@ar': { title: 'Numbers and operations', desc: '…' },   // @ = bloque
+    'ar-naturales': { t: 'Natural numbers', r: 'Counting, ordering…' }
+  }
+});
+```
+
+El texto castellano **es la clave**. Eso tiene una consecuencia práctica que es
+el motivo de hacerlo así: corregir una frase mal traducida es cambiar una entrada
+en un archivo, no buscarla en 96 temas multiplicados por los idiomas. Y lo que no
+esté traducido sale en castellano, sin romperse.
+
+| Puerta | Qué traduce |
+|---|---|
+| `I18N.ui(s)` | botones, avisos, etiquetas. En `app.js` se abrevia `T(s)` |
+| `I18N.bloque(b)` | título y descripción de un bloque (clave `'@' + id`) |
+| `I18N.tema(t)` | título y resumen de un tema (clave: su `id`) |
+| `I18N.trad(s)` | la prosa. Existe, no se usa: ver arriba |
+| `I18N.diccionario(c)` | el diccionario crudo. Lo usan las pruebas |
+| `I18N.faltan()` | las frases de interfaz que se han pedido y no estaban |
+
+Ese último es el que se usa para **traducir sin adivinar**: se pone el idioma,
+se pasea por el curso —portada, un tema, el progreso, las rutas, un examen— y se
+pregunta en la consola. Lo que conteste es exactamente lo que falta por traducir,
+y ni una frase más.
+
+**Dónde se aplica.** En `flatten()`, al montar el índice, y solo ahí: el temario
+se traduce una vez al cargar y `_t0` / `_r0` / `_d0` guardan el original para
+poder volver. `setIdioma()` rehace ese paso, retraduce el cromo —buscador,
+glosario, itinerarios— y vuelve a enrutar. Los **objetivos** (`o:`) no se
+traducen a propósito: solo se enseñan en temas sin escribir, y no queda ninguno.
+
+**Qué comprueban las pruebas.** No la calidad de la traducción, que no la puede
+juzgar una máquina, sino lo que sí es mecánico: que estén los 20 bloques, que el
+temario esté cubierto al menos al 90 %, que una clave desconocida caiga al
+original, que `lang=` cambie —de eso vive un lector de pantalla— y, sobre todo,
+que **ninguna clave apunte a un tema que ya no existe**. Una clave huérfana no
+rompe nada: la entrada no se usa nunca y el tema sale en castellano sin decir por
+qué. Por eso hay que buscarla a propósito.
+
+> Si renombras un tema en `curriculum.js`, `tests.html` te dirá qué diccionarios
+> se han quedado apuntando al nombre viejo.
+
+---
+
 ## El motor de redes neuronales (`NN`)
 
 Los dos bloques de inteligencia artificial se apoyan en

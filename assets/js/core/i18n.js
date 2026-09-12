@@ -50,6 +50,12 @@
 
   I18N.actual = function () { return actual; };
 
+  /** El diccionario crudo de un idioma. Lo usa la bateria de pruebas para
+      comprobar que ninguna clave apunta a un tema que ya no existe: una
+      clave huerfana no rompe nada -la entrada no se usa nunca- y por eso
+      hay que buscarla a proposito. */
+  I18N.diccionario = function (codigo) { return idiomas[codigo] || null; };
+
   I18N.usar = function (codigo) {
     if (!idiomas[codigo]) codigo = 'es';
     actual = codigo;
@@ -60,10 +66,29 @@
 
   /* ---------- las cuatro puertas de traduccion ---------- */
 
+  /* Lo que se ha pedido traducir y no estaba. Un hueco en la interfaz no
+     rompe nada -sale la frase en castellano- y por eso no se descubre
+     mirando: hay que preguntar. `I18N.faltan()` en la consola contesta,
+     despues de haber paseado por el curso, que frases quedan por traducir
+     en el idioma puesto. */
+  var huecos = {};
+
   /** Textos de la interfaz: botones, avisos, etiquetas. */
   I18N.ui = function (s) {
     if (!dic) return s;
-    return (dic.ui[s] !== undefined) ? dic.ui[s] : s;
+    if (dic.ui[s] !== undefined) return dic.ui[s];
+    huecos[actual + '\u0000' + s] = 1;
+    return s;
+  };
+
+  /** Las frases de interfaz que se han pedido y no estaban, en este idioma. */
+  I18N.faltan = function (codigo) {
+    var c = codigo || actual, out = [];
+    for (var k in huecos) {
+      var i = k.indexOf('\u0000');
+      if (k.slice(0, i) === c) out.push(k.slice(i + 1));
+    }
+    return out.sort();
   };
 
   /** Prosa del curso. Se llama desde MathX.inline, el embudo de todo texto. */

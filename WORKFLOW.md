@@ -251,7 +251,7 @@ botones de widgets de verdad, porque la auditoría de temas no ve un widget roto
 lo aprendimos con el banco de circuitos, que perdía el estado entre pulsaciones
 y hacía que el tema de la memoria enseñara lo contrario de lo que decía.
 
-## Fase 7 — Las mejoras del análisis (en curso)
+## Fase 7 — Las mejoras del análisis (cerrada)
 
 Un DAFO del curso desde dos lecturas —la de quien lo estudia y la de quien lo
 daría en clase— dejó diez mejoras ordenadas por lo que cambian dividido por lo
@@ -266,6 +266,16 @@ que cuestan. Lo que ha salido de aplicarlas, con lo que conviene recordar:
 - **La red, cerrada.** 44 temas no recibían ni un enlace; ahora ninguno, y hay
   una prueba que lo impide.
 - **Deberes y exámenes sin servidor:** el enlace lleva dentro lo que hace falta.
+- **Cualquier tema, imprimible como ficha**, y auditorías reproducibles: la
+  semilla se enseña y se puede repetir con `tests.html?seed=<n>`.
+- **El bloque de repaso, contenido y no andamio.** Reparte las preguntas por lo
+  que flojea y cuenta en qué se fue el tiempo. Probarlo destapó un fallo de
+  corrección que llevaba meses dando por buenas respuestas equivocadas: `tol` no
+  es una tolerancia absoluta.
+- **El árbol y la pila, dibujados.** El tramo del lenguaje se explicaba con
+  texto lo que es una forma.
+- **Un idioma más, pero solo por fuera.** Interfaz y temario en inglés; la prosa
+  sigue en castellano y el tema lo avisa.
 - **La instrucción que faltaba.** `CARGAI` y `GUARDAI` cambian lo que la máquina
   *puede* hacer, no lo cómoda que es, y por eso valían un bit de más en el código
   de operación. Con ellas hay listas, y el quine dejó de ser imposible: 26 celdas
@@ -280,11 +290,22 @@ que cuestan. Lo que ha salido de aplicarlas, con lo que conviene recordar:
 > por qué ahora sí— y termina con el programa corriendo, que es bastante mejor
 > final que una imposibilidad.
 
+> **Por qué la traducción se queda en la puerta.** Traducir la prosa de 246 temas
+> es escribir el curso otra vez, y a medias es peor que nada: el alumno no sabe
+> qué se va a encontrar al abrir cada tema. Traducir solo lo que sirve para
+> orientarse —interfaz, títulos y resúmenes— es útil de inmediato, no miente, y
+> deja la puerta abierta: `I18N.trad` ya existe para el día que la prosa se
+> traduzca de verdad. El aviso encima del tema dice exactamente qué está
+> traducido y qué no.
+
 ## Fase 8 — Ideas pendientes (a petición)
 
 - Más problemas de examen reales, adaptados por comunidades autónomas.
 - Un modo profesor para montar simulacros a medida eligiendo temas.
-- Exportar e importar el progreso para cambiar de ordenador.
+- La prosa traducida de verdad, tema a tema, con `I18N.trad` y `dic.hechos` para
+  que el aviso desaparezca solo en los que ya estén.
+- La ampliación que propuso el análisis: algoritmos y estructuras de datos,
+  inferencia, optimización numérica, verificación formal, concurrencia.
 
 ## Versiones
 
@@ -297,6 +318,12 @@ del índice. Sigue el esquema MAYOR.MENOR.PARCHE:
 
 Se sube en el mismo commit que el cambio, y `tests.html` comprueba que tiene ese
 formato. La primera versión numerada es la 1.0.0, con 164 temas.
+
+| Versión | Qué trajo |
+|---|---|
+| 1.0.0 | 164 temas |
+| 1.2.0 | los dos bloques de IA y «Máquinas y lenguajes»: 246 temas |
+| 1.3.0 | las mejoras del análisis: progreso portátil, rutas, deberes y exámenes por enlace, ficha imprimible, `CARGAI`/`GUARDAI`, el árbol dibujado, el repaso que reparte por lo que flojea y la interfaz en inglés |
 
 ---
 

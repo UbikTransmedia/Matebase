@@ -701,6 +701,15 @@ ol.deberes{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direc
 }
 .simul__tiempo-det{font-family:var(--mono); font-size:0.78rem; color:var(--ink-faint)}
 
+/* El aviso de que la prosa sigue en castellano. Va antes del tema, no a
+   mitad: nadie tiene que descubrirlo leyendo. */
+.avisoIdioma{
+  margin:0 0 16px; padding:10px 14px; border-radius:9px;
+  background:var(--panel-2); border-left:3px solid var(--accent);
+  font-size:0.875rem; color:var(--ink-soft); line-height:1.5;
+}
+.themes--idioma .themes__b{font-family:var(--mono); font-size:0.75rem; letter-spacing:.04em}
+
 /* Los conmutadores de entrada. El estado se ve por el texto («a = 1») ademas
    de por el color, que es la regla de accesibilidad del curso: nada se
    distingue solo por color. */

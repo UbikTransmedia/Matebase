@@ -48,9 +48,9 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
 <script>
   (function () {
     var t = '?t=' + Date.now();
-    ['version', 'core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
+    ['version', 'core/util', 'core/i18n', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
      'core/shader', 'core/cripto', 'core/nn', 'core/logica', 'core/maquina', 'core/lenguaje', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
-     'glosario', 'glsl'].forEach(function (f) {
+     'glosario', 'glsl', 'i18n/en'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
   })();
@@ -1189,6 +1189,78 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   anc.remove();
 
   /* --- temas --- */
+  /* ---------------- idiomas ----------------
+     El curso esta escrito en castellano y esa es su lengua; un diccionario
+     traduce la interfaz y el temario y deja la prosa. Lo que se comprueba
+     aqui no es la calidad de la traduccion -eso no lo puede comprobar una
+     maquina- sino que no apunte a temas que no existen y que cubra lo
+     suficiente para que el indice se pueda leer entero. */
+  group('idiomas · el diccionario apunta a donde debe');
+  (function () {
+    if (!window.I18N) { ko('i18n.js se carga', 'no está', 'el módulo cargado'); return; }
+    var lista = I18N.lista();
+    truthy('el castellano siempre está', lista.some(function (l) { return l.codigo === 'es'; }));
+    var otros = lista.filter(function (l) { return l.codigo !== 'es'; });
+    if (!otros.length) { truthy('no hay más idiomas instalados', true); return; }
+
+    var hayTema = {}, hayBloque = {}, nTemas = 0;
+    CURRICULUM.forEach(function (b) {
+      hayBloque['@' + b.id] = 1;
+      b.temas.forEach(function (t) { hayTema[t.id] = 1; nTemas++; });
+    });
+
+    otros.forEach(function (l) {
+      var previo = I18N.actual();
+      I18N.usar(l.codigo);
+      var pre = 'idioma «' + l.nombre + '»';
+
+      /* Una clave que no existe es una errata que no se ve: la entrada
+         simplemente no se usa nunca y el tema sale en castellano. */
+      var cubiertos = 0, bloquesCub = 0;
+      var prueba = I18N.tema({ id: '__no_existe__', t: 'x', r: 'y' });
+      eq(pre + ': un id desconocido cae al original', prueba.t, 'x');
+
+      CURRICULUM.forEach(function (b) {
+        var tb = I18N.bloque({ id: b.id, title: 'ORIG', desc: 'ORIG' });
+        if (tb.title !== 'ORIG') bloquesCub++;
+        b.temas.forEach(function (t) {
+          var tt = I18N.tema({ id: t.id, t: 'ORIG', r: 'ORIG' });
+          if (tt.t !== 'ORIG') cubiertos++;
+        });
+      });
+
+      truthy(pre + ': traduce todos los bloques (' + bloquesCub + ' de ' + CURRICULUM.length + ')',
+        bloquesCub === CURRICULUM.length);
+      truthy(pre + ': cubre el temario (' + cubiertos + ' de ' + nTemas + ')',
+        cubiertos >= nTemas * 0.9);
+      /* Y al reves: una clave que ya no corresponde a ningun tema es trabajo
+         de traduccion tirado a la basura, y nadie se entera. */
+      var d = I18N.diccionario(l.codigo) || { cur: {} }, huerfanas = [];
+      for (var k in d.cur) {
+        if (k.charAt(0) === '@') { if (!hayBloque[k]) huerfanas.push(k); }
+        else if (!hayTema[k]) huerfanas.push(k);
+      }
+      eq(pre + ': ninguna clave apunta a un tema que no existe',
+        huerfanas.slice(0, 5).join(', ') || 'ninguna', 'ninguna');
+
+      truthy(pre + ': traduce algo de la interfaz', I18N.ui('Glosario') !== 'Glosario');
+      /* Y apunta lo que le piden y no tiene, para que se pueda preguntar. */
+      I18N.ui('§ frase de prueba que nadie traducira §');
+      truthy(pre + ': apunta las frases que le faltan',
+        I18N.faltan().indexOf('§ frase de prueba que nadie traducira §') >= 0);
+      eq(pre + ': una frase que no está en el diccionario sale en castellano',
+        I18N.ui('una frase que nadie ha traducido'), 'una frase que nadie ha traducido');
+      /* El atributo lang= del documento manda en lectores de pantalla y en
+         la particion silabica: si no cambia, un lector lee ingles con
+         fonetica castellana. */
+      truthy(pre + ': el documento cambia de lang',
+        document.documentElement.getAttribute('lang') !== 'es');
+
+      I18N.usar(previo);
+    });
+    eq('y al volver al castellano manda el original', I18N.ui('Glosario'), 'Glosario');
+  })();
+
   /* ---------------- las rutas de la ampliacion ----------------
      Una ruta manda al alumno de un tema a otro por su cuenta, asi que tiene
      que cumplir lo mismo que el temario: nada antes que sus requisitos. Si

@@ -72,14 +72,91 @@
   var BYID = {};
 
   function flatten() {
+    FLAT = []; BYID = {};
     CURRICULUM.forEach(function (b) {
+      /* El original se guarda la primera vez, para poder volver al castellano
+         y para que traducir dos veces no traduzca sobre lo traducido. */
+      if (b._t0 === undefined) { b._t0 = b.title; b._d0 = b.desc; }
+      var bt = global.I18N ? I18N.bloque({ id: b.id, title: b._t0, desc: b._d0 }) : null;
+      b.title = bt ? bt.title : b._t0;
+      b.desc = bt ? bt.desc : b._d0;
       b.temas.forEach(function (t) {
+        if (t._t0 === undefined) { t._t0 = t.t; t._r0 = t.r; }
+        var tt = global.I18N ? I18N.tema({ id: t.id, t: t._t0, r: t._r0 }) : null;
+        t.t = tt ? tt.t : t._t0;
+        t.r = tt ? tt.r : t._r0;
         t._block = b;
         if (!t.curso) t.curso = b.curso || '';
         BYID[t.id] = t;
         FLAT.push(t);
       });
     });
+  }
+
+  /* Un texto de interfaz. Si no hay diccionario -o la frase no esta en el-,
+     sale en castellano, que es el original. */
+  function T(s) { return global.I18N ? I18N.ui(s) : s; }
+  Course.T = T;
+
+  /* Los rotulos que vienen escritos en index.html. Son pocos y estan en un
+     sitio, asi que se traducen de una vez al arrancar y al cambiar de
+     idioma, en vez de repartir llamadas por el HTML. */
+  function traduceChrome() {
+    /* atributo -> [selector, atributo, original] */
+    var attrs = [
+      ['#search', 'placeholder', 'Buscar un tema…'],
+      ['#glosSearch', 'placeholder', 'Buscar un término…'],
+      ['#searchClear', 'title', 'Limpiar'],
+      ['#homeLink', 'title', 'Volver al índice del curso'],
+      ['#homeBtn', 'title', 'Volver al índice del curso'],
+      ['#navAtras', 'title', 'Tema anterior visitado'],
+      ['#navAtras', 'aria-label', 'Atrás'],
+      ['#navAlante', 'title', 'Tema siguiente visitado'],
+      ['#navAlante', 'aria-label', 'Adelante'],
+      ['#burger', 'aria-label', 'Índice'],
+      ['#resetBtn', 'title', 'Borrar el progreso guardado'],
+      ['#sideScroll', 'aria-label', 'Índice del curso'],
+      ['#itin', 'aria-label', 'Temario que muestra el índice'],
+      ['#themes', 'aria-label', 'Tema de color'],
+      ['#letras', 'aria-label', 'Tamaño de la letra'],
+      ['#idiomas', 'aria-label', 'Idioma']
+    ];
+    attrs.forEach(function (a) {
+      var el = U.$(a[0]);
+      if (el) el.setAttribute(a[1], T(a[2]));
+    });
+
+    /* texto -> [selector, original] */
+    var textos = [
+      ['#homeBtn span', 'Inicio'],
+      ['#resetBtn', 'Reiniciar'],
+      ['#glosTitle', 'Glosario'],
+      ['#glosBtn span', 'Glosario'],
+      ['#saltar', 'Saltar al contenido']
+    ];
+    textos.forEach(function (t) {
+      var el = U.$(t[0]);
+      if (el) el.textContent = T(t[1]);
+    });
+
+    /* «Diseñado por» lleva un enlace al lado, asi que solo se toca su primer
+       nodo de texto; el nombre propio no se traduce. */
+    var by = U.$('.side__by');
+    if (by && by.firstChild && by.firstChild.nodeType === 3) {
+      by.firstChild.nodeValue = T('Diseñado por') + ' ';
+    }
+
+    var version = U.$('#version');
+    if (version && global.MATEBASE_VERSION) {
+      version.textContent = T('versión') + ' ' + global.MATEBASE_VERSION;
+    }
+
+    /* Los botones de color y de tamaño llevan su rotulo dentro, asi que se
+       vuelven a montar y se les devuelve la marca de cual esta puesto. */
+    buildThemeButtons();
+    setTheme(Progress.pref('theme') || 'light');
+    buildLetraButtons();
+    setLetra(Progress.pref('letra') || 'n');
   }
 
   /** La ruta actual, separando el tema de sus parametros. */
@@ -225,7 +302,7 @@
     var caja = U.$('#itin');
     if (!caja) return;
     U.clear(caja);
-    [{ id: 'todo', t: 'Todo el curso' }, { id: 'MII', t: ITIN.MII.abrev }, { id: 'MCS', t: ITIN.MCS.abrev }]
+    [{ id: 'todo', t: T('Todo el curso') }, { id: 'MII', t: ITIN.MII.abrev }, { id: 'MCS', t: ITIN.MCS.abrev }]
       .forEach(function (o) {
         caja.appendChild(U.el('button.themes__b', {
           type: 'button', 'data-itin': o.id,
@@ -288,7 +365,7 @@
     var req = (t.req || []).filter(function (r) { return BYID[r]; });
     if (!req.length) return null;
     var box = U.el('nav.prereq', { 'aria-label': 'Temas que este da por sabidos' });
-    box.appendChild(U.el('span.prereq__t', { text: 'Antes de empezar' }));
+    box.appendChild(U.el('span.prereq__t', { text: T('Antes de empezar') }));
     var flojos = 0;
     var ul = U.el('ul.prereq__l');
     req.forEach(function (rid) {
@@ -329,11 +406,11 @@
     var prev = FLAT[i - 1], next = FLAT[i + 1];
     var box = U.el('div.pager');
     if (prev) box.appendChild(U.el('a', { href: '#/' + prev.id }, [
-      U.el('div.k', { text: '← Anterior' }), U.el('div.t', { text: prev.t })
+      U.el('div.k', { text: T('← Anterior') }), U.el('div.t', { text: prev.t })
     ]));
     else box.appendChild(U.el('div.sp'));
     if (next) box.appendChild(U.el('a.nx', { href: '#/' + next.id }, [
-      U.el('div.k', { text: 'Siguiente →' }), U.el('div.t', { text: next.t })
+      U.el('div.k', { text: T('Siguiente →') }), U.el('div.t', { text: next.t })
     ]));
     else box.appendChild(U.el('div.sp'));
     return box;
@@ -397,6 +474,9 @@
     else wrapEl.removeAttribute('data-piel');
     crumbEl.innerHTML = '<b>' + U.escape(t._block.title) + '</b> &nbsp;/&nbsp; ' + U.escape(t.t);
     wrapEl.appendChild(header(t));
+    if (!global.I18N || !I18N.temaTraducido(t.id)) {
+      avisoIdioma(wrapEl, 'El texto de este tema está en castellano.');
+    }
     var antes = antesDeEmpezar(t);
     if (antes) wrapEl.appendChild(antes);
     var body = U.el('div');
@@ -431,11 +511,24 @@
     });
   }
 
+  /* Si se esta leyendo en otro idioma, se dice ANTES de empezar a leer: la
+     prosa sigue en castellano y eso no puede ser una sorpresa a mitad de
+     pagina. El aviso va en la portada y en cada tema, porque son las dos
+     puertas por las que se entra. */
+  function avisoIdioma(host, frase) {
+    if (!global.I18N || I18N.actual() === 'es') return;
+    host.appendChild(U.el('div.avisoIdioma', {
+      role: 'note',
+      html: '<strong>' + T(frase) + '</strong> ' +
+        T('La interfaz y el temario están traducidos; la explicación, todavía no.')
+    }));
+  }
+
   function renderHome() {
     U.clear(wrapEl);
     wrapEl.removeAttribute('data-piel');
-    crumbEl.innerHTML = '<b>Inicio</b>';
-    document.title = 'Matebase · curso interactivo de matemáticas';
+    crumbEl.innerHTML = '<b>' + U.escape(T('Inicio')) + '</b>';
+    document.title = 'Matebase · ' + T('curso interactivo de matemáticas');
     var st = Progress.stats();
     var total = FLAT.length;
 
@@ -448,6 +541,7 @@
       'y de ahí a los sistemas dinámicos, en ' + total +
       ' temas con ejemplos que se tocan y ejercicios que nunca se repiten.</p>';
     wrapEl.appendChild(h);
+    avisoIdioma(wrapEl, 'El curso está escrito en castellano.');
 
     var p = new Page(wrapEl, { id: '__home' });
 
@@ -595,7 +689,7 @@
     wrapEl.removeAttribute('data-piel');
     var recibidos = q && q.d ? Ex.leeDeberes(q.d) : null;
     var lista = recibidos || Ex.deberes();
-    crumbEl.innerHTML = '<a href="#/">Inicio</a> › <b>Deberes</b>';
+    crumbEl.innerHTML = '<a href="#/">' + U.escape(T('Inicio')) + '</a> › <b>' + U.escape(T('Deberes')) + '</b>';
     document.title = 'Deberes · Matebase';
 
     var h = U.el('div.hdr');
@@ -608,6 +702,7 @@
           'que los lleva dentro: quien lo abra verá exactamente estos, con estos números.') +
       '</p>';
     wrapEl.appendChild(h);
+    avisoIdioma(wrapEl, 'Esta página está escrita en castellano.');
 
     var p = new Page(wrapEl, { id: '__deberes' });
 
@@ -706,7 +801,7 @@
   function renderExamen(q) {
     U.clear(wrapEl);
     wrapEl.removeAttribute('data-piel');
-    crumbEl.innerHTML = '<a href="#/">Inicio</a> › <b>Examen</b>';
+    crumbEl.innerHTML = '<a href="#/">' + U.escape(T('Inicio')) + '</a> › <b>' + U.escape(T('Examen')) + '</b>';
     document.title = 'Examen de cualquier bloque · Matebase';
 
     var h = U.el('div.hdr');
@@ -714,6 +809,7 @@
       '<p class="hdr__sub">Elige de dónde entran las preguntas y el curso monta un examen: sin ' +
       'pistas, con cronómetro si quieres, y con la corrección y el paso a paso al entregar.</p>';
     wrapEl.appendChild(h);
+    avisoIdioma(wrapEl, 'Esta página está escrita en castellano.');
 
     var elegidos = {};
     (q && q.b ? String(q.b).split(',') : []).forEach(function (x) { elegidos[x] = 1; });
@@ -896,8 +992,9 @@
     U.clear(wrapEl);
     wrapEl.removeAttribute('data-piel');
     var sola = q && q.r ? rutaPorId(q.r) : null;
-    crumbEl.innerHTML = '<a href="#/">Inicio</a> › ' +
-      (sola ? '<a href="#/__rutas">Rutas</a> › <b>' + sola.t + '</b>' : '<b>Rutas de la ampliación</b>');
+    crumbEl.innerHTML = '<a href="#/">' + U.escape(T('Inicio')) + '</a> › ' +
+      (sola ? '<a href="#/__rutas">' + U.escape(T('Rutas')) + '</a> › <b>' + sola.t + '</b>'
+            : '<b>' + U.escape(T('Rutas de la ampliación')) + '</b>');
     document.title = (sola ? sola.t : 'Rutas de la ampliación') + ' · Matebase';
 
     var h = U.el('div.hdr');
@@ -907,6 +1004,7 @@
           ' temas optativos que no se presuponen entre sí. Estas tres rutas los recorren con ' +
           'sentido: cada una dice a dónde llega y por dónde se pasa.') + '</p>';
     wrapEl.appendChild(h);
+    avisoIdioma(wrapEl, 'Esta página está escrita en castellano.');
 
     var p = new Page(wrapEl, { id: '__rutas' });
 
@@ -959,7 +1057,7 @@
   function renderProgreso() {
     U.clear(wrapEl);
     wrapEl.removeAttribute('data-piel');
-    crumbEl.innerHTML = '<a href="#/">Inicio</a> › <b>Progreso y clase</b>';
+    crumbEl.innerHTML = '<a href="#/">' + U.escape(T('Inicio')) + '</a> › <b>' + U.escape(T('Progreso y clase')) + '</b>';
     document.title = 'Progreso y clase · Matebase';
 
     var h = U.el('div.hdr');
@@ -967,6 +1065,7 @@
       '<p class="hdr__sub">Tu progreso vive en este navegador y no se manda a ninguna parte. ' +
       'Aquí puedes llevártelo a otro ordenador, recuperarlo, o —si das clase— leer los de tu grupo.</p>';
     wrapEl.appendChild(h);
+    avisoIdioma(wrapEl, 'Esta página está escrita en castellano.');
 
     var p = new Page(wrapEl, { id: '__progreso' });
 
@@ -1233,11 +1332,11 @@
     U.clear(caja);
     LETRAS.forEach(function (t) {
       caja.appendChild(U.el('button.themes__b', {
-        type: 'button', 'data-letra': t.id, title: t.titulo,
+        type: 'button', 'data-letra': t.id, title: T(t.titulo),
         onclick: function () { setLetra(t.id); }
       }, [
         U.el('span.themes__i', { style: { fontSize: (0.72 + LETRAS.indexOf(t) * 0.17) + 'rem' } }, 'A'),
-        U.el('span', null, t.nombre)
+        U.el('span', null, T(t.nombre))
       ]));
     });
   }
@@ -1258,6 +1357,45 @@
   }
 
   /** Un boton por tema, para que se vean los tres y no haya que adivinarlos. */
+  /* ---------------- idioma ----------------
+     El curso esta escrito en castellano y esa es su lengua. Un diccionario
+     traduce la INTERFAZ y el TEMARIO -titulos y resumenes- y deja la prosa
+     como esta, que es lo que permite que el curso se pueda recorrer y citar
+     sin haber traducido 246 temas. Cuando se elige otro idioma, el aviso lo
+     dice: nadie tiene que descubrirlo abriendo un tema. */
+
+  function buildIdiomaButtons() {
+    var caja = U.$('#idiomas');
+    if (!caja || !global.I18N) return;
+    var lista = I18N.lista();
+    if (lista.length < 2) { caja.style.display = 'none'; return; }
+    U.clear(caja);
+    lista.forEach(function (l) {
+      caja.appendChild(U.el('button.themes__b', {
+        type: 'button', 'data-idioma': l.codigo,
+        title: l.nombre,
+        onclick: function () { setIdioma(l.codigo); }
+      }, l.codigo.toUpperCase()));
+    });
+  }
+
+  function setIdioma(codigo) {
+    if (!global.I18N) return;
+    var usado = I18N.usar(codigo);
+    Progress.pref('idioma', usado);
+    U.$$('#idiomas .themes__b').forEach(function (b) {
+      var on = b.getAttribute('data-idioma') === usado;
+      b.classList.toggle('is-on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    flatten();                      // el temario se vuelve a leer traducido
+    traduceChrome();
+    buildItinButtons();
+    setItinerario(itin);            // reconstruye el indice con los rotulos nuevos
+    route();                        // y la pagina de ahora se repinta
+  }
+  Course.setIdioma = setIdioma;
+
   function buildThemeButtons() {
     var caja = U.$('#themes');
     if (!caja) return;
@@ -1266,11 +1404,11 @@
       caja.appendChild(U.el('button.themes__b', {
         type: 'button',
         'data-tema': t.id,
-        title: 'Tema ' + t.nombre.toLowerCase(),
+        title: T('Tema') + ' ' + T(t.nombre).toLowerCase(),
         onclick: function () { setTheme(t.id); }
       }, [
         U.el('span.themes__i', null, t.icono),
-        U.el('span', null, t.nombre)
+        U.el('span', null, T(t.nombre))
       ]));
     });
   }
@@ -1590,11 +1728,11 @@
   var pila = [], cur = -1, saltando = false;
 
   function nombreDe(id) {
-    if (!id) return 'Inicio';
-    if (id === '__progreso') return 'Progreso y clase';
-    if (id === '__rutas') return 'Rutas de la ampliación';
-    if (id === '__deberes') return 'Deberes';
-    if (id === '__examen') return 'Examen';
+    if (!id) return T('Inicio');
+    if (id === '__progreso') return T('Progreso y clase');
+    if (id === '__rutas') return T('Rutas de la ampliación');
+    if (id === '__deberes') return T('Deberes');
+    if (id === '__examen') return T('Examen');
     var t = BYID[id];
     return t ? t.t : id;
   }
@@ -1658,6 +1796,11 @@
   }
 
   function start() {
+    /* El idioma se elige ANTES de montar nada. Si se restaura despues, el
+       temario, los botones del itinerario y el indice se construyen en
+       castellano y hay que rehacerlos; y lo que se olvide rehacer se queda
+       en castellano sin que nadie se entere. */
+    if (global.I18N) I18N.usar(Progress.pref('idioma') || 'es');
     flatten();
     sideScroll = U.$('#sideScroll');
     mainEl = U.$('#main');
@@ -1672,6 +1815,14 @@
     setTheme(Progress.pref('theme') || 'light');
     buildLetraButtons();
     setLetra(Progress.pref('letra') || 'n');
+    buildIdiomaButtons();
+    if (global.I18N) {
+      U.$$('#idiomas .themes__b').forEach(function (b) {
+        var on = b.getAttribute('data-idioma') === I18N.actual();
+        b.classList.toggle('is-on', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    }
 
     // El boton de salto lleva el foco al contenido sin tocar el hash, que
     // aqui es la ruta: un href="#wrap" cambiaria de tema.
@@ -1680,6 +1831,8 @@
       var h = wrapEl.querySelector('h1');
       if (h) { h.focus(); h.scrollIntoView({ block: 'start' }); }
     });
+
+    traduceChrome();
 
     var search = U.$('#search');
     search.addEventListener('input', function () {
@@ -1691,7 +1844,7 @@
     });
 
     U.$('#resetBtn').addEventListener('click', function () {
-      if (confirm('¿Borrar el progreso guardado (temas visitados, aciertos y repasos pendientes)?')) {
+      if (confirm(T('¿Borrar el progreso guardado (temas visitados, aciertos y repasos pendientes)?'))) {
         Progress.reset(); paintIndex();
         if (!ruta().id) renderHome();
       }
@@ -1699,8 +1852,6 @@
 
     // La version, en la esquina inferior izquierda del indice. El numero
     // solo se cambia en version.js.
-    var version = U.$('#version');
-    if (version && global.MATEBASE_VERSION) version.textContent = 'versión ' + global.MATEBASE_VERSION;
     U.$('#burger').addEventListener('click', function () {
       U.$('.side').classList.toggle('is-open');
       U.$('.scrim').classList.toggle('is-on');
