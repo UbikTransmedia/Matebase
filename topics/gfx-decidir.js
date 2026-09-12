@@ -77,6 +77,13 @@ Course.topic('gfx-decidir', function (p) {
     'veces. GLSL admite funciones como cualquier lenguaje, y en cuanto un shader pasa de veinte ' +
     'líneas conviene usarlas: el código se lee mejor y las figuras se reutilizan.');
 
+  p.note('Esto que parece una rareza de los shaders es, en realidad, cómo decide ' +
+    '<em>cualquier</em> circuito. Un procesador tampoco tiene un <code>if</code> por dentro: calcula ' +
+    'las dos ramas siempre y deja pasar una con un <strong>multiplexor</strong>, que es exactamente ' +
+    'este <code>mix</code> con el mando puesto a 0 o a 1. Se monta con puertas en ' +
+    '[[maq-decidir|el bloque de máquinas y lenguajes]], que va antes que éste.',
+    null, 'Lo mismo, un piso más abajo');
+
   p.section('min y max: unir y cortar figuras');
 
   p.text('Aquí ocurre algo elegante. Si tienes las distancias de dos figuras, las operaciones de ' +

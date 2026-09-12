@@ -151,6 +151,13 @@ Course.topic('ar-operaciones', function (p) {
     'redes con expresiones tipo $8 \\div 2(2+2)$ no son un problema de matemáticas sino de notación ' +
     'ambigua: con un paréntesis más, la discusión desaparece.');
 
+  p.note('Un programa que lee una fórmula no consulta ninguna tabla de prioridades: lo que hace es ' +
+    'construir un <strong>árbol</strong> donde el producto queda colgando por debajo de la suma, y ' +
+    'entonces la jerarquía deja de ser una regla que recordar y pasa a ser la forma del dibujo. En ' +
+    '[[len-arbol|el bloque de máquinas y lenguajes]] se construye ese traductor, y aparece de paso la ' +
+    'otra mitad del convenio, la que casi nunca se enseña: qué pasa con $10 - 3 - 2$, que se agrupa por ' +
+    'la izquierda y vale 5, y no por la derecha, que daría 9.', null, 'La jerarquía, hecha dibujo');
+
   p.hist('El orden de las operaciones no lo dictó ningún matemático: se fue asentando con la imprenta ' +
     'entre los siglos XVI y XVII, por comodidad tipográfica. Como los polinomios se escribían ' +
     'constantemente, resultaba práctico que $3x^2$ significara «tres por equis al cuadrado» sin ' +

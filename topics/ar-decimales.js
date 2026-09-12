@@ -98,6 +98,11 @@ Course.topic('ar-decimales', function (p) {
     'del ordenador: es el mismo fenómeno que impide escribir $1/3$ con decimales exactos. La ' +
     'solución que usa la banca es no guardar euros con decimales, sino contar en céntimos enteros.');
 
+  p.note('El desarrollo binario de $0{,}1$ se puede mirar cifra a cifra en ' +
+    '[[maq-bits|el tema de los bits]], junto a los de $1/4$ o $5/8$, que sí se acaban. La regla es ' +
+    'la misma que aquí, con el 2 en el papel que aquí tienen el 2 y el 5: sólo son exactas las ' +
+    'fracciones cuyo denominador es una potencia de dos.', null, 'Verlo cifra a cifra');
+
   p.section('De decimal a fracción: la fracción generatriz');
 
   p.text('Todo decimal exacto o periódico se puede convertir en fracción. El truco es siempre el ' +

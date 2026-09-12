@@ -174,6 +174,14 @@ Course.topic('av-grafos', function (p) {
 
   p.formula('\\text{árbol con } V \\text{ vértices} \\ \\Longrightarrow\\ A = V - 1');
 
+  p.note('Los árboles salen por todas partes en cuanto se mira, y uno de los sitios donde más trabajan es ' +
+    'dentro de los programas. Cuando un ordenador lee la fórmula $2 + 3 \\cdot 4$, lo primero que hace ' +
+    'es convertirla en un árbol con las operaciones en los nudos y los números en las hojas; recorrerlo ' +
+    'de abajo arriba es calcular, y recorrerlo escribiendo instrucciones en vez de resultados es ' +
+    'compilar. Está en [[len-arbol|el bloque de máquinas y lenguajes]], y es un caso en que la ' +
+    'estructura no es una manera de dibujar el problema: <strong>es el problema</strong>.',
+    null, 'Un árbol dentro de cada fórmula');
+
   p.text('El <strong>árbol de expansión mínimo</strong> responde a una pregunta muy práctica: si hay ' +
     'que conectar $n$ ciudades con fibra óptica y cada tramo tiene un coste, ¿cuál es la red más barata ' +
     'que las une todas? Los algoritmos de Kruskal y Prim la encuentran, y son sorprendentemente ' +

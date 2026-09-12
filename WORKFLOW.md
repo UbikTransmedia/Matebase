@@ -25,7 +25,7 @@ Se abre haciendo doble clic en `index.html`. **Sin servidor local, sin internet,
 
 ## Fase 1 — Temario (cerrada) → `assets/js/curriculum.js`
 
-19 bloques, 228 temas, en progresión estricta. El orden es el contrato pedagógico:
+20 bloques, 246 temas, en progresión estricta. El orden es el contrato pedagógico:
 ningún tema usa una herramienta que no se haya explicado antes, y `tests.html`
 comprueba que los requisitos declarados de cada tema van antes que él.
 
@@ -52,12 +52,13 @@ comprueba que los requisitos declarados de cada tema van antes que él.
 12. **Estructuras, números e infinito** (6).
 13. **Discreta y computacional** (6).
 14. **Cibernética** (15).
-15. **Programación gráfica** (33), con piel propia.
-16. **Criptografía** (36), con piel propia — de César a lo poscuántico, con la criptografía real (SHA-256, AES, curvas, RSA) ejecutándose en el navegador desde `assets/js/core/cripto.js`.
-17. **Inteligencia artificial I: aprender de los datos** (12), con piel propia — de qué significa aprender de ejemplos hasta la red densa, la retropropagación y cómo se evalúa.
-18. **Inteligencia artificial II: las arquitecturas** (14), con piel propia — cada arquitectura entra por la idea matemática que aporta, y las redes se entrenan de verdad en el navegador desde `assets/js/core/nn.js`.
+15. **Máquinas y lenguajes** (18) — cómo funciona un ordenador y cómo funciona un lenguaje, construyendo los dos de abajo arriba desde `assets/js/core/logica.js`, `maquina.js` y `lenguaje.js`. Va aquí porque necesita la realimentación y el retardo de cibernética: un biestable es un bucle que se acuerda.
+16. **Programación gráfica** (33), con piel propia.
+17. **Criptografía** (36), con piel propia — de César a lo poscuántico, con la criptografía real (SHA-256, AES, curvas, RSA) ejecutándose en el navegador desde `assets/js/core/cripto.js`.
+18. **Inteligencia artificial I: aprender de los datos** (12), con piel propia — de qué significa aprender de ejemplos hasta la red densa, la retropropagación y cómo se evalúa.
+19. **Inteligencia artificial II: las arquitecturas** (14), con piel propia — cada arquitectura entra por la idea matemática que aporta, y las redes se entrenan de verdad en el navegador desde `assets/js/core/nn.js`.
 
-> **Los bloques 15, 16, 17 y 18 son optativos y no se presuponen entre sí.** Un
+> **Los bloques 15, 16, 17, 18 y 19 son optativos y no se presuponen entre sí.** Un
 > alumno puede hacer el de criptografía sin el de gráficos, o los de IA sin
 > ninguno de los otros dos: por eso sus `req` sólo citan requisitos reales, y
 > las herramientas generales que necesitan viven en su bloque natural (`av-pca`
@@ -68,6 +69,69 @@ Cada tema declara `id`, `t` (título), `r` (resumen), `o` (objetivos) y `req`
 (requisitos); los de 2.º, además, `curso: '2B'` e `itin` (`['MII']`, `['MCS']` o
 los dos). Se pueden **intercalar temas nuevos** en cualquier punto insertando un
 objeto en el array.
+
+> **Por qué «Máquinas y lenguajes» es el bloque 15 y no el 13.** El encargo pedía
+> insertarlo entre cibernética y programación gráfica, y daba por hecho que eso lo
+> dejaba en el 13 con gráficos pasando al 14. Esa numeración era de un estado
+> anterior del temario: cuando se escribió, cibernética ya era el 14 y gráficos el
+> 15, porque entre medias habían entrado criptografía y los dos bloques de
+> inteligencia artificial. Se respetó **la posición pedida** —entre cibernética y
+> gráficos— y se renumeró con los números reales: `maq` al 15, y `gfx`, `cr`, `ia1`
+> e `ia2` corridos al 16, 17, 18 y 19. Cambiar el sitio para que cuadrara el número
+> habría roto la razón pedagógica de ponerlo ahí, que es tener a mano la
+> realimentación y el retardo de cibernética.
+>
+> El mismo encargo pedía añadir un campo `req` «porque `curriculum.js` no lo tiene».
+> Sí lo tiene, en los 228 temas, y `tests.html` ya comprobaba que cada requisito
+> exista y vaya antes. No se tocó nada: las fichas nuevas se limitan a declararlo
+> como las demás.
+
+> **Decisiones propias del bloque de máquinas**, tomadas sin consultar porque el
+> encargo pedía trabajar de principio a fin, y anotadas aquí por eso mismo:
+>
+> - **La piel del bloque es violeta, no azul.** Se probó el azul, que es el color
+>   con el que se piensa un ordenador, y era invisible: el acento por defecto del
+>   curso ya es azul en los tres temas, así que el bloque no se habría distinguido
+>   de ninguno de los normales. Se midió la distancia de tono a los acentos ya
+>   usados y el violeta era el hueco.
+> - **El simulador de circuitos avanza por instantes, no en orden topológico.** Un
+>   orden topológico resuelve de un tirón cualquier circuito sin ciclos, pero
+>   entonces el biestable —que es un ciclo— no tendría solución, y es el tema que
+>   hace que el instrumento valga la pena.
+> - **El banco de circuitos guarda estado entre pulsaciones** (opción `memoria`).
+>   Sin eso, soltar la orden de un cerrojo lo devolvía a cero y oscilaba: el tema
+>   de la memoria enseñaba justo lo contrario de lo que decía. La auditoría de
+>   temas no puede ver un defecto así, de modo que la regresión mueve los
+>   conmutadores de un banco de verdad.
+> - **La máquina tiene mnemónicos en castellano, celdas de 8 bits con signo y el
+>   programa en la misma memoria que los datos.** Lo primero porque el alumno los
+>   lee letra a letra; lo segundo porque convierte `maq-bits` en algo que se toca
+>   —el factorial de 5 cabe y el de 6 no—; lo tercero porque «un programa son
+>   números en celdas» es la idea de von Neumann y aquí se ve en una tabla.
+> - **El lenguaje se llama Pizca** y tiene siete palabras. El encargo pedía «un
+>   nombre corto, de una palabra en castellano»; se eligió éste porque dice lo que
+>   es —una pizca de lenguaje— sin prometer nada que no cumpla.
+> - **Pizca es un lenguaje de ocho bits, y su intérprete desborda igual que la
+>   CPU.** Podría haber usado los números de JavaScript y ser más cómodo, pero
+>   entonces interpretar y compilar darían resultados distintos en cuanto una
+>   cuenta se saliera de rango, y la prueba diferencial —que es lo que sostiene
+>   todo el tramo B— no diría nada.
+> - **Las funciones compiladas no tienen marco de pila, sino huecos fijos que
+>   quien llama salva y restaura.** La máquina no sabe leer una celda cuya
+>   dirección esté en otra celda, y añadirle esa instrucción habría sido la
+>   alternativa. Se prefirió no tocar la máquina ya escrita: con salvar y
+>   restaurar, la recursión funciona igual, la pila crece una vez por llamada
+>   —que es lo que hay que ver— y el tope de 64 avisa. Los argumentos van también
+>   por la pila, no por celdas temporales; con celdas, `suma(1, suma(2, 3))` se
+>   pisaba a sí mismo, y se descubrió probándolo.
+> - **Los cuatro paneles del taller se ven por turnos, con fichas**, y no los
+>   cuatro a la vez. Cuatro columnas no caben en un móvil, y como los cuatro
+>   salen del mismo texto, verlos por turnos no pierde sincronía ninguna.
+> - **El Quine-McCluskey de `maq-normal` vive en el tema, no en el núcleo.** No lo
+>   usa nadie más, y lo que hace falta allí no es minimizar de verdad —eso es un
+>   problema duro— sino poder decir un coste alcanzable sin inventárselo. Por eso
+>   los ejercicios dicen «se puede con N» y enseñan el circuito, nunca «el mínimo
+>   es N».
 
 > **Por qué el temario de ampliación está repartido por disciplinas.** Los bloques
 > de ampliación empezaron siendo **un solo bloque de 19 temas** llamado «Escalada
@@ -157,7 +221,37 @@ todos los temas:
 comprobaciones por tema y exige una sola opción correcta y explicación en todas.
 Cada bloque se entregó en un commit con las pruebas en verde.
 
-## Fase 6 — Ideas pendientes (a petición)
+## Fase 6 — Máquinas y lenguajes (cerrada)
+
+Un bloque optativo de 18 temas entre Cibernética y Programación gráfica, con dos
+tramos que se cierran uno sobre otro: **el compilador del tramo B genera el
+ensamblador de la CPU del tramo A**. Con él, el curso llega a **246 temas
+escritos de 246 previstos**.
+
+Tres instrumentos nuevos en el núcleo, con la misma forma de API que `W.shader`:
+
+- **`logica.js`** — el banco de circuitos. Netlist escrita en texto, diagrama
+  generado solo, tabla de verdad entera y un simulador que avanza **por
+  instantes**, no en orden topológico, porque el biestable es un ciclo.
+- **`maquina.js`** — la CPU de juguete. Dieciséis instrucciones con mnemónicos en
+  castellano, celdas de ocho bits con signo, programa y datos en la misma
+  memoria, ensamblador de dos pasadas y un tope de pasos.
+- **`lenguaje.js`** — **Pizca**, siete palabras. Troceador, analizador por
+  descenso recursivo, intérprete, compilador a `maquina.js` y optimizador.
+
+La prueba que sostiene el tramo B es **diferencial**: una batería de once
+programas —con bucles, funciones, recursión y recursión mutua— se interpreta y se
+compila-y-ejecuta en cada pasada de `tests.html`, y las dos salidas se comparan,
+también con el optimizador puesto. Cazó un fallo real del compilador que pasaba
+la vista perfectamente: los argumentos iban por celdas temporales y
+`suma(1, suma(2, 3))` se pisaba a sí mismo.
+
+Las pruebas del bloque suman 462 comprobaciones en total, y varias mueven
+botones de widgets de verdad, porque la auditoría de temas no ve un widget roto:
+lo aprendimos con el banco de circuitos, que perdía el estado entre pulsaciones
+y hacía que el tema de la memoria enseñara lo contrario de lo que decía.
+
+## Fase 7 — Ideas pendientes (a petición)
 
 - Más problemas de examen reales, adaptados por comunidades autónomas.
 - Un modo profesor para montar simulacros a medida eligiendo temas.

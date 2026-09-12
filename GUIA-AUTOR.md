@@ -632,6 +632,183 @@ tokens `--cr*` en `base.css`.
 
 ---
 
+## El banco de circuitos (`LOG` y `W.circuito`)
+
+El bloque **Máquinas y lenguajes** se apoya en `assets/js/core/logica.js`, que
+expone `window.LOG`. El alumno escribe una **netlist** —una puerta por línea— y
+de ahí salen el diagrama, la tabla de verdad y un simulador.
+
+```
+s = xor(a, b);      // suma
+c = and(a, b);      // acarreo
+```
+
+Se admite `nombre = puerta(a, b)`, `nombre = otroCable` y `nombre = 0` o `1`.
+Puertas: `not and or xor nand nor xnor`; las binarias aceptan más de dos
+entradas. **Entradas** son los nombres que se usan y nunca se definen;
+**salidas**, los que se definen y nadie consume (y si todo se consume —un
+biestable— son salidas todas).
+
+**Por qué se simula por instantes y no en orden topológico.** Un orden
+topológico resolvería cualquier circuito sin ciclos de un tirón, pero entonces
+el biestable no tendría solución, y el biestable es lo que hace que el bloque
+valga la pena. Aquí **todas las puertas calculan a la vez** a partir de los
+valores del instante anterior, que es lo que hace un cable de verdad: tarda. Un
+circuito sin ciclos se estabiliza en tantos instantes como capas tenga; uno con
+ciclos puede estabilizarse —y entonces recuerda— o no estabilizarse nunca, y
+entonces **oscila**, que se anuncia y no se cuelga.
+
+| Función | Qué hace |
+|---|---|
+| `LOG.analiza(texto)` | `{nodos, orden, entradas, salidas, errores, puertas}`; los errores llevan `linea` y `msg` |
+| `LOG.simula(c, entradas, {tope, inicial})` | `{estable, oscila, instantes, valores, historia}`. `inicial` da el estado previo, que es como se enseña que un biestable recuerda |
+| `LOG.tabla(c, o)` | la tabla de verdad completa; una fila que oscile trae `sal: null` |
+| `LOG.iguales(texto, esperada, o)` | compara **comportamiento**, no texto: acepta cualquier circuito equivalente. Devuelve `{ok, porQue, puertas}` |
+| `LOG.esTrivial(tabla)` | si la tabla se resuelve con un cable pelado, su negación o una constante. El equivalente al «shader que pinta liso» |
+| `LOG.pinta(texto)` | coloreado de la netlist con los mismos ocho papeles del editor de shaders |
+
+**El widget.** `W.circuito(host, {id, texto, alto, aria, nota, tope, salidas,
+memoria, pausa, inicial})`, con la misma forma que `W.shader`: `id` recuerda lo
+que escribió el alumno, `aria` describe el dibujo y `nota` dice qué mirar. Debajo
+del diagrama va **siempre** la tabla: nada existe solo como dibujo. Los
+conmutadores de entrada muestran su estado en el texto (`a = 1`) además de en el
+color.
+
+`salidas` declara cuáles mirar. Hace falta cuando todos los cables se consumen
+entre sí —un cerrojo, donde cada mitad alimenta a la otra—: allí la regla
+automática no encuentra ninguna salida libre y las enseña todas, que es ruido.
+
+Las tres siguientes solo tienen sentido en un circuito con bucles, y por defecto
+están apagadas para no tocar lo que ya funciona:
+
+| Opción | Para qué |
+|---|---|
+| `memoria: true` | el banco empieza cada simulación **donde acabó la anterior**, en vez de poner todos los cables a cero. Sin esto un cerrojo no puede recordar nada: al soltar la orden volvería a arrancar de cero y oscilaría, y el tema de la memoria enseñaría lo contrario de lo que dice. Añade un botón «⏻ Apagar y encender» que borra lo guardado, que es a la vez el modo de volver a ver la oscilación del arranque y la demostración de que esta memoria es **volátil** |
+| `inicial: {q: 0, qn: 1}` | con qué estado arranca lo guardado. Un cerrojo recién encendido no viene de ningún sitio y oscila; si lo que se quiere enseñar es otra cosa, se le da un pasado |
+| `pausa: true` | mover un conmutador **no** resuelve el circuito: cambia las entradas y deja los cables quietos, esperando a «Un instante». Es la única forma de ver viajar un cambio por dentro del bucle, porque si se estabiliza al soltar el conmutador ya no queda nada que recorrer |
+
+En un circuito sin bucles ninguna hace falta: el estado de partida da igual
+porque siempre converge al mismo sitio.
+
+`W.circuito` devuelve el banco, y del banco solo hay una cosa pensada para
+usarse desde fuera: `banco.pon(texto)`, que **cambia la netlist** y lo recalcula
+todo. Es para las demos que generan el circuito solas —`maq-normal` lo hace a
+partir de las filas que el alumno enciende— y a propósito **no guarda** lo que
+pone: lo generado no es del alumno, y si se guardara, al volver al tema
+aparecería un circuito que él no escribió. Un banco así va **sin `id`**, por lo
+mismo.
+
+Para corregir, `W.circuitoIguales` es `LOG.iguales`, y el número de puertas que
+devuelve sirve para la puntuación por coste: «lo has resuelto con 9 puertas; se
+puede con 5». Informa, no penaliza.
+
+---
+
+## La máquina de juguete (`MAQ` y `W.maquina`)
+
+`assets/js/core/maquina.js` es la CPU donde aterriza todo el bloque: el
+compilador del tramo B genera exactamente su ensamblador. **Dieciséis
+instrucciones**, que es lo que cabe en cuatro bits, con mnemónicos en castellano
+porque el alumno los va a leer letra a letra:
+
+| Sin argumento | Con argumento |
+|---|---|
+| `PARA` `METE` `SACA` `SUMA` `RESTA` `MULT` `DIV` `MENOR` `VUELVE` `MUESTRA` | `NUM n` `CARGA c` `GUARDA c` `SALTA e` `SICERO e` `LLAMA e` |
+
+Cuatro decisiones mandan sobre todo lo demás, y conviene conocerlas antes de
+escribir un programa para una demo:
+
+- **Celdas de 8 bits con signo**, en complemento a dos: de −128 a 127, y lo que
+  se sale da la vuelta. No es una limitación que haya que disculpar, es
+  `maq-bits` hecho carne. La máquina **avisa** de que ha desbordado, para que se
+  vea en lugar de sospecharse. El factorial de 5 cabe justo; el de 6, no.
+- **Programa y datos en la misma memoria.** Un programa son números en celdas, y
+  la tabla de memoria los enseña todos iguales: en la celda 0 hay un `2` que
+  resulta ser un `CARGA`. Las instrucciones ocupan una celda, o dos si llevan
+  argumento.
+- **Acumulador más pila.** Las operaciones sacan el operando **izquierdo** de la
+  pila y toman el **derecho** del acumulador. Con eso, compilar un árbol es un
+  recorrido en postorden y nada más: `izquierda, METE, derecha, operación`. El
+  tramo B se apoya entero en esa frase.
+- **Nada se cuelga.** Todo corre con un tope de pasos y cada final trae su
+  explicación: bucle sin fin, división entre cero, pila vacía, pila llena.
+
+| Función | Qué hace |
+|---|---|
+| `MAQ.ensambla(texto)` | dos pasadas: `{celdas, imagen, etiquetas, vars, fin, libre, errores, instrucciones}`; los errores llevan `linea` y `msg`. Las variables se colocan solas detrás del programa |
+| `MAQ.nueva(asm, datos)` | estado inicial; `datos` es `{nombre: valor}` y es como se le dan entradas a un programa sin inventar una instrucción de leer |
+| `MAQ.paso(m)` / `MAQ.corre(m, tope)` | un paso (buscar, decodificar, ejecutar) o hasta que pare |
+| `MAQ.ejecuta(texto, datos, tope)` | atajo: `{errores, salida, a, mem, pasos, porQue, desbordo}` |
+| `MAQ.iguales(texto, casos, o)` | compara **comportamiento**: corre el programa con cada `{datos, salida}` y devuelve `{ok, porQue, instrucciones, pasos}` |
+| `MAQ.pinta(texto)` | coloreado del ensamblador con los mismos ocho papeles |
+| `MAQ.EJEMPLOS` | la batería de programas de referencia (`suma`, `mayor`, `cuenta`, `fact`, `doble`), que además son pruebas: si uno deja de dar lo que da, la CPU está rota |
+
+**El widget.** `W.maquina(host, {id, texto, datos, alto, aria, nota, tope})`, con
+la misma forma que los otros dos: editor de dos capas, aviso con `aria-live` que
+dice en castellano qué acaba de hacer, registros a la vista, y debajo **la
+memoria entera**, con una flecha en la celda del contador (flecha *y* fondo:
+nada se distingue solo por color). Para corregir, `W.programaIguales` es
+`MAQ.iguales`, y las instrucciones que devuelve dan la puntuación por coste.
+
+---
+
+## El lenguaje (`LEN` y `W.lenguaje`)
+
+`assets/js/core/lenguaje.js` es **Pizca**, el lenguaje que se construye en el
+tramo B. Se llama así porque es lo justo: siete palabras (`sea`, `si`, `sino`,
+`mientras`, `fun`, `vuelve`, `muestra`), cuatro operaciones y seis
+comparaciones. El camino completo es el índice del tramo:
+
+```
+texto  →  tokens  →  árbol  →  ┬→  intérprete  →  salida
+                               └→  ensamblador →  MÁQUINA → salida
+```
+
+**Las dos salidas tienen que ser la misma**, y eso no es un deseo: es la prueba
+diferencial de `tests.html`, que corre la batería entera por los dos caminos —y
+además optimizada— y compara. Es la única forma de saber que el compilador no
+miente, porque un compilador que genera código plausible y equivocado no se
+distingue leyéndolo.
+
+| Función | Qué hace |
+|---|---|
+| `LEN.tokeniza(texto)` | `{tokens, errores}`; cada token con su `linea` |
+| `LEN.analiza(texto)` | descenso recursivo → `{ast, errores, tokens}`. La precedencia sale del orden en que las funciones se llaman unas a otras |
+| `LEN.evalua(ast, o)` | el intérprete: `{salida, pasos, porQue}`. El entorno es una cadena de diccionarios, que es todo lo que significa «ámbito» |
+| `LEN.compila(ast)` | `{texto, errores, huecos}` en ensamblador de `MAQ` |
+| `LEN.optimiza(ast, cuenta)` | pliega constantes y quita código muerto **modificando el árbol**: pásale una `LEN.copia(ast)` si quieres conservar el original |
+| `LEN.corre(texto, o)` | atajo; con `o.compilado` va por la máquina, con `o.optimiza` pasa antes por el optimizador |
+| `LEN.diferencial(texto, o)` | corre por los dos caminos y devuelve `{interpretado, compilado, iguales, asm}` |
+| `LEN.iguales(texto, casos, o)` | corrección por comportamiento; cada caso puede traer un `antes` que pone los datos (`'sea n = 3;\n'`) |
+| `LEN.arbolTexto(ast)` | el árbol escrito con sangría, que es lo que se enseña en el panel |
+| `LEN.EJEMPLOS` | la batería; si uno deja de coincidir por los dos caminos, algo se ha roto |
+
+Tres decisiones que conviene conocer:
+
+- **Pizca es un lenguaje de ocho bits.** Sus números son los de la máquina: de
+  −128 a 127, con vuelta al desbordar, y división entera. El intérprete desborda
+  igual que la CPU **a propósito**; si no, las dos ramas del dibujo darían cosas
+  distintas y la prueba diferencial no valdría nada.
+- **Ni `eval` ni `new Function` con lo que escribe el alumno.** Todo pasa por el
+  analizador de este archivo. Es la regla del curso y además es el tema.
+- **Las funciones se compilan salvando y restaurando sus huecos.** La máquina no
+  sabe leer una celda cuya dirección esté en otra celda, así que no hay marcos de
+  pila de verdad: cada función tiene huecos fijos, y quien llama los guarda en la
+  pila antes de llamar y los devuelve a su sitio al volver. Con eso la recursión
+  funciona —`fib` y `fact` están en la batería—, la pila crece una vez por
+  llamada, que es justo lo que hay que ver, y cuando se pasa de 64 la máquina lo
+  dice. Los **argumentos también van por la pila**, no por celdas temporales:
+  con celdas, `suma(1, suma(2, 3))` se pisaba a sí mismo.
+
+**El widget.** `W.lenguaje(host, {id, texto, nota, tope, paneles, optimiza})`
+pone el editor y **cuatro paneles del mismo texto** —tokens, árbol, ensamblador y
+máquina— que se eligen con fichas. Cuatro columnas no caben en un móvil, y como
+todo sale del mismo sitio, verlas por turnos no pierde nada. El aviso canta
+siempre **las dos salidas** y si coinciden; cuando no, el taller se pone en rojo.
+`paneles` recorta la lista para una demo que solo quiera enseñar uno o dos.
+
+---
+
 ## El motor de redes neuronales (`NN`)
 
 Los dos bloques de inteligencia artificial se apoyan en

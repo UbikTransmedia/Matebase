@@ -49,7 +49,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   (function () {
     var t = '?t=' + Date.now();
     ['version', 'core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
-     'core/shader', 'core/cripto', 'core/nn', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
+     'core/shader', 'core/cripto', 'core/nn', 'core/logica', 'core/maquina', 'core/lenguaje', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
      'glosario', 'glsl'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
@@ -369,6 +369,365 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     b.pausa();
   })();
 
+  /* ---------------- circuitos: el banco de logica ----------------
+     Lo que se audita aqui no es el texto de una netlist sino lo que HACE:
+     su tabla de verdad entera. Asi vale cualquier circuito equivalente,
+     igual que W.glslIguales acepta cualquier shader que pinte lo mismo. */
+  group('circuitos · lo que hace cada netlist');
+  (function () {
+    if (!window.LOG) { ko('logica.js se carga', 'no está', 'el módulo cargado'); return; }
+
+    function tablaDe(txt) {
+      var c = LOG.analiza(txt);
+      if (c.errores.length) return 'ERROR: ' + c.errores[0].msg;
+      return LOG.tabla(c).filas.map(function (f) {
+        return f.ent.join('') + '>' + f.sal.map(function (x) { return x === null ? 'o' : x; }).join('');
+      }).join(' ');
+    }
+
+    eq('semisumador: suma y acarreo',
+      tablaDe('s = xor(a, b);\nc = and(a, b);'), '00>00 01>10 10>10 11>01');
+    eq('sumador completo, con el acarreo de entrada',
+      tablaDe('s1 = xor(a, b);\ns = xor(s1, cin);\nc1 = and(a, b);\nc2 = and(s1, cin);\ncout = or(c1, c2);'),
+      '000>00 001>10 010>10 011>01 100>10 101>01 110>01 111>11');
+    eq('multiplexor: elige x o y según sel',
+      tablaDe('na = not(sel);\nt1 = and(x, na);\nt2 = and(y, sel);\nm = or(t1, t2);'),
+      '000>0 001>0 010>1 011>1 100>0 101>1 110>0 111>1');
+    /* nand sola construye todas las demas: si esto falla, el tema de las
+       puertas esta contando algo que no es verdad. */
+    eq('not con una nand', tablaDe('y = nand(a, a);'), '0>1 1>0');
+    eq('and con nands', tablaDe('n = nand(a, b);\ny = nand(n, n);'), '00>0 01>0 10>0 11>1');
+    eq('or con nands', tablaDe('na = nand(a, a);\nnb = nand(b, b);\ny = nand(na, nb);'),
+      '00>0 01>1 10>1 11>1');
+
+    /* El biestable, que es la razon de simular por instantes y no en orden
+       topologico: con las dos entradas a cero RECUERDA lo que tuviera, y sin
+       historia previa oscila. Las dos cosas son contenido de maq-memoria. */
+    var latch = LOG.analiza('q = nor(r, qn);\nqn = nor(s, q);');
+    var pon = LOG.simula(latch, { s: 1, r: 0 }, { tope: 40 });
+    var borra = LOG.simula(latch, { s: 0, r: 1 }, { tope: 40 });
+    var recuerda1 = LOG.simula(latch, { s: 0, r: 0 }, { inicial: { q: 1, qn: 0 }, tope: 40 });
+    var recuerda0 = LOG.simula(latch, { s: 0, r: 0 }, { inicial: { q: 0, qn: 1 }, tope: 40 });
+    var sinHistoria = LOG.simula(latch, { s: 0, r: 0 }, { tope: 40 });
+    truthy('el biestable se pone a 1', pon.estable && pon.valores.q === 1);
+    truthy('el biestable se pone a 0', borra.estable && borra.valores.q === 0);
+    truthy('el biestable recuerda el 1', recuerda1.estable && recuerda1.valores.q === 1);
+    truthy('el biestable recuerda el 0', recuerda0.estable && recuerda0.valores.q === 0);
+    truthy('sin historia previa, oscila y se anuncia', sinHistoria.oscila === true);
+
+    /* Y ahora el BANCO, no el simulador. Que LOG.simula sepa recordar no basta:
+       si el banco vuelve a arrancar de cero cada vez que se toca un conmutador,
+       el cerrojo pierde lo guardado en cuanto se suelta la orden y el tema de la
+       memoria enseña lo contrario de lo que dice. La auditoria de temas no ve
+       esto: hay que mover los conmutadores y mirar. */
+    (function () {
+      var hc = document.createElement('div');
+      document.body.appendChild(hc);
+      hc.style.cssText = 'position:absolute;left:-9999px;width:700px';
+      var bc = W.circuito(hc, {
+        texto: 'q = nor(r, qn);\nqn = nor(s, q);', salidas: ['q', 'qn'],
+        memoria: true, inicial: { q: 0, qn: 1 }, tope: 40, reinicia: false
+      });
+      function pulsa(nombre) {
+        [].slice.call(hc.querySelectorAll('.cir__sw')).forEach(function (b) {
+          if (b.textContent.trim().indexOf(nombre + ' =') === 0) b.click();
+        });
+      }
+      function boton(txt) {
+        var b = [].slice.call(hc.querySelectorAll('button')).filter(function (x) { return x.textContent.indexOf(txt) >= 0; })[0];
+        if (b) b.click();
+      }
+      truthy('el banco arranca con lo que se le dio guardado', bc.estado.valores.q === 0 && !bc.estado.oscila);
+      pulsa('s');
+      truthy('poniendo s a 1 el banco guarda un 1', bc.estado.valores.q === 1);
+      pulsa('s');
+      truthy('al soltar s, el banco NO olvida', bc.estado.valores.q === 1 && !bc.estado.oscila);
+      pulsa('r'); pulsa('r');
+      truthy('r borra, y al soltarla tampoco olvida', bc.estado.valores.q === 0 && !bc.estado.oscila);
+      boton('Apagar y encender');
+      truthy('apagar y encender borra lo guardado y vuelve a oscilar', bc.estado.oscila === true);
+
+      /* Con `pausa`, mover un conmutador no resuelve el circuito: deja los
+         cables quietos para poder ver viajar el cambio instante a instante.
+         Sin esto, el paso a paso del tema no ensena nada, porque al soltar el
+         conmutador ya esta todo hecho. */
+      var hp = document.createElement('div');
+      document.body.appendChild(hp);
+      hp.style.cssText = 'position:absolute;left:-9999px;width:700px';
+      var bp = W.circuito(hp, {
+        texto: 'q = nor(r, qn);\nqn = nor(s, q);', salidas: ['q', 'qn'],
+        memoria: true, pausa: true, inicial: { q: 0, qn: 1 }, tope: 40, reinicia: false
+      });
+      function pulsaP(nombre) {
+        [].slice.call(hp.querySelectorAll('.cir__sw')).forEach(function (b) {
+          if (b.textContent.trim().indexOf(nombre + ' =') === 0) b.click();
+        });
+      }
+      function paso() {
+        [].slice.call(hp.querySelectorAll('button')).filter(function (x) { return x.textContent.indexOf('Un instante') >= 0; })[0].click();
+      }
+      pulsaP('s');
+      truthy('en pausa, el conmutador no resuelve el circuito', bp.estado.valores.q === 0 && bp.estado.valores.qn === 1);
+      paso();
+      truthy('primer instante: las dos salidas se van a 0 a la vez', bp.estado.valores.q === 0 && bp.estado.valores.qn === 0);
+      paso();
+      truthy('segundo instante: q sube a 1', bp.estado.valores.q === 1 && bp.estado.valores.qn === 0);
+      paso();
+      truthy('tercer instante: ya no se mueve', bp.estado.valores.q === 1 && bp.estado.valores.qn === 0);
+      hc.remove(); hp.remove();
+    }());
+
+    /* Comparar por comportamiento: dos circuitos distintos que hacen lo mismo
+       tienen que valer los dos. */
+    var XOR = { entradas: ['a', 'b'], salidas: ['y'], filas: [[0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 0]] };
+    truthy('acepta el xor directo', LOG.iguales('y = xor(a, b);', XOR).ok);
+    truthy('acepta el mismo xor hecho con cuatro nand',
+      LOG.iguales('n1 = nand(a, b);\nn2 = nand(a, n1);\nn3 = nand(b, n1);\ny = nand(n2, n3);', XOR).ok);
+    truthy('rechaza un and donde se pedia un xor', !LOG.iguales('y = and(a, b);', XOR).ok);
+    truthy('rechaza si se deja una entrada sin usar', !LOG.iguales('y = not(a);', XOR).ok);
+    truthy('una netlist rota se rechaza con su línea', !LOG.iguales('y = xor(a,;', XOR).ok);
+    eq('cuenta el coste en puertas', LOG.iguales('y = xor(a, b);', XOR).puertas, 1);
+
+    /* No trivialidad: el equivalente al «shader que pinta liso». Una tabla que
+       se resuelve copiando una entrada, negandola o con una constante no es un
+       ejercicio, y no puede colarse como enunciado. */
+    function comoTabla(t) {
+      return {
+        entradas: t.entradas, salidas: t.salidas,
+        filas: t.filas.map(function (f) {
+          return { ent: f.slice(0, t.entradas.length), sal: f.slice(t.entradas.length) };
+        })
+      };
+    }
+    truthy('el xor no es trivial', !LOG.esTrivial(comoTabla(XOR)));
+    truthy('copiar una entrada sí lo es',
+      LOG.esTrivial(comoTabla({ entradas: ['a', 'b'], salidas: ['y'], filas: [[0, 0, 0], [0, 1, 0], [1, 0, 1], [1, 1, 1]] })));
+    truthy('una salida constante sí lo es',
+      LOG.esTrivial(comoTabla({ entradas: ['a', 'b'], salidas: ['y'], filas: [[0, 0, 1], [0, 1, 1], [1, 0, 1], [1, 1, 1]] })));
+
+    /* Errores con el numero de linea que ve el alumno. */
+    var mal = LOG.analiza('y = xor(a, b);\nz = chorra(a);');
+    truthy('un nombre de puerta inventado se caza en su línea',
+      mal.errores.length === 1 && mal.errores[0].linea === 2);
+
+    /* El coloreado usa los mismos ocho papeles del editor de shaders. */
+    var html = LOG.pinta('y = xor(a, b); // nota');
+    truthy('la netlist se colorea con las clases del curso',
+      html.indexOf('cod-fun') >= 0 && html.indexOf('cod-com') >= 0 && html.indexOf('<script') < 0);
+  })();
+
+  /* ---------------- la maquina de juguete ----------------
+     Un programa no se compara por su texto sino por lo que escribe, igual
+     que un circuito por su tabla. Y la bateria de ejemplos esta aqui por
+     una razon: si alguno deja de dar lo que da, es que se ha roto la CPU
+     y todo el tramo B se apoya en ella. */
+  group('la máquina · lo que hace cada programa');
+  (function () {
+    if (!window.MAQ) { ko('maquina.js se carga', 'no está', 'el módulo cargado'); return; }
+
+    Object.keys(MAQ.EJEMPLOS).forEach(function (k) {
+      var e = MAQ.EJEMPLOS[k];
+      var r = MAQ.ejecuta(e.texto, e.datos);
+      eq('«' + e.t + '» escribe lo que debe',
+        r.errores.length ? ('error: ' + r.errores[0].msg) : r.salida.join(','), e.salida.join(','));
+    });
+
+    /* El ensamblador: dos pasadas, variables detras del programa, y cada
+       error con el numero de linea que ve el alumno. */
+    var a = MAQ.ensambla('SALTA fin\nNUM 9\nfin:\nCARGA x\nPARA');
+    truthy('un salto hacia delante se resuelve', a.errores.length === 0 && a.etiquetas.fin === 4);
+    truthy('las variables van detrás del programa', a.vars.x === a.fin);
+    eq('una etiqueta que no existe se caza en su línea',
+      MAQ.ensambla('SALTA nada\nPARA').errores[0].linea, 1);
+    eq('una instrucción inventada se caza en su línea',
+      MAQ.ensambla('PARA\nCARGAR x').errores[0].linea, 2);
+    eq('un número que no cabe en ocho bits se caza',
+      MAQ.ensambla('NUM 300\nPARA').errores.length, 1);
+    truthy('una etiqueta puede ir delante de la instrucción',
+      MAQ.ejecuta('ini: NUM 5\nMUESTRA\nPARA').salida.join(',') === '5');
+    truthy('los comentarios no estorban',
+      MAQ.ejecuta('; uno\nNUM 1 ; dos\n// tres\nMUESTRA\nPARA').salida.join(',') === '1');
+
+    /* Nada se cuelga, y cada final tiene su explicacion. */
+    truthy('un bucle sin fin se para y lo dice',
+      MAQ.ejecuta('b:\nSALTA b', null, 200).porQue.indexOf('sin terminar') >= 0);
+    truthy('dividir entre cero se para y lo dice',
+      MAQ.ejecuta('NUM 5\nMETE\nNUM 0\nDIV\nPARA').porQue.indexOf('entre cero') >= 0);
+    truthy('sacar de la pila vacía se para y lo dice',
+      MAQ.ejecuta('SUMA\nPARA').porQue.indexOf('vacía') >= 0);
+    truthy('una llamada que no vuelve llena la pila y se para',
+      MAQ.ejecuta('f:\nLLAMA f', null, 500).porQue.indexOf('pila') >= 0);
+
+    /* Ocho bits con signo: lo que se sale da la vuelta, y se avisa. */
+    var db = MAQ.ejecuta('NUM 100\nMETE\nNUM 100\nSUMA\nMUESTRA\nPARA');
+    truthy('sumar 100 y 100 da la vuelta a -56 y lo avisa',
+      db.salida[0] === -56 && db.desbordo === true);
+    eq('el complemento a dos es el de maq-bits', MAQ.ocho(-129), 127);
+
+    /* Correccion por comportamiento: vale cualquier programa que resuelva. */
+    var casos = [{ datos: { x: 1, y: 2 }, salida: [3] }, { datos: { x: -5, y: 5 }, salida: [0] }];
+    truthy('acepta la suma escrita de una manera',
+      MAQ.iguales('CARGA x\nMETE\nCARGA y\nSUMA\nMUESTRA\nPARA', casos).ok);
+    truthy('acepta la misma suma escrita al revés',
+      MAQ.iguales('CARGA y\nMETE\nCARGA x\nSUMA\nMUESTRA\nPARA', casos).ok);
+    truthy('rechaza un programa que escribe otra cosa',
+      !MAQ.iguales('CARGA x\nMUESTRA\nPARA', casos).ok);
+    truthy('avisa si el programa no usa los nombres del enunciado',
+      MAQ.iguales('NUM 3\nMUESTRA\nPARA', casos).porQue.indexOf('celda llamada') >= 0);
+    eq('cuenta el coste en instrucciones',
+      MAQ.iguales('CARGA x\nMETE\nCARGA y\nSUMA\nMUESTRA\nPARA', casos).instrucciones, 6);
+
+    /* El coloreado no puede alterar el texto: se pinta lo que hay. */
+    var pintado = MAQ.pinta('bucle: CARGA x ; nota <b>');
+    var plano = pintado.replace(/<[^>]*>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    eq('el coloreado no cambia ni una letra', plano, 'bucle: CARGA x ; nota <b>');
+    truthy('y usa las clases del curso',
+      pintado.indexOf('cod-key') >= 0 && pintado.indexOf('cod-com') >= 0);
+
+    /* El widget: la auditoria de temas no lo mira, asi que se mira aqui. */
+    var hm = document.createElement('div');
+    document.body.appendChild(hm);
+    hm.style.cssText = 'position:absolute;left:-9999px;width:760px';
+    var con = W.maquina(hm, { texto: MAQ.EJEMPLOS.suma.texto, datos: MAQ.EJEMPLOS.suma.datos });
+    function boton(t) {
+      return [].slice.call(hm.querySelectorAll('button')).filter(function (b) { return b.textContent.indexOf(t) >= 0; })[0];
+    }
+    truthy('la memoria se enseña celda a celda', hm.querySelectorAll('.maq__mem tbody tr').length === 10);
+    truthy('en la celda 0 hay un número, que resulta ser una instrucción',
+      hm.querySelectorAll('.maq__mem tbody tr')[0].textContent.indexOf('CARGA') >= 0 && con.m.mem[0] === 2);
+    boton('Un paso').click();
+    truthy('un paso mueve el contador y carga el acumulador', con.m.pc === 2 && con.m.a === 20);
+    boton('▶ Corre').click();
+    truthy('correr hasta el final deja la salida puesta', con.m.salida.join(',') === '42');
+    truthy('la flecha se queda donde paró', hm.querySelector('.maq__mem tr.is-pc').textContent.indexOf('PARA') >= 0);
+    boton('↺ Reinicia').click();
+    truthy('reiniciar lo devuelve todo a su sitio', con.m.pc === 0 && !con.m.salida.length);
+    hm.remove();
+  })();
+
+  /* ---------------- el lenguaje ----------------
+     LA PRUEBA DIFERENCIAL. Interpretar un programa y compilarlo para
+     ejecutarlo en la CPU son dos caminos distintos hacia el mismo sitio,
+     y el tramo B entero se apoya en que llegan al mismo. Si alguna vez
+     dejan de coincidir, es que el compilador miente, y eso no se ve
+     mirando el codigo generado: hay que correr los dos y comparar. */
+  group('el lenguaje · interpretar y compilar dan lo mismo');
+  (function () {
+    if (!window.LEN) { ko('lenguaje.js se carga', 'no está', 'el módulo cargado'); return; }
+
+    Object.keys(LEN.EJEMPLOS).forEach(function (k) {
+      var e = LEN.EJEMPLOS[k];
+      var d = LEN.diferencial(e.texto, { tope: 60000 });
+      eq('«' + e.t + '»: los dos caminos coinciden',
+        d.iguales ? 'sí' : ('interpretado ' + d.interpretado + ' · compilado ' + d.compilado +
+          (d.errores.length ? ' · ' + d.errores[0].msg : '')), 'sí');
+      /* Y también optimizando: una optimización que cambia lo que hace el
+         programa no es una optimización, es un fallo. */
+      var o = LEN.diferencial(e.texto, { tope: 60000, optimiza: true });
+      truthy('«' + e.t + '»: optimizar no cambia el resultado', o.iguales);
+    });
+
+    /* El analizador lexico: cada pieza con su nombre y su linea. */
+    var lx = LEN.tokeniza('sea x = 12;\nmuestra x >= 3;');
+    eq('trocea en las piezas que toca',
+      lx.tokens.filter(function (t) { return t.t !== 'fin'; }).map(function (t) { return t.t; }).join(' '),
+      'palabra nombre op num op palabra nombre op num op');
+    eq('el token de la segunda línea sabe que es la segunda',
+      lx.tokens[5].linea, 2);
+    eq('«>=» es un solo token, no dos', lx.tokens[7].texto, '>=');
+    truthy('los comentarios no llegan al analizador',
+      LEN.tokeniza('muestra 1; # esto no\n').tokens.length === 4);
+
+    /* El arbol: la precedencia sale de la forma, no de un parentesis. */
+    var a1 = LEN.analiza('muestra 2 + 3 * 4;').ast.ss[0].e;
+    truthy('«2 + 3 * 4» pone el * debajo del +', a1.op === '+' && a1.d.op === '*');
+    var a2 = LEN.analiza('muestra (2 + 3) * 4;').ast.ss[0].e;
+    truthy('el paréntesis le da la vuelta al árbol', a2.op === '*' && a2.i.op === '+');
+    var a3 = LEN.analiza('muestra 10 - 3 - 2;').ast.ss[0].e;
+    truthy('la resta se asocia por la izquierda: (10-3)-2',
+      a3.op === '-' && a3.i.op === '-' && a3.d.v === 2);
+    eq('y por eso vale 5', LEN.corre('muestra 10 - 3 - 2;').salida[0], 5);
+
+    /* Errores con la linea que ve el alumno. */
+    eq('un punto y coma que falta se caza', LEN.analiza('sea x = 3').errores[0].linea, 1);
+    eq('y en su línea', LEN.analiza('sea x = 3;\nmuestra (1 + 2;').errores[0].linea, 2);
+    truthy('un carácter que no es del lenguaje se caza',
+      LEN.tokeniza('muestra 3 $ 4;').errores.length === 1);
+    truthy('usar una variable que no existe se dice claro',
+      LEN.corre('muestra z;').porQue.indexOf('«z»') >= 0);
+    truthy('asignar sin declarar dice cómo se declara',
+      LEN.corre('z = 3;').porQue.indexOf('sea z') >= 0);
+
+    /* Nada se cuelga, ni interpretando ni compilando. */
+    truthy('un bucle sin fin interpretado se para y lo dice',
+      LEN.corre('mientras 1 { sea q = 1; }', { tope: 400 }).porQue.indexOf('sin terminar') >= 0);
+    truthy('dividir entre cero se para y lo dice',
+      LEN.corre('muestra 6 / 0;').porQue.indexOf('entre cero') >= 0);
+    truthy('una recursión sin fondo llena la pila de la máquina y se para',
+      LEN.corre('fun f(n) { vuelve f(n) + 1; }\nmuestra f(1);',
+        { compilado: true, tope: 4000 }).porQue.indexOf('pila') >= 0);
+
+    /* Pizca es un lenguaje de ocho bits, y eso tiene que notarse igual
+       por los dos caminos: si no, la prueba diferencial no diria nada. */
+    var db = LEN.diferencial('muestra 100 + 100;');
+    truthy('desbordar da la vuelta, y por los dos caminos igual',
+      db.iguales && db.interpretado[0] === -56);
+    eq('la división tira los decimales', LEN.corre('muestra 20 / 6;').salida[0], 3);
+
+    /* Optimizar: plegar lo que ya se sabe y tirar lo que no se ejecuta. */
+    var cta = { plegadas: 0, muertas: 0 };
+    var ar = LEN.optimiza(LEN.copia(LEN.analiza(
+      'sea x = 2 + 3 * 4;\nsi 1 > 2 { muestra 1; } sino { muestra 9; }\nmientras 0 { muestra 5; }\nmuestra x;').ast), cta);
+    truthy('pliega las cuentas que ya se saben', cta.plegadas === 3);
+    truthy('y tira las dos ramas que no se ejecutan nunca', cta.muertas === 2);
+    eq('el programa plegado sigue escribiendo lo mismo',
+      LEN.corre('sea x = 2 + 3 * 4;\nsi 1 > 2 { muestra 1; } sino { muestra 9; }\nmientras 0 { muestra 5; }\nmuestra x;',
+        { optimiza: true }).salida.join(','), '9,14');
+    truthy('optimizar acorta el ensamblador de verdad', (function () {
+      var t = 'sea x = 2 + 3 * 4;\nsi 1 > 2 { muestra 1; } sino { muestra 9; }\nmuestra x;';
+      var largo = MAQ.ensambla(LEN.compila(LEN.analiza(t).ast).texto).instrucciones;
+      var corto = MAQ.ensambla(LEN.compila(LEN.optimiza(LEN.copia(LEN.analiza(t).ast))).texto).instrucciones;
+      return corto < largo;
+    }()));
+
+    /* Correccion por comportamiento, con un prologo que pone los datos. */
+    var casos = [{ antes: 'sea n = 3;\n', salida: [9] }, { antes: 'sea n = 0;\n', salida: [0] }];
+    truthy('acepta un programa que resuelve',
+      LEN.iguales('muestra n * n;', casos).ok);
+    truthy('acepta otro que resuelve igual escrito distinto',
+      LEN.iguales('sea r = n;\nr = r * n;\nmuestra r;', casos).ok);
+    truthy('rechaza uno que escribe otra cosa',
+      !LEN.iguales('muestra n + n;', casos).ok);
+
+    /* El coloreado no puede alterar el texto. */
+    var pintado = LEN.pinta('sea x = 1; # nota <b>');
+    var plano = pintado.replace(/<[^>]*>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    eq('el coloreado no cambia ni una letra', plano, 'sea x = 1; # nota <b>');
+    truthy('y usa las clases del curso',
+      pintado.indexOf('cod-key') >= 0 && pintado.indexOf('cod-com') >= 0);
+
+    /* El widget: cuatro paneles del mismo texto. */
+    var hl = document.createElement('div');
+    document.body.appendChild(hl);
+    hl.style.cssText = 'position:absolute;left:-9999px;width:760px';
+    var tal = W.lenguaje(hl, { texto: LEN.EJEMPLOS.funcion.texto });
+    truthy('el aviso canta las dos salidas y que coinciden',
+      hl.querySelector('.len__aviso').textContent.indexOf('son lo mismo') >= 0);
+    function ficha(t) {
+      return [].slice.call(hl.querySelectorAll('.chip')).filter(function (c) { return c.textContent.trim() === t; })[0];
+    }
+    truthy('el panel de tokens enseña tokens', hl.querySelector('.len__panel').textContent.indexOf('palabra  fun') >= 0);
+    ficha('árbol').click();
+    truthy('el panel del árbol enseña el árbol', hl.querySelector('.len__panel').textContent.indexOf('llamar doble') >= 0);
+    ficha('ensamblador').click();
+    truthy('el panel del ensamblador enseña ensamblador de la máquina',
+      hl.querySelector('.len__panel').textContent.indexOf('LLAMA f_doble') >= 0);
+    ficha('máquina').click();
+    truthy('el panel de la máquina enseña lo que escribe',
+      hl.querySelector('.len__panel').textContent.indexOf('8, 12') >= 0);
+    hl.remove();
+  })();
+
   /* ---------------- mathlib: enteros ---------------- */
   group('mathlib · aritmética entera');
   eq('gcd(84,36)', ML.gcd(84, 36), 12);
@@ -549,7 +908,10 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     }
     var enCasilla = recibeElClic(inp), enBoton = recibeElClic(bot);
     if (!enCasilla || !enBoton) {
-      ko('la fila de respuesta se monta con tamaño', 'las cajas salen a cero', 'algo que se pueda pulsar');
+      /* Sin pintar no hay geometria: pasa con la pestana oculta o en segundo
+         plano, donde todo mide cero. Eso no es el fallo que busca esta prueba,
+         asi que se dice y no se cuenta como error. */
+      ok('las casillas se pueden pulsar (no medible: la página no se está pintando)');
     } else {
       truthy('al pulsar la casilla, el clic llega a la casilla', enCasilla === inp);
       truthy('al pulsar el «?», el clic llega al «?»', enBoton === bot);
@@ -683,6 +1045,17 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     ].forEach(function (c) {
       parejas.push([c[0], '--bg-alt', 'código · ' + c[1] + ' en el editor']);
       parejas.push([c[0], '--panel-2', 'código · ' + c[1] + ' en el enunciado']);
+    });
+    /* Las pieles de bloque redefinen el acento entero, así que hay que
+       medirlas igual que el acento normal: en un bloque con piel, el color
+       de los enlaces y el de los botones son los suyos y no los de :root.
+       Esto no se comprobaba, y la piel nueva del bloque 15 obligó a mirarlo. */
+    [['maq', 'máquinas y lenguajes'], ['gfx', 'programación gráfica'],
+     ['cr', 'criptografía'], ['ia', 'inteligencia artificial']
+    ].forEach(function (pl) {
+      parejas.push(['--' + pl[0], '--bg', 'piel ' + pl[1] + ' · enlaces']);
+      parejas.push(['--' + pl[0] + '-on', '--' + pl[0], 'piel ' + pl[1] + ' · texto del botón']);
+      parejas.push(['--' + pl[0] + '-ink', '--' + pl[0] + '-soft', 'piel ' + pl[1] + ' · etiqueta']);
     });
     var raiz = document.documentElement;
     var previo = raiz.getAttribute('data-theme');

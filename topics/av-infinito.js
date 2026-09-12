@@ -228,6 +228,14 @@ Course.topic('av-infinito', function (p) {
     'diagonal que acabas de ver, aplicada a un objeto distinto.',
     null, 'La diagonal vuelve enseguida');
 
+  p.note('Y hay una tercera aplicación de la misma jugada, ésta muy concreta y muy práctica. Para que el ' +
+    'argumento diagonal funcione sobre programas hace falta que un programa pueda recibir a otro ' +
+    '<em>como dato</em>, cosa que suena abstracta hasta que se ve por dentro: en ' +
+    '[[len-autorreferencia|el bloque de máquinas y lenguajes]] se construye la máquina donde un programa ' +
+    'son números en celdas, indistinguibles de los datos, y se comprueba que un programa puede leerse a ' +
+    'sí mismo. Con eso, lo de «construir el caso que contradice a quien lo predice» deja de ser un juego ' +
+    'de palabras y pasa a ser una cosa que se puede hacer.', null, 'Qué hace falta para que la diagonal funcione');
+
   p.section('La hipótesis del continuo');
 
   p.text('Cantor se preguntó lo obvio: ¿hay algún infinito <em>entre</em> $\\aleph_0$ y $|\\mathbb{R}|$? ' +

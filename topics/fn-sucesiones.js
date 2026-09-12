@@ -14,6 +14,15 @@ Course.topic('fn-sucesiones', function (p) {
   p.text('El <strong>término general</strong> es la fórmula que permite calcular cualquier término sin ' +
     'recorrer los anteriores. Encontrarlo es la mitad del trabajo con sucesiones.');
 
+  p.note('Hay otra forma de decir quién es una sucesión, y es la contraria: en vez de una fórmula que da ' +
+    'el término $n$ de golpe, una regla que lo saca de los anteriores más un punto de partida. Eso es ' +
+    'una <strong>recurrencia</strong>, y es literalmente lo mismo que una función que se llama a sí ' +
+    'misma en un programa: caso base y regla. En ' +
+    '[[len-funciones|el bloque de máquinas y lenguajes]] se escribe así y se ve lo que cuesta —hay que ' +
+    'guardar en algún sitio todos los términos a medio calcular, y ese sitio se llena—, que es ' +
+    'exactamente la razón práctica de que encontrar el término general merezca la pena.',
+    null, 'La otra forma de definir una sucesión');
+
   p.section('Progresiones aritméticas');
 
   p.text('Cada término se obtiene <strong>sumando</strong> siempre la misma cantidad $d$ (la ' +
