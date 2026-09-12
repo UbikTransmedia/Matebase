@@ -86,6 +86,34 @@ objeto en el array.
 > exista y vaya antes. No se tocó nada: las fichas nuevas se limitan a declararlo
 > como las demás.
 
+> **Decisiones propias del bloque de máquinas**, tomadas sin consultar porque el
+> encargo pedía trabajar de principio a fin, y anotadas aquí por eso mismo:
+>
+> - **La piel del bloque es violeta, no azul.** Se probó el azul, que es el color
+>   con el que se piensa un ordenador, y era invisible: el acento por defecto del
+>   curso ya es azul en los tres temas, así que el bloque no se habría distinguido
+>   de ninguno de los normales. Se midió la distancia de tono a los acentos ya
+>   usados y el violeta era el hueco.
+> - **El simulador de circuitos avanza por instantes, no en orden topológico.** Un
+>   orden topológico resuelve de un tirón cualquier circuito sin ciclos, pero
+>   entonces el biestable —que es un ciclo— no tendría solución, y es el tema que
+>   hace que el instrumento valga la pena.
+> - **El banco de circuitos guarda estado entre pulsaciones** (opción `memoria`).
+>   Sin eso, soltar la orden de un cerrojo lo devolvía a cero y oscilaba: el tema
+>   de la memoria enseñaba justo lo contrario de lo que decía. La auditoría de
+>   temas no puede ver un defecto así, de modo que la regresión mueve los
+>   conmutadores de un banco de verdad.
+> - **La máquina tiene mnemónicos en castellano, celdas de 8 bits con signo y el
+>   programa en la misma memoria que los datos.** Lo primero porque el alumno los
+>   lee letra a letra; lo segundo porque convierte `maq-bits` en algo que se toca
+>   —el factorial de 5 cabe y el de 6 no—; lo tercero porque «un programa son
+>   números en celdas» es la idea de von Neumann y aquí se ve en una tabla.
+> - **El Quine-McCluskey de `maq-normal` vive en el tema, no en el núcleo.** No lo
+>   usa nadie más, y lo que hace falta allí no es minimizar de verdad —eso es un
+>   problema duro— sino poder decir un coste alcanzable sin inventárselo. Por eso
+>   los ejercicios dicen «se puede con N» y enseñan el circuito, nunca «el mínimo
+>   es N».
+
 > **Por qué el temario de ampliación está repartido por disciplinas.** Los bloques
 > de ampliación empezaron siendo **un solo bloque de 19 temas** llamado «Escalada
 > avanzada», y funcionaba mal: su único criterio era negativo —*esto no entra en

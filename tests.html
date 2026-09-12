@@ -49,7 +49,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   (function () {
     var t = '?t=' + Date.now();
     ['version', 'core/util', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
-     'core/shader', 'core/cripto', 'core/nn', 'core/logica', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
+     'core/shader', 'core/cripto', 'core/nn', 'core/logica', 'core/maquina', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
      'glosario', 'glsl'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
@@ -514,6 +514,95 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     var html = LOG.pinta('y = xor(a, b); // nota');
     truthy('la netlist se colorea con las clases del curso',
       html.indexOf('cod-fun') >= 0 && html.indexOf('cod-com') >= 0 && html.indexOf('<script') < 0);
+  })();
+
+  /* ---------------- la maquina de juguete ----------------
+     Un programa no se compara por su texto sino por lo que escribe, igual
+     que un circuito por su tabla. Y la bateria de ejemplos esta aqui por
+     una razon: si alguno deja de dar lo que da, es que se ha roto la CPU
+     y todo el tramo B se apoya en ella. */
+  group('la máquina · lo que hace cada programa');
+  (function () {
+    if (!window.MAQ) { ko('maquina.js se carga', 'no está', 'el módulo cargado'); return; }
+
+    Object.keys(MAQ.EJEMPLOS).forEach(function (k) {
+      var e = MAQ.EJEMPLOS[k];
+      var r = MAQ.ejecuta(e.texto, e.datos);
+      eq('«' + e.t + '» escribe lo que debe',
+        r.errores.length ? ('error: ' + r.errores[0].msg) : r.salida.join(','), e.salida.join(','));
+    });
+
+    /* El ensamblador: dos pasadas, variables detras del programa, y cada
+       error con el numero de linea que ve el alumno. */
+    var a = MAQ.ensambla('SALTA fin\nNUM 9\nfin:\nCARGA x\nPARA');
+    truthy('un salto hacia delante se resuelve', a.errores.length === 0 && a.etiquetas.fin === 4);
+    truthy('las variables van detrás del programa', a.vars.x === a.fin);
+    eq('una etiqueta que no existe se caza en su línea',
+      MAQ.ensambla('SALTA nada\nPARA').errores[0].linea, 1);
+    eq('una instrucción inventada se caza en su línea',
+      MAQ.ensambla('PARA\nCARGAR x').errores[0].linea, 2);
+    eq('un número que no cabe en ocho bits se caza',
+      MAQ.ensambla('NUM 300\nPARA').errores.length, 1);
+    truthy('una etiqueta puede ir delante de la instrucción',
+      MAQ.ejecuta('ini: NUM 5\nMUESTRA\nPARA').salida.join(',') === '5');
+    truthy('los comentarios no estorban',
+      MAQ.ejecuta('; uno\nNUM 1 ; dos\n// tres\nMUESTRA\nPARA').salida.join(',') === '1');
+
+    /* Nada se cuelga, y cada final tiene su explicacion. */
+    truthy('un bucle sin fin se para y lo dice',
+      MAQ.ejecuta('b:\nSALTA b', null, 200).porQue.indexOf('sin terminar') >= 0);
+    truthy('dividir entre cero se para y lo dice',
+      MAQ.ejecuta('NUM 5\nMETE\nNUM 0\nDIV\nPARA').porQue.indexOf('entre cero') >= 0);
+    truthy('sacar de la pila vacía se para y lo dice',
+      MAQ.ejecuta('SUMA\nPARA').porQue.indexOf('vacía') >= 0);
+    truthy('una llamada que no vuelve llena la pila y se para',
+      MAQ.ejecuta('f:\nLLAMA f', null, 500).porQue.indexOf('pila') >= 0);
+
+    /* Ocho bits con signo: lo que se sale da la vuelta, y se avisa. */
+    var db = MAQ.ejecuta('NUM 100\nMETE\nNUM 100\nSUMA\nMUESTRA\nPARA');
+    truthy('sumar 100 y 100 da la vuelta a -56 y lo avisa',
+      db.salida[0] === -56 && db.desbordo === true);
+    eq('el complemento a dos es el de maq-bits', MAQ.ocho(-129), 127);
+
+    /* Correccion por comportamiento: vale cualquier programa que resuelva. */
+    var casos = [{ datos: { x: 1, y: 2 }, salida: [3] }, { datos: { x: -5, y: 5 }, salida: [0] }];
+    truthy('acepta la suma escrita de una manera',
+      MAQ.iguales('CARGA x\nMETE\nCARGA y\nSUMA\nMUESTRA\nPARA', casos).ok);
+    truthy('acepta la misma suma escrita al revés',
+      MAQ.iguales('CARGA y\nMETE\nCARGA x\nSUMA\nMUESTRA\nPARA', casos).ok);
+    truthy('rechaza un programa que escribe otra cosa',
+      !MAQ.iguales('CARGA x\nMUESTRA\nPARA', casos).ok);
+    truthy('avisa si el programa no usa los nombres del enunciado',
+      MAQ.iguales('NUM 3\nMUESTRA\nPARA', casos).porQue.indexOf('celda llamada') >= 0);
+    eq('cuenta el coste en instrucciones',
+      MAQ.iguales('CARGA x\nMETE\nCARGA y\nSUMA\nMUESTRA\nPARA', casos).instrucciones, 6);
+
+    /* El coloreado no puede alterar el texto: se pinta lo que hay. */
+    var pintado = MAQ.pinta('bucle: CARGA x ; nota <b>');
+    var plano = pintado.replace(/<[^>]*>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    eq('el coloreado no cambia ni una letra', plano, 'bucle: CARGA x ; nota <b>');
+    truthy('y usa las clases del curso',
+      pintado.indexOf('cod-key') >= 0 && pintado.indexOf('cod-com') >= 0);
+
+    /* El widget: la auditoria de temas no lo mira, asi que se mira aqui. */
+    var hm = document.createElement('div');
+    document.body.appendChild(hm);
+    hm.style.cssText = 'position:absolute;left:-9999px;width:760px';
+    var con = W.maquina(hm, { texto: MAQ.EJEMPLOS.suma.texto, datos: MAQ.EJEMPLOS.suma.datos });
+    function boton(t) {
+      return [].slice.call(hm.querySelectorAll('button')).filter(function (b) { return b.textContent.indexOf(t) >= 0; })[0];
+    }
+    truthy('la memoria se enseña celda a celda', hm.querySelectorAll('.maq__mem tbody tr').length === 10);
+    truthy('en la celda 0 hay un número, que resulta ser una instrucción',
+      hm.querySelectorAll('.maq__mem tbody tr')[0].textContent.indexOf('CARGA') >= 0 && con.m.mem[0] === 2);
+    boton('Un paso').click();
+    truthy('un paso mueve el contador y carga el acumulador', con.m.pc === 2 && con.m.a === 20);
+    boton('▶ Corre').click();
+    truthy('correr hasta el final deja la salida puesta', con.m.salida.join(',') === '42');
+    truthy('la flecha se queda donde paró', hm.querySelector('.maq__mem tr.is-pc').textContent.indexOf('PARA') >= 0);
+    boton('↺ Reinicia').click();
+    truthy('reiniciar lo devuelve todo a su sitio', con.m.pc === 0 && !con.m.salida.length);
+    hm.remove();
   })();
 
   /* ---------------- mathlib: enteros ---------------- */

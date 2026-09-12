@@ -567,6 +567,31 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
 }
 .cir__tabla, .maq__tabla{margin-top:10px}
 
+/* LA MAQUINA. Los registros a la vista en una fila, y la memoria debajo en la
+   tabla de siempre. La celda por la que va el contador se marca con una flecha
+   ademas de con el fondo: nada se distingue solo por color. */
+.maq__regs{display:flex; flex-wrap:wrap; gap:8px; margin:9px 0 2px}
+.maq__reg{
+  padding:5px 11px; border-radius:8px;
+  background:var(--panel-2); border:1px solid var(--line-soft);
+  font-family:var(--mono); font-size:0.8125rem; color:var(--ink);
+}
+.maq__reg b{color:var(--ink-faint); font-weight:600; text-transform:uppercase; font-size:0.75rem; margin-right:5px}
+.maq__reg--sal{background:var(--accent-soft); border-color:var(--accent)}
+.maq__reg--sal b{color:var(--accent-ink)}
+
+.maq__mem{max-height:340px; overflow:auto; margin-top:10px}
+.maq__mem table.tbl{font-family:var(--mono); font-size:0.8125rem}
+.maq__mem th, .maq__mem td{padding:4px 10px}
+.maq__mem thead th{position:sticky; top:0; z-index:1}
+.maq__flecha{width:1.4em; color:var(--accent); font-weight:700}
+.maq__mem tr.is-pc{background:var(--accent-soft)}
+.maq__mem tr.is-pc td{color:var(--accent-ink); font-weight:650}
+.maq__op{font-weight:700}
+.maq__et{color:var(--accent-ink); font-weight:700}
+.maq__var{font-weight:650}
+.maq__libre{color:var(--ink-faint)}
+
 /* Los conmutadores de entrada. El estado se ve por el texto («a = 1») ademas
    de por el color, que es la regla de accesibilidad del curso: nada se
    distingue solo por color. */

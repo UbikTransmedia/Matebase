@@ -704,6 +704,54 @@ puede con 5». Informa, no penaliza.
 
 ---
 
+## La máquina de juguete (`MAQ` y `W.maquina`)
+
+`assets/js/core/maquina.js` es la CPU donde aterriza todo el bloque: el
+compilador del tramo B genera exactamente su ensamblador. **Dieciséis
+instrucciones**, que es lo que cabe en cuatro bits, con mnemónicos en castellano
+porque el alumno los va a leer letra a letra:
+
+| Sin argumento | Con argumento |
+|---|---|
+| `PARA` `METE` `SACA` `SUMA` `RESTA` `MULT` `DIV` `MENOR` `VUELVE` `MUESTRA` | `NUM n` `CARGA c` `GUARDA c` `SALTA e` `SICERO e` `LLAMA e` |
+
+Cuatro decisiones mandan sobre todo lo demás, y conviene conocerlas antes de
+escribir un programa para una demo:
+
+- **Celdas de 8 bits con signo**, en complemento a dos: de −128 a 127, y lo que
+  se sale da la vuelta. No es una limitación que haya que disculpar, es
+  `maq-bits` hecho carne. La máquina **avisa** de que ha desbordado, para que se
+  vea en lugar de sospecharse. El factorial de 5 cabe justo; el de 6, no.
+- **Programa y datos en la misma memoria.** Un programa son números en celdas, y
+  la tabla de memoria los enseña todos iguales: en la celda 0 hay un `2` que
+  resulta ser un `CARGA`. Las instrucciones ocupan una celda, o dos si llevan
+  argumento.
+- **Acumulador más pila.** Las operaciones sacan el operando **izquierdo** de la
+  pila y toman el **derecho** del acumulador. Con eso, compilar un árbol es un
+  recorrido en postorden y nada más: `izquierda, METE, derecha, operación`. El
+  tramo B se apoya entero en esa frase.
+- **Nada se cuelga.** Todo corre con un tope de pasos y cada final trae su
+  explicación: bucle sin fin, división entre cero, pila vacía, pila llena.
+
+| Función | Qué hace |
+|---|---|
+| `MAQ.ensambla(texto)` | dos pasadas: `{celdas, imagen, etiquetas, vars, fin, libre, errores, instrucciones}`; los errores llevan `linea` y `msg`. Las variables se colocan solas detrás del programa |
+| `MAQ.nueva(asm, datos)` | estado inicial; `datos` es `{nombre: valor}` y es como se le dan entradas a un programa sin inventar una instrucción de leer |
+| `MAQ.paso(m)` / `MAQ.corre(m, tope)` | un paso (buscar, decodificar, ejecutar) o hasta que pare |
+| `MAQ.ejecuta(texto, datos, tope)` | atajo: `{errores, salida, a, mem, pasos, porQue, desbordo}` |
+| `MAQ.iguales(texto, casos, o)` | compara **comportamiento**: corre el programa con cada `{datos, salida}` y devuelve `{ok, porQue, instrucciones, pasos}` |
+| `MAQ.pinta(texto)` | coloreado del ensamblador con los mismos ocho papeles |
+| `MAQ.EJEMPLOS` | la batería de programas de referencia (`suma`, `mayor`, `cuenta`, `fact`, `doble`), que además son pruebas: si uno deja de dar lo que da, la CPU está rota |
+
+**El widget.** `W.maquina(host, {id, texto, datos, alto, aria, nota, tope})`, con
+la misma forma que los otros dos: editor de dos capas, aviso con `aria-live` que
+dice en castellano qué acaba de hacer, registros a la vista, y debajo **la
+memoria entera**, con una flecha en la celda del contador (flecha *y* fondo:
+nada se distingue solo por color). Para corregir, `W.programaIguales` es
+`MAQ.iguales`, y las instrucciones que devuelve dan la puntuación por coste.
+
+---
+
 ## El motor de redes neuronales (`NN`)
 
 Los dos bloques de inteligencia artificial se apoyan en
