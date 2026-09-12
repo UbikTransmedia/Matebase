@@ -219,6 +219,97 @@ Course.topic('av-juegos', function (p) {
     'dos supermercados acaban abriendo en la misma esquina. Nash recibió el Nobel de Economía en ' +
     '1994 por una tesis doctoral de veintisiete páginas escrita a los veintiuno.');
 
+  /* ---------------------------------------------------------------- */
+  p.section('Juegos de suma cero y el minimax');
+
+  p.text('Hay una familia de juegos en la que el conflicto es total: lo que gana uno lo pierde el otro, ' +
+    'exactamente. Se llaman de <strong>suma cero</strong>, y como los dos pagos de cada casilla son el ' +
+    'mismo número con signos opuestos, basta escribir uno. El ajedrez, el póquer y repartirse una tarta ' +
+    'lo son; el dilema del prisionero <em>no</em>, y por eso allí podía haber un resultado mejor para ' +
+    'los dos.');
+
+  p.text('Sin acuerdo posible, cada jugador razona a la defensiva. El que elige fila se pregunta: «si ' +
+    'elijo esta, ¿qué es lo peor que puede pasarme?», y se queda con la fila cuyo peor caso es mejor. ' +
+    'Eso le garantiza un mínimo, pase lo que pase.');
+
+  p.formulas([
+    '\\underline{v} = \\max_{\\text{filas}} \\; \\min_{\\text{columnas}} a_{ij}',
+    '\\overline{v} = \\min_{\\text{columnas}} \\; \\max_{\\text{filas}} a_{ij}'
+  ], 'lo que cada uno se garantiza',
+    'Se leen: <em>«uve baja es el máximo, sobre las filas, del mínimo sobre las columnas»</em> y ' +
+    '<em>«uve alta es el mínimo, sobre las columnas, del máximo sobre las filas»</em>.<br><br>La ' +
+    'primera es el <strong>maximin</strong>: lo que el jugador de las filas se asegura. La segunda es ' +
+    'el <strong>minimax</strong>: lo máximo que el de las columnas va a permitir que le saquen. ' +
+    'Siempre $\\underline{v} \\le \\overline{v}$, y cuando son iguales esa casilla es un ' +
+    '<strong>punto de silla</strong>: ninguno de los dos gana nada cambiando, y el juego tiene un ' +
+    'valor claro.');
+
+  p.demo({
+    title: 'Buscar el punto de silla',
+    intro: 'Una matriz de pagos de suma cero: el número es lo que gana el jugador de las filas y pierde el de las columnas. A la derecha de cada fila, su peor caso; debajo de cada columna, el peor caso del otro. Mueve la casilla de arriba a la izquierda y mira cuándo el maximin y el minimax coinciden.',
+    predice: 'Con la matriz de partida, el maximin y el minimax coinciden en un número. Si subes mucho esa casilla, ¿crees que seguirán coincidiendo?',
+    build: function (host) {
+      var a = 3;
+      var out = W.readout(host, '');
+      var caja = U.el('div');
+      host.appendChild(caja);
+      function matriz() { return [[a, -1, 2], [0, 1, -2], [-1, 2, 1]]; }
+      function pinta() {
+        var M = matriz(), i, j;
+        var minFila = M.map(function (f) { return Math.min.apply(null, f); });
+        var maxCol = [0, 1, 2].map(function (j2) { return Math.max(M[0][j2], M[1][j2], M[2][j2]); });
+        var maximin = Math.max.apply(null, minFila);
+        var minimax = Math.min.apply(null, maxCol);
+        var fi = minFila.indexOf(maximin), ci = maxCol.indexOf(minimax);
+        var hay = maximin === minimax;
+        var html = '<div class="tbl-wrap"><table class="tbl"><thead><tr><th></th><th class="num">C₁</th><th class="num">C₂</th><th class="num">C₃</th><th class="num">peor caso</th></tr></thead><tbody>';
+        for (i = 0; i < 3; i++) {
+          html += '<tr><td>F' + (i + 1) + '</td>';
+          for (j = 0; j < 3; j++) {
+            var silla = hay && i === fi && j === ci;
+            html += '<td class="num"' + (silla ? ' style="background:var(--ok-soft);color:var(--ok);font-weight:700"' : '') + '>' + M[i][j] + '</td>';
+          }
+          html += '<td class="num"' + (i === fi ? ' style="font-weight:700"' : '') + '>' + minFila[i] + '</td></tr>';
+        }
+        html += '<tr><td><strong>peor caso</strong></td>';
+        for (j = 0; j < 3; j++) html += '<td class="num"' + (j === ci ? ' style="font-weight:700"' : '') + '>' + maxCol[j] + '</td>';
+        html += '<td></td></tr></tbody></table></div>';
+        caja.innerHTML = html;
+        out.set('Maximin $\\underline{v} = ' + maximin + '$ &nbsp;·&nbsp; minimax $\\overline{v} = ' + minimax + '$<br>' +
+          (hay ? '<strong style="color:var(--ok)">Coinciden: hay punto de silla</strong> en la fila ' + (fi + 1) +
+            ', columna ' + (ci + 1) + '. Ninguno de los dos mejora cambiando él solo, y el valor del juego es ' + maximin + '.'
+            : '<strong>No coinciden</strong> (' + maximin + ' &lt; ' + minimax + '): no hay ninguna casilla estable. ' +
+              'Cualquier elección fija se puede explotar, y hay que jugar al azar entre varias.'));
+      }
+      W.slider(W.row(host), {
+        label: 'casilla F₁C₁', min: -4, max: 6, step: 1, value: 3, dec: 0,
+        on: function (v) { a = v; pinta(); }
+      });
+      pinta();
+    }
+  });
+
+  p.text('¿Y cuando no hay punto de silla? Entonces ninguna elección fija sirve, porque el rival la ' +
+    'aprendería y la explotaría: hay que <strong>jugar al azar</strong>, con unas probabilidades bien ' +
+    'elegidas. Eso es una <em>estrategia mixta</em>, y es lo que hace el que juega a piedra, papel o ' +
+    'tijera, o el portero que se tira a un lado en un penalti.');
+
+  p.note('El <strong>teorema minimax</strong> de von Neumann, de 1928, dice que permitiendo estrategias ' +
+    'mixtas <em>todo</em> juego finito de suma cero entre dos jugadores tiene un valor: el maximin y el ' +
+    'minimax coinciden siempre. Es el antepasado del equilibrio de Nash, que llegó veintiún años ' +
+    'después y vale para cualquier juego, de suma cero o no.', 'ok', 'El teorema minimax');
+
+  p.comprueba('En un juego de suma cero, el maximin vale 2 y el minimax vale 5. ¿Qué se puede decir?', [
+    { t: 'No hay punto de silla, y los dos tendrán que jugar con estrategias mixtas', ok: true, por: 'Que no coincidan significa que ninguna casilla es estable: cualquier elección fija se puede explotar. Con estrategias mixtas, el teorema minimax garantiza que sí habrá un valor, y estará entre 2 y 5.' },
+    { t: 'El jugador de las filas gana seguro entre 2 y 5', ok: false, por: 'Solo se garantiza el 2, que es su maximin. El 5 es lo que el otro va a evitar que le saque, no una promesa.' },
+    { t: 'Los datos son imposibles: el minimax nunca es mayor', ok: false, por: 'Es al revés: el maximin nunca supera al minimax. Aquí $2 \\le 5$, que es lo normal cuando no hay punto de silla.' }
+  ]);
+
+  p.hist('John von Neumann demostró el teorema minimax en 1928, en un artículo titulado <em>Zur Theorie ' +
+    'der Gesellschaftsspiele</em>, «sobre la teoría de los juegos de sociedad». Le gustaba decir que sin ' +
+    'ese teorema no habría teoría de juegos en absoluto. En 1944 lo convirtió, con el economista Oskar ' +
+    'Morgenstern, en el libro que fundó la disciplina, <em>Theory of Games and Economic Behavior</em>.');
+
   p.section('Juegos repetidos: cuando vuelve a haber mañana');
 
   p.text('Si el dilema del prisionero se juega <strong>una sola vez</strong>, traicionar es lo racional. ' +

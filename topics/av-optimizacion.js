@@ -174,11 +174,124 @@ Course.topic('av-optimizacion', function (p) {
   p.text('El descenso de gradiente es <strong>ciego</strong>: solo ve la pendiente que tiene debajo. Si ' +
     'cae en un valle, se queda ahí aunque exista otro valle más profundo al otro lado de la loma.');
 
-  p.text('En una variable esto se arregla estudiando la función entera. Con un millón de variables no ' +
-    'se puede, así que se recurre a trucos: empezar en varios sitios distintos, añadir ruido aleatorio ' +
-    '(<em>descenso estocástico</em>) o darle «inercia» a la bola para que atraviese lomas pequeñas.');
+  p.text('En una variable esto se arregla estudiando la función entera. Con un millón de variables no se ' +
+    'puede, así que se recurre a trucos: empezar en varios sitios distintos, o las dos ideas de la ' +
+    'sección siguiente, que además resuelven otro problema mucho más gordo.');
 
   /* ---------------------------------------------------------------- */
+  /* ---------------------------------------------------------------- */
+  p.section('Minilotes: el gradiente como una encuesta');
+
+  p.text('Hay un problema de tamaño que la fórmula esconde. La función que se minimiza casi siempre es ' +
+    'una <strong>suma sobre los datos</strong>: el error del primero, más el del segundo, más el del ' +
+    'tercero. Con un millón de datos, cada paso del descenso exige recorrerlos todos para calcular un ' +
+    'solo gradiente. Dar mil pasos costaría mil millones de cuentas.');
+
+  p.text('La salida es la de [[pe-inferencia|el muestreo]]: para saber qué piensa un país no se pregunta ' +
+    'a todo el mundo, se pregunta a mil personas. Aquí igual. Se coge al azar un puñado de datos —un ' +
+    '<strong>minilote</strong>—, se calcula el gradiente solo con ellos y se da el paso. Ese gradiente ' +
+    'no es el verdadero: es una <em>estimación</em> suya, y como toda estimación de una media, no está ' +
+    'sesgada y su error encoge como la raíz del tamaño de la muestra.');
+
+  p.formula('\\nabla f \\approx \\frac{1}{m}\\sum_{i \\in \\text{lote}} \\nabla f_i, \\qquad \\text{error} \\sim \\frac{1}{\\sqrt{m}}',
+    'descenso de gradiente estocástico',
+    'Se lee: <em>«el gradiente se aproxima por uno partido por eme, por el sumatorio de los gradientes ' +
+    'de los datos del lote»</em>.<br><br>Lo importante es el $\\frac{1}{\\sqrt{m}}$: pasar de 100 a ' +
+    '10 000 datos por lote reduce el error solo a la décima parte, pero cuesta cien veces más. Por eso ' +
+    'compensa dar muchos pasos con un gradiente mediocre en vez de pocos con uno exacto.');
+
+  p.note('El ruido de la estimación no es solo un mal menor: <strong>ayuda</strong>. Un gradiente ' +
+    'ligeramente equivocado en cada paso hace que la bola no se quede quieta en cualquier hoyo ' +
+    'pequeño, y es una de las razones de que el descenso estocástico encuentre mejores soluciones que ' +
+    'el exacto en problemas grandes.', 'ok', 'El ruido, a favor');
+
+  /* ---------------------------------------------------------------- */
+  p.section('Momento: la bola pesada');
+
+  p.text('El otro problema es la forma del terreno. En un valle largo y estrecho, el gradiente apunta ' +
+    'sobre todo hacia las paredes y muy poco hacia el fondo: el descenso rebota de lado a lado y ' +
+    'avanza despacio en la dirección que interesa. Lo viste en la demo del cuenco alargado.');
+
+  p.text('La cura es darle <strong>inercia</strong>. En vez de que cada paso dependa solo del gradiente ' +
+    'de ahora, se arrastra una velocidad que acumula los pasos anteriores. Las componentes que cambian ' +
+    'de signo en cada rebote se cancelan entre sí, y la que apunta siempre al mismo sitio se suma y ' +
+    'crece.');
+
+  p.formulas([
+    '\\vec{v}_{n+1} = \\beta\\,\\vec{v}_n - \\eta\\,\\nabla f(\\vec{x}_n)',
+    '\\vec{x}_{n+1} = \\vec{x}_n + \\vec{v}_{n+1}'
+  ], 'descenso con momento',
+    'Se leen: <em>«uve sub ene más uno es beta por uve sub ene, menos eta por el gradiente»</em> y ' +
+    '<em>«equis sub ene más uno es equis sub ene más uve sub ene más uno»</em>.<br><br>$\\beta$ es el ' +
+    '<strong>momento</strong>, entre 0 y 1, y dice cuánta velocidad se conserva de un paso al ' +
+    'siguiente. Con $\\beta = 0$ es el descenso de siempre. Con $\\beta = 0{,}9$, un gradiente ' +
+    'constante acaba dando pasos diez veces más largos, porque $1 + \\beta + \\beta^2 + \\dots = ' +
+    '\\frac{1}{1-\\beta}$: es la suma de [[fn-sucesiones|una progresión geométrica]].');
+
+  p.demo({
+    title: 'Con inercia y sin ella, en el mismo valle',
+    intro: 'Las dos bolas salen del mismo sitio en un valle estrecho. La azul es el descenso de siempre; la naranja lleva momento. Sube el momento poco a poco y mira cómo los rebotes laterales se cancelan mientras el avance hacia el fondo se acumula.',
+    predice: 'El valle es estrecho de lado y largo de fondo. Con momento alto, ¿qué crees que se cancelará antes: el vaivén lateral o el avance a lo largo?',
+    build: function (host) {
+      var beta = 0.8, eta = 0.08;
+      var out = W.readout(host, '');
+      function traza(b) {
+        var x = -4.2, y = 1.6, vx = 0, vy = 0, pts = [[x, y]];
+        for (var i = 0; i < 120; i++) {
+          var gx = 0.16 * x, gy = 3.2 * y;
+          vx = b * vx - eta * gx; vy = b * vy - eta * gy;
+          x += vx; y += vy;
+          if (!isFinite(x) || Math.abs(x) > 12 || Math.abs(y) > 12) break;
+          pts.push([x, y]);
+        }
+        return pts;
+      }
+      var plot = W.plot(host, {
+        xmin: -5, xmax: 5, ymin: -2.6, ymax: 2.6, height: 300, equal: true,
+        aria: 'Un valle alargado con dos trayectorias de descenso, una sin momento y otra con momento',
+        draw: function (g) {
+          var k;
+          for (k = 1; k <= 9; k++) {
+            var c = k * 0.35;
+            g.param(function (t) { return Math.sqrt(c / 0.08) * Math.cos(t); },
+                    function (t) { return Math.sqrt(c / 1.6) * Math.sin(t); },
+                    0, 2 * Math.PI, { color: 'axis', w: 0.8, alpha: 0.35 });
+          }
+          var sin = traza(0), con = traza(beta);
+          g.path(sin, { color: 0, w: 2 });
+          g.path(con, { color: 3, w: 2.4 });
+          g.point(-4.2, 1.6, { color: 'ink', r: 4.5 });
+          g.point(sin[sin.length - 1][0], sin[sin.length - 1][1], { color: 0, r: 5, hollow: true });
+          g.point(con[con.length - 1][0], con[con.length - 1][1], { color: 3, r: 5, hollow: true });
+        }
+      });
+      function pinta() {
+        var sin = traza(0), con = traza(beta);
+        function dist(p) { return Math.sqrt(p[0] * p[0] + p[1] * p[1]); }
+        var ds = dist(sin[sin.length - 1]), dc = dist(con[con.length - 1]);
+        out.set('Momento $\\beta = ' + U.fmt(beta, 2) + '$ &nbsp;·&nbsp; tras 120 pasos, distancia al mínimo:<br>' +
+          '<span style="color:var(--c1)">sin momento: ' + U.fmt(ds, 3) + '</span> &nbsp;·&nbsp; ' +
+          '<span style="color:var(--c4)">con momento: ' + (isFinite(dc) ? U.fmt(dc, 3) : 'se ha disparado') + '</span><br>' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">' +
+          (beta > 0.95 ? 'Con tanta inercia la bola ya no frena a tiempo y se pasa: el momento también se puede exagerar.'
+            : (dc < ds ? 'La inercia gana: el vaivén lateral se cancela solo y el avance hacia el fondo se acumula.'
+              : 'Con poco momento apenas hay diferencia: hace falta que la velocidad llegue a acumularse.')) +
+          '</span>');
+        plot.render();
+      }
+      var fila = W.row(host);
+      W.slider(fila, { label: 'momento β', min: 0, max: 0.99, step: 0.01, value: 0.8, dec: 2, on: function (v) { beta = v; pinta(); } });
+      W.slider(fila, { label: 'tasa η', min: 0.01, max: 0.2, step: 0.005, value: 0.08, dec: 3, on: function (v) { eta = v; pinta(); } });
+      pinta();
+    }
+  });
+
+  p.comprueba('¿Por qué el momento acelera en un valle largo y estrecho?', [
+    { t: 'Porque los rebotes laterales cambian de signo y se cancelan al acumularse, mientras el avance hacia el fondo apunta siempre igual y se suma', ok: true, por: 'La velocidad es una media de los gradientes recientes. Lo que oscila se promedia a casi cero; lo que es constante se acumula hasta $\\frac{1}{1-\\beta}$ veces el paso normal.' },
+    { t: 'Porque aumenta la tasa de aprendizaje en todas las direcciones por igual', ok: false, por: 'Si fuera por igual no arreglaría nada: el problema es precisamente que hace falta avanzar mucho en una dirección y poco en otra. Lo que hace el momento es distinguirlas solo.' },
+    { t: 'Porque calcula el gradiente con más precisión', ok: false, por: 'El gradiente es el mismo. Lo que cambia es cómo se combinan los de varios pasos seguidos.' }
+  ]);
+
   p.section('Dónde está esto funcionando');
 
   p.text('Entrenar una red neuronal es exactamente esto y nada más que esto:');

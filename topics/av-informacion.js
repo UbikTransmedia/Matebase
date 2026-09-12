@@ -179,6 +179,103 @@ Course.topic('av-informacion', function (p) {
     'compresor que reduce cualquier archivo a la mitad, está anunciando algo demostradamente ' +
     'imposible.');
 
+  /* ---------------------------------------------------------------- */
+  p.section('Codificar con la distribución equivocada');
+
+  p.text('El teorema anterior dice cuánto ocupa un mensaje codificado <em>bien</em>, o sea, sabiendo las ' +
+    'probabilidades de verdad. ¿Y si no se saben? Si crees que las probabilidades son $q$ cuando en ' +
+    'realidad son $p$, construirás el código pensando en $q$: darás los códigos cortos a lo que ' +
+    '<em>tú</em> crees frecuente. El mensaje seguirá siendo legible, pero ocupará de más, y se puede ' +
+    'calcular exactamente cuánto de más.');
+
+  p.formula('H(p, q) = -\\sum_i p_i \\log_2 q_i',
+    'entropía cruzada de p respecto de q',
+    'Se lee: <em>«hache de pe, cu, es menos el sumatorio en i de pe sub i por el logaritmo en base dos ' +
+    'de cu sub i»</em>.<br><br>Fíjate en que aparecen las dos distribuciones y en qué papel hace cada ' +
+    'una: el código lo dicta $q$, porque es lo que crees, y por eso el símbolo $i$ ocupa ' +
+    '$\\log_2(1/q_i)$ bits. Pero lo que <strong>pesa</strong> cada símbolo es $p_i$, porque es lo que ' +
+    'de verdad va a salir. La entropía de siempre es el caso $q = p$: acertar del todo.');
+
+  p.text('Como la entropía $H(p)$ es lo mínimo que se puede ocupar, la diferencia entre lo que gastas y ' +
+    'ese mínimo es <strong>lo que te cuesta tu error</strong>. Ese exceso tiene nombre propio.');
+
+  p.formula('D_{KL}(p \\Vert q) = H(p, q) - H(p) = \\sum_i p_i \\log_2 \\frac{p_i}{q_i}',
+    'divergencia de Kullback-Leibler',
+    'Se lee: <em>«de ka ele de pe respecto de cu»</em>. La doble barra $\\Vert$ separa las dos ' +
+    'distribuciones y no significa división.<br><br>Es el <strong>número de bits que desperdicias por ' +
+    'símbolo</strong> por creer $q$ en vez de $p$. Nunca es negativa, porque no se puede gastar menos ' +
+    'que el mínimo, y vale cero exactamente cuando $q = p$. Por eso se usa como una «distancia» entre ' +
+    'distribuciones, aunque no lo sea del todo: no es simétrica.');
+
+  p.demo({
+    title: 'Lo que cuesta creerse otra cosa',
+    intro: 'La distribución real $p$ es fija y tiene entropía exacta de 1,75 bits. Mueve el mando para acercar tu creencia $q$ a la realidad y mira las tres cantidades: lo mínimo que se podría ocupar, lo que ocupas de verdad, y la diferencia.',
+    predice: 'Cuando $q$ coincida exactamente con $p$, ¿cuánto valdrá la divergencia, y qué le pasará a la entropía cruzada?',
+    build: function (host) {
+      var t = 0, extremo = false;
+      var pReal = [0.5, 0.25, 0.125, 0.125];
+      var nombres = ['A', 'B', 'C', 'D'];
+      var out = W.readout(host, '');
+      function qActual() {
+        var partida = extremo ? [0.05, 0.05, 0.4, 0.5] : [0.25, 0.25, 0.25, 0.25];
+        return partida.map(function (v, i) { return v + t * (pReal[i] - v); });
+      }
+      function bits(q) {
+        var hc = 0, i;
+        for (i = 0; i < 4; i++) hc += -pReal[i] * Math.log(Math.max(q[i], 1e-12)) / Math.LN2;
+        return hc;
+      }
+      var plot = W.plot(host, {
+        xmin: -0.6, xmax: 3.9, ymin: 0, ymax: 0.62, height: 250,
+        xlabel: 'símbolo', ylabel: 'probabilidad', xstep: 1,
+        xtickLabel: function (i) { return nombres[Math.round(i)] || ''; },
+        aria: 'Dos distribuciones de probabilidad sobre cuatro símbolos, la real y la que se cree, en barras enfrentadas',
+        draw: function (g) {
+          var q = qActual();
+          pReal.forEach(function (v, i) { g.bars([{ x: i - 0.17, h: v, color: 0 }], { width: 0.3 }); });
+          q.forEach(function (v, i) { g.bars([{ x: i + 0.17, h: v, color: 2 }], { width: 0.3 }); });
+        }
+      });
+      W.legend(host, [{ c: 0, t: 'p, la realidad' }, { c: 2, t: 'q, lo que crees' }]);
+      function pinta() {
+        var q = qActual(), hc = bits(q), h = 1.75, kl = hc - h;
+        out.set('Entropía real $H(p) = ' + U.fmt(h, 3) + '$ bits &nbsp;·&nbsp; ' +
+          'entropía cruzada $H(p, q) = ' + U.fmt(hc, 3) + '$ bits<br>' +
+          '<strong>Divergencia $D_{KL}(p \\Vert q) = ' + U.fmt(kl, 3) + '$ bits desperdiciados por símbolo.</strong><br>' +
+          '<span style="font-size:0.7812rem;color:var(--ink-faint)">' +
+          (kl < 0.001 ? 'Creencia exacta: no se desperdicia nada, y la entropía cruzada baja hasta la entropía. Por debajo no se puede bajar.'
+            : 'En un mensaje de mil símbolos, eso son ' + U.fmt(kl * 1000, 0) + ' bits de más por haberte equivocado de código.') +
+          '</span>');
+        plot.render();
+      }
+      W.chips(host, [{ label: 'partir de una creencia uniforme', value: 0 }, { label: 'partir de una creencia muy mala', value: 1 }],
+        { value: 0, on: function (v) { extremo = !!v; pinta(); } });
+      W.slider(W.row(host), {
+        label: 'acercar q a la realidad', min: 0, max: 1, step: 0.01, value: 0, dec: 2,
+        on: function (v) { t = v; pinta(); }
+      });
+      pinta();
+    }
+  });
+
+  p.comprueba('¿Puede la divergencia $D_{KL}(p \\Vert q)$ ser negativa?', [
+    { t: 'No: sería ocupar menos que la entropía, y el teorema de codificación lo prohíbe', ok: true, por: 'La entropía es el mínimo alcanzable con cualquier código. Creerse otra cosa solo puede costar igual (si $q = p$) o más, nunca menos.' },
+    { t: 'Sí, si $q$ es más concentrada que $p$', ok: false, por: 'Concentrar mal la creencia sale caro, no barato: se le dan códigos cortos a símbolos que apenas salen, y los frecuentes acaban con códigos largos.' },
+    { t: 'Sí, cuando las dos distribuciones son muy parecidas', ok: false, por: 'Cuanto más se parecen, más se acerca a cero, pero siempre por arriba. Llega a cero justo cuando son iguales.' }
+  ]);
+
+  p.note('No es simétrica, y no es un detalle: $D_{KL}(p \\Vert q)$ y $D_{KL}(q \\Vert p)$ son números ' +
+    'distintos. Se ve en el caso extremo: si $q$ da probabilidad cero a algo que $p$ sí produce, el ' +
+    'término correspondiente se dispara a infinito —tu código no tiene ni siquiera un símbolo para eso—, ' +
+    'mientras que al revés no pasa nada. Por eso conviene leerla como «bits desperdiciados» y no como ' +
+    'una distancia.', 'warn', 'El orden importa');
+
+  p.util('La entropía cruzada es, literalmente, la función que se minimiza al entrenar casi cualquier ' +
+    'clasificador: el modelo propone una distribución $q$ sobre las respuestas posibles, la realidad es ' +
+    'una $p$ que vale 1 en la correcta, y entrenar es acercar una a otra. Y la divergencia KL aparece ' +
+    'en compresión, en el criterio de selección de modelos de Akaike y en la comparación de secuencias ' +
+    'genéticas.');
+
   p.section('Redundancia y corrección de errores');
 
   p.text('El idioma castellano tiene una entropía de aproximadamente <strong>1,5 bits por letra</strong>, ' +
