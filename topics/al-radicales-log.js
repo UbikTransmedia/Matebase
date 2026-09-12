@@ -162,6 +162,13 @@ Course.topic('al-radicales-log', function (p) {
     'se conoce el resultado y se busca el exponente, y despejar un exponente es exactamente para lo ' +
     'que se inventó el logaritmo.');
 
+  p.note('Hay un uso de los logaritmos que se ve constantemente en gráficas y conviene reconocer. Si dos ' +
+    'magnitudes se relacionan por una potencia, $y = c\\,x^{-\\alpha}$, al tomar logaritmos queda ' +
+    '$\\log y = \\log c - \\alpha \\log x$: <strong>una recta</strong>. Por eso, dibujando los dos ejes ' +
+    'en escala logarítmica, una ley de potencias se reconoce a simple vista porque los puntos caen ' +
+    'alineados, y <em>la pendiente es el exponente</em>. Así se presentan las llamadas leyes de escala ' +
+    'de los modelos de lenguaje, en [[ia-llm|el tema del LLM]].', null, 'Una potencia es una recta en papel logarítmico');
+
   p.section('Practica');
 
   p.exercise({
