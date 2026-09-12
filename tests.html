@@ -772,6 +772,17 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       parejas.push([c[0], '--bg-alt', 'código · ' + c[1] + ' en el editor']);
       parejas.push([c[0], '--panel-2', 'código · ' + c[1] + ' en el enunciado']);
     });
+    /* Las pieles de bloque redefinen el acento entero, así que hay que
+       medirlas igual que el acento normal: en un bloque con piel, el color
+       de los enlaces y el de los botones son los suyos y no los de :root.
+       Esto no se comprobaba, y la piel nueva del bloque 15 obligó a mirarlo. */
+    [['maq', 'máquinas y lenguajes'], ['gfx', 'programación gráfica'],
+     ['cr', 'criptografía'], ['ia', 'inteligencia artificial']
+    ].forEach(function (pl) {
+      parejas.push(['--' + pl[0], '--bg', 'piel ' + pl[1] + ' · enlaces']);
+      parejas.push(['--' + pl[0] + '-on', '--' + pl[0], 'piel ' + pl[1] + ' · texto del botón']);
+      parejas.push(['--' + pl[0] + '-ink', '--' + pl[0] + '-soft', 'piel ' + pl[1] + ' · etiqueta']);
+    });
     var raiz = document.documentElement;
     var previo = raiz.getAttribute('data-theme');
     ['light', 'dark', 'monokai'].forEach(function (tema) {

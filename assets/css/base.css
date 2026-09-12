@@ -20,7 +20,11 @@
   --plot-bg:#ffffff; --plot-grid:#e8e5dc; --plot-grid2:#f2f0e9;
   --plot-axis:#7b818e; --plot-ink:#3c424e;
   --c1:#3f5bd9; --c2:#d1495b; --c3:#0f8a5f; --c4:#b4690e; --c5:#7a4fbf; --c6:#0d7c9b;
-  /* Bloque 13, programación gráfica: magenta de demoscene. Ya no es solo
+  /* Bloque 15, maquinas y lenguajes: violeta. Los tonos libres eran pocos
+     -el acento ya es azul, graficos es magenta, cripto cobre e IA verde- y
+     este es el que mas se separa de los cuatro. */
+  --maq:#6b3fa0; --maq-soft:#efe4fb; --maq-ink:#54307e; --maq-on:#ffffff;
+  /* Bloque 16, programación gráfica: magenta de demoscene. Ya no es solo
      matemáticas, y tiene que notarse antes de leer una palabra. */
   --gfx:#a81b86; --gfx-soft:#fae3f4; --gfx-ink:#7c1364; --gfx-on:#ffffff;
   /* Bloque de criptografia: cobre de lacre y de llave antigua. */
@@ -54,6 +58,7 @@ html[data-theme="dark"]{
   --plot-bg:#191c22; --plot-grid:#2b303a; --plot-grid2:#22262e;
   --plot-axis:#8d95a5; --plot-ink:#c9cfdb;
   --c1:#7b93ff; --c2:#ff8b93; --c3:#4bd39b; --c4:#e5a44b; --c5:#b795f5; --c6:#4cc4e0;
+  --maq:#c4a2ff; --maq-soft:#2b2140; --maq-ink:#d8c2ff; --maq-on:#170f24;
   --gfx:#ff79d3; --gfx-soft:#3a1b33; --gfx-ink:#ffa8e2; --gfx-on:#1b0f18;
   --cr:#f0a070; --cr-soft:#3a2418; --cr-ink:#ffc39c; --cr-on:#1b120c;
   --ia:#5fd7bd; --ia-soft:#13332e; --ia-ink:#8fe8d3; --ia-on:#0c1a17;
@@ -81,6 +86,7 @@ html[data-theme="monokai"]{
   --plot-bg:#2b2c25; --plot-grid:#3d3e35; --plot-grid2:#343529;
   --plot-axis:#8a887c; --plot-ink:#c7c5ba;
   --c1:#7cc7d4; --c2:#d96a80; --c3:#9cbf4a; --c4:#d99a4a; --c5:#a68fd4; --c6:#d6cd7a;
+  --maq:#c9a6f0; --maq-soft:#352c42; --maq-ink:#dcc2f7; --maq-on:#221a2b;
   --gfx:#e08bd0; --gfx-soft:#3b2c39; --gfx-ink:#f0abe0; --gfx-on:#241a22;
   --cr:#e6a06e; --cr-soft:#3c2f27; --cr-ink:#f2c39f; --cr-on:#241c17;
   /* Verde primavera, no el cian del acento de monokai: si no, la piel de

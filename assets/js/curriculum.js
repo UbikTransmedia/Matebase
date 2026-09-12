@@ -973,7 +973,7 @@ window.CURRICULUM = [
      bifurcar) es hermano de `maq-decidir`, pero va DESPUES, asi que el
      puente entre los dos se escribe alli y apunta hacia atras. */
   {
-    id: 'maq', n: 15, title: 'Máquinas y lenguajes', curso: 'AMP',
+    id: 'maq', n: 15, title: 'Máquinas y lenguajes', piel: 'maq', curso: 'AMP',
     desc: 'Un ordenador no entiende nada: son tablas de verdad apiladas. Y un lenguaje de programación no es magia: es un texto que otro programa traduce. Se construyen los dos, de abajo arriba, hasta que el segundo corre sobre el primero.',
     temas: [
       {

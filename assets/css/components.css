@@ -403,7 +403,16 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
 .keys .xref, .note .xref{font-weight:600}
 
 
-/* ================= BLOQUE 13 · PROGRAMACIÓN GRÁFICA =================
+/* --- bloque de máquinas y lenguajes: piel de violeta --- */
+[data-piel="maq"]{
+  --accent:var(--maq);
+  --accent-soft:var(--maq-soft);
+  --accent-ink:var(--maq-ink);
+  --on-accent:var(--maq-on);
+}
+[data-piel="maq"] .hdr__over{color:var(--maq-ink); font-weight:700}
+
+/* ================= BLOQUE 16 · PROGRAMACIÓN GRÁFICA =================
    Una sola declaración cambia el bloque entero: al redefinir el acento
    sobre el contenedor, lo heredan las secciones, los avisos, los enlaces
    entre capítulos, los botones y las gráficas. */
