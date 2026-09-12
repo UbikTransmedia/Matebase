@@ -40,6 +40,15 @@ Course.topic('av-computabilidad', function (p) {
     'pueda calcular</strong>. Tu portátil no puede hacer nada que no pueda hacer esta cosa: puede ' +
     'hacerlo muchísimo más deprisa, que no es lo mismo.');
 
+  p.note('Que una definición tan pobre valga para todo se puede ver desde el otro lado. En ' +
+    '[[maq-ensamblador|el bloque de máquinas y lenguajes]] se programa una CPU con dieciséis ' +
+    'instrucciones y se llega a la misma conclusión por el camino contrario: en cuanto una máquina sabe ' +
+    '<strong>decidir</strong> —saltar si algo vale cero— y <strong>repetir</strong> —saltar hacia ' +
+    'atrás—, ya no hay nada calculable fuera de su alcance. Añadirle instrucciones la hace más cómoda y ' +
+    'más rápida, nunca más capaz. Son dos maneras de tropezarse con el mismo techo: la de Turing ' +
+    'quitando hasta que no queda nada, y la de la ingeniería añadiendo hasta que deja de notarse.',
+    null, 'El mismo techo, por el otro lado');
+
   p.ejemplo({
     title: 'Seguir la máquina con el 7',
     enunciado: 'La máquina de sumar uno tiene seis reglas. En $q_0$ avanza a la derecha sin cambiar nada; al leer el blanco pasa a $q_1$ y retrocede. En $q_1$, un 1 se convierte en 0 y sigue a la izquierda; un 0 o un blanco se convierte en 1 y para. Ejecutarla con la entrada $111_2 = 7$.',
