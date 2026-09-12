@@ -137,6 +137,13 @@ Course.topic('av-lineal', function (p) {
     'doctoral, un autovector y una empresa de un billón de dólares.');
 
   /* ================= EJERCICIOS ================= */
+  p.note('Hay un caso en el que la matriz cuyos autovectores se buscan la fabrican los propios datos. Si ' +
+    'se toma una nube de puntos y se construye la matriz que guarda cuánto varía cada variable y cuánto ' +
+    'van juntas, sus autovectores resultan ser las direcciones en las que la nube más se estira, y cada ' +
+    'autovalor mide exactamente cuánto. Eso es el [[av-pca|análisis de componentes principales]], y es la ' +
+    'forma más extendida de resumir datos de muchas variables en unos pocos números.',
+    'ok', 'Los autovectores de una nube de datos');
+
   p.util('Los autovalores son las frecuencias propias de una estructura, y conocerlas es cuestión de ' +
     'seguridad. Un puente, un rascacielos o un ala de avión vibran de forma natural a ciertas ' +
     'frecuencias, y si una excitación externa coincide con una de ellas, la amplitud crece sola: eso ' +

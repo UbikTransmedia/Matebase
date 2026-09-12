@@ -208,8 +208,10 @@ Course.topic('av-svd', function (p) {
     'mejorar las recomendaciones de películas, las técnicas ganadoras se basaban en factorizar la enorme matriz de ' +
     'valoraciones de los usuarios, con ideas directamente emparentadas con esta.');
 
-  p.util('El análisis de componentes principales, la herramienta básica para reducir datos de muchas variables a unas ' +
-    'pocas que expliquen casi todo, es una descomposición en valores singulares. Los buscadores la han usado para ' +
+  p.util('El [[av-pca|análisis de componentes principales]], la herramienta básica para reducir datos de muchas variables a unas ' +
+    'pocas que expliquen casi todo, es una descomposición en valores singulares: las componentes principales de una nube son ' +
+    'sus vectores singulares una vez centrados los datos, y los autovalores de la covarianza son los valores singulares al ' +
+    'cuadrado. Son el mismo resultado contado dos veces. Los buscadores la han usado para ' +
     'encontrar documentos relacionados aunque no compartan palabras, los sistemas de recomendación para adivinar qué te ' +
     'gustará, y en física cuántica mide cuánto entrelazamiento hay entre dos partes de un sistema.');
 
