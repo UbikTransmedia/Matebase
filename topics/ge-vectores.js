@@ -156,6 +156,14 @@ Course.topic('ge-vectores', function (p) {
     'producto escalar vale cero</strong>, porque $\\cos 90^\\circ = 0$. Es la forma más rápida de ' +
     'comprobar un ángulo recto sin dibujar nada.', 'ok', 'La prueba de la perpendicularidad');
 
+  p.note('Esta fórmula del coseno, tal cual, es la que se usa para decidir si dos palabras significan ' +
+    'cosas parecidas. Se representa cada palabra por un vector que cuenta con qué otras palabras ' +
+    'aparece, y se comparan por el ángulo y no por la distancia: así una palabra diez veces más ' +
+    'frecuente que otra no sale «lejos» sólo por ser más frecuente, porque multiplicar un vector por ' +
+    'un número positivo no cambia su dirección. Se llama <em>similitud coseno</em> y está en ' +
+    '[[ia-vectores-palabras|las palabras como vectores]].',
+    null, 'El mismo coseno, con palabras');
+
   p.ejemplo({
     title: 'Del producto escalar al ángulo, y de vuelta',
     enunciado: 'Dados $\\vec u = (3, 1)$ y $\\vec v = (-1, 2)$: ¿qué ángulo forman? ¿Y qué vector es perpendicular a $\\vec u$?',

@@ -240,6 +240,14 @@ Course.topic('av-pca', function (p) {
   ]);
 
   /* ================= EJERCICIOS ================= */
+  p.note('Hay un sitio donde proyectar con PCA sirve para <em>ver</em> algo que no se podía mirar de ' +
+    'ninguna otra forma. Cuando a cada palabra de un texto se le asigna un vector con tantas ' +
+    'componentes como palabras haya en el vocabulario, ese espacio tiene miles de dimensiones y no hay ' +
+    'manera de dibujarlo. Proyectando sobre las dos primeras componentes aparecen grupos que nadie ha ' +
+    'marcado: los verbos por un lado y los seres vivos por otro. Está en ' +
+    '[[ia-vectores-palabras|el tema de las palabras como vectores]].',
+    null, 'Dibujar un espacio de miles de dimensiones');
+
   p.section('Practica');
 
   p.exercise({
