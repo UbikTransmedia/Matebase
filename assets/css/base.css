@@ -25,6 +25,10 @@
   --gfx:#a81b86; --gfx-soft:#fae3f4; --gfx-ink:#7c1364; --gfx-on:#ffffff;
   /* Bloque de criptografia: cobre de lacre y de llave antigua. */
   --cr:#a3521c; --cr-soft:#f8e6da; --cr-ink:#7a3a10; --cr-on:#ffffff;
+  /* Bloques de inteligencia artificial: verde de fosforo, el de las
+     pantallas en las que se escribio todo esto. Los dos bloques comparten
+     piel, porque son dos mitades de lo mismo. */
+  --ia:#0f7361; --ia-soft:#ddf0eb; --ia-ink:#0a5548; --ia-on:#ffffff;
   /* Coloreado del codigo GLSL. Ocho papeles, un color cada uno, y los tres
      temas los redefinen enteros. Todos pasan 4,5:1 sobre el fondo del editor
      y sobre el de los recuadros de codigo de los enunciados: se comprueba en
@@ -52,6 +56,7 @@ html[data-theme="dark"]{
   --c1:#7b93ff; --c2:#ff8b93; --c3:#4bd39b; --c4:#e5a44b; --c5:#b795f5; --c6:#4cc4e0;
   --gfx:#ff79d3; --gfx-soft:#3a1b33; --gfx-ink:#ffa8e2; --gfx-on:#1b0f18;
   --cr:#f0a070; --cr-soft:#3a2418; --cr-ink:#ffc39c; --cr-on:#1b120c;
+  --ia:#5fd7bd; --ia-soft:#13332e; --ia-ink:#8fe8d3; --ia-on:#0c1a17;
   --cod-com:#8b93a3; --cod-key:#ff79d3; --cod-typ:#6fd3e8; --cod-num:#c4a2ff;
   --cod-fun:#7fdba4; --cod-uni:#f0b45e; --cod-pre:#9aa2b2; --cod-pun:#aab2c0;
   --cod-sel:rgba(255,121,211,.26);
@@ -78,6 +83,9 @@ html[data-theme="monokai"]{
   --c1:#7cc7d4; --c2:#d96a80; --c3:#9cbf4a; --c4:#d99a4a; --c5:#a68fd4; --c6:#d6cd7a;
   --gfx:#e08bd0; --gfx-soft:#3b2c39; --gfx-ink:#f0abe0; --gfx-on:#241a22;
   --cr:#e6a06e; --cr-soft:#3c2f27; --cr-ink:#f2c39f; --cr-on:#241c17;
+  /* Verde primavera, no el cian del acento de monokai: si no, la piel de
+     los bloques de IA se confundiria con los enlaces. */
+  --ia:#6fd7ae; --ia-soft:#2b3a35; --ia-ink:#9ce8c9; --ia-on:#241f1c;
   /* Monokai reconocible -rosa, cian, verde, violeta- pero subido de
      luminosidad hasta pasar el contraste. El gris de los comentarios del
      Monokai original se queda en 3:1 y aqui no vale. */

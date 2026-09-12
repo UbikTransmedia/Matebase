@@ -24,8 +24,15 @@
    0 a 6) y a su repaso para la PAU (bloque 7). A partir de ahi pivota hacia
    lo que viene despues, agrupado por disciplina: algebra lineal (8), calculo
    en varias variables (9), ecuaciones diferenciales (10), geometria avanzada
-   (11), estructuras (12), matematica discreta (13), cibernetica (14) y
-   programacion grafica (15).
+   (11), estructuras (12), matematica discreta (13), cibernetica (14),
+   programacion grafica (15), criptografia (16) e inteligencia artificial
+   (17 y 18).
+
+   Los tres ultimos bloques son optativos y tienen piel propia. No se dan
+   por sabidos unos a otros: un alumno puede hacer criptografia sin haber
+   hecho shaders, y la IA sin haber hecho ninguno de los dos. Por eso en
+   `req` solo van requisitos de verdad, y lo que es una pasarela bonita
+   entre bloques optativos se escribe como enlace [[id]] en la prosa.
 
    Los textos de los temas no citan bloques por su numero: nombran el bloque
    o enlazan el tema con [[id]]. Asi el orden se puede cambiar aqui sin dejar
@@ -629,6 +636,12 @@ window.CURRICULUM = [
         req: ['av-espacios']
       },
       {
+        id: 'av-pca', t: 'Componentes principales',
+        r: 'Los ejes que mejor resumen una nube de datos son los autovectores de su covarianza.',
+        o: ['La matriz de covarianza y lo que mide', 'Los autovectores como ejes de máxima varianza', 'Comprimir perdiendo lo mínimo, y cuánto se pierde'],
+        req: ['av-lineal', 'pe-bidimensional']
+      },
+      {
         id: 'av-minimos-cuadrados', t: 'Mínimos cuadrados y proyecciones',
         r: 'De dónde sale de verdad la recta de regresión: proyectar sobre un subespacio.',
         o: ['Proyección ortogonal sobre un subespacio', 'Ecuaciones normales', 'Ajustar rectas y parábolas a datos'],
@@ -727,6 +740,12 @@ window.CURRICULUM = [
         r: 'Toda señal es una suma de ondas puras.',
         o: ['Serie de Fourier', 'Espectro', 'Idea de la transformada'],
         req: ['tr-funciones', 'fn-series']
+      },
+      {
+        id: 'av-convolucion', t: 'Convolución: el filtro que se desliza',
+        r: 'La media móvil, el desenfoque y la detección de bordes son la misma operación.',
+        o: ['Deslizar un núcleo: convolución en una dimensión', 'Núcleos en dos dimensiones sobre una imagen', 'El teorema de convolución: un producto en el dominio de la frecuencia'],
+        req: ['fn-integral-def', 'fn-derivadas', 'av-fourier']
       }
     ]
   },
@@ -1373,6 +1392,194 @@ window.CURRICULUM = [
         r: 'Lo que ocurre cuando envías un mensaje: trinquetes, secreto hacia delante, tarjetas, llaves de acceso y las reglas para no meter la pata.',
         o: ['El doble trinquete de la mensajería cifrada', 'Secreto hacia delante', 'Las diez reglas del que no es criptógrafo'],
         req: ['cr-certificados', 'cr-bb84']
+      }
+    ]
+  },
+
+  /* ================= 17. INTELIGENCIA ARTIFICIAL I =================
+     La tesis del bloque, que tiene que notarse en cada tema: no hay magia.
+     Es el producto escalar, el gradiente y Bayes, repetidos millones de
+     veces. Cada tema entra por la idea matematica nueva que aporta, y
+     todas estan ya explicadas antes en el curso.
+
+     La neurona NO esta aqui: se explico en cibernetica (cib-neurona), con
+     McCulloch-Pitts, la regla del perceptron y XOR. Este bloque la retoma
+     en ia-sigmoide -que es lo nuevo: un umbral que se puede derivar- en
+     vez de contarla dos veces. */
+  {
+    id: 'ia1', n: 17, title: 'Inteligencia artificial I: aprender de los datos', piel: 'ia', curso: 'AMP',
+    desc: 'Qué significa que una máquina aprenda: un modelo con parámetros, una medida de lo mal que va y un gradiente que los corrige. De clasificar por la distancia a una red entrenada, regularizada y evaluada con honestidad sobre lo que no sabe.',
+    temas: [
+      {
+        id: 'ia-que-es', t: 'Aprender es ajustar números',
+        r: 'De las reglas escritas a mano a un modelo con parámetros que se corrigen solos.',
+        o: ['Dato, etiqueta, modelo y pérdida', 'Mover una recta a mano y ver bajar el error', 'Por qué aprender es optimizar'],
+        req: ['fn-lineales', 'pe-bidimensional', 'av-optimizacion']
+      },
+      {
+        id: 'ia-buscar', t: 'Antes de aprender: buscar',
+        r: 'Minimax con poda y A*: resolver un problema razonando, sin haber aprendido nada.',
+        o: ['El árbol de un juego y el minimax', 'La poda alfa-beta: por qué se puede no mirar', 'A*: heurística admisible y camino óptimo'],
+        req: ['av-juegos', 'av-grafos']
+      },
+      {
+        id: 'ia-distancia', t: 'La primera IA es una distancia',
+        r: 'Clasificar por el vecino más cercano y agrupar con k-medias. Sin derivadas y sin entrenamiento.',
+        o: ['Vecinos más cercanos y la elección de k', 'La frontera de decisión es un diagrama de Voronoi', 'k-medias: asignar y recolocar hasta que deje de moverse'],
+        req: ['ge-pitagoras', 'pe-descriptiva']
+      },
+      {
+        id: 'ia-arboles', t: 'Preguntar lo que más informa',
+        r: 'Árboles de decisión por ganancia de información, y el bosque que promedia muchos.',
+        o: ['Entropía de un nodo y ganancia de información', 'Construir el árbol eligiendo cada vez la mejor pregunta', 'Por qué un bosque aleatorio reduce la varianza'],
+        req: ['av-informacion', 'pe-inferencia']
+      },
+      {
+        id: 'ia-bayes', t: 'Bayes ingenuo: el filtro de spam',
+        r: 'Multiplicar probabilidades condicionadas suponiendo independencia, y sumar logaritmos para no perderse.',
+        o: ['La suposición ingenua, y por qué funciona aunque sea falsa', 'Sumar logaritmos en vez de multiplicar probabilidades', 'Suavizado: qué hacer con una palabra nunca vista'],
+        req: ['pe-condicionada', 'al-radicales-log']
+      },
+      {
+        id: 'ia-margen', t: 'La frontera con más margen',
+        r: 'Entre todas las rectas que separan, la que deja el pasillo más ancho.',
+        o: ['El margen es una distancia punto-recta', 'Vectores soporte: solo unos pocos datos deciden', 'El truco del núcleo: cambiar un producto escalar por otro'],
+        req: ['ge-rectas', 'al-inecuaciones', 'av-espacios']
+      },
+      {
+        id: 'ia-sigmoide', t: 'De decidir a dudar',
+        r: 'El escalón del perceptrón no se puede derivar. La sigmoide sí, y además devuelve una probabilidad.',
+        o: ['Del umbral a la regresión logística', 'La sigmoide y su derivada', 'Interpretar la salida como probabilidad'],
+        req: ['cib-neurona', 'fn-exp-log', 'fn-derivadas']
+      },
+      {
+        id: 'ia-perdida', t: 'Medir el error y bajar la ladera',
+        r: 'La entropía cruzada como pérdida, los minilotes como muestreo y Adam como dos medias móviles.',
+        o: ['Por qué la entropía cruzada y no el error cuadrático', 'Minilotes: el gradiente como estimación por muestreo', 'Adam: media móvil del gradiente y de su cuadrado'],
+        req: ['av-informacion', 'av-optimizacion', 'cib-filtrado']
+      },
+      {
+        id: 'ia-red', t: 'Apilar neuronas',
+        r: 'Capas lineales y no linealidad. Sin ella, mil capas colapsan en una sola matriz.',
+        o: ['Una capa es una matriz por un vector más una no linealidad', 'Por qué sin activación todo colapsa', 'XOR resuelto, y la aproximación universal como suma de escalones'],
+        req: ['al-matrices', 'av-espacios', 'fn-integral-def']
+      },
+      {
+        id: 'ia-retropropagacion', t: 'La regla de la cadena, en cadena',
+        r: 'El grafo de cómputo y el gradiente que vuelve hacia atrás, a mano en una red 2-2-1.',
+        o: ['El grafo de cómputo y la pasada hacia delante', 'Retropropagar: la regla de la cadena capa a capa', 'Comprobar el gradiente con diferencias finitas'],
+        req: ['fn-derivadas', 'av-numerico']
+      },
+      {
+        id: 'ia-generalizar', t: 'Aprenderse los ejemplos no es aprender',
+        r: 'Sobreajuste, validación y regularización: la diferencia entre memorizar y aprender.',
+        o: ['Un polinomio de grado n pasa por n+1 puntos', 'Entrenamiento, validación y prueba', 'Regularizar, y normalizar, que es tipificar'],
+        req: ['al-polinomios', 'pe-inferencia', 'pe-normal']
+      },
+      {
+        id: 'ia-evaluar', t: '¿Funciona?',
+        r: 'La exactitud engaña. Matriz de confusión, precisión, sensibilidad y el área bajo la ROC.',
+        o: ['Matriz de confusión: los cuatro casos', 'Precisión y sensibilidad, y por qué compiten', 'La curva ROC, su área y los errores por subgrupos'],
+        req: ['pe-condicionada', 'fn-integral-def']
+      }
+    ]
+  },
+
+  /* ================= 18. INTELIGENCIA ARTIFICIAL II =================
+     Por que cada arquitectura tiene la forma que tiene. Cada tema entra
+     por su idea matematica nueva, dicha en una frase que el alumno pueda
+     repetir: una CNN comparte pesos porque la imagen no cambia de
+     significado al desplazarla.
+
+     Los temas marcados como rama -ia-hopfield- se pueden saltar: nada de
+     lo que viene despues depende de ellos. */
+  {
+    id: 'ia2', n: 18, title: 'Inteligencia artificial II: las arquitecturas', piel: 'ia', curso: 'AMP',
+    desc: 'Catorce arquitecturas y la idea matemática que aporta cada una, funcionando en pequeño dentro del navegador. De compartir pesos en una imagen a ponderar con un producto escalar, generar deshaciendo ruido y aprender de un premio que llega tarde.',
+    temas: [
+      {
+        id: 'ia-cnn', t: 'Redes convolucionales',
+        r: 'Compartir pesos porque una imagen no cambia de significado al desplazarla.',
+        o: ['De la capa densa a la convolución: cuántos parámetros se ahorran', 'Núcleos que se aprenden, agrupación y campo receptivo', 'Dibujar un dígito y ver cómo lo clasifica'],
+        req: ['av-convolucion', 'av-grupos']
+      },
+      {
+        id: 'ia-hopfield', t: 'La memoria como un valle',
+        r: 'Una función de energía que solo puede bajar, y sus mínimos son los recuerdos.',
+        o: ['La regla de Hebb y la matriz de pesos', 'Por qué la energía nunca sube', 'Recuperar un patrón desde una versión con ruido'],
+        req: ['av-sistemas-dinamicos', 'av-optimizacion']
+      },
+      {
+        id: 'ia-recurrentes', t: 'Redes con memoria: RNN y LSTM',
+        r: 'Un estado que se realimenta, y un gradiente que explota o se desvanece como una potencia.',
+        o: ['La red recurrente como bucle realimentado', 'Potencias de una matriz: explotar o desvanecerse', 'Las puertas de la LSTM y por qué lo arreglan'],
+        req: ['cib-realimentacion', 'cib-retardos', 'av-lineal']
+      },
+      {
+        id: 'ia-autocodificador', t: 'Comprimir para generar: autocodificadores y VAE',
+        r: 'Un cuello de botella obliga a quedarse con lo esencial, y del espacio latente se puede muestrear.',
+        o: ['El cuello de botella; si es lineal, aprende el subespacio de PCA', 'El espacio latente y lo que hay entre dos datos', 'VAE: divergencia KL y reparametrizar, que es tipificar al revés'],
+        req: ['av-pca', 'av-informacion', 'pe-normal']
+      },
+      {
+        id: 'ia-gan', t: 'Dos redes jugando: GAN',
+        r: 'Un juego de suma cero entre quien falsifica y quien detecta, y por qué es tan inestable.',
+        o: ['Generador y discriminador; el discriminador óptimo', 'El generador transforma ruido en datos', 'Por qué oscila: el descenso-ascenso simultáneo gira en espiral'],
+        req: ['av-juegos', 'pe-continuas', 'av-sistemas-dinamicos', 'al-complejos']
+      },
+      {
+        id: 'ia-difusion', t: 'Generar quitando ruido: difusión',
+        r: 'Añadir ruido normal paso a paso hasta borrarlo todo, y aprender a deshacer el camino.',
+        o: ['El paso hacia delante: las varianzas se suman', 'Aprender a quitar ruido: el gradiente del logaritmo de la densidad', 'Parentesco con la ecuación del calor'],
+        req: ['pe-normal', 'av-edp', 'av-vectorial', 'av-markov']
+      },
+      {
+        id: 'ia-tokens', t: 'Trocear el texto: tokens',
+        r: 'BPE es un algoritmo de compresión: fusionar una y otra vez el par de símbolos más frecuente.',
+        o: ['Por qué no se trabaja ni con letras ni con palabras', 'Una fusión de BPE, a mano', 'El tamaño del vocabulario como compromiso'],
+        req: ['av-informacion']
+      },
+      {
+        id: 'ia-secuencias', t: 'Predecir el siguiente token',
+        r: 'Los n-gramas son una cadena de Markov. Perplejidad, temperatura y el experimento de Shannon.',
+        o: ['n-gramas como cadena de Markov', 'Perplejidad: la entropía, exponenciada', 'La temperatura divide los logits antes del softmax'],
+        req: ['av-markov', 'av-informacion', 'fn-exp-log']
+      },
+      {
+        id: 'ia-vectores-palabras', t: 'Las palabras como vectores',
+        r: 'Contar con quién aparece cada palabra, y descubrir que la dirección significa algo.',
+        o: ['Coocurrencia, y el peso IDF de Spärck Jones', 'Similitud coseno', 'Analogías, y proyectar a dos dimensiones con PCA'],
+        req: ['ge-vectores', 'av-pca']
+      },
+      {
+        id: 'ia-atencion', t: 'Atención y el transformador',
+        r: 'Una media ponderada cuyos pesos salen de un softmax de productos escalares.',
+        o: ['Consultas, claves y valores', 'Por qué se divide por la raíz de d', 'Máscara causal, varias cabezas y codificación posicional con senos'],
+        req: ['ge-vectores', 'al-matrices', 'tr-funciones', 'pe-normal']
+      },
+      {
+        id: 'ia-llm', t: 'Un LLM, de principio a fin',
+        r: 'Un transformador de juguete entrenado en el navegador, y qué cambia al multiplicarlo por mil millones.',
+        o: ['Preentrenar: entropía cruzada del siguiente token', 'Ventana de contexto y leyes de escala en ejes log-log', 'Ajuste por preferencias, y por qué genera texto probable'],
+        req: ['ia-atencion', 'ia-tokens', 'ia-sigmoide', 'al-radicales-log']
+      },
+      {
+        id: 'ia-refuerzo', t: 'Aprender a base de premios: Bellman y Q-learning',
+        r: 'Nadie dice cuál era la jugada buena: solo llega un premio, y a veces mucho después.',
+        o: ['La ecuación de Bellman como iteración que converge', 'Q-learning y el factor de descuento', 'AlphaZero: la búsqueda guiada por una red'],
+        req: ['av-markov', 'fn-sucesiones', 'ia-buscar', 'cib-refuerzo']
+      },
+      {
+        id: 'ia-limites', t: 'Lo que el modelo no puede saber',
+        r: 'Goodhart, el sesgo como variable de confusión y los ejemplos adversarios.',
+        o: ['La ley de Goodhart: optimizar la medida estropea la medida', 'Sesgo: lo que había en los datos', 'Ejemplos adversarios: un paso en la dirección del gradiente'],
+        req: ['cib-segundo-orden', 'pe-causal', 'av-computabilidad']
+      },
+      {
+        id: 'ia-taller', t: 'El taller',
+        r: 'Todos los mandos a la vez, una red entera escrita a la vista, y el mapa de qué idea aporta cada arquitectura.',
+        o: ['Un banco de pruebas con datos, arquitectura y optimizador', 'Una red completa, línea a línea', 'El mapa: qué matemática hay debajo de cada arquitectura'],
+        req: ['ia-llm', 'ia-cnn', 'ia-red']
       }
     ]
   }

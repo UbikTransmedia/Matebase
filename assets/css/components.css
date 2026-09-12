@@ -416,6 +416,16 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
   --on-accent:var(--cr-on);
 }
 [data-piel="cr"] .hdr__over{color:var(--cr-ink); font-weight:700}
+
+/* --- bloques de inteligencia artificial: piel de fósforo --- */
+[data-piel="ia"]{
+  --accent:var(--ia);
+  --accent-soft:var(--ia-soft);
+  --accent-ink:var(--ia-ink);
+  --on-accent:var(--ia-on);
+}
+[data-piel="ia"] .hdr__over{color:var(--ia-ink); font-weight:700}
+
 .cr-fld{margin:10px 0 4px; width:100%}
 .cr-fld--corto{width:auto; display:inline-flex; margin-right:14px}
 .cr-fld input, .cr-fld textarea{
