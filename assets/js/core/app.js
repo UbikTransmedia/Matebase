@@ -262,7 +262,10 @@
   }
 
   function header(t) {
-    var h = U.el('div.hdr');
+    /* `data-ruta` no se ve en pantalla: la usa la hoja de impresion para
+       poner al pie de la ficha de donde sale, que en papel es lo unico que
+       permite volver. */
+    var h = U.el('div.hdr', { 'data-ruta': (location.pathname.split('/').pop() || 'index.html') + '#/' + t.id });
     h.appendChild(U.el('div.hdr__over', { text: 'Bloque ' + t._block.n + ' · ' + t._block.title }));
     // El titulo se puede enfocar: al cambiar de tema, el foco aterriza aqui
     // en vez de quedarse a mitad del indice.
@@ -306,6 +309,19 @@
     }));
     box.appendChild(ul);
     return box;
+  }
+
+  /* Un tema se puede imprimir como ficha de trabajo: el enunciado y las
+     casillas en blanco, sin botones ni ayudas. El boton va al pie, junto a
+     la navegacion, porque es lo ultimo que se hace con un tema. */
+  function botonImprimir(t) {
+    return U.el('div.chips.imprimir', null, [
+      U.el('button.btn.btn--sm.btn--ghost', {
+        type: 'button',
+        title: 'Imprime este tema como ficha: los enunciados con sus casillas en blanco, sin botones',
+        onclick: function () { global.print(); }
+      }, '🖨 Imprimir como ficha')
+    ]);
   }
 
   function pager(t) {
@@ -385,6 +401,7 @@
     if (antes) wrapEl.appendChild(antes);
     var body = U.el('div');
     wrapEl.appendChild(body);
+    wrapEl.appendChild(botonImprimir(t));
     wrapEl.appendChild(pager(t));
     mainEl.scrollTop = 0;
     Progress.visit(id);

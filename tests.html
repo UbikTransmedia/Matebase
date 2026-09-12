@@ -1577,17 +1577,35 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       }
     }
 
+    /* La semilla de la tanda: al azar, salvo que se pida una concreta con
+       ?seed= en la direccion. Se enseña siempre, para poder repetir la misma
+       tanda de enunciados y ver el fallo otra vez. */
+    var SEMILLA_BASE = (function () {
+      var m = /[?&]seed=(-?\d+)/.exec(location.search);
+      return m ? parseInt(m[1], 10) : (Date.now() % 1000000);
+    })();
+    function conSemilla(c) {
+      return ' · repítelo con ?seed=' + SEMILLA_BASE + ' en esta página';
+    }
+
     function auditar(specs) {
       var fallos = [];
       (specs || []).forEach(function (s, idx) {
         var etiqueta = (s.partes ? 'problema ' : 'ej.') + (idx + 1) + ' («' + (s.title || '') + '»)';
-        var c = { malCheck: 0, malTex: 0, tragaTodo: 0, malOpc: 0, malErr: 0, decimales: 0, barraSuelta: 0, otros: [] };
+        var c = { malCheck: 0, malTex: 0, tragaTodo: 0, malOpc: 0, malErr: 0, decimales: 0, barraSuelta: 0, otros: [], semilla: 0 };
         var excep = '';
         if (s.partes && !s.partes.length) excep = 'un problema sin apartados';
+        /* Cada pasada usa una SEMILLA CONOCIDA. Antes se generaba con
+           `U.rng()` sin semilla, asi que un fallo raro -uno de cada mil
+           enunciados- aparecia una vez y no habia forma de volver a verlo.
+           Ahora la semilla se apunta y se enseña en el mensaje: el fallo se
+           reproduce escribiendo `?seed=` en la direccion de esta pagina. */
         for (var i = 0; i < 40 && !excep; i++) {
           var d = null, guard = 0;
+          var semilla = SEMILLA_BASE + idx * 100003 + i;
+          c.semilla = semilla;
           try {
-            do { d = s.gen ? s.gen(U.rng()) : {}; } while (d === null && ++guard < 60);
+            do { d = s.gen ? s.gen(U.rng(semilla + guard * 7919)) : {}; } while (d === null && ++guard < 60);
             if (d === null) { excep = excep || 'gen() nunca devuelve datos'; break; }
             if (s.partes) {
               var intro = s.intro ? s.intro(d) : '';
@@ -1599,12 +1617,12 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           } catch (e) { excep = e.message; break; }
         }
         if (excep) fallos.push(etiqueta + ': ' + excep);
-        else if (c.malCheck) fallos.push(etiqueta + ': la solución no pasa su corrector ' + c.malCheck + ' veces en 40');
+        else if (c.malCheck) fallos.push(etiqueta + ': la solución no pasa su corrector ' + c.malCheck + ' veces en 40' + conSemilla(c));
         else if (c.malTex) fallos.push(etiqueta + ': ' + c.malTex + ' fórmulas con comandos LaTeX desconocidos');
         else if (c.barraSuelta) fallos.push(etiqueta + ': un «\\,» suelto fuera de $...$, que se ve literal; dentro de una fórmula va bien, en prosa no (y U.miles ya trae su propio espacio)');
         else if (c.tragaTodo) fallos.push(etiqueta + ': el corrector acepta respuestas vacías o sin contenido');
         else if (c.malOpc) fallos.push(etiqueta + ': la solución no está entre las opciones que se ofrecen');
-        else if (c.malErr) fallos.push(etiqueta + ': un «error típico» salta con la respuesta correcta');
+        else if (c.malErr) fallos.push(etiqueta + ': un «error típico» salta con la respuesta correcta' + conSemilla(c));
         else if (c.decimales) fallos.push(etiqueta + ': pide ' + c.decimales + ' ' + U.plural(c.decimales, 'decimal', 'decimales') + ' pero su tolerancia rechazaría una respuesta bien redondeada; declara dec: ' + c.decimales);
         else if (c.otros.length) fallos.push(etiqueta + ': ' + c.otros[0]);
       });
@@ -1861,6 +1879,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
         ' temas escritos de ' + ids.length + ' previstos' +
         (malos ? ' · <b style="color:var(--bad)">' + malos + ' con errores</b>' : ' · todos se construyen bien') +
         ' · ' + conPuntos + ' gráficas con puntos móviles, todas manejables con el teclado' +
+        ' · <span style="font-family:var(--mono)">seed=' + SEMILLA_BASE + '</span>' +
         '</div>' + html;
     }
   })();

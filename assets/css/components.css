@@ -650,6 +650,10 @@ ol.deberes{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direc
 .examen__b input{width:17px; height:17px; accent-color:var(--accent); flex:0 0 auto}
 .examen__b span{font-size:0.9062rem}
 
+/* El boton de imprimir, discreto y al pie del tema. */
+.imprimir{margin-top:26px; justify-content:flex-end}
+@media print{ .imprimir{display:none !important} }
+
 /* EL TALLER DEL LENGUAJE. Un solo panel a la vez, elegido con fichas: cuatro
    columnas no caben en un movil y aqui todo sale del mismo texto, asi que
    verlas por turnos no pierde nada. */
@@ -936,9 +940,15 @@ a.btn:hover{text-decoration:none}
    El formulario, y cualquier tema, se imprimen sin índice, sin barras y
    sin botones: solo lo que se lee. */
 @media print{
+  /* IMPRIMIR UN TEMA COMO FICHA DE TRABAJO.
+     Se va todo lo que solo sirve con un ratón delante -indice, botones,
+     ayudas desplegables- y se queda lo que se lee y lo que se rellena. Los
+     ejercicios se imprimen con su enunciado y sus casillas vacias: la ficha
+     se hace a boligrafo y se corrige despues en pantalla. */
   .side, .topbar, .glos, .pager, .scrim, .saltar, .card__foot, .parte__pie,
   .formu__barra, .fbox__help, .fbox__tip, .ans__como, .stage__teclas, .prereq,
-  .res__pie, .res__antes, .toc{display:none !important}
+  .res__pie, .res__antes, .toc, .nav, .itin-inicio, .simul__pie, .chips .btn,
+  .card__url, .barrita, .shd__pie, .cir__aviso, .maq__aviso, .len__aviso{display:none !important}
   /* Impreso, un ejemplo resuelto se lee entero. */
   .res__paso[hidden], .res__cierre[hidden]{display:list-item !important}
   .res__cierre[hidden]{display:block !important}
@@ -949,4 +959,38 @@ a.btn:hover{text-decoration:none}
   body{background:#fff}
   .card, .fbox, .keys{box-shadow:none}
   .fbox, .keys, .formu__tema h3{break-inside:avoid}
+
+  /* Una ficha no se parte por la mitad, y un titulo no se queda solo al pie. */
+  .card, .chk, .res, .ans__panel{break-inside:avoid}
+  h1, h2, h3, h4{break-after:avoid}
+  .card__head{break-after:avoid}
+
+  /* Las casillas de respuesta, en papel, son rayas para escribir encima. */
+  .fbox input, .fld input, input[type="text"], input[type="number"]{
+    border:0 !important; border-bottom:1px solid #999 !important;
+    border-radius:0 !important; background:transparent !important;
+    min-width:7em; box-shadow:none !important;
+  }
+  .opc__b{border:1px solid #999 !important; background:transparent !important; color:#000 !important}
+
+  /* Papel: tinta negra, enlaces sin adorno y con su destino a la vista cuando
+     no sea obvio. Un enlace subrayado en azul no sirve de nada impreso. */
+  *{color:#000 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  a{text-decoration:none !important}
+  .prose a[href^="#/"]::after{content:" (" attr(href) ")"; font-size:0.75em; color:#555 !important}
+
+  /* La cabecera de la ficha: de que tema es y de donde sale. */
+  .hdr{border-bottom:1px solid #999; padding-bottom:8px; margin-bottom:14px}
+  .hdr::after{
+    content:"Matebase · " attr(data-ruta);
+    display:block; margin-top:6px; font-size:0.75rem; color:#555 !important;
+  }
+
+  /* Nada de fondos grises que se comen el toner. */
+  .card, .note, .keys, .chk, .fbox, .res, table.tbl, .shd__mini, pre{
+    background:#fff !important; border-color:#bbb !important;
+  }
+  table.tbl th{background:#f2f2f2 !important}
+
+  @page{margin:16mm 14mm}
 }

@@ -809,6 +809,37 @@ siempre **las dos salidas** y si coinciden; cuando no, el taller se pone en rojo
 
 ---
 
+## Imprimir un tema como ficha
+
+Cualquier tema se imprime desde el botón del pie, y sale como **ficha de
+trabajo**: los enunciados con sus casillas en blanco y sin nada que solo sirva
+con un ratón delante. La hoja de impresión quita el índice, la barra, los
+botones de comprobar y de pista, los avisos de los talleres y el propio botón de
+imprimir; convierte las casillas en rayas para escribir encima; pone todo en
+negro para no gastar tóner; y evita que una tarjeta se parta entre dos páginas.
+
+Dos detalles que conviene conocer al escribir un tema:
+
+- Los **ejemplos resueltos se imprimen enteros**, con sus pasos desplegados: en
+  papel no se puede hacer clic.
+- La cabecera lleva un `data-ruta` invisible en pantalla que la hoja de
+  impresión saca al pie, para que desde el papel se pueda volver al tema.
+
+---
+
+## Un fallo raro, dos veces
+
+La auditoría genera cada ejercicio **40 veces** para ver si su solución pasa su
+propio corrector. Antes generaba con `U.rng()` sin semilla, así que un fallo de
+uno entre mil aparecía una vez, se iba y no había forma de volver a verlo.
+
+Ahora cada tanda usa una **semilla conocida**, que se enseña en el resumen del
+auditor (`seed=…`) y en el propio mensaje de fallo. Para repetir exactamente la
+misma tanda, se abre `tests.html?seed=<n>`. Si un fallo solo aparece con una
+semilla, esa semilla es el caso que hay que arreglar.
+
+---
+
 ## Deberes y exámenes, sin servidor
 
 Dos cosas que necesita quien da clase, resueltas con la misma idea: **que el
