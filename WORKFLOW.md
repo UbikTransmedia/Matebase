@@ -25,7 +25,7 @@ Se abre haciendo doble clic en `index.html`. **Sin servidor local, sin internet,
 
 ## Fase 1 — Temario (cerrada) → `assets/js/curriculum.js`
 
-19 bloques, 228 temas, en progresión estricta. El orden es el contrato pedagógico:
+20 bloques, 246 temas, en progresión estricta. El orden es el contrato pedagógico:
 ningún tema usa una herramienta que no se haya explicado antes, y `tests.html`
 comprueba que los requisitos declarados de cada tema van antes que él.
 
@@ -52,12 +52,13 @@ comprueba que los requisitos declarados de cada tema van antes que él.
 12. **Estructuras, números e infinito** (6).
 13. **Discreta y computacional** (6).
 14. **Cibernética** (15).
-15. **Programación gráfica** (33), con piel propia.
-16. **Criptografía** (36), con piel propia — de César a lo poscuántico, con la criptografía real (SHA-256, AES, curvas, RSA) ejecutándose en el navegador desde `assets/js/core/cripto.js`.
-17. **Inteligencia artificial I: aprender de los datos** (12), con piel propia — de qué significa aprender de ejemplos hasta la red densa, la retropropagación y cómo se evalúa.
-18. **Inteligencia artificial II: las arquitecturas** (14), con piel propia — cada arquitectura entra por la idea matemática que aporta, y las redes se entrenan de verdad en el navegador desde `assets/js/core/nn.js`.
+15. **Máquinas y lenguajes** (18) — cómo funciona un ordenador y cómo funciona un lenguaje, construyendo los dos de abajo arriba desde `assets/js/core/logica.js`, `maquina.js` y `lenguaje.js`. Va aquí porque necesita la realimentación y el retardo de cibernética: un biestable es un bucle que se acuerda.
+16. **Programación gráfica** (33), con piel propia.
+17. **Criptografía** (36), con piel propia — de César a lo poscuántico, con la criptografía real (SHA-256, AES, curvas, RSA) ejecutándose en el navegador desde `assets/js/core/cripto.js`.
+18. **Inteligencia artificial I: aprender de los datos** (12), con piel propia — de qué significa aprender de ejemplos hasta la red densa, la retropropagación y cómo se evalúa.
+19. **Inteligencia artificial II: las arquitecturas** (14), con piel propia — cada arquitectura entra por la idea matemática que aporta, y las redes se entrenan de verdad en el navegador desde `assets/js/core/nn.js`.
 
-> **Los bloques 15, 16, 17 y 18 son optativos y no se presuponen entre sí.** Un
+> **Los bloques 15, 16, 17, 18 y 19 son optativos y no se presuponen entre sí.** Un
 > alumno puede hacer el de criptografía sin el de gráficos, o los de IA sin
 > ninguno de los otros dos: por eso sus `req` sólo citan requisitos reales, y
 > las herramientas generales que necesitan viven en su bloque natural (`av-pca`
@@ -68,6 +69,22 @@ Cada tema declara `id`, `t` (título), `r` (resumen), `o` (objetivos) y `req`
 (requisitos); los de 2.º, además, `curso: '2B'` e `itin` (`['MII']`, `['MCS']` o
 los dos). Se pueden **intercalar temas nuevos** en cualquier punto insertando un
 objeto en el array.
+
+> **Por qué «Máquinas y lenguajes» es el bloque 15 y no el 13.** El encargo pedía
+> insertarlo entre cibernética y programación gráfica, y daba por hecho que eso lo
+> dejaba en el 13 con gráficos pasando al 14. Esa numeración era de un estado
+> anterior del temario: cuando se escribió, cibernética ya era el 14 y gráficos el
+> 15, porque entre medias habían entrado criptografía y los dos bloques de
+> inteligencia artificial. Se respetó **la posición pedida** —entre cibernética y
+> gráficos— y se renumeró con los números reales: `maq` al 15, y `gfx`, `cr`, `ia1`
+> e `ia2` corridos al 16, 17, 18 y 19. Cambiar el sitio para que cuadrara el número
+> habría roto la razón pedagógica de ponerlo ahí, que es tener a mano la
+> realimentación y el retardo de cibernética.
+>
+> El mismo encargo pedía añadir un campo `req` «porque `curriculum.js` no lo tiene».
+> Sí lo tiene, en los 228 temas, y `tests.html` ya comprobaba que cada requisito
+> exista y vaya antes. No se tocó nada: las fichas nuevas se limitan a declararlo
+> como las demás.
 
 > **Por qué el temario de ampliación está repartido por disciplinas.** Los bloques
 > de ampliación empezaron siendo **un solo bloque de 19 temas** llamado «Escalada

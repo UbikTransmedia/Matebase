@@ -12,7 +12,7 @@ abrirla en cualquier ordenador con un navegador.
 
 ## Qué hay dentro
 
-A la izquierda, un índice desplegable con los diecinueve bloques del curso. A la
+A la izquierda, un índice desplegable con los veinte bloques del curso. A la
 derecha, el tema abierto. Cada tema empieza con un **puente** desde lo anterior
 —de dónde venimos y qué herramienta del curso se reutiliza— y tiene explicación,
 historia, ejemplos que se tocan (con una **predicción** que hacer antes de
@@ -82,11 +82,12 @@ asignatura.
 | 12. Estructuras, números e infinito | 6 | números y RSA, grupos, Diffie-Hellman y curvas elípticas, completitud, Cantor, Turing y Gödel |
 | 13. Discreta y computacional | 6 | grafos, recurrencias, complejidad y P frente a NP, cálculo numérico, información, teoría de juegos |
 | 14. Cibernética | 15 | realimentación y bloques, PID, dinámica de sistemas, Kalman, perceptrón, refuerzo, autoorganización, sistema viable, segundo orden |
-| 15. Programación gráfica | 33 | shaders GLSL: del píxel al raymarching, con ratón, curvas, texto, mosaicos, disco de Poincaré, trazado de rayos, cámara, shaders con memoria y fluidos, terreno, texturas sólidas, nubes y filtros de cámara |
-| 16. Criptografía | 36 | del cifrado de César a lo poscuántico: frecuencias, Vigenère, Enigma, la libreta de un solo uso, AES paso a paso, hash, RSA, curvas elípticas, firmas, conocimiento cero, cadenas de bloques, Shor y BB84, con la criptografía real ejecutándose en el navegador |
+| 15. Máquinas y lenguajes | 18 | cómo funciona un ordenador y cómo funciona un lenguaje: del bit y la puerta lógica a una CPU que ejecuta, y de ahí a un lenguaje propio que compila para ella |
+| 16. Programación gráfica | 33 | shaders GLSL: del píxel al raymarching, con ratón, curvas, texto, mosaicos, disco de Poincaré, trazado de rayos, cámara, shaders con memoria y fluidos, terreno, texturas sólidas, nubes y filtros de cámara |
+| 17. Criptografía | 36 | del cifrado de César a lo poscuántico: frecuencias, Vigenère, Enigma, la libreta de un solo uso, AES paso a paso, hash, RSA, curvas elípticas, firmas, conocimiento cero, cadenas de bloques, Shor y BB84, con la criptografía real ejecutándose en el navegador |
 
-| 17. Inteligencia artificial I: aprender de los datos | 12 | qué es aprender de los datos, búsqueda y poda alfa-beta, vecinos próximos, árboles y bosques, Bayes ingenuo, margen máximo, sigmoide, pérdidas y optimizadores, la red densa, retropropagación, generalizar y evaluar |
-| 18. Inteligencia artificial II: las arquitecturas | 14 | convolucionales, Hopfield, recurrentes y LSTM, autocodificadores y VAE, GAN, difusión, tokens y BPE, n-gramas y perplejidad, vectores de palabras, atención y transformador, un LLM entero, Bellman y Q-learning, los límites, y un taller con todos los mandos |
+| 18. Inteligencia artificial I: aprender de los datos | 12 | qué es aprender de los datos, búsqueda y poda alfa-beta, vecinos próximos, árboles y bosques, Bayes ingenuo, margen máximo, sigmoide, pérdidas y optimizadores, la red densa, retropropagación, generalizar y evaluar |
+| 19. Inteligencia artificial II: las arquitecturas | 14 | convolucionales, Hopfield, recurrentes y LSTM, autocodificadores y VAE, GAN, difusión, tokens y BPE, n-gramas y perplejidad, vectores de palabras, atención y transformador, un LLM entero, Bellman y Q-learning, los límites, y un taller con todos los mandos |
 
 **228 temas escritos**, en progresión estricta: ninguno usa una herramienta que no
 se haya explicado antes, y cada tema declara cuáles necesita; `tests.html`

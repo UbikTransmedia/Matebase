@@ -962,13 +962,138 @@ window.CURRICULUM = [
     ]
   },
 
-  /* ================= 15. PROGRAMACION GRAFICA =================
+  /* ================= 15. MAQUINAS Y LENGUAJES =================
+     Va justo despues de cibernetica porque necesita su realimentacion y su
+     retardo: un biestable es un bucle que se acuerda, y eso alli ya esta
+     contado. Dos tramos que se cierran uno sobre otro: el compilador del
+     tramo B genera el ensamblador de la CPU del tramo A, asi que al final
+     el programa del alumno corre en la maquina del alumno.
+
+     Ojo al orden con programacion grafica: `gfx-decidir` (decidir sin
+     bifurcar) es hermano de `maq-decidir`, pero va DESPUES, asi que el
+     puente entre los dos se escribe alli y apunta hacia atras. */
+  {
+    id: 'maq', n: 15, title: 'Máquinas y lenguajes', curso: 'AMP',
+    desc: 'Un ordenador no entiende nada: son tablas de verdad apiladas. Y un lenguaje de programación no es magia: es un texto que otro programa traduce. Se construyen los dos, de abajo arriba, hasta que el segundo corre sobre el primero.',
+    temas: [
+      {
+        id: 'maq-bits', t: 'Contar con dos símbolos: binario, hexadecimal y complemento a dos',
+        r: 'El valor posicional con dos dedos en vez de diez, y cómo se escribe un número negativo sin signo.',
+        o: ['Binario y hexadecimal como valor posicional', 'Complemento a dos: el negativo que suma solo', 'Desbordamiento y por qué 0,1 no cabe'],
+        req: ['ar-naturales', 'ar-enteros', 'ar-potencias', 'ar-decimales']
+      },
+      {
+        id: 'maq-puertas', t: 'La puerta lógica: una tabla de verdad hecha de cables',
+        r: 'Las conectivas de la lógica, ahora con corriente. Y una sola de ellas basta para todas.',
+        o: ['Y, O y NO como circuitos', 'La tabla de verdad es el plano', 'NAND lo construye todo'],
+        req: ['lg-proposiciones']
+      },
+      {
+        id: 'maq-sumador', t: 'Sumar con cables: semisumador, sumador completo y el acarreo',
+        r: 'La suma de toda la vida, cableada. Y por qué el acarreo es lo que frena a un procesador.',
+        o: ['Semisumador: suma y acarreo', 'Encadenar sumadores completos', 'Por qué el acarreo es lento'],
+        req: ['maq-puertas', 'ar-operaciones']
+      },
+      {
+        id: 'maq-decidir', t: 'El «si» no existe: multiplexor y comparador',
+        r: 'Un circuito no bifurca: calcula las dos ramas y elige una con aritmética.',
+        o: ['El multiplexor como si-entonces', 'Comparar dos números con puertas', 'Elegir sin bifurcar'],
+        req: ['maq-puertas', 'lg-proposiciones']
+      },
+      {
+        id: 'maq-memoria', t: 'Un bit que se acuerda: el biestable es un bucle con retardo',
+        r: 'Realimentar una puerta sobre sí misma, y que el retardo del cable se convierta en memoria.',
+        o: ['El cerrojo: realimentación que recuerda', 'Por qué puede oscilar', 'Registro y reloj'],
+        req: ['maq-puertas', 'cib-realimentacion', 'cib-retardos']
+      },
+      {
+        id: 'maq-normal', t: 'Cualquier tabla se puede construir: forma normal y simplificación',
+        r: 'De una tabla de verdad cualquiera a un circuito, y de ahí a uno más barato.',
+        o: ['Suma de productos desde la tabla', 'Simplificar agrupando', 'Contar el coste en puertas'],
+        req: ['maq-puertas', 'lg-proposiciones']
+      },
+      {
+        id: 'maq-cpu', t: 'La máquina mínima: buscar, decodificar, ejecutar',
+        r: 'Un contador, un acumulador, una memoria y un ciclo de tres pasos que no para nunca.',
+        o: ['El ciclo de instrucción', 'Registros, memoria y bus', 'La máquina de Turing, con cables'],
+        req: ['maq-memoria', 'maq-sumador', 'maq-decidir', 'av-computabilidad']
+      },
+      {
+        id: 'maq-ensamblador', t: 'Hablarle a la máquina: saltos, bucles y pila',
+        r: 'Las instrucciones con nombre, las etiquetas que evitan contar direcciones, y una pila.',
+        o: ['Etiquetas y saltos', 'Un bucle escrito a mano', 'La pila: guardar para volver'],
+        req: ['maq-cpu']
+      },
+      {
+        id: 'len-tokens', t: 'Trocear el texto: el analizador léxico es un autómata',
+        r: 'Antes de entender una frase hay que partirla en piezas, y eso lo hace una máquina de estados.',
+        o: ['De caracteres a piezas', 'El autómata que reconoce números y nombres', 'Qué hacer con lo que no encaja'],
+        req: ['maq-ensamblador', 'av-computabilidad']
+      },
+      {
+        id: 'len-gramatica', t: 'Gramáticas: reglas que generan frases',
+        r: 'Unas pocas reglas con flechas describen infinitas frases correctas. Y a veces, dos a la vez.',
+        o: ['Reglas, símbolos y derivaciones', 'Recursión: reglas que se nombran a sí mismas', 'Ambigüedad, y por qué importa'],
+        req: ['len-tokens', 'lg-demostracion', 'av-grafos']
+      },
+      {
+        id: 'len-arbol', t: 'Del texto al árbol: precedencia, asociatividad y descenso recursivo',
+        r: 'El corrector que acepta 120/7 en todos los ejercicios del curso es esto, y lo vas a construir.',
+        o: ['Por qué la jerarquía es la forma del árbol', 'Descenso recursivo, una función por nivel', 'Asociatividad y paréntesis'],
+        req: ['len-gramatica', 'ar-operaciones']
+      },
+      {
+        id: 'len-pila', t: 'Notación polaca inversa: evaluar es recorrer el árbol',
+        r: 'Sin paréntesis y sin precedencia, con una pila y recorriendo el árbol por abajo.',
+        o: ['Recorrido en postorden', 'Evaluar con una pila', 'De la pila a las instrucciones'],
+        req: ['len-arbol', 'maq-ensamblador']
+      },
+      {
+        id: 'len-variables', t: 'Nombres y ámbito: un entorno es una aplicación de nombres en valores',
+        r: 'Dar nombre a un valor es definir una aplicación, y el ámbito dice dónde vale.',
+        o: ['El entorno como aplicación', 'Asignar, leer y sombrear', 'Dónde vive cada nombre'],
+        req: ['len-arbol', 'lg-conjuntos']
+      },
+      {
+        id: 'len-funciones', t: 'Funciones y recursión: el marco de llamada y la pila que crece',
+        r: 'Llamar es apilar. La inducción de las demostraciones y la recursión de los programas son la misma idea.',
+        o: ['El marco de llamada', 'Recursión e inducción', 'Cuando la pila se acaba'],
+        req: ['len-variables', 'lg-demostracion', 'fn-sucesiones']
+      },
+      {
+        id: 'len-compilar', t: 'Compilar en vez de interpretar: generar el ensamblador del tramo A',
+        r: 'El momento en que los dos tramos se tocan: tu programa se convierte en instrucciones de tu máquina.',
+        o: ['Interpretar frente a compilar', 'Generar código desde el árbol', 'Comprobar que dan lo mismo'],
+        req: ['len-funciones', 'maq-ensamblador']
+      },
+      {
+        id: 'len-optimizar', t: 'Plegar constantes, quitar código muerto y medir la mejora',
+        r: 'Lo que se puede calcular antes de ejecutar, y lo que no se va a ejecutar nunca.',
+        o: ['Plegado de constantes', 'Código muerto', 'Medir: instrucciones y pasos'],
+        req: ['len-compilar']
+      },
+      {
+        id: 'len-autorreferencia', t: 'El programa que se escribe a sí mismo',
+        r: 'Un programa que imprime su propio texto, y un intérprete escrito en el lenguaje que interpreta.',
+        o: ['La diagonal, otra vez', 'El quine', 'Interpretarse a sí mismo'],
+        req: ['len-compilar', 'av-computabilidad', 'av-infinito', 'cib-segundo-orden']
+      },
+      {
+        id: 'len-taller', t: 'Tu propio lenguaje, corriendo en tu propia máquina',
+        r: 'Todo junto y a la vista, y qué hace de más un compilador de verdad.',
+        o: ['Los cuatro paneles a la vez', 'Del texto a la máquina, sin cortes', 'Qué le falta para ser de verdad'],
+        req: ['len-optimizar', 'len-autorreferencia']
+      }
+    ]
+  },
+
+  /* ================= 16. PROGRAMACION GRAFICA =================
      Piel propia: aqui ya no estamos solo en matematicas. Es la golosina
      del curso, el sitio al que el alumno viene a convertir numeros en
      algo bello. El campo `piel` es lo unico que hace falta para que todo
      el bloque cambie de color. */
   {
-    id: 'gfx', n: 15, title: 'Programación gráfica', piel: 'gfx', curso: 'AMP',
+    id: 'gfx', n: 16, title: 'Programación gráfica', piel: 'gfx', curso: 'AMP',
     desc: 'Reglas de tres líneas que producen imágenes que no caben en la cabeza. Las matemáticas del curso —la geometría del espacio de 2.º incluida— dibujándose a sesenta imágenes por segundo.',
     temas: [
       {
@@ -1172,9 +1297,9 @@ window.CURRICULUM = [
     ]
   },
 
-  /* ================= 16. CRIPTOGRAFÍA ================= */
+  /* ================= 17. CRIPTOGRAFÍA ================= */
   {
-    id: 'cr', n: 16, title: 'Criptografía', piel: 'cr', curso: 'AMP',
+    id: 'cr', n: 17, title: 'Criptografía', piel: 'cr', curso: 'AMP',
     desc: 'Guardar un secreto delante de quien lo quiere. Del disco de César a las curvas elípticas y a lo que resistirá a un ordenador cuántico, con la aritmética modular, las matrices, la probabilidad y los polinomios del curso trabajando de verdad: cada cifrado se rompe y se repara aquí mismo.',
     temas: [
       {
@@ -1396,7 +1521,7 @@ window.CURRICULUM = [
     ]
   },
 
-  /* ================= 17. INTELIGENCIA ARTIFICIAL I =================
+  /* ================= 18. INTELIGENCIA ARTIFICIAL I =================
      La tesis del bloque, que tiene que notarse en cada tema: no hay magia.
      Es el producto escalar, el gradiente y Bayes, repetidos millones de
      veces. Cada tema entra por la idea matematica nueva que aporta, y
@@ -1407,7 +1532,7 @@ window.CURRICULUM = [
      en ia-sigmoide -que es lo nuevo: un umbral que se puede derivar- en
      vez de contarla dos veces. */
   {
-    id: 'ia1', n: 17, title: 'Inteligencia artificial I: aprender de los datos', piel: 'ia', curso: 'AMP',
+    id: 'ia1', n: 18, title: 'Inteligencia artificial I: aprender de los datos', piel: 'ia', curso: 'AMP',
     desc: 'Qué significa que una máquina aprenda: un modelo con parámetros, una medida de lo mal que va y un gradiente que los corrige. De clasificar por la distancia a una red entrenada, regularizada y evaluada con honestidad sobre lo que no sabe.',
     temas: [
       {
@@ -1485,7 +1610,7 @@ window.CURRICULUM = [
     ]
   },
 
-  /* ================= 18. INTELIGENCIA ARTIFICIAL II =================
+  /* ================= 19. INTELIGENCIA ARTIFICIAL II =================
      Por que cada arquitectura tiene la forma que tiene. Cada tema entra
      por su idea matematica nueva, dicha en una frase que el alumno pueda
      repetir: una CNN comparte pesos porque la imagen no cambia de
@@ -1494,7 +1619,7 @@ window.CURRICULUM = [
      Los temas marcados como rama -ia-hopfield- se pueden saltar: nada de
      lo que viene despues depende de ellos. */
   {
-    id: 'ia2', n: 18, title: 'Inteligencia artificial II: las arquitecturas', piel: 'ia', curso: 'AMP',
+    id: 'ia2', n: 19, title: 'Inteligencia artificial II: las arquitecturas', piel: 'ia', curso: 'AMP',
     desc: 'Catorce arquitecturas y la idea matemática que aporta cada una, funcionando en pequeño dentro del navegador. De compartir pesos en una imagen a ponderar con un producto escalar, generar deshaciendo ruido y aprender de un premio que llega tarde.',
     temas: [
       {
