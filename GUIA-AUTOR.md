@@ -652,7 +652,11 @@ entera. `NN.limpia()` vacía la cinta antes de cada pasada.
 repartido por filas) · `NN.prod` · `NN.escala` · `NN.trans` · `NN.trozo` ·
 `NN.reforma` · activaciones `NN.relu` `NN.sigmoide` `NN.tanh` `NN.escalon` ·
 `NN.softmax` · `NN.entropiaCruzada(logits, objetivo)` (con el softmax dentro:
-su gradiente es «probabilidad menos lo que debería») · `NN.ecm` · `NN.media` ·
+su gradiente es «probabilidad menos lo que debería») ·
+`NN.entropiaCruzadaBinaria(p, y)` — ojo, esta recibe la probabilidad **ya
+pasada por la sigmoide**, no el logit; su derivada lleva $p(1-p)$ en el
+denominador justo para que, al encadenarla con la sigmoide, el gradiente que
+llega al logit sea exactamente $p - y$ · `NN.ecm` · `NN.media` ·
 `NN.conv2d(x, nucleo)` · `NN.agrupa` · `NN.embedding` · `NN.mascaraCausal` ·
 `NN.normaliza`. La **atención** (`NN.atencion(q, k, v, causal)`) y la **celda
 LSTM** (`NN.lstm`) están *compuestas* a partir de las anteriores: se escriben

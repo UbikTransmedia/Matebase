@@ -25,7 +25,7 @@ Se abre haciendo doble clic en `index.html`. **Sin servidor local, sin internet,
 
 ## Fase 1 — Temario (cerrada) → `assets/js/curriculum.js`
 
-17 bloques, 200 temas, en progresión estricta. El orden es el contrato pedagógico:
+19 bloques, 228 temas, en progresión estricta. El orden es el contrato pedagógico:
 ningún tema usa una herramienta que no se haya explicado antes, y `tests.html`
 comprueba que los requisitos declarados de cada tema van antes que él.
 
@@ -54,6 +54,15 @@ comprueba que los requisitos declarados de cada tema van antes que él.
 14. **Cibernética** (15).
 15. **Programación gráfica** (33), con piel propia.
 16. **Criptografía** (36), con piel propia — de César a lo poscuántico, con la criptografía real (SHA-256, AES, curvas, RSA) ejecutándose en el navegador desde `assets/js/core/cripto.js`.
+17. **Inteligencia artificial I: aprender de los datos** (12), con piel propia — de qué significa aprender de ejemplos hasta la red densa, la retropropagación y cómo se evalúa.
+18. **Inteligencia artificial II: las arquitecturas** (14), con piel propia — cada arquitectura entra por la idea matemática que aporta, y las redes se entrenan de verdad en el navegador desde `assets/js/core/nn.js`.
+
+> **Los bloques 15, 16, 17 y 18 son optativos y no se presuponen entre sí.** Un
+> alumno puede hacer el de criptografía sin el de gráficos, o los de IA sin
+> ninguno de los otros dos: por eso sus `req` sólo citan requisitos reales, y
+> las herramientas generales que necesitan viven en su bloque natural (`av-pca`
+> con el álgebra lineal, `av-convolucion` junto a Fourier) y no dentro del
+> bloque que las usa.
 
 Cada tema declara `id`, `t` (título), `r` (resumen), `o` (objetivos) y `req`
 (requisitos); los de 2.º, además, `curso: '2B'` e `itin` (`['MII']`, `['MCS']` o
@@ -88,6 +97,8 @@ objeto en el array.
 | `mathlib.js` | Fracciones exactas, polinomios, primos, matrices, **parser de expresiones** para corregir respuestas | ejercicios |
 | `widgets.js` | **`Plot2D`**, motor gráfico único con sus envoltorios, controles y el **visor 3D** `W.space3d` | ejemplos y ejercicios |
 | `shader.js` | Visor de shaders GLSL, comparación píxel a píxel y modo con memoria | programación gráfica y cibernética |
+| `cripto.js` | Criptografía real ejecutándose en el navegador: SHA-256, AES, curvas elípticas, RSA | criptografía |
+| `nn.js` | Tensores con cinta y derivación automática, capas, atención, LSTM, optimizadores y el bucle de entrenamiento | los dos bloques de IA |
 | `exercise.js` | Motor de **ejercicios y problemas por apartados**: generar → preguntar → corregir → diagnosticar → resolver → regenerar; modo examen | todos los temas |
 | `page.js` | Constructor declarativo de páginas y recolector de contenido | todos los temas |
 | `repaso.js` | Mapa del temario, simulacros y formulario | bloque de repaso |
@@ -97,7 +108,7 @@ objeto en el array.
 ## Fase 3 — Contenido, bloque a bloque (cerrada)
 
 Por cada tema: explicación → apunte histórico → ejemplos interactivos → ejercicios
-procedimentales → ideas clave. **Los 164 temas están escritos**, y cada tanda se
+procedimentales → ideas clave. **Los 228 temas están escritos**, y cada tanda se
 entregó dejando el proyecto funcionando y pasando `tests.html`.
 
 ## Fase 4 — Curso de 2.º de Bachillerato y repaso (cerrada)
