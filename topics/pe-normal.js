@@ -181,7 +181,10 @@ Course.topic('pe-normal', function (p) {
     'posible comparar lo incomparable: si tu nota de Matemáticas está a 1,5 desviaciones por encima ' +
     'de la media y la de Lengua a 0,8, has ido mejor en Matemáticas aunque el número de Lengua fuera ' +
     'más alto. Con esa misma idea se construyen las tablas de percentiles del pediatra y las ' +
-    'puntuaciones estandarizadas de las pruebas internacionales.');
+    'puntuaciones estandarizadas de las pruebas internacionales. Y es lo primero que se le hace a unos ' +
+    'datos antes de entrenar cualquier modelo: [[ia-generalizar|normalizar es exactamente tipificar]], ' +
+    'columna a columna, para que ninguna mande sobre las demás solo por venir medida en unidades más ' +
+    'grandes.');
 
   p.section('Aproximación de la binomial');
 
