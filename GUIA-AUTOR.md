@@ -690,6 +690,14 @@ están apagadas para no tocar lo que ya funciona:
 En un circuito sin bucles ninguna hace falta: el estado de partida da igual
 porque siempre converge al mismo sitio.
 
+`W.circuito` devuelve el banco, y del banco solo hay una cosa pensada para
+usarse desde fuera: `banco.pon(texto)`, que **cambia la netlist** y lo recalcula
+todo. Es para las demos que generan el circuito solas —`maq-normal` lo hace a
+partir de las filas que el alumno enciende— y a propósito **no guarda** lo que
+pone: lo generado no es del alumno, y si se guardara, al volver al tema
+aparecería un circuito que él no escribió. Un banco así va **sin `id`**, por lo
+mismo.
+
 Para corregir, `W.circuitoIguales` es `LOG.iguales`, y el número de puertas que
 devuelve sirve para la puntuación por coste: «lo has resuelto con 9 puertas; se
 puede con 5». Informa, no penaliza.

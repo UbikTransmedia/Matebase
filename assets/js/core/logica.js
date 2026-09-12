@@ -433,6 +433,18 @@
     this.capa.scrollLeft = this.ed.scrollLeft;
   };
 
+  /** Pone otra netlist desde fuera, para las demos que la generan solas.
+      No la guarda en el progreso: lo que se genera no es del alumno, y si se
+      guardara, al volver al tema apareceria un circuito que el no escribio. */
+  Banco.prototype.pon = function (texto) {
+    this.ed.value = String(texto == null ? '' : texto);
+    this.ed.rows = Math.max(3, this.ed.value.split('\n').length + 1);
+    this.ultimo = this.base = null;
+    this.instante = null;
+    this.repinta();
+    this.recalcula();
+  };
+
   /** Rehace el circuito a partir del texto y actualiza todo lo de abajo. */
   Banco.prototype.recalcula = function () {
     var self = this;
