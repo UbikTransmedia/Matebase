@@ -114,7 +114,9 @@ Course.topic('gfx-filtros', function (p) {
   p.section('Mirar a los vecinos: la convolución');
 
   p.text('Desenfocar, enfocar o encontrar los bordes no se puede hacer mirando un solo píxel: hace falta ' +
-    'saber qué hay alrededor. La idea es la de la [[cib-filtrado|media móvil]], que suavizaba una ' +
+    'saber qué hay alrededor. Lo que viene es el caso aplicado de ' +
+    '[[av-convolucion|la convolución]], con el núcleo deslizándose sobre una foto en vez de sobre una ' +
+    'señal. La idea es la de la [[cib-filtrado|media móvil]], que suavizaba una ' +
     'señal promediando sus últimos valores, llevada a dos dimensiones: cada píxel se sustituye por una ' +
     '<strong>suma ponderada de sus vecinos</strong>. Los pesos se escriben en una tablita de 3 × 3, el ' +
     '<strong>núcleo</strong>, y la operación se llama <strong>convolución</strong>.');

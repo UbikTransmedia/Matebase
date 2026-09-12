@@ -173,6 +173,12 @@ Course.topic('cib-filtrado', function (p) {
     'cada sentido.');
 
   /* ---------------------------------------------------------------- */
+  p.note('Esa media móvil tiene un nombre general y una familia entera detrás. Deslizar una lista de ' +
+    'pesos sobre una señal, multiplicando y sumando en cada posición, es una ' +
+    '<strong>[[av-convolucion|convolución]]</strong>: con los pesos iguales sale esta media, con otros ' +
+    'pesos sale un suavizado que respeta mejor los escalones, y con pesos que sumen cero sale un ' +
+    'detector de cambios en vez de un suavizador.', 'ok', 'Esto tiene un nombre: convolución');
+
   p.section('De filtrar a predecir');
 
   p.text('El paso siguiente, y el que de verdad interesaba a Wiener, es el más ambicioso. Si el filtro ' +
