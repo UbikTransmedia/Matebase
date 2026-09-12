@@ -198,6 +198,13 @@ Course.topic('av-markov', function (p) {
     'de Pushkin, contando con qué probabilidad una vocal sigue a una consonante. Es, literalmente, el ' +
     'primer modelo estadístico de un texto: el tatarabuelo de los modelos de lenguaje actuales.');
 
+  p.note('Ese tatarabuelo tiene descendencia directa y se puede ver funcionando. Un modelo que predice ' +
+    'la siguiente letra a partir de las $n$ anteriores es exactamente una cadena de Markov cuyo estado ' +
+    'son «las últimas $n$ letras»: la matriz de transición es gigantesca, pero es una matriz de ' +
+    'transición, con sus filas sumando uno. En [[ia-secuencias|el tema de predecir el siguiente token]] ' +
+    'se construye una sobre un texto corto y se mide lo bien que escribe.',
+    null, 'De Pushkin a los modelos de lenguaje');
+
   p.trampas([
     { e: 'Mezclar el convenio de filas con el de columnas', por: 'Aquí las filas suman 1 y se multiplica $\\vec x\\cdot P$ con $\\vec x$ fila. Si un libro pone $P\\vec x$ con columnas que suman 1, su matriz es la traspuesta de esta.' },
     { e: '«En la estacionaria el sistema se para»', por: 'Sigue saltando entre estados cada día. Lo que no cambia son las <em>proporciones</em>: el flujo que entra en cada estado iguala al que sale.' },

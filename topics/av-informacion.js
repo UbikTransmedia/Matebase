@@ -98,6 +98,13 @@ Course.topic('av-informacion', function (p) {
     'un resultado es seguro. Mide exactamente la <em>incertidumbre</em> que hay antes de conocer el ' +
     'mensaje, que es lo mismo que la información que se obtiene al conocerlo.', 'ok');
 
+  p.note('La forma habitual de puntuar un modelo de lenguaje es esta misma entropía, exponenciada: se ' +
+    'llama <strong>perplejidad</strong> y vale $2^H$. Deshacer el logaritmo la convierte en algo que ' +
+    'se entiende sin pensar —entre cuántas opciones está dudando el modelo, de media— en vez de en ' +
+    'bits. Vale 1 si acierta con total seguridad y el tamaño del vocabulario si no tiene ni idea; en ' +
+    '[[ia-secuencias|el tema de predecir el siguiente token]] se mide sobre un texto de verdad.',
+    null, 'La entropía, exponenciada');
+
   /* ---------------------------------------------------------------- */
   p.section('El teorema de codificación');
 
