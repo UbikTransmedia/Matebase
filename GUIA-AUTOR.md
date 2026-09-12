@@ -809,6 +809,33 @@ siempre **las dos salidas** y si coinciden; cuando no, el taller se pone en rojo
 
 ---
 
+## El progreso, y cómo sale del navegador
+
+`assets/js/core/progress.js` guarda en `localStorage` lo que el alumno lleva
+hecho. Eso está bien para quien estudia —no hay que registrarse— y es ciego para
+quien enseña, así que el progreso también se puede **sacar como texto**:
+
+| Función | Qué hace |
+|---|---|
+| `Progress.exporta(nombre)` | devuelve el progreso entero como JSON, con la versión del curso, la fecha y un nombre opcional |
+| `Progress.lee(texto)` | valida **sin aplicar**: `{ok, datos}` o `{ok:false, error}` con un mensaje que se puede enseñar tal cual |
+| `Progress.importa(texto, modo)` | `'fundir'` conserva lo más avanzado de cada lado; `'reemplazar'` deja exactamente lo del archivo |
+| `Progress.resumen(mapa)` | vistos, dominados, aciertos e intentos, repartidos por bloque. Acepta un mapa ajeno, que es lo que hace posible la vista de clase |
+| `Progress.estadoEn(t)` · `Progress.dominioEn(t)` | lo mismo que `state` y `dominio`, sobre un progreso que no es el propio |
+
+**Al fundir gana lo más avanzado, nunca lo más reciente.** Abrir el curso en el
+móvil no puede borrar lo hecho en el portátil, y esa regla es la única que hay.
+
+La página está en `#/__progreso` y no es un tema: la monta `app.js` como monta la
+portada. Carga varios archivos a la vez para la vista de clase, y **no guarda
+ninguno**: se leen, se suman en una tabla y desaparecen al recargar.
+
+> Si escribes pruebas que toquen el progreso, saca antes una copia con
+> `Progress.exporta()` y devuélvela en un `finally`. `tests.html` corre en el
+> mismo navegador que el curso, y nadie debe perder lo suyo por abrir las pruebas.
+
+---
+
 ## El motor de redes neuronales (`NN`)
 
 Los dos bloques de inteligencia artificial se apoyan en

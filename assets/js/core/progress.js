@@ -107,12 +107,35 @@
     return (t.ok >= 5) ? 'done' : 'seen';        // tema aun sin construir en este navegador
   };
 
-  P.stats = function () {
+  /* Las dos funciones de arriba miran `data.t`, que es el progreso de QUIEN
+     esta usando el curso. Para la vista de clase hace falta lo mismo sobre un
+     progreso ajeno, recien leido de un archivo, asi que se separan: `estadoEn`
+     y `dominioEn` trabajan sobre el mapa que se les pase. */
+  function dominioEn(t) {
+    if (!t) return { tipos: 0, resueltos: 0 };
+    var r = 0;
+    for (var k in (t.ex || {})) if (t.ex[k].ok > 0 && (!t.nex || +k <= t.nex)) r++;
+    return { tipos: t.nex || 0, resueltos: r };
+  }
+  function estadoEn(t) {
+    if (!t || (!t.seen && !t.tries)) return '';
+    if (t.nex !== undefined) {
+      if (!t.nex) return 'seen';
+      return dominioEn(t).resueltos >= t.nex ? 'done' : 'seen';
+    }
+    return (t.ok >= 5) ? 'done' : 'seen';
+  }
+  P.estadoEn = estadoEn;
+  P.dominioEn = dominioEn;
+
+  P.stats = function (mapa) {
+    var m = mapa || data.t;
     var seen = 0, done = 0, ok = 0, tries = 0;
-    for (var k in data.t) {
-      var t = data.t[k];
+    for (var k in m) {
+      var t = m[k];
+      if (k.charAt(0) === '_') continue;
       if (t.seen) seen++;
-      if (P.state(k) === 'done') done++;
+      if (estadoEn(t) === 'done') done++;
       ok += t.ok || 0; tries += t.tries || 0;
     }
     return { seen: seen, done: done, ok: ok, tries: tries };
@@ -155,6 +178,92 @@
     data.open[id] = v; save();
   };
 
+  /* ---------------- llevarse el progreso ----------------
+     El progreso vive en el navegador, y eso tiene dos consecuencias malas:
+     se pierde al cambiar de ordenador, y quien enseña no ve nada. Las dos
+     se arreglan con lo mismo y sin servidor: que el progreso sea un TEXTO
+     que se copia, se guarda en un archivo y se vuelve a leer. */
+
+  var FORMATO = 1;
+
+  P.exporta = function (nombre) {
+    return JSON.stringify({
+      matebase: FORMATO,
+      version: global.MATEBASE_VERSION || '',
+      fecha: new Date().toISOString().slice(0, 10),
+      nombre: String(nombre || '').slice(0, 60),
+      ultimo: data.ultimo || null,
+      t: data.t
+    });
+  };
+
+  /** Lee un texto exportado SIN aplicarlo. Devuelve {ok, datos|error}. */
+  P.lee = function (texto) {
+    var o;
+    try { o = JSON.parse(String(texto || '').trim()); }
+    catch (e) { return { ok: false, error: 'Eso no es un progreso de Matebase: el texto no se entiende.' }; }
+    if (!o || typeof o !== 'object') return { ok: false, error: 'El archivo está vacío o no es lo que parece.' };
+    if (!o.matebase) return { ok: false, error: 'Falta la marca de Matebase: ¿seguro que es un archivo de progreso?' };
+    if (o.matebase > FORMATO) {
+      return { ok: false, error: 'Ese archivo lo escribió una versión más nueva del curso. Actualiza antes de leerlo.' };
+    }
+    if (!o.t || typeof o.t !== 'object') return { ok: false, error: 'El archivo no trae ningún tema.' };
+    return { ok: true, datos: o };
+  };
+
+  /** Aplica un progreso leido. `modo` es 'reemplazar' o 'fundir'. */
+  P.importa = function (texto, modo) {
+    var r = P.lee(texto);
+    if (!r.ok) return r;
+    var nuevo = r.datos.t;
+    if (modo === 'fundir') {
+      for (var id in nuevo) {
+        var a = data.t[id], b = nuevo[id];
+        if (!a) { data.t[id] = b; continue; }
+        /* Al fundir gana lo mas avanzado, nunca lo mas reciente: nadie
+           quiere que abrir el curso en el movil le borre lo del portatil. */
+        a.seen = Math.max(a.seen || 0, b.seen || 0);
+        a.ok = Math.max(a.ok || 0, b.ok || 0);
+        a.tries = Math.max(a.tries || 0, b.tries || 0);
+        if (b.nex !== undefined) a.nex = b.nex;
+        a.ex = a.ex || {};
+        for (var n in (b.ex || {})) {
+          var ea = a.ex[n], eb = b.ex[n];
+          if (!ea) { a.ex[n] = eb; continue; }
+          ea.ok = Math.max(ea.ok || 0, eb.ok || 0);
+          ea.tries = Math.max(ea.tries || 0, eb.tries || 0);
+          if ((eb.racha || 0) > (ea.racha || 0)) { ea.racha = eb.racha; ea.last = eb.last; ea.prox = eb.prox; }
+        }
+      }
+    } else {
+      data.t = nuevo;
+      if (r.datos.ultimo) data.ultimo = r.datos.ultimo;
+    }
+    save();
+    U.bus.emit('progress', null);
+    return { ok: true, temas: Object.keys(nuevo).length, nombre: r.datos.nombre || '' };
+  };
+
+  /** Resumen de un progreso cualquiera, para poner varios en una tabla. */
+  P.resumen = function (mapa) {
+    var m = mapa || data.t;
+    var st = P.stats(m);
+    var porBloque = {};
+    if (global.CURRICULUM) {
+      CURRICULUM.forEach(function (b) {
+        var vistos = 0, hechos = 0;
+        b.temas.forEach(function (t) {
+          var e = estadoEn(m[t.id]);
+          if (e) vistos++;
+          if (e === 'done') hechos++;
+        });
+        porBloque[b.id] = { n: b.n, title: b.title, total: b.temas.length, vistos: vistos, hechos: hechos };
+      });
+    }
+    return { vistos: st.seen, dominados: st.done, ok: st.ok, intentos: st.tries, bloques: porBloque };
+  };
+
   P.INTERVALOS = INTERVALOS;
+  P.FORMATO = FORMATO;
   global.Progress = P;
 })(window);

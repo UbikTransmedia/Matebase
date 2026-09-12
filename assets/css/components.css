@@ -592,6 +592,16 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
 .maq__var{font-weight:650}
 .maq__libre{color:var(--ink-faint)}
 
+/* LA BARRITA DE PROGRESO por bloque. Dos tramos: lo dominado y lo solo
+   visto. Se distinguen por color y por orden, y el title lo dice en texto. */
+.barrita{
+  display:inline-flex; width:100%; min-width:70px; height:7px; border-radius:4px;
+  background:var(--line-soft); overflow:hidden; vertical-align:middle;
+}
+.barrita i{display:block; height:100%}
+.barrita__done{background:var(--ok)}
+.barrita__seen{background:var(--accent); opacity:.42}
+
 /* EL TALLER DEL LENGUAJE. Un solo panel a la vez, elegido con fichas: cuatro
    columnas no caben en un movil y aqui todo sale del mismo texto, asi que
    verlas por turnos no pierde nada. */

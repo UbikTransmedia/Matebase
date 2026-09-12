@@ -1117,6 +1117,69 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   anc.remove();
 
   /* --- temas --- */
+  /* ---------------- progreso portatil ----------------
+     CUIDADO: estas pruebas escriben en el progreso de verdad, que es el de
+     quien esta mirando la pagina. Se saca una copia al empezar y se devuelve
+     al terminar, pase lo que pase: nadie debe perder su curso por abrir las
+     pruebas. */
+  group('progreso · llevárselo y traerlo');
+  (function () {
+    var copia = Progress.exporta('__copia_de_seguridad');
+    try {
+      Progress.reset();
+      /* Con temas de verdad: los ids que empiezan por _ los salta `stats` a
+         proposito -son paginas internas- y entonces no se podria medir nada. */
+      Progress.visit('ar-naturales'); Progress.tipos('ar-naturales', 2);
+      Progress.answer('ar-naturales', true, 1);
+      Progress.visit('ar-operaciones'); Progress.answer('ar-operaciones', false, 1);
+
+      var txt = Progress.exporta('Grupo 2.º B');
+      var leido = Progress.lee(txt);
+      truthy('lo exportado se vuelve a leer', leido.ok);
+      eq('y conserva el nombre', leido.datos.nombre, 'Grupo 2.º B');
+      truthy('y lleva la versión del curso', !!leido.datos.version);
+
+      var antes = Progress.stats();
+      Progress.reset();
+      eq('borrar deja el progreso a cero', Progress.stats().tries, 0);
+      var r = Progress.importa(txt, 'reemplazar');
+      truthy('reemplazar lo devuelve entero', r.ok && Progress.stats().tries === antes.tries);
+
+      /* Fundir tiene una regla y solo una: gana lo mas avanzado. Abrir el
+         curso en el movil no puede borrar lo hecho en el portatil. */
+      Progress.answer('ar-naturales', true, 2);
+      var conDos = Progress.dominio('ar-naturales').resueltos;
+      Progress.importa(txt, 'fundir');
+      eq('al fundir gana lo más avanzado, no lo más reciente', Progress.dominio('ar-naturales').resueltos, conDos);
+
+      Progress.reset();
+      Progress.visit('ar-fracciones');
+      Progress.importa(txt, 'fundir');
+      truthy('y fundir suma lo que no estaba', Progress.stats().seen >= 3);
+
+      /* Los errores se explican, no se tragan. */
+      truthy('un texto que no es JSON se rechaza con motivo',
+        !Progress.importa('no soy json', 'fundir').ok);
+      truthy('un JSON sin la marca de Matebase, también',
+        Progress.importa('{"t":{}}', 'fundir').error.indexOf('marca') >= 0);
+      truthy('y un formato del futuro avisa de que hay que actualizar',
+        Progress.lee('{"matebase":99,"t":{}}').error.indexOf('nueva') >= 0);
+
+      /* El resumen es lo que ve quien da clase. */
+      var res = Progress.resumen(JSON.parse(txt).t);
+      truthy('el resumen cuenta vistos y dominados', res.vistos >= 2 && res.dominados >= 0);
+      truthy('y reparte por bloques del temario',
+        res.bloques && Object.keys(res.bloques).length === CURRICULUM.length);
+
+      /* Leer el progreso de otro no toca el propio. */
+      var mios = Progress.stats().tries;
+      Progress.resumen(JSON.parse(txt).t);
+      eq('mirar un progreso ajeno no cambia el mío', Progress.stats().tries, mios);
+    } finally {
+      Progress.importa(copia, 'reemplazar');
+    }
+  })();
+
   group('temas');
   var raiz = document.documentElement;
   var previo = raiz.getAttribute('data-theme');

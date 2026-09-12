@@ -525,6 +525,7 @@
       }, 'Temario de ' + ITIN[k].corto));
     });
     if (BYID['pau-mapa']) fila.appendChild(U.el('a.btn', { href: '#/pau-mapa', text: 'Mapa de 2.º y simulacros →' }));
+    fila.appendChild(U.el('a.btn', { href: '#/__progreso', text: 'Progreso y clase →' }));
     p.raw(fila);
 
     p.section('El recorrido');
@@ -563,6 +564,287 @@
     mainEl.scrollTop = 0;
     paintIndex();
   }
+
+  /* ---------------- progreso portatil y vista de clase ----------------
+     El progreso vive en el navegador. Eso esta bien para quien estudia -no
+     hay que registrarse- y es ciego para quien enseña. Las dos cosas se
+     arreglan sin servidor: el progreso se exporta como texto, se guarda en
+     un archivo y se vuelve a leer; y quien enseña lee varios a la vez y los
+     pone en una tabla. Nada sale del ordenador si nadie lo manda. */
+
+  var clase = [];      // [{nombre, resumen}] cargados en esta sesion
+
+  function descarga(texto, nombre) {
+    try {
+      var b = new Blob([texto], { type: 'application/json' });
+      var u = URL.createObjectURL(b);
+      var a = U.el('a', { href: u, download: nombre });
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () { URL.revokeObjectURL(u); a.remove(); }, 400);
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function barra(hechos, vistos, total) {
+    var el = U.el('span.barrita', { title: hechos + ' dominados y ' + vistos + ' vistos de ' + total });
+    el.appendChild(U.el('i.barrita__done', { style: { width: (100 * hechos / total) + '%' } }));
+    el.appendChild(U.el('i.barrita__seen', { style: { width: (100 * Math.max(0, vistos - hechos) / total) + '%' } }));
+    return el;
+  }
+
+  function renderProgreso() {
+    U.clear(wrapEl);
+    wrapEl.removeAttribute('data-piel');
+    crumbEl.innerHTML = '<a href="#/">Inicio</a> › <b>Progreso y clase</b>';
+    document.title = 'Progreso y clase · Matebase';
+
+    var h = U.el('div.hdr');
+    h.innerHTML = '<h1 tabindex="-1">Progreso y clase</h1>' +
+      '<p class="hdr__sub">Tu progreso vive en este navegador y no se manda a ninguna parte. ' +
+      'Aquí puedes llevártelo a otro ordenador, recuperarlo, o —si das clase— leer los de tu grupo.</p>';
+    wrapEl.appendChild(h);
+
+    var p = new Page(wrapEl, { id: '__progreso' });
+
+    /* --- lo mío --- */
+    p.section('Tu progreso');
+    var st = Progress.stats();
+    var res = Progress.resumen();
+    p.text('Ahora mismo has abierto <strong>' + st.seen + '</strong> ' +
+      U.plural(st.seen, 'tema', 'temas') + ' y dominas <strong>' + st.done + '</strong>, ' +
+      'con ' + st.ok + ' ' + U.plural(st.ok, 'acierto', 'aciertos') + ' de ' + st.tries + ' ' +
+      U.plural(st.tries, 'intento', 'intentos') + '. Dominar un tema es haber resuelto al menos ' +
+      'una vez cada tipo de ejercicio que tiene, no haber acertado cinco veces el mismo.');
+
+    var nombreEd = U.el('input.card__url', {
+      type: 'text', maxlength: '60', placeholder: 'Tu nombre (opcional, va dentro del archivo)',
+      'aria-label': 'Nombre para el archivo de progreso',
+      value: Progress.pref('nombre') || ''
+    });
+    p.raw(nombreEd);
+
+    var avisoEx = U.el('p.card__aviso');
+    var filaEx = U.el('div.chips');
+    filaEx.appendChild(U.el('button.btn.btn--main', {
+      type: 'button',
+      onclick: function () {
+        var n = nombreEd.value.trim();
+        Progress.pref('nombre', n);
+        var txt = Progress.exporta(n);
+        var nom = 'matebase-' + (n ? n.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' : '') +
+          new Date().toISOString().slice(0, 10) + '.json';
+        avisoEx.textContent = descarga(txt, nom)
+          ? 'Guardado como «' + nom + '». Llévatelo donde quieras y cárgalo ahí abajo.'
+          : 'Este navegador no deja descargar archivos. Copia el texto de abajo a mano.';
+        cajaEx.value = txt;
+        cajaEx.hidden = false;
+      }
+    }, '⭳ Guardar en un archivo'));
+    filaEx.appendChild(U.el('button.btn', {
+      type: 'button',
+      onclick: function () {
+        cajaEx.value = Progress.exporta(nombreEd.value.trim());
+        cajaEx.hidden = false;
+        cajaEx.focus(); cajaEx.select();
+        avisoEx.textContent = 'Ahí está el texto. Cópialo y pégalo donde quieras guardarlo.';
+      }
+    }, 'Ver el texto para copiarlo'));
+    p.raw(filaEx);
+    var cajaEx = U.el('textarea.card__url', {
+      rows: '3', hidden: true, readonly: '', 'aria-label': 'Tu progreso en texto'
+    });
+    p.raw(cajaEx);
+    p.raw(avisoEx);
+
+    /* --- traerlo de vuelta --- */
+    p.sub('Traerlo de vuelta');
+    p.text('Carga aquí un archivo guardado antes. <strong>Fundir</strong> conserva lo más avanzado de ' +
+      'cada lado, que es lo que quieres si has estudiado en dos sitios; <strong>reemplazar</strong> ' +
+      'tira lo de este navegador y deja exactamente lo del archivo.');
+
+    var avisoIm = U.el('p.card__aviso');
+    var cajaIm = U.el('textarea.card__url', {
+      rows: '3', placeholder: 'Pega aquí el texto del progreso, o usa el botón de abajo',
+      'aria-label': 'Progreso a recuperar'
+    });
+    p.raw(cajaIm);
+
+    function aplica(modo) {
+      var r = Progress.importa(cajaIm.value, modo);
+      if (!r.ok) { avisoIm.textContent = r.error; return; }
+      avisoIm.textContent = 'Listo: ' + r.temas + ' ' + U.plural(r.temas, 'tema', 'temas') +
+        (modo === 'fundir' ? ' fundidos con lo que ya había.' : ' cargados, reemplazando lo anterior.') +
+        (r.nombre ? ' (archivo de ' + r.nombre + ')' : '');
+      renderProgreso();
+      var a = wrapEl.querySelector('.card__aviso');
+      if (a) a.textContent = avisoIm.textContent;
+    }
+
+    var filaIm = U.el('div.chips');
+    var file = U.el('input', {
+      type: 'file', accept: '.json,application/json', 'aria-label': 'Archivo de progreso',
+      onchange: function () {
+        var f = file.files && file.files[0];
+        if (!f) return;
+        var fr = new FileReader();
+        fr.onload = function () { cajaIm.value = String(fr.result || ''); aplica('fundir'); };
+        fr.onerror = function () { avisoIm.textContent = 'No se ha podido leer el archivo.'; };
+        fr.readAsText(f);
+      }
+    });
+    filaIm.appendChild(file);
+    filaIm.appendChild(U.el('button.btn.btn--main', { type: 'button', onclick: function () { aplica('fundir'); } }, 'Fundir con lo mío'));
+    filaIm.appendChild(U.el('button.btn', { type: 'button', onclick: function () { aplica('reemplazar'); } }, 'Reemplazar'));
+    p.raw(filaIm);
+    p.raw(avisoIm);
+
+    p.note('Si el navegador borra los datos del sitio —o los borras tú— el progreso se va sin aviso. ' +
+      'Guardar el archivo de vez en cuando es la única copia de seguridad que hay.', 'warn', 'Antes de que pase');
+
+    /* --- por bloques --- */
+    p.section('Por dónde vas');
+    var tb = U.el('table.tbl');
+    var thead = U.el('tr');
+    ['Bloque', 'Temas', 'Vistos', 'Dominados', ''].forEach(function (x, i) {
+      thead.appendChild(U.el(i > 0 && i < 4 ? 'th.num' : 'th', { text: x }));
+    });
+    tb.appendChild(U.el('thead', null, thead));
+    var tbody = U.el('tbody');
+    CURRICULUM.forEach(function (b) {
+      var r = res.bloques[b.id];
+      var tr = U.el('tr');
+      tr.appendChild(U.el('td', null, [U.el('span.blk__num', { text: b.n }), U.el('span', { text: ' ' + b.title })]));
+      tr.appendChild(U.el('td.num', { text: String(r.total) }));
+      tr.appendChild(U.el('td.num', { text: String(r.vistos) }));
+      tr.appendChild(U.el('td.num', { text: String(r.hechos) }));
+      tr.appendChild(U.el('td', null, [barra(r.hechos, r.vistos, r.total)]));
+      tbody.appendChild(tr);
+    });
+    tb.appendChild(tbody);
+    p.raw(U.el('div.tbl-wrap', null, [tb]));
+
+    /* --- la clase --- */
+    p.section('Vista de clase');
+    p.text('Para quien da clase: carga aquí los archivos que te entreguen y verás a todo el grupo en ' +
+      'una tabla. Los archivos <strong>no se guardan</strong> en ninguna parte: se leen, se suman y ' +
+      'desaparecen al recargar la página.');
+
+    var avisoCl = U.el('p.card__aviso');
+    var fileCl = U.el('input', {
+      type: 'file', accept: '.json,application/json', multiple: '',
+      'aria-label': 'Archivos de progreso del grupo',
+      onchange: function () {
+        var fs = [].slice.call(fileCl.files || []);
+        if (!fs.length) return;
+        var pend = fs.length, malos = 0;
+        fs.forEach(function (f) {
+          var fr = new FileReader();
+          fr.onload = function () {
+            var r = Progress.lee(String(fr.result || ''));
+            if (r.ok) {
+              clase.push({
+                nombre: r.datos.nombre || f.name.replace(/\.json$/i, ''),
+                fecha: r.datos.fecha || '',
+                resumen: Progress.resumen(r.datos.t)
+              });
+            } else malos++;
+            if (--pend === 0) {
+              avisoCl.textContent = malos ? (malos + ' ' + U.plural(malos, 'archivo no se ha entendido', 'archivos no se han entendido') + '.') : '';
+              pintaClase();
+            }
+          };
+          fr.readAsText(f);
+        });
+      }
+    });
+    var filaCl = U.el('div.chips', null, [fileCl]);
+    filaCl.appendChild(U.el('button.btn', {
+      type: 'button', onclick: function () { clase = []; pintaClase(); avisoCl.textContent = ''; }
+    }, 'Vaciar la lista'));
+    p.raw(filaCl);
+    p.raw(avisoCl);
+
+    var cajaClase = U.el('div');
+    p.raw(cajaClase);
+
+    function pintaClase() {
+      U.clear(cajaClase);
+      if (!clase.length) {
+        cajaClase.appendChild(U.el('p.card__aviso', {
+          text: 'Todavía no has cargado ningún archivo. Puedes seleccionar varios a la vez.'
+        }));
+        return;
+      }
+      var t2 = U.el('table.tbl');
+      var h2 = U.el('tr');
+      ['Alumno', 'Fecha', 'Vistos', 'Dominados', 'Aciertos', 'Intentos', 'Acierto'].forEach(function (x, i) {
+        h2.appendChild(U.el(i >= 2 ? 'th.num' : 'th', { text: x }));
+      });
+      t2.appendChild(U.el('thead', null, h2));
+      var b2 = U.el('tbody');
+      clase.slice().sort(function (a, b) { return b.resumen.dominados - a.resumen.dominados; })
+        .forEach(function (al) {
+          var r = al.resumen, tr = U.el('tr');
+          var pct = r.intentos ? Math.round(100 * r.ok / r.intentos) : 0;
+          tr.appendChild(U.el('td', { text: al.nombre }));
+          tr.appendChild(U.el('td', { text: al.fecha }));
+          tr.appendChild(U.el('td.num', { text: String(r.vistos) }));
+          tr.appendChild(U.el('td.num', { text: String(r.dominados) }));
+          tr.appendChild(U.el('td.num', { text: String(r.ok) }));
+          tr.appendChild(U.el('td.num', { text: String(r.intentos) }));
+          tr.appendChild(U.el('td.num', { text: r.intentos ? pct + ' %' : '—' }));
+          b2.appendChild(tr);
+        });
+      t2.appendChild(b2);
+      cajaClase.appendChild(U.el('div.tbl-wrap', null, [t2]));
+
+      /* Donde se atasca el grupo: los bloques con mas distancia entre
+         abrirlos y dominarlos son los que hay que mirar en clase. */
+      var agg = {};
+      clase.forEach(function (al) {
+        for (var k in al.resumen.bloques) {
+          var b = al.resumen.bloques[k];
+          if (!agg[k]) agg[k] = { n: b.n, title: b.title, total: b.total, vistos: 0, hechos: 0 };
+          agg[k].vistos += b.vistos; agg[k].hechos += b.hechos;
+        }
+      });
+      var lista = [];
+      for (var k2 in agg) if (agg[k2].vistos) lista.push(agg[k2]);
+      lista.sort(function (a, b) {
+        return (a.hechos / a.vistos) - (b.hechos / b.vistos);
+      });
+      if (lista.length) {
+        cajaClase.appendChild(U.el('p.card__aviso', {
+          html: '<strong>Donde más se atasca el grupo:</strong> ' +
+            lista.slice(0, 3).map(function (b) {
+              return b.title + ' (' + Math.round(100 * b.hechos / b.vistos) + ' % de lo abierto, dominado)';
+            }).join(' · ')
+        }));
+      }
+    }
+    pintaClase();
+
+    /* --- borrar --- */
+    p.section('Empezar de cero');
+    var avisoRe = U.el('p.card__aviso');
+    p.raw(U.el('div.chips', null, [
+      U.el('button.btn', {
+        type: 'button',
+        onclick: function () {
+          if (!global.confirm('Se borrará todo tu progreso en este navegador. ¿Seguro?')) return;
+          Progress.reset();
+          renderProgreso();
+        }
+      }, 'Borrar mi progreso')
+    ]));
+    p.raw(avisoRe);
+    p.text('Antes de borrar, guarda el archivo: es la única forma de volver atrás.');
+
+    mainEl.scrollTop = 0;
+    paintIndex();
+  }
+  Course.renderProgreso = renderProgreso;
 
   /* ---------------- temas: claro, oscuro y monokai ---------------- */
 
@@ -946,6 +1228,7 @@
 
   function nombreDe(id) {
     if (!id) return 'Inicio';
+    if (id === '__progreso') return 'Progreso y clase';
     var t = BYID[id];
     return t ? t.t : id;
   }
@@ -988,7 +1271,9 @@
     var r = ruta();
     apila(r.id);
     pintarNav();
-    if (!r.id) renderHome(); else renderTopic(r.id, r.q);
+    if (!r.id) renderHome();
+    else if (r.id === '__progreso') renderProgreso();
+    else renderTopic(r.id, r.q);
     // Al navegar, llevar el foco al titulo: quien usa teclado no tiene que
     // volver a recorrer el indice, y quien usa lector de pantalla se entera
     // de que ha cambiado de tema.
