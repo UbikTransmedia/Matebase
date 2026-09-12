@@ -202,6 +202,13 @@ Course.topic('fn-sucesiones', function (p) {
     'un JPEG. Lo que tiras es la cola de la serie, y la razón de que no se note es precisamente que ' +
     'converge.');
 
+  p.note('Que una razón menor que 1 haga converger una geométrica es justo el argumento que garantiza ' +
+    'que un agente pueda aprender a base de premios. El método repite una operación que <em>acerca</em> ' +
+    'las estimaciones: cada vuelta reduce el error al menos por un factor $\\gamma < 1$, así que los ' +
+    'errores sucesivos están acotados por una geométrica y tienden a cero. Como el límite existe y es ' +
+    'único, hay un único valor posible y se llega a él desde cualquier punto de partida. Se ve en ' +
+    '[[ia-refuerzo|Bellman y Q-learning]].', null, 'Una razón menor que uno, otra vez');
+
   p.section('Practica');
 
   p.exercise({

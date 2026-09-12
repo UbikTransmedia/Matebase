@@ -235,6 +235,14 @@ Course.topic('cib-refuerzo', function (p) {
   ]);
 
   /* ================= EJERCICIOS ================= */
+  p.note('Todo esto tiene una formulación matemática que convierte la idea en un método con garantías. ' +
+    'En lugar de preguntar qué hacer se pregunta <em>cuánto vale estar aquí</em>, y ese valor cumple ' +
+    'una ecuación consigo mismo —la de Bellman— que se resuelve repitiendo hasta que deja de cambiar. ' +
+    'Aparece además un número, el factor de descuento, que fija cuánto cuenta un premio que llega ' +
+    'tarde y que puede invertir la decisión él solo. Está en ' +
+    '[[ia-refuerzo|Bellman y Q-learning]], junto con lo que hay que cambiar cuando los estados no ' +
+    'caben en una tabla.', null, 'La versión con ecuaciones');
+
   p.section('Practica');
 
   p.exercise({
