@@ -128,6 +128,12 @@ Course.topic('lg-proposiciones', function (p) {
     'Barcelona) Y NO planta baja»</em> estás escribiendo una proposición compuesta, y el buscador la ' +
     'evalúa igual que tú.');
 
+  p.note('Ese plano se puede montar. En [[maq-puertas|el bloque de máquinas y lenguajes]] las mismas ' +
+    'conectivas se escriben como circuito y se prueban con conmutadores, y aparece un resultado que ' +
+    'no se ve desde aquí: <strong>una sola puerta basta para todas</strong>. Con «no (a y b)» repetida ' +
+    'se construyen el «no», el «y» y el «o», y por eso los chips se fabrican con una única pieza ' +
+    'repetida mil millones de veces.', null, 'De la tabla al circuito');
+
   p.section('La implicación y sus parientes');
 
   p.text('$p \\to q$ es la conectiva más importante y la que peor se entiende. Solo es <strong>falsa ' +
