@@ -849,6 +849,22 @@
       return;
     }
 
+    /* Con `avisa: 'poco'` el taller no corre nada: solo dice si el texto se
+       entiende. Hace falta en los primeros temas del tramo, donde el alumno
+       todavia no ha visto ni el interprete ni la maquina y cantarle las dos
+       salidas seria contarle el final. */
+    if (this.o.avisa === 'poco') {
+      var ts = this.r.tokens.length - 1;
+      this.aviso.textContent = 'Se entiende. ' + ts + ' ' + (ts === 1 ? 'pieza' : 'piezas') +
+        ' y un árbol de ' + this.r.ast.ss.length + ' ' +
+        (this.r.ast.ss.length === 1 ? 'sentencia' : 'sentencias') + '.';
+      this.el.classList.remove('len--difiere');
+      this.asm = LEN.compila(this.r.ast);
+      this.salidaC = [];
+      this.pintaPanel();
+      return;
+    }
+
     var i = LEN.evalua(this.r.ast, { tope: this.o.tope || 20000 });
     this.asm = LEN.compila(this.r.ast);
     var c = this.asm.errores.length
@@ -856,6 +872,8 @@
       : MAQ.ejecuta(this.asm.texto, null, this.o.tope || 8000);
     this.salidaI = i.salida;
     this.salidaC = c.salida || [];
+    this.porQueI = i.porQue;
+    this.porQueC = c.porQue;
     var mismas = this.salidaI.length === this.salidaC.length &&
       this.salidaI.every(function (v, k) { return v === c.salida[k]; });
 
@@ -883,6 +901,8 @@
     } else {
       txt = 'Lo que escribe la máquina: ' + (this.salidaC.length ? this.salidaC.join(', ') : 'nada') +
         '\nInstrucciones generadas: ' + (this.asm.errores.length ? '—' : MAQ.ensambla(this.asm.texto).instrucciones) +
+        (this.porQueC ? '\nCómo acabó: ' + this.porQueC : '') +
+        (this.porQueI ? '\nInterpretándolo: ' + this.porQueI : '') +
         (this.cuenta ? '\nCuentas plegadas: ' + this.cuenta.plegadas + ' · trozos muertos quitados: ' + this.cuenta.muertas : '');
     }
     this.cuerpo.textContent = txt;

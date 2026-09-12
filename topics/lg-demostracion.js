@@ -219,6 +219,15 @@ Course.topic('lg-demostracion', function (p) {
     }
   });
 
+  p.note('La inducción no se queda en los números. Cualquier cosa definida con reglas que se nombran a sí ' +
+    'mismas admite el mismo razonamiento, y de ahí salen demostraciones sobre objetos que no se pueden ' +
+    'numerar. El caso más útil son los <strong>programas</strong>: en ' +
+    '[[len-gramatica|el bloque de máquinas y lenguajes]] se define un lenguaje con diecisiete reglas, ' +
+    'unas cuantas de ellas recursivas, y demostrar que todo programa se traduce bien es exactamente ' +
+    'esto: comprobarlo en los casos base y suponerlo cierto en las partes al demostrarlo para el todo. ' +
+    'Se llama <strong>inducción estructural</strong>, y es la inducción de siempre con los objetos ' +
+    'ordenados por tamaño en vez de los naturales.', null, 'Inducción sin números');
+
   p.hist('La inducción se usaba de forma intuitiva desde antiguo, pero fue Blaise Pascal quien la formuló ' +
     'con claridad hacia 1654, estudiando su triángulo. Curiosamente, llegó a las matemáticas por una ' +
     'apuesta: un jugador profesional le preguntó cómo repartir el dinero de una partida ' +

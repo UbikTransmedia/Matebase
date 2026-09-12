@@ -346,6 +346,13 @@ Course.topic('lg-conjuntos', function (p) {
   ]);
 
   /* ================= EJERCICIOS ================= */
+  p.note('Una aplicación aparece en un sitio donde casi nadie la busca: dentro de cualquier programa en ' +
+    'ejecución. Lo que un intérprete consulta cuando se encuentra un nombre de variable es exactamente ' +
+    'una aplicación $E$ de un conjunto de nombres en el conjunto de los valores. Declarar es añadir un ' +
+    'par, asignar es cambiar una imagen y usar el nombre es evaluar $E(x)$. Está desarrollado en ' +
+    '[[len-variables|el bloque de máquinas y lenguajes]], y de ahí sale, sin más teoría, por qué un ' +
+    'nombre no puede valer dos cosas a la vez.', null, 'Una aplicación dentro de cada programa');
+
   p.util('Que una aplicación sea inyectiva es lo que hace que un identificador sirva: si dos personas ' +
     'pudieran tener el mismo DNI, el DNI no identificaría a nadie. Que sea biyectiva es lo que hace ' +
     'que algo se pueda <strong>deshacer</strong>: comprimir un archivo y recuperarlo intacto, cifrar ' +
