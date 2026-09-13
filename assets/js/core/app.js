@@ -1340,7 +1340,7 @@
         onclick: function () { setLetra(t.id); }
       }, [
         U.el('span.themes__i', { style: { fontSize: (0.72 + LETRAS.indexOf(t) * 0.17) + 'rem' } }, 'A'),
-        U.el('span', null, T(t.nombre))
+        U.el('span.sr-solo', null, T(t.nombre))
       ]));
     });
   }

@@ -1259,6 +1259,26 @@ Convenciones del curso:
 - Si escribes un comando que no existe, sale en rojo en la página **y**
   `tests.html` lo detecta.
 
+Lo que hace por su cuenta, para que las fórmulas no se pisen (no hay que
+escribir nada especial, pero conviene saberlo para no pelearse con ello):
+
+- **Signo unario pegado.** Un `-` o `+` al principio de un grupo, o detrás de
+  una relación, de otro operador o de un paréntesis que abre, va sin aire:
+  `= -x`, `(-1)`, `x^{-3}`, `-\frac{1}{2}`. Entre dos términos sí lo lleva.
+- **Los índices ocupan sitio dentro de fracciones, raíces y matrices.** Un
+  exponente en un denominador no atraviesa la barra; uno bajo una raíz no
+  asoma por encima del vínculo.
+- **El radical crece** con una fracción o una matriz dentro, como hacen los
+  paréntesis de `\left`. Y tras un `\left(...\right)` alto, el exponente sube
+  al hombro del paréntesis.
+- **En línea, los límites van al lado** (`\sum_{k=1}^{n}` se lee como en TeX
+  en textstyle); apilados solo en `p.formula` y `MathX.display`. Así una suma
+  en un párrafo no abre el interlineado.
+- **`30^\circ`** sale como grado pegado; **`f'`** con la prima al hombro y no
+  como exponente; **`\bmod`** con aire a los lados; **`\|v\|`** son las dobles
+  barras; y **`\\[4pt]`** en un `cases` o una matriz es un salto con aire, no
+  texto.
+
 ---
 
 ## Antes de dar un tema por bueno

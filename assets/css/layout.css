@@ -304,8 +304,13 @@
 }
 
 
-/* Los dos grupos de preferencia -tema y tamano- comparten aspecto. */
-.themes--letra{margin-top:6px}
+/* Los grupos de preferencia comparten aspecto. Tamano de letra e idioma
+   van en una fila: las tres «A» y los dos codigos se entienden sin rotulo,
+   y el rotulo queda para el lector de pantalla y el title. */
+.side__prefs{display:flex; gap:6px; align-items:stretch}
+.side__prefs>.themes--letra{flex:3 1 0; min-width:0}
+.side__prefs>.themes--idioma{flex:2 1 0; min-width:0}
+.themes--letra .themes__b{gap:0; padding-left:2px; padding-right:2px}
 .themes--letra .themes__i{
   font-family:var(--serif); font-weight:700; line-height:1;
   display:inline-block; min-width:1em; text-align:center;

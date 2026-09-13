@@ -9,32 +9,62 @@
 .mx-rel{font-style:normal; padding:0 .28em}
 .mx-fn{font-style:normal; padding-right:.14em; font-family:var(--sans); font-size:.9em}
 .mx-txt{font-family:var(--sans); font-size:.85em; font-style:normal; padding:0 .18em}
-.mx sup,.mx sub{font-size:.68em; line-height:0; position:relative}
-.mx sup{top:-.55em}
+.mx sup,.mx sub{font-size:.7em; line-height:0; position:relative}
+.mx sup{top:-.5em}
 .mx sub{bottom:-.22em}
+/* Tras un parentesis alto (\left...\right con una fraccion dentro), el
+   exponente sube hasta su hombro y el subindice baja hasta su pie. */
+.mx sup.mx-supt{top:-1.05em}
+.mx sub.mx-subt{bottom:-.75em}
+.mx-sup2--t{vertical-align:.55em}
+/* La prima y el grado van pegados al simbolo, sin la altura de un exponente. */
+.mx-pr{font-size:.82em; line-height:0; vertical-align:.34em; font-style:normal; letter-spacing:-.06em; padding-left:.02em}
+.mx-deg{font-style:normal; padding-left:.02em}
+/* Dentro de una fraccion, una raiz, una matriz o un limite, los indices
+   tienen que OCUPAR sitio: con line-height:0 se salian de la caja y
+   atravesaban la barra de la fraccion o el vinculo de la raiz. */
+.mx-frac sup,.mx-sqrt>.c sup,.mx-mat td sup,.mx-lim>.l sup,.mx-big>.u sup,.mx-big>.l sup,.mx-al td sup{
+  position:static; line-height:1; vertical-align:.42em}
+.mx-frac sub,.mx-sqrt>.c sub,.mx-mat td sub,.mx-lim>.l sub,.mx-big>.u sub,.mx-big>.l sub,.mx-al td sub{
+  position:static; line-height:1; vertical-align:-.22em}
+.mx-frac>.n:has(sup,.mx-sup2),.mx-frac>.d:has(sup,.mx-sup2),.mx-sqrt>.c:has(sup,.mx-sup2),.mx-mat td:has(sup,.mx-sup2){line-height:1.55}
 .mx-sup2{display:inline-flex; flex-direction:column; vertical-align:middle; line-height:1;
   font-size:.66em; padding-left:.06em}
 
-.mx-frac{display:inline-block; vertical-align:-.52em; text-align:center; padding:0 .17em; line-height:1.18}
-.mx-frac>.n{display:block; font-size:.95em; padding:0 .22em}
-.mx-frac>.d{display:block; font-size:.95em; padding:0 .22em; border-top:1.3px solid currentColor}
+/* Compacta en prosa (una fraccion no debe abrir el interlineado mas de lo
+   justo) y con aire solo cuando lleva exponentes, que es cuando lo necesita. */
+.mx-frac{display:inline-block; vertical-align:-.52em; text-align:center; padding:0 .17em; line-height:1.08}
+.mx-frac>.n{display:block; font-size:.93em; padding:.02em .22em .07em}
+.mx-frac>.d{display:block; font-size:.93em; padding:.09em .22em 0; border-top:1.3px solid currentColor}
+.mx-display .mx-frac{line-height:1.15}
+.mx-display .mx-frac>.n,.mx-display .mx-frac>.d{font-size:.97em}
 
 .mx-sqrt{display:inline-block; position:relative; padding:0 .08em}
-.mx-sqrt>.r{display:inline-block; font-size:.6em; vertical-align:.78em; margin-right:-.45em; position:relative; z-index:2}
+.mx-sqrt>.r{display:inline-block; font-size:.58em; vertical-align:.95em; margin-right:-.3em; position:relative; z-index:2}
 .mx-sqrt>.s{display:inline-block; transform:scaleY(1.18) translateY(-.02em); transform-origin:bottom}
-.mx-sqrt>.c{display:inline-block; border-top:1.2px solid currentColor; padding:.13em .16em 0 .1em; margin-left:-.07em}
+.mx-sqrt>.c{display:inline-block; border-top:1.2px solid currentColor; padding:.16em .16em 0 .1em; margin-left:-.07em; line-height:1.2}
+/* Con una fraccion o una matriz dentro, el radical crece con el contenido,
+   como el parentesis de \left: un signo pequeno delante de una caja alta
+   parecia una errata. */
+.mx-sqrt:has(.mx-frac,.mx-mat,.mx-big,.mx-lim)>.s{transform:scaleY(2.45) translateY(-.02em)}
+.mx-sqrt:has(.mx-frac,.mx-mat,.mx-big,.mx-lim)>.c{padding-top:.22em}
 
 .mx-par{display:inline-block; transform-origin:center; padding:0 .02em}
 .mx-ovl{display:inline-block; border-top:1.3px solid currentColor; padding-top:.06em}
 .mx-vec{display:inline-block; position:relative; padding-top:.2em}
 .mx-vec>.a{position:absolute; top:-.3em; left:0; right:0; text-align:center; font-size:.7em; line-height:1}
+.mx-vec--w>.a{transform:scaleX(1.9)}
 .mx-hat{display:inline-block; position:relative}
-.mx-hat>.a{position:absolute; top:-.58em; left:0; right:0; text-align:center; font-size:.8em; line-height:1}
+.mx-hat>.a{position:absolute; top:-.42em; left:0; right:0; text-align:center; font-size:1em; line-height:1}
 
 .mx-big{display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle;
   padding:0 .18em; line-height:1}
 .mx-big>.g{font-size:1.6em; line-height:.95}
 .mx-big>.u,.mx-big>.l{font-size:.52em; line-height:1.25}
+.mx-big>.u{margin-bottom:.14em}
+.mx-big>.l{margin-top:.1em}
+/* El sumatorio en linea: un poco mayor que la letra, con sus limites al lado. */
+.mx-bigi{font-size:1.25em; line-height:.8; vertical-align:-.12em; padding:0 .04em}
 .mx-int{display:inline-block; font-size:1.6em; line-height:.7; vertical-align:-.24em;
   transform:scaleX(.9); padding:0 .03em; font-family:var(--serif)}
 .mx-lim{display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; padding:0 .22em}

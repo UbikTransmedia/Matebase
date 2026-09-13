@@ -50,7 +50,7 @@
     iff: '⟺', implies: '⟹', mapsto: '↦', nearrow: '↗', searrow: '↘',
     in: '∈', notin: '∉', ni: '∋', subset: '⊂', subseteq: '⊆', supset: '⊃',
     supseteq: '⊇', nsubseteq: '⊄', colon: ':',
-    mid: '∣', nmid: '∤', doteq: '≐', asymp: '≍', prec: '≺', succ: '≻',
+    nmid: '∤', doteq: '≐', asymp: '≍', prec: '≺', succ: '≻',
     smile: '⌣', frown: '⌢',
     Longrightarrow: '⟹', Longleftrightarrow: '⟺', longmapsto: '⟼', uparrow: '↑', downarrow: '↓'
   };
@@ -64,6 +64,11 @@
 
   var BIGSTACK = { sum: '∑', prod: '∏', coprod: '∐', bigcup: '⋃', bigcap: '⋂', bigoplus: '⨁' };
   var BIGSIDE = { int: '∫', iint: '∬', iiint: '∭', oint: '∮', oiint: '∯', oiiint: '∰' };
+
+  /* true mientras se renderiza una formula en bloque: los limites de un
+     sumatorio o de un lim se apilan encima y debajo. En linea van al lado,
+     como hace TeX en textstyle, para no abrir el interlineado de la prosa. */
+  var enBloque = false;
 
   var MATDELIM = {
     pmatrix: ['(', ')'], bmatrix: ['[', ']'], Bmatrix: ['{', '}'],
@@ -172,12 +177,16 @@
         return { h: '' };
       case 'underline':
         return { h: '<span style="border-bottom:1.3px solid currentColor">' + render(group(p)) + '</span>' };
-      case 'vec':
-        return { h: '<span class="mx-vec"><span class="a">→</span>' + render(group(p)) + '</span>' };
+      case 'vec': {
+        var gv = group(p);
+        /* Sobre dos letras o mas, la flecha se estira para cubrirlas. */
+        var ancho = gv.replace(/\\[a-zA-Z]+/g, 'x').replace(/[^a-zA-Z0-9]/g, '').length > 1;
+        return { h: '<span class="mx-vec' + (ancho ? ' mx-vec--w' : '') + '"><span class="a">→</span>' + render(gv) + '</span>' };
+      }
       case 'overrightarrow':
         return { h: '<span class="mx-vec"><span class="a">⟶</span>' + render(group(p)) + '</span>' };
       case 'hat': case 'widehat':
-        return { h: '<span class="mx-hat"><span class="a">^</span>' + render(group(p)) + '</span>' };
+        return { h: '<span class="mx-hat"><span class="a">ˆ</span>' + render(group(p)) + '</span>' };
       case 'tilde': case 'widetilde':
         return { h: '<span class="mx-hat"><span class="a">~</span>' + render(group(p)) + '</span>' };
       case 'dot':
@@ -210,7 +219,10 @@
         return { h: sp('mx-par', readDelim(p)) };
       case 'lim': return { h: sp('mx-fn', 'lím'), big: 'lim', raw: 'lím' };
       case 'pmod': return { h: sp('mx-op', ' (mód ') + render(group(p)) + sp('mx-op', ')') };
-      case 'bmod': return { h: sp('mx-fn', 'mód') };
+      /* \bmod es un operador binario: aire a los dos lados, como \cdot. */
+      case 'bmod': return { h: '<span class="mx-fn" style="padding:0 .3em">mód</span>', kind: 'op' };
+      case 'mid': return { h: sp('mx-op', '∣'), kind: 'op' };
+      case '|': return { h: sp('mx-num', '‖') };
       case 'displaystyle': case 'textstyle': case 'limits': case 'nolimits': case 'scriptstyle':
         return { h: '' };
       case 'quad': return { h: '<span style="display:inline-block;width:1em"></span>' };
@@ -227,8 +239,8 @@
 
     if (BIGSTACK[name]) return { h: '<span style="font-size:1.5em;vertical-align:-.16em">' + BIGSTACK[name] + '</span>', big: 'stack', raw: BIGSTACK[name] };
     if (BIGSIDE[name]) return { h: '<span class="mx-int">' + BIGSIDE[name] + '</span>', big: 'side' };
-    if (RELS[name]) return { h: sp('mx-rel', RELS[name]) };
-    if (OPS[name]) return { h: sp('mx-op', OPS[name]) };
+    if (RELS[name]) return { h: sp('mx-rel', RELS[name]), kind: 'rel' };
+    if (OPS[name]) return { h: sp('mx-op', OPS[name]), kind: 'op' };
     if (SYM[name]) return { h: sp('mx-num', SYM[name]) };
     if (FUNCS.indexOf(name) >= 0) return { h: sp('mx-fn', name) };
 
@@ -284,7 +296,7 @@
       if (!d || d === '.') return '';
       return '<span class="mx-par" style="transform:scaleY(' + sy + ')">' + esc(d) + '</span>';
     }
-    return { h: par(open) + html + par(close) };
+    return { h: par(open) + html + par(close), tall: tall, kind: 'other' };
   }
 
   /* ---------- entornos ---------- */
@@ -300,7 +312,8 @@
     var rows = body.split(/\\\\/);
     var cells = [];
     for (var r = 0; r < rows.length; r++) {
-      var t = rows[r].trim();
+      // \\[4pt] es un salto con aire extra: el aire no se pinta
+      var t = (r > 0 ? rows[r].replace(/^\s*\[[^\]]*\]/, '') : rows[r]).trim();
       if (t === '' && r === rows.length - 1) continue;
       cells.push(t.split('&'));
     }
@@ -364,45 +377,68 @@
       }
       return { h: sp('mx-var', c) };
     }
-    if (c === '=' || c === '<' || c === '>') return { h: sp('mx-rel', c) };
-    if (c === '+') return { h: sp('mx-op', '+') };
-    if (c === '-') return { h: sp('mx-op', '−') };
-    if (c === '*') return { h: sp('mx-op', '·') };
-    if (c === '/') return { h: sp('mx-op', '/') };
-    if (c === "'") return { h: '<sup>′</sup>' };
+    if (c === '=' || c === '<' || c === '>') return { h: sp('mx-rel', c), kind: 'rel' };
+    if (c === '+' || c === '-') {
+      /* Un signo es unario si no hay nada a su izquierda, o hay una relacion,
+         otro operador o un parentesis que abre: entonces va pegado a lo que
+         sigue, como en TeX («= −x», «(−1)», «x^{−3}»), y no flotando. */
+      var unario = !p.prev || p.prev === 'rel' || p.prev === 'op' || p.prev === 'open';
+      var g = c === '+' ? '+' : '−';
+      return unario ? { h: sp('mx-num', g), kind: 'sign' } : { h: sp('mx-op', g), kind: 'op' };
+    }
+    if (c === '*') return { h: sp('mx-op', '·'), kind: 'op' };
+    if (c === '/') return { h: sp('mx-op', '/'), kind: 'op' };
+    if (c === "'") return { h: '<span class="mx-pr">′</span>' };
     if (c === '~') return { h: ' ' };
+    if (c === '(' || c === '[') return { h: sp('mx-num', c), kind: 'open' };
     return { h: sp('mx-num', c) };
   }
 
   /* ---------- secuencia con super/subindices ---------- */
 
   function scripts(p, a) {
-    var sup = null, sub = null;
+    var sup = null, sub = null, primas = '', grado = false;
     for (;;) {
       skipWs(p);
       var c = p.s[p.i];
-      if (c === '^') { p.i++; sup = (sup || '') + render(group(p)); }
+      if (c === '^') {
+        p.i++;
+        var crudo = group(p);
+        /* 30^\circ es un grado, no un «∘» flotando como exponente. */
+        if (/^\s*\\circ\s*$/.test(crudo)) grado = true;
+        else sup = (sup || '') + render(crudo);
+      }
       else if (c === '_') { p.i++; sub = (sub || '') + render(group(p)); }
-      else if (c === "'") { p.i++; sup = (sup || '') + '′'; }
+      else if (c === "'") { p.i++; primas += '′'; }
       else break;
     }
-    if (sup === null && sub === null) return a.h;
+    /* La prima va pegada al hombro de la letra, no como exponente. */
+    var base = a.h + (primas ? '<span class="mx-pr">' + primas + '</span>' : '') +
+      (grado ? '<span class="mx-deg">°</span>' : '');
+    if (sup === null && sub === null) return base;
+    a = { h: base, big: a.big, raw: a.raw, tall: a.tall };
 
-    if (a.big === 'stack') {
+    if (a.big === 'stack' && enBloque) {
       return '<span class="mx-big">' + (sup ? '<span class="u">' + sup + '</span>' : '') +
         '<span class="g">' + a.raw + '</span>' +
         (sub ? '<span class="l">' + sub + '</span>' : '') + '</span>';
     }
-    if (a.big === 'lim') {
+    if (a.big === 'stack') {
+      a = { h: '<span class="mx-bigi">' + a.raw + '</span>', tall: false };
+    }
+    if (a.big === 'lim' && enBloque) {
       return '<span class="mx-lim"><span class="g">lim</span>' +
         (sub ? '<span class="l">' + sub + '</span>' : '') + '</span>' +
         (sup ? '<sup>' + sup + '</sup>' : '');
     }
+    if (a.big === 'lim') a = { h: sp('mx-fn', 'lím'), tall: false };
     if (sub !== null && sup !== null) {
-      return a.h + '<span class="mx-sup2"><span style="margin-bottom:.15em">' + sup +
+      return a.h + '<span class="mx-sup2' + (a.tall ? ' mx-sup2--t' : '') + '"><span style="margin-bottom:.15em">' + sup +
         '</span><span>' + sub + '</span></span>';
     }
-    return a.h + (sub !== null ? '<sub>' + sub + '</sub>' : '') + (sup !== null ? '<sup>' + sup + '</sup>' : '');
+    /* Tras un \left(...\right) alto, el exponente sube hasta el hombro del parentesis. */
+    var t = a.tall ? ' class="mx-supt"' : '', tb = a.tall ? ' class="mx-subt"' : '';
+    return a.h + (sub !== null ? '<sub' + tb + '>' + sub + '</sub>' : '') + (sup !== null ? '<sup' + t + '>' + sup + '</sup>' : '');
   }
 
   function render(src) {
@@ -414,6 +450,7 @@
       var a = atom(p);
       if (a === null) break;
       out += scripts(p, a);
+      p.prev = a.kind || 'other';
       if (p.i === before) p.i++;
     }
     return out;
@@ -427,7 +464,9 @@
     return '<span class="mx">' + render(tex) + '</span>';
   };
   MathX.display = function (tex) {
-    return '<span class="mx mx-display">' + render(tex) + '</span>';
+    enBloque = true;
+    try { return '<span class="mx mx-display">' + render(tex) + '</span>'; }
+    finally { enBloque = false; }
   };
   /** Sustituye los tramos $...$ dentro de un texto que puede llevar HTML. */
   MathX.inline = function (s) {

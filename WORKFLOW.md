@@ -396,6 +396,7 @@ formato. La primera versión numerada es la 1.0.0, con 164 temas.
 | 1.4.0 | revisión experta de 2.º frente al programa de la PAU: un error corregido, tasa de variación media, hipótesis y ejercicios de Rolle y valor medio, optimización con beneficio, simétrico respecto de una recta |
 | 1.5.0 | el bloque «Síntesis de sonido»: 14 temas, el sintetizador programable `sonido.js`, una ruta y 14 términos de glosario: 260 temas |
 | 1.6.0 | la referencia de JavaScript en la columna derecha: 80 entradas con ejemplos que se ejecutan, y el panel generalizado a tres documentos |
+| 1.6.1 | estética: las fórmulas dejan de pisarse (exponentes dentro de fracciones y raíces, radical que crece, signo unario pegado, primas al hombro, `30^\circ`, `\bmod`, `\|`, límites al lado en línea), y letra e idioma en una fila |
 
 ---
 
