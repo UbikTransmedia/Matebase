@@ -524,6 +524,8 @@ Course.topic('gfx-directo', function (p) {
     answer: function (d) { return d.ref; }
   });
 
+  p.note('Cuando quieras saber si el bloque entero se ha quedado, en [[gfx-examen]] hay un examen procedimental con preguntas de todos sus temas, con reloj y corregido al entregar.', 'ok', 'Para medirte');
+
   p.keys([
     'Una pieza se construye <strong>por capas</strong>: cada una da un color y una máscara, y se apilan con <code>mix</code>.',
     '<strong>Tapar</strong> es para materia y <strong>sumar</strong> para luz. Sumando se sale del rango, y por eso hace falta comprimir el tono.',

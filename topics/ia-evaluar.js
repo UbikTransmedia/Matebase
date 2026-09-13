@@ -385,6 +385,8 @@ Course.topic('ia-evaluar', function (p) {
     answer: function (d) { return Math.round(d.c.a * 100) + ' de cada 100, ' + d.c.v; }
   });
 
+  p.note('Cuando quieras saber si el bloque entero se ha quedado, en [[ia-examen-datos]] hay un examen procedimental con preguntas de todos sus temas, con reloj y corregido al entregar.', 'ok', 'Para medirte');
+
   p.keys([
     'La exactitud engaña cuando una clase es rara: contestar siempre «no» puede dar un 99,9 % y no detectar nada.',
     'La matriz de confusión separa los dos errores, que casi nunca cuestan lo mismo.',

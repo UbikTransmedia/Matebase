@@ -390,6 +390,8 @@ Course.topic('ia-taller', function (p) {
     answer: function (d) { return d.c.v; }
   });
 
+  p.note('Cuando quieras saber si el bloque entero se ha quedado, en [[ia-examen-arquitecturas]] hay un examen procedimental con preguntas de todos sus temas, con reloj y corregido al entregar.', 'ok', 'Para medirte');
+
   p.keys([
     'No hay magia: hay un producto escalar, un gradiente y una regla de Bayes, repetidos muchísimas veces.',
     'Una red entera cabe en una pantalla: construir parámetros, multiplicar y doblar, calcular la pérdida, volver hacia atrás y dar un paso.',

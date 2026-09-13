@@ -7,7 +7,9 @@
    entra solo en los simulacros, sin copiarlo a ningun sitio.
 
      p.mapa()                              el temario de 2.º con tu estado
-     p.simulacro({ titulo, itin, partes }) examen con preguntas de varios temas
+     p.simulacro({ titulo, itin, partes, kind, intro }) examen con preguntas de varios temas
+       kind e intro cambian el rotulo («Simulacro») y el parrafo de entrada:
+       los examenes de bloque de la ampliacion no hablan de la PAU.
      p.formulario({ itin })                formulas e ideas clave, para imprimir
 
    Las tres cargan temas ajenos, y eso solo se puede hacer con el curso
@@ -142,7 +144,7 @@
 
     var caja = U.el('div.card.simul');
     caja.appendChild(U.el('div.card__head', null, [
-      U.el('span.card__kind.simul__kind', { text: 'Simulacro' }),
+      U.el('span.card__kind.simul__kind', { text: o.kind || 'Simulacro' }),
       U.el('span.card__title', { text: o.titulo || 'Examen de práctica' })
     ]));
     var cuerpo = U.el('div.card__body');
@@ -150,9 +152,9 @@
     this._add(caja);
 
     cuerpo.appendChild(U.el('p.simul__intro', {
-      text: 'Elige los bloques que entran. Las preguntas se sacan al azar de los ejercicios de ' +
+      text: o.intro || ('Elige los bloques que entran. Las preguntas se sacan al azar de los ejercicios de ' +
         'cada tema, dando preferencia a los problemas por apartados, que son los que más se ' +
-        'parecen a la PAU. No hay pistas: la corrección y la solución paso a paso llegan al entregar.'
+        'parecen a la PAU. No hay pistas: la corrección y la solución paso a paso llegan al entregar.')
     }));
     var lista = U.el('div.simul__partes');
     partes.forEach(function (pt, i) {

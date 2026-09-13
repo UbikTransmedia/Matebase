@@ -104,14 +104,14 @@ asignatura.
 | 12. Estructuras, números e infinito | 6 | números y RSA, grupos, Diffie-Hellman y curvas elípticas, completitud, Cantor, Turing y Gödel |
 | 13. Discreta y computacional | 6 | grafos, recurrencias, complejidad y P frente a NP, cálculo numérico, información, teoría de juegos |
 | 14. Cibernética | 15 | realimentación y bloques, PID, dinámica de sistemas, Kalman, perceptrón, refuerzo, autoorganización, sistema viable, segundo orden |
-| 15. Máquinas y lenguajes | 18 | cómo funciona un ordenador y cómo funciona un lenguaje: del bit y la puerta lógica a una CPU que ejecuta, y de ahí a un lenguaje propio que compila para ella |
-| 16. Síntesis de sonido | 14 | un sonido es una función del tiempo: de la onda a la nota, de la nota al timbre y del timbre a la música, con un sintetizador que se programa como un shader: muestreo, escala y logaritmo, envolventes, armónicos y Fourier, la cuerda, el espectro, batidos, FM, filtros, ruido y Karplus-Strong, eco, secuenciador y taller |
-| 17. Programación gráfica | 33 | shaders GLSL: del píxel al raymarching, con ratón, curvas, texto, mosaicos, disco de Poincaré, trazado de rayos, cámara, shaders con memoria y fluidos, terreno, texturas sólidas, nubes y filtros de cámara |
-| 18. Criptografía | 36 | del cifrado de César a lo poscuántico: frecuencias, Vigenère, Enigma, la libreta de un solo uso, AES paso a paso, hash, RSA, curvas elípticas, firmas, conocimiento cero, cadenas de bloques, Shor y BB84, con la criptografía real ejecutándose en el navegador |
-| 19. Inteligencia artificial I: aprender de los datos | 12 | qué es aprender de los datos, búsqueda y poda alfa-beta, vecinos próximos, árboles y bosques, Bayes ingenuo, margen máximo, sigmoide, pérdidas y optimizadores, la red densa, retropropagación, generalizar y evaluar |
-| 20. Inteligencia artificial II: las arquitecturas | 14 | convolucionales, Hopfield, recurrentes y LSTM, autocodificadores y VAE, GAN, difusión, tokens y BPE, n-gramas y perplejidad, vectores de palabras, atención y transformador, un LLM entero, Bellman y Q-learning, los límites, y un taller con todos los mandos |
+| 15. Máquinas y lenguajes | 19 | cómo funciona un ordenador y cómo funciona un lenguaje: del bit y la puerta lógica a una CPU que ejecuta, y de ahí a un lenguaje propio que compila para ella |
+| 16. Síntesis de sonido | 15 | un sonido es una función del tiempo: de la onda a la nota, de la nota al timbre y del timbre a la música, con un sintetizador que se programa como un shader: muestreo, escala y logaritmo, envolventes, armónicos y Fourier, la cuerda, el espectro, batidos, FM, filtros, ruido y Karplus-Strong, eco, secuenciador y taller |
+| 17. Programación gráfica | 34 | shaders GLSL: del píxel al raymarching, con ratón, curvas, texto, mosaicos, disco de Poincaré, trazado de rayos, cámara, shaders con memoria y fluidos, terreno, texturas sólidas, nubes y filtros de cámara |
+| 18. Criptografía | 37 | del cifrado de César a lo poscuántico: frecuencias, Vigenère, Enigma, la libreta de un solo uso, AES paso a paso, hash, RSA, curvas elípticas, firmas, conocimiento cero, cadenas de bloques, Shor y BB84, con la criptografía real ejecutándose en el navegador |
+| 19. Inteligencia artificial I: aprender de los datos | 13 | qué es aprender de los datos, búsqueda y poda alfa-beta, vecinos próximos, árboles y bosques, Bayes ingenuo, margen máximo, sigmoide, pérdidas y optimizadores, la red densa, retropropagación, generalizar y evaluar |
+| 20. Inteligencia artificial II: las arquitecturas | 15 | convolucionales, Hopfield, recurrentes y LSTM, autocodificadores y VAE, GAN, difusión, tokens y BPE, n-gramas y perplejidad, vectores de palabras, atención y transformador, un LLM entero, Bellman y Q-learning, los límites, y un taller con todos los mandos |
 
-**Los 260 temas están escritos**, en progresión estricta: ninguno usa una
+**Los 266 temas están escritos**, en progresión estricta: ninguno usa una
 herramienta que no se haya explicado antes, y cada tema declara cuáles necesita;
 `tests.html` comprueba que todos esos requisitos van antes en el temario.
 
@@ -122,7 +122,9 @@ de cada asignatura, un catálogo de errores frecuentes con ejercicios para
 cazarlos, un formulario que se monta solo a partir de los temas y se imprime, y
 dos **simulacros** —uno por asignatura— que sacan preguntas de los temas, sin pistas
 ni soluciones hasta entregar, con cronómetro opcional y nota por bloques con
-enlaces a lo que conviene repasar.
+enlaces a lo que conviene repasar. Cada bloque de la ampliación, del 15 en
+adelante, termina con un **examen del bloque** hecho de la misma manera: preguntas
+de todos sus temas, repartidas por tramos, para saber si se ha interiorizado.
 
 A partir de ahí el curso **pivota hacia lo que viene después**, agrupado por
 disciplina. La **Cibernética** reutiliza todo lo anterior a la vez —la derivada y la integral como

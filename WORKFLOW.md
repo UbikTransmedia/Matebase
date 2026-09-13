@@ -25,7 +25,7 @@ Se abre haciendo doble clic en `index.html`. **Sin servidor local, sin internet,
 
 ## Fase 1 — Temario (cerrada) → `assets/js/curriculum.js`
 
-21 bloques, 260 temas, en progresión estricta. El orden es el contrato pedagógico:
+21 bloques, 266 temas, en progresión estricta. El orden es el contrato pedagógico:
 ningún tema usa una herramienta que no se haya explicado antes, y `tests.html`
 comprueba que los requisitos declarados de cada tema van antes que él.
 
@@ -52,12 +52,12 @@ comprueba que los requisitos declarados de cada tema van antes que él.
 12. **Estructuras, números e infinito** (6).
 13. **Discreta y computacional** (6).
 14. **Cibernética** (15).
-15. **Máquinas y lenguajes** (18) — cómo funciona un ordenador y cómo funciona un lenguaje, construyendo los dos de abajo arriba desde `assets/js/core/logica.js`, `maquina.js` y `lenguaje.js`. Va aquí porque necesita la realimentación y el retardo de cibernética: un biestable es un bucle que se acuerda.
-16. **Síntesis de sonido** (14), con piel propia — un sonido es una función del tiempo, y un sintetizador que se programa como un shader desde `assets/js/core/sonido.js`. Va aquí porque es donde la trigonometría, el logaritmo, Fourier y las sucesiones recurrentes se oyen, y porque su editor es el del bloque siguiente.
-17. **Programación gráfica** (33), con piel propia.
-18. **Criptografía** (36), con piel propia — de César a lo poscuántico, con la criptografía real (SHA-256, AES, curvas, RSA) ejecutándose en el navegador desde `assets/js/core/cripto.js`.
-19. **Inteligencia artificial I: aprender de los datos** (12), con piel propia — de qué significa aprender de ejemplos hasta la red densa, la retropropagación y cómo se evalúa.
-20. **Inteligencia artificial II: las arquitecturas** (14), con piel propia — cada arquitectura entra por la idea matemática que aporta, y las redes se entrenan de verdad en el navegador desde `assets/js/core/nn.js`.
+15. **Máquinas y lenguajes** (19) — cómo funciona un ordenador y cómo funciona un lenguaje, construyendo los dos de abajo arriba desde `assets/js/core/logica.js`, `maquina.js` y `lenguaje.js`. Va aquí porque necesita la realimentación y el retardo de cibernética: un biestable es un bucle que se acuerda.
+16. **Síntesis de sonido** (15), con piel propia — un sonido es una función del tiempo, y un sintetizador que se programa como un shader desde `assets/js/core/sonido.js`. Va aquí porque es donde la trigonometría, el logaritmo, Fourier y las sucesiones recurrentes se oyen, y porque su editor es el del bloque siguiente.
+17. **Programación gráfica** (34), con piel propia.
+18. **Criptografía** (37), con piel propia — de César a lo poscuántico, con la criptografía real (SHA-256, AES, curvas, RSA) ejecutándose en el navegador desde `assets/js/core/cripto.js`.
+19. **Inteligencia artificial I: aprender de los datos** (13), con piel propia — de qué significa aprender de ejemplos hasta la red densa, la retropropagación y cómo se evalúa.
+20. **Inteligencia artificial II: las arquitecturas** (15), con piel propia — cada arquitectura entra por la idea matemática que aporta, y las redes se entrenan de verdad en el navegador desde `assets/js/core/nn.js`.
 
 > **Los bloques 15, 16, 17, 18 y 19 son optativos y no se presuponen entre sí.** Un
 > alumno puede hacer el de criptografía sin el de gráficos, o los de IA sin
@@ -367,7 +367,19 @@ mensajes de error en castellano, `iguales` que acepta seno y coseno y rechaza un
 semitono) y audita cada sintetizador de cada tema: que calcula, que no da silencio,
 que no recorta más del 2 % y que el coloreado no altera el texto.
 
-## Fase 10 — Ideas pendientes (a petición)
+## Fase 10 — Exámenes de bloque (cerrada)
+
+Los seis bloques de la ampliación (15 a 20) terminan con un **examen del
+bloque**: un tema que, como los simulacros de 2.º, monta un examen procedimental
+con los ejercicios de todos los temas del bloque, repartidos por tramos, con
+reloj y corregido al entregar. Es `p.simulacro` con dos opciones nuevas, `kind`
+e `intro`, para que el rótulo y la introducción no hablen de la PAU. Cada tema
+lleva la tabla de lo que entra por tramo —con enlace a cada tema del bloque, lo
+que de paso deja escrito el mapa del bloque—, consejos de examen propios de la
+materia, una comprobación y un apunte histórico. Con ellos el curso llega a
+**266 temas**.
+
+## Fase 11 — Ideas pendientes (a petición)
 
 - Más problemas de examen reales, adaptados por comunidades autónomas.
 - Un modo profesor para montar simulacros a medida eligiendo temas.
@@ -396,6 +408,7 @@ formato. La primera versión numerada es la 1.0.0, con 164 temas.
 | 1.4.0 | revisión experta de 2.º frente al programa de la PAU: un error corregido, tasa de variación media, hipótesis y ejercicios de Rolle y valor medio, optimización con beneficio, simétrico respecto de una recta |
 | 1.5.0 | el bloque «Síntesis de sonido»: 14 temas, el sintetizador programable `sonido.js`, una ruta y 14 términos de glosario: 260 temas |
 | 1.6.0 | la referencia de JavaScript en la columna derecha: 80 entradas con ejemplos que se ejecutan, y el panel generalizado a tres documentos |
+| 1.7.0 | los exámenes de bloque de la ampliación: seis temas, uno por bloque del 15 al 20, con preguntas de todos sus temas: 266 temas |
 | 1.6.1 | estética: las fórmulas dejan de pisarse (exponentes dentro de fracciones y raíces, radical que crece, signo unario pegado, primas al hombro, `30^\circ`, `\bmod`, `\|`, límites al lado en línea), y letra e idioma en una fila |
 
 ---

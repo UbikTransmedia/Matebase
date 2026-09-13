@@ -150,6 +150,8 @@ Course.topic('son-taller', function (p) {
     { e: 'Creer que esto es «lo fácil» y lo de verdad es otra cosa', por: 'Es lo mismo. Un sintetizador profesional es este código, muestra a muestra, con más etapas y en tiempo real. La matemática no cambia.' }
   ]);
 
+  p.note('Cuando quieras saber si el bloque entero se ha quedado, en [[son-examen]] hay un examen procedimental con preguntas de todos sus temas, con reloj y corregido al entregar.', 'ok', 'Para medirte');
+
   p.keys([
     'La cadena de un sintetizador: oscilador → modulación → filtro → envolvente → efectos, y un secuenciador que decide qué nota y cuándo. Cada etapa es una función.',
     'Todo el bloque cabe en un instrumento de cuarenta líneas, y cada línea es un tema: senos, logaritmos, Fourier, recurrencias, series, probabilidad, divisibilidad.',

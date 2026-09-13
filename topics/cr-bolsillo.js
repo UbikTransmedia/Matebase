@@ -220,6 +220,8 @@ Course.topic('cr-bolsillo', function (p) {
     answer: function (d) { return { nonce: 'nonce/k repetido', azar: 'azar predecible', ecb: 'ECB', auth: 'oráculo de relleno' }[d.c.v]; }
   });
 
+  p.note('Cuando quieras saber si el bloque entero se ha quedado, en [[cr-examen]] hay un examen procedimental con preguntas de todos sus temas, con reloj y corregido al entregar.', 'ok', 'Para medirte');
+
   p.keys([
     'El trinquete deriva una clave nueva por mensaje con un hash: como no se invierte, protege el pasado (secreto hacia delante).',
     'El doble trinquete añade un Diffie-Hellman nuevo en cada respuesta: recupera el futuro si el estado llegó a filtrarse.',

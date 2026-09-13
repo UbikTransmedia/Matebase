@@ -1083,6 +1083,12 @@ window.CURRICULUM = [
         r: 'Todo junto y a la vista, y qué hace de más un compilador de verdad.',
         o: ['Los cuatro paneles a la vez', 'Del texto a la máquina, sin cortes', 'Qué le falta para ser de verdad'],
         req: ['len-optimizar', 'len-autorreferencia']
+      },
+      {
+        id: 'maq-examen', t: 'Examen del bloque: máquinas y lenguajes',
+        r: 'Un examen procedimental con preguntas de los dieciocho temas, corregido al entregar: para saber si el bloque está interiorizado.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -1181,6 +1187,12 @@ window.CURRICULUM = [
         r: 'Todo junto y a la vista: osciladores, envolvente, filtro, eco y secuencia, en un instrumento que programas tú.',
         o: ['Montar un instrumento completo', 'Componer con código', 'Dónde seguir: SuperCollider, Sonic Pi, Web Audio'],
         req: ['son-secuencia', 'son-modulacion', 'son-eco', 'son-ruido']
+      },
+      {
+        id: 'son-examen', t: 'Examen del bloque: síntesis de sonido',
+        r: 'Un examen procedimental con preguntas de los catorce temas, corregido al entregar: del seno al secuenciador.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -1391,6 +1403,12 @@ window.CURRICULUM = [
         r: 'Del ejercicio al directo: reglas simples, complejidad epatante, y adónde ir después.',
         o: ['Componer un shader por capas', 'Parámetros como mandos de una actuación', 'Herramientas libres y comunidad'],
         req: ['gfx-post', 'gfx-luz']
+      },
+      {
+        id: 'gfx-examen', t: 'Examen del bloque: programación gráfica',
+        r: 'Un examen procedimental con preguntas de los treinta y tres temas, corregido al entregar: del píxel al raymarching.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -1615,6 +1633,12 @@ window.CURRICULUM = [
         r: 'Lo que ocurre cuando envías un mensaje: trinquetes, secreto hacia delante, tarjetas, llaves de acceso y las reglas para no meter la pata.',
         o: ['El doble trinquete de la mensajería cifrada', 'Secreto hacia delante', 'Las diez reglas del que no es criptógrafo'],
         req: ['cr-certificados', 'cr-bb84']
+      },
+      {
+        id: 'cr-examen', t: 'Examen del bloque: criptografía',
+        r: 'Un examen procedimental con preguntas de los treinta y seis temas, corregido al entregar: de César a lo poscuántico.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -1704,6 +1728,12 @@ window.CURRICULUM = [
         r: 'La exactitud engaña. Matriz de confusión, precisión, sensibilidad y el área bajo la ROC.',
         o: ['Matriz de confusión: los cuatro casos', 'Precisión y sensibilidad, y por qué compiten', 'La curva ROC, su área y los errores por subgrupos'],
         req: ['pe-condicionada', 'fn-integral-def']
+      },
+      {
+        id: 'ia-examen-datos', t: 'Examen del bloque: aprender de los datos',
+        r: 'Un examen procedimental con preguntas de los doce temas, corregido al entregar: del vecino más próximo a la retropropagación.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -1803,6 +1833,12 @@ window.CURRICULUM = [
         r: 'Todos los mandos a la vez, una red entera escrita a la vista, y el mapa de qué idea aporta cada arquitectura.',
         o: ['Un banco de pruebas con datos, arquitectura y optimizador', 'Una red completa, línea a línea', 'El mapa: qué matemática hay debajo de cada arquitectura'],
         req: ['ia-llm', 'ia-cnn', 'ia-red']
+      },
+      {
+        id: 'ia-examen-arquitecturas', t: 'Examen del bloque: las arquitecturas',
+        r: 'Un examen procedimental con preguntas de los catorce temas, corregido al entregar: de las convoluciones al transformador.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   }

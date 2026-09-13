@@ -335,6 +335,8 @@ Course.topic('len-taller', function (p) {
     answer: function (d) { return d.c.ref.replace(/\n/g, ' '); }
   });
 
+  p.note('Cuando quieras saber si el bloque entero se ha quedado, en [[maq-examen]] hay un examen procedimental con preguntas de todos sus temas, con reloj y corregido al entregar.', 'ok', 'Para medirte');
+
   p.keys([
     'El camino completo va de tu texto a cables a 1 y a 0, y no hay ni un paso que no hayas visto por dentro.',
     'Un ordenador no entiende nada: son <strong>tablas de verdad apiladas</strong>. Un lenguaje no es un idioma que la máquina hable: es un <strong>texto que otro programa traduce</strong>.',
