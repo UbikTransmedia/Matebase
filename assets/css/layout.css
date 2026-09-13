@@ -257,6 +257,7 @@
 .topbar__docs{flex:0 0 auto; display:flex; gap:6px}
 .topbar__ico{font-family:var(--mono); font-weight:700; font-size:0.75rem; letter-spacing:-.04em}
 .glos[data-modo="glsl"] .glos__title{color:var(--gfx)}
+.glos[data-modo="js"] .glos__title{color:var(--son)}
 .glos__intro{margin:4px 6px 8px; font-size:0.8125rem; line-height:1.55; color:var(--ink-soft); text-wrap:pretty}
 .glos__grupo{
   margin:16px 6px 3px; font-size:0.6875rem; text-transform:uppercase; letter-spacing:.1em;

@@ -368,6 +368,10 @@
 
   /** El codigo convertido en HTML con un <span> por trozo, con los mismos
       ocho papeles y las mismas clases que el editor de shaders. */
+  /* Se exporta para que tests.html compruebe que la referencia de la
+     columna derecha explica cada palabra que el editor colorea. */
+  SON.lexico = LEXICO;
+
   SON.pinta = function (texto, mandos) {
     var propios = {};
     (mandos || []).forEach(function (m) { propios[m.n || m] = 1; });

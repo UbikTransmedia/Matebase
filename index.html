@@ -71,8 +71,8 @@
     <div class="topbar">
       <button class="burger" id="burger" type="button" aria-label="Índice">☰</button>
       <div class="topbar__crumb" id="crumb"></div>
-      <!-- Dos documentos que comparten la columna derecha: cada botón abre el
-           suyo, y pulsarlo otra vez cuando ya se ve lo cierra. -->
+      <!-- Tres documentos que comparten la columna derecha: cada botón abre
+           el suyo, y pulsarlo otra vez cuando ya se ve lo cierra. -->
       <div class="topbar__docs" role="group" aria-label="Documentación">
         <button class="topbar__glos" id="glosBtn" type="button" aria-expanded="false"
                 aria-controls="glos" aria-label="Glosario" title="Mostrar u ocultar el glosario">
@@ -82,6 +82,11 @@
                 aria-controls="glos" aria-label="Referencia GLSL"
                 title="Mostrar u ocultar la referencia del lenguaje GLSL">
           <b class="topbar__ico" aria-hidden="true">{}</b> <span>GLSL</span>
+        </button>
+        <button class="topbar__glos" id="jsBtn" type="button" aria-expanded="false"
+                aria-controls="glos" aria-label="Referencia de JavaScript"
+                title="Mostrar u ocultar la referencia de JavaScript, el lenguaje del sintetizador">
+          <b class="topbar__ico" aria-hidden="true">( )</b> <span>JavaScript</span>
         </button>
       </div>
     </div>
@@ -130,6 +135,7 @@
 <script src="assets/js/i18n/en.js"></script>
 <script src="assets/js/glosario.js"></script>
 <script src="assets/js/glsl.js"></script>
+<script src="assets/js/javascript.js"></script>
 <!-- ============ arranque (los temas se cargan solos al abrirlos) ============ -->
 <script src="assets/js/core/app.js"></script>
 

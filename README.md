@@ -40,13 +40,18 @@ Los ejercicios hacen más que decir «bien» o «mal»:
 - **Enlaces con semilla**: copiar el enlace de un ejercicio reproduce exactamente
   los mismos números, para que un profesor pase el mismo a toda la clase.
 
-A la derecha, una columna con dos documentos, cada uno con su botón en la barra
-superior: el **glosario** y la **referencia GLSL** —los tipos, las palabras y
-las funciones del lenguaje de los shaders, con su firma, un ejemplo que compila
-en WebGL 1 y el tema donde se explican—. Pulsar el otro botón cambia de
-documento sin cerrar la columna; pulsar el mismo la cierra. Los dos buscadores
+A la derecha, una columna con tres documentos, cada uno con su botón en la barra
+superior: el **glosario**, la **referencia GLSL** —los tipos, las palabras y las
+funciones del lenguaje de los shaders, con su firma, un ejemplo que compila en
+WebGL 1 y el tema donde se explican— y la **referencia de JavaScript**, que es el
+lenguaje del sintetizador: la forma de `sonido(t, i)`, los operadores, el control
+de flujo, las funciones del preámbulo, las recetas del curso, lo que **no**
+conviene hacer ahí dentro (empezando por `Math.random`, que rompe la
+reproducibilidad) y los usos de JavaScript que están fuera del sonido —el taller
+de redes neuronales y el propio código del curso—. Pulsar otro botón cambia de
+documento sin cerrar la columna; pulsar el mismo la cierra. Los tres buscadores
 miran también dentro de las explicaciones y no distinguen tildes, y el buscador
-del índice encuentra términos de los dos.
+del índice encuentra términos de los tres.
 
 **El progreso se guarda en el propio navegador**, y va más allá de «visto»:
 
@@ -173,6 +178,7 @@ matebase/
 │       ├── curriculum.js ← EL TEMARIO (el único sitio donde se decide qué hay)
 │       ├── glosario.js   ← EL VOCABULARIO (un término por entrada)
 │       ├── glsl.js       ← LA REFERENCIA DEL LENGUAJE DE LOS SHADERS
+│       ├── javascript.js ← LA REFERENCIA DEL LENGUAJE DEL SINTETIZADOR
 │       ├── version.js    ← LA VERSIÓN (se cambia aquí y sale en el pie del índice)
 │       ├── i18n/         ← un archivo por idioma (interfaz y temario)
 │       └── core/         ← el motor, compartido por todos los temas
@@ -198,7 +204,7 @@ El núcleo (`assets/js/core/`) es lo que evita repetir código:
 | `logica.js` | el banco de circuitos: netlist escrita en texto, diagrama generado solo, tabla de verdad y un simulador que **avanza por instantes**, porque el biestable es un ciclo y no tendría solución de otro modo |
 | `maquina.js` | la CPU de juguete: dieciocho instrucciones, celdas de 8 bits con signo, programa y datos en la misma memoria, su ensamblador de dos pasadas y un tope de pasos para que nada se cuelgue |
 | `lenguaje.js` | **Pizca**: troceador, analizador por descenso recursivo, intérprete, compilador a la CPU de `maquina.js`, optimizador y el dibujo del árbol de sintaxis con su pila |
-| `app.js` | índice desplegable, buscador con glosario, columna del glosario y la referencia GLSL, itinerarios, enrutado y carga perezosa de temas |
+| `app.js` | índice desplegable, buscador con glosario, columna derecha con el glosario y las dos referencias de lenguaje, itinerarios, enrutado y carga perezosa de temas |
 | `i18n.js` | el idioma de la interfaz y del temario: cada idioma es un diccionario, y lo que no esté traducido sale en castellano |
 
 Un tema de trigonometría y uno de geometría usan exactamente el mismo código de
@@ -230,7 +236,9 @@ Los detalles están en **`GUIA-AUTOR.md`**.
   marcadores y veredictos se anuncian por `aria-live`; los ejemplos con ratón
   traen deslizadores equivalentes; y las combinaciones de color de los tres temas
   pasan el contraste AA, comprobado en cada ejecución de las pruebas.
-- El código GLSL sale **coloreado**, con un esquema propio por tema de color.
+- El código sale **coloreado**, con un esquema propio por tema de color y los mismos
+  ocho papeles en los cinco lenguajes que se escriben en el curso: GLSL, JavaScript,
+  el ensamblador, la netlist de circuitos y Pizca.
 - La programación gráfica usa **WebGL 1.0**. Si falta, el visor lo dice y el código
   sigue leyéndose. Las texturas se generan por fórmula y no se carga ninguna imagen,
   que es precisamente lo que permite que funcione desde `file://`.
@@ -244,7 +252,9 @@ Los detalles están en **`GUIA-AUTOR.md`**.
   inexistentes, que ninguna gráfica de escala 1:1 recorta su encuadre, que ninguna
   gráfica se queda sin nombre accesible ni fuera del alcance del teclado, que ningún
   enlace entre temas apunta a un tema inexistente, que los requisitos de cada tema
-  van antes en el temario, que el glosario apunta a temas que existen, que **todos
+  van antes en el temario, que el glosario apunta a temas que existen, que **cada
+  ejemplo de la referencia GLSL compila y cada ejemplo de la referencia de JavaScript
+  se ejecuta y suena**, que **todos
   los shaders compilan y ninguno pinta una imagen lisa**, que **todos los sintetizadores
   calculan y ninguno da silencio ni recorta**, y que todos los temas del
   temario se construyen sin errores.

@@ -169,7 +169,7 @@ objeto en el array.
 | `page.js` | Constructor declarativo de páginas y recolector de contenido | todos los temas |
 | `repaso.js` | Mapa del temario, simulacros y formulario | bloque de repaso |
 | `progress.js` | Progreso, dominio por tipo de ejercicio y repaso espaciado en `localStorage` | índice, portada y ejercicios |
-| `app.js` | Índice, buscador con glosario, columna derecha con el glosario y la referencia GLSL, itinerarios, enrutado con semilla y carga perezosa | shell |
+| `app.js` | Índice, buscador con glosario, columna derecha con el glosario y las dos referencias de lenguaje (GLSL y JavaScript), itinerarios, enrutado con semilla y carga perezosa | shell |
 
 ## Fase 3 — Contenido, bloque a bloque (cerrada)
 
@@ -395,6 +395,7 @@ formato. La primera versión numerada es la 1.0.0, con 164 temas.
 | 1.3.0 | las mejoras del análisis: progreso portátil, rutas, deberes y exámenes por enlace, ficha imprimible, `CARGAI`/`GUARDAI`, el árbol dibujado, el repaso que reparte por lo que flojea y la interfaz en inglés |
 | 1.4.0 | revisión experta de 2.º frente al programa de la PAU: un error corregido, tasa de variación media, hipótesis y ejercicios de Rolle y valor medio, optimización con beneficio, simétrico respecto de una recta |
 | 1.5.0 | el bloque «Síntesis de sonido»: 14 temas, el sintetizador programable `sonido.js`, una ruta y 14 términos de glosario: 260 temas |
+| 1.6.0 | la referencia de JavaScript en la columna derecha: 80 entradas con ejemplos que se ejecutan, y el panel generalizado a tres documentos |
 
 ---
 

@@ -50,7 +50,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     var t = '?t=' + Date.now();
     ['version', 'core/util', 'core/i18n', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
      'core/shader', 'core/sonido', 'core/cripto', 'core/nn', 'core/logica', 'core/maquina', 'core/lenguaje', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
-     'glosario', 'glsl', 'i18n/en'].forEach(function (f) {
+     'glosario', 'glsl', 'javascript', 'i18n/en'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
   })();
@@ -1069,6 +1069,78 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       eq('ejemplos de la referencia que no compilan en WebGL 1', gNoCompilan.join(' · '), '');
       eq('coloreado que altera el texto de una entrada', gAltera.join(', '), '');
     }
+  }
+
+  /* ---------------- referencia de JavaScript ----------------
+     Lo que muestra la columna derecha al pulsar «JavaScript»: el lenguaje
+     del sintetizador. Mismo trato que la de GLSL, con la ventaja de que
+     aqui los ejemplos no se compilan: se EJECUTAN, y se comprueba que
+     suenan. Una referencia cuyos ejemplos no suenan enseña a equivocarse. */
+  group('referencia de JavaScript');
+  truthy('la referencia se carga', !!window.JSREF && JSREF.entradas.length > 50);
+  if (window.JSREF && window.SON) {
+    var jGrupos = {}, jVistos = {}, jMal = [], jRep = [], jHuer = [], jMx = [], jEnl = [];
+    var jTemas = {};
+    CURRICULUM.forEach(function (b4) { b4.temas.forEach(function (t) { jTemas[t.id] = 1; }); });
+    JSREF.grupos.forEach(function (g) { jGrupos[g.id] = 1; });
+    JSREF.entradas.forEach(function (e) {
+      if (!e.t || !jGrupos[e.g] || !e.d || e.d.length < 40) jMal.push(e.t || '(sin título)');
+      if (jVistos[e.t]) jRep.push(e.t); else jVistos[e.t] = 1;
+      if (e.i && !jTemas[e.i]) jHuer.push(e.t + ' → ' + e.i);
+      if (MathX.inline(e.d).indexOf('mx-err') >= 0) jMx.push(e.t);
+    });
+    /* Los enlaces [[tema]] de las explicaciones y de la entradilla. */
+    (JSREF.entradas.map(function (e) { return e.d; }).concat([JSREF.intro || ''])).forEach(function (txt) {
+      (String(txt).match(/\[\[[a-z]{2,4}-[a-z0-9-]+/g) || []).forEach(function (m) {
+        var id = m.slice(2);
+        if (!jTemas[id]) jEnl.push(id);
+      });
+    });
+    eq('entradas incompletas (título, grupo o explicación)', jMal.join(', '), '');
+    eq('entradas repetidas', jRep.join(', '), '');
+    eq('entradas que apuntan a temas que no existen', jHuer.join(', '), '');
+    eq('enlaces [[tema]] a temas que no existen', jEnl.join(', '), '');
+    eq('explicaciones con fórmulas mal escritas', jMx.join(', '), '');
+
+    /* Cada palabra que el editor del sintetizador colorea tiene que estar
+       explicada: si se añade una función al preámbulo, la prueba la pide. */
+    if (SON.lexico) {
+      var jCubre = {};
+      JSREF.entradas.forEach(function (e) {
+        e.t.split(/[^A-Za-z0-9_]+/).forEach(function (w) { if (w) jCubre[w] = 1; });
+      });
+      var jFaltan = Object.keys(SON.lexico).filter(function (w) { return !jCubre[w]; });
+      eq('palabras que el editor colorea y la referencia no explica', jFaltan.join(', '), '');
+    }
+
+    /* Y cada ejemplo se ejecuta. Los mandos que citan los ejemplos se
+       declaran aquí, como los hay en cualquier sintetizador del bloque; las
+       variables sueltas, también, para que un fragmento de dos líneas no
+       tenga que arrastrar su contexto. */
+    var jMandos = [
+      { n: 'f', value: 440 }, { n: 'g', value: 0.5 }, { n: 'fm', value: 5 },
+      { n: 'bpm', value: 120 }, { n: 'corte', value: 0.3 }, { n: 'indice', value: 2 }
+    ];
+    var jDecl = 'var x = 0.4 * sin(TAU * 440 * t), y = 0, k = 1, a = 0.3, s = 0, e = 1,\n' +
+      '    u = t, dur = 0.5, Tp = 0.5, N = 200, n = 0, w = 0.5;\n';
+    var jNoSuenan = [], jSilencio = [], jAltera = [];
+    JSREF.entradas.forEach(function (en) {
+      [en.s, en.e].forEach(function (txt) {
+        if (!txt || !SON.pinta) return;
+        var caja = document.createElement('div');
+        caja.innerHTML = SON.pinta(txt, jMandos);
+        if (caja.textContent !== txt) jAltera.push(en.t);
+      });
+      if (!en.e || en.x === 'no') return;
+      var src = en.x === 'solo' ? en.e
+        : 'function sonido(t, i) {\n' + jDecl + en.e + '\nreturn 0.4 * sin(TAU * 440 * t);\n}';
+      var r = SON.render(src, { dur: 0.25, mandos: jMandos });
+      if (!r.ok) jNoSuenan.push(en.t + ' (' + r.error.msg + ')');
+      else if (en.x === 'solo' && r.silencio) jSilencio.push(en.t);
+    });
+    eq('ejemplos de la referencia que no se ejecutan', jNoSuenan.join(' · '), '');
+    eq('programas de ejemplo que no suenan', jSilencio.join(', '), '');
+    eq('coloreado que altera el texto de una entrada', jAltera.join(', '), '');
   }
 
   /* ---------------- el sintetizador ----------------

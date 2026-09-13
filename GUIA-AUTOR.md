@@ -571,10 +571,12 @@ lo mismo pueden diferir por redondeo; por encima, entra cualquier cosa.
 
 ### La referencia GLSL de la columna derecha
 
-Junto al botón **Glosario** está el botón **GLSL**. Los dos abren la misma
-columna: cada uno muestra su documento, pulsar el otro cambia de documento sin
-cerrarla y pulsar otra vez el que ya se ve la cierra. La referencia vive en
-`assets/js/glsl.js`, separada del glosario, y cada entrada es así:
+Junto al botón **Glosario** están los botones **GLSL** y **JavaScript**. Los tres
+abren la misma columna: cada uno muestra su documento, pulsar otro cambia de
+documento sin cerrarla y pulsar otra vez el que ya se ve la cierra. Cada
+documento recuerda lo que se estaba buscando, qué entradas estaban abiertas y por
+dónde iba. La referencia vive en `assets/js/glsl.js`, separada del glosario, y
+cada entrada es así:
 
 ```js
 { t: 'smoothstep', g: 'comunes',                       // nombre y grupo
@@ -596,6 +598,40 @@ cerrarla y pulsar otra vez el que ya se ve la cierra. La referencia vive en
 - Cada palabra que el editor colorea como tipo, función o uniform tiene que
   aparecer en el título de alguna entrada: si se añade un uniform al preámbulo
   del visor, la prueba pide su entrada.
+
+### La referencia de JavaScript
+
+El sintetizador del bloque de sonido no inventa un lenguaje: ejecuta JavaScript,
+con un preámbulo que deja a mano `sin`, `TAU`, `sierra`, `nota`, `anterior`. Así
+que tiene su propio documento, `assets/js/javascript.js`, con **la misma forma**
+que `glsl.js` —`{intro, grupos, entradas}`— y los mismos campos por entrada. El
+panel de `app.js` pinta los dos con el mismo código: lo único que cambia es de
+dónde salen los datos y quién colorea (`W.glslPinta` o `SON.pinta`). Para añadir
+un tercer lenguaje bastaría con otra entrada en `MODOS`.
+
+Tres cosas propias de esta referencia:
+
+- **Los ejemplos no se compilan: se ejecutan.** `tests.html` mete cada uno dentro
+  de `SON.render`. Por defecto lo trata como sentencias, dentro de
+  `sonido(t, i)` y con unas cuantas variables y mandos ya declarados (`f`, `g`,
+  `x`, `y`, `u`, `Tp`, `N`…); con `x: 'solo'` es un programa entero, y entonces
+  además se comprueba que **suena** (que no da silencio); con `x: 'no'` no se
+  ejecuta, que es lo que llevan las entradas del grupo «fuera del sintetizador»,
+  porque `Course`, `W` y `NN` no existen dentro del cajón de arena.
+- **Se documenta el cajón de arena como es, no como debería ser.** Aquí no hay
+  `use strict`, `Math.random` funciona y `console.log` también. Ocultarlo sería
+  mentir, y se nota a la primera; el grupo «Lo que aquí no conviene hacer»
+  explica por qué cada una de esas cosas estropea algo: la reproducibilidad de
+  los ejercicios, el navegador, o las dos.
+- **Recoge los usos de JavaScript que no están en el sonido.** El taller de IA
+  (`NN`), el constructor de páginas (`Course.topic` y `p`), el motor gráfico
+  (`W`) y el propio motor del sonido (`SON`). Quien llega por un sintetizador se
+  encuentra ahí el mapa para leer el código del curso, que está escrito en el
+  mismo lenguaje que acaba de aprender.
+
+Como en la de GLSL, `tests.html` exige que **cada palabra que el editor colorea**
+—las de `SON.lexico`— aparezca en el título de alguna entrada: si se añade una
+función al preámbulo de `sonido.js`, la prueba pide su entrada.
 
 ---
 
