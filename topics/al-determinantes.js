@@ -78,7 +78,7 @@ Course.topic('al-determinantes', function (p) {
   p.demo({
     title: 'Operaciones de fila y lo que le pasa al determinante',
     intro: 'Aplica operaciones a la matriz y mira cómo cambia el determinante. Cada botón es una propiedad: fíjate en cuáles lo dejan igual, cuáles le cambian el signo y cuáles lo multiplican.',
-    predice: 'La matriz de partida tiene determinante $-11$. Antes de pulsar: si intercambias F1 y F2, ¿qué saldrá? ¿Y si multiplicas F1 por 2? ¿Y con F3 ← F3 − 2·F2?',
+    predice: 'La matriz de partida es la del ejemplo resuelto, con determinante $6$. Antes de pulsar: si intercambias F1 y F2, ¿qué saldrá? ¿Y si multiplicas F1 por 2? ¿Y con F3 ← F3 − 2·F2?',
     build: function (host) {
       var orig = [[2, 1, 3], [1, 0, 2], [4, 1, 1]];
       var M, nota;

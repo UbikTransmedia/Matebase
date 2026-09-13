@@ -131,8 +131,8 @@ recompila al vuelo, y donde los ejercicios de código se corrigen **comparando l
 pinta tu shader con lo que pinta la solución**. La idea que lo sostiene, que es la
 del curso entero: **reglas simples, complejidad epatante**.
 
-En total, **518 ejemplos interactivos**, **1071 ejercicios procedimentales**,
-**21 problemas por apartados** con 66 apartados, **244 ejemplos resueltos paso a
+En total, **518 ejemplos interactivos**, **1075 ejercicios procedimentales**,
+**22 problemas por apartados** con 70 apartados, **244 ejemplos resueltos paso a
 paso**, **271 comprobaciones rápidas**, **329 cuadros de utilidad**, **265 apuntes
 históricos** —con las matemáticas de Hipatia, Sophie Germain, Sofia Kovalévskaya,
 Ada Lovelace, Emmy Noether, Mary Cartwright, Katherine Johnson, Karen Spärck Jones,

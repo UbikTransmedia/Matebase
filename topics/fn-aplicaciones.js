@@ -206,6 +206,26 @@ Course.topic('fn-aplicaciones', function (p) {
     cierre: 'Fíjate en que la respuesta no es «los dos iguales»: como $y$ va al cuadrado, conviene que sea el doble de $x$. La receta no presupone la respuesta; la encuentra.'
   });
 
+  p.sub('Coste, ingreso y beneficio');
+
+  p.text('En los problemas de economía las cantidades a optimizar tienen nombre propio, y conviene ' +
+    'conocerlo porque el enunciado lo da por sabido. Si se fabrican y venden $x$ unidades, el ' +
+    '<strong>coste</strong> $C(x)$ es lo que cuesta producirlas —con una parte fija, que se paga aunque ' +
+    'no se fabrique nada, y otra que crece con $x$—, el <strong>ingreso</strong> $I(x)$ es lo que se ' +
+    'cobra por venderlas, y el <strong>beneficio</strong> es la diferencia.');
+
+  p.formulas([
+    'B(x) = I(x) - C(x)',
+    'B\'(x) = 0 \\iff I\'(x) = C\'(x)'
+  ], 'beneficio, y la condición de beneficio máximo',
+    'La segunda se lee: <em>«el beneficio tiene pendiente cero exactamente cuando el ingreso marginal ' +
+      'iguala al coste marginal»</em>.<br><br><strong>Marginal</strong> es la palabra de la economía ' +
+      'para la derivada: $C\'(x)$ es, aproximadamente, lo que cuesta fabricar <em>una unidad más</em> ' +
+      'cuando ya se fabrican $x$. Mientras esa unidad de más ingrese más de lo que cuesta, conviene ' +
+      'fabricarla; el máximo del beneficio está donde las dos cosas empatan.<br><br>Y el paso que no ' +
+      'hay que saltarse: la respuesta es un número de unidades, así que se comprueba que sea ' +
+      'positivo y, si hace falta, entero.');
+
   p.demo({
     title: 'La lata que gasta menos aluminio',
     intro: 'Con un volumen fijo, ¿qué proporción de radio y altura minimiza la superficie? Mueve el radio y busca el mínimo.',
@@ -384,6 +404,44 @@ Course.topic('fn-aplicaciones', function (p) {
   });
 
   p.exercise({
+    title: 'Optimización: el beneficio máximo',
+    level: 'avanzado',
+    gen: function (r) {
+      // C(x) = a x^2 + b x + c, precio p por unidad: B = -a x^2 + (p - b) x - c
+      var a = r.pick([1, 2]), xo = r.int(5, 40), b = r.int(2, 20), c = r.int(50, 900);
+      var pr = b + 2 * a * xo;                 // p - b = 2 a xo: el optimo es entero
+      var B = a * xo * xo - c;                 // B(xo) = a xo^2 - c
+      if (B <= 0) return null;                 // que el negocio tenga sentido
+      return { a: a, b: b, c: c, p: pr, xo: xo, B: B, cx: a * xo * xo + b * xo + c, ix: pr * xo };
+    },
+    ask: function (d) {
+      return 'El coste de fabricar $x$ unidades de un producto es $C(x) = ' + ML.polyTex([d.a, d.b, d.c]) +
+        '$ euros, y cada unidad se vende a $' + d.p + '$ €. ¿Cuántas unidades hay que fabricar y vender ' +
+        'para que el <strong>beneficio</strong> sea máximo, y cuánto vale ese beneficio?';
+    },
+    fields: [{ name: 'x', label: 'unidades', w: 'tiny' }, { name: 'b', label: 'beneficio (€)', w: 'wide' }],
+    sol: function (d) { return { x: d.xo, b: d.B }; },
+    tol: 1e-6,
+    errores: [
+      { si: function (v, d) { return Math.abs(v.b - (d.B + d.c)) < 1e-6; }, msg: 'Te has dejado el coste fijo: el término independiente de $C(x)$ se paga aunque no se fabrique nada, y también resta del beneficio.' },
+      { si: function (v, d) { return Math.abs(v.b - d.ix) < 1e-6; }, msg: 'Eso es el <em>ingreso</em>. El beneficio es lo que queda después de restar el coste: $B(x) = I(x) - C(x)$.' },
+      { si: function (v, d) { return Math.abs(v.x + d.b / (2 * d.a)) < 1e-6; }, msg: 'Has derivado el coste y lo has igualado a cero: eso buscaría el coste mínimo. Lo que se maximiza es el beneficio, $I(x) - C(x)$.' }
+    ],
+    hint: function (d) {
+      return ['Ingreso: $I(x) = ' + d.p + 'x$. Beneficio: $B(x) = I(x) - C(x)$: escríbelo y simplifica.',
+        'Deriva $B$, iguala a cero y comprueba con $B\'\'$ que es un máximo.'];
+    },
+    steps: function (d) {
+      return ['Ingreso: $I(x) = ' + d.p + 'x$. Beneficio: $B(x) = ' + d.p + 'x - (' + ML.polyTex([d.a, d.b, d.c]) + ') = ' + ML.polyTex([-d.a, d.p - d.b, -d.c]) + '$.',
+        '$B\'(x) = ' + ML.polyTex([-2 * d.a, d.p - d.b]) + ' = 0 \\Rightarrow x = ' + d.xo + '$.',
+        '$B\'\'(x) = ' + (-2 * d.a) + ' < 0$: es un máximo. Y $' + d.xo + '$ es un número entero y positivo de unidades: tiene sentido.',
+        'Beneficio máximo: $B(' + d.xo + ') = ' + d.ix + ' - ' + d.cx + ' = ' + d.B + '$ €.',
+        'Comprobación con los marginales: $I\'(x) = ' + d.p + '$ y $C\'(' + d.xo + ') = ' + (2 * d.a * d.xo + d.b) + '$: iguales, como tiene que ser en el óptimo.'];
+    },
+    answer: function (d) { return d.xo + ' unidades, con un beneficio de ' + d.B + ' €'; }
+  });
+
+  p.exercise({
     title: 'Optimización: la caja sin tapa',
     level: 'avanzado',
     gen: function (r) {
@@ -432,6 +490,7 @@ Course.topic('fn-aplicaciones', function (p) {
     'Signo de $f\'\'$: curvatura. Ceros de $f\'\'$ con cambio de signo: puntos de inflexión.',
     'Criterio rápido: $f\'(a)=0$ y $f\'\'(a)>0$ → mínimo; $f\'\'(a)<0$ → máximo.',
     'En optimización lo difícil es plantear, no derivar.',
+    'Beneficio = ingreso − coste; «marginal» es la derivada, y el beneficio es máximo donde $I\'(x) = C\'(x)$.',
     'Hay que dejar la función con <strong>una sola variable</strong> usando la condición del enunciado.',
     'Y siempre comprobar que la solución tiene sentido en el problema real.'
   ]);

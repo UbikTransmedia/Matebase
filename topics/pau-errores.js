@@ -250,7 +250,7 @@ Course.topic('pau-errores', function (p) {
           'Hay un menor de orden 2 de $A$ distinto de cero, así que $\\operatorname{rg} A = 2$.',
           'Orlando ese menor con la columna de los términos independientes sale un menor de orden 3 no nulo, así que $\\operatorname{rg} A^* = 3$.',
           'Como $\\operatorname{rg} A = 2$ es menor que el número de incógnitas, el sistema es compatible indeterminado.'],
-        malo: 3, pista: 'qué dice el teorema de Rouché-Fröbenius cuando los dos rangos no coinciden',
+        malo: 3, pista: 'qué dice el teorema de Rouché-Frobenius cuando los dos rangos no coinciden',
         porque: 'Antes de comparar con el número de incógnitas hay que comparar los dos rangos entre sí.',
         bien: 'Como $\\operatorname{rg} A = 2 \\ne 3 = \\operatorname{rg} A^*$, el sistema es <strong>incompatible</strong>. Solo cuando los rangos coinciden se mira el número de incógnitas.'
       };

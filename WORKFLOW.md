@@ -298,7 +298,41 @@ que cuestan. Lo que ha salido de aplicarlas, con lo que conviene recordar:
 > traduzca de verdad. El aviso encima del tema dice exactamente qué está
 > traducido y qué no.
 
-## Fase 8 — Ideas pendientes (a petición)
+## Fase 8 — Revisión experta y PAU (cerrada)
+
+Una lectura completa de los 34 temas de 2.º de Bachillerato y del bloque de
+repaso con dos preguntas: ¿es correcto? y ¿con esto se prepara la PAU de
+Matemáticas II y de MACS II? Se recalculó cada ejemplo resuelto, cada fórmula y
+cada generador de ejercicios; se cruzó el temario con el programa LOMLOE de las
+dos asignaturas. Lo que salió:
+
+- **Un error de contenido**, y solo uno: la demo de operaciones de fila de
+  `al-determinantes` anunciaba determinante −11 para la matriz del ejemplo
+  resuelto, cuyo determinante es 6. La auditoría no lo podía ver: era prosa.
+- **La cobertura era completa**: Rouché-Frobenius, Cramer, producto mixto,
+  perpendicular común, Bolzano, Weierstrass, L'Hôpital, valores intermedios,
+  áreas con parámetro, Bayes, la aproximación normal con corrección de
+  continuidad, intervalos, tamaño muestral y contrastes están todos, con
+  ejercicios. Programación lineal y la inferencia van en el itinerario de MACS;
+  la geometría del espacio y la función integral, en el de Mat II.
+- **Cuatro huecos respecto a lo que cae en el examen**, cerrados en esta fase:
+  la *tasa de variación media* no se nombraba (solo «cociente incremental»),
+  y es vocabulario de enunciado en las dos asignaturas; Rolle y el valor medio
+  se enunciaban sin hipótesis y sin ejercicio, cuando el examen pide siempre
+  comprobarlas; faltaba la optimización con coste, ingreso y beneficio, que es
+  *el* problema de análisis de MACS II; y faltaba el simétrico de un punto
+  respecto de una recta, que en Mat II cae tanto como el simétrico respecto de
+  un plano. Son cuatro ejercicios y un problema por apartados nuevos.
+
+> **Lo que enseña esta fase sobre el método.** La batería de pruebas genera
+> cada ejercicio 40 veces y comprueba que la solución declarada pasa su propio
+> corrector; por eso los 1097 ejercicios y problemas del curso estaban bien. Lo
+> que no puede comprobar una máquina es un número escrito en la prosa de una
+> demo, ni que un tema *falte*. Para eso hace falta leerlo como lo leería un
+> profesor con el programa de la PAU al lado, y conviene hacerlo cada vez que
+> cambie el programa.
+
+## Fase 9 — Ideas pendientes (a petición)
 
 - Más problemas de examen reales, adaptados por comunidades autónomas.
 - Un modo profesor para montar simulacros a medida eligiendo temas.
@@ -324,6 +358,7 @@ formato. La primera versión numerada es la 1.0.0, con 164 temas.
 | 1.0.0 | 164 temas |
 | 1.2.0 | los dos bloques de IA y «Máquinas y lenguajes»: 246 temas |
 | 1.3.0 | las mejoras del análisis: progreso portátil, rutas, deberes y exámenes por enlace, ficha imprimible, `CARGAI`/`GUARDAI`, el árbol dibujado, el repaso que reparte por lo que flojea y la interfaz en inglés |
+| 1.4.0 | revisión experta de 2.º frente al programa de la PAU: un error corregido, tasa de variación media, hipótesis y ejercicios de Rolle y valor medio, optimización con beneficio, simétrico respecto de una recta |
 
 ---
 

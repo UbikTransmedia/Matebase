@@ -11,6 +11,7 @@ Course.topic('ge-metrico', function (p) {
   function nulo(a) { return !a[0] && !a[1] && !a[2]; }
   function vt(a) { return '(' + a.map(function (x) { return U.fmt(x, 4); }).join(',\\ ') + ')'; }
   function grados(rad) { return rad * 180 / Math.PI; }
+  function pa(n) { return n < 0 ? '(' + n + ')' : String(n); }
   function planoTex(n, D) {
     var s = ML.termTex(n[0], 'x', 1, true);
     s += ML.termTex(n[1], 'y', 1, s === '');
@@ -431,6 +432,75 @@ Course.topic('ge-metrico', function (p) {
     ]
   });
 
+  p.problem({
+    title: 'Proyección y simétrico respecto de una recta',
+    level: 'avanzado',
+    gen: function (r) {
+      var A = [r.int(-3, 3), r.int(-3, 3), r.int(-3, 3)];
+      var u = [r.pm(0, 2), r.pm(0, 2), r.pm(0, 2)];
+      if (nulo(u)) return null;
+      var t = r.pm(1, 2);
+      var Q = suma(A, por(t, u));                         // el pie de la perpendicular, en la recta
+      var w = cruz(u, [r.pm(0, 2), r.pm(0, 2), r.pm(0, 2)]);  // perpendicular a u
+      if (nulo(w) || Math.max(Math.abs(w[0]), Math.abs(w[1]), Math.abs(w[2])) > 6) return null;
+      var P = suma(Q, w);
+      if (Math.max.apply(null, P.map(Math.abs)) > 9) return null;
+      return { A: A, u: u, t: t, Q: Q, P: P, P2: resta(por(2, Q), P), u2: esc(u, u), AP: resta(P, A), dist: mod(w) };
+    },
+    intro: function (d) {
+      return 'Sean el punto $P(' + d.P.join(',\\ ') + ')$ y la recta $r:\\ (x, y, z) = (' + d.A.join(',\\ ') + ') + \\lambda(' + d.u.join(',\\ ') + ')$.';
+    },
+    partes: [
+      {
+        ask: function () { return 'Un punto genérico de $r$ es $X = A + \\lambda\\vec u$. ¿Para qué valor de $\\lambda$ es $\\overrightarrow{PX}$ perpendicular a $\\vec u$?'; },
+        fields: [{ name: 'l', label: 'λ =', w: 'tiny' }],
+        sol: function (d) { return { l: d.t }; },
+        tol: 1e-6,
+        hint: function () { return ['Escribe $X = (' + 'a_1 + \\lambda u_1,\\ \\ldots)$ y el vector $\\overrightarrow{PX} = X - P$.', 'Perpendicular a $\\vec u$ quiere decir $\\overrightarrow{PX}\\cdot\\vec u = 0$: sale una ecuación de primer grado en $\\lambda$.']; },
+        steps: function (d) {
+          return ['$X = (' + d.A[0] + ML.termTex(d.u[0], '\\lambda', 1, false) + ',\\ ' + d.A[1] + ML.termTex(d.u[1], '\\lambda', 1, false) + ',\\ ' + d.A[2] + ML.termTex(d.u[2], '\\lambda', 1, false) + ')$',
+            '$\\overrightarrow{PX}\\cdot\\vec u = 0$: $' + d.u2 + '\\lambda ' + (esc(d.AP, d.u) >= 0 ? '- ' + esc(d.AP, d.u) : '+ ' + (-esc(d.AP, d.u))) + ' = 0 \\Rightarrow \\lambda = ' + d.t + '$',
+            'Es lo mismo que cortar $r$ con el plano perpendicular a ella que pasa por $P$.'];
+        },
+        answer: function (d) { return 'λ = ' + d.t; }
+      },
+      {
+        ask: function () { return 'Halla la proyección ortogonal $Q$ de $P$ sobre $r$.'; },
+        fields: [{ name: 'x', label: 'x', w: 'tiny' }, { name: 'y', label: 'y', w: 'tiny' }, { name: 'z', label: 'z', w: 'tiny' }],
+        sol: function (d) { return { x: d.Q[0], y: d.Q[1], z: d.Q[2] }; },
+        tol: 1e-6,
+        hint: function (d) { return 'Sustituye $\\lambda = ' + d.t + '$ en el punto genérico de la recta.'; },
+        steps: function (d) { return ['$Q = A + ' + pa(d.t) + '\\vec u = (' + d.Q.join(',\\ ') + ')$']; },
+        answer: function (d) { return '$Q(' + d.Q.join(',\\ ') + ')$'; }
+      },
+      {
+        ask: function () { return 'Halla el simétrico $P\'$ de $P$ respecto de $r$.'; },
+        fields: [{ name: 'x', label: 'x', w: 'tiny' }, { name: 'y', label: 'y', w: 'tiny' }, { name: 'z', label: 'z', w: 'tiny' }],
+        sol: function (d) { return { x: d.P2[0], y: d.P2[1], z: d.P2[2] }; },
+        errores: [{
+          si: function (v, d) { return v.x === d.Q[0] && v.y === d.Q[1] && v.z === d.Q[2]; },
+          msg: 'Ese punto es la proyección $Q$, que está <em>en</em> la recta. El simétrico está al otro lado, a la misma distancia.'
+        }],
+        hint: function () { return ['$Q$ es el punto medio de $P$ y $P\'$.', '$P\' = 2Q - P$.']; },
+        steps: function (d) { return ['$P\' = 2Q - P = 2(' + d.Q.join(',\\ ') + ') - (' + d.P.join(',\\ ') + ') = (' + d.P2.join(',\\ ') + ')$']; },
+        answer: function (d) { return '$P\'(' + d.P2.join(',\\ ') + ')$'; }
+      },
+      {
+        ask: function () { return 'Calcula la distancia de $P$ a $r$ (cuatro decimales).'; },
+        fields: [{ name: 'd', label: 'distancia', w: 'wide' }],
+        sol: function (d) { return { d: U.round(d.dist, 6) }; },
+        tol: 3e-4,
+        hint: function () { return ['Ya tienes el pie de la perpendicular: la distancia es $|\\overrightarrow{PQ}|$.', 'O con la fórmula $\\frac{|\\overrightarrow{AP}\\times\\vec u|}{|\\vec u|}$: tiene que salir lo mismo.']; },
+        steps: function (d) {
+          var PQ = resta(d.Q, d.P);
+          return ['$\\overrightarrow{PQ} = (' + PQ.join(',\\ ') + ')$, así que $d(P, r) = |\\overrightarrow{PQ}| = \\sqrt{' + esc(PQ, PQ) + '} \\approx ' + U.fmt(d.dist, 4) + '$.',
+            'Con la fórmula del producto vectorial sale el mismo número: dos caminos, una comprobación.'];
+        },
+        answer: function (d) { return U.fmt(d.dist, 4); }
+      }
+    ]
+  });
+
   p.exercise({
     title: 'Distancia de un punto a una recta',
     level: 'avanzado',
@@ -529,7 +599,7 @@ Course.topic('ge-metrico', function (p) {
     'Los ángulos entre rectas y planos se dan entre 0° y 90°: el producto escalar va en valor absoluto.',
     'Recta con recta y plano con plano: <strong>coseno</strong>. Recta con plano: <strong>seno</strong>, porque la normal forma el ángulo complementario.',
     'Proyectar un punto sobre un plano: recta perpendicular por el punto y corte con el plano. Sobre una recta: plano perpendicular y corte.',
-    'El simétrico es $P\' = 2Q - P$, con $Q$ la proyección.',
+    'El simétrico es $P\' = 2Q - P$, con $Q$ la proyección; respecto de una recta, $Q$ sale de exigir $\\overrightarrow{PX}\\cdot\\vec u = 0$ en el punto genérico $X$.',
     '$d(P,\\pi) = \\frac{|Ap_1+Bp_2+Cp_3+D|}{\\sqrt{A^2+B^2+C^2}}$.',
     'Punto y recta, rectas que se cruzan: área o volumen entre base, con productos vectorial y mixto.',
     'Planos paralelos: igualar primero las normales, y luego $\\frac{|D_1-D_2|}{|\\vec n|}$.'

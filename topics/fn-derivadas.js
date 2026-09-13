@@ -14,6 +14,21 @@ Course.topic('fn-derivadas', function (p) {
     'pareciendo cada vez más a la <strong>tangente</strong>. Y «acercar hasta el límite» es justo lo ' +
     'que sabemos hacer desde el tema anterior.');
 
+  p.sub('La tasa de variación media');
+
+  p.text('La pendiente de la secante tiene nombre propio, y conviene saberlo porque el examen lo usa: ' +
+    'es la <strong>tasa de variación media</strong> de $f$ en el intervalo $[a, b]$. Dice cuánto ' +
+    'cambia la función <em>por unidad</em> de $x$, en promedio, entre $a$ y $b$: si $f$ es la ' +
+    'distancia recorrida, es la velocidad media del trayecto; si es el número de clientes, cuántos ' +
+    'entran de media cada hora.');
+
+  p.formula('\\operatorname{TVM}[a, b] = \\frac{f(b) - f(a)}{b - a}', 'tasa de variación media en [a, b]',
+    'Se lee: <em>«la tasa de variación media en el intervalo a be es efe de be menos efe de a, partido ' +
+      'por be menos a»</em>.<br><br>Es exactamente la pendiente de la recta que une $(a, f(a))$ con ' +
+      '$(b, f(b))$: lo que sube entre lo que avanza. La derivada será lo que queda de esa tasa cuando el ' +
+      'intervalo se encoge hasta un punto, y por eso se la llama también <strong>tasa de variación ' +
+      'instantánea</strong>.');
+
   p.formula('f\'(a) = \\lim_{h \\to 0} \\frac{f(a+h) - f(a)}{h}', 'definición de derivada',
     'Se dice: <em>«efe prima de a es igual al límite, cuando hache tiende a cero, de efe de a más ' +
     'hache, menos efe de a, partido por hache»</em>.<br><br>' +
@@ -326,10 +341,11 @@ Course.topic('fn-derivadas', function (p) {
     'tuvo que dejar de subir para empezar a bajar (o al revés). En ese momento la tangente está ' +
     'horizontal.');
 
-  p.formula('f(a) = f(b) \\ \\Longrightarrow\\ \\exists\\,c \\in (a,b) : f\'(c) = 0',
+  p.formula('f \\text{ continua en } [a,b],\\ \\text{derivable en } (a,b)\\ \\text{y}\\ f(a) = f(b) \\ \\Longrightarrow\\ \\exists\\,c \\in (a,b) : f\'(c) = 0',
     'teorema de Rolle',
-    'Se dice: <em>«si efe de a es igual a efe de be, entonces existe un ce, perteneciente al ' +
-      'intervalo abierto a be, tal que efe prima de ce es igual a cero»</em>.<br><br>El símbolo ' +
+    'Se dice: <em>«si efe es continua en el intervalo cerrado a be, derivable en el abierto, y efe de a ' +
+      'es igual a efe de be, entonces existe un ce, perteneciente al intervalo abierto a be, tal que efe ' +
+      'prima de ce es igual a cero»</em>.<br><br>El símbolo ' +
       '$\\exists$ es el cuantificador existencial de [[lg-proposiciones|la lógica]]: «existe al menos un». Los dos puntos ' +
       'se leen «tal que».<br><br>Fíjate en lo que <strong>no</strong> dice: no dice cuántos hay, ni ' +
       'dónde están, ni cómo encontrarlos. Solo que hay al menos uno. Es un teorema de existencia, y ' +
@@ -347,10 +363,12 @@ Course.topic('fn-derivadas', function (p) {
     'instante concreto el velocímetro marcaba exactamente 90</strong>. No puedes haber ido siempre ' +
     'por encima ni siempre por debajo de tu propia media.');
 
-  p.formula('\\exists\\,c \\in (a,b) : f\'(c) = \\frac{f(b) - f(a)}{b - a}',
+  p.formula('f \\text{ continua en } [a,b]\\ \\text{y derivable en } (a,b) \\ \\Longrightarrow\\ \\exists\\,c \\in (a,b) : f\'(c) = \\frac{f(b) - f(a)}{b - a}',
     'teorema del valor medio (Lagrange)',
-    'Se dice: <em>«existe un ce en el intervalo abierto a be tal que efe prima de ce es igual a efe ' +
-      'de be menos efe de a, partido por be menos a»</em>.<br><br>El lado derecho es la pendiente de ' +
+    'Se dice: <em>«si efe es continua en el cerrado y derivable en el abierto, existe un ce en el ' +
+      'intervalo abierto a be tal que efe prima de ce es igual a efe de be menos efe de a, partido por ' +
+      'be menos a»</em>.<br><br>Las hipótesis son las de Rolle sin la de los extremos iguales, y en un ' +
+      'examen se escriben <strong>antes</strong> de usar el teorema. El lado derecho es la pendiente de ' +
       'la recta que une los dos extremos de la curva: la <strong>media</strong>. El lado izquierdo es ' +
       'una pendiente <strong>instantánea</strong>. El teorema dice que en algún punto coinciden, o ' +
       'sea, que la tangente en ese punto es paralela a la cuerda.');
@@ -463,6 +481,34 @@ Course.topic('fn-derivadas', function (p) {
   });
 
   p.exercise({
+    title: 'Tasa de variación media',
+    level: 'basico',
+    gen: function (r) {
+      var a = r.nz(-3, 3), b = r.pm(0, 6), c = r.pm(0, 9);
+      var p1 = r.int(-3, 3), p2 = p1 + r.int(1, 5);
+      var f = function (x) { return a * x * x + b * x + c; };
+      // (f(q) - f(p)) / (q - p) = a (p + q) + b
+      return { a: a, b: b, c: c, p: p1, q: p2, fp: f(p1), fq: f(p2), tvm: a * (p1 + p2) + b };
+    },
+    ask: function (d) {
+      return 'Calcula la tasa de variación media de $f(x) = ' + ML.polyTex([d.a, d.b, d.c]) + '$ en el intervalo $[' + d.p + ',\\ ' + d.q + ']$.';
+    },
+    fields: [{ name: 'v', label: 'TVM', w: 'tiny' }],
+    sol: function (d) { return { v: d.tvm }; },
+    errores: [
+      { si: function (v, d) { return d.tvm !== d.fq - d.fp && v.v === d.fq - d.fp; }, msg: 'Eso es lo que <em>sube</em> la función, $f(b) - f(a)$. La tasa lo divide por lo que avanza, $b - a$.' },
+      { si: function (v, d) { var der = 2 * d.a * d.q + d.b; return der !== d.tvm && v.v === der; }, msg: 'Eso es la derivada en el extremo, la tasa <em>instantánea</em>. La media usa los dos extremos: $\\frac{f(b) - f(a)}{b - a}$.' }
+    ],
+    hint: function (d) { return ['$\\operatorname{TVM} = \\dfrac{f(' + d.q + ') - f(' + d.p + ')}{' + d.q + ' - (' + d.p + ')}$.', 'Calcula primero $f$ en los dos extremos.']; },
+    steps: function (d) {
+      return ['$f(' + d.p + ') = ' + d.fp + '$ y $f(' + d.q + ') = ' + d.fq + '$.',
+        '$\\operatorname{TVM}[' + d.p + ',\\ ' + d.q + '] = \\dfrac{' + d.fq + ' - (' + d.fp + ')}{' + d.q + ' - (' + d.p + ')} = \\dfrac{' + (d.fq - d.fp) + '}{' + (d.q - d.p) + '} = ' + d.tvm + '$',
+        'Es la pendiente de la recta que une los dos puntos de la gráfica. Curiosidad: en una parábola coincide con la derivada en el punto medio, $f\'(' + U.fmt((d.p + d.q) / 2, 1) + ') = ' + d.tvm + '$.'];
+    },
+    answer: function (d) { return String(d.tvm); }
+  });
+
+  p.exercise({
     title: 'Regla del producto',
     level: 'medio',
     gen: function (r) {
@@ -551,6 +597,36 @@ Course.topic('fn-derivadas', function (p) {
   });
 
   p.exercise({
+    title: '¿Se puede aplicar el teorema de Rolle?',
+    level: 'medio',
+    gen: function (r) {
+      var k = r.int(1, 4), m = r.int(1, 3);
+      var casos = [
+        { f: 'x^2 - ' + (2 * k) + 'x', I: '[0,\\ ' + (2 * k) + ']', ok: 'si', por: 'es un polinomio (continua y derivable en todo $\\mathbb{R}$) y $f(0) = f(' + (2 * k) + ') = 0$. El $c$ es el vértice, $x = ' + k + '$' },
+        { f: '|x - ' + k + '|', I: '[' + (k - m) + ',\\ ' + (k + m) + ']', ok: 'derivable', por: 'los extremos valen lo mismo, $' + m + '$, y es continua, pero en $x = ' + k + '$ tiene un pico: no es derivable ahí. De hecho $f\'$ nunca vale 0' },
+        { f: '\\dfrac{1}{x}', I: '[-' + k + ',\\ ' + k + ']', ok: 'continua', por: 'no está definida en $x = 0$, que está dentro del intervalo. Que $f(-' + k + ') \\ne f(' + k + ')$ ya la descartaba también' },
+        { f: 'x^3', I: '[0,\\ ' + k + ']', ok: 'extremos', por: 'es continua y derivable, pero $f(0) = 0$ y $f(' + k + ') = ' + (k * k * k) + '$: los extremos no valen lo mismo' },
+        { f: '\\operatorname{sen} x', I: '[0,\\ \\pi]', ok: 'si', por: 'el seno es continuo y derivable, y $\\operatorname{sen} 0 = \\operatorname{sen}\\pi = 0$. El $c$ es $\\pi/2$, donde $\\cos c = 0$' },
+        { f: 'x^2 - ' + (2 * k) + 'x', I: '[0,\\ ' + (2 * k + 1) + ']', ok: 'extremos', por: 'es un polinomio, pero $f(0) = 0$ y $f(' + (2 * k + 1) + ') = ' + (2 * k + 1) + '$: los extremos no coinciden' },
+        { f: '\\sqrt[3]{x^2}', I: '[-1,\\ 1]', ok: 'derivable', por: 'es continua y $f(-1) = f(1) = 1$, pero en $x = 0$ tiene tangente vertical: no es derivable ahí, y $f\'$ no se anula en ningún punto' }
+      ];
+      return r.pick(casos);
+    },
+    ask: function (d) { return '¿Cumple $f(x) = ' + d.f + '$ las hipótesis del teorema de Rolle en $' + d.I + '$?'; },
+    fields: [{
+      name: 't', label: 'Respuesta', opts: [
+        { t: 'Sí: hay algún $c$ interior con $f\'(c) = 0$', v: 'si' },
+        { t: 'No: no es continua en todo el intervalo', v: 'continua' },
+        { t: 'No: no es derivable en algún punto interior', v: 'derivable' },
+        { t: 'No: los extremos no valen lo mismo', v: 'extremos' }]
+    }],
+    sol: function (d) { return { t: d.ok }; },
+    hint: function () { return ['Tres hipótesis, por orden: continua en el cerrado, derivable en el abierto, $f(a) = f(b)$.', 'Basta con que falle una para que el teorema no diga nada.']; },
+    steps: function (d) { return ['Se observa que ' + d.por + '.', { si: 'Las tres hipótesis se cumplen: Rolle garantiza un $c$ con tangente horizontal.', continua: 'Falla la continuidad: el teorema no se puede aplicar.', derivable: 'Falla la derivabilidad en un punto interior: el teorema no se puede aplicar.', extremos: 'Falla $f(a) = f(b)$: el teorema no dice nada (aunque podría haber tangente horizontal por otra razón).' }[d.ok]]; },
+    answer: function (d) { return { si: 'Sí', continua: 'No: no es continua', derivable: 'No: no es derivable', extremos: 'No: f(a) ≠ f(b)' }[d.ok]; }
+  });
+
+  p.exercise({
     title: 'Regla de la cadena',
     level: 'avanzado',
     gen: function (r) {
@@ -587,6 +663,52 @@ Course.topic('fn-derivadas', function (p) {
   });
 
   p.exercise({
+    title: 'El punto c del teorema del valor medio',
+    level: 'avanzado',
+    gen: function (r) {
+      var fam = r.int(0, 1);
+      if (fam === 0) {
+        var a = r.nz(-3, 3), b = r.pm(0, 5), c0 = r.pm(0, 6), p1 = r.int(-3, 2), q1 = p1 + r.int(1, 5);
+        var f = function (x) { return a * x * x + b * x + c0; };
+        return { fam: 0, a: a, b: b, c0: c0, p: p1, q: q1, fp: f(p1), fq: f(q1), m: a * (p1 + q1) + b, c: (p1 + q1) / 2 };
+      }
+      var m = r.pm(0, 5), k = r.int(1, 5);
+      // f = x^3 + m x en [0, k]: TVM = k^2 + m, 3c^2 + m = k^2 + m, c = k/sqrt(3)
+      return { fam: 1, m: m, k: k, m2: k * k + m, c: k / Math.sqrt(3) };
+    },
+    ask: function (d) {
+      return d.fam === 0
+        ? 'Halla el punto $c$ que garantiza el teorema del valor medio para $f(x) = ' + ML.polyTex([d.a, d.b, d.c0]) + '$ en $[' + d.p + ',\\ ' + d.q + ']$.'
+        : 'Halla el punto $c$ que garantiza el teorema del valor medio para $f(x) = ' + ML.polyTex([1, 0, d.m, 0]) + '$ en $[0,\\ ' + d.k + ']$ (cuatro decimales).';
+    },
+    fields: [{ name: 'c', label: 'c =', w: 'wide' }],
+    sol: function (d) { return { c: U.round(d.c, 6) }; },
+    tol: 3e-4,
+    errores: [
+      { si: function (v, d) { return d.fam === 1 && Math.abs(v.c + d.c) < 1e-3; }, msg: function (v, d) { return 'Ese $c$ es negativo y el intervalo es $[0,\\ ' + d.k + ']$: el teorema pide $c$ <em>dentro</em> del intervalo. Toma la raíz positiva.'; } },
+      { si: function (v, d) { return d.fam === 0 && Math.abs(v.c - d.m) < 1e-3 && Math.abs(d.m - d.c) > 1e-3; }, msg: 'Eso es la pendiente de la cuerda, $f\'(c)$. Falta resolver la ecuación $f\'(c) = $ esa pendiente para hallar $c$.' }
+    ],
+    hint: function (d) {
+      return d.fam === 0
+        ? ['Las hipótesis se cumplen: es un polinomio. Calcula la pendiente de la cuerda, $\\frac{f(' + d.q + ') - f(' + d.p + ')}{' + d.q + ' - (' + d.p + ')}$.', 'Resuelve $f\'(c) = $ esa pendiente: $' + ML.termTex(2 * d.a, 'c', 1, true) + ML.termTex(d.b, '', 0, false) + ' = ' + d.m + '$.']
+        : ['Pendiente de la cuerda: $\\frac{f(' + d.k + ') - f(0)}{' + d.k + '} = ' + d.m2 + '$.', 'Resuelve $f\'(c) = 3c^2' + ML.termTex(d.m, '', 0, false) + ' = ' + d.m2 + '$ y quédate con la raíz que está en $(0, ' + d.k + ')$.'];
+    },
+    steps: function (d) {
+      if (d.fam === 0) {
+        return ['Hipótesis: $f$ es un polinomio, continua y derivable en todo $\\mathbb{R}$. Se puede aplicar.',
+          'Pendiente de la cuerda: $\\dfrac{f(' + d.q + ') - f(' + d.p + ')}{' + d.q + ' - (' + d.p + ')} = \\dfrac{' + d.fq + ' - (' + d.fp + ')}{' + (d.q - d.p) + '} = ' + d.m + '$.',
+          '$f\'(c) = ' + ML.termTex(2 * d.a, 'c', 1, true) + ML.termTex(d.b, '', 0, false) + ' = ' + d.m + ' \\Rightarrow c = ' + U.fmt(d.c, 1) + '$, que está en $(' + d.p + ',\\ ' + d.q + ')$ ✓.',
+          'En una parábola el $c$ del valor medio es siempre el punto medio del intervalo.'];
+      }
+      return ['Hipótesis: polinomio, continua y derivable. Se puede aplicar.',
+        'Pendiente de la cuerda: $\\dfrac{f(' + d.k + ') - f(0)}{' + d.k + '} = \\dfrac{' + (d.k * d.k * d.k + d.m * d.k) + '}{' + d.k + '} = ' + d.m2 + '$.',
+        '$f\'(c) = 3c^2' + ML.termTex(d.m, '', 0, false) + ' = ' + d.m2 + ' \\Rightarrow c^2 = \\dfrac{' + (d.k * d.k) + '}{3} \\Rightarrow c = \\dfrac{' + d.k + '}{\\sqrt{3}} \\approx ' + U.fmt(d.c, 4) + '$.',
+        'La raíz negativa no está en $(0, ' + d.k + ')$: se descarta.'];
+    },
+    answer: function (d) { return d.fam === 0 ? 'c = ' + U.fmt(d.c, 1) : 'c ≈ ' + U.fmt(d.c, 4); }
+  });
+
+  p.exercise({
     title: 'Derivación logarítmica',
     level: 'avanzado',
     gen: function (r) {
@@ -614,7 +736,8 @@ Course.topic('fn-derivadas', function (p) {
 
   p.keys([
     'Si la variable está a la vez en la base y en el exponente, se toman logaritmos antes de derivar.',
-    'La derivada es el límite del cociente incremental: la pendiente de la tangente.',
+    'La tasa de variación media en $[a,b]$ es $\\frac{f(b)-f(a)}{b-a}$, la pendiente de la secante; la derivada es su límite: la pendiente de la tangente.',
+    'Rolle y el valor medio exigen continuidad en el cerrado y derivabilidad en el abierto: se comprueban antes de aplicarlos.',
     'Dos lecturas de lo mismo: pendiente (geometría) y ritmo de cambio instantáneo (física).',
     '$(x^n)\' = n\\,x^{n-1}$ resuelve casi todo lo polinómico.',
     'Producto: $u\'v + uv\'$. Cociente: $\\frac{u\'v - uv\'}{v^2}$. No son el producto ni el cociente de las derivadas.',
