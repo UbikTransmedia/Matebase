@@ -25,8 +25,8 @@
    lo que viene despues, agrupado por disciplina: algebra lineal (8), calculo
    en varias variables (9), ecuaciones diferenciales (10), geometria avanzada
    (11), estructuras (12), matematica discreta (13), cibernetica (14),
-   programacion grafica (15), criptografia (16) e inteligencia artificial
-   (17 y 18).
+   sintesis de sonido (16), programacion grafica (17), criptografia (18) e
+   inteligencia artificial (19 y 20).
 
    Los tres ultimos bloques son optativos y tienen piel propia. No se dan
    por sabidos unos a otros: un alumno puede hacer criptografia sin haber
@@ -1087,13 +1087,111 @@ window.CURRICULUM = [
     ]
   },
 
-  /* ================= 16. PROGRAMACION GRAFICA =================
+  /* ================= 16. SINTESIS DE SONIDO =================
+     Entre las maquinas y la imagen: el sonido. Un sonido es una funcion
+     del tiempo, y una formula de tres lineas ya se oye. El bloque va de la
+     onda a la nota, de la nota al timbre y del timbre a la musica, con un
+     sintetizador que se programa como se programa un shader. Piel propia,
+     como los otros bloques optativos, y sin dar por sabido ninguno de
+     ellos: los requisitos son del tronco del curso. */
+  {
+    id: 'son', n: 16, title: 'Síntesis de sonido', piel: 'son', curso: 'AMP',
+    desc: 'Un sonido es una función del tiempo, y una fórmula de tres líneas ya suena. De la onda a la nota, de la nota al timbre y del timbre a la música: el seno, el logaritmo, Fourier y las sucesiones recurrentes, escuchándose en un sintetizador que se programa como un shader.',
+    temas: [
+      {
+        id: 'son-onda', t: 'El sonido es una función',
+        r: 'Una presión que cambia con el tiempo; un seno que se oye; la primera fórmula que suena.',
+        o: ['Qué es un sonido y qué es una onda', 'Amplitud, frecuencia y fase de un seno', 'Escribir y tocar una función del tiempo'],
+        req: ['tr-funciones', 'fn-concepto']
+      },
+      {
+        id: 'son-muestras', t: 'Muestrear: de la curva a la lista de números',
+        r: 'El sonido digital es una sucesión; cuántas muestras hacen falta y qué pasa si faltan.',
+        o: ['Frecuencia de muestreo y bits', 'El teorema de Nyquist y el aliasing', 'Cuantización y ruido de redondeo'],
+        req: ['son-onda', 'fn-sucesiones', 'ar-decimales']
+      },
+      {
+        id: 'son-tono', t: 'Tono, escala y logaritmo',
+        r: 'Doblar la frecuencia sube una octava: la altura se oye en escala logarítmica, y de ahí salen las notas.',
+        o: ['La octava y el semitono: 2 elevado a un doceavo', 'De la nota MIDI a los hercios', 'Temperamento igual y afinación justa'],
+        req: ['son-onda', 'fn-exp-log', 'al-radicales-log']
+      },
+      {
+        id: 'son-envolvente', t: 'La envolvente: el sonido en el tiempo',
+        r: 'Ataque, caída, sostenido y liberación: una función a trozos que multiplica a la onda.',
+        o: ['Producto de una onda por una envolvente', 'La caída exponencial y su constante de tiempo', 'ADSR como función definida a trozos'],
+        req: ['son-onda', 'fn-racionales', 'fn-exp-log']
+      },
+      {
+        id: 'son-armonicos', t: 'Armónicos y timbre: sumar senos',
+        r: 'La misma nota suena distinta en cada instrumento porque lleva otros senos encima: la serie de Fourier, oída.',
+        o: ['La serie armónica', 'Sierra, cuadrada y triángulo como sumas de senos', 'El fenómeno de Gibbs, a la escucha'],
+        req: ['son-tono', 'av-fourier']
+      },
+      {
+        id: 'son-cuerda', t: 'La cuerda y el tubo: de dónde salen los armónicos',
+        r: 'Una onda que va y otra que vuelve se suman en una que no se mueve: los modos de una cuerda.',
+        o: ['Ondas estacionarias como suma de dos viajeras', 'Los modos de una cuerda y de un tubo', 'Por qué la longitud fija la nota'],
+        req: ['son-armonicos', 'tr-identidades']
+      },
+      {
+        id: 'son-espectro', t: 'El espectro: ver el sonido',
+        r: 'La transformada de Fourier de una lista de números, y el espectrograma que lee un sonido como una partitura.',
+        o: ['La transformada discreta de Fourier', 'Leer un espectro: fundamental, armónicos, ruido', 'El espectrograma'],
+        req: ['son-armonicos', 'son-muestras']
+      },
+      {
+        id: 'son-batidos', t: 'Batidos, acordes y consonancia',
+        r: 'Dos senos casi iguales laten; dos en razón simple consuenan. Las identidades trigonométricas explican la afinación.',
+        o: ['La suma de dos senos como producto', 'Afinar por batidos', 'Intervalos consonantes y razones de frecuencias'],
+        req: ['son-tono', 'tr-identidades']
+      },
+      {
+        id: 'son-modulacion', t: 'Modular: vibrato, trémolo y FM',
+        r: 'Mover la amplitud o la frecuencia con otro seno: del vibrato al sintetizador FM que sonó en toda una década.',
+        o: ['Modulación de amplitud y bandas laterales', 'Modulación de frecuencia: índice y espectro', 'Un instrumento FM'],
+        req: ['son-armonicos', 'son-batidos']
+      },
+      {
+        id: 'son-filtros', t: 'Filtros: quitar frecuencias',
+        r: 'Una media que se acuerda de la muestra anterior es un filtro: la sucesión recurrente que apaga los agudos.',
+        o: ['La media móvil y el filtro de un polo', 'La respuesta en frecuencia', 'Síntesis sustractiva'],
+        req: ['son-espectro', 'fn-sucesiones']
+      },
+      {
+        id: 'son-ruido', t: 'Ruido, percusión y la cuerda pulsada',
+        r: 'Azar filtrado: de una lluvia de números al golpe de un tambor y a una cuerda de guitarra.',
+        o: ['Ruido blanco y ruido filtrado', 'Envolventes de percusión', 'Karplus-Strong: un retardo y una media'],
+        req: ['son-filtros', 'son-envolvente', 'pe-probabilidad']
+      },
+      {
+        id: 'son-eco', t: 'Eco, retardo y reverberación',
+        r: 'Sumar el pasado: una suma geométrica que se oye, y por qué la ganancia tiene que ser menor que uno.',
+        o: ['Retardo simple y peine', 'Realimentación y la serie geométrica', 'Reverberación como muchos ecos'],
+        req: ['son-filtros', 'fn-series']
+      },
+      {
+        id: 'son-secuencia', t: 'Ritmo y secuencias: la música como función del tiempo',
+        r: 'Dividir el tiempo en pulsos con la parte entera y el resto: un secuenciador en tres líneas.',
+        o: ['Pulso, compás y BPM', 'floor y mod para saber en qué nota estamos', 'Escribir una melodía como una lista'],
+        req: ['son-tono', 'son-envolvente', 'ar-divisibilidad']
+      },
+      {
+        id: 'son-taller', t: 'El taller: tu propio sintetizador',
+        r: 'Todo junto y a la vista: osciladores, envolvente, filtro, eco y secuencia, en un instrumento que programas tú.',
+        o: ['Montar un instrumento completo', 'Componer con código', 'Dónde seguir: SuperCollider, Sonic Pi, Web Audio'],
+        req: ['son-secuencia', 'son-modulacion', 'son-eco', 'son-ruido']
+      }
+    ]
+  },
+
+  /* ================= 17. PROGRAMACION GRAFICA =================
      Piel propia: aqui ya no estamos solo en matematicas. Es la golosina
      del curso, el sitio al que el alumno viene a convertir numeros en
      algo bello. El campo `piel` es lo unico que hace falta para que todo
      el bloque cambie de color. */
   {
-    id: 'gfx', n: 16, title: 'Programación gráfica', piel: 'gfx', curso: 'AMP',
+    id: 'gfx', n: 17, title: 'Programación gráfica', piel: 'gfx', curso: 'AMP',
     desc: 'Reglas de tres líneas que producen imágenes que no caben en la cabeza. Las matemáticas del curso —la geometría del espacio de 2.º incluida— dibujándose a sesenta imágenes por segundo.',
     temas: [
       {
@@ -1299,7 +1397,7 @@ window.CURRICULUM = [
 
   /* ================= 17. CRIPTOGRAFÍA ================= */
   {
-    id: 'cr', n: 17, title: 'Criptografía', piel: 'cr', curso: 'AMP',
+    id: 'cr', n: 18, title: 'Criptografía', piel: 'cr', curso: 'AMP',
     desc: 'Guardar un secreto delante de quien lo quiere. Del disco de César a las curvas elípticas y a lo que resistirá a un ordenador cuántico, con la aritmética modular, las matrices, la probabilidad y los polinomios del curso trabajando de verdad: cada cifrado se rompe y se repara aquí mismo.',
     temas: [
       {
@@ -1532,7 +1630,7 @@ window.CURRICULUM = [
      en ia-sigmoide -que es lo nuevo: un umbral que se puede derivar- en
      vez de contarla dos veces. */
   {
-    id: 'ia1', n: 18, title: 'Inteligencia artificial I: aprender de los datos', piel: 'ia', curso: 'AMP',
+    id: 'ia1', n: 19, title: 'Inteligencia artificial I: aprender de los datos', piel: 'ia', curso: 'AMP',
     desc: 'Qué significa que una máquina aprenda: un modelo con parámetros, una medida de lo mal que va y un gradiente que los corrige. De clasificar por la distancia a una red entrenada, regularizada y evaluada con honestidad sobre lo que no sabe.',
     temas: [
       {
@@ -1619,7 +1717,7 @@ window.CURRICULUM = [
      Los temas marcados como rama -ia-hopfield- se pueden saltar: nada de
      lo que viene despues depende de ellos. */
   {
-    id: 'ia2', n: 19, title: 'Inteligencia artificial II: las arquitecturas', piel: 'ia', curso: 'AMP',
+    id: 'ia2', n: 20, title: 'Inteligencia artificial II: las arquitecturas', piel: 'ia', curso: 'AMP',
     desc: 'Catorce arquitecturas y la idea matemática que aporta cada una, funcionando en pequeño dentro del navegador. De compartir pesos en una imagen a ponderar con un producto escalar, generar deshaciendo ruido y aprender de un premio que llega tarde.',
     temas: [
       {
@@ -1813,6 +1911,21 @@ var RUTAS = [
       'av-sistemas-dinamicos', 'av-caos', 'av-edp', 'av-fourier', 'av-noeuclidea',
       'av-geodif', 'av-topologia', 'av-numeros', 'av-grupos', 'av-cripto-curvas',
       'av-reales', 'av-infinito', 'av-computabilidad'
+    ]
+  },
+  {
+    id: 'son', t: 'Hacer sonar las matemáticas',
+    r: 'Del seno que suena a un sintetizador que programas tú: la trigonometría, el logaritmo, Fourier y las sucesiones recurrentes, oídos.',
+    para: 'Si te gusta la música, si quieres saber qué hay dentro de un sintetizador o si necesitas una razón para que las identidades trigonométricas y las series existan.',
+    temas: [
+      'fn-exp-log', 'fn-sucesiones', 'fn-series', 'tr-identidades', 'av-fourier',
+      'son-onda', 'son-muestras', 'son-tono', 'son-envolvente', 'son-armonicos', 'son-cuerda',
+      'son-espectro', 'son-batidos', 'son-modulacion', 'son-filtros', 'son-ruido', 'son-eco',
+      'son-secuencia', 'son-taller'
+    ],
+    nucleo: [
+      'son-onda', 'son-tono', 'son-envolvente', 'son-armonicos', 'son-espectro', 'son-batidos',
+      'son-modulacion', 'son-filtros', 'son-ruido', 'son-eco', 'son-secuencia', 'son-taller'
     ]
   }
 ];

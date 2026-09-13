@@ -424,6 +424,15 @@ h1[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:4px; 
 }
 [data-piel="gfx"] .hdr__over{color:var(--gfx-ink); font-weight:700}
 
+/* --- bloque de síntesis de sonido: piel de latón --- */
+[data-piel="son"]{
+  --accent:var(--son);
+  --accent-soft:var(--son-soft);
+  --accent-ink:var(--son-ink);
+  --on-accent:var(--son-on);
+}
+[data-piel="son"] .hdr__over{color:var(--son-ink); font-weight:700}
+
 /* --- bloque de criptografía: piel de cobre y sus controles --- */
 [data-piel="cr"]{
   --accent:var(--cr);
@@ -747,6 +756,40 @@ ol.deberes{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direc
   [data-piel="gfx"] .wrap, [data-piel="gfx"].wrap{max-width:1000px}
 }
 
+/* ================= SINTESIS DE SONIDO =================
+   El sintetizador reutiliza el editor de dos capas de los shaders y pone
+   encima dos vistas -la onda y el espectro- y una tira con el sonido
+   entero y la posicion de reproduccion. Mientras suena, la tira lo dice
+   con el color del acento. */
+.son{margin:22px 0 8px}
+.son__vistas{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+@media (max-width:640px){ .son__vistas{grid-template-columns:1fr} }
+.son__vista{
+  position:relative; border:1px solid var(--line); border-radius:11px; overflow:hidden;
+  background:var(--plot-bg); line-height:0;
+}
+.son__rot{
+  position:absolute; top:6px; right:9px; z-index:1;
+  font-size:0.6875rem; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--ink-faint); font-weight:700; line-height:1.2;
+}
+.son__lienzo{display:block; width:100%; height:120px}
+.son__tira{
+  display:block; width:100%; height:26px; margin-top:8px;
+  border:1px solid var(--line); border-radius:8px; background:var(--plot-bg);
+}
+.son--sonando .son__tira{border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft)}
+.son__aviso{
+  display:none; margin-top:8px; padding:8px 12px; border-radius:8px;
+  font-size:0.8125rem; line-height:1.5; background:var(--panel-2); color:var(--ink-soft);
+}
+.son__aviso.is-on{display:block}
+.son--roto .shd__caja{border-color:var(--bad)}
+.son__vol{display:inline-flex; align-items:center; gap:7px; font-size:0.75rem; color:var(--ink-faint)}
+.son__vol input{width:90px; accent-color:var(--accent)}
+.son__info{font-size:0.75rem; color:var(--ink-faint); line-height:1.4}
+.son__info:empty{display:none}
+
 /* Trocitos de código dentro de un enunciado */
 .shd__mini{
   margin:9px 0; padding:10px 13px; border-radius:9px;
@@ -755,6 +798,7 @@ ol.deberes{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direc
   overflow-x:auto; white-space:pre; color:var(--ink);
 }
 .shd__mini strong{color:var(--gfx); font-weight:700}
+[data-piel="son"] .shd__mini strong{color:var(--son)}
 .shd__mini .cod-com{font-style:italic}
 
 

@@ -12,7 +12,7 @@ abrirla en cualquier ordenador con un navegador.
 
 ## Qué hay dentro
 
-A la izquierda, un índice desplegable con los veinte bloques del curso. A la
+A la izquierda, un índice desplegable con los veintiún bloques del curso. A la
 derecha, el tema abierto. Cada tema empieza con un **puente** desde lo anterior
 —de dónde venimos y qué herramienta del curso se reutiliza— y tiene explicación,
 historia, ejemplos que se tocan (con una **predicción** que hacer antes de
@@ -100,12 +100,13 @@ asignatura.
 | 13. Discreta y computacional | 6 | grafos, recurrencias, complejidad y P frente a NP, cálculo numérico, información, teoría de juegos |
 | 14. Cibernética | 15 | realimentación y bloques, PID, dinámica de sistemas, Kalman, perceptrón, refuerzo, autoorganización, sistema viable, segundo orden |
 | 15. Máquinas y lenguajes | 18 | cómo funciona un ordenador y cómo funciona un lenguaje: del bit y la puerta lógica a una CPU que ejecuta, y de ahí a un lenguaje propio que compila para ella |
-| 16. Programación gráfica | 33 | shaders GLSL: del píxel al raymarching, con ratón, curvas, texto, mosaicos, disco de Poincaré, trazado de rayos, cámara, shaders con memoria y fluidos, terreno, texturas sólidas, nubes y filtros de cámara |
-| 17. Criptografía | 36 | del cifrado de César a lo poscuántico: frecuencias, Vigenère, Enigma, la libreta de un solo uso, AES paso a paso, hash, RSA, curvas elípticas, firmas, conocimiento cero, cadenas de bloques, Shor y BB84, con la criptografía real ejecutándose en el navegador |
-| 18. Inteligencia artificial I: aprender de los datos | 12 | qué es aprender de los datos, búsqueda y poda alfa-beta, vecinos próximos, árboles y bosques, Bayes ingenuo, margen máximo, sigmoide, pérdidas y optimizadores, la red densa, retropropagación, generalizar y evaluar |
-| 19. Inteligencia artificial II: las arquitecturas | 14 | convolucionales, Hopfield, recurrentes y LSTM, autocodificadores y VAE, GAN, difusión, tokens y BPE, n-gramas y perplejidad, vectores de palabras, atención y transformador, un LLM entero, Bellman y Q-learning, los límites, y un taller con todos los mandos |
+| 16. Síntesis de sonido | 14 | un sonido es una función del tiempo: de la onda a la nota, de la nota al timbre y del timbre a la música, con un sintetizador que se programa como un shader: muestreo, escala y logaritmo, envolventes, armónicos y Fourier, la cuerda, el espectro, batidos, FM, filtros, ruido y Karplus-Strong, eco, secuenciador y taller |
+| 17. Programación gráfica | 33 | shaders GLSL: del píxel al raymarching, con ratón, curvas, texto, mosaicos, disco de Poincaré, trazado de rayos, cámara, shaders con memoria y fluidos, terreno, texturas sólidas, nubes y filtros de cámara |
+| 18. Criptografía | 36 | del cifrado de César a lo poscuántico: frecuencias, Vigenère, Enigma, la libreta de un solo uso, AES paso a paso, hash, RSA, curvas elípticas, firmas, conocimiento cero, cadenas de bloques, Shor y BB84, con la criptografía real ejecutándose en el navegador |
+| 19. Inteligencia artificial I: aprender de los datos | 12 | qué es aprender de los datos, búsqueda y poda alfa-beta, vecinos próximos, árboles y bosques, Bayes ingenuo, margen máximo, sigmoide, pérdidas y optimizadores, la red densa, retropropagación, generalizar y evaluar |
+| 20. Inteligencia artificial II: las arquitecturas | 14 | convolucionales, Hopfield, recurrentes y LSTM, autocodificadores y VAE, GAN, difusión, tokens y BPE, n-gramas y perplejidad, vectores de palabras, atención y transformador, un LLM entero, Bellman y Q-learning, los límites, y un taller con todos los mandos |
 
-**Los 246 temas están escritos**, en progresión estricta: ninguno usa una
+**Los 260 temas están escritos**, en progresión estricta: ninguno usa una
 herramienta que no se haya explicado antes, y cada tema declara cuáles necesita;
 `tests.html` comprueba que todos esos requisitos van antes en el temario.
 
@@ -124,6 +125,14 @@ anticipación y memoria de un controlador, la entropía como variedad, los
 autovalores como criterio de estabilidad— para responder a una sola pregunta: cómo
 se mantiene algo en su sitio en un mundo que lo empuja.
 
+La **Síntesis de sonido** es el puente entre las matemáticas, la música y la programación:
+un sonido es una función del tiempo, y una fórmula de tres líneas ya suena. Cada tema
+lleva un **sintetizador** donde el código —JavaScript llano, `function sonido(t)`— se
+edita, se calcula entero antes de sonar y se ve como onda y como espectro; el seno, el
+logaritmo de la escala, la serie de Fourier del timbre, las sucesiones recurrentes de
+los filtros y la serie geométrica del eco se oyen, y los ejercicios de código se
+corrigen **comparando el espectro y la envolvente de lo que suena** con la solución.
+
 La **Programación gráfica** tiene piel propia —cambia de color entero— porque ahí ya no
 estamos solo en matemáticas: es programación y es arte. Enseña shaders GLSL desde
 cero, con un visor tipo Shadertoy en cada tema donde el código se edita y se
@@ -131,16 +140,16 @@ recompila al vuelo, y donde los ejercicios de código se corrigen **comparando l
 pinta tu shader con lo que pinta la solución**. La idea que lo sostiene, que es la
 del curso entero: **reglas simples, complejidad epatante**.
 
-En total, **518 ejemplos interactivos**, **1075 ejercicios procedimentales**,
-**22 problemas por apartados** con 70 apartados, **244 ejemplos resueltos paso a
-paso**, **271 comprobaciones rápidas**, **329 cuadros de utilidad**, **265 apuntes
+En total, **551 ejemplos interactivos**, **1143 ejercicios procedimentales**,
+**22 problemas por apartados** con 70 apartados, **257 ejemplos resueltos paso a
+paso**, **285 comprobaciones rápidas**, **343 cuadros de utilidad**, **279 apuntes
 históricos** —con las matemáticas de Hipatia, Sophie Germain, Sofia Kovalévskaya,
 Ada Lovelace, Emmy Noether, Mary Cartwright, Katherine Johnson, Karen Spärck Jones,
 Grace Hopper, Kathleen Booth, Donella Meadows o Maryam Mirzakhani—, **73 visores de
-shaders**, **13 bancos de circuitos**, **7 consolas de la máquina**, **11 talleres
+shaders**, **29 sintetizadores programables**, **13 bancos de circuitos**, **7 consolas de la máquina**, **11 talleres
 del lenguaje** con **4 árboles de sintaxis** que se recorren paso a paso, **14
 escenas en tres dimensiones** que se giran con el ratón o el teclado, y un
-glosario de **454 términos**.
+glosario de **468 términos**.
 
 El temario vive en `assets/js/curriculum.js`. Si en el futuro se añade un tema
 nuevo al índice sin su archivo, aparece marcado como «en preparación» con sus
@@ -183,6 +192,7 @@ El núcleo (`assets/js/core/`) es lo que evita repetir código:
 | `repaso.js` | las páginas de repaso: mapa del temario, simulacros y formulario, montadas con el contenido de los demás temas |
 | `progress.js` | progreso en `localStorage`: dominio por tipo de ejercicio y repaso espaciado |
 | `shader.js` | visor de shaders GLSL: editor, recompilación al vuelo, errores con su número de línea, comparación de dos shaders píxel a píxel y modo con memoria entre fotogramas |
+| `sonido.js` | el sintetizador: compila `function sonido(t, i)`, calcula el sonido entero antes de sonar (con memoria de lo ya calculado para filtros y ecos), lo dibuja como onda, espectro o espectrograma, lo reproduce con Web Audio y compara dos códigos por espectro y envolvente para corregir ejercicios |
 | `cripto.js` | la criptografía de verdad ejecutándose en el navegador: SHA-256, AES, RSA y curvas elípticas |
 | `nn.js` | redes neuronales de verdad: tensores y diferenciación automática, para que las demos de IA entrenen lo que el texto explica |
 | `logica.js` | el banco de circuitos: netlist escrita en texto, diagrama generado solo, tabla de verdad y un simulador que **avanza por instantes**, porque el biestable es un ciclo y no tendría solución de otro modo |
@@ -224,7 +234,10 @@ Los detalles están en **`GUIA-AUTOR.md`**.
 - La programación gráfica usa **WebGL 1.0**. Si falta, el visor lo dice y el código
   sigue leyéndose. Las texturas se generan por fórmula y no se carga ninguna imagen,
   que es precisamente lo que permite que funcione desde `file://`.
-- `tests.html` hace 532 comprobaciones del núcleo y **audita todos los ejercicios y
+- La síntesis de sonido usa **Web Audio** solo para reproducir: el sonido se calcula
+  entero, sin sonar, y el audio se abre al pulsar «Tocar». Sin audio, el sintetizador
+  sigue calculando y dibujando.
+- `tests.html` hace 575 comprobaciones del núcleo y **audita todos los ejercicios y
   problemas**: genera cada uno 40 veces y verifica que la solución declarada pasa su
   propio corrector, que ningún «error típico» salta con la respuesta correcta, que
   nada lanza excepciones, que no queda ninguna fórmula con comandos LaTeX
@@ -232,7 +245,8 @@ Los detalles están en **`GUIA-AUTOR.md`**.
   gráfica se queda sin nombre accesible ni fuera del alcance del teclado, que ningún
   enlace entre temas apunta a un tema inexistente, que los requisitos de cada tema
   van antes en el temario, que el glosario apunta a temas que existen, que **todos
-  los shaders compilan y ninguno pinta una imagen lisa**, y que todos los temas del
+  los shaders compilan y ninguno pinta una imagen lisa**, que **todos los sintetizadores
+  calculan y ninguno da silencio ni recorta**, y que todos los temas del
   temario se construyen sin errores.
 
 ---

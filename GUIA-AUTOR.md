@@ -599,6 +599,102 @@ cerrarla y pulsar otra vez el que ya se ve la cierra. La referencia vive en
 
 ---
 
+## El sintetizador (`SON` y `W.sinte`)
+
+Lo usa el bloque de síntesis de sonido, y sirve para cualquier tema que quiera que
+una función del tiempo se oiga. Vive en `assets/js/core/sonido.js` y tiene la misma
+forma de API que `W.shader`: un editor de dos capas, ediciones guardadas por `id`,
+un error con su número de línea y un ejercicio de código que se corrige comparando
+lo que sale.
+
+```js
+W.sinte(host, {
+  id: 'son-xxx-1',        // para recordar las ediciones del alumno entre visitas
+  dur: 2,                 // segundos que se calculan (2 por defecto)
+  loop: true,             // si al tocar se repite (false para una nota que se apaga)
+  ventana: 20,            // milisegundos de onda que se enseñan a la izquierda
+  fmax: 4000,             // hasta qué frecuencia llega el espectro
+  espectrograma: false,   // true: en vez del espectro, el espectro a lo largo del tiempo
+  mandos: [               // deslizadores que el código ve como variables
+    { n: 'f', label: 'frecuencia (Hz)', min: 50, max: 2000, step: 1, value: 440, dec: 0 }
+  ],
+  codigo:                 // JavaScript llano; tiene que definir `sonido`
+    'function sonido(t) {\n' +
+    '    return 0.5 * sin(TAU * f * t);\n' +
+    '}\n',
+  nota: 'Texto bajo el sintetizador, con $latex$ y [[enlaces]].'
+});
+```
+
+Lo que conviene saber:
+
+- **El código es una función del tiempo.** `sonido(t, i)` recibe el instante en
+  segundos y el número de muestra, y devuelve un número entre −1 y 1. Se llama
+  44 100 veces por segundo calculado. Ve `sin cos tan abs floor ceil round sqrt
+  exp log pow min max atan PI TAU SR`, las formas de onda `sierra cuadrada
+  triangulo pulso`, `nota(midi)`, `decae(t, tau)`, `adsr(t, a, d, s, r, dur)`,
+  `fract clamp mix step smoothstep mod sign`, y los mandos por su nombre. Se
+  pueden definir funciones y listas auxiliares fuera de `sonido`.
+- **Todo se calcula antes de sonar.** El `AudioContext` se abre al pulsar «Tocar»;
+  hasta entonces el sintetizador solo calcula y dibuja. Por eso la auditoría puede
+  ejecutar cada sintetizador sin altavoces, y por eso `SON.render` devuelve el
+  sonido entero: `{ ok, muestras, sr, dur, pico, rms, recorte, silencio }`.
+- **Hay memoria si se pide.** `anterior(k)` devuelve la salida de hace `k`
+  muestras (1 si se omite) y `antes(s)` la de hace `s` segundos; antes del
+  principio valen 0. Con eso un filtro es `a * x + (1 - a) * anterior()`, un eco
+  `x + g * antes(0.25)` y Karplus-Strong `g * 0.5 * (anterior(N) + anterior(N + 1))`.
+  Una realimentación desbocada se recorta a ±8 y se avisa: no se lleva el navegador.
+- **`ruido()` es reproducible**: la misma semilla en cada cálculo, para que la
+  auditoría y el alumno oigan lo mismo y `SON.iguales` pueda comparar dos códigos
+  con ruido.
+- **Lo que se dibuja.** La onda (los primeros `ventana` ms), el espectro medio
+  (`SON.espectro`, ventanas de Hann de 4096 muestras promediadas, con un seno de
+  amplitud 1 a altura 1) o el espectrograma, una tira con el cabezal mientras suena,
+  y un aviso si hay recorte o silencio. Se repinta al cambiar de tema de color.
+- **Los errores se dicen en castellano** con su número de línea, ya sean de
+  sintaxis, de nombre (`«fq» no existe`) o de forma (`¿Falta el «return»?`,
+  «no hay ninguna función sonido»).
+
+### Corregir un ejercicio de código
+
+`SON.iguales(respuesta, referencia, { dur, tolEspectro, tolEnvolvente, tolNivel,
+mandos, valores })` calcula los dos códigos y compara tres cosas: el **espectro**
+(coseno entre los espectros logarítmicos medios), la **envolvente** (coseno entre
+las envolventes de 20 ms) y el **nivel** (razón entre los RMS). Devuelve `{ ok,
+espectro, envolvente, nivel, silencio }`, o `motivo: 'la respuesta no compila'`
+con el `error`. Así `sin` y `cos` a la misma frecuencia dan lo mismo, `x + x` y
+`2 * x` también, y un semitono de más, una sierra por un seno o la mitad de
+volumen no pasan.
+
+```js
+check: function (v, d) {
+  var texto = String(v.raw.c || '').trim().replace(/;\s*$/, '');
+  if (!texto) return { ok: false, msg: 'Escribe la expresión.' };
+  function env(x) { return 'function sonido(t) { return ' + x + '; }'; }
+  var r = SON.iguales(env(texto), env(d.ref), { dur: 0.6 });
+  if (r.motivo === 'la respuesta no compila') return { ok: false, msg: 'Eso no se entiende: ' + r.error.msg };
+  if (!r.ok) {
+    if (r.silencio) return { ok: false, msg: 'Eso es silencio.' };
+    if (r.espectro < 0.9) return { ok: false, msg: 'Suena, pero no a esa frecuencia.' };
+    if (r.envolvente < 0.9) return { ok: false, msg: 'La nota está, pero no se apaga como se pide.' };
+    return { ok: false, msg: 'El nivel no es el pedido.' };
+  }
+  return { ok: true };
+}
+```
+
+Mirar `espectro`, `envolvente` y `nivel` por separado es lo que permite decir
+*qué* está mal, y no solo que lo está. Las tolerancias por defecto (0,97, 0,95 y
+±35 % de nivel) van bien para senos y sumas de armónicos; para ruido conviene
+bajar `tolEspectro` a 0,9, y para secuencias y ecos, `tolEnvolvente` a 0,9. Cada
+comparación cuesta unos 12 ms.
+
+`tests.html` prueba el motor (un grupo propio) y, en cada tema, calcula cada
+sintetizador con su código original y comprueba que calcula, que no da silencio,
+que no recorta más del 2 % y que el coloreado del editor no altera el texto.
+
+---
+
 ## La caja de herramientas de criptografía (`CR`)
 
 El bloque de criptografía se apoya en `assets/js/core/cripto.js`, igual que el
@@ -973,7 +1069,7 @@ ninguno**: se leen, se suman en una tabla y desaparecen al recargar.
 
 ## Un idioma más, pero solo por fuera
 
-El curso está escrito en castellano y esa es su lengua. Traducir 246 temas de
+El curso está escrito en castellano y esa es su lengua. Traducir 260 temas de
 prosa matemática no es un archivo más: es escribir el curso otra vez, y hacerlo a
 medias deja algo peor que no hacerlo, porque el alumno no sabe qué se va a
 encontrar al abrir cada tema. Así que lo traducido es **la interfaz y el
@@ -1139,7 +1235,9 @@ Abre **`tests.html`**. Comprueba:
    solución declarada pasa su propio corrector, que nada lanza excepciones, que
    no hay fórmulas mal escritas, que ninguna gráfica 1:1 recorta su encuadre y
    que ninguna fórmula se sale de su caja.
-4. Si el tema lleva shaders, la auditoría también los compila y comprueba que
+4. Si el tema lleva sintetizadores, la auditoría los calcula y comprueba que
+   ninguno da silencio ni recorta más del 2 %.
+5. Si el tema lleva shaders, la auditoría también los compila y comprueba que
    ninguno pinta una imagen lisa. Un shader que compila y sale de un solo color
    es un fallo mudo que no se ve de ninguna otra manera.
 5. Ningún enlace `[[tema|texto]]` apunta a un tema que no existe.

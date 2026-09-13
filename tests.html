@@ -49,7 +49,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
   (function () {
     var t = '?t=' + Date.now();
     ['version', 'core/util', 'core/i18n', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
-     'core/shader', 'core/cripto', 'core/nn', 'core/logica', 'core/maquina', 'core/lenguaje', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
+     'core/shader', 'core/sonido', 'core/cripto', 'core/nn', 'core/logica', 'core/maquina', 'core/lenguaje', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
      'glosario', 'glsl', 'i18n/en'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
@@ -1071,6 +1071,67 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     }
   }
 
+  /* ---------------- el sintetizador ----------------
+     Todo se calcula sin sonar: la lista de muestras es lo que se comprueba.
+     Lo que importa es que un seno de 440 Hz de un pico en 440 Hz, que la
+     memoria (anterior, antes) funcione como una recurrencia, que los
+     errores del alumno salgan con palabras, y que el corrector acepte lo
+     que suena igual y rechace lo que no. */
+  group('sintetizador · calcular sin sonar');
+  (function () {
+    if (!window.SON) { ko('sonido.js se carga', 'no está', 'el módulo cargado'); return; }
+    var seno = 'function sonido(t) { return 0.5 * sin(TAU * 440 * t); }';
+    var r = SON.render(seno, { dur: 1 });
+    truthy('un seno se calcula', r.ok && r.muestras.length === 44100);
+    eq('y tiene el pico donde debe', r.pico, 0.5, 1e-3);
+    eq('y el nivel eficaz de un seno es A/√2', r.rms, 0.5 / Math.SQRT2, 2e-3);
+    var esp = SON.espectro(r.muestras);
+    eq('el espectro tiene su raya en 440 Hz', SON.frecuenciaPico(esp), 440, 3);
+    eq('con la amplitud del seno', esp[Math.round(440 * 4096 / 44100)], 0.5, 0.05);
+    truthy('un seno de 440 no tiene nada en 880', esp[Math.round(880 * 4096 / 44100)] < 0.01);
+    var sierra = SON.render('function sonido(t) { return sierra(220, t); }', { dur: 0.5 });
+    truthy('la sierra va de -1 a 1', sierra.ok && sierra.pico > 0.99 && sierra.pico <= 1);
+    eq('nota(69) es el La de 440', SON.f.nota(69), 440, 1e-9);
+    eq('nota(60) es el Do central', SON.f.nota(60), 261.63, 0.01);
+    eq('doce semitonos doblan', SON.f.nota(81) / SON.f.nota(69), 2, 1e-9);
+    /* memoria: y_n = x_n + g·y_{n-k} es una recurrencia, y se calcula en orden */
+    var eco = SON.render('function sonido(t, i) { return (i === 0 ? 1 : 0) + 0.5 * anterior(3); }', { dur: 0.001 });
+    truthy('anterior(k) lee la salida de hace k muestras', eco.ok &&
+      Math.abs(eco.muestras[0] - 1) < 1e-9 && Math.abs(eco.muestras[3] - 0.5) < 1e-9 &&
+      Math.abs(eco.muestras[6] - 0.25) < 1e-9 && Math.abs(eco.muestras[1]) < 1e-9);
+    var ant = SON.render('function sonido(t, i) { return (i === 0 ? 1 : 0) + 0.5 * antes(0.25); }', { dur: 0.6 });
+    truthy('antes(s) es anterior(s·SR)', ant.ok && Math.abs(ant.muestras[11025] - 0.5) < 1e-9);
+    truthy('el ruido es reproducible', SON.render('function sonido(t) { return ruido(); }', { dur: 0.01 }).muestras[5] ===
+      SON.render('function sonido(t) { return ruido(); }', { dur: 0.01 }).muestras[5]);
+    var des = SON.render('function sonido(t) { return 1 + 2 * anterior(); }', { dur: 0.01 });
+    truthy('una realimentación desbocada no se lleva el navegador', des.ok && isFinite(des.pico) && des.pico <= 8);
+    truthy('el silencio se reconoce', SON.render('function sonido(t) { return 0; }', { dur: 0.1 }).silencio);
+    /* errores con palabras */
+    var e1 = SON.render('function sonido(t) { return foo(t); }', { dur: 0.1 });
+    truthy('un nombre que no existe se dice en castellano', !e1.ok && /«foo»/.test(e1.error.msg));
+    var e2 = SON.render('return 1;', { dur: 0.1 });
+    truthy('sin función sonido, se dice', !e2.ok && /sonido/.test(e2.error.msg));
+    var e3 = SON.render('function sonido(t) { return sin(t; }', { dur: 0.1 });
+    truthy('un error de sintaxis no rompe nada', !e3.ok && e3.error && e3.error.msg.length > 0);
+    var e4 = SON.render('function sonido(t) { var x = 1; }', { dur: 0.1 });
+    truthy('una función sin return se explica', !e4.ok && /return/.test(e4.error.msg));
+    /* el corrector: por lo que suena, no por el texto */
+    var cos = 'function sonido(t) { return 0.5 * cos(TAU * 440 * t); }';
+    truthy('seno y coseno a la misma frecuencia suenan igual', SON.iguales(seno, cos, { dur: 0.6 }).ok);
+    truthy('«x + x» y «2 * x» suenan igual', SON.iguales('function sonido(t) { var x = 0.25 * sin(TAU * 440 * t); return x + x; }', seno, { dur: 0.6 }).ok);
+    truthy('un semitono más arriba no suena igual', !SON.iguales(seno, 'function sonido(t) { return 0.5 * sin(TAU * 466.16 * t); }', { dur: 0.6 }).ok);
+    truthy('una sierra no es un seno', !SON.iguales(seno, 'function sonido(t) { return 0.5 * sierra(440, t); }', { dur: 0.6 }).ok);
+    truthy('la mitad de volumen no es lo mismo', !SON.iguales(seno, 'function sonido(t) { return 0.25 * sin(TAU * 440 * t); }', { dur: 0.6 }).ok);
+    truthy('con envolvente distinta no es lo mismo', !SON.iguales(seno, 'function sonido(t) { return 0.5 * sin(TAU * 440 * t) * exp(-4 * t); }', { dur: 0.6 }).ok);
+    truthy('un código roto se distingue de uno equivocado', SON.iguales('function sonido(t) { return sin(; }', seno, { dur: 0.6 }).motivo === 'la respuesta no compila');
+    /* el coloreado no cambia ni una letra */
+    var cod = 'function sonido(t) {\n  // La 440\n  return A * sin(TAU * 440.5 * t) + anterior(2);\n}';
+    var caja = document.createElement('div');
+    caja.innerHTML = SON.pinta(cod, [{ n: 'A' }]);
+    eq('el coloreado conserva el texto', caja.textContent, cod);
+    truthy('y distingue el mando de fuera', /cod-uni">A</.test(caja.innerHTML));
+  })();
+
   /* ---------------- contraste de la paleta ---------------- */
   /* Un curso no se lee con el color que uno elige, sino con el que puede
      ver quien lo lee. Se mide de verdad, en los tres temas. */
@@ -1122,7 +1183,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
        medirlas igual que el acento normal: en un bloque con piel, el color
        de los enlaces y el de los botones son los suyos y no los de :root.
        Esto no se comprobaba, y la piel nueva del bloque 15 obligó a mirarlo. */
-    [['maq', 'máquinas y lenguajes'], ['gfx', 'programación gráfica'],
+    [['maq', 'máquinas y lenguajes'], ['son', 'síntesis de sonido'], ['gfx', 'programación gráfica'],
      ['cr', 'criptografía'], ['ia', 'inteligencia artificial']
     ].forEach(function (pl) {
       parejas.push(['--' + pl[0], '--bg', 'piel ' + pl[1] + ' · enlaces']);
@@ -1940,6 +2001,20 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
             if (caja.textContent !== v.original) {
               aud.push('el coloreado del shader ' + (i + 1) + ' altera el texto');
             }
+          });
+          // Cada sintetizador de un tema se calcula con su codigo original:
+          // tiene que evaluarse, sonar (no ser silencio) y no recortar. Y su
+          // coloreado, como el de los shaders, no puede tocar el texto.
+          [].forEach.call(h.querySelectorAll('.son'), function (sn, i) {
+            var v = sn.__son;
+            if (!v || !window.SON) return;
+            var r = SON.render(v.original, { dur: Math.min(v.dur, 1), mandos: v.mandos });
+            if (!r.ok) { aud.push('sintetizador ' + (i + 1) + ' no se calcula: ' + r.error.msg); return; }
+            if (r.silencio) aud.push('sintetizador ' + (i + 1) + ' es silencio');
+            if (r.recorte > 0.02) aud.push('sintetizador ' + (i + 1) + ' recorta el ' + (100 * r.recorte).toFixed(0) + ' % de las muestras');
+            var caja = document.createElement('div');
+            caja.innerHTML = SON.pinta(v.original, v.mandos);
+            if (caja.textContent !== v.original) aud.push('el coloreado del sintetizador ' + (i + 1) + ' altera el texto');
           });
           // Un shader puede compilar perfectamente y pintar un rectangulo de
           // un solo color: un fallo mudo que ninguna otra prueba ve. Se pinta

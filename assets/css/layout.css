@@ -360,6 +360,11 @@
 .blk[data-piel="gfx"] .blk__btn{color:var(--gfx-ink)}
 .blk[data-piel="gfx"] .tpc.is-active{background:var(--gfx-soft); color:var(--gfx-ink)}
 .blk[data-piel="gfx"] .blk__list{border-left-color:color-mix(in srgb, var(--gfx) 30%, transparent)}
+/* --- bloque de síntesis de sonido: la misma idea, en latón --- */
+.blk[data-piel="son"] .blk__num{background:var(--son-soft); color:var(--son-ink)}
+.blk[data-piel="son"] .blk__btn{color:var(--son-ink)}
+.blk[data-piel="son"] .tpc.is-active{background:var(--son-soft); color:var(--son-ink)}
+.blk[data-piel="son"] .blk__list{border-left-color:color-mix(in srgb, var(--son) 30%, transparent)}
 /* --- bloque de criptografía: la misma idea, en cobre --- */
 .blk[data-piel="cr"] .blk__num{background:var(--cr-soft); color:var(--cr-ink)}
 .blk[data-piel="cr"] .blk__btn{color:var(--cr-ink)}

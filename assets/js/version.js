@@ -14,5 +14,5 @@
 (function (global) {
   'use strict';
 
-  global.MATEBASE_VERSION = '1.4.0';
+  global.MATEBASE_VERSION = '1.5.0';
 })(window);

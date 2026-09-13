@@ -27,6 +27,10 @@
   /* Bloque 16, programación gráfica: magenta de demoscene. Ya no es solo
      matemáticas, y tiene que notarse antes de leer una palabra. */
   --gfx:#a81b86; --gfx-soft:#fae3f4; --gfx-ink:#7c1364; --gfx-on:#ffffff;
+  /* Bloque de sintesis de sonido: laton de instrumento de viento. Un
+     dorado oscuro, que no se confunde ni con el cobre de cripto ni con el
+     ambar de los avisos. */
+  --son:#8a6300; --son-soft:#faf0cc; --son-ink:#664900; --son-on:#ffffff;
   /* Bloque de criptografia: cobre de lacre y de llave antigua. */
   --cr:#a3521c; --cr-soft:#f8e6da; --cr-ink:#7a3a10; --cr-on:#ffffff;
   /* Bloques de inteligencia artificial: verde de fosforo, el de las
@@ -60,6 +64,7 @@ html[data-theme="dark"]{
   --c1:#7b93ff; --c2:#ff8b93; --c3:#4bd39b; --c4:#e5a44b; --c5:#b795f5; --c6:#4cc4e0;
   --maq:#c4a2ff; --maq-soft:#2b2140; --maq-ink:#d8c2ff; --maq-on:#170f24;
   --gfx:#ff79d3; --gfx-soft:#3a1b33; --gfx-ink:#ffa8e2; --gfx-on:#1b0f18;
+  --son:#f2c55a; --son-soft:#3b3014; --son-ink:#ffd97e; --son-on:#1d1708;
   --cr:#f0a070; --cr-soft:#3a2418; --cr-ink:#ffc39c; --cr-on:#1b120c;
   --ia:#5fd7bd; --ia-soft:#13332e; --ia-ink:#8fe8d3; --ia-on:#0c1a17;
   --cod-com:#8b93a3; --cod-key:#ff79d3; --cod-typ:#6fd3e8; --cod-num:#c4a2ff;
@@ -88,6 +93,7 @@ html[data-theme="monokai"]{
   --c1:#7cc7d4; --c2:#d96a80; --c3:#9cbf4a; --c4:#d99a4a; --c5:#a68fd4; --c6:#d6cd7a;
   --maq:#c9a6f0; --maq-soft:#352c42; --maq-ink:#dcc2f7; --maq-on:#221a2b;
   --gfx:#e08bd0; --gfx-soft:#3b2c39; --gfx-ink:#f0abe0; --gfx-on:#241a22;
+  --son:#e3c366; --son-soft:#3b3624; --son-ink:#f2da94; --son-on:#262117;
   --cr:#e6a06e; --cr-soft:#3c2f27; --cr-ink:#f2c39f; --cr-on:#241c17;
   /* Verde primavera, no el cian del acento de monokai: si no, la piel de
      los bloques de IA se confundiria con los enlaces. */
