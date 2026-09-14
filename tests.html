@@ -2063,12 +2063,16 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
          un rotulo legitimo como «sin 3x / x» quedaba marcado como
          castellano en todos los temas de trigonometria y analisis. */
       var CAST = /(^|[\s>«("'])(el|la|los|las|un|una|del|que|con|por|para|como|se|su|sus|al|más|pero|cada|está|están|este|esta|esto|cuántos|cuántas|cuánto|qué|cuál|hay|entre|según|desde|hasta|cuando|donde|porque|aunque|también|así|entonces|entra|vale|entera)([\s<».,;:?!)'"]|$)/i;
+      /* Un articulo pegado a un nombre propio no es castellano: viaja dentro
+         del apellido. «de la Vallée Poussin» se escribe igual en ingles, y
+         sin esto el « la » de en medio marcaba la frase entera. */
+      var NOMBRE = /\b(el|la|los|las|de|del)\s+(?=[A-ZÁÉÍÓÚÑ])/g;
       var quedan = visto.map(function (x) { return I18N.trad(x); })
         .filter(function (x) {
           /* Fuera las formulas: la variable $y$ no es la conjuncion «y». */
           return CAST.test(x.split('$').filter(function (_, i) {
             return i % 2 === 0;
-          }).join(' ')) && x.split(/\s+/).length >= 4;
+          }).join(' ').replace(NOMBRE, ' ')) && x.split(/\s+/).length >= 4;
         });
       I18N.contexto(null);
       I18N.usar(previo);
