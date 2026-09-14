@@ -16,6 +16,13 @@
 (function (global) {
   'use strict';
 
+  /* Los rotulos que no llevan formulas ni enlaces no pasan por MathX.inline,
+     que es donde entra la traduccion: van por aqui. `UI` es para los rotulos
+     fijos del constructor («Ideas clave»), que son interfaz; `TX` para lo que
+     escribe el autor de un tema, que es prosa. */
+  function UI(s) { return global.I18N ? I18N.ui(s) : s; }
+  function TX(s) { return global.I18N ? I18N.trad(s) : s; }
+
   function Page(root, node) {
     this.root = root;
     this.node = node || {};
@@ -48,7 +55,7 @@
   /* El hilo del curso: de donde viene este tema y a donde va. Es un
      organizador previo: el alumno sabe que va a mirar antes de mirarlo. */
   Page.prototype.puente = function (html, title) {
-    return this.note(html, 'puente', title || 'De dónde venimos');
+    return this.note(html, 'puente', title || UI('De dónde venimos'));
   };
 
   /* Trampas habituales: los errores que de verdad se cometen, con su
@@ -56,7 +63,7 @@
      correcto. */
   Page.prototype.trampas = function (items, title) {
     var box = U.el('div.note.note--trampa');
-    box.appendChild(U.el('span.note__t', { text: title || 'Trampas habituales' }));
+    box.appendChild(U.el('span.note__t', { text: title ? TX(title) : UI('Trampas habituales') }));
     var l = U.el('ul');
     items.forEach(function (i) {
       if (typeof i === 'string') l.appendChild(U.el('li', { html: MathX.inline(i) }));
@@ -127,7 +134,7 @@
   /** Formula centrada, con etiqueta y lectura en voz alta opcionales. */
   Page.prototype.formula = function (tex, label, lectura) {
     var box = U.el('div.fbox' + (label ? '.fbox--lab' : ''));
-    if (label) box.appendChild(U.el('span.fbox__lab', { text: label }));
+    if (label) box.appendChild(U.el('span.fbox__lab', { text: TX(label) }));
     box.appendChild(U.el('div', { html: MathX.display(tex) }));
     if (lectura) ayudaLectura(box, lectura);
     return this._add(box);
@@ -136,7 +143,7 @@
   /** Varias formulas seguidas en la misma caja. */
   Page.prototype.formulas = function (list, label, lectura) {
     var box = U.el('div.fbox' + (label ? '.fbox--lab' : ''));
-    if (label) box.appendChild(U.el('span.fbox__lab', { text: label }));
+    if (label) box.appendChild(U.el('span.fbox__lab', { text: TX(label) }));
     list.forEach(function (t) { box.appendChild(U.el('div', { html: MathX.display(t), style: { margin: '0' } })); });
     if (lectura) ayudaLectura(box, lectura);
     return this._add(box);
@@ -144,17 +151,17 @@
 
   Page.prototype.note = function (html, kind, title) {
     var box = U.el('div.note' + (kind ? '.note--' + kind : ''));
-    if (title) box.appendChild(U.el('span.note__t', { text: title }));
+    if (title) box.appendChild(U.el('span.note__t', { text: TX(title) }));
     box.appendChild(U.el('div', { html: MathX.inline(html) }));
     return this._add(box);
   };
   /** Apunte historico: el hilo que une el curso con la historia real. */
   Page.prototype.hist = function (html, title) {
-    return this.note(html, 'hist', title || 'De dónde viene esto');
+    return this.note(html, 'hist', title || UI('De dónde viene esto'));
   };
   /** Para que sirve esto de verdad: una aplicacion concreta, fuera del aula. */
   Page.prototype.util = function (html, title) {
-    return this.note(html, 'util', title || 'Utilidad');
+    return this.note(html, 'util', title || UI('Utilidad'));
   };
 
   Page.prototype.table = function (head, rows, o) {
@@ -183,7 +190,7 @@
 
   Page.prototype.keys = function (items, title) {
     var box = U.el('div.keys');
-    box.appendChild(U.el('h3', { text: title || 'Ideas clave' }));
+    box.appendChild(U.el('h3', { text: title ? TX(title) : UI('Ideas clave') }));
     var l = U.el('ul');
     items.forEach(function (i) { l.appendChild(U.el('li', { html: MathX.inline(i) })); });
     box.appendChild(l);
@@ -204,7 +211,7 @@
     this.ejemplos.push({ title: spec.title || '', enunciado: spec.enunciado || '', pasos: pasos, cierre: spec.cierre || '' });
     var card = U.el('div.card.card--res');
     card.appendChild(U.el('div.card__head', null, [
-      U.el('span.card__kind', { text: 'Ejemplo resuelto' }),
+      U.el('span.card__kind', { text: UI('Ejemplo resuelto') }),
       U.el('span.card__title', { html: MathX.inline(spec.title || '') })
     ]));
     var body = U.el('div.card__body');
@@ -219,8 +226,8 @@
     });
     body.appendChild(ol);
     var pie = U.el('div.res__pie');
-    var bSig = U.el('button.btn.btn--sm.btn--main', { type: 'button', text: 'Siguiente paso' });
-    var bTodo = U.el('button.btn.btn--sm', { type: 'button', text: 'Ver todos los pasos' });
+    var bSig = U.el('button.btn.btn--sm.btn--main', { type: 'button', text: UI('Siguiente paso') });
+    var bTodo = U.el('button.btn.btn--sm', { type: 'button', text: UI('Ver todos los pasos') });
     var cierre = U.el('div.prose.res__cierre', { html: spec.cierre ? '<p>' + MathX.inline(spec.cierre) + '</p>' : '' });
     cierre.hidden = true;
     var visto = 1;
@@ -264,7 +271,7 @@
     this.checks.push({ q: pregunta, opts: opts });
     var box = U.el('div.chk', { role: 'group' });
     var idQ = 'chk' + (++cuentaChk);
-    box.appendChild(U.el('span.chk__t', { text: o.title || 'Comprueba' }));
+    box.appendChild(U.el('span.chk__t', { text: o.title ? TX(o.title) : UI('Comprueba') }));
     box.appendChild(U.el('div.chk__q', { id: idQ, html: MathX.inline(pregunta) }));
     var fila = U.el('div.opc.chk__opc', { role: 'group', 'aria-labelledby': idQ });
     var fb = U.el('div.chk__fb', { role: 'status', 'aria-live': 'polite' });
@@ -297,7 +304,7 @@
     this._demo++;
     var card = U.el('div.card.card--demo');
     card.appendChild(U.el('div.card__head', null, [
-      U.el('span.card__kind', { text: 'Ejemplo interactivo' }),
+      U.el('span.card__kind', { text: UI('Ejemplo interactivo') }),
       U.el('span.card__title', { html: MathX.inline(spec.title || '') })
     ]));
     var body = U.el('div.card__body');
@@ -306,7 +313,7 @@
        simulacion para comprobarlo, y se acuerda de lo que vio. */
     if (spec.predice) {
       var det = U.el('details.predice');
-      det.appendChild(U.el('summary', { text: 'Antes de tocar nada: ¿qué crees que pasará?' }));
+      det.appendChild(U.el('summary', { text: UI('Antes de tocar nada: ¿qué crees que pasará?') }));
       det.appendChild(U.el('div.prose', { html: '<p>' + MathX.inline(spec.predice) + '</p>' }));
       body.appendChild(det);
     }

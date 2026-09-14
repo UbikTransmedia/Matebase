@@ -36,6 +36,11 @@
 (function (global) {
   'use strict';
 
+  /* Los rotulos fijos de una tarjeta de ejercicio son interfaz, no prosa del
+     curso: van al diccionario de interfaz. El enunciado no, que lo fabrica
+     `gen` con numeros distintos cada vez y no tiene frase fija. */
+  function UI(s) { return global.I18N ? I18N.ui(s) : s; }
+
   var Ex = {};
   var LEVEL = {
     basico: ['tag--b', 'básico'],
@@ -208,9 +213,9 @@
     // lector de pantalla, pulsar Comprobar no producia ninguna respuesta.
     this.verdict = U.el('div.verdict', { role: 'status', 'aria-live': 'polite' });
     this.stepsEl = U.el('div.steps', { role: 'region', 'aria-label': 'Solución paso a paso' });
-    this.bCheck = U.el('button.btn.btn--ok', { type: 'button', text: 'Comprobar' });
-    this.bHint = U.el('button.btn', { type: 'button', text: 'Pista' });
-    this.bSol = U.el('button.btn', { type: 'button', text: 'Ver solución' });
+    this.bCheck = U.el('button.btn.btn--ok', { type: 'button', text: UI('Comprobar') });
+    this.bHint = U.el('button.btn', { type: 'button', text: UI('Pista') });
+    this.bSol = U.el('button.btn', { type: 'button', text: UI('Ver solución') });
     var self = this;
     this.bCheck.addEventListener('click', function () { self.check(); });
     this.bHint.addEventListener('click', function () { self.showHint(); });
@@ -257,7 +262,7 @@
     this.verdict.innerHTML = '';
     this.stepsEl.className = 'steps';
     this.stepsEl.innerHTML = '';
-    this.bHint.textContent = 'Pista';
+    this.bHint.textContent = UI('Pista');
     this.bloquea(false);
   };
 
@@ -411,7 +416,7 @@
       }
       for (var q0 in this.inputs) this.mark(q0, false);
       this.verdict.className = 'verdict is-on verdict--bad';
-      this.verdict.innerHTML = '<strong>Sin responder.</strong>';
+      this.verdict.innerHTML = '<strong>' + UI('Sin responder.') + '</strong>';
       this._fin(false);
       return false;
     }
@@ -512,7 +517,7 @@
         '<ol class="pistas">' + lista.slice(0, this.pistas).map(function (x) {
           return '<li>' + MathX.inline(x) + '</li>';
         }).join('') + '</ol>';
-      this.bHint.textContent = this.pistas < lista.length ? 'Otra pista' : 'Pista';
+      this.bHint.textContent = UI(this.pistas < lista.length ? 'Otra pista' : 'Pista');
     }
     this.verdict.className = 'verdict verdict--hint is-on';
     this.verdict.innerHTML = html;
@@ -577,14 +582,14 @@
     var b = U.el('button.btn.btn--sm.btn--ghost', {
       type: 'button',
       title: 'Copiar un enlace que abre este mismo enunciado, con estos mismos números',
-      html: '&#128279; Enlace'
+      html: '&#128279; ' + UI('Enlace')
     });
     b.addEventListener('click', function () {
       var url = location.href.split('#')[0] + '#/' + tarjeta.topicId +
         '?e=' + tarjeta.index + '&s=' + tarjeta.seed;
       function manual() {
         U.clear(tarjeta.aviso);
-        tarjeta.aviso.appendChild(U.el('span', { text: 'Copia este enlace: ' }));
+        tarjeta.aviso.appendChild(U.el('span', { text: UI('Copia este enlace:') + ' ' }));
         var inp = U.el('input.card__url', {
           type: 'text', readonly: true, value: url, 'aria-label': 'Enlace a este enunciado'
         });
@@ -631,7 +636,7 @@
     var b = U.el('button.btn.btn--sm.btn--ghost', {
       type: 'button',
       title: 'Añadir este enunciado, con estos números, a una lista que se comparte como un enlace',
-      html: '&#43; Deberes'
+      html: '&#43; ' + UI('Deberes')
     });
     b.addEventListener('click', function () {
       var lista = Ex.deberes();
@@ -649,7 +654,7 @@
         text: 'Añadido. La lista va por ' + lista.length + ' ' +
           U.plural(lista.length, 'enunciado', 'enunciados') + '. '
       }));
-      tarjeta.aviso.appendChild(U.el('a', { href: '#/__deberes', text: 'Ver los deberes y copiar el enlace →' }));
+      tarjeta.aviso.appendChild(U.el('a', { href: '#/__deberes', text: UI('Ver los deberes y copiar el enlace →') }));
     });
     return b;
   }
@@ -680,7 +685,7 @@
     this.el = U.el('div.card.card--ex' + (this.examen ? '.is-examen' : ''));
     this.el.__card = this;
     this.head = U.el('div.card__head', null, [
-      U.el('span.card__kind', { text: 'Ejercicio práctico' }),
+      U.el('span.card__kind', { text: UI('Ejercicio práctico') }),
       U.el('span.card__title', { html: MathX.inline(s.title || 'Practica') }),
       U.el('span.card__spacer'),
       origen(this),
@@ -698,7 +703,7 @@
     U.add(this.body, this.preg.nodos());
 
     this.score = U.el('span.card__score');
-    this.bNew = U.el('button.btn.btn--main', { type: 'button', html: '&#8635; Otro ejercicio' });
+    this.bNew = U.el('button.btn.btn--main', { type: 'button', html: '&#8635; ' + UI('Otro ejercicio') });
     this.bNew.addEventListener('click', function () { self.regen(); });
     this.aviso = U.el('div.card__aviso', { role: 'status', 'aria-live': 'polite' });
     this.foot = U.el('div.card__foot', null, this.preg.botones().concat([
@@ -764,7 +769,7 @@
     this.el = U.el('div.card.card--ex.card--prob' + (this.examen ? '.is-examen' : ''));
     this.el.__card = this;
     this.head = U.el('div.card__head', null, [
-      U.el('span.card__kind', { text: 'Ejercicio práctico' }),
+      U.el('span.card__kind', { text: UI('Ejercicio práctico') }),
       U.el('span.card__title', { html: MathX.inline(s.title || 'Problema') }),
       U.el('span.card__spacer'),
       origen(this),
@@ -797,7 +802,7 @@
       });
       U.add(parte.caja, parte.preg.nodos());
       parte.caja.appendChild(U.el('div.parte__cerrojo', {
-        text: 'Este apartado se abre al resolver o consultar el anterior: casi siempre usa su resultado.'
+        text: UI('Este apartado se abre al resolver o consultar el anterior: casi siempre usa su resultado.')
       }));
       if (!self.examen) parte.caja.appendChild(U.el('div.parte__pie', null, parte.preg.botones()));
       self.partes.push(parte);
@@ -805,7 +810,7 @@
     });
 
     this.score = U.el('span.card__score');
-    this.bNew = U.el('button.btn.btn--main', { type: 'button', html: '&#8635; Otro problema' });
+    this.bNew = U.el('button.btn.btn--main', { type: 'button', html: '&#8635; ' + UI('Otro problema') });
     this.bNew.addEventListener('click', function () { self.regen(); });
     this.aviso = U.el('div.card__aviso', { role: 'status', 'aria-live': 'polite' });
     this.foot = U.el('div.card__foot', null, [
