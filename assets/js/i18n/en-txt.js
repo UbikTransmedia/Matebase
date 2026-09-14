@@ -4,7 +4,7 @@
    la escribio el autor; el valor, su traduccion. Lo que no este aqui sale
    en castellano y el tema lo avisa arriba.
 
-   NO SE EDITA A MANO. Lo genera `__zip.py` a partir de:
+   NO SE EDITA A MANO. Lo genera `coser.py` a partir de:
      __i18n/claves.json   las claves espanolas, extraidas de topics/
      __i18n/en/<tema>.json  la traduccion, en el mismo orden
 

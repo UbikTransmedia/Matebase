@@ -8,5 +8,6 @@ desktop.ini
 
 # paginas de usar y tirar (previsualizar con antichache, contar cifras)
 __*.html
-__i18n/claves.js
-__i18n/claves.json
+i18n/claves.js
+i18n/claves.json
+__pycache__/

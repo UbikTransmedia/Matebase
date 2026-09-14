@@ -175,10 +175,10 @@ def main():
             vistos.add(s)
             lista.append(s)
         salida[tid] = lista
-    os.makedirs('__i18n', exist_ok=True)
-    io.open('__i18n/claves.js', 'w', encoding='utf-8').write(
+    os.makedirs('i18n', exist_ok=True)
+    io.open('i18n/claves.js', 'w', encoding='utf-8').write(
         'window.__PY = ' + json.dumps(salida, ensure_ascii=False) + ';\n')
-    io.open('__i18n/claves.json', 'w', encoding='utf-8').write(
+    io.open('i18n/claves.json', 'w', encoding='utf-8').write(
         json.dumps(salida, ensure_ascii=False, indent=0))
     n = sum(len(v) for v in salida.values())
     ch = sum(len(s) for v in salida.values() for s in v)

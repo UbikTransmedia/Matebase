@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Cose las traducciones con sus claves y escribe el diccionario.
 
-El traductor escribe, por tema, un archivo `__i18n/en/<tema>.json`: un
+El traductor escribe, por tema, un archivo `i18n/en/<tema>.json`: un
 objeto {frase espanola: frase inglesa}. Las claves se sacan de
-`__i18n/claves.json`, que lo genera `__claves.py` leyendo los temas, y
-`__falta.py` imprime las que quedan por traducir.
+`i18n/claves.json`, que lo genera `extraer.py` leyendo los temas, y
+`falta.py` imprime las que quedan por traducir.
 
 Se empareja por CONTENIDO y no por posicion porque el extractor puede
 afinarse -y se ha afinado- y una lista posicional se descoloca entera en
@@ -19,7 +19,7 @@ CAB = """/* ===================================================================
    la escribio el autor; el valor, su traduccion. Lo que no este aqui sale
    en castellano y el tema lo avisa arriba.
 
-   NO SE EDITA A MANO. Lo genera `__zip.py` a partir de:
+   NO SE EDITA A MANO. Lo genera `coser.py` a partir de:
      __i18n/claves.json   las claves espanolas, extraidas de topics/
      __i18n/en/<tema>.json  la traduccion, en el mismo orden
 
@@ -34,11 +34,11 @@ CAB = """/* ===================================================================
 
 
 def main():
-    claves = json.load(io.open('__i18n/claves.json', encoding='utf-8'))
+    claves = json.load(io.open('i18n/claves.json', encoding='utf-8'))
     txt = {}
     hechos = {}
     parcial = {}
-    for f in sorted(glob.glob('__i18n/en/*.json')):
+    for f in sorted(glob.glob('i18n/en/*.json')):
         tid = os.path.basename(f)[:-5]
         en = json.load(io.open(f, encoding='utf-8'))
         es = claves.get(tid)

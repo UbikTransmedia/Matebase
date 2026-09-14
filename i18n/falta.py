@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 """Imprime las claves que le faltan a un tema (o el recuento de todos).
 
-    python3 __falta.py               resumen por bloque
-    python3 __falta.py lg-conjuntos  las claves pendientes de ese tema
+    python3 i18n/falta.py               resumen por bloque
+    python3 i18n/falta.py lg-conjuntos  las claves pendientes de ese tema
 """
 import io, json, os, re, sys
 
-claves = json.load(io.open('__i18n/claves.json', encoding='utf-8'))
+claves = json.load(io.open('i18n/claves.json', encoding='utf-8'))
 
 
 def hechas(tid):
-    f = '__i18n/en/%s.json' % tid
+    f = 'i18n/en/%s.json' % tid
     if not os.path.exists(f):
         return {}
     d = json.load(io.open(f, encoding='utf-8'))
