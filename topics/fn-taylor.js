@@ -282,8 +282,8 @@ Course.topic('fn-taylor', function (p) {
           (n > 5 ? ' \\dots' : '') + '$<br>' +
           'Con <strong>' + n + '</strong> término' + (n > 1 ? 's' : '') + ': $' + U.fmt(v, 12) + '$<br>' +
           'Valor real: &nbsp;$' + U.fmt(real, 12) + '$<br>' +
-          'Error real: $' + Math.abs(real - v).toExponential(2).replace('.', ',') + '$ · ' +
-          'cota garantizada: $' + cota.toExponential(2).replace('.', ',') + '$');
+          'Error real: $' + U.exp(Math.abs(real - v), 2) + '$ · ' +
+          'cota garantizada: $' + U.exp(cota, 2) + '$');
         plot.render();
       }
       var row = W.row(host);
@@ -501,10 +501,10 @@ Course.topic('fn-taylor', function (p) {
         'Las derivadas del seno son $\\pm\\operatorname{sen}$ y $\\pm\\cos$, todas acotadas por 1: ' +
         '$|f^{(n+1)}(c)| \\le 1$.',
         'Por tanto $|R_{' + d.n + '}| \\le \\dfrac{' + U.fmt(d.x, 1) + '^{' + (d.n + 1) + '}}{' +
-        (d.n + 1) + '!} = ' + d.cota.toExponential(3).replace('.', ',') + '$',
+        (d.n + 1) + '!} = ' + U.exp(d.cota, 3) + '$',
         'Fíjate en que la cota no depende de saber cuánto vale $c$: por eso el truco funciona.'];
     },
-    answer: function (d) { return d.cota.toExponential(3).replace('.', ','); }
+    answer: function (d) { return U.exp(d.cota, 3); }
   });
 
   p.exercise({
@@ -538,7 +538,7 @@ Course.topic('fn-taylor', function (p) {
         d.cifras + '}$.'];
       for (var n = Math.max(1, d.n - 2); n <= d.n; n++) {
         var c = Math.pow(d.x, n + 1) / ML.factorial(n + 1);
-        t.push('$n = ' + n + '$: cota $= ' + c.toExponential(2).replace('.', ',') + '$' +
+        t.push('$n = ' + n + '$: cota $= ' + U.exp(c, 2) + '$' +
           (n === d.n ? ' &nbsp;← ya baja del umbral' : ' — todavía no basta'));
       }
       t.push('Hace falta grado <strong>' + d.n + '</strong>. Como el seno solo tiene potencias ' +

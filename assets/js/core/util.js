@@ -138,6 +138,14 @@
        asi que el unico sitio donde se puede decidir es aqui. */
     return (global.I18N && I18N.actual() !== 'es') ? s : s.replace('.', ',');
   };
+  /** Notacion cientifica con la coma decimal del idioma: 2,34e-5 / 2.34e-5.
+      Mismo motivo que en `U.fmt`: el numero se fabrica al vuelo y no pasa
+      por el diccionario, asi que el separador se decide aqui. */
+  U.exp = function (x, dec) {
+    var s = Number(x).toExponential(dec === undefined ? 2 : dec);
+    return (global.I18N && I18N.actual() !== 'es') ? s : s.replace('.', ',');
+  };
+
   /** Igual que fmt pero anadiendo el signo siempre. */
   U.fmts = function (x, dec) { return (x < 0 ? '' : '+') + U.fmt(x, dec); };
 
