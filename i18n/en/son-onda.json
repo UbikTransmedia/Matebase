@@ -20,6 +20,7 @@
  "$: suena a ": "$: it sounds at ",
  "$T = \\frac{1}{f}$ segundos. Para pasar a milisegundos, multiplica por 1000.": "$T = \\frac{1}{f}$ seconds. To convert to milliseconds, multiply by 1000.",
  "$y = A\\,\\operatorname{sen}(2\\pi f t)$ se escribe <code>A * sin(TAU * f * t)</code>, con los números en el sitio de $A$ y de $f$.": "$y = A\\,\\sin(2\\pi f t)$ is written <code>A * sin(TAU * f * t)</code>, with the numbers in the place of $A$ and of $f$.",
+ "</strong>:<br><pre class=\"shd__mini\">function sonido(t) {\n    return <strong>???</strong>;\n}</pre><span style=\"font-size:0.875rem;color:var(--ink-faint)\">Escribe solo lo que va en el hueco. Se corrige comparando el sonido, así que vale cualquier forma de escribirlo que suene igual.</span>": "</strong>:<br><pre class=\"shd__mini\">function sonido(t) {\n    return <strong>???</strong>;\n}</pre><span style=\"font-size:0.875rem;color:var(--ink-faint)\">Write only what goes in the gap. It is marked by comparing the sound, so any way of writing it that sounds the same will do.</span>",
  "<code>*</code>, <code>/</code>, <code>+</code>, <code>-</code>": "<code>*</code>, <code>/</code>, <code>+</code>, <code>-</code>",
  "<code>// …</code>": "<code>// …</code>",
  "<code>TAU</code>, <code>PI</code>": "<code>TAU</code>, <code>PI</code>",
