@@ -1430,6 +1430,33 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     eq('los enlaces [[tema]] se conservan al traducir', malEnlace.slice(0, 3).join(' | ') || 'todos', 'todos');
     eq('las etiquetas HTML se conservan al traducir', malEtiqueta.slice(0, 3).join(' | ') || 'todas', 'todas');
 
+    /* Los fallos de interpretacion que no se ven leyendo por encima. El
+       primero es el mas caro: «billon» en castellano es un millon de
+       millones y «billion» en ingles es mil millones, asi que traducirlo
+       por lo que parece multiplica por mil el resultado de una frase. */
+    var falsoAmigo = [], comillas = [], comaDecimal = [], senoSinTraducir = [];
+    /* Para buscar comas decimales hay que quitar antes tres cosas que en
+       ingles llevan coma con todo derecho: lo que va dentro de una formula,
+       el separador de millares (1,000) y la notacion de una distribucion,
+       N(0,1). Lo que quede y tenga una coma entre cifras es un decimal a la
+       espanola que se ha colado. */
+    function sinFormulas(x) {
+      return x.split('$').filter(function (_, i) { return i % 2 === 0; }).join(' ')
+        .replace(/[A-Z]\([^)]*\)/g, ' ')
+        .replace(/\d,\d{3}\b/g, ' ');
+    }
+    claves.forEach(function (es) {
+      var en = d.txt[es];
+      if (/billón|billones/i.test(es) && /billion/i.test(en)) falsoAmigo.push(es.slice(0, 45));
+      if (/[«»]/.test(en)) comillas.push(es.slice(0, 45));
+      if (/\d,\d(?!\d)/.test(sinFormulas(en))) comaDecimal.push(es.slice(0, 45));
+      if (/\\operatorname\{(sen|tg|cotg|arcsen)\}/.test(en)) senoSinTraducir.push(es.slice(0, 45));
+    });
+    eq('«billón» no se traduce por «billion» (mil veces más)', falsoAmigo.slice(0, 3).join(' | ') || 'ninguno', 'ninguno');
+    eq('las comillas angulares se cambian por las inglesas', comillas.slice(0, 3).join(' | ') || 'ninguna', 'ninguna');
+    eq('los decimales van con punto fuera de las fórmulas', comaDecimal.slice(0, 3).join(' | ') || 'ninguno', 'ninguno');
+    eq('«sen» y «tg» se traducen a la notación inglesa', senoSinTraducir.slice(0, 3).join(' | ') || 'ninguno', 'ninguno');
+
     truthy('hay temas con la prosa completa (' + Object.keys(d.hechos || {}).length + ')',
       Object.keys(d.hechos || {}).length > 0);
     /* Que un tema marcado como terminado no deje castellano por detras se

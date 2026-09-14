@@ -52,6 +52,11 @@ del tema. `coser.py` las acepta aunque no estén en `claves.json`.
   sobreviven a la traducción. Una `$` perdida parte una fórmula en dos, y
   eso ya ha pasado: lo cazó esta prueba.
 - Un tema marcado como traducido no deja prosa en castellano por detrás.
+- Los fallos de interpretación que no se ven leyendo por encima:
+  **«billón» no es «billion»** (uno es un millón de millones y el otro mil
+  millones: traducirlo por lo que parece multiplica por mil), las comillas
+  angulares se cambian por las inglesas, los decimales llevan punto fuera
+  de las fórmulas, y `\operatorname{sen}` pasa a `\sin`.
 
 ## Estado
 
