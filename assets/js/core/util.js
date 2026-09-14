@@ -133,7 +133,10 @@
     var d = (dec === undefined) ? 4 : dec;
     var v = redondea(x, d);
     var s = (dec === undefined) ? String(v) : v.toFixed(d);
-    return s.replace('.', ',');
+    /* La coma decimal es castellana. En ingles se escribe punto, y estos
+       numeros los fabrica el curso al vuelo -no pasan por el diccionario-,
+       asi que el unico sitio donde se puede decidir es aqui. */
+    return (global.I18N && I18N.actual() !== 'es') ? s : s.replace('.', ',');
   };
   /** Igual que fmt pero anadiendo el signo siempre. */
   U.fmts = function (x, dec) { return (x < 0 ? '' : '+') + U.fmt(x, dec); };

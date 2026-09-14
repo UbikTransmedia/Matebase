@@ -36,7 +36,8 @@
 
   I18N.add = function (codigo, d) {
     d = d || {};
-    d.ui = d.ui || {}; d.cur = d.cur || {}; d.glos = d.glos || {}; d.txt = d.txt || {};
+    d.ui = d.ui || {}; d.cur = d.cur || {}; d.glos = d.glos || {};
+    d.txt = d.txt || {}; d.frag = d.frag || {};
     idiomas[codigo] = d;
     if (codigo === actual) dic = (codigo === 'es') ? null : d;
   };
@@ -61,6 +62,7 @@
     actual = codigo;
     dic = (codigo === 'es') ? null : idiomas[codigo];
     document.documentElement.setAttribute('lang', idiomas[codigo].lang || codigo);
+    if (I18N.contexto) I18N.contexto(I18N.contexto());   // rehace los pedazos
     return codigo;
   };
 
@@ -91,11 +93,46 @@
     return out.sort();
   };
 
-  /** Prosa del curso. Se llama desde MathX.inline, el embudo de todo texto. */
+  /* El tema que se esta pintando. Lo necesita la traduccion por pedazos:
+     ver `I18N.trad`. */
+  var tema = null, pedazos = null;
+  I18N.contexto = function (id) {
+    if (arguments.length) tema = id || null;
+    /* La lista de pedazos del tema mas la general, ya unidas: se arma una
+       vez al entrar y no en cada frase, que por aqui pasa la pagina entera. */
+    pedazos = null;
+    if (dic && tema && dic.frag && dic.hechos && dic.hechos[tema]) {
+      pedazos = (dic.frag[tema] || []).concat(dic.frag['@'] || []);
+    }
+    return tema;
+  };
+
+  /** Prosa del curso. Se llama desde MathX.inline, el embudo de todo texto.
+
+      Casi toda la prosa es un literal fijo y se busca entera. Pero los
+      cuadros de resultado de las demos y los enunciados de los ejercicios
+      se arman al vuelo con numeros dentro -«Estás en $4$. Anterior: $3$»-
+      y no tienen clave posible: cambian en cada tirada. Para esos, el
+      diccionario guarda los PEDAZOS de texto que rodean a los numeros
+      (`d.frag`, por tema) y aqui se sustituyen uno a uno, de mas largo a
+      mas corto para que un pedazo no se coma el principio de otro. */
   I18N.trad = function (s) {
     if (!dic || typeof s !== 'string') return s;
     var v = dic.txt[s];
-    return (v !== undefined) ? v : s;
+    if (v !== undefined) return v;
+    /* Solo en un tema traducido. En uno que sigue en castellano, sustituir
+       pedazos sueltos daria una frase mitad y mitad, peor que la original. */
+    var fr = pedazos;
+    if (!fr) return s;
+    for (var i = 0; i < fr.length; i++) {
+      /* Un pedazo es la pareja [espanol, ingles], o solo el espanol cuando
+         su traduccion ya vive en `txt` y no hace falta repetirla. */
+      var f = fr[i], a = (typeof f === 'string') ? f : f[0];
+      if (s.indexOf(a) < 0) continue;
+      var b = (typeof f === 'string') ? dic.txt[a] : f[1];
+      if (b) s = s.split(a).join(b);
+    }
+    return s;
   };
 
   /** Un tema del temario: titulo, resumen y objetivos. */

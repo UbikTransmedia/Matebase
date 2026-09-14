@@ -2022,35 +2022,46 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       if (!d || !d.hechos || !d.hechos[id]) return [];
       var previo = I18N.actual();
       I18N.usar('en');
+      I18N.contexto(id);
       var orig = MathX.inline, visto = [];
-      /* El enunciado de un ejercicio se arma con numeros al azar en cada
-         generacion, asi que no puede tener una clave fija en el diccionario:
-         no es prosa traducible, es texto fabricado. Se deja fuera de la
-         cuenta marcando el rato en que lo fabrica el motor de ejercicios. */
-      var enEjercicio = false;
-      var oCard = Ex.card, oProb = Ex.problema;
-      Ex.card = function () { enEjercicio = true; try { return oCard.apply(this, arguments); } finally { enEjercicio = false; } };
-      Ex.problema = function () { enEjercicio = true; try { return oProb.apply(this, arguments); } finally { enEjercicio = false; } };
-      var marcado = [];
+      /* Los enunciados SI entran en la cuenta. Llevan numeros distintos en
+         cada tirada y no pueden tener una clave entera, pero el diccionario
+         guarda los pedazos de texto que rodean a esos numeros y los sustituye
+         (`d.frag`): lo que quede en castellano despues de eso es un hueco de
+         verdad, no una limitacion. */
       MathX.inline = function (x) {
-        if (typeof x === 'string' && !enEjercicio) visto.push(x);
+        if (typeof x === 'string') visto.push(x);
         return orig.apply(this, arguments);
       };
-      var h2 = document.createElement('div');
-      h2.style.cssText = 'position:absolute;left:-9999px;top:0;width:760px';
-      document.body.appendChild(h2);
-      try { reg[id](new Page(h2, { id: id })); } catch (e) { /* lo cuenta la otra auditoría */ }
-      document.body.removeChild(h2);
+      /* Tres pasadas: los ejercicios eligen un caso al azar en cada
+         generacion y con una sola no se ven las demas ramas. */
+      for (var v = 0; v < 3; v++) {
+        var h2 = document.createElement('div');
+        h2.style.cssText = 'position:absolute;left:-9999px;top:0;width:760px';
+        document.body.appendChild(h2);
+        try { reg[id](new Page(h2, { id: id })); } catch (e) { /* lo cuenta la otra auditoría */ }
+        document.body.removeChild(h2);
+      }
       MathX.inline = orig;
-      Ex.card = oCard; Ex.problema = oProb;
+      /* Lo que llega a MathX.inline es la frase espanola. La pregunta es que
+         sale al otro lado: se pasa por la misma puerta que usa el curso -que
+         busca la frase entera y, si no esta, sustituye pedazos- y si lo que
+         sale sigue teniendo acentos espanoles, es que va a leerse en
+         castellano. Se mira DESPUES de traducir, no antes. */
+      /* Un acento no basta para decir que una frase sigue en castellano:
+         «Pólya» y «Méchain» son nombres propios y viven igual en ingles. Lo
+         que delata al castellano son sus palabras de servicio, que el ingles
+         no tiene: articulos, preposiciones y relativos. */
+      var CAST = /(^|[\s>«("'])(el|la|los|las|un|una|del|que|con|por|para|como|se|su|sus|al|y|o|más|pero|cada|está|están|este|esta|esto|cuántos|cuántas|cuánto|qué|cuál|sin|hay|entre|según|desde|hasta|cuando|donde|porque|aunque|también|así|entonces|entra|vale|entera)([\s<».,;:?!)'"]|$)/i;
+      var quedan = visto.map(function (x) { return I18N.trad(x); })
+        .filter(function (x) {
+          /* Fuera las formulas: la variable $y$ no es la conjuncion «y». */
+          return CAST.test(x.split('$').filter(function (_, i) {
+            return i % 2 === 0;
+          }).join(' ')) && x.split(/\s+/).length >= 4;
+        });
+      I18N.contexto(null);
       I18N.usar(previo);
-      /* Lo que llega a MathX.inline es la frase espanola: lo que hay que
-         preguntar es si el diccionario la conocia. Si `trad` devuelve lo
-         mismo que entro, no habia traduccion y va a salir en castellano. */
-      var quedan = visto.filter(function (x) {
-        return I18N.diccionario('en').txt[x] === undefined &&
-          /[áéíóúñ¿¡]/i.test(x) && x.split(/\s+/).length >= 4;
-      });
       /* Se guardan a mano: son las frases que el extractor estatico no puede
          ver porque las arma una demo al vuelo, y la unica forma de darles
          clave es leerlas aqui. `__SIN_TRAD` en la consola las lista. */

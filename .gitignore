@@ -11,3 +11,6 @@ __*.html
 i18n/claves.js
 i18n/claves.json
 __pycache__/
+
+# el mapa de pedazos, que lo regenera extraer.py
+i18n/fragmentos.json

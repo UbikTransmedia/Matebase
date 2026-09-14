@@ -33,18 +33,41 @@ Los objetivos del temario pasan por ahí desde `app.js`.
 `coser.py` marca en `d.hechos` los temas cuya prosa está completa: solo esos
 dejan de avisar de que están en castellano.
 
-## Lo que esta tubería NO puede traducir
+## Los enunciados, que llevan números dentro
 
-**Los enunciados de los ejercicios.** El motor los fabrica con números
-distintos en cada generación, así que no hay una frase fija que sirva de
-clave. Un tema traducido lo dice arriba en vez de callárselo, y
-`tests.html` separa las dos cosas: exige que la prosa esté entera y deja
-fuera lo que fabrica el motor de ejercicios.
+El motor fabrica cada enunciado con números distintos —«Estás en $4$.
+Anterior: $3$»— así que la frase entera no puede ser una clave: cambia en
+cada tirada. Lo que sí es fijo son los **pedazos** de texto que rodean a esos
+números, y esos se traducen y se sustituyen dentro de la frase ya armada.
 
-Algunas demos arman su texto al vuelo con literales. Esas frases sí se
-pueden traducir, pero el extractor estático no las ve: aparecen al ejecutar
-la batería (`window.__SIN_TRAD` en la consola) y se añaden a mano al archivo
-del tema. `coser.py` las acepta aunque no estén en `claves.json`.
+`extraer.py` los recoge aparte, en `i18n/fragmentos.json`, y los añade al
+final de la lista del tema para que el traductor los vea como cualquier otra
+frase. `coser.py` los escribe en `d.frag`, ordenados de más largo a más
+corto: si no, un pedazo corto se come el principio de otro largo. `I18N.trad`
+los aplica **solo** cuando la frase entera no está en el diccionario y el
+tema está marcado como traducido; en un tema que sigue en castellano,
+sustituir pedazos daría una frase mitad y mitad, peor que la original.
+
+También entran en `d.frag` las frases enteras que **se insertan** en esos
+enunciados —«un polígono es un cuadrado», que sale de una lista de casos— y
+que tampoco se encuentran buscando la frase completa.
+
+Tres cosas que no se pueden extraer solas y se escriben a mano, en la clave
+reservada `"@frag"` del archivo del tema:
+
+- el pegamento de dos letras: `"¿Es $"`, `"$ a "`;
+- una palabra suelta que viaja dentro del enunciado y que como pedazo
+  general sería peligrosa (`racional` está dentro de `irracional`);
+- los arreglos de orden: el inglés no coloca las palabras donde el
+  castellano, y a veces hay que repartir el sentido entre el prefijo y el
+  dato («Redondea $X$ **a** *el millar* **más próxima**» → «Round $X$ **to**
+  *the nearest thousand*»).
+
+`i18n/en/@global.json` guarda los pedazos que valen para todo el curso: la
+`y` que une dos fórmulas, por ejemplo, aparece en casi todos los temas.
+
+Los números los formatea `U.fmt`, que pone coma decimal en castellano y
+punto en los demás idiomas: por ahí no pasa el diccionario.
 
 ## Lo que vigila la batería
 
@@ -52,6 +75,9 @@ del tema. `coser.py` las acepta aunque no estén en `claves.json`.
   sobreviven a la traducción. Una `$` perdida parte una fórmula en dos, y
   eso ya ha pasado: lo cazó esta prueba.
 - Un tema marcado como traducido no deja prosa en castellano por detrás.
+  Se construye tres veces —los ejercicios eligen caso al azar— y se mira
+  lo que sale DESPUÉS de traducir, pedazos incluidos. Lo que quede se
+  lista en `window.__SIN_TRAD`.
 - Los fallos de interpretación que no se ven leyendo por encima:
   **«billón» no es «billion»** (uno es un millón de millones y el otro mil
   millones: traducirlo por lo que parece multiplica por mil), las comillas
@@ -61,4 +87,5 @@ del tema. `coser.py` las acepta aunque no estén en `claves.json`.
 ## Estado
 
 `python3 i18n/falta.py` lo dice en una tabla. Al cerrar la versión 1.8.0:
-el bloque 0 completo y los 776 objetivos del temario.
+los bloques 0 y 1 completos (Lógica y Aritmética, 26 temas) y los
+776 objetivos del temario.

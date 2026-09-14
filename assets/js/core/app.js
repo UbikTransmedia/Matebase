@@ -371,7 +371,7 @@
   function antesDeEmpezar(t) {
     var req = (t.req || []).filter(function (r) { return BYID[r]; });
     if (!req.length) return null;
-    var box = U.el('nav.prereq', { 'aria-label': 'Temas que este da por sabidos' });
+    var box = U.el('nav.prereq', { 'aria-label': T('Temas que este da por sabidos') });
     box.appendChild(U.el('span.prereq__t', { text: T('Antes de empezar') }));
     var flojos = 0;
     var ul = U.el('ul.prereq__l');
@@ -382,14 +382,14 @@
       ul.appendChild(U.el('li', null, U.el('a.prereq__a.is-' + (st || 'nuevo'), { href: '#/' + rid }, [
         U.el('span.tpc__dot', { 'aria-hidden': 'true' }),
         U.el('span', { text: r.t }),
-        U.el('span.prereq__st', { text: st === 'done' ? 'dominado' : (st === 'seen' ? 'visto' : 'sin empezar') })
+        U.el('span.prereq__st', { text: T(st === 'done' ? 'dominado' : (st === 'seen' ? 'visto' : 'sin empezar')) })
       ])));
     });
     box.appendChild(U.el('p', {
       text: flojos
-        ? 'Este tema da por sabidos los de la lista. Si alguno no lo dominas todavía, empieza por él: ' +
-          'casi todos los atascos vienen de un escalón anterior.'
-        : 'Dominas todo lo que este tema necesita. Adelante.'
+        ? T('Este tema da por sabidos los de la lista. Si alguno no lo dominas todavía, empieza por él: ' +
+            'casi todos los atascos vienen de un escalón anterior.')
+        : T('Dominas todo lo que este tema necesita. Adelante.')
     }));
     box.appendChild(ul);
     return box;
@@ -402,9 +402,9 @@
     return U.el('div.chips.imprimir', null, [
       U.el('button.btn.btn--sm.btn--ghost', {
         type: 'button',
-        title: 'Imprime este tema como ficha: los enunciados con sus casillas en blanco, sin botones',
+        title: T('Imprime este tema como ficha: los enunciados con sus casillas en blanco, sin botones'),
         onclick: function () { global.print(); }
-      }, '🖨 Imprimir como ficha')
+      }, '🖨 ' + T('Imprimir como ficha'))
     ]);
   }
 
@@ -475,6 +475,11 @@
     var t = BYID[id];
     if (!t) return renderHome();
     U.clear(wrapEl);
+    /* La traduccion por pedazos -los cuadros de resultado y los enunciados,
+       que llevan numeros dentro- necesita saber que tema se esta pintando, y
+       lo necesita tambien despues, cada vez que una demo se redibuja o el
+       alumno pide otro ejercicio. Por eso se pone aqui y se queda puesto. */
+    if (global.I18N) I18N.contexto(id);
     // La piel del bloque tiñe el contenido entero: secciones, avisos,
     // enlaces, botones y hasta las gráficas, que leen las variables CSS.
     if (t._block.piel) wrapEl.setAttribute('data-piel', t._block.piel);
@@ -483,14 +488,11 @@
     wrapEl.appendChild(header(t));
     if (!global.I18N || !I18N.temaTraducido(t.id)) {
       avisoIdioma(wrapEl, 'El texto de este tema está en castellano.');
-    } else {
-      /* La prosa esta traducida, pero los enunciados de los ejercicios los
-         fabrica el motor con numeros distintos cada vez: no tienen una frase
-         fija que traducir, y salen en castellano. Decirlo es mejor que
-         dejar que el lector lo descubra al llegar a «Practica». */
-      avisoIdioma(wrapEl, 'Los enunciados de los ejercicios se generan en castellano.',
-        'La explicación de este tema sí está traducida.');
     }
+    /* Cuando el tema esta traducido no se avisa de nada: los enunciados de
+       los ejercicios llevan numeros distintos en cada tirada, pero el texto
+       que los rodea tambien esta traducido (ver `I18N.trad`), asi que no hay
+       ningun trozo de castellano que anunciar. */
     var antes = antesDeEmpezar(t);
     if (antes) wrapEl.appendChild(antes);
     var body = U.el('div');
@@ -539,6 +541,7 @@
   }
 
   function renderHome() {
+    if (global.I18N) I18N.contexto(null);
     U.clear(wrapEl);
     wrapEl.removeAttribute('data-piel');
     crumbEl.innerHTML = '<b>' + U.escape(T('Inicio')) + '</b>';
@@ -699,6 +702,7 @@
      copia y pega; el alumno abre y los tiene, con los mismos numeros. */
 
   function renderDeberes(q) {
+    if (global.I18N) I18N.contexto(null);
     U.clear(wrapEl);
     wrapEl.removeAttribute('data-piel');
     var recibidos = q && q.d ? Ex.leeDeberes(q.d) : null;
@@ -813,6 +817,7 @@
      reproduce las mismas preguntas con los mismos numeros. */
 
   function renderExamen(q) {
+    if (global.I18N) I18N.contexto(null);
     U.clear(wrapEl);
     wrapEl.removeAttribute('data-piel');
     crumbEl.innerHTML = '<a href="#/">' + U.escape(T('Inicio')) + '</a> › <b>' + U.escape(T('Examen')) + '</b>';
@@ -1003,6 +1008,7 @@
   }
 
   function renderRutas(q) {
+    if (global.I18N) I18N.contexto(null);
     U.clear(wrapEl);
     wrapEl.removeAttribute('data-piel');
     var sola = q && q.r ? rutaPorId(q.r) : null;
@@ -1069,6 +1075,7 @@
   }
 
   function renderProgreso() {
+    if (global.I18N) I18N.contexto(null);
     U.clear(wrapEl);
     wrapEl.removeAttribute('data-piel');
     crumbEl.innerHTML = '<a href="#/">' + U.escape(T('Inicio')) + '</a> › <b>' + U.escape(T('Progreso y clase')) + '</b>';

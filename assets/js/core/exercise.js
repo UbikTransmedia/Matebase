@@ -689,7 +689,7 @@
       U.el('span.card__title', { html: MathX.inline(s.title || 'Practica') }),
       U.el('span.card__spacer'),
       origen(this),
-      U.el('span.tag.' + lv[0], { text: lv[1] })
+      U.el('span.tag.' + lv[0], { text: UI(lv[1]) })
     ]);
     this.body = U.el('div.card__body');
     this.preg = new Pregunta(s, {
@@ -774,7 +774,7 @@
       U.el('span.card__spacer'),
       origen(this),
       U.el('span.tag.tag--partes', { text: n + ' apartados' }),
-      U.el('span.tag.' + lv[0], { text: lv[1] })
+      U.el('span.tag.' + lv[0], { text: UI(lv[1]) })
     ]);
     this.body = U.el('div.card__body');
     this.qEl = U.el('div.q');

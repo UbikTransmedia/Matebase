@@ -86,6 +86,17 @@ I18N.add('en', {
     'Adelante': 'Forward',
     'Reiniciar': 'Reset',
     'Antes de empezar': 'Before you start',
+    'básico': 'basic',
+    'medio': 'intermediate',
+    'avanzado': 'advanced',
+    'Imprimir como ficha': 'Print as a worksheet',
+    'Imprime este tema como ficha: los enunciados con sus casillas en blanco, sin botones':
+      'Print this topic as a worksheet: the questions with their boxes blank, no buttons',
+    'Temas que este da por sabidos': 'Topics this one assumes you know',
+    'Este tema da por sabidos los de la lista. Si alguno no lo dominas todavía, empieza por él: casi todos los atascos vienen de un escalón anterior.':
+      'This topic assumes the ones in the list. If you have not mastered one of them yet, start there: almost every sticking point comes from an earlier step.',
+    'Dominas todo lo que este tema necesita. Adelante.':
+      'You have mastered everything this topic needs. Go ahead.',
     '← Anterior': '← Previous',
     'Siguiente →': 'Next →',
     'Saltar al contenido': 'Skip to content',
