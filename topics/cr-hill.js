@@ -153,6 +153,16 @@ Course.topic('cr-hill', function (p) {
   }
   var PARES = ['HO', 'LA', 'ME', 'SA', 'TE', 'NO', 'SI', 'DE', 'EN', 'AR', 'OS', 'UN'];
 
+  /* Dos pares cuya matriz de columnas es invertible módulo 26: la mayoría de
+     las combinaciones de PARES no lo es, así que hay que buscarlos. */
+  function paresIndep(r) {
+    for (var k = 0; k < 100; k++) {
+      var p1 = r.pick(PARES), p2 = r.pick(PARES);
+      if (CR.hillInv([[CR.num(p1.charAt(0)), CR.num(p2.charAt(0))], [CR.num(p1.charAt(1)), CR.num(p2.charAt(1))]])) return [p1, p2];
+    }
+    return ['HO', 'EN'];
+  }
+
   p.exercise({
     title: 'Cifra un par de letras',
     level: 'basico',
@@ -229,10 +239,9 @@ Course.topic('cr-hill', function (p) {
     title: 'Ataque con texto conocido',
     level: 'avanzado',
     gen: function (r) {
-      var K = matVal(r), p1 = r.pick(PARES), p2 = r.pick(PARES);
+      var K = matVal(r), pp = paresIndep(r), p1 = pp[0], p2 = pp[1];
       var X = [[CR.num(p1.charAt(0)), CR.num(p2.charAt(0))], [CR.num(p1.charAt(1)), CR.num(p2.charAt(1))]];
       var Xi = CR.hillInv(X);
-      if (!Xi) return null;
       var c1 = CR.hill(p1, K), c2 = CR.hill(p2, K);
       return { K: K, p1: p1, p2: p2, c1: c1, c2: c2, Xi: Xi };
     },

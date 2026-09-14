@@ -18,6 +18,14 @@
 (function (global) {
   'use strict';
 
+  /* La puerta de traduccion de los rotulos de estas tres paginas. No pasan
+     por MathX.inline -son texto de interfaz, no prosa del curso-, asi que
+     se piden al diccionario `ui` igual que en app.js y en page.js. */
+  function UI(s) { return global.I18N ? I18N.ui(s) : s; }
+  /* Lo que viene de los temas -el titulo de un simulacro, el nombre de un
+     bloque de preguntas- ya esta en el diccionario de prosa: se pide ahi. */
+  function TX(s) { return global.I18N ? I18N.trad(s) : s; }
+
   var ITIN = {
     MII: 'Matemáticas II',
     MCS: 'Matemáticas Aplicadas a las Ciencias Sociales II'
@@ -69,7 +77,7 @@
   }
 
   function estadoTxt(st) {
-    return st === 'done' ? 'dominado' : (st === 'seen' ? 'visto' : 'sin empezar');
+    return UI(st === 'done' ? 'dominado' : (st === 'seen' ? 'visto' : 'sin empezar'));
   }
 
   /* ============================== MAPA ============================== */
@@ -97,8 +105,8 @@
           var wrap = U.el('div.tbl-wrap');
           var t = U.el('table.tbl.mapa__tbl');
           t.appendChild(U.el('thead', null, U.el('tr', null, [
-            U.el('th', { text: 'Tema' }), U.el('th', { text: 'Tu estado' }),
-            U.el('th', { text: 'Lo que da por sabido' })
+            U.el('th', { text: UI('Tema') }), U.el('th', { text: UI('Tu estado') }),
+            U.el('th', { text: UI('Lo que da por sabido') })
           ])));
           tb = U.el('tbody');
           t.appendChild(tb);
@@ -117,11 +125,13 @@
           U.el('td.mapa__req', { html: req.length ? MathX.inline(req.map(function (r) { return '[[' + r + ']]'; }).join(' · ')) : '—' })
         ]));
       });
-      resumen.set('Temario de 2.º de <strong>' + ITIN[cual] + '</strong>: ' + lista.length + ' temas. ' +
-        'Dominados: <strong>' + dom + '</strong> · vistos sin dominar: <strong>' + (vis - dom) + '</strong> · ' +
-        'sin empezar: <strong>' + (lista.length - vis) + '</strong>.<br>' +
-        '<span style="font-size:0.8125rem;color:var(--ink-faint)">«Dominado» significa haber resuelto ' +
-        'al menos una vez cada tipo de ejercicio del tema. Entre paréntesis, cuántos llevas.</span>');
+      resumen.set(UI('Temario de 2.º de') + ' <strong>' + ITIN[cual] + '</strong>: ' + lista.length + ' ' +
+        UI('temas') + '. ' + UI('Dominados') + ': <strong>' + dom + '</strong> · ' +
+        UI('vistos sin dominar') + ': <strong>' + (vis - dom) + '</strong> · ' +
+        UI('sin empezar') + ': <strong>' + (lista.length - vis) + '</strong>.<br>' +
+        '<span style="font-size:0.8125rem;color:var(--ink-faint)">' +
+        UI('«Dominado» significa haber resuelto al menos una vez cada tipo de ejercicio del tema. Entre paréntesis, cuántos llevas.') +
+        '</span>');
     }
     pinta();
     U.bus.on('progress', function () { if (caja.isConnected) pinta(); });
@@ -144,17 +154,17 @@
 
     var caja = U.el('div.card.simul');
     caja.appendChild(U.el('div.card__head', null, [
-      U.el('span.card__kind.simul__kind', { text: o.kind || 'Simulacro' }),
-      U.el('span.card__title', { text: o.titulo || 'Examen de práctica' })
+      U.el('span.card__kind.simul__kind', { text: o.kind ? TX(o.kind) : UI('Simulacro') }),
+      U.el('span.card__title', { text: o.titulo ? TX(o.titulo) : UI('Examen de práctica') })
     ]));
     var cuerpo = U.el('div.card__body');
     caja.appendChild(cuerpo);
     this._add(caja);
 
     cuerpo.appendChild(U.el('p.simul__intro', {
-      text: o.intro || ('Elige los bloques que entran. Las preguntas se sacan al azar de los ejercicios de ' +
+      text: o.intro ? TX(o.intro) : UI(('Elige los bloques que entran. Las preguntas se sacan al azar de los ejercicios de ' +
         'cada tema, dando preferencia a los problemas por apartados, que son los que más se ' +
-        'parecen a la PAU. No hay pistas: la corrección y la solución paso a paso llegan al entregar.')
+        'parecen a la PAU. No hay pistas: la corrección y la solución paso a paso llegan al entregar.'))
     }));
     var lista = U.el('div.simul__partes');
     partes.forEach(function (pt, i) {
@@ -164,9 +174,9 @@
       var nombres = pt.temas.map(function (tid) { var x = porId(tid); return x ? x.t.t : tid; });
       lista.appendChild(U.el('label.simul__parte', { 'for': id }, [
         chk,
-        U.el('span', { html: '<strong>' + U.escape(pt.titulo) + '</strong> · ' + pt.n +
-          (pt.n === 1 ? ' pregunta' : ' preguntas') + ' · ' + (pt.min || 20) + ' min' +
-          '<span class="simul__de">de: ' + U.escape(nombres.join(', ')) + '</span>' })
+        U.el('span', { html: '<strong>' + U.escape(TX(pt.titulo)) + '</strong> · ' + pt.n +
+          ' ' + UI(pt.n === 1 ? 'pregunta' : 'preguntas') + ' · ' + (pt.min || 20) + ' min' +
+          '<span class="simul__de">' + UI('de') + ': ' + U.escape(nombres.join(', ')) + '</span>' })
       ]));
     });
     cuerpo.appendChild(lista);
@@ -174,20 +184,20 @@
     var reloj = U.el('input', { type: 'checkbox', id: idR, checked: true });
     reloj.addEventListener('change', function () { conReloj = reloj.checked; resumen(); });
     cuerpo.appendChild(U.el('label.simul__parte.simul__reloj-op', { 'for': idR }, [
-      reloj, U.el('span', { text: 'Con cronómetro (orientativo: al acabar el tiempo avisa, no corta)' })
+      reloj, U.el('span', { text: UI('Con cronómetro (orientativo: al acabar el tiempo avisa, no corta)') })
     ]));
     var idA = 'simul-' + self.id + '-ajusta';
     var chkA = U.el('input', { type: 'checkbox', id: idA });
     chkA.addEventListener('change', function () { ajusta = chkA.checked; resumen(); });
     cuerpo.appendChild(U.el('label.simul__parte.simul__reloj-op', { 'for': idA }, [
       chkA, U.el('span', {
-        html: 'Ajustado a lo que llevas hecho <span class="simul__de">entran antes las preguntas que ' +
-          'no has resuelto nunca y las de los temas que aún no dominas</span>'
+        html: UI('Ajustado a lo que llevas hecho') + ' <span class="simul__de">' +
+          UI('entran antes las preguntas que no has resuelto nunca y las de los temas que aún no dominas') + '</span>'
       })
     ]));
     var info = U.el('p.simul__info');
     cuerpo.appendChild(info);
-    var bEmpezar = U.el('button.btn.btn--main', { type: 'button', text: 'Empezar el simulacro' });
+    var bEmpezar = U.el('button.btn.btn--main', { type: 'button', text: UI('Empezar el simulacro') });
     cuerpo.appendChild(U.el('div.simul__pie', null, [bEmpezar]));
     var aviso = U.el('div.card__aviso', { role: 'status', 'aria-live': 'polite' });
     caja.appendChild(aviso);
@@ -202,9 +212,10 @@
     function resumen() {
       var n = 0;
       partes.forEach(function (pt, i) { if (elegidas[i]) n += pt.n; });
-      info.textContent = n ? n + ' preguntas' + (conReloj ? ' · ' + minutos() + ' minutos' : ' · sin límite de tiempo') +
-          (ajusta ? ' · ajustado a tus fallos' : ' · al azar')
-        : 'Elige al menos un bloque.';
+      info.textContent = n ? n + ' ' + UI('preguntas') +
+          (conReloj ? ' · ' + minutos() + ' ' + UI('minutos') : ' · ' + UI('sin límite de tiempo')) +
+          ' · ' + UI(ajusta ? 'ajustado a tus fallos' : 'al azar')
+        : UI('Elige al menos un bloque.');
       bEmpezar.disabled = !n;
     }
     resumen();
@@ -257,13 +268,13 @@
 
     function empezar(semilla) {
       if (!puedeCargar()) {
-        aviso.textContent = 'El simulacro necesita el curso abierto desde index.html.';
+        aviso.textContent = UI('El simulacro necesita el curso abierto desde index.html.');
         return;
       }
       var rng = U.rng(semilla);
       var semillaExamen = rng.seed;
       bEmpezar.disabled = true;
-      aviso.textContent = 'Preparando las preguntas…';
+      aviso.textContent = UI('Preparando las preguntas…');
       var ids = [];
       partes.forEach(function (pt, i) {
         if (elegidas[i]) pt.temas.forEach(function (tid) { if (ids.indexOf(tid) < 0) ids.push(tid); });
@@ -281,7 +292,7 @@
         });
         aviso.textContent = '';
         bEmpezar.disabled = false;
-        bEmpezar.textContent = 'Empezar otro simulacro';
+        bEmpezar.textContent = UI('Empezar otro simulacro');
         monta(grupos, rng, semillaExamen);
       });
     }
@@ -293,15 +304,15 @@
 
       var relojEl = U.el('span.simul__reloj');
       var cuentaEl = U.el('span.simul__cuenta');
-      var bEntregar = U.el('button.btn.btn--ok', { type: 'button', text: 'Entregar y corregir' });
-      zona.appendChild(U.el('div.simul__barra', { role: 'region', 'aria-label': 'Control del simulacro' }, [
+      var bEntregar = U.el('button.btn.btn--ok', { type: 'button', text: UI('Entregar y corregir') });
+      zona.appendChild(U.el('div.simul__barra', { role: 'region', 'aria-label': UI('Control del simulacro') }, [
         conReloj ? relojEl : null, cuentaEl, U.el('span.card__spacer'), bEntregar
       ]));
       var resultado = U.el('div.simul__res', { role: 'status', 'aria-live': 'polite' });
       zona.appendChild(resultado);
 
       grupos.forEach(function (g) {
-        zona.appendChild(U.el('div.sec', null, U.el('h2', { text: g.parte.titulo })));
+        zona.appendChild(U.el('div.sec', null, U.el('h2', { text: TX(g.parte.titulo) })));
         g.items.forEach(function (c) {
           num++;
           var x = porId(c.tid);
@@ -356,7 +367,7 @@
 
       bEntregar.addEventListener('click', function () {
         var sin = tarjetas.filter(function (t) { return !t.card.respondida(); }).length;
-        if (sin && !confirm('Quedan ' + sin + ' preguntas sin responder. ¿Entregar igualmente?')) return;
+        if (sin && !confirm(UI('Quedan') + ' ' + sin + ' ' + UI('preguntas sin responder. ¿Entregar igualmente?'))) return;
         if (intervalo) clearInterval(intervalo);
         bEntregar.disabled = true;
         var suma = 0, porParte = [], idx = {};
@@ -371,16 +382,17 @@
         });
         var nota10 = total ? 10 * suma / total : 0;
         var html = '<div class="simul__nota"><span class="simul__cifra">' + U.fmt(nota10, 1) +
-          '</span><span class="simul__sobre"> sobre 10</span></div>';
-        html += '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Bloque</th><th class="num">Puntos</th>' +
-          '<th>Para repasar</th></tr></thead><tbody>';
+          '</span><span class="simul__sobre"> ' + UI('sobre 10') + '</span></div>';
+        html += '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>' + UI('Bloque') +
+          '</th><th class="num">' + UI('Puntos') + '</th><th>' + UI('Para repasar') +
+          '</th></tr></thead><tbody>';
         porParte.forEach(function (pp) {
-          html += '<tr><td>' + U.escape(pp.titulo) + '</td><td class="num">' + U.fmt(pp.suma, 2) + ' / ' + pp.n + '</td><td>' +
+          html += '<tr><td>' + U.escape(TX(pp.titulo)) + '</td><td class="num">' + U.fmt(pp.suma, 2) + ' / ' + pp.n + '</td><td>' +
             (pp.flojos.length ? pp.flojos.map(function (t) {
               var x = porId(t.tid);
               return '<a class="simul__repasa" href="#/' + t.tid + '?e=' + t.n + '">' +
                 U.escape((x ? x.t.t : t.tid) + ' · ' + t.titulo.replace(/<[^>]+>|\$/g, '')) + '</a>';
-            }).join('<br>') : 'nada: todo bien') + '</td></tr>';
+            }).join('<br>') : UI('nada: todo bien')) + '</td></tr>';
         });
         html += '</tbody></table></div>';
         /* EL REPARTO DEL TIEMPO. En un examen no basta con saber: hay que
@@ -400,18 +412,17 @@
              diez minutos, con un decimal. Decir «unos 1 min» arriba y «0,1
              min» abajo para la misma pregunta es peor que no decir nada. */
           function mm(x) { return x < 10 ? U.fmt(x, 1) : U.fmt(x, 0); }
-          html += '<div class="simul__tiempo"><strong>El reparto del tiempo.</strong> ' +
-            'Has tardado <strong>' + mm(minutosTotal) + ' min</strong>' +
-            (conReloj ? ' de los ' + presupuesto + ' del examen' : '') + '. ' +
+          html += '<div class="simul__tiempo"><strong>' + UI('El reparto del tiempo.') + '</strong> ' +
+            UI('Has tardado') + ' <strong>' + mm(minutosTotal) + ' min</strong>' +
+            (conReloj ? ' ' + UI('de los') + ' ' + presupuesto + ' ' + UI('del examen') : '') + '. ' +
             (lenta.mins < 0.5
-              ? 'Ninguna pregunta te ha llevado ni medio minuto, así que aquí no hay mucho que mirar: ' +
-                'el reparto del tiempo se ve cuando el examen se hace de verdad.'
-              : 'Donde más rato estuviste fue en la <strong>pregunta ' + lenta.num + '</strong>, ' +
+              ? UI('Ninguna pregunta te ha llevado ni medio minuto, así que aquí no hay mucho que mirar: el reparto del tiempo se ve cuando el examen se hace de verdad.')
+              : UI('Donde más rato estuviste fue en la') + ' <strong>' + UI('pregunta') + ' ' + lenta.num + '</strong>, ' +
                 mm(lenta.mins) + ' min' +
                 (lenta.mins > porPregunta * 2
-                  ? ', más del doble de los ' + mm(porPregunta) + ' que le tocaban. En un examen de ' +
-                    'verdad, ése es el momento de dejarla a medias, hacer las demás y volver.'
-                  : ', y le tocaban ' + mm(porPregunta) + ': dentro de lo razonable.')) +
+                  ? ', ' + UI('más del doble de los') + ' ' + mm(porPregunta) + ' ' +
+                    UI('que le tocaban. En un examen de verdad, ése es el momento de dejarla a medias, hacer las demás y volver.')
+                  : ', ' + UI('y le tocaban') + ' ' + mm(porPregunta) + ': ' + UI('dentro de lo razonable.'))) +
             '<br><span class="simul__tiempo-det">' +
             conTiempo.slice(0, 5).map(function (x) {
               return 'p' + x.num + ': ' + mm(x.mins) + ' min';
@@ -419,22 +430,22 @@
             '</span></div>';
         }
 
-        html += '<p class="simul__nota-pie">Cada pregunta vale lo mismo; en los problemas por apartados ' +
-          'cuenta la parte acertada. Las soluciones paso a paso están ya abiertas debajo de cada ' +
-          'pregunta. Lo que falles volverá a salirte en «Para repasar hoy», en la portada.</p>';
+        html += '<p class="simul__nota-pie">' +
+          UI('Cada pregunta vale lo mismo; en los problemas por apartados cuenta la parte acertada. Las soluciones paso a paso están ya abiertas debajo de cada pregunta. Lo que falles volverá a salirte en «Para repasar hoy», en la portada.') +
+          '</p>';
         resultado.innerHTML = html;
         var pie = U.el('div.simul__pie');
         pie.appendChild(U.el('button.btn.btn--main', {
-          type: 'button', text: 'Otro simulacro',
+          type: 'button', text: UI('Otro simulacro'),
           onclick: function () { empezar(); caja.scrollIntoView({ block: 'start' }); }
         }));
-        var bEnlace = U.el('button.btn', { type: 'button', html: '&#128279; Enlace a este mismo examen' });
+        var bEnlace = U.el('button.btn', { type: 'button', html: '&#128279; ' + UI('Enlace a este mismo examen') });
         bEnlace.addEventListener('click', function () {
           try {
             navigator.clipboard.writeText(urlExamen).then(function () {
-              bEnlace.textContent = 'Enlace copiado: quien lo abra tendrá estas mismas preguntas';
-            }, function () { prompt('Copia este enlace:', urlExamen); });
-          } catch (e) { prompt('Copia este enlace:', urlExamen); }
+              bEnlace.textContent = UI('Enlace copiado: quien lo abra tendrá estas mismas preguntas');
+            }, function () { prompt(UI('Copia este enlace:'), urlExamen); });
+          } catch (e) { prompt(UI('Copia este enlace:'), urlExamen); }
         });
         pie.appendChild(bEnlace);
         resultado.appendChild(pie);
@@ -460,7 +471,7 @@
       { label: 'MACS II', value: 'MCS' }
     ], { value: cual, on: function (v) { cual = v; monta(); } });
     barra.appendChild(U.el('button.btn', {
-      type: 'button', html: '&#128424; Imprimir o guardar en PDF',
+      type: 'button', html: '&#128424; ' + UI('Imprimir o guardar en PDF'),
       onclick: function () { global.print(); }
     }));
     var aviso = U.el('div.formu__aviso', { role: 'status', 'aria-live': 'polite' });
@@ -472,12 +483,12 @@
     function monta() {
       U.clear(zona);
       if (!puedeCargar()) {
-        aviso.textContent = 'El formulario se monta al abrir el curso desde index.html.';
+        aviso.textContent = UI('El formulario se monta al abrir el curso desde index.html.');
         return;
       }
       var lista = temario(cual);
       var mio = ++turno;
-      aviso.textContent = 'Reuniendo las fórmulas de ' + lista.length + ' temas…';
+      aviso.textContent = UI('Reuniendo las fórmulas de') + ' ' + lista.length + ' ' + UI('temas…');
       recoge(lista.map(function (x) { return x.t.id; }), function (rec) {
         if (mio !== turno) return;
         var bloque = null;
@@ -498,7 +509,7 @@
           });
           if (r.claves.length) {
             var k = U.el('div.keys');
-            k.appendChild(U.el('h3', { text: 'Ideas clave' }));
+            k.appendChild(U.el('h3', { text: UI('Ideas clave') }));
             var ul = U.el('ul');
             r.claves.forEach(function (c) { ul.appendChild(U.el('li', { html: MathX.inline(c) })); });
             k.appendChild(ul);

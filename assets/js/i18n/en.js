@@ -149,7 +149,77 @@ I18N.add('en', {
     'El curso está escrito en castellano.': 'This course is written in Spanish.',
     'Esta página está escrita en castellano.': 'This page is written in Spanish.',
     'La interfaz y el temario están traducidos; la explicación, todavía no.':
-      'The interface and the syllabus are translated; the explanation is not — yet.'
+      'The interface and the syllabus are translated; the explanation is not — yet.',
+
+    /* --- el mapa, los simulacros y el formulario de 2.º (repaso.js) --- */
+    'Tema': 'Topic',
+    'Tu estado': 'Your progress',
+    'Lo que da por sabido': 'What it takes for granted',
+    'dominado': 'mastered',
+    'visto': 'seen',
+    'sin empezar': 'not started',
+    'Temario de 2.º de': 'Final-year syllabus of',
+    'temas': 'topics',
+    'Dominados': 'Mastered',
+    'vistos sin dominar': 'seen but not mastered',
+    '«Dominado» significa haber resuelto al menos una vez cada tipo de ejercicio del tema. Entre paréntesis, cuántos llevas.':
+      '“Mastered” means having solved each kind of exercise in the topic at least once. In brackets, how many you have done.',
+    'Simulacro': 'Mock paper',
+    'Examen de práctica': 'Practice exam',
+    'Elige los bloques que entran. Las preguntas se sacan al azar de los ejercicios de cada tema, dando preferencia a los problemas por apartados, que son los que más se parecen a la PAU. No hay pistas: la corrección y la solución paso a paso llegan al entregar.':
+      'Choose the blocks that are included. The questions are drawn at random from each topic\u2019s exercises, giving preference to the multi-part problems, which are the ones that most resemble the entrance exam. There are no hints: the marking and the step-by-step solution arrive when you submit.',
+    'pregunta': 'question',
+    'preguntas': 'questions',
+    'de': 'from',
+    'Con cronómetro (orientativo: al acabar el tiempo avisa, no corta)':
+      'With a stopwatch (indicative: when the time is up it warns you, it does not cut you off)',
+    'Ajustado a lo que llevas hecho': 'Tuned to what you have done so far',
+    'entran antes las preguntas que no has resuelto nunca y las de los temas que aún no dominas':
+      'questions you have never solved and questions from topics you have not mastered come first',
+    'Empezar el simulacro': 'Start the mock paper',
+    'Empezar otro simulacro': 'Start another mock paper',
+    'minutos': 'minutes',
+    'sin límite de tiempo': 'no time limit',
+    'ajustado a tus fallos': 'tuned to your mistakes',
+    'al azar': 'at random',
+    'Elige al menos un bloque.': 'Choose at least one block.',
+    'El simulacro necesita el curso abierto desde index.html.':
+      'The mock paper needs the course open from index.html.',
+    'Preparando las preguntas…': 'Preparing the questions…',
+    'Entregar y corregir': 'Submit and mark',
+    'Control del simulacro': 'Mock paper controls',
+    'Quedan': 'There are still',
+    'preguntas sin responder. ¿Entregar igualmente?': 'questions unanswered. Submit anyway?',
+    'sobre 10': 'out of 10',
+    'Bloque': 'Block',
+    'Puntos': 'Marks',
+    'Para repasar': 'To revise',
+    'nada: todo bien': 'nothing: all correct',
+    'El reparto del tiempo.': 'How the time was spent.',
+    'Has tardado': 'You took',
+    'de los': 'of the',
+    'del examen': 'of the exam',
+    'Ninguna pregunta te ha llevado ni medio minuto, así que aquí no hay mucho que mirar: el reparto del tiempo se ve cuando el examen se hace de verdad.':
+      'No question took you even half a minute, so there is not much to look at here: how the time is spent shows up when the exam is done for real.',
+    'Donde más rato estuviste fue en la': 'Where you spent longest was on',
+    'más del doble de los': 'more than double the',
+    'que le tocaban. En un examen de verdad, ése es el momento de dejarla a medias, hacer las demás y volver.':
+      'it was allotted. In a real exam, that is the moment to leave it half done, do the rest and come back.',
+    'y le tocaban': 'and it was allotted',
+    'dentro de lo razonable.': 'within reason.',
+    'Cada pregunta vale lo mismo; en los problemas por apartados cuenta la parte acertada. Las soluciones paso a paso están ya abiertas debajo de cada pregunta. Lo que falles volverá a salirte en «Para repasar hoy», en la portada.':
+      'Every question is worth the same; in multi-part problems the part you got right counts. The step-by-step solutions are already open under each question. What you get wrong will come up again under “To revise today”, on the home page.',
+    'Otro simulacro': 'Another mock paper',
+    'Enlace a este mismo examen': 'Link to this very exam',
+    'Enlace copiado: quien lo abra tendrá estas mismas preguntas':
+      'Link copied: whoever opens it will get these same questions',
+    'Copia este enlace:': 'Copy this link:',
+    'Imprimir o guardar en PDF': 'Print or save as PDF',
+    'El formulario se monta al abrir el curso desde index.html.':
+      'The formula sheet is assembled when the course is opened from index.html.',
+    'Reuniendo las fórmulas de': 'Gathering the formulas of',
+    'temas…': 'topics…',
+    'Ideas clave': 'Key ideas'
   },
 
   cur: {
