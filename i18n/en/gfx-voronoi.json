@@ -23,6 +23,7 @@
  "<strong>Las tres distancias.</strong> A $A$: $\\sqrt{0{,}64 + 0{,}81} = \\sqrt{1{,}45} \\approx 1{,}204$. A $B$: $\\sqrt{1{,}44 + 0{,}81} = 1{,}5$. A $C$: $\\sqrt{0{,}64 + 1{,}21} \\approx 1{,}360$.": "<strong>The three distances.</strong> To $A$: $\\sqrt{0{.}64 + 0{.}81} = \\sqrt{1{.}45} \\approx 1{.}204$. To $B$: $\\sqrt{1{.}44 + 0{.}81} = 1{.}5$. To $C$: $\\sqrt{0{.}64 + 1{.}21} \\approx 1{.}360$.",
  "<strong>Ordenar.</strong> $F_1 = 1{,}204$ (gana $A$), $F_2 = 1{,}360$ ($C$). El píxel está en la celda de $A$.": "<strong>Ordering.</strong> $F_1 = 1{.}204$ ($A$ wins), $F_2 = 1{.}360$ ($C$). The pixel is in $A$'s cell.",
  "@frag": {
+  "// distancia al punto sembrado mas cercano": "// distance to the nearest sown point",
   "// donde siembra": "// where it sows",
   "// que celda vecina": "// which neighbouring cell"
  },
