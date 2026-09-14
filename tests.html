@@ -50,7 +50,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     var t = '?t=' + Date.now();
     ['version', 'core/util', 'core/i18n', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
      'core/shader', 'core/sonido', 'core/cripto', 'core/nn', 'core/logica', 'core/maquina', 'core/lenguaje', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
-     'glosario', 'glsl', 'javascript', 'i18n/en'].forEach(function (f) {
+     'glosario', 'glsl', 'javascript', 'i18n/en', 'i18n/en-txt'].forEach(function (f) {
       document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
     });
   })();
@@ -1394,6 +1394,49 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
     eq('y al volver al castellano manda el original', I18N.ui('Glosario'), 'Glosario');
   })();
 
+  /* ---------------- la prosa traducida ----------------
+     La traduccion de la prosa se guarda como {frase espanola: inglesa}, y
+     una traduccion mal copiada no rompe nada: simplemente sale la frase en
+     castellano y nadie se entera. Por eso hay que preguntarlo a proposito.
+
+     Se comprueban dos cosas distintas. Una, que cada pareja conserve la
+     ESTRUCTURA: las formulas van entre $...$ y los enlaces entre [[...]],
+     asi que si el ingles no tiene los mismos, o se ha comido una formula o
+     ha roto un enlace. Dos, que un tema marcado como terminado lo este de
+     verdad: se construye entero en ingles y no puede quedar ni una frase
+     con letras que solo existen en castellano. */
+  group('idiomas · la prosa traducida');
+  (function () {
+    var d = window.I18N && I18N.diccionario('en');
+    if (!d || !d.txt) { ko('en-txt.js se carga', 'no está', 'el diccionario de prosa'); return; }
+    var claves = Object.keys(d.txt);
+    truthy('hay prosa traducida (' + claves.length + ' frases)', claves.length > 100);
+
+    function dolares(s) { return (s.match(/\$/g) || []).length; }
+    function enlaces(s) {
+      return (s.match(/\[\[[a-z0-9-]+/g) || []).sort().join(',');
+    }
+    var malFormula = [], malEnlace = [], malEtiqueta = [];
+    claves.forEach(function (es) {
+      var en = d.txt[es];
+      if (dolares(es) !== dolares(en)) malFormula.push(es.slice(0, 40));
+      if (enlaces(es) !== enlaces(en)) malEnlace.push(es.slice(0, 40));
+      ['strong', 'em', 'code', 'br'].forEach(function (tag) {
+        var re = new RegExp('<' + tag + '[ >]', 'g');
+        if ((es.match(re) || []).length !== (en.match(re) || []).length) malEtiqueta.push(tag + ' · ' + es.slice(0, 30));
+      });
+    });
+    eq('las fórmulas $…$ se conservan al traducir', malFormula.slice(0, 3).join(' | ') || 'todas', 'todas');
+    eq('los enlaces [[tema]] se conservan al traducir', malEnlace.slice(0, 3).join(' | ') || 'todos', 'todos');
+    eq('las etiquetas HTML se conservan al traducir', malEtiqueta.slice(0, 3).join(' | ') || 'todas', 'todas');
+
+    truthy('hay temas con la prosa completa (' + Object.keys(d.hechos || {}).length + ')',
+      Object.keys(d.hechos || {}).length > 0);
+    /* Que un tema marcado como terminado no deje castellano por detras se
+       comprueba en la auditoria de temas, que ya los construye todos: alli
+       estan cargados y no hay que volver a montarlos. */
+  })();
+
   /* ---------------- las rutas de la ampliacion ----------------
      Una ruta manda al alumno de un tema a otro por su cuenta, asi que tiene
      que cumplir lo mismo que el temario: nada antes que sus requisitos. Si
@@ -1943,6 +1986,55 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       return fallos;
     }
 
+    /* Un tema marcado como traducido que deja castellano por detras es lo
+       peor de los dos mundos: no avisa de que esta a medias y ademas se lee
+       a medias. Se construye otra vez en ingles y se busca cualquier frase
+       de varias palabras con letras que en ingles no existen. */
+    function auditarTraduccion(id, host) {
+      var d = window.I18N && I18N.diccionario('en');
+      if (!d || !d.hechos || !d.hechos[id]) return [];
+      var previo = I18N.actual();
+      I18N.usar('en');
+      var orig = MathX.inline, visto = [];
+      /* El enunciado de un ejercicio se arma con numeros al azar en cada
+         generacion, asi que no puede tener una clave fija en el diccionario:
+         no es prosa traducible, es texto fabricado. Se deja fuera de la
+         cuenta marcando el rato en que lo fabrica el motor de ejercicios. */
+      var enEjercicio = false;
+      var oCard = Ex.card, oProb = Ex.problema;
+      Ex.card = function () { enEjercicio = true; try { return oCard.apply(this, arguments); } finally { enEjercicio = false; } };
+      Ex.problema = function () { enEjercicio = true; try { return oProb.apply(this, arguments); } finally { enEjercicio = false; } };
+      var marcado = [];
+      MathX.inline = function (x) {
+        if (typeof x === 'string' && !enEjercicio) visto.push(x);
+        return orig.apply(this, arguments);
+      };
+      var h2 = document.createElement('div');
+      h2.style.cssText = 'position:absolute;left:-9999px;top:0;width:760px';
+      document.body.appendChild(h2);
+      try { reg[id](new Page(h2, { id: id })); } catch (e) { /* lo cuenta la otra auditoría */ }
+      document.body.removeChild(h2);
+      MathX.inline = orig;
+      Ex.card = oCard; Ex.problema = oProb;
+      I18N.usar(previo);
+      /* Lo que llega a MathX.inline es la frase espanola: lo que hay que
+         preguntar es si el diccionario la conocia. Si `trad` devuelve lo
+         mismo que entro, no habia traduccion y va a salir en castellano. */
+      var quedan = visto.filter(function (x) {
+        return I18N.diccionario('en').txt[x] === undefined &&
+          /[áéíóúñ¿¡]/i.test(x) && x.split(/\s+/).length >= 4;
+      });
+      /* Se guardan a mano: son las frases que el extractor estatico no puede
+         ver porque las arma una demo al vuelo, y la unica forma de darles
+         clave es leerlas aqui. `__SIN_TRAD` en la consola las lista. */
+      window.__SIN_TRAD = window.__SIN_TRAD || {};
+      if (quedan.length) window.__SIN_TRAD[id] = quedan;
+      return quedan.length
+        ? ['marcado como traducido al inglés, pero deja ' + quedan.length +
+           ' frase(s) en castellano, la primera: «' + quedan[0].slice(0, 60) + '»']
+        : [];
+    }
+
     function build() {
       var html = '', malos = 0;
       var host = document.createElement('div');
@@ -1964,6 +2056,7 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
           var pg = new Page(h, t);
           reg[t.id](pg);
           var aud = auditar(pg.specs);
+          aud = aud.concat(auditarTraduccion(t.id, h));
           // Una comprobación sin opción correcta, o con una opción sin
           // explicación, deja al alumno sin saber por qué. Y un ejemplo
           // resuelto de un solo paso no es un ejemplo resuelto.

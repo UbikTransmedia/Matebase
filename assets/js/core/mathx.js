@@ -460,17 +460,27 @@
 
   var MathX = {};
 
+  /* La traduccion entra aqui, en el embudo, y no en cada tema: la clave es
+     la cadena espanola tal cual la escribio el autor, antes de resolver los
+     enlaces y antes de partir por los $. Un idioma sin esa clave cae al
+     original, que es lo que se quiere: media pagina traducida se lee; media
+     pagina en blanco, no. */
+  function tr(s) {
+    return (window.I18N && I18N.trad) ? I18N.trad(s) : s;
+  }
+
   MathX.render = function (tex) {
-    return '<span class="mx">' + render(tex) + '</span>';
+    return '<span class="mx">' + render(tr(tex)) + '</span>';
   };
   MathX.display = function (tex) {
     enBloque = true;
-    try { return '<span class="mx mx-display">' + render(tex) + '</span>'; }
+    try { return '<span class="mx mx-display">' + render(tr(tex)) + '</span>'; }
     finally { enBloque = false; }
   };
   /** Sustituye los tramos $...$ dentro de un texto que puede llevar HTML. */
   MathX.inline = function (s) {
     if (s === null || s === undefined) return '';
+    s = tr(String(s));
     /* Los enlaces entre capitulos se resuelven aqui porque este es el embudo
        por el que pasa toda la prosa del curso: parrafos, notas, pistas, pasos
        de una solucion y marcadores. Un solo sitio, y funcionan en todos. */

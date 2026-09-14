@@ -224,6 +224,11 @@ Los detalles están en **`GUIA-AUTOR.md`**.
 ## Notas técnicas
 
 - Sin dependencias, sin `npm`, sin compilación. JavaScript plano.
+- El curso se puede leer en **inglés**: la interfaz, el temario y los objetivos
+  están traducidos, y la prosa se va traduciendo bloque a bloque (ahora, el 0).
+  Cada tema dice arriba en qué estado está. Los **enunciados de los ejercicios
+  se generan con números distintos cada vez**, así que no tienen una frase fija
+  que traducir y salen en castellano; el aviso lo dice.
 - No se usa `fetch` ni módulos ES porque el navegador los bloquea en `file://`;
   los temas se cargan inyectando etiquetas `<script>` clásicas bajo demanda.
 - Tres temas de color —**claro** por defecto, oscuro y **monokai** de contraste

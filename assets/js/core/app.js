@@ -96,6 +96,9 @@
   /* Un texto de interfaz. Si no hay diccionario -o la frase no esta en el-,
      sale en castellano, que es el original. */
   function T(s) { return global.I18N ? I18N.ui(s) : s; }
+  /** Prosa del curso escrita por el autor: va al diccionario de texto, no
+      al de interfaz. Los objetivos del temario entran por aqui. */
+  function TX(s) { return global.I18N ? I18N.trad(s) : s; }
   Course.T = T;
 
   /* Los rotulos que vienen escritos en index.html. Son pocos y estan en un
@@ -335,7 +338,7 @@
 
   function etiquetasCurso(t) {
     var out = [];
-    if (t.curso && CURSOS[t.curso]) out.push(U.el('span.tag.tag--curso', { text: CURSOS[t.curso] }));
+    if (t.curso && CURSOS[t.curso]) out.push(U.el('span.tag.tag--curso', { text: T(CURSOS[t.curso]) }));
     (t.itin || []).forEach(function (k) {
       if (ITIN[k]) out.push(U.el('span.tag.tag--' + k.toLowerCase(), { text: ITIN[k].corto, title: ITIN[k].largo }));
     });
@@ -347,7 +350,7 @@
        poner al pie de la ficha de donde sale, que en papel es lo unico que
        permite volver. */
     var h = U.el('div.hdr', { 'data-ruta': (location.pathname.split('/').pop() || 'index.html') + '#/' + t.id });
-    h.appendChild(U.el('div.hdr__over', { text: 'Bloque ' + t._block.n + ' · ' + t._block.title }));
+    h.appendChild(U.el('div.hdr__over', { text: T('Bloque') + ' ' + t._block.n + ' · ' + t._block.title }));
     // El titulo se puede enfocar: al cambiar de tema, el foco aterriza aqui
     // en vez de quedarse a mitad del indice.
     h.appendChild(U.el('h1', { html: MathX.inline(t.t), tabindex: '-1' }));
@@ -356,7 +359,7 @@
     if (cur.length) h.appendChild(U.el('div.hdr__curso', null, cur));
     if (t.o && t.o.length) {
       var meta = U.el('div.hdr__meta');
-      t.o.forEach(function (o) { meta.appendChild(U.el('span.tag', { text: o })); });
+      t.o.forEach(function (o) { meta.appendChild(U.el('span.tag', { text: TX(o) })); });
       h.appendChild(meta);
     }
     return h;
@@ -427,7 +430,7 @@
       '<code>topics/' + t.id + '.js</code> aparecerá aquí sin tocar nada más.</p>' +
       '<p><strong>Lo que cubrirá:</strong></p>';
     var ul = U.el('ul');
-    (t.o || []).forEach(function (o) { ul.appendChild(U.el('li', { text: o })); });
+    (t.o || []).forEach(function (o) { ul.appendChild(U.el('li', { text: TX(o) })); });
     box.appendChild(ul);
     root.appendChild(box);
   }
@@ -438,7 +441,7 @@
   function indiceDelTema(p, body) {
     if (!p.secciones || p.secciones.length < 3) return;
     var nav = U.el('nav.toc', { 'aria-label': 'Secciones de este tema' });
-    nav.appendChild(U.el('span.toc__t', { text: 'En este tema' }));
+    nav.appendChild(U.el('span.toc__t', { text: T('En este tema') }));
     var ol = U.el('ol.toc__l');
     p.secciones.forEach(function (s) {
       var a = U.el('a', { href: '#' + s.el.id, html: MathX.inline(s.t) });
@@ -480,6 +483,13 @@
     wrapEl.appendChild(header(t));
     if (!global.I18N || !I18N.temaTraducido(t.id)) {
       avisoIdioma(wrapEl, 'El texto de este tema está en castellano.');
+    } else {
+      /* La prosa esta traducida, pero los enunciados de los ejercicios los
+         fabrica el motor con numeros distintos cada vez: no tienen una frase
+         fija que traducir, y salen en castellano. Decirlo es mejor que
+         dejar que el lector lo descubra al llegar a «Practica». */
+      avisoIdioma(wrapEl, 'Los enunciados de los ejercicios se generan en castellano.',
+        'La explicación de este tema sí está traducida.');
     }
     var antes = antesDeEmpezar(t);
     if (antes) wrapEl.appendChild(antes);
@@ -519,12 +529,12 @@
      prosa sigue en castellano y eso no puede ser una sorpresa a mitad de
      pagina. El aviso va en la portada y en cada tema, porque son las dos
      puertas por las que se entra. */
-  function avisoIdioma(host, frase) {
+  function avisoIdioma(host, frase, cola) {
     if (!global.I18N || I18N.actual() === 'es') return;
     host.appendChild(U.el('div.avisoIdioma', {
       role: 'note',
       html: '<strong>' + T(frase) + '</strong> ' +
-        T('La interfaz y el temario están traducidos; la explicación, todavía no.')
+        T(cola || 'La interfaz y el temario están traducidos; la explicación, todavía no.')
     }));
   }
 

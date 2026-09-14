@@ -379,7 +379,50 @@ que de paso deja escrito el mapa del bloque—, consejos de examen propios de la
 materia, una comprobación y un apunte histórico. Con ellos el curso llega a
 **266 temas**.
 
-## Fase 11 — Ideas pendientes (a petición)
+## Fase 11 — La prosa en inglés (abierta)
+
+Hasta aquí el inglés llegaba a la interfaz y al temario —títulos y resúmenes—
+y la explicación de cada tema seguía en castellano, con un aviso arriba. Esta
+fase abre la traducción de la prosa y deja montada la tubería para
+terminarla.
+
+**Lo primero fue medir.** `__claves.py` extrae de `topics/*.js` toda la prosa
+que el curso llega a pintar, plegando las concatenaciones de literales:
+**35 017 frases, 3,39 M de caracteres, unas 574 000 palabras**. Es el tamaño
+de siete novelas, y conviene saberlo antes de prometer nada.
+
+**La tubería.** El diccionario es `{frase española: frase inglesa}`, y una
+clave mal copiada no rompe nada: la frase sale en castellano y nadie se
+entera. Por eso el traductor no copia claves nunca:
+
+| Pieza | Qué hace |
+|---|---|
+| `__claves.py` | extrae las claves españolas de `topics/` y de los objetivos de `curriculum.js` → `__i18n/claves.json` |
+| `__i18n/en/<tema>.json` | la traducción, `{español: inglés}`; se empareja por contenido, no por posición |
+| `__falta.py` | qué falta, por bloque o por tema |
+| `__zip.py` | cose las dos cosas y genera `assets/js/i18n/en-txt.js`, con `hechos` marcando los temas completos |
+
+`I18N.trad` se enchufó en `MathX.inline` y en `MathX.render`, que es el
+embudo por el que pasa toda la prosa: un solo sitio, y funciona en párrafos,
+notas, pasos, pistas, trampas y fórmulas. Los objetivos del temario y los
+rótulos de la cabecera pasan ahora por ahí también.
+
+**El límite, dicho claro.** Un diccionario de frases no puede traducir texto
+que se fabrica al vuelo, y **los enunciados de los ejercicios se generan con
+números distintos cada vez**: no tienen una frase fija que traducir. Un tema
+traducido avisa de eso arriba en vez de callárselo. `tests.html` lo separa:
+comprueba que la prosa está entera y deja fuera lo que fabrica el motor de
+ejercicios.
+
+**Lo que vigila la batería.** Que cada pareja conserve las fórmulas `$…$`,
+los enlaces `[[tema]]` y las etiquetas HTML —una `$` perdida parte una
+fórmula en dos, y eso ya pasó y lo cazó la prueba—, y que un tema marcado
+como traducido no deje prosa en castellano por detrás.
+
+**Estado**: bloque 0 completo (5 temas) y los 776 objetivos del temario, que
+salen en la cabecera de los 266 temas. Quedan los bloques 1 a 20.
+
+## Fase 12 — Ideas pendientes (a petición)
 
 - Más problemas de examen reales, adaptados por comunidades autónomas.
 - Un modo profesor para montar simulacros a medida eligiendo temas.
@@ -408,6 +451,7 @@ formato. La primera versión numerada es la 1.0.0, con 164 temas.
 | 1.4.0 | revisión experta de 2.º frente al programa de la PAU: un error corregido, tasa de variación media, hipótesis y ejercicios de Rolle y valor medio, optimización con beneficio, simétrico respecto de una recta |
 | 1.5.0 | el bloque «Síntesis de sonido»: 14 temas, el sintetizador programable `sonido.js`, una ruta y 14 términos de glosario: 260 temas |
 | 1.6.0 | la referencia de JavaScript en la columna derecha: 80 entradas con ejemplos que se ejecutan, y el panel generalizado a tres documentos |
+| 1.8.0 | la prosa en inglés: tubería de traducción, `I18N.trad` enchufado al embudo, bloque 0 y los objetivos del temario |
 | 1.7.0 | los exámenes de bloque de la ampliación: seis temas, uno por bloque del 15 al 20, con preguntas de todos sus temas: 266 temas |
 | 1.6.1 | estética: las fórmulas dejan de pisarse (exponentes dentro de fracciones y raíces, radical que crece, signo unario pegado, primas al hombro, `30^\circ`, `\bmod`, `\|`, límites al lado en línea), y letra e idioma en una fila |
 
