@@ -2067,12 +2067,16 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
          del apellido. «de la Vallée Poussin» se escribe igual en ingles, y
          sin esto el « la » de en medio marcaba la frase entera. */
       var NOMBRE = /\b(el|la|los|las|de|del)\s+(?=[A-ZÁÉÍÓÚÑ])/g;
+      /* Un mnemonico de la maquina no es una palabra: `PARA` es la orden de
+         parar, no la preposicion, y en ingles se escribe igual porque es el
+         nombre de una instruccion. Van en mayusculas y asi se reconocen. */
+      var MNEMO = /\b[A-Z]{2,}\b/g;
       var quedan = visto.map(function (x) { return I18N.trad(x); })
         .filter(function (x) {
           /* Fuera las formulas: la variable $y$ no es la conjuncion «y». */
           return CAST.test(x.split('$').filter(function (_, i) {
             return i % 2 === 0;
-          }).join(' ').replace(NOMBRE, ' ')) && x.split(/\s+/).length >= 4;
+          }).join(' ').replace(NOMBRE, ' ').replace(MNEMO, ' ')) && x.split(/\s+/).length >= 4;
         });
       I18N.contexto(null);
       I18N.usar(previo);
