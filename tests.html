@@ -2051,8 +2051,14 @@ o <code>widgets.js</code>. Si algo se rompe, sale aquí en rojo.</p>
       /* Un acento no basta para decir que una frase sigue en castellano:
          «Pólya» y «Méchain» son nombres propios y viven igual en ingles. Lo
          que delata al castellano son sus palabras de servicio, que el ingles
-         no tiene: articulos, preposiciones y relativos. */
-      var CAST = /(^|[\s>«("'])(el|la|los|las|un|una|del|que|con|por|para|como|se|su|sus|al|y|o|más|pero|cada|está|están|este|esta|esto|cuántos|cuántas|cuánto|qué|cuál|sin|hay|entre|según|desde|hasta|cuando|donde|porque|aunque|también|así|entonces|entra|vale|entera)([\s<».,;:?!)'"]|$)/i;
+         no tiene: articulos, preposiciones y relativos.
+
+         La «y» y la «o» no estan en la lista aunque delaten castellano: son
+         tambien nombres de variable, y «the line y = x» las dispararia en
+         cada tema de funciones. El hueco que dejan lo tapa el pedazo general
+         « y » -> « and » de `i18n/en/@global.json`, que traduce esa
+         conjuncion en todos los temas sin que haya que cazarla aqui. */
+      var CAST = /(^|[\s>«("'])(el|la|los|las|un|una|del|que|con|por|para|como|se|su|sus|al|más|pero|cada|está|están|este|esta|esto|cuántos|cuántas|cuánto|qué|cuál|sin|hay|entre|según|desde|hasta|cuando|donde|porque|aunque|también|así|entonces|entra|vale|entera)([\s<».,;:?!)'"]|$)/i;
       var quedan = visto.map(function (x) { return I18N.trad(x); })
         .filter(function (x) {
           /* Fuera las formulas: la variable $y$ no es la conjuncion «y». */
