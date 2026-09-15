@@ -26,7 +26,7 @@
  ")$ pasa la verificación sin que Alicia haya firmado nada. Eva no ha elegido el mensaje, pero ha demostrado que la verificación de libro no vale.": ")$ passes the verification without Alice having signed anything. Eve has not chosen the message, but she has shown that the textbook verification is no good.",
  ")$. Elige $s = ": ")$. She chooses $s = ",
  ")$. Llega el mensaje $m = ": ")$. The message $m = ",
- ", e = 65 537\n\n<b>Alicia firma</b> «": ", e = 65 537\n\n<b>Alice signs</b> “",
+ ", e = 65 537\n\n<b>Alicia firma</b> «": ", e = 65,537\n\n<b>Alice signs</b> “",
  ", no válida": ", not valid",
  ", válida": ", valid",
  ". Buscarlo cuesta 2^256 intentos.  <span class=\"cr-ok\">inútil</span>": ". Looking for it costs 2^256 attempts.  <span class=\"cr-ok\">useless</span>",

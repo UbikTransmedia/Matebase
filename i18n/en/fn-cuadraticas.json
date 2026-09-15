@@ -52,7 +52,7 @@
  "Corta al eje Y en $(0, ": "It cuts the y-axis at $(0, ",
  "Corte mayor": "Larger crossing",
  "Corte menor": "Smaller crossing",
- "Cortes con los ejes": "Intercepts with the axes",
+ "Cortes con los ejes": "Crossings with the axes",
  "Cuadrado de ": "A square of side ",
  "Cuidado con el signo: $b = -6$, así que $-\\frac{b}{2a} = -\\frac{-6}{2} = +3$.": "Careful with the sign: $b = -6$, so $-\\frac{b}{2a} = -\\frac{-6}{2} = +3$.",
  "De la ecuación de segundo grado ya sabes que sus soluciones son los cortes de la parábola con el eje X, y que el discriminante dice cuántos hay. Aquí la parábola pasa a ser la protagonista: se lee entera a partir de sus coeficientes, y su vértice resuelve la primera familia de problemas de máximos y mínimos del curso, sin necesidad de derivar.": "From the quadratic equation you already know that its solutions are where the parabola cuts the x-axis, and that the discriminant says how many there are. Here the parabola takes the lead: it is read whole from its coefficients, and its vertex solves the course's first family of maximum and minimum problems, with no need to differentiate.",

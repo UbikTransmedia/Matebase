@@ -42,7 +42,7 @@
  "Con alcance 0,18, ¿a qué distancia del puntero llega justo la mitad de la luz? Y al doblar el alcance, ¿la mancha iluminada será el doble de ancha o cuatro veces?": "With range 0.18, at what distance from the pointer does exactly half the light arrive? And on doubling the range, will the lit patch be twice as wide or four times?",
  "Cuánta luz llega, a mano": "How much light arrives, by hand",
  "Deformar alrededor del ratón": "Deforming around the mouse",
- "Deformar las coordenadas con un peso que decrece con la distancia —una campana— produce lupas y ojos de pez.": "Deforming the coordinates with a weight that decreases with distance —a bell— produces magnifying glasses and fisheyes.",
+ "Deformar las coordenadas con un peso que decrece con la distancia —una campana— produce lupas y ojos de pez.": "Deforming the coordinates with a weight that decreases with distance — a bell — produces magnifying glasses and fisheyes.",
  "Del píxel del ratón a la coordenada centrada": "From the mouse pixel to the centred coordinate",
  "Dentro de la lupa": "Inside the lens",
  "Divide las dos por <code>iResolution.y</code>.": "Divide both by <code>iResolution.y</code>.",

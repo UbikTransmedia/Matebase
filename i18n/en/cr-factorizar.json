@@ -22,8 +22,8 @@
  ", se empieza en a = ": ", you start at a = ",
  ", sí": ", yes",
  ". Empieza en $\\lceil\\sqrt n\\rceil$ y sube hasta que $a^2 - n$ sea un cuadrado.": ". Start at $\\lceil\\sqrt n\\rceil$ and go up until $a^2 - n$ is a square.",
- "1 000 003 y 1 000 033 (cercanos)": "1 000 003 and 1 000 033 (close)",
- "1 000 003 y 9 999 991 (lejanos)": "1 000 003 and 9 999 991 (far apart)",
+ "1 000 003 y 1 000 033 (cercanos)": "1,000,003 and 1,000,033 (close)",
+ "1 000 003 y 9 999 991 (lejanos)": "1,000,003 and 9,999,991 (far apart)",
  "2048 bits de RSA equivalen a 112 simétricos, no a 2048. El ataque no es la fuerza bruta.": "2048 bits of RSA are equivalent to 112 symmetric ones, not to 2048. The attack is not brute force.",
  ": se cambia la constante y se repite.": ": the constant is changed and it is repeated.",
  ": tortuga ": ": tortoise ",
@@ -131,5 +131,5 @@
  "¿Cuál es el primer entero por encima de $\\sqrt{5959}$?": "What is the first integer above $\\sqrt{5959}$?",
  "¿Es 441 un cuadrado?": "Is 441 a square?",
  "…": "…",
- "…\n\n<span class=\"cr-dif\">20 000 pasos y nada:</span> los primos están lejos y el método no sirve. Dividir hasta √n costaría ": "…\n\n<span class=\"cr-dif\">20 000 steps and nothing:</span> the primes are far apart and the method is no use. Dividing up to √n would cost "
+ "…\n\n<span class=\"cr-dif\">20 000 pasos y nada:</span> los primos están lejos y el método no sirve. Dividir hasta √n costaría ": "…\n\n<span class=\"cr-dif\">20,000 steps and nothing:</span> the primes are far apart and the method is no use. Dividing up to √n would cost "
 }

@@ -21,7 +21,7 @@
  ", lo que cabe esperar del azar (1 de cada 16)": ", which is what chance would predict (1 in 16)",
  ": la huella conserva demasiado de la entrada. Una función así no resiste.": ": the fingerprint keeps too much of the input. A function like that does not hold up.",
  ": ¿es lo esperable?": " change: is that what is expected?",
- "</b> intentos   <span class=\"cr-tenue\">(√65 536 = 256; la teoría dice 1,25 · 256 ≈ 320)</span>\nSHA-256 de «": "</b> attempts   <span class=\"cr-tenue\">(√65 536 = 256; theory says 1.25 · 256 ≈ 320)</span>\nSHA-256 of “",
+ "</b> intentos   <span class=\"cr-tenue\">(√65 536 = 256; la teoría dice 1,25 · 256 ≈ 320)</span>\nSHA-256 de «": "</b> attempts   <span class=\"cr-tenue\">(√65,536 = 256; theory says 1.25 · 256 ≈ 320)</span>\nSHA-256 of “",
  "<b>SHA-256(texto 1)</b>\n": "<b>SHA-256(text 1)</b>\n",
  "<b>colisión:</b> hash16(«": "<b>collision:</b> hash16(“",
  "<span class=\"cr-ok\">textos iguales: hashes iguales</span>": "<span class=\"cr-ok\">equal texts: equal hashes</span>",

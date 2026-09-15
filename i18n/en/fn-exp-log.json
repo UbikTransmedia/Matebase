@@ -111,7 +111,7 @@
  "Solo existe para $x > 0$: no hay logaritmo de números negativos ni de cero.": "It exists only for $x > 0$: there is no logarithm of negative numbers or of zero.",
  "Tiene una asíntota <strong>vertical</strong> en $x = 0$.": "It has a <strong>vertical</strong> asymptote at $x = 0$.",
  "Todo esto se apoya en algo que se dio por sabido hace mucho: qué es una potencia, qué pasa cuando el exponente es negativo o fraccionario, y por qué $a^0 = 1$. Si al leer $e^{-kt}$ has tenido que parar un segundo, merece la pena volver a [[ar-potencias|potencias, raíces y notación científica]]: la exponencial no es más que aquello con el exponente suelto, y la notación científica que se usa allí para escribir el tamaño de un átomo es esta misma función disfrazada.": "All this leans on something taken for granted long ago: what a power is, what happens when the exponent is negative or fractional, and why $a^0 = 1$. If on reading $e^{-kt}$ you had to stop for a second, it is worth going back to [[ar-potencias|powers, roots and scientific notation]]: the exponential is no more than that with the exponent set loose, and the scientific notation used there to write the size of an atom is this same function in disguise.",
- "Un capital crece un 5 % anual. ¿Cuántos años tarda en duplicarse?": "A capital grows 5 % a year. How many years does it take to double?",
+ "Un capital crece un 5 % anual. ¿Cuántos años tarda en duplicarse?": "A sum of money grows 5 % a year. How many years does it take to double?",
  "Una población de $": "A population of $",
  "Una sustancia radiactiva tiene una semivida de $": "A radioactive substance has a half-life of $",
  "Valor de una exponencial": "Value of an exponential",
