@@ -40,6 +40,9 @@
  "<strong>La permutación.</strong> Bits en posiciones 0 a 7: $1, 0, 0, 1, 0, 0, 0, 0$. El bit 0 va a la posición 0; el bit 3 va a $2\\cdot 3 + 0 = 6$. Los demás son ceros. Resultado: $1000\\,0010$.": "<strong>The permutation.</strong> Bits at positions 0 to 7: $1, 0, 0, 1, 0, 0, 0, 0$. Bit 0 goes to position 0; bit 3 goes to $2\\cdot 3 + 0 = 6$. The rest are zeros. Result: $1000\\,0010$.",
  "<strong>Las S-boxes.</strong> $1101 = $ D $\\to$ 9 $= 1001$. $1110 = $ E $\\to$ 0 $= 0000$. Queda $1001\\,0000$.": "<strong>The S-boxes.</strong> $1101 = $ D $\\to$ 9 $= 1001$. $1110 = $ E $\\to$ 0 $= 0000$. That leaves $1001\\,0000$.",
  "<strong>Lo que se ve.</strong> El uno de la posición 3, que salió de la primera S-box, ha ido a parar a la segunda mitad: en la ronda siguiente entrará en la otra S-box. Eso es la difusión: lo que la S-box cambia se reparte por todo el bloque.": "<strong>What can be seen.</strong> The one at position 3, which came out of the first S-box, has ended up in the second half: in the next round it will go into the other S-box. That is diffusion: what the S-box changes is spread over the whole block.",
+ "@frag": {
+  "$ (el ": "$ (the "
+ },
  "A dónde va cada bit": "Where each bit goes",
  "Ahorrar rondas": "Skimping on rounds",
  "Al revés: que cambie poco significa que el cifrado conserva la estructura del mensaje. La seguridad está en que cambie la mitad, y al azar.": "The other way round: changing little means the ciphertext preserves the message's structure. Security lies in half of it changing, and at random.",

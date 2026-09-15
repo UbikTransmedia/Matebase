@@ -26,6 +26,7 @@
  "<strong>La luz, rodaja a rodaja.</strong> La primera aporta $1\\cdot(1 - 0{,}8187) = 0{,}1813$. La segunda, $0{,}8187\\cdot(1 - 0{,}4493) = 0{,}4509$. La tercera, $0{,}3679\\cdot(1 - 0{,}6703) = 0{,}1213$.": "<strong>The light, slice by slice.</strong> The first contributes $1\\cdot(1 - 0{.}8187) = 0{.}1813$. The second, $0{.}8187\\cdot(1 - 0{.}4493) = 0{.}4509$. The third, $0{.}3679\\cdot(1 - 0{.}6703) = 0{.}1213$.",
  "<strong>La transmitancia.</strong> Se multiplican: $0{,}8187\\cdot 0{,}4493\\cdot 0{,}6703 = 0{,}2466$, que es $e^{-1{,}4}$. El espesor óptico es la suma, $0{,}2 + 0{,}8 + 0{,}4 = 1{,}4$.": "<strong>The transmittance.</strong> They multiply: $0{.}8187\\cdot 0{.}4493\\cdot 0{.}6703 = 0{.}2466$, which is $e^{-1{.}4}$. The optical depth is the sum, $0{.}2 + 0{.}8 + 0{.}4 = 1{.}4$.",
  "@frag": {
+  "// las dos lineas, al reves": "// the two lines, the other way round",
   "// sin la marcha al sol": "// without the march to the sun"
  },
  "Actualizar $T$ antes de sumar la luz de la rodaja": "Updating $T$ before adding the slice's light",

@@ -33,6 +33,7 @@
   " · hierba": " · grass",
   " · mezcla": " · mix",
   " · roca": " · rock",
+  "// disponibles en el punto donde choca el rayo:\n//   vec3 p   el punto          vec3 n   la normal\n//   vec3 roca, hierba, nieve   los tres colores": "// available at the point where the ray hits:\n//   vec3 p   the point          vec3 n   the normal\n//   vec3 roca, hierba, nieve   the three colours",
   "// una sola octava": "// a single octave",
   "hierba</strong>": "grass</strong>",
   "roca</strong>": "rock</strong>"
