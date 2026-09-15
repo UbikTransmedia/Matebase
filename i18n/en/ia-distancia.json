@@ -6,7 +6,7 @@
  " de los ": " of the ",
  " primeros de la lista y cuenta de cada clase. Gana la mayoría.": " first of the list and count each class. The majority wins.",
  " primeros son: ": " first are: ",
- " puntos: $": " points: $",
+ " puntos: $": " points signed up to it: $",
  " vecinos son de la clase naranja: ": " neighbours are of the orange class: ",
  "$. ¿Dónde se coloca el centro en el paso siguiente? (dos decimales)": "$. Where is the centre placed in the next step? (two decimal places)",
  "$</strong><span style=\"font-size:0.7812rem;color:var(--ink-faint)\"> &nbsp;·&nbsp; suma de las distancias al cuadrado de cada punto a su centro.</span><br><span style=\"font-size:0.7812rem;color:var(--ink-faint)\">Ninguno de los dos pasos puede subir este número, y por eso el método siempre acaba parando.</span>": "$</strong><span style=\"font-size:0.7812rem;color:var(--ink-faint)\"> &nbsp;·&nbsp; sum of the squared distances from each point to its centre.</span><br><span style=\"font-size:0.7812rem;color:var(--ink-faint)\">Neither of the two steps can raise this number, and that is why the method always ends up stopping.</span>",
@@ -33,7 +33,7 @@
   "naranja": "orange",
   "naranjas": "oranges"
  },
- "A un centro de $k$-medias se le han apuntado estos ": "These ",
+ "A un centro de $k$-medias se le han apuntado estos ": "A $k$-means centre has these ",
  "Afecta a cualquier $k$, porque afecta al orden en que se ordenan los vecinos, que es lo que usa el método sea cual sea $k$.": "It affects any $k$, because it affects the order the neighbours are sorted in, which is what the method uses whatever $k$ is.",
  "Agrupar sin etiquetas: k-medias": "Grouping without labels: k-means",
  "Al subir k la frontera se alisa: cada decisión se toma con más testigos y los puntos raros dejan de mandar.": "As k goes up the boundary smooths out: each decision is taken with more witnesses and the odd points stop ruling.",
