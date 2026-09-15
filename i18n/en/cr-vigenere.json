@@ -87,7 +87,7 @@
  "La clave mide ": "The key is ",
  "La clave se escribe repetida bajo el mensaje y cada columna es una suma módulo 26. Mira lo que pasa con las letras repetidas del mensaje: ya no van siempre a la misma.": "The key is written repeated under the message and each column is an addition modulo 26. Look at what happens with the message's repeated letters: they no longer always go to the same one.",
  "La clave, columna a columna": "The key, column by column",
- "Las frecuencias del cifrado entero se aplanan, pero cada columna, tomada de $L$ en $L$, es un César.": "The whole ciphertext's frequencies flatten, but each column, one letter in every $L$, is a Caesar.",
+ "Las frecuencias del cifrado entero se aplanan, pero cada columna, tomada de $L$ en $L$, es un César.": "The whole ciphertext's frequencies flatten, but each column, taken $L$ by $L$, is a Caesar.",
  "Lo que protege a Vigenère es la longitud de la clave frente a la del mensaje; ese camino lleva a la libreta de un solo uso.": "What protects Vigenère is the key's length against the message's; that road leads to the one-time pad.",
  "MENSAJE": "MENSAJE",
  "Medir si un texto está «mezclado»": "Measuring whether a text is “mixed”",
