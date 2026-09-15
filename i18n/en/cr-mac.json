@@ -157,7 +157,7 @@
  "}$ intentos.": "}$ attempts.",
  "}$ mensajes por segundo. Si Eva usa toda esa capacidad para probar etiquetas al azar, ¿cuántos años tarda de media en colar un mensaje? (un año son $3{,}156\\cdot 10^7$ s; da el resultado con notación científica o dos decimales)": "}$ messages per second. If Eve uses all that capacity to try random tags, how many years does she take on average to slip a message through? (a year is $3{.}156\\cdot 10^7$ s; give the result in scientific notation or to two decimal places)",
  "}$ segundos.": "}$ seconds.",
- "»": "»",
+ "»": "”",
  "»\n<b>cifrado:</b>       ": "”\n<b>ciphertext:</b>    ",
  "» (byte $": "” (byte $",
  "» sin sospechar nada.": "” suspecting nothing.",
