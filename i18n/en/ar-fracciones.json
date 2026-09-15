@@ -19,6 +19,10 @@
  "</span>": "</span>",
  "<strong>No es correcto.</strong> Ese valor no coincide.": "<strong>Not correct.</strong> That value does not match.",
  "<strong>Simplificar</strong> es dividir arriba y abajo por su m.c.d. Cuando ya no se puede más, la fracción es <strong>irreducible</strong>, y esa es la forma en que hay que dar siempre el resultado.": "<strong>Simplifying</strong> is dividing top and bottom by their gcd. When it can go no further, the fraction is in <strong>lowest terms</strong>, and that is the form the answer must always be given in.",
+ "@frag": {
+  " alumnos.": " students.",
+  "1 unidad": "1 unit"
+ },
  "Ahora los trozos son del mismo tamaño y se pueden juntar: $\\frac{10}{12} + \\frac{9}{12} = \\frac{19}{12}$.": "Now the pieces are the same size and can be put together: $\\frac{10}{12} + \\frac{9}{12} = \\frac{19}{12}$.",
  "Ahora ya se pueden juntar: $\\dfrac{": "Now they can be put together: $\\dfrac{",
  "Alumnos": "Students",

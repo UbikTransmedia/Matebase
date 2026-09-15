@@ -37,6 +37,8 @@
  "<strong>Y si afinan.</strong> Si la segunda flauta baja a 441, quedará un batido por segundo; a 440,2, uno cada cinco segundos. En una orquesta, eso es «estar afinado».": "<strong>And if they tune.</strong> If the second flute comes down to 441, one beat per second will be left; at 440.2, one every five seconds. In an orchestra, that is “being in tune”.",
  "@frag": {
   " batidos por segundo</strong>:<br>": " beats per second</strong>:<br>",
+  " batidos/s": " beats/s",
+  "$ Hz y $": "$ Hz and $",
   "su cuarta justa (razón $": "its just fourth (ratio $",
   "su quinta justa (razón $": "its just fifth (ratio $",
   "su sexta mayor justa (razón $": "its just major sixth (ratio $",

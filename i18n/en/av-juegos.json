@@ -50,6 +50,12 @@
  "<strong>No coinciden</strong> (": "<strong>They do not coincide</strong> (",
  "<td></td></tr></tbody></table></div>": "<td></td></tr></tbody></table></div>",
  "<tr><td><strong>peor caso</strong></td>": "<tr><td><strong>worst case</strong></td>",
+ "@frag": {
+  " y B ": " and B ",
+  "Sí: A": "Yes: A",
+  "mejoraría ✗": "would improve ✗",
+  "no mejora ✓": "does not improve ✓"
+ },
  "Antes de pulsar: si B calla, ¿qué le conviene a A, callar o delatar? ¿Y si B delata? Si la respuesta es la misma en los dos casos, A tiene una estrategia dominante.": "Before pressing: if B stays silent, what suits A, staying silent or informing? And if B informs? If the answer is the same in both cases, A has a dominant strategy.",
  "Aquí basta con una convención, una señal o una norma que fije cuál de los equilibrios se elige.": "Here a convention, a signal or a rule fixing which of the equilibria is chosen is enough.",
  "Aquí es un <strong>": "Here it is a <strong>",

@@ -44,8 +44,11 @@
  "<strong>Lo que enlaza.</strong> En RSA, $e = 13$ podría ser la clave pública, $17$ sería la privada si $\\varphi(n) = 22$, y descifrar módulo $n = 35$ se haría módulo 5 y módulo 7 por separado, recomponiendo con el teorema chino.": "<strong>What links up.</strong> In RSA, $e = 13$ could be the public key, $17$ would be the private one if $\\varphi(n) = 22$, and decrypting modulo $n = 35$ would be done modulo 5 and modulo 7 separately, recombining with the Chinese theorem.",
  "<strong>Teorema chino del resto</strong>: restos módulo primos entre sí determinan un único número módulo el producto, y se recompone con inversos.": "<strong>Chinese remainder theorem</strong>: remainders modulo coprime numbers determine a single number modulo the product, and it is recombined with inverses.",
  "@frag": {
+  " y ": " and ",
+  "$ en <strong>": "$ in <strong>",
   "$, con $": "$, with $",
-  "$</strong>, con ": "$</strong>, with "
+  "$</strong>, con ": "$</strong>, with ",
+  "</strong>, con ": "</strong>, with "
  },
  "Aplicar el teorema chino con módulos que comparten factores": "Applying the Chinese theorem with moduli that share factors",
  "Buscar el inverso probando": "Looking for the inverse by trial",

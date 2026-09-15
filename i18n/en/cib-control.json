@@ -29,6 +29,10 @@
  "<strong>¿Cuánto error llevo acumulado desde que empecé?</strong> Sumar el error a lo largo del tiempo es <strong>integrarlo</strong>. Da el término <em>integral</em>.": "<strong>How much error have I accumulated since I started?</strong> Adding the error over time is <strong>integrating</strong> it. It gives the <em>integral</em> term.",
  "<strong>¿Cuánto me he desviado ahora mismo?</strong> Eso es el error, sin más. Da el término <em>proporcional</em>.": "<strong>How far have I drifted right now?</strong> That is the error, nothing more. It gives the <em>proportional</em> term.",
  "<strong>¿Hacia dónde va el error, se está corrigiendo o empeorando?</strong> El ritmo al que cambia el error es su <strong>derivada</strong>. Da el término <em>derivativo</em>.": "<strong>Where is the error heading, is it correcting itself or getting worse?</strong> The rate at which the error changes is its <strong>derivative</strong>. It gives the <em>derivative</em> term.",
+ "@frag": {
+  "</strong> de ": "</strong> of ",
+  "ninguno": "none"
+ },
  "A partir de esa señal se pueden hacer tres preguntas distintas, y cada una da un término del controlador. Son estas, y merece la pena leerlas despacio porque las tres últimas palabras ya las conoces:": "From that signal three different questions can be asked, and each gives one term of the controller. They are these, and it is worth reading them slowly because the last three words are already familiar:",
  "Acción total: $u = ": "Total action: $u = ",
  "Acumulado nuevo: $": "New accumulation: $",

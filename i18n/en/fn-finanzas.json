@@ -59,7 +59,9 @@
   " €</strong> más.": " €</strong> more.",
   " €</strong> por ": " €</strong> for ",
   "<span style=\"font-size:0.8125rem;color:var(--ink-faint)\">Por 10 000 € prestados un año, son ": "<span style=\"font-size:0.8125rem;color:var(--ink-faint)\">On 10 000 € lent for a year, that is ",
-  "Son ": "That is "
+  "Son ": "That is ",
+  "del ": "of ",
+  "son ": "that is "
  },
  "Al 5 % anual, ¿qué vale más hoy: 1000 € dentro de un año o 950 € ahora mismo?": "At 5 % a year, which is worth more today: 1000 € one year from now or 950 € right now?",
  "Al alargar, cada cuota es menor, pero el capital pendiente tarda más en bajar, y sobre ese capital pendiente se cobran intereses todos los meses. En la cuenta total, lo segundo pesa mucho más que lo primero. En la demostración de arriba, 150 000 € al 3 %:": "Stretching it makes each instalment smaller, but the outstanding capital takes longer to come down, and interest is charged on that outstanding capital every month. In the overall reckoning, the second weighs far more than the first. In the demonstration above, 150,000 € at 3 %:",

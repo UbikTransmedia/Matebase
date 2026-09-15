@@ -35,6 +35,14 @@
  "<strong>se cortan</strong> en un punto": "<strong>they meet</strong> at a point",
  "<strong>se cruzan</strong>": "<strong>they are skew</strong>",
  "<strong>¡Correcto!</strong> Cualquier otro punto de la recta y cualquier múltiplo del vector también valían.": "<strong>Correct!</strong> Any other point of the line and any multiple of the vector would have done too.",
+ "@frag": {
+  "Se cortan": "They meet",
+  "coincidentes": "coincident",
+  "cortan": "meet",
+  "paralelas": "parallel",
+  "se cortan": "they meet",
+  "se cruzan": "they are skew"
+ },
  "A y B están fijos en los ejes; mueve C. El producto vectorial de dos lados del triángulo da la normal, y con ella la ecuación. Gira el dibujo para ver la normal de perfil: es perpendicular a todo el plano, no solo al triángulo.": "A and B are fixed on the axes; move C. The cross product of two sides of the triangle gives the normal, and with it the equation. Turn the drawing to see the normal edge on: it is perpendicular to the whole plane, not just to the triangle.",
  "Aquí aparece la posibilidad que no existe en el plano: dos rectas que ni se cortan ni son paralelas. <strong>Se cruzan</strong>, como una calle y un puente que pasa por encima. Con $r$ por $P$ con director $\\vec{u}$ y $s$ por $Q$ con director $\\vec{v}$:": "Here appears the possibility that does not exist in the plane: two lines that neither meet nor are parallel. They are <strong>skew</strong>, like a street and a bridge passing over it. With $r$ through $P$ with direction $\\vec{u}$ and $s$ through $Q$ with direction $\\vec{v}$:",
  "Ax + By + Cz + D = 0, \\qquad \\vec{n} = (A, B, C) \\quad \\text{(general)}": "Ax + By + Cz + D = 0, \\qquad \\vec{n} = (A, B, C) \\quad \\text{(general)}",

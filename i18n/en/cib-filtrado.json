@@ -4,7 +4,7 @@
  " lecturas: $": " readings: $",
  " lecturas: las anteriores ya han salido de la ventana.": " readings are involved: the earlier ones have already left the window.",
  " segundos</strong> en hacer efecto. ¿A qué posición debes apuntar, suponiendo que la velocidad se mantenga?": " seconds</strong> to take effect. What position should you aim at, assuming the velocity stays the same?",
- " últimas lecturas. (Dos decimales si no es exacta.)": " readings. (Two decimals if it is not exact.)",
+ " últimas lecturas. (Dos decimales si no es exacta.)": " readings. (Two decimal places if it is not exact.)",
  "$ &nbsp;·&nbsp; error medio del filtro: <strong>": "$ &nbsp;·&nbsp; average error of the filter: <strong>",
  "$ en el <strong>último</strong> instante, ": "$ at the <strong>last</strong> instant, ",
  "$ m y su velocidad estimada es $": "$ m and its estimated velocity is $",

@@ -1,5 +1,5 @@
 {
- "$ y la pantalla va de $p_y = -0{,}5$ a $p_y = 0{,}5$. ¿Cuál es su campo de visión vertical, en grados? (Dos decimales.)": "$ and the screen runs from $p_y = -0{.}5$ to $p_y = 0{.}5$. What is its vertical field of view, in degrees? (Two decimals.)",
+ "$ y la pantalla va de $p_y = -0{,}5$ a $p_y = 0{,}5$. ¿Cuál es su campo de visión vertical, en grados? (Dos decimales.)": "$ and the screen runs from $p_y = -0{.}5$ to $p_y = 0{.}5$. What is its vertical field of view, in degrees? (Two decimal places.)",
  "$ y un ángulo de $": "$ and an angle of $",
  "$(f_x, 0, f_z)\\times(0, 1, 0) = (-f_z,\\ 0,\\ f_x)$, que ya es unitario.": "$(f_x, 0, f_z)\\times(0, 1, 0) = (-f_z,\\ 0,\\ f_x)$, which is already a unit vector.",
  "$, así que $\\vec f = \\left(": "$, so $\\vec f = \\left(",
@@ -17,6 +17,9 @@
  "<strong>Hacia delante.</strong> $\\vec t - \\vec o = (-3, 0, -4)$, de módulo 5: $\\vec f = (-0{,}6,\\ 0,\\ -0{,}8)$.": "<strong>Forward.</strong> $\\vec t - \\vec o = (-3, 0, -4)$, of modulus 5: $\\vec f = (-0{.}6,\\ 0,\\ -0{.}8)$.",
  "<strong>La arriba.</strong> $\\vec u = \\vec r\\times\\vec f = (0,\\ 0{,}36 + 0{,}64,\\ 0) = (0, 1, 0)$. Sale la vertical del mundo porque la cámara está a la altura del objetivo; si mirara desde arriba, $\\vec u$ se inclinaría.": "<strong>The up.</strong> $\\vec u = \\vec r\\times\\vec f = (0,\\ 0{.}36 + 0{.}64,\\ 0) = (0, 1, 0)$. The world's vertical comes out because the camera is at the target's height; if it looked from above, $\\vec u$ would tilt.",
  "<strong>La derecha.</strong> $\\vec f\\times\\vec a = (f_y a_z - f_z a_y,\\ f_z a_x - f_x a_z,\\ f_x a_y - f_y a_x) = (0{,}8,\\ 0,\\ -0{,}6)$. Ya mide 1: $\\vec r = (0{,}8, 0, -0{,}6)$.": "<strong>The right.</strong> $\\vec f\\times\\vec a = (f_y a_z - f_z a_y,\\ f_z a_x - f_x a_z,\\ f_x a_y - f_y a_x) = (0{.}8,\\ 0,\\ -0{.}6)$. It already measures 1: $\\vec r = (0{.}8, 0, -0{.}6)$.",
+ "@frag": {
+  "campo (°)": "field (°)"
+ },
  "Cambia <code>cross(f, vec3(0.0, 1.0, 0.0))</code> por <code>cross(vec3(0.0, 1.0, 0.0), f)</code>: la derecha y la arriba cambian las dos de sentido, y la imagen gira media vuelta.": "Change <code>cross(f, vec3(0.0, 1.0, 0.0))</code> to <code>cross(vec3(0.0, 1.0, 0.0), f)</code>: the right and the up both reverse, and the image turns half a turn.",
  "Cambiar el orden del producto vectorial": "Changing the order of the cross product",
  "Campo de visión vertical: $2\\operatorname{arctg}\\frac{0{,}5}{z}$. Foco corto, gran angular; foco largo, teleobjetivo.": "Vertical field of view: $2\\arctan\\frac{0{.}5}{z}$. Short focal length, wide angle; long focal length, telephoto.",
@@ -105,8 +108,8 @@
  "\\text{campo de visión} = 2\\operatorname{arctg}\\frac{0{,}5}{z} \\qquad\\Longleftrightarrow\\qquad z = \\frac{0{,}5}{\\operatorname{tg}(\\text{campo}/2)}": "\\text{field of view} = 2\\arctan\\frac{0{.}5}{z} \\qquad\\Longleftrightarrow\\qquad z = \\frac{0{.}5}{\\tan(\\text{field}/2)}",
  "\\vec d = \\frac{p_x\\,\\vec r + p_y\\,\\vec u + z\\,\\vec f}{|\\,p_x\\,\\vec r + p_y\\,\\vec u + z\\,\\vec f\\,|}": "\\vec d = \\frac{p_x\\,\\vec r + p_y\\,\\vec u + z\\,\\vec f}{|\\,p_x\\,\\vec r + p_y\\,\\vec u + z\\,\\vec f\\,|}",
  "\\vec f = \\frac{\\vec t - \\vec o}{|\\vec t - \\vec o|}, \\qquad \\vec r = \\frac{\\vec f\\times\\vec{a}}{|\\vec f\\times\\vec{a}|}, \\qquad \\vec u = \\vec r\\times\\vec f": "\\vec f = \\frac{\\vec t - \\vec o}{|\\vec t - \\vec o|}, \\qquad \\vec r = \\frac{\\vec f\\times\\vec{a}}{|\\vec f\\times\\vec{a}|}, \\qquad \\vec u = \\vec r\\times\\vec f",
- "^\\circ$, con la pantalla de $p_y = -0{,}5$ a $p_y = 0{,}5$. ¿Qué foco $z$ hay que usar? (Tres decimales.)": "^\\circ$, with the screen from $p_y = -0{.}5$ to $p_y = 0{.}5$. What focal length $z$ has to be used? (Three decimals.)",
- "^\\circ$. ¿En qué punto está el ojo? (Tres decimales.)": "^\\circ$. At what point is the eye? (Three decimals.)",
+ "^\\circ$, con la pantalla de $p_y = -0{,}5$ a $p_y = 0{,}5$. ¿Qué foco $z$ hay que usar? (Tres decimales.)": "^\\circ$, with the screen from $p_y = -0{.}5$ to $p_y = 0{.}5$. What focal length $z$ has to be used? (Three decimal places.)",
+ "^\\circ$. ¿En qué punto está el ojo? (Tres decimales.)": "^\\circ$. At what point is the eye? (Three decimal places.)",
  "altura": "height",
  "altura del ojo": "eye height",
  "campo": "field",

@@ -32,6 +32,11 @@
  "<strong>No reutilices un nonce</strong> con la misma clave, ni un $k$ en una firma. Es el error que más claves ha regalado.": "<strong>Do not reuse a nonce</strong> with the same key, nor a $k$ in a signature. It is the mistake that has given away the most keys.",
  "<strong>Piensa en el futuro:</strong> lo que grabe hoy un adversario, lo descifrará el día que tenga un ordenador cuántico.": "<strong>Think about the future:</strong> what an adversary records today, they will decrypt the day they have a quantum computer.",
  "<strong>Tamaños de hoy:</strong> 128 bits simétricos, 256 de curva, 3072 de RSA, hash de 256. Y mira ya lo poscuántico.": "<strong>Today's sizes:</strong> 128 symmetric bits, 256 of curve, 3072 of RSA, a 256-bit hash. And start looking at post-quantum now.",
+ "@frag": {
+  " al ": " to ",
+  ", son ": ", that is ",
+  "sí": "yes"
+ },
  "A salvo: del 1 al ": "Safe: from 1 to ",
  "Acordar una clave en público es Diffie-Hellman.": "Agreeing a key in public is Diffie-Hellman.",
  "Acordar → DH; identidad → firma; integridad → MAC; que no se repita el cifrado → modo; guardar contraseñas → hash lento.": "Agree → DH; identity → signature; integrity → MAC; no repeated ciphertext → mode; storing passwords → slow hash.",

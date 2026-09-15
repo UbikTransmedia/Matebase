@@ -3,7 +3,7 @@
  " \\ge 0{,}5$, el umbral da 1: <strong>blanco</strong>.": " \\ge 0{.}5$, the threshold gives 1: <strong>white</strong>.",
  " · radio ": " · radius ",
  "$, ¿qué fracción de la celda tiene que cubrir la tinta, y qué radio tiene el punto? (cuatro decimales)": "$, what fraction of the cell does the ink have to cover, and what radius does the dot have? (four decimal places)",
- "$<br>¿Qué valor sale en el píxel central? Cada peso multiplica al vecino que ocupa su misma posición. (Sin recortar: puede salir negativo o mayor que 1. Cuatro decimales.)": "$<br>What value comes out at the central pixel? Each weight multiplies the neighbour in its own position. (Without clipping: it can come out negative or greater than 1. Four decimals.)",
+ "$<br>¿Qué valor sale en el píxel central? Cada peso multiplica al vecino que ocupa su misma posición. (Sin recortar: puede salir negativo o mayor que 1. Cuatro decimales.)": "$<br>What value comes out at the central pixel? Each weight multiplies the neighbour in its own position. (Without clipping: it can come out negative or greater than 1. Four decimal places.)",
  ")</code>. ¿Cuál es su luminancia, <code>dot(c, vec3(0.2126, 0.7152, 0.0722))</code>? Y con el filtro de umbral <code>step(0.5, luminancia)</code>, ¿ese píxel sale blanco o negro? (cuatro decimales)": ")</code>. What is its luminance, <code>dot(c, vec3(0.2126, 0.7152, 0.0722))</code>? And with the threshold filter <code>step(0.5, luminancia)</code>, does that pixel come out white or black? (four decimal places)",
  "<code>(c - 0.5) * k + 0.5</code>": "<code>(c - 0.5) * k + 0.5</code>",
  "<code>c * k</code>": "<code>c * k</code>",
@@ -27,6 +27,7 @@
  "@frag": {
   " · blanco": " · white",
   " · negro": " · black",
+  "blanco": "white",
   "caja:<br>": "box:<br>",
   "nitidez:<br>": "sharpen:<br>"
  },

@@ -31,6 +31,7 @@
  "<strong>no</strong> ocurre $A$": "$A$ does <strong>not</strong> happen",
  "<strong>¿Se solapan?</strong> Sí: hay tres cartas que son oro <em>y</em> figura, la sota, el caballo y el rey de oros. $P(O\\cap F) = \\dfrac{3}{40}$.": "<strong>Do they overlap?</strong> Yes: there are three cards that are a coin <em>and</em> a court card, the jack, the knight and the king of coins. $P(O\\cap F) = \\dfrac{3}{40}$.",
  "@frag": {
+  "$ y ": "$ and ",
   "Con <strong>": "With <strong>",
   "Si $P(A) = ": "If $P(A) = "
  },

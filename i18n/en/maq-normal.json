@@ -51,6 +51,8 @@
  "<strong>a = 0</strong>": "<strong>a = 0</strong>",
  "<strong>a = 1</strong>": "<strong>a = 1</strong>",
  "@frag": {
+  "</code>, de ": "</code>, of ",
+  "</strong> de 8": "</strong> of 8",
   "ninguna": "none",
   "puerta": "gate",
   "puertas": "gates"

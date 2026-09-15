@@ -41,7 +41,11 @@
  "<strong>Las S-boxes.</strong> $1101 = $ D $\\to$ 9 $= 1001$. $1110 = $ E $\\to$ 0 $= 0000$. Queda $1001\\,0000$.": "<strong>The S-boxes.</strong> $1101 = $ D $\\to$ 9 $= 1001$. $1110 = $ E $\\to$ 0 $= 0000$. That leaves $1001\\,0000$.",
  "<strong>Lo que se ve.</strong> El uno de la posición 3, que salió de la primera S-box, ha ido a parar a la segunda mitad: en la ronda siguiente entrará en la otra S-box. Eso es la difusión: lo que la S-box cambia se reparte por todo el bloque.": "<strong>What can be seen.</strong> The one at position 3, which came out of the first S-box, has ended up in the second half: in the next round it will go into the other S-box. That is diffusion: what the S-box changes is spread over the whole block.",
  "@frag": {
-  "$ (el ": "$ (the "
+  " y ": " and ",
+  "$ (el ": "$ (the ",
+  "$ es el ": "$ is ",
+  "Los ": "The ",
+  "sí": "yes"
  },
  "A dónde va cada bit": "Where each bit goes",
  "Ahorrar rondas": "Skimping on rounds",

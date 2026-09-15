@@ -22,6 +22,9 @@
  "<strong>Imagen de $(3, 2)$.</strong> Dos maneras. Multiplicando: $A\\begin{pmatrix} 3 \\\\ 2 \\end{pmatrix} = \\begin{pmatrix} 6 - 2 \\\\ 3 + 2 \\end{pmatrix} = \\begin{pmatrix} 4 \\\\ 5 \\end{pmatrix}$. O por linealidad: $f(3, 2) = 3f(1, 0) + 2f(0, 1) = 3(2, 1) + 2(-1, 1) = (4, 5)$. Lo mismo.": "<strong>Image of $(3, 2)$.</strong> Two ways. By multiplying: $A\\begin{pmatrix} 3 \\\\ 2 \\end{pmatrix} = \\begin{pmatrix} 6 - 2 \\\\ 3 + 2 \\end{pmatrix} = \\begin{pmatrix} 4 \\\\ 5 \\end{pmatrix}$. Or by linearity: $f(3, 2) = 3f(1, 0) + 2f(0, 1) = 3(2, 1) + 2(-1, 1) = (4, 5)$. The same thing.",
  "<strong>La matriz.</strong> Las imágenes de la base van por <em>columnas</em>: $A = \\begin{pmatrix} 2 & -1 \\\\ 1 & 1 \\end{pmatrix}$. Primera columna $(2, 1)$, segunda $(-1, 1)$.": "<strong>The matrix.</strong> The images of the basis go in <em>columns</em>: $A = \\begin{pmatrix} 2 & -1 \\\\ 1 & 1 \\end{pmatrix}$. First column $(2, 1)$, second $(-1, 1)$.",
  "<strong>Una matriz es el destino de los vectores de la base, puestos en columnas.</strong>": "<strong>A matrix is the destination of the basis vectors, placed in columns.</strong>",
+ "@frag": {
+  ")$ y ": ")$ and "
+ },
  "A = \\begin{pmatrix} \\uparrow & \\uparrow \\\\ f(\\vec{e}_1) & f(\\vec{e}_2) \\\\ \\downarrow & \\downarrow \\end{pmatrix}": "A = \\begin{pmatrix} \\uparrow & \\uparrow \\\\ f(\\vec{e}_1) & f(\\vec{e}_2) \\\\ \\downarrow & \\downarrow \\end{pmatrix}",
  "Aplicaciones lineales: qué es de verdad una matriz": "Linear maps: what a matrix really is",
  "Aplicación lineal: conserva sumas y múltiplos. Mantiene el origen, lleva rectas a rectas y conserva el paralelismo.": "Linear map: it preserves sums and multiples. It keeps the origin, takes lines to lines and preserves parallelism.",
@@ -80,7 +83,7 @@
  "No, dependientes.": "No, dependent.",
  "No: en el plano nunca puede haber tres independientes": "No: in the plane there can never be three independent ones",
  "Núcleo nulo: la aplicación es <strong>inyectiva</strong>, no destruye nada.": "Zero kernel: the map is <strong>injective</strong>, it destroys nothing.",
- "Núcleo, imagen y el teorema del rango": "Kernel, image and the rank theorem",
+ "Núcleo, imagen y el teorema del rango": "Kernel, image and the rank-nullity theorem",
  "Otra lectura: $\\vec{v} = ": "Another reading: $\\vec{v} = ",
  "Pon $\\vec v_1 = (2, 1)$ y $\\vec v_2 = (4, 2)$. ¿Qué valdrá el determinante y qué quedará del plano sombreado? ¿Y con $(2, 1)$ y $(-4, -2)$?": "Set $\\vec v_1 = (2, 1)$ and $\\vec v_2 = (4, 2)$. What will the determinant be and what will be left of the shaded plane? And with $(2, 1)$ and $(-4, -2)$?",
  "Pon los dos vectores en la misma dirección, por ejemplo (2,1) y (4,2).": "Put the two vectors in the same direction, for instance (2, 1) and (4, 2).",

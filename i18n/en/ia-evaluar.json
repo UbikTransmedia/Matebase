@@ -22,6 +22,9 @@
  "<strong>Sensibilidad.</strong> $\\frac{32}{32 + 8} = \\frac{32}{40} = 0{,}80$. Pilla a cuatro de cada cinco enfermos.": "<strong>Recall.</strong> $\\frac{32}{32 + 8} = \\frac{32}{40} = 0{.}80$. It catches four out of every five ill people.",
  "<strong>Y sin embargo es inútil.</strong> Su sensibilidad es $0/40 = 0$: no detecta a nadie. Su precisión ni siquiera se puede calcular, porque nunca dice que sí. La exactitud, ella sola, ha elegido el peor modelo posible.": "<strong>And yet it is useless.</strong> Its recall is $0/40 = 0$: it detects nobody. Its precision cannot even be computed, because it never says yes. Accuracy, on its own, has chosen the worst possible model.",
  "<strong>área bajo la curva: ": "<strong>area under the curve: ",
+ "@frag": {
+  "indefinida": "undefined"
+ },
  "Acierta el orden en tres de cada cuatro pares: distingue, pero con solapamiento entre las dos clases.": "It gets the order right in three out of four pairs: it distinguishes, but with overlap between the two classes.",
  "Acierta en todos los negativos y falla en todos los positivos. La sensibilidad mira cuántos positivos ha pillado.": "It gets all the negatives right and all the positives wrong. Recall looks at how many positives it has caught.",
  "Acierta los $": "It gets the $",

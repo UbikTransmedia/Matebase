@@ -37,6 +37,7 @@
  "<strong>cerrado por un extremo</strong>": "<strong>closed at one end</strong>",
  "? (tres decimales, en metros)": "? (three decimal places, in metres)",
  "@frag": {
+  " Hz y ": " Hz and ",
   "$ nodo interior": "$ interior node",
   "$ nodos interiores": "$ interior nodes",
   "$ semitono": "$ semitone",

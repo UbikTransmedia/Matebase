@@ -51,7 +51,8 @@
   "$ (mínimo) y $x = ": "$ (minimum) and $x = ",
   "$ (mínimo).<br>": "$ (minimum).<br>",
   "$ cm²</strong><br>": "$ cm²</strong><br>",
-  "$. En $x = ": "$. At $x = "
+  "$. En $x = ": "$. At $x = ",
+  ") y $x = ": ") and $x = "
  },
  "Al recortar $x$ en cada esquina, la base mide $": "Cutting $x$ out of each corner, the base measures $",
  "Al revés: $f'' > 0$ significa que la curva sonríe, y el punto llano es el fondo del cuenco, un <em>mínimo</em>.": "The other way round: $f'' > 0$ means the curve smiles, and the flat point is the bottom of the bowl, a <em>minimum</em>.",

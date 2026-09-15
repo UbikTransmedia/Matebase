@@ -19,6 +19,12 @@
  "<strong>Subiendo.</strong> <code>fact(2)</code> recibe ese 1, lo multiplica por su $n = 2$ y devuelve 2; su marco muere. <code>fact(3)</code> recibe el 2, lo multiplica por 3 y devuelve 6. <code>fact(4)</code> recibe el 6, lo multiplica por 4 y devuelve 24.": "<strong>Going up.</strong> <code>fact(2)</code> receives that 1, multiplies it by its $n = 2$ and returns 2; its frame dies. <code>fact(3)</code> receives the 2, multiplies it by 3 and returns 6. <code>fact(4)</code> receives the 6, multiplies it by 4 and returns 24.",
  "<strong>Tirar el entorno</strong> y seguir donde se había quedado quien llamaba.": "<strong>Throw away the environment</strong> and carry on where the caller had left off.",
  "<strong>Y sigue bajando.</strong> Lo mismo con 3, con 2 y con 1. Al llegar a <code>fact(1)</code> hay cuatro marcos vivos, cada uno con su <code>n</code>: 4, 3, 2 y 1.": "<strong>And it keeps going down.</strong> The same with 3, with 2 and with 1. On reaching <code>fact(1)</code> there are four frames alive, each with its own <code>n</code>: 4, 3, 2 and 1.",
+ "@frag": {
+  " en ": " from ",
+  "La recursión baja de ": "The recursion goes down in steps of ",
+  "nada": "nothing",
+  "no termina": "does not terminate"
+ },
  "A ese entorno con sus parámetros, sus variables locales y la dirección a la que hay que volver se le llama <strong>marco de llamada</strong>. Es lo que una función necesita para existir, y muere con ella.": "That environment with its parameters, its local variables and the address to return to is called a <strong>call frame</strong>. It is what a function needs in order to exist, and it dies with it.",
  "A esta función le falta el caso base. Mira qué dice la máquina cuando se le acaba la pila: son 64 sitios, y no hace falta ninguna recursión muy exótica para agotarlos. Después arréglala añadiendo un «si n < 1 { vuelve 0; }» al principio.": "This function is missing its base case. Look at what the machine says when its stack runs out: there are 64 places, and no very exotic recursion is needed to exhaust them. Then fix it by adding a “si n < 1 { vuelve 0; }” at the start.",
  "Al entorno con sus parámetros, sus locales y la dirección de vuelta se le llama <strong>marco de llamada</strong>.": "The environment with its parameters, its locals and the return address is called a <strong>call frame</strong>.",

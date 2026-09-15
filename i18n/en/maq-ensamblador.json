@@ -28,8 +28,10 @@
  "<strong>Marcar dónde empieza la vuelta.</strong> Una etiqueta, <code>bucle:</code>. Ahí es donde volverá el salto de abajo.": "<strong>Mark where the turn starts.</strong> A label, <code>bucle:</code>. That is where the jump below will come back to.",
  "<strong>Poner el contador a cero.</strong> <code>NUM 0</code> y <code>GUARDA i</code>. Con eso queda una celda llamada <code>i</code> detrás del programa, valiendo 0.": "<strong>Set the counter to zero.</strong> <code>NUM 0</code> and <code>GUARDA i</code>. That leaves a cell called <code>i</code> after the program, holding 0.",
  "@frag": {
+  "Los ": "The ",
   "MENOR ha dejado un 0": "MENOR has left a 0",
-  "MENOR ha dejado un 1": "MENOR has left a 1"
+  "MENOR ha dejado un 1": "MENOR has left a 1",
+  "se va a fin": "goes to fin"
  },
  "Ahí está ya todo lo que hace falta para programar: se puede <strong>decidir</strong> y se puede <strong>repetir</strong>. Con esas dos cosas y un poco de memoria no hay cálculo que se resista, y eso es un resultado con nombre: lo verás en [[av-computabilidad|qué se puede calcular]].": "There you already have everything needed to program: you can <strong>decide</strong> and you can <strong>repeat</strong>. With those two things and a little memory no calculation holds out, and that is a result with a name: you will see it in [[av-computabilidad|what can be computed]].",
  "Al revés: si x es menor, <code>MENOR</code> deja un 1, y <code>SICERO</code> no salta con un 1. La ejecución sigue por la línea de abajo.": "The other way round: if x is less, <code>MENOR</code> leaves a 1, and <code>SICERO</code> does not jump on a 1. Execution carries on with the line below.",

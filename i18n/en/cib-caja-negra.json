@@ -25,6 +25,9 @@
  "<strong>Desde $D$.</strong> $D \\to E$, y $E$ se transforma en sí mismo: es un estado <em>absorbente</em>. Después del primer paso ya no hay más movimiento. $T^{100}(D) = E$.": "<strong>From $D$.</strong> $D \\to E$, and $E$ transforms into itself: it is an <em>absorbing</em> state. After the first step there is no more movement. $T^{100}(D) = E$.",
  "<strong>Lo que enseña.</strong> Antes de usar el resto hay que comprobar que el estado de partida está en un ciclo. Si cae en un absorbente, el resto no sirve; se sigue el camino hasta que se detiene.": "<strong>What it teaches.</strong> Before using the remainder you have to check that the starting state is in a cycle. If it falls into an absorbing one, the remainder is no use; you follow the path until it stops.",
  "<strong>¿Periodo?</strong> Para tener periodo, alguna potencia de $T$ tendría que devolver <em>todos</em> los estados a su sitio. Pero $D$ nunca vuelve: una vez en $E$, se queda. La transformación entera no tiene periodo, aunque una parte de ella sí.": "<strong>A period?</strong> To have a period, some power of $T$ would have to return <em>all</em> the states to their place. But $D$ never comes back: once at $E$, it stays. The whole transformation has no period, although part of it does.",
+ "@frag": {
+  "Con ": "With "
+ },
  "Abrir la caja": "Open the box",
  "Ajusta a mano una caja ruidosa": "Fit a noisy box by hand",
  "Ajusta una recta a cinco medidas": "Fit a line to five measurements",

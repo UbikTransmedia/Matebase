@@ -32,6 +32,13 @@
  "<strong>Resistencia a la segunda preimagen</strong>: dado un mensaje $m_1$, no se puede encontrar otro $m_2$ con la misma huella. Nadie puede sustituir un documento por otro con la misma huella.": "<strong>Second preimage resistance</strong>: given a message $m_1$, no other $m_2$ with the same fingerprint can be found. Nobody can swap a document for another with the same fingerprint.",
  "<strong>Treinta personas.</strong> $N = 365$, $k = 30$: $k^2 / (2N) = 900 / 730 = 1{,}23$, y $P \\approx 1 - e^{-1{,}23} = 0{,}71$. El valor exacto, multiplicando $\\frac{364}{365}\\cdot\\frac{363}{365}\\cdots$, es $0{,}706$.": "<strong>Thirty people.</strong> $N = 365$, $k = 30$: $k^2 / (2N) = 900 / 730 = 1{.}23$, and $P \\approx 1 - e^{-1{.}23} = 0{.}71$. The exact value, multiplying $\\frac{364}{365}\\cdot\\frac{363}{365}\\cdots$, is $0{.}706$.",
  "<strong>Un hash de 64 bits.</strong> $N = 2^{64}$, y para $P = 1/2$ hacen falta $k \\approx 1{,}18\\cdot 2^{32} \\approx 5\\cdot 10^9$ documentos. Un ordenador normal los genera en una hora.": "<strong>A 64-bit hash.</strong> $N = 2^{64}$, and for $P = 1/2$ about $k \\approx 1{.}18\\cdot 2^{32} \\approx 5\\cdot 10^9$ documents are needed. An ordinary computer generates them in an hour.",
+ "@frag": {
+  " y 2^": " and 2^",
+  "Con $2^{": "With $2^{",
+  "Hay $2^{": "There are $2^{",
+  "Los ": "The ",
+  "sí": "yes"
+ },
  "Además, un cambio de un solo bit en la entrada cambia, de media, la mitad de los bits de la salida: es la avalancha de los cifrados por bloques, y con ella la huella de dos documentos casi iguales no se parece en nada. La demo usa SHA-256, la función que se usa hoy en casi todo, calculada de verdad en tu navegador.": "Besides, a change of a single bit in the input changes, on average, half the output bits: it is the block ciphers' avalanche, and with it the fingerprints of two nearly identical documents look nothing alike. The demo uses SHA-256, the function used today in almost everything, genuinely computed in your browser.",
  "Aplica la fórmula con $k = 30$ y $N = 365$.": "Apply the formula with $k = 30$ and $N = 365$.",
  "Avalancha: cada bit de salida cambia con probabilidad 1/2.": "Avalanche: each output bit changes with probability 1/2.",

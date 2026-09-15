@@ -10,7 +10,7 @@
  "$ y se ha calculado igual, pero no ha salido.": "$ and was computed anyway, but did not come out.",
  ". ¿Qué ocurre?": ". What happens?",
  "</code> cuando <code>sel</code> vale 1</strong> y la otra cuando vale 0.<br><span style=\"font-size:0.875rem;color:var(--ink-faint)\">Se corrige comparando la tabla.</span>": "</code> when <code>sel</code> is 1</strong> and the other when it is 0.<br><span style=\"font-size:0.875rem;color:var(--ink-faint)\">It is marked by comparing the table.</span>",
- "</code> pasa <code>": "</code> through goes <code>",
+ "</code> pasa <code>": "</code>, what passes through is <code>",
  "</code> y control ": "</code> and control ",
  "</code>, <code>": "</code>, <code>",
  "</code>, que vale $": "</code>, which is $",
@@ -21,6 +21,7 @@
  "<strong>La lectura.</strong> Esto explica una cosa que sorprende al programar: en una tarjeta gráfica, y en muchos procesadores, <em>evitar</em> un cálculo puede salir más caro que hacerlo, porque decidir cuesta más que calcular.": "<strong>The reading.</strong> This explains something surprising when programming: on a graphics card, and on many processors, <em>avoiding</em> a calculation can cost more than doing it, because deciding costs more than computing.",
  "<strong>Las dos ramas.</strong> Una es el número tal cual. La otra es su opuesto, que en complemento a dos se calcula invirtiendo los bits y sumando uno; los dos circuitos ya existen.": "<strong>The two branches.</strong> One is the number as it stands. The other is its opposite, which in two's complement is computed by inverting the bits and adding one; both circuits already exist.",
  "@frag": {
+  " Con ": " With ",
   "puertas": "gates"
  },
  "Cada <code>and</code> apaga su rama cuando no le toca, y el <code>or</code> deja pasar la que quede encendida.": "Each <code>and</code> switches off its branch when it is not its turn, and the <code>or</code> lets through whichever stays lit.",

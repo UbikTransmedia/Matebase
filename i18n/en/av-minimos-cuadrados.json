@@ -33,7 +33,10 @@
  "<strong>Plantear.</strong> $A = \\begin{pmatrix} 1 & 0 \\\\ 1 & 1 \\\\ 1 & 2 \\end{pmatrix}$, $\\vec b = \\begin{pmatrix} 1 \\\\ 3 \\\\ 2 \\end{pmatrix}$. Tres ecuaciones, dos incógnitas, y los puntos no están alineados: el sistema $A\\vec x = \\vec b$ es incompatible.": "<strong>Set it up.</strong> $A = \\begin{pmatrix} 1 & 0 \\\\ 1 & 1 \\\\ 1 & 2 \\end{pmatrix}$, $\\vec b = \\begin{pmatrix} 1 \\\\ 3 \\\\ 2 \\end{pmatrix}$. Three equations, two unknowns, and the points are not aligned: the system $A\\vec x = \\vec b$ is inconsistent.",
  "<strong>Resolver.</strong> $\\begin{cases} 3c_0 + 3c_1 = 6 \\\\ 3c_0 + 5c_1 = 7 \\end{cases}$. Restando, $2c_1 = 1$: $c_1 = \\frac{1}{2}$ y $c_0 = \\frac{3}{2}$. La recta es $y = \\frac{3}{2} + \\frac{1}{2}t$.": "<strong>Solve.</strong> $\\begin{cases} 3c_0 + 3c_1 = 6 \\\\ 3c_0 + 5c_1 = 7 \\end{cases}$. Subtracting, $2c_1 = 1$: $c_1 = \\frac{1}{2}$ and $c_0 = \\frac{3}{2}$. The line is $y = \\frac{3}{2} + \\frac{1}{2}t$.",
  "@frag": {
-  " a $": " to $"
+  " a $": " to $",
+  "$ (en $t = ": "$ (at $t = ",
+  "$A^tA$ es $": "$A^tA$ is $",
+  "sí": "yes"
  },
  "A\\,\\vec x = \\vec b, \\qquad A = \\begin{pmatrix} 1 & t_1 \\\\ 1 & t_2 \\\\ 1 & t_3 \\end{pmatrix}, \\quad \\vec x = \\begin{pmatrix} c_0 \\\\ c_1 \\end{pmatrix}, \\quad \\vec b = \\begin{pmatrix} y_1 \\\\ y_2 \\\\ y_3 \\end{pmatrix}": "A\\,\\vec x = \\vec b, \\qquad A = \\begin{pmatrix} 1 & t_1 \\\\ 1 & t_2 \\\\ 1 & t_3 \\end{pmatrix}, \\quad \\vec x = \\begin{pmatrix} c_0 \\\\ c_1 \\end{pmatrix}, \\quad \\vec b = \\begin{pmatrix} y_1 \\\\ y_2 \\\\ y_3 \\end{pmatrix}",
  "A^{t}\\,(\\vec b - A\\hat x) = \\vec 0 \\qquad\\Longleftrightarrow\\qquad A^{t}A\\,\\hat x = A^{t}\\vec b": "A^{t}\\,(\\vec b - A\\hat x) = \\vec 0 \\qquad\\Longleftrightarrow\\qquad A^{t}A\\,\\hat x = A^{t}\\vec b",

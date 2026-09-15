@@ -35,6 +35,11 @@
  "<strong>Weierstrass</strong>: una función continua en un cerrado alcanza su máximo": "<strong>Weierstrass</strong>: a continuous function on a closed interval attains its maximum",
  "<strong>no</strong>": "<strong>no</strong>",
  "<strong>sí</strong>": "<strong>yes</strong>",
+ "@frag": {
+  " (máximo)": " (maximum)",
+  " (mínimo)": " (minimum)",
+  "Sí": "Yes"
+ },
  "A = \\{\\,x \\in \\mathbb{Q} : x > 0,\\ x^2 < 2\\,\\}": "A = \\{\\,x \\in \\mathbb{Q} : x > 0,\\ x^2 < 2\\,\\}",
  "Anchura: $": "Width: $",
  "Arrastra el punto para probar cotas. El conjunto está pintado en la recta: una cota tiene que dejar todo el conjunto a su izquierda. Cambia de conjunto y fíjate en cuándo el supremo pertenece y cuándo no.": "Drag the point to try bounds. The set is painted on the line: a bound has to leave the whole set to its left. Change set and notice when the supremum belongs and when it does not.",

@@ -23,7 +23,9 @@
  "<strong>Lo que enseña.</strong> Cada paso es seguro, pero el paso lo fija el objeto más cercano, sea o no el que se va a tocar. Y el método nunca se pasa: llega a $\\vec P$ exactamente, sin cruzar la superficie.": "<strong>What it teaches.</strong> Every step is safe, but the step is set by the nearest object, whether or not it is the one that will be touched. And the method never overshoots: it reaches $\\vec P$ exactly, without crossing the surface.",
  "@frag": {
   ": en $t = ": ": at $t = ",
-  "Recuerda: <code>min</code> une, <code>max</code> corta, y un menos delante invierte dentro y fuera.": "Remember: <code>min</code> unites, <code>max</code> cuts, and a minus in front swaps inside and outside."
+  "Recuerda: <code>min</code> une, <code>max</code> corta, y un menos delante invierte dentro y fuera.": "Remember: <code>min</code> unites, <code>max</code> cuts, and a minus in front swaps inside and outside.",
+  "el suelo": "the floor",
+  "la esfera": "the sphere"
  },
  "A la esfera: $": "To the sphere: $",
  "A una función así se le llama <strong>SDF</strong>, de <em>signed distance function</em>: función de distancia con signo. Es la definición completa del objeto. No hay una lista de vértices en ninguna parte: una esfera pesa exactamente una línea de código, y una esfera de un kilómetro de radio pesa lo mismo que una de un milímetro.": "A function like that is called an <strong>SDF</strong>, a <em>signed distance function</em>. It is the object's complete definition. There is no list of vertices anywhere: a sphere weighs exactly one line of code, and a sphere of one kilometre radius weighs the same as one of a millimetre.",

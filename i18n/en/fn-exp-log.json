@@ -31,6 +31,7 @@
  "<strong>El modelo.</strong> Cada año se multiplica por $1{,}05$: al cabo de $t$ años, $C(t) = C_0\\cdot 1{,}05^t$. Duplicarse es $1{,}05^t = 2$; el capital inicial se va, da igual cuánto sea.": "<strong>The model.</strong> Each year it is multiplied by $1{.}05$: after $t$ years, $C(t) = C_0\\cdot 1{.}05^t$. Doubling is $1{.}05^t = 2$; the initial capital cancels, it makes no difference how much it is.",
  "<strong>La incógnita está en el exponente.</strong> Para bajarla, logaritmos en los dos lados: $t\\cdot\\ln 1{,}05 = \\ln 2$.": "<strong>The unknown is in the exponent.</strong> To bring it down, logarithms on both sides: $t\\cdot\\ln 1{.}05 = \\ln 2$.",
  "@frag": {
+  "$ en $": "$ in $",
   "$ plazo": "$ instalment",
   "$ plazos": "$ instalments",
   "Con $": "With $"

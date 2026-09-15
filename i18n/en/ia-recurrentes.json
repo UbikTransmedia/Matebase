@@ -29,6 +29,7 @@
  "<strong>Treinta pasos.</strong> $0{,}8^{30} = 0{,}00124$: poco más de una milésima. La dependencia larga ya es casi invisible para el entrenamiento.": "<strong>Thirty steps.</strong> $0{.}8^{30} = 0{.}00124$: a little more than a thousandth. The long dependency is already nearly invisible to the training.",
  "@frag": {
   " y la secuencia dura $": " and the sequence lasts $",
+  "$ y la ": "$ and the ",
   "Con $|\\lambda| = ": "With $|\\lambda| = "
  },
  "Al desplegar parece una red profunda con muchas capas, pero todas comparten $W_h$. Por eso el gradiente acumula la <em>misma</em> matriz elevada, y no un producto de matrices distintas.": "Unrolled it looks like a deep network with many layers, but they all share $W_h$. That is why the gradient accumulates the <em>same</em> matrix raised to a power, and not a product of different matrices.",

@@ -29,6 +29,11 @@
  "<strong>Descomponer.</strong> $75^\\circ$ no está en la tabla, pero $75^\\circ = 45^\\circ + 30^\\circ$, y esos dos sí.": "<strong>Break it up.</strong> $75^\\circ$ is not in the table, but $75^\\circ = 45^\\circ + 30^\\circ$, and those two are.",
  "<strong>Fórmula de adición.</strong> $\\operatorname{sen}(45^\\circ + 30^\\circ) = \\operatorname{sen} 45^\\circ\\cos 30^\\circ + \\cos 45^\\circ\\operatorname{sen} 30^\\circ$.": "<strong>Addition formula.</strong> $\\sin(45^\\circ + 30^\\circ) = \\sin 45^\\circ\\cos 30^\\circ + \\cos 45^\\circ\\sin 30^\\circ$.",
  "<strong>Sustituir los valores exactos.</strong> $= \\dfrac{\\sqrt 2}{2}\\cdot\\dfrac{\\sqrt 3}{2} + \\dfrac{\\sqrt 2}{2}\\cdot\\dfrac{1}{2} = \\dfrac{\\sqrt 6 + \\sqrt 2}{4}$.": "<strong>Substitute the exact values.</strong> $= \\dfrac{\\sqrt 2}{2}\\cdot\\dfrac{\\sqrt 3}{2} + \\dfrac{\\sqrt 2}{2}\\cdot\\dfrac{1}{2} = \\dfrac{\\sqrt 6 + \\sqrt 2}{4}$.",
+ "@frag": {
+  "\\operatorname{sen}": "\\sin",
+  "}$ y $\\alpha$ es ": "}$ and $\\alpha$ is ",
+  "° y ": "° and "
+ },
  "Antes de los logaritmos, los astrónomos multiplicaban números grandes usando estas fórmulas, con un método llamado <em>prostaféresis</em>: convertían un producto en una suma de cosenos, que se buscaban en tablas. Tycho Brahe lo usó para sus cálculos de posiciones planetarias. Fue un apaño que duró apenas medio siglo, hasta que Napier publicó los logaritmos en 1614 y resolvió el mismo problema mucho mejor.": "Before logarithms, astronomers multiplied large numbers using these formulas, by a method called <em>prosthaphaeresis</em>: they turned a product into a sum of cosines, which were looked up in tables. Tycho Brahe used it for his calculations of planetary positions. It was a makeshift that lasted barely half a century, until Napier published logarithms in 1614 and solved the same problem far better.",
  "Busca la solución del primer cuadrante y usa la simetría del seno: la otra es $180^\\circ - \\alpha$.": "Look for the first-quadrant solution and use the symmetry of the sine: the other is $180^\\circ - \\alpha$.",
  "Buscamos los ángulos cuyo seno vale $": "We look for the angles whose sine is $",

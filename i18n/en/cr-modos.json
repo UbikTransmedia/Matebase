@@ -43,6 +43,12 @@
  "<strong>El relleno al descifrar.</strong> Benito mira el último byte: si vale $\\text{0B}$, quita once bytes y comprueba que todos eran $\\text{0B}$. Si no lo son, algo se ha alterado, y lo que haga con ese error importa: es el oráculo de relleno, que se verá más adelante.": "<strong>The padding on decrypting.</strong> Bob looks at the last byte: if it is $\\text{0B}$, he removes eleven bytes and checks that they were all $\\text{0B}$. If they are not, something has been altered, and what he does with that error matters: it is the padding oracle, which will be seen later on.",
  "<strong>El relleno.</strong> 21 bytes son un bloque y 5 bytes; faltan 11 para el segundo: se añaden once bytes con el valor 11 ($\\text{0B}$). Total 32 bytes, dos bloques. Con 32 bytes exactos se habrían añadido dieciséis $\\text{10}$, y serían tres.": "<strong>The padding.</strong> 21 bytes are one block and 5 bytes; 11 are missing for the second: eleven bytes with the value 11 ($\\text{0B}$) are added. Total 32 bytes, two blocks. With exactly 32 bytes, sixteen $\\text{10}$s would have been added, and there would be three.",
  "<strong>Si $c_1$ llegara alterado.</strong> Ese mismo byte de $m_2$ saldría con los bits cambiados que tuviera $c_1$, y ningún otro byte de $m_2$ se enteraría. En cambio $m_1$, que sale de descifrar $c_1$, sería ruido.": "<strong>If $c_1$ arrived altered.</strong> That same byte of $m_2$ would come out with whatever bits $c_1$ had changed, and no other byte of $m_2$ would notice. $m_1$, on the other hand, which comes from decrypting $c_1$, would be noise.",
+ "@frag": {
+  " (de 1 a ": " (from 1 to ",
+  "intacto": "intact",
+  "ruido": "noise",
+  "un bit": "one bit"
+ },
  "AES es seguro como permutación de un bloque. La fuga no está en AES, sino en usarlo igual para cada bloque: el modo delata la estructura del mensaje.": "AES is secure as a permutation of one block. The leak is not in AES, but in using it the same way for each block: the mode gives away the message's structure.",
  "Benito descifra $c^{*} \\oplus s = m \\oplus \\Delta = \\text{": "Bob decrypts $c^{*} \\oplus s = m \\oplus \\Delta = \\text{",
  "Bloques alterados: <strong>": "Blocks altered: <strong>",

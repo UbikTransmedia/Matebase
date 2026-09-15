@@ -27,6 +27,13 @@
  "<strong>Las potencias.</strong> $\\text{57}\\cdot x = 1010\\,1110 = $ AE (desplazar; no sale nada). $\\cdot x$ otra vez: $0101\\,1100$ con un 1 fuera, XOR 1B: $0100\\,0111 = $ 47. Seguimos: $\\text{8E}$, luego $0001\\,1100 \\oplus \\text{1B} = $ 07, luego 0E, 1C, 38.": "<strong>The powers.</strong> $\\text{57}\\cdot x = 1010\\,1110 = $ AE (shift; nothing goes out). $\\cdot x$ again: $0101\\,1100$ with a 1 outside, XOR 1B: $0100\\,0111 = $ 47. On we go: $\\text{8E}$, then $0001\\,1100 \\oplus \\text{1B} = $ 07, then 0E, 1C, 38.",
  "<strong>Los bits de 83.</strong> $\\text{83} = 1000\\,0011$: bits 0, 1 y 7.": "<strong>The bits of 83.</strong> $\\text{83} = 1000\\,0011$: bits 0, 1 and 7.",
  "<strong>Sumar.</strong> $\\text{57}\\cdot x^0 \\oplus \\text{57}\\cdot x^1 \\oplus \\text{57}\\cdot x^7 = \\text{57} \\oplus \\text{AE} \\oplus \\text{38}$. $\\text{57} \\oplus \\text{AE} = \\text{F9}$, y $\\text{F9} \\oplus \\text{38} = \\text{C1}$.": "<strong>Adding.</strong> $\\text{57}\\cdot x^0 \\oplus \\text{57}\\cdot x^1 \\oplus \\text{57}\\cdot x^7 = \\text{57} \\oplus \\text{AE} \\oplus \\text{38}$. $\\text{57} \\oplus \\text{AE} = \\text{F9}$, and $\\text{F9} \\oplus \\text{38} = \\text{C1}$.",
+ "@frag": {
+  " (se suma)": " (added)",
+  " de ": " of ",
+  " es ": " is ",
+  "$ más $": "$ plus $",
+  ", sí": ", yes"
+ },
  "Bit $k$ (desde la derecha, desde 0) $= 1$ si el polinomio tiene $x^k$.": "Bit $k$ (from the right, from 0) $= 1$ if the polynomial has $x^k$.",
  "Bits: <strong>": "Bits: <strong>",
  "Buscar el inverso de 00": "Looking for the inverse of 00",

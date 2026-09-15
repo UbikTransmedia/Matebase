@@ -28,8 +28,12 @@
  "<strong>Por qué se usa la perplejidad y no la entropía.</strong> Son la misma información, pero «5,66 opciones» se entiende y «2,5 bits» no tanto. La exponencial sólo deshace el logaritmo para poder hablar en opciones en vez de en bits.": "<strong>Why perplexity is used and not entropy.</strong> They are the same information, but “5.66 options” is understood and “2.5 bits” not so much. The exponential only undoes the logarithm so as to be able to speak in options instead of in bits.",
  "<strong>Situar el modelo.</strong> Con perplejidad 5,66 sobre un recorrido que va de 1 a 50 000, el modelo ha reducido la incertidumbre enormemente: de dudar entre cincuenta mil a dudar entre menos de seis.": "<strong>Placing the model.</strong> With perplexity 5.66 on a range going from 1 to 50,000, the model has reduced the uncertainty enormously: from hesitating between fifty thousand to hesitating between fewer than six.",
  "@frag": {
+  " letra": " letter",
+  " letras": " letters",
+  "$, con ": "$, with ",
   "$, con temperatura $\\tau = ": "$, with temperature $\\tau = ",
-  "Con <strong>": "With <strong>"
+  "Con <strong>": "With <strong>",
+  "Hay $": "There are $"
  },
  "Al aumentar el contexto el texto se parecerá cada vez más al original. ¿Crees que eso significa que el modelo es cada vez mejor?": "As the context is increased the text will look more and more like the original. Do you think that means the model is getting better and better?",
  "Al evaluar un modelo de lenguaje se observa que ": "On evaluating a language model it is observed that ",

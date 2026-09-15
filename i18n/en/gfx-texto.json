@@ -41,6 +41,8 @@
   "$, par: el píxel está <strong>": "$, even: the pixel is <strong>",
   "$, que es impar: el bit vale ": "$, which is odd: the bit is ",
   "$, que es par: el bit vale ": "$, which is even: the bit is ",
+  ", que es impar: el bit vale ": ", which is odd: the bit is ",
+  ", que es par: el bit vale ": ", which is even: the bit is ",
   "// letra(q): distancia con signo a una T, negativa dentro": "// letra(q): signed distance to a T, negative inside",
   "apagado": "unlit",
   "centenas": "hundreds",

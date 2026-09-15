@@ -65,6 +65,7 @@
  "<strong>error de tipo II</strong> (probabilidad $\\beta$)": "<strong>type II error</strong> (probability $\\beta$)",
  "<strong>unilateral</strong>": "<strong>one-tailed</strong>",
  "@frag": {
+  "Sí": "Yes",
   "{,}": "{.}"
  },
  "Al revés: la sospecha era que no fuera 500, y esa sospecha no ha encontrado apoyo suficiente en los datos.": "The other way round: the suspicion was that it was not 500, and that suspicion has not found enough support in the data.",

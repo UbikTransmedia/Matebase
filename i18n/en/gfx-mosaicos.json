@@ -14,7 +14,7 @@
  "$\\lfloor\\ \\rfloor$ es la parte entera por abajo, <code>floor</code>: numera la celda. $\\operatorname{fract}$ es la parte decimal: da la posición dentro de la celda, que al restar $\\frac{1}{2}$ va de $-\\frac{1}{2}$ a $\\frac{1}{2}$ con el centro en 0.<br><br>Cambiar el signo de $q_x$ refleja la baldosa, que para estos dibujos es lo mismo que girarla un cuarto de vuelta.<br><br>Con $n$ celdas y dos posiciones por celda hay $2^n$ mosaicos distintos: una cuadrícula de 10 por 10 ya da más de $10^{30}$.": "$\\lfloor\\ \\rfloor$ is the floor, <code>floor</code>: it numbers the cell. $\\operatorname{fract}$ is the fractional part: it gives the position inside the cell, which on subtracting $\\frac{1}{2}$ runs from $-\\frac{1}{2}$ to $\\frac{1}{2}$ with the centre at 0.<br><br>Changing the sign of $q_x$ reflects the tile, which for these drawings is the same as turning it a quarter of a turn.<br><br>With $n$ cells and two positions per cell there are $2^n$ different tilings: a 10 by 10 grid already gives more than $10^{30}$.",
  "$\\max(|q_x|, |q_y|) < 0{,}4$ es un cuadrado centrado en cada celda, un poco más pequeño que la celda: queda una junta de anchura 0,2 entre baldosas.": "$\\max(|q_x|, |q_y|) < 0{.}4$ is a square centred in each cell, a little smaller than the cell: a joint of width 0.2 is left between tiles.",
  ")$, y restando 0,5: $q = (": ")$, and subtracting 0.5: $q = (",
- ")</code>? (Tres decimales.)": ")</code>? (Three decimals.)",
+ ")</code>? (Tres decimales.)": ")</code>? (Three decimal places.)",
  ", entero: caben ": ", an integer: ",
  ", no es entero. <strong>No teselan.</strong>": ", not an integer. <strong>They do not tile.</strong>",
  ".0) - 0.5;</code> ¿Qué valen <code>celda</code> y <code>q</code> para <code>p = (": ".0) - 0.5;</code> What are <code>celda</code> and <code>q</code> for <code>p = (",
@@ -31,6 +31,8 @@
  "<strong>Pentágono.</strong> $\\alpha_5 = \\frac{3\\cdot 180°}{5} = 108°$. $360 / 108 = 3{,}33$: tres pentágonos dejan un hueco de $36°$ y el cuarto se monta. No tesela.": "<strong>Pentagon.</strong> $\\alpha_5 = \\frac{3\\cdot 180°}{5} = 108°$. $360 / 108 = 3{.}33$: three pentagons leave a gap of $36°$ and the fourth piles up. It does not tile.",
  "<strong>Truchet 3 × 3.</strong> Nueve celdas, dos orientaciones cada una: $2^9 = 512$ mosaicos. Con 4 orientaciones serían $4^9 = 262\\,144$. Se multiplica por celda, no se suma.": "<strong>Truchet 3 × 3.</strong> Nine cells, two orientations each: $2^9 = 512$ tilings. With 4 orientations it would be $4^9 = 262\\,144$. You multiply per cell, you do not add.",
  "@frag": {
+  "Hay $": "There are $",
+  "sí": "yes",
   "°, no": "°, no",
   "°, sí": "°, yes"
  },

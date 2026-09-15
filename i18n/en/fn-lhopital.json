@@ -23,7 +23,10 @@
  "<strong>Reconocer el tipo.</strong> $x \\to 0$ y $\\ln x \\to -\\infty$: es $0\\cdot\\infty$. L'Hôpital no se aplica a productos; primero hay que escribirlo como cociente.": "<strong>Recognise the type.</strong> $x \\to 0$ and $\\ln x \\to -\\infty$: it is $0\\cdot\\infty$. L'Hôpital does not apply to products; first it has to be written as a quotient.",
  "@frag": {
   "$ · en $x = ": "$ · at $x = ",
-  "\\operatorname{sen}": "\\sin"
+  "$; en $x = 10\\,000$, $": "$; at $x = 10\\,000$, $",
+  "\\operatorname{sen}": "\\sin",
+  "x)}{x}$: es $\\frac{0}{0}$.": "x)}{x}$: it is $\\frac{0}{0}$.",
+  "}{x}\\right)$: es $\\infty\\cdot 0$.": "}{x}\\right)$: it is $\\infty\\cdot 0$."
  },
  "Antes de aplicar la regla, sustituye. Si no hay indeterminación, L'Hôpital da resultados falsos: $\\lim_{x \\to 1} \\frac{x + 1}{x} = 2$ sustituyendo, pero derivando arriba y abajo saldría $\\frac{1}{1} = 1$. Y si el límite del cociente de derivadas no existe, la regla no dice nada: $\\lim_{x \\to \\infty} \\frac{x + \\operatorname{sen} x}{x} = 1$, aunque $\\frac{1 + \\cos x}{1}$ oscile sin límite.": "Before applying the rule, substitute. If there is no indeterminate form, L'Hôpital gives false results: $\\lim_{x \\to 1} \\frac{x + 1}{x} = 2$ by substitution, but differentiating top and bottom would give $\\frac{1}{1} = 1$. And if the limit of the quotient of derivatives does not exist, the rule says nothing: $\\lim_{x \\to \\infty} \\frac{x + \\sin x}{x} = 1$, even though $\\frac{1 + \\cos x}{1}$ oscillates without limit.",
  "Antes de aplicarla, se sustituye: sin indeterminación, da resultados falsos.": "Before applying it, substitute: with no indeterminate form, it gives false results.",

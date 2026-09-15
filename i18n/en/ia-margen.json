@@ -22,6 +22,10 @@
  "<strong>Escribirla en forma vectorial.</strong> $y - 2 = 0$ es $\\vec w \\cdot \\vec x + b = 0$ con $\\vec w = (0, 1)$ y $b = -2$.": "<strong>Writing it in vector form.</strong> $y - 2 = 0$ is $\\vec w \\cdot \\vec x + b = 0$ with $\\vec w = (0, 1)$ and $b = -2$.",
  "<strong>Normalizar.</strong> Se divide todo entre 2: $\\vec w = (0,\\ 0{,}5)$ y $b = -1$. Ahora sí, cada punto da exactamente $\\pm 1$.": "<strong>Normalising.</strong> Everything is divided by 2: $\\vec w = (0,\\ 0{.}5)$ and $b = -1$. Now each point does give exactly $\\pm 1$.",
  "<strong>Por simetría.</strong> Las dos nubes son dos segmentos horizontales, uno en $y = 0$ y otro en $y = 4$. La frontera que más se aleja de los dos es la horizontal de en medio: $y = 2$.": "<strong>By symmetry.</strong> The two clouds are two horizontal segments, one at $y = 0$ and another at $y = 4$. The boundary that gets furthest from both is the horizontal one in the middle: $y = 2$.",
+ "@frag": {
+  ")$ y ": ")$ and ",
+  ", en ": ", at "
+ },
  "A cada punto del plano se le añade una tercera coordenada, $z = x^2 + y^2$, que es su distancia al origen al cuadrado. Los de dentro suben poco y los de fuera suben mucho, y en el espacio los separa un plano horizontal. Gira el dibujo arrastrando, o con las flechas.": "To each point of the plane a third coordinate is added, $z = x^2 + y^2$, which is its squared distance to the origin. The inner ones rise a little and the outer ones a lot, and in space a horizontal plane separates them. Rotate the drawing by dragging, or with the arrow keys.",
  "Basta con que haya puntos de las dos clases. En el ejemplo resuelto, con cuatro puntos ya está determinada la recta.": "It is enough to have points of both classes. In the worked example, four points already determine the line.",
  "Buscar el pasillo más ancho": "Looking for the widest corridor",

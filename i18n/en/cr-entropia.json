@@ -38,6 +38,14 @@
  "<strong>La condición.</strong> Todo esto vale si las palabras salen de los dados. Si las elige la persona, «casa perro sol luna» tiene la entropía de un poema de niño, no de $7776^4$.": "<strong>The condition.</strong> All this holds if the words come out of the dice. If the person chooses them, “house dog sun moon” has the entropy of a child's poem, not of $7776^4$.",
  "<strong>Las palabras.</strong> $\\log_2 7776 = 12{,}92$ bits por palabra, porque $7776 = 6^5$: cinco tiradas de dado. Seis palabras: $77{,}5$ bits, más que los diez símbolos, y se recuerdan.": "<strong>The words.</strong> $\\log_2 7776 = 12{.}92$ bits per word, because $7776 = 6^5$: five rolls of a die. Six words: $77{.}5$ bits, more than the ten symbols, and they can be remembered.",
  "<strong>Para 100 bits.</strong> $100 / 12{,}92 = 7{,}7$: hacen falta 8 palabras.": "<strong>For 100 bits.</strong> $100 / 12{.}92 = 7{.}7$: 8 words are needed.",
+ "@frag": {
+  " años": " years",
+  " días": " days",
+  " horas": " hours",
+  " minutos": " minutes",
+  "$ es $": "$ is $",
+  "</strong> de ": "</strong> of "
+ },
  "Aleatorio no es lo mismo que impredecible; el azar malo es la causa más común de fallo real.": "Random is not the same as unpredictable; bad randomness is the commonest cause of real failure.",
  "Bits": "Bits",
  "Bits de sorpresa": "Bits of surprise",

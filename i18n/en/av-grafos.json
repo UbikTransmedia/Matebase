@@ -7,7 +7,7 @@
  " vértices de grado impar, y solo se admiten 0 o 2.</strong>": " vertices of odd degree, and only 0 or 2 are allowed.</strong>",
  " ✓ (lema del apretón de manos). Los vértices rojos tienen grado impar.</span>": " ✓ (handshaking lemma). The red vertices have odd degree.</span>",
  "$ elementos tomados de 2 en 2.": "$ items taken 2 at a time.",
- "$ personas todas se saludan con todas exactamente una vez. ¿Cuántos saludos se producen?": "$ people everyone greets everyone exactly once. How many greetings take place?",
+ "$ personas todas se saludan con todas exactamente una vez. ¿Cuántos saludos se producen?": "$ people everyone greets everyone else exactly once. How many greetings take place?",
  "$ personas, así que ": "$ people, so ",
  "$ vértices. ¿Cuántas aristas tiene?": "$ vertices. How many edges does it have?",
  "$. ¿Admite un recorrido que pase una sola vez por cada arista?": "$. Does it admit a trail passing once through each edge?",
@@ -26,6 +26,11 @@
  "<strong>Por qué.</strong> En un vértice por el que se <em>pasa</em> hay que entrar y salir: sus aristas se gastan de dos en dos, y su grado tiene que ser par. Solo la salida y la llegada pueden ser impares.": "<strong>Why.</strong> At a vertex you <em>pass through</em>, you have to come in and go out: its edges are used up two at a time, and its degree has to be even. Only the start and the finish can be odd.",
  "<strong>Y la casita.</strong> Si se quita la diagonal que une 1 y 3... no: si se quita la diagonal entre las esquinas de abajo, quedan 1 y 2 con grado 2, y los impares pasan a ser 3 y 4. Sigue siendo de un trazo, empezando arriba. Con las dos diagonales quitadas, todos los grados son pares y además se acaba donde se empezó.": "<strong>And the little house.</strong> If the diagonal joining 1 and 3 is removed... no: if the diagonal between the bottom corners is removed, 1 and 2 are left with degree 2, and the odd ones become 3 and 4. It is still one stroke, starting at the top. With both diagonals removed, all the degrees are even and you also finish where you started.",
  "<strong>Árbol</strong>: grafo conexo sin ciclos. Siempre tiene exactamente $V-1$ aristas.": "<strong>Tree</strong>: a connected graph with no cycles. It always has exactly $V-1$ edges.",
+ "@frag": {
+  " aristas": " edges",
+  " saludos": " greetings",
+  "Con ": "With "
+ },
  "Aristas": "Edges",
  "Aristas de un árbol": "Edges of a tree",
  "Buscar el recorrido de un trazo probando": "Looking for the one-stroke route by trial",

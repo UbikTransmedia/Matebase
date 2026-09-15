@@ -18,6 +18,9 @@
  "<strong>Segundo instante.</strong> Ahora $q = \\text{nor}(0,\\ 0) = 1$ y $qn = \\text{nor}(1,\\ 0) = 0$. Queda $q = 1$, $qn = 0$.": "<strong>Second instant.</strong> Now $q = \\text{nor}(0,\\ 0) = 1$ and $qn = \\text{nor}(1,\\ 0) = 0$. It comes to $q = 1$, $qn = 0$.",
  "<strong>Tercer instante.</strong> $q = \\text{nor}(0,\\ 0) = 1$ y $qn = \\text{nor}(1,\\ 1) = 0$. No ha cambiado nada: <strong>estable</strong>.": "<strong>Third instant.</strong> $q = \\text{nor}(0,\\ 0) = 1$ and $qn = \\text{nor}(1,\\ 1) = 0$. Nothing has changed: <strong>stable</strong>.",
  "<strong>Y ahora lo importante.</strong> Si se baja $s$ a 0, en el instante siguiente $q = \\text{nor}(0, 0) = 1$ y $qn = \\text{nor}(0, 1) = 0$: sigue igual. La orden ha desaparecido y el 1 se ha quedado. Eso es recordar.": "<strong>And now the important part.</strong> If $s$ is lowered to 0, at the next instant $q = \\text{nor}(0, 0) = 1$ and $qn = \\text{nor}(0, 1) = 0$: still the same. The order has gone and the 1 has stayed. That is remembering.",
+ "@frag": {
+  " y ": " and "
+ },
  "Anota el estado de los dos cables antes de empezar.": "Note the state of the two wires before starting.",
  "Aquí hay algo que no cuadra si uno lo piensa como una fórmula. La primera puerta dice que $q$ depende de $qn$; la segunda, que $qn$ depende de $q$. Resolver eso como un sistema de ecuaciones no lleva a ninguna parte, porque cada una necesita a la otra ya resuelta.": "Here is something that does not add up if you think of it as a formula. The first gate says that $q$ depends on $qn$; the second, that $qn$ depends on $q$. Solving that as a system of equations leads nowhere, because each one needs the other already solved.",
  "Con el reloj a 0, ¿crees que el dato de entrada tiene algún efecto sobre lo guardado?": "With the clock at 0, do you think the input datum has any effect on what is stored?",

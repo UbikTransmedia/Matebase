@@ -31,10 +31,13 @@
   "$: decrece.": "$: it decreases.",
   "<strong>negativa</strong>": "<strong>negative</strong>",
   "<strong>positiva</strong>": "<strong>positive</strong>",
+  "Positiva": "Positive",
   "débil": "weak",
   "fuerte": "strong",
   "moderada": "moderate",
   "muy fuerte": "very strong",
+  "negativa": "negative",
+  "positiva": "positive",
   "y negativa": "and negative",
   "y positiva": "and positive"
  },

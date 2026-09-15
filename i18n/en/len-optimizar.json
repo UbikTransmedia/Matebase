@@ -20,7 +20,9 @@
  "<strong>Plegar constantes</strong>: un nudo con dos hojas numéricas se calcula al compilar y se sustituye por el número. Se hace de abajo arriba.": "<strong>Constant folding</strong>: a node with two numeric leaves is computed at compile time and replaced by the number. It is done bottom up.",
  "<strong>Plegar lo obvio.</strong> <code>4 * 5</code> son dos hojas numéricas: se pliega a 20. El programa pasa a ser <code>sea x = 20;</code>.": "<strong>Fold the obvious.</strong> <code>4 * 5</code> is two numeric leaves: it folds to 20. The program becomes <code>sea x = 20;</code>.",
  "@frag": {
-  "Aquí se pliegan <strong>": "Here <strong>"
+  "Aquí se pliegan <strong>": "Here <strong>",
+  "correcta": "correct",
+  "igual": "the same"
  },
  "Ante la duda, <strong>no tocar</strong>: un programa más lento es un inconveniente y un programa equivocado es otra cosa.": "When in doubt, <strong>do not touch</strong>: a slower program is an inconvenience and a wrong program is something else.",
  "Ante la duda, no tocar": "When in doubt, do not touch",

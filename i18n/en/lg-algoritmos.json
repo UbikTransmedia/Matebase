@@ -31,6 +31,13 @@
  "<strong>Pasos precisos</strong>: cada instrucción dice exactamente qué hacer, sin interpretación. «Añade sal al gusto» no vale.": "<strong>Precise steps</strong>: each instruction says exactly what to do, with nothing left to interpretation. “Add salt to taste” will not do.",
  "<strong>Salida</strong>: el resultado que se buscaba.": "<strong>Output</strong>: the result you were after.",
  "<strong>Terminación</strong>: tiene que acabar, para cualquier entrada válida, después de un número finito de pasos.": "<strong>Termination</strong>: it has to finish, for any valid input, after a finite number of steps.",
+ "@frag": {
+  " al ": " to ",
+  "$ en <strong>": "$ in <strong>",
+  "Termina": "Terminates",
+  "_2$, con $": "_2$, with $",
+  "mcd = ": "gcd = "
+ },
  "Ahora $s = 3$ e $i = 2$. ¿Qué sale?": "Now $s = 3$ and $i = 2$. What comes out?",
  "Ahora el divisor pasa a ser el dividendo y el resto el divisor. Repite hasta que el resto sea 0: el último divisor es el mcd.": "Now the divisor becomes the dividend and the remainder the divisor. Repeat until the remainder is 0: the last divisor is the gcd.",
  "Aplica el algoritmo de Euclides a $a = ": "Apply the Euclidean algorithm to $a = ",

@@ -38,7 +38,8 @@
  "<strong>continua</strong>": "<strong>continuous</strong>",
  "@frag": {
   "$ en ": "$ at ",
-  "$, en $x = ": "$, at $x = "
+  "$, en $x = ": "$, at $x = ",
+  "no continua": "not continuous"
  },
  "A la derecha (dentro), $f(x) = ": "To the right (inside), $f(x) = ",
  "A la derecha, $f(x) = x^2 - ": "To the right, $f(x) = x^2 - ",

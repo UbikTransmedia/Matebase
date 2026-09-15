@@ -37,6 +37,11 @@
  "<strong>Segunda agrupación.</strong> $6\\times6\\times32$, porque 13 entre 2 son 6 y sobra uno, que se descarta.": "<strong>Second pooling.</strong> $6\\times6\\times32$, because 13 divided by 2 is 6 with one left over, which is discarded.",
  "<strong>Segunda convolución.</strong> Lado $15 - 3 + 1 = 13$, con 32 filtros: $13\\times13\\times32$. Pesos: $3\\cdot3\\cdot16\\cdot32 = 4608$.": "<strong>Second convolution.</strong> Side $15 - 3 + 1 = 13$, with 32 filters: $13\\times13\\times32$. Weights: $3\\cdot3\\cdot16\\cdot32 = 4608$.",
  "<strong>Sus pesos.</strong> Cada filtro es $3\\times3$ y tan profundo como la entrada, o sea 3 canales: $3\\cdot3\\cdot3 = 27$ pesos por filtro, por 16 filtros, $432$ pesos.": "<strong>Its weights.</strong> Each filter is $3\\times3$ and as deep as the input, that is 3 channels: $3\\cdot3\\cdot3 = 27$ weights per filter, times 16 filters, $432$ weights.",
+ "@frag": {
+  " y ": " and ",
+  " y $": " and $",
+  "sí": "yes"
+ },
  "A cada núcleo se le llama <strong>filtro</strong>, y lo importante es que sus números <strong>no se eligen: se aprenden</strong>. En [[av-convolucion|convolución]] escribíamos a mano un detector de bordes; aquí el descenso de gradiente decide qué conviene detectar, y lo decide a partir de los datos.": "Each kernel is called a <strong>filter</strong>, and the important thing is that its numbers <strong>are not chosen: they are learned</strong>. In [[av-convolucion|convolution]] we wrote an edge detector by hand; here gradient descent decides what is worth detecting, and it decides from the data.",
  "A la izquierda, una imagen con un trazo; a la derecha, el resultado de pasarle un núcleo detector de bordes verticales. Desplaza el trazo y fíjate en que el mapa de la derecha se desplaza exactamente igual, sin que nada haya tenido que reaprenderse.": "On the left, an image with a stroke; on the right, the result of passing a vertical edge detector kernel over it. Shift the stroke and notice that the map on the right shifts exactly the same, without anything having had to be relearned.",
  "Agrupación: $": "Pooling: $",

@@ -39,6 +39,12 @@
  "<strong>Intentos de media.</strong> La mitad: $2^{31} \\approx 2{,}1\\cdot 10^9$. A mil por segundo, $2{,}1\\cdot 10^6$ segundos: unos 25 días. Poco, para algo que se puede automatizar.": "<strong>Attempts on average.</strong> Half: $2^{31} \\approx 2{.}1\\cdot 10^9$. At a thousand per second, $2{.}1\\cdot 10^6$ seconds: about 25 days. Not much, for something that can be automated.",
  "<strong>La moraleja.</strong> La etiqueta se puede acortar, porque el atacante no puede verificar por su cuenta, pero no tanto: 64 bits es el mínimo razonable, y HMAC-SHA256 da 256.": "<strong>The moral.</strong> The tag can be shortened, because the attacker cannot verify on their own, but not that much: 64 bits is the reasonable minimum, and HMAC-SHA256 gives 256.",
  "<strong>Las etiquetas posibles.</strong> $2^{32} \\approx 4{,}3\\cdot 10^9$. Una etiqueta al azar es válida con probabilidad $2^{-32}$.": "<strong>The possible tags.</strong> $2^{32} \\approx 4{.}3\\cdot 10^9$. A random tag is valid with probability $2^{-32}$.",
+ "@frag": {
+  " años": " years",
+  "Hay $2^{": "There are $2^{",
+  "son pocos.": "are too few.",
+  "}$ es $2^{-": "}$ is $2^{-"
+ },
  "Adivinar es la única opción de Eva si el MAC es bueno: la clave no viaja y la construcción no se despeja.": "Guessing is Eve's only option if the MAC is good: the key does not travel and the construction cannot be solved.",
  "Adivinar una etiqueta": "Guessing a tag",
  "Alicia cifra una orden de pago en modo CTR. Eva no tiene la clave y no puede leerla, pero sabe el formato: el importe está en una posición fija. Elige qué quiere que lea Benito y la demo calcula qué bytes del cifrado hay que alterar. Con el sello activado, Benito rechaza el mensaje.": "Alice encrypts a payment order in CTR mode. Eve does not have the key and cannot read it, but she knows the format: the amount is at a fixed position. Choose what you want Bob to read and the demo works out which bytes of the ciphertext have to be altered. With the seal switched on, Bob rejects the message.",

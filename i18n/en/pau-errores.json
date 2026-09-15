@@ -84,6 +84,10 @@
  "<strong>¿Qué se pidió?</strong> Área, no integral. $\\displaystyle\\int_0^3 (x^2 - 4)\\,dx = -3$ es correcto como integral, pero no es lo que preguntan.": "<strong>What was asked?</strong> Area, not integral. $\\displaystyle\\int_0^3 (x^2 - 4)\\,dx = -3$ is correct as an integral, but it is not what is being asked.",
  "<strong>¿Tiene sentido?</strong> Un área no puede ser negativa. Algo está mal, y esa señal vale oro: se ha detectado antes de entregar.": "<strong>Does it make sense?</strong> An area cannot be negative. Something is wrong, and that signal is worth gold: it was caught before handing in.",
  "@frag": {
+  " éxito.": " success.",
+  " éxitos.": " successes.",
+  "creciente": "increasing",
+  "decreciente": "decreasing",
   "veces": "times",
   "vez": "time"
  },

@@ -24,6 +24,10 @@
  "<strong>Comprobar.</strong> $A\\begin{pmatrix} 1 \\\\ 1 \\end{pmatrix} = \\begin{pmatrix} 3 \\\\ 3 \\end{pmatrix} = 3\\vec v_1$ ✓ y $A\\begin{pmatrix} 1 \\\\ -1 \\end{pmatrix} = \\begin{pmatrix} 1 \\\\ -1 \\end{pmatrix} = 1\\cdot\\vec v_2$ ✓.": "<strong>Check.</strong> $A\\begin{pmatrix} 1 \\\\ 1 \\end{pmatrix} = \\begin{pmatrix} 3 \\\\ 3 \\end{pmatrix} = 3\\vec v_1$ ✓ and $A\\begin{pmatrix} 1 \\\\ -1 \\end{pmatrix} = \\begin{pmatrix} 1 \\\\ -1 \\end{pmatrix} = 1\\cdot\\vec v_2$ ✓.",
  "<strong>Diagonalizar.</strong> $P = \\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}$ (autovectores por columnas), $D = \\begin{pmatrix} 3 & 0 \\\\ 0 & 1 \\end{pmatrix}$. En la base $\\{\\vec v_1, \\vec v_2\\}$ la matriz solo estira: por 3 en una diagonal del plano, por 1 en la otra.": "<strong>Diagonalise.</strong> $P = \\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}$ (eigenvectors as columns), $D = \\begin{pmatrix} 3 & 0 \\\\ 0 & 1 \\end{pmatrix}$. In the basis $\\{\\vec v_1, \\vec v_2\\}$ the matrix only stretches: by 3 along one diagonal of the plane, by 1 along the other.",
  "<strong>Ecuación característica.</strong> Traza $= 4$, determinante $= 3$: $\\lambda^2 - 4\\lambda + 3 = 0$, es decir, $(\\lambda - 1)(\\lambda - 3) = 0$. Autovalores $\\lambda_1 = 3$ y $\\lambda_2 = 1$.": "<strong>Characteristic equation.</strong> Trace $= 4$, determinant $= 3$: $\\lambda^2 - 4\\lambda + 3 = 0$, that is, $(\\lambda - 1)(\\lambda - 3) = 0$. Eigenvalues $\\lambda_1 = 3$ and $\\lambda_2 = 1$.",
+ "@frag": {
+  " y ": " and ",
+  " y λ = ": " and λ = "
+ },
  "A = \\begin{pmatrix} a & -b \\\\ b & a \\end{pmatrix} = r\\begin{pmatrix} \\cos\\theta & -\\operatorname{sen}\\theta \\\\ \\operatorname{sen}\\theta & \\cos\\theta \\end{pmatrix}, \\qquad \\lambda = a \\pm b\\,i": "A = \\begin{pmatrix} a & -b \\\\ b & a \\end{pmatrix} = r\\begin{pmatrix} \\cos\\theta & -\\sin\\theta \\\\ \\sin\\theta & \\cos\\theta \\end{pmatrix}, \\qquad \\lambda = a \\pm b\\,i",
  "A la larga domina el autovalor de mayor módulo: casi cualquier vector acaba alineándose con su autovector. Eso es lo que aprovecha PageRank.": "In the long run the eigenvalue of largest modulus dominates: almost any vector ends up lining up with its eigenvector. That is what PageRank exploits.",
  "A\\vec{v} = \\lambda\\,\\vec{v}": "A\\vec{v} = \\lambda\\,\\vec{v}",
@@ -96,7 +100,7 @@
  "Primer autovalor": "First eigenvalue",
  "Prueba la última matriz: es un giro de 90°, y no tiene ninguna dirección invariante real.": "Try the last matrix: it is a 90° rotation, and it has no real invariant direction at all.",
  "Resta 3 en la diagonal y resuelve. ¿Por qué salen dos ecuaciones iguales?": "Subtract 3 along the diagonal and solve. Why do two identical equations come out?",
- "Se aplica la matriz una y otra vez a un punto de partida. Cada aplicación gira un ángulo θ y estira por r, los dos datos del autovalor complejo. Pon r justo en 1 y el punto da vueltas sin acercarse ni alejarse.": "The matrix is applied again and again to a starting point. Each application rotates by an angle θ and stretches by r, the two data of the complex eigenvalue. Set r exactly at 1 and the point goes round without approaching or receding.",
+ "Se aplica la matriz una y otra vez a un punto de partida. Cada aplicación gira un ángulo θ y estira por r, los dos datos del autovalor complejo. Pon r justo en 1 y el punto da vueltas sin acercarse ni alejarse.": "The matrix is applied again and again to a starting point. Each application rotates by an angle θ and stretches by r, the two parameters of the complex eigenvalue. Set r exactly at 1 and the point goes round without approaching or receding.",
  "Se calculan resolviendo $\\det(A-\\lambda I) = 0$.": "They are computed by solving $\\det(A-\\lambda I) = 0$.",
  "Segundo autovalor": "Second eigenvalue",
  "Si $A = PDP^{-1}$, entonces $A^n = PD^nP^{-1}$: solo hay que elevar los autovalores.": "If $A = PDP^{-1}$, then $A^n = PD^nP^{-1}$: you only have to raise the eigenvalues.",
@@ -136,7 +140,7 @@
  "gira sin acercarse ni alejarse": "turns without approaching or receding",
  "giro con escala: autovalores complejos": "rotation with scaling: complex eigenvalues",
  "i$ tiene argumento $": "i$ has argument $",
- "i$. (Tres decimales.)": "i$. (Three decimals.)",
+ "i$. (Tres decimales.)": "i$. (Three decimal places.)",
  "i$. ¿Cuánto estira y cuánto gira? Da el módulo y el ángulo de giro en grados, entre $-180^\\circ$ y $180^\\circ$, del autovalor $": "i$. How much does it stretch and how much does it rotate? Give the modulus and the angle of rotation in degrees, between $-180^\\circ$ and $180^\\circ$, of the eigenvalue $",
  "imagen de la circunferencia": "image of the circle",
  "módulo": "modulus",

@@ -32,6 +32,7 @@
  "<strong>Recorrido</strong> (o imagen) $\\operatorname{Im} f$: todos los valores que llega a tomar $f(x)$.": "<strong>Range</strong> (or image) $\\operatorname{Im} f$: all the values $f(x)$ manages to take.",
  "<strong>Simetría</strong>: si es simétrica respecto al eje Y se llama <em>par</em> ($f(-x)=f(x)$); si lo es respecto al origen, <em>impar</em> ($f(-x)=-f(x)$).": "<strong>Symmetry</strong>: if it is symmetric about the y-axis it is called <em>even</em> ($f(-x)=f(x)$); if about the origin, <em>odd</em> ($f(-x)=-f(x)$).",
  "@frag": {
+  ", 0) y (": ", 0) and (",
   "IMPAR: $f(-x)=-f(x)$, simétrica respecto al origen": "ODD: $f(-x)=-f(x)$, symmetric about the origin",
   "NI PAR NI IMPAR": "NEITHER EVEN NOR ODD",
   "PAR: $f(-x)=f(x)$, simétrica respecto al eje Y": "EVEN: $f(-x)=f(x)$, symmetric about the y-axis",

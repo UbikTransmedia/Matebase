@@ -30,6 +30,13 @@
  "<strong>La primera letra.</strong> La primera columna es un César. Su letra más frecuente, J $= 9$, debe ser la E $= 4$ del castellano: la clave desplaza $9 - 4 = 5$, que es la <strong>F</strong>.": "<strong>The first letter.</strong> The first column is a Caesar. Its most frequent letter, J $= 9$, must be Spanish's E $= 4$: the key shifts by $9 - 4 = 5$, which is <strong>F</strong>.",
  "<strong>Las distancias.</strong> $24$, $36$ y $60$. Cada una tiene que ser múltiplo de $L$, así que $L$ divide a su máximo común divisor.": "<strong>The distances.</strong> $24$, $36$ and $60$. Each one has to be a multiple of $L$, so $L$ divides their greatest common divisor.",
  "<strong>Y así las doce.</strong> Cada columna da una letra de la clave. Con doce columnas de treinta letras cada una las frecuencias son ruidosas, y a veces la más frecuente es la A y no la E: se prueba, se lee, se corrige.": "<strong>And so for all twelve.</strong> Each column gives one letter of the key. With twelve columns of thirty letters each the frequencies are noisy, and sometimes the most frequent is A and not E: you try, you read, you correct.",
+ "@frag": {
+  " es la <strong>": " is letter <strong>",
+  " letras: ": " letters: ",
+  " y ": " and ",
+  ", la ": ", letter ",
+  "El ": "Number "
+ },
  "CASTILLO": "CASTILLO",
  "Cada columna es un César cuya E ha ido a parar a la letra más frecuente: la clave de esa columna es su número menos 4.": "Each column is a Caesar whose E has ended up at the most frequent letter: that column's key is its number minus 4.",
  "Cada distancia es un múltiplo de la longitud de la clave: calcula el máximo común divisor de las tres.": "Each distance is a multiple of the key's length: compute the greatest common divisor of the three.",

@@ -27,9 +27,12 @@
  "@frag": {
   " · dentro": " · inside",
   " · fuera": " · outside",
+  ":<br><pre class=\"shd__mini\">float dA = length(p - vec2(-0.12, 0.0)) - 0.2;   // circulo\nfloat dB = length(p - vec2( 0.12, 0.0)) - 0.2;   // otro circulo\nfloat d  = <strong>???</strong> ;</pre>": ":<br><pre class=\"shd__mini\">float dA = length(p - vec2(-0.12, 0.0)) - 0.2;   // circle\nfloat dB = length(p - vec2( 0.12, 0.0)) - 0.2;   // another circle\nfloat d  = <strong>???</strong> ;</pre>",
   "</code> y a la ": "</code> and to ",
   "</code> —la <strong>": "</code> —the <strong>",
-  "La <strong>": "The <strong>"
+  "La <strong>": "The <strong>",
+  "dentro": "inside",
+  "fuera": "outside"
  },
  "Acuérdate de cómo funciona la tarjeta gráfica: miles de píxeles se calculan a la vez, en grupos que ejecutan <strong>la misma instrucción al mismo tiempo</strong>. Si dentro de un grupo unos píxeles entran en el <code>if</code> y otros no, la tarjeta no puede hacer las dos cosas a la vez: ejecuta primero una rama con unos apagados, luego la otra con los otros apagados, y tira la mitad del trabajo. Se llama <em>divergencia</em>, y cuesta caro.": "Remember how the graphics card works: thousands of pixels are computed at once, in groups that execute <strong>the same instruction at the same time</strong>. If within a group some pixels enter the <code>if</code> and others do not, the card cannot do both things at once: it runs one branch first with some switched off, then the other with the others switched off, and throws away half the work. It is called <em>divergence</em>, and it costs dear.",
  "Aquí ocurre algo elegante. Si tienes las distancias de dos figuras, las operaciones de [[lg-conjuntos|conjuntos]] salen solas:": "Something elegant happens here. If you have the distances of two figures, the [[lg-conjuntos|set]] operations come out by themselves:",

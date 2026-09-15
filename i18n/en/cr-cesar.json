@@ -28,6 +28,14 @@
  "<strong>Descifrar.</strong> Restar 5: E = 4, $4 - 5 = -1 \\equiv 25$, Z. T = 19, $19 - 5 = 14$, O. W = 22, $22 - 5 = 17$, R. Recuperado ZORRO ✓.": "<strong>Deciphering.</strong> Subtract 5: E = 4, $4 - 5 = -1 \\equiv 25$, Z. T = 19, $19 - 5 = 14$, O. W = 22, $22 - 5 = 17$, R. ZORRO recovered ✓.",
  "<strong>Lo que ya se ve.</strong> Las dos R se cifran igual, como W. Un cifrado que manda cada letra siempre a la misma letra conserva la forma de las palabras, y eso es una pista para quien quiera romperlo.": "<strong>What can already be seen.</strong> The two Rs are enciphered the same, as W. A cipher that always sends each letter to the same letter preserves the shape of the words, and that is a clue for whoever wants to break it.",
  "<strong>Sumar 5 y reducir.</strong> $25 + 5 = 30 \\equiv 4$, que es la E. $14 + 5 = 19$, T. $17 + 5 = 22$, W. Y otra vez W y T. Cifrado: <strong>ETWWT</strong>.": "<strong>Add 5 and reduce.</strong> $25 + 5 = 30 \\equiv 4$, which is E. $14 + 5 = 19$, T. $17 + 5 = 22$, W. And W and T again. Ciphertext: <strong>ETWWT</strong>.",
+ "@frag": {
+  " es el ": " is number ",
+  " es la <strong>": " is letter <strong>",
+  " y ": " and ",
+  ", es el ": ", is number ",
+  "El ": "Number ",
+  "La ": "Letter "
+ },
  "A: $X = 23$, $23 + 3 = 26$, y $26 \\bmod 26 = 0$, que es la A": "A: $X = 23$, $23 + 3 = 26$, and $26 \\bmod 26 = 0$, which is A",
  "Al pasar de la Z se vuelve a empezar. Por eso las letras se numeran desde 0: así 26 es «una vuelta entera».": "On passing Z you start again. That is why the letters are numbered from 0: that way 26 is “a whole turn”.",
  "Alguien cifra con «clave ": "Somebody enciphers with “key ",

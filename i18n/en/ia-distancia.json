@@ -28,8 +28,10 @@
  "<strong>Recolocar.</strong> Cada centro se mueve a la media de los puntos que se le han apuntado.": "<strong>Relocate.</strong> Each centre moves to the mean of the points that have signed up to it.",
  "<strong>Y si hubiera sido $k = 5$.</strong> Entrarían los cinco: dos azules y tres naranjas. Ganaría el <strong>naranja</strong>. El mismo punto, tres respuestas posibles según el $k$: por eso elegirlo importa.": "<strong>And if it had been $k = 5$.</strong> All five would come in: two blues and three oranges. <strong>Orange</strong> would win. The same point, three possible answers depending on $k$: that is why choosing it matters.",
  "@frag": {
+  "Los ": "The ",
   "azul": "blue",
   "azules": "blues",
+  "k vecinos": "k neighbours",
   "naranja": "orange",
   "naranjas": "oranges"
  },

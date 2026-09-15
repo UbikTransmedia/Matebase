@@ -12,6 +12,12 @@
  "<strong>Con la normalización mala.</strong> $uv - 0{,}5 = (0{,}9 - 0{,}5,\\ 0{,}2 - 0{,}5) = (0{,}4,\\ -0{,}3)$. La $y$ coincide y la $x$ vale la mitad: en horizontal una unidad son 1000 píxeles y en vertical 500. Un círculo dibujado con esta $p$ se estira al doble de ancho.": "<strong>With the bad normalisation.</strong> $uv - 0{.}5 = (0{.}9 - 0{.}5,\\ 0{.}2 - 0{.}5) = (0{.}4,\\ -0{.}3)$. The $y$ agrees and the $x$ is half: horizontally one unit is 1000 pixels and vertically 500. A circle drawn with this $p$ stretches to twice the width.",
  "<strong>Dónde cae.</strong> A la derecha del centro y un poco por debajo. Fíjate en que $p_x = 0{,}8$ se sale de $[-0{,}5, 0{,}5]$: la pantalla es el doble de ancha que alta y la $x$ llega hasta $\\pm 1$.": "<strong>Where it falls.</strong> To the right of the centre and a little below. Notice that $p_x = 0{.}8$ goes outside $[-0{.}5,\\, 0{.}5]$: the screen is twice as wide as it is tall and the $x$ reaches $\\pm 1$.",
  "<strong>Polares.</strong> $r = \\sqrt{0{,}64 + 0{,}09} = \\sqrt{0{,}73} \\approx 0{,}854$. $\\theta = \\operatorname{atan2}(-0{,}3,\\ 0{,}8) \\approx -0{,}359$ rad, unos $-20{,}6°$: cuarto cuadrante.": "<strong>Polars.</strong> $r = \\sqrt{0{.}64 + 0{.}09} = \\sqrt{0{.}73} \\approx 0{.}854$. $\\theta = \\operatorname{atan2}(-0{.}3,\\ 0{.}8) \\approx -0{.}359$ rad, about $-20{.}6°$: fourth quadrant.",
+ "@frag": {
+  "cuarto": "fourth",
+  "primero": "first",
+  "segundo": "second",
+  "tercero": "third"
+ },
  "A la izquierda se pinta la distancia al centro; a la derecha, el ángulo. Míralos por separado y luego combínalos: con esas dos cantidades se construye casi todo lo que gira.": "On the left the distance to the centre is painted; on the right, the angle. Look at them separately and then combine them: with those two quantities almost everything that turns is built.",
  "A polares": "To polars",
  "Ahora el centro de la pantalla es el $(0,0)$, la izquierda es $-0{,}5$ y la derecha $+0{,}5$. Es el plano cartesiano de [[ge-vectores|geometría]], con el mismo convenio de signos que llevas usando desde entonces.": "Now the centre of the screen is $(0,0)$, the left is $-0{.}5$ and the right $+0{.}5$. It is the Cartesian plane of [[ge-vectores|geometry]], with the same sign convention you have been using ever since.",

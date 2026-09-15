@@ -20,7 +20,10 @@
  "<strong>La garantía.</strong> Ese $0{,}5$ está entre $0{,}2$ y $0{,}8$. Una interpolación no inventa valores fuera de los que ya había: mirando atrás, la tinta no puede crecer sin control, pase lo que pase con la velocidad.": "<strong>The guarantee.</strong> That $0{.}5$ lies between $0{.}2$ and $0{.}8$. An interpolation invents no values outside those that were already there: looking backwards, the ink cannot grow out of control, whatever happens to the velocity.",
  "<strong>Mirar atrás.</strong> $(120, 80) - (3, -2) = (117, 82)$: tres píxeles a la izquierda y dos hacia arriba. La corriente va hacia la derecha y hacia abajo, así que lo que llega aquí venía de allí.": "<strong>Looking back.</strong> $(120, 80) - (3, -2) = (117, 82)$: three pixels to the left and two upwards. The current goes to the right and downwards, so what arrives here came from there.",
  "@frag": {
-  "$ en el de arriba y $": "$ at the one above and $"
+  "$ en el de arriba y $": "$ at the one above and $",
+  "acumula": "accumulates",
+  "escapa": "escapes",
+  "nada": "nothing"
  },
  "Advección": "Advection",
  "Alrededor de un píxel, la componente horizontal de la velocidad vale $": "Around a pixel, the horizontal component of the velocity is $",

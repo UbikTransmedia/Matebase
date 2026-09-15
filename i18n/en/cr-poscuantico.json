@@ -50,6 +50,12 @@
  "<strong>Cuántico.</strong> Grover da la raíz: $2^{128}$. Sigue siendo inalcanzable, y no hay ningún Shor para las funciones hash, porque no tienen estructura de periodo.": "<strong>Quantum.</strong> Grover gives the root: $2^{128}$. Still out of reach, and there is no Shor for hash functions, because they have no period structure.",
  "<strong>La solución.</strong> Cada clave de un solo uso, y muchas colgando de un árbol de Merkle cuya raíz es la clave pública permanente: así se firman millones de mensajes, cada uno con una hoja distinta. Es lo que hacen los esquemas SPHINCS y XMSS.": "<strong>The solution.</strong> Each key for one use only, and many hanging from a Merkle tree whose root is the permanent public key: that way millions of messages are signed, each with a different leaf. It is what the SPHINCS and XMSS schemes do.",
  "<strong>Una firma, un mensaje 0 y un mensaje 1.</strong> Si con una misma clave se firma un bit 0 (revela $x_0$) y luego un bit 1 (revela $x_1$), Eva conoce los dos secretos de esa posición y puede firmar ese bit como quiera.": "<strong>One key, a 0 message and a 1 message.</strong> If with the same key a 0 bit is signed (revealing $x_0$) and then a 1 bit (revealing $x_1$), Eve knows both secrets at that position and can sign that bit however she likes.",
+ "@frag": {
+  " y ": " and ",
+  ", sin ruido": ", without noise",
+  "clásico": "classical",
+  "sobrevive": "survives"
+ },
  "Al descifrar un cifrado LWE con $q = 97$ (así que $q/2 \\approx 48$), queda el valor $": "On decrypting an LWE ciphertext with $q = 97$ (so $q/2 \\approx 48$), the value $",
  "Aprender con errores": "Learning with errors",
  "Basado en": "Based on",

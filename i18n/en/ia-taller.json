@@ -28,6 +28,9 @@
  "<strong>La proporción.</strong> Los sesgos son el $10{,}2\\ \\%$ del total. En redes grandes esa proporción se hace minúscula: con capas de mil neuronas, una matriz tiene un millón de pesos y sólo mil sesgos.": "<strong>The proportion.</strong> The biases are $10{.}2\\ \\%$ of the total. In large networks that proportion becomes tiny: with layers of a thousand neurons, one matrix has a million weights and only a thousand biases.",
  "<strong>Las matrices.</strong> Hay cuatro saltos: $2\\times12$, $12\\times12$, $12\\times12$ y $12\\times1$. Eso da $24 + 144 + 144 + 12 = 324$ pesos.": "<strong>The matrices.</strong> There are four jumps: $2\\times12$, $12\\times12$, $12\\times12$ and $12\\times1$. That gives $24 + 144 + 144 + 12 = 324$ weights.",
  "<strong>Los sesgos.</strong> Uno por neurona de cada capa de llegada: $12 + 12 + 12 + 1 = 37$.": "<strong>The biases.</strong> One per neuron of each arrival layer: $12 + 12 + 12 + 1 = 37$.",
+ "@frag": {
+  " de $": " of $"
+ },
  "Adam": "Adam",
  "Aquí están juntos los elementos que has ido viendo por separado. Cambia uno y observa: casi todo lo que pasa tiene una explicación en algún tema anterior.": "Here together are the elements you have been seeing separately. Change one and watch: almost everything that happens has an explanation in some earlier topic.",
  "Arquitectura": "Architecture",

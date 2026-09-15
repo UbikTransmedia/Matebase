@@ -23,6 +23,7 @@
  "<strong>Plantear.</strong> $\\dfrac{x + 5}{(x - 2)(x + 1)} = \\dfrac{A}{x - 2} + \\dfrac{B}{x + 1}$. Quitando denominadores: $x + 5 = A(x + 1) + B(x - 2)$.": "<strong>Set it up.</strong> $\\dfrac{x + 5}{(x - 2)(x + 1)} = \\dfrac{A}{x - 2} + \\dfrac{B}{x + 1}$. Clearing denominators: $x + 5 = A(x + 1) + B(x - 2)$.",
  "<strong>¿Hay que dividir?</strong> Grado 1 arriba, grado 2 abajo: no. Se pasa directamente a descomponer.": "<strong>Does it need dividing?</strong> Degree 1 on top, degree 2 underneath: no. Go straight to decomposing.",
  "@frag": {
+  " y ": " and ",
   "$) y $B$ (el de $": "$) and $B$ (that of $",
   "\\operatorname{sen}": "\\sin"
  },

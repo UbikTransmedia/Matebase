@@ -41,6 +41,10 @@
  "<strong>Las partes.</strong> $f(1) = 5 + 3 + 2 = 10$. $f(2) = 5 + 6 + 8 = 19 \\equiv 2$. $f(3) = 5 + 9 + 18 = 32 \\equiv 15$. Partes: $(1, 10)$, $(2, 2)$, $(3, 15)$.": "<strong>The shares.</strong> $f(1) = 5 + 3 + 2 = 10$. $f(2) = 5 + 6 + 8 = 19 \\equiv 2$. $f(3) = 5 + 9 + 18 = 32 \\equiv 15$. Shares: $(1, 10)$, $(2, 2)$, $(3, 15)$.",
  "<strong>Los coeficientes en 0.</strong> $\\ell_1 = \\frac{(0-2)(0-3)}{(1-2)(1-3)} = \\frac{6}{2} = 3$. $\\ell_2 = \\frac{(0-1)(0-3)}{(2-1)(2-3)} = \\frac{3}{-1} = -3 \\equiv 14$. $\\ell_3 = \\frac{(0-1)(0-2)}{(3-1)(3-2)} = \\frac{2}{2} = 1$. Comprobación: suman $18 \\equiv 1$, como deben.": "<strong>The coefficients at 0.</strong> $\\ell_1 = \\frac{(0-2)(0-3)}{(1-2)(1-3)} = \\frac{6}{2} = 3$. $\\ell_2 = \\frac{(0-1)(0-3)}{(2-1)(2-3)} = \\frac{3}{-1} = -3 \\equiv 14$. $\\ell_3 = \\frac{(0-1)(0-2)}{(3-1)(3-2)} = \\frac{2}{2} = 1$. Check: they add up to $18 \\equiv 1$, as they should.",
  "<strong>Recuperar.</strong> $s = 10\\cdot 3 + 2\\cdot 14 + 15\\cdot 1 = 30 + 28 + 15 = 73 = 4\\cdot 17 + 5 \\equiv 5$ ✓.": "<strong>Recovering.</strong> $s = 10\\cdot 3 + 2\\cdot 14 + 15\\cdot 1 = 30 + 28 + 15 = 73 = 4\\cdot 17 + 5 \\equiv 5$ ✓.",
+ "@frag": {
+  " de ": " of ",
+  " y ": " and "
+ },
  "Adi Shamir, la S de RSA, publicó <em>How to Share a Secret</em> en 1979, en dos páginas. El mismo año, George Blakley propuso otra solución con hiperplanos que se cortan en un punto. La interpolación de Lagrange es de 1795, y la idea de que $k$ puntos fijan un polinomio de grado $k - 1$ es aún más antigua; lo nuevo fue llevarla a un cuerpo finito y darse cuenta de que entonces $k - 1$ puntos no dicen nada.": "Adi Shamir, the S of RSA, published <em>How to Share a Secret</em> in 1979, in two pages. The same year, George Blakley proposed another solution with hyperplanes meeting at a point. Lagrange interpolation is from 1795, and the idea that $k$ points fix a polynomial of degree $k - 1$ is older still; what was new was carrying it into a finite field and realising that then $k - 1$ points say nothing.",
  "Calcular las partes": "Computing the shares",
  "Coeficientes en 0 para $x = ": "Coefficients at 0 for $x = ",

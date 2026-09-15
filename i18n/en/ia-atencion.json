@@ -28,6 +28,12 @@
  "<strong>La lectura.</strong> Con $d = 2$ la diferencia es pequeña, pero crece con la dimensión: es exactamente el efecto que mide la demo de arriba. La salida del tercer token sería $0{,}248\\vec v_1 + 0{,}248\\vec v_2 + 0{,}504\\vec v_3$.": "<strong>The reading.</strong> With $d = 2$ the difference is small, but it grows with the dimension: it is exactly the effect the demo above measures. The third token's output would be $0{.}248\\vec v_1 + 0{.}248\\vec v_2 + 0{.}504\\vec v_3$.",
  "<strong>Los productos escalares.</strong> $\\vec q\\cdot\\vec k_1 = 1$, $\\vec q\\cdot\\vec k_2 = 1$, $\\vec q\\cdot\\vec k_3 = 2$.": "<strong>The dot products.</strong> $\\vec q\\cdot\\vec k_1 = 1$, $\\vec q\\cdot\\vec k_2 = 1$, $\\vec q\\cdot\\vec k_3 = 2$.",
  "<strong>Sin dividir.</strong> $e^1 = 2{,}718$ dos veces y $e^2 = 7{,}389$, que suman $12{,}825$: los pesos serían $0{,}212$, $0{,}212$ y $0{,}576$. Más concentrado.": "<strong>Without dividing.</strong> $e^1 = 2{.}718$ twice and $e^2 = 7{.}389$, which add to $12{.}825$: the weights would be $0{.}212$, $0{.}212$ and $0{.}576$. More concentrated.",
+ "@frag": {
+  " y ": " and ",
+  "$ usa $": "$ uses $",
+  "20 y ": "20 and ",
+  "40 y ": "40 and "
+ },
  "A esta dimensión, sin dividir el softmax está <strong>completamente saturado</strong>: un peso vale prácticamente 1 y el resto 0. Ahí la derivada del softmax es casi cero y el entrenamiento se para.": "At this dimension, without dividing the softmax is <strong>completely saturated</strong>: one weight is practically 1 and the rest 0. There the softmax's derivative is almost zero and the training stops.",
  "Al subir la dimensión, los productos escalares se hacen más grandes. ¿Qué le pasará al reparto de pesos del softmax?": "As the dimension rises, the dot products become larger. What will happen to the softmax's sharing of weights?",
  "Aquí hay un agujero que conviene ver. Si se barajan los tokens de la entrada, todos los productos escalares son los mismos y los pesos también: <strong>la atención no distingue el orden</strong>. «El perro muerde al hombre» y «el hombre muerde al perro» le darían exactamente lo mismo. Hay que meter la posición a mano.": "Here there is a hole worth seeing. If the input's tokens are shuffled, all the dot products are the same and so are the weights: <strong>attention does not distinguish order</strong>. “The dog bites the man” and “the man bites the dog” would give it exactly the same thing. The position has to be put in by hand.",

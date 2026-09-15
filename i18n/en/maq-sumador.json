@@ -24,9 +24,11 @@
  "<strong>El circuito.</strong> Cuatro columnas, cuatro sumadores completos, cinco puertas cada uno: <strong>20 puertas</strong>. Y en el peor caso, 8 instantes de espera.": "<strong>The circuit.</strong> Four columns, four full adders, five gates each: <strong>20 gates</strong>. And in the worst case, 8 instants of waiting.",
  "<strong>El resultado.</strong> Queda $10001$, con el acarreo final como quinto bit. En decimal: $6 + 11 = 17$, y $10001_2 = 17$.": "<strong>The result.</strong> It comes to $10001$, with the final carry as the fifth bit. In decimal: $6 + 11 = 17$, and $10001_2 = 17$.",
  "@frag": {
+  "$ es $": "$ is $",
   "</code> y un ": "</code> and an ",
   "de acarreo": "carry",
   "de suma": "sum",
+  "nada": "nothing",
   "puerta": "gate",
   "puertas": "gates"
  },

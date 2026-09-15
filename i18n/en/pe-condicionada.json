@@ -45,7 +45,8 @@
  "<tr><td>Total</td><td class=\"num\">": "<tr><td>Total</td><td class=\"num\">",
  "@frag": {
   "<tr><td>no C</td>": "<tr><td>not C</td>",
-  "<tr><td>no D</td>": "<tr><td>not D</td>"
+  "<tr><td>no D</td>": "<tr><td>not D</td>",
+  "Independientes": "Independent"
  },
  "A y no B": "A and not B",
  "AdadoB": "AdadoB",

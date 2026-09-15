@@ -1,9 +1,9 @@
 {
  " % de ellos. La dirección puede atender ": " % of them. Management can attend to ",
- " al día. ¿Cuántos se quedan sin atender cada día? ¿Qué porcentaje máximo de asuntos podría subir sin que la dirección se desborde? (Dos decimales.)": " per day. How many are left unattended each day? What is the maximum percentage of matters that could go up without swamping management? (Two decimals.)",
+ " al día. ¿Cuántos se quedan sin atender cada día? ¿Qué porcentaje máximo de asuntos podría subir sin que la dirección se desborde? (Dos decimales.)": " per day. How many are left unattended each day? What is the maximum percentage of matters that could go up without swamping management? (Two decimal places.)",
  " asuntos al día, y sube a la dirección el ": " matters per day, and there go up to management ",
  " bits": " bits",
- " categorías. ¿Cuántos bits de variedad hay en las situaciones, cuántos llegan en el informe y cuántos bits atenúa el informe? (Dos decimales.)": " categories. How many bits of variety are there in the situations, how many arrive in the report and how many bits does the report attenuate? (Two decimals.)",
+ " categorías. ¿Cuántos bits de variedad hay en las situaciones, cuántos llegan en el informe y cuántos bits atenúa el informe? (Dos decimales.)": " categories. How many bits of variety are there in the situations, how many arrive in the report and how many bits does the report attenuate? (Two decimal places.)",
  " niveles por debajo de la organización completa. Contando la organización entera, ¿cuántos sistemas viables hay en total?": " levels below the complete organisation. Counting the whole organisation, how many viable systems are there in total?",
  " sin atender cada día.</strong> O se atenúa más, o se amplía la capacidad de arriba.": " unattended each day.</strong> Either attenuate more, or expand the capacity at the top.",
  " sin atender; como máximo ": " unattended; at most ",
@@ -33,6 +33,7 @@
  "<strong>Variedad de jefatura.</strong> $\\log_2 16 = 4$ bits.": "<strong>Variety of the head of studies.</strong> $\\log_2 16 = 4$ bits.",
  "<strong>Variedad de las operaciones.</strong> $\\log_2 500 \\approx 8{,}97$ bits: hacen falta casi 9 preguntas de sí o no para distinguir una situación de otra.": "<strong>Variety of operations.</strong> $\\log_2 500 \\approx 8{.}97$ bits: almost 9 yes-or-no questions are needed to tell one situation from another.",
  "@frag": {
+  " y ": " and ",
   "Quedan ": "There remain ",
   "Suben ": "Going up: "
  },

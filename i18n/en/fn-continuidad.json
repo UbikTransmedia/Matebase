@@ -33,6 +33,7 @@
  "<strong>Valores intermedios</strong>: una función continua en $[a,b]$ toma todos los valores entre $f(a)$ y $f(b)$.": "<strong>Intermediate values</strong>: a function continuous on $[a,b]$ takes every value between $f(a)$ and $f(b)$.",
  "<strong>Weierstrass</strong>: continua en un intervalo <em>cerrado</em> ⟹ alcanza máximo y mínimo absolutos.": "<strong>Weierstrass</strong>: continuous on a <em>closed</em> interval ⟹ it attains an absolute maximum and minimum.",
  "@frag": {
+  "$ en $[": "$ in $[",
   ": en $[": ": on $["
  },
  "Acorralar una raíz partiendo por la mitad": "Cornering a root by halving",

@@ -25,10 +25,15 @@
  "<strong>En $t = \\tau = 0{,}5$.</strong> $e^{-1} \\approx 0{,}368$: queda el 37 %.": "<strong>At $t = \\tau = 0{.}5$.</strong> $e^{-1} \\approx 0{.}368$: 37 % is left.",
  "@frag": {
   "Con $\\tau = ": "With $\\tau = ",
+  "ataque": "attack",
   "ataque</strong>.": "attack</strong>.",
+  "caida": "decay",
   "caída</strong>.": "decay</strong>.",
+  "liberacion": "release",
   "liberación</strong>.": "release</strong>.",
+  "silencio": "silence",
   "silencio</strong>.": "silence</strong>.",
+  "sostenido": "sustain",
   "sostenido</strong>.": "sustain</strong>."
  },
  "ADSR es una función a trozos de cuatro rectas: ataque, caída, sostenido y liberación. En el código, <code>adsr(t, a, d, s, r, D)</code>.": "ADSR is a piecewise function of four straight lines: attack, decay, sustain and release. In the code, <code>adsr(t, a, d, s, r, D)</code>.",

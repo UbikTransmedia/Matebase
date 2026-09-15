@@ -29,6 +29,10 @@
  "<strong>La fórmula.</strong> Con $\\beta$ constante, $\\overline{\\alpha}_t = (1-\\beta)^t = 0{,}98^t$.": "<strong>The formula.</strong> With $\\beta$ constant, $\\overline{\\alpha}_t = (1-\\beta)^t = 0{.}98^t$.",
  "<strong>Qué enseña el patrón.</strong> Como es una potencia, el dato se va <em>exponencialmente</em>. Por eso los modelos reales usan del orden de mil pasos con $\\beta$ pequeñísimos: se quiere que la destrucción sea lenta y suave, para que cada paso sea fácil de deshacer.": "<strong>What the pattern shows.</strong> Since it is a power, the datum goes away <em>exponentially</em>. That is why real models use of the order of a thousand steps with tiny $\\beta$: the destruction is wanted slow and gentle, so that each step is easy to undo.",
  "<strong>score $": "<strong>score $",
+ "@frag": {
+  " y ": " and ",
+  "</strong> de ": "</strong> of "
+ },
  "Al final del camino la distribución será una normal estándar, la misma para cualquier conjunto de datos. Si el final es siempre igual, ¿qué es lo que la red tendrá que aprender?": "At the end of the path the distribution will be a standard normal, the same for any set of data. If the end is always the same, what is it that the network will have to learn?",
  "Arriba la densidad, abajo su score. Mueve el punto y mira la flecha: dice hacia dónde hay que empujarlo para que sea más plausible. Fíjate en qué pasa justo en el valle entre las dos jorobas.": "Above, the density; below, its score. Move the point and watch the arrow: it says which way it has to be pushed to be more plausible. Notice what happens right in the valley between the two humps.",
  "Cada paso pasa a ser un salto enorme, y deshacerlo es tan difícil como generar de cero. La gracia del método es que cada escalón sea pequeño.": "Each step becomes an enormous jump, and undoing it is as hard as generating from scratch. The point of the method is for each rung to be small.",

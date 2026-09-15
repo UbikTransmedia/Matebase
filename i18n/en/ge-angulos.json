@@ -23,14 +23,18 @@
  "<strong>correspondiente</strong>": "<strong>corresponding</strong> angle",
  "@frag": {
   "En un ": "In a regular ",
+  "Sí existe.": "It does exist.",
+  "acutángulo": "acute-angled",
   "cuadrado": "square",
   "decágono": "decagon",
   "dodecágono": "dodecagon",
   "eneágono": "nonagon",
   "heptágono": "heptagon",
   "hexágono": "hexagon",
+  "obtusángulo": "obtuse-angled",
   "octógono": "octagon",
   "pentágono": "pentagon",
+  "rectángulo": "right-angled",
   "triángulo": "triangle"
  },
  "A + B + C = 180^\\circ": "A + B + C = 180^\\circ",

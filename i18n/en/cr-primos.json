@@ -58,6 +58,13 @@
  "<strong>Base 174.</strong> $174^{55} \\equiv 47$, que no es 1 ni $-1$. Al cuadrado: $47^2 = 2209 = 10\\cdot 221 - 1 \\equiv -1$. Ha aparecido el $-1$: la condición se cumple. La base 174 <em>miente</em>: 221 pasa el test con ella.": "<strong>Base 174.</strong> $174^{55} \\equiv 47$, which is neither 1 nor $-1$. Squared: $47^2 = 2209 = 10\\cdot 221 - 1 \\equiv -1$. The $-1$ has turned up: the condition holds. The base 174 <em>lies</em>: 221 passes the test with it.",
  "<strong>Descomponer.</strong> $n - 1 = 220 = 4\\cdot 55 = 2^2\\cdot 55$: $s = 2$, $d = 55$. La sucesión tiene dos términos: $a^{55}$ y $a^{110}$.": "<strong>Decomposing.</strong> $n - 1 = 220 = 4\\cdot 55 = 2^2\\cdot 55$: $s = 2$, $d = 55$. The sequence has two terms: $a^{55}$ and $a^{110}$.",
  "<strong>Lo que enseña.</strong> Una sola base puede mentir; con varias al azar, la probabilidad de que todas mientan cae como $4^{-k}$. En la práctica se usan 40 o 64, y ningún compuesto pasa.": "<strong>What it teaches.</strong> A single base can lie; with several at random, the probability that they all lie falls like $4^{-k}$. In practice 40 or 64 are used, and no composite gets through.",
+ "@frag": {
+  " (es primo)": " (it is prime)",
+  " de ": " of ",
+  ", no delata": ", does not give it away",
+  ", testigo": ", witness",
+  "Si es 1 o $": "If it is 1 or $"
+ },
  "Ahora con 188. ¿Aparece el $-1$?": "Now with 188. Does the $-1$ turn up?",
  "Antes de comprobar nada hay que saber que buscar a ciegas funciona. El teorema de los números primos dice que cerca de $n$ hay un primo cada $\\ln n$ números. Para $n \\approx 2^{1024}$, $\\ln n \\approx 710$: uno de cada 710, o uno de cada 355 si solo se prueban impares. Con unos cientos de candidatos al azar aparece uno.": "Before checking anything you have to know that searching blindly works. The prime number theorem says that near $n$ there is one prime every $\\ln n$ numbers. For $n \\approx 2^{1024}$, $\\ln n \\approx 710$: one in 710, or one in 355 if only odd numbers are tried. With a few hundred random candidates one turns up.",
  "Aparece 1 o $-1$ donde toca: esta base <strong>no delata</strong> a $": "1 or $-1$ turns up where it should: this base <strong>does not give away</strong> $",

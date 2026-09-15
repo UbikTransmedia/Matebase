@@ -31,6 +31,7 @@
  "<strong>Segunda posición.</strong> Ahora enfrente está $(3, 5, 4)$: $3 - 4 = -1$.": "<strong>Second position.</strong> Now facing it is $(3, 5, 4)$: $3 - 4 = -1$.",
  "<strong>Tercera posición.</strong> Enfrente, $(5, 4, 2)$: $5 - 2 = 3$.": "<strong>Third position.</strong> Facing it, $(5, 4, 2)$: $5 - 2 = 3$.",
  "@frag": {
+  "$ canal": "$ channel",
   "$ con $": "$ with $",
   "es y le aplica $": "s and applies $"
  },

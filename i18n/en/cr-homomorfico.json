@@ -28,6 +28,13 @@
  "<strong>Cifrar el segundo.</strong> $E(1) = 36\\cdot 3^{35} \\bmod 1225$. $3^{35} \\bmod 1225 = 843$; $36\\cdot 843 = 30\\,348 \\equiv 973$.": "<strong>Encrypting the second.</strong> $E(1) = 36\\cdot 3^{35} \\bmod 1225$. $3^{35} \\bmod 1225 = 843$; $36\\cdot 843 = 30\\,348 \\equiv 973$.",
  "<strong>Descifrar.</strong> Con la clave privada $\\lambda = \\operatorname{mcm}(4, 6) = 12$ y la fórmula de Paillier, $129$ descifra a $2$: el recuento. Los dos votos «sí» tenían cifrados distintos (673 y 973) y nadie los abrió.": "<strong>Decrypting.</strong> With the private key $\\lambda = \\operatorname{lcm}(4, 6) = 12$ and Paillier's formula, $129$ decrypts to $2$: the count. The two “yes” votes had different ciphertexts (673 and 973) and nobody opened them.",
  "<strong>Sumar (multiplicar los cifrados).</strong> $673\\cdot 973 \\bmod 1225 = 654\\,829 \\bmod 1225 = 129$. Ese es $E(1 + 1) = E(2)$, con un azar que es $2\\cdot 3 = 6$.": "<strong>Adding (multiplying the ciphertexts).</strong> $673\\cdot 973 \\bmod 1225 = 654\\,829 \\bmod 1225 = 129$. That is $E(1 + 1) = E(2)$, with a randomness that is $2\\cdot 3 = 6$.",
+ "@frag": {
+  "$ (de $m_1 = ": "$ (from $m_1 = ",
+  "$ (de $m_2 = ": "$ (from $m_2 = ",
+  "$ es $c = ": "$ is $c = ",
+  "$) y $c_2 = ": "$) and $c_2 = ",
+  ", y 0 votos": ", and 0 votes"
+ },
  "Calcular la media de unas notas cifradas (suma y división por una constante pública)": "Computing the average of some encrypted marks (sum and division by a public constant)",
  "Cifra $": "It encrypts $",
  "Comprobación: descifrando ": "Check: decrypting ",

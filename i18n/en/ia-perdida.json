@@ -32,6 +32,7 @@
  "<strong>Las dos medias.</strong> Partiendo de cero: $m_1 = 0{,}1 \\cdot 5 = 0{,}5$ y $v_1 = 0{,}001 \\cdot 25 = 0{,}025$.": "<strong>The two averages.</strong> Starting from zero: $m_1 = 0{.}1 \\cdot 5 = 0{.}5$ and $v_1 = 0{.}001 \\cdot 25 = 0{.}025$.",
  "<strong>Lo que significa.</strong> El primer paso de Adam mide exactamente $\\eta$, sea cual sea el gradiente. Eso es lo que quiere decir que el método sea insensible a la escala: la tasa de aprendizaje deja de depender de en qué unidades estén los datos.": "<strong>What it means.</strong> Adam's first step measures exactly $\\eta$, whatever the gradient. That is what it means for the method to be insensitive to scale: the learning rate stops depending on what units the data are in.",
  "@frag": {
+  "Con $\\beta = ": "With $\\beta = ",
   "con momento": "with momentum"
  },
  "Acertando con seguridad: las dos corrigen poco, que es lo correcto. No hay nada que arreglar.": "Getting it right with certainty: both correct little, which is right. There is nothing to fix.",

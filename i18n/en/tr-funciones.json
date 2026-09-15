@@ -21,6 +21,9 @@
  "<strong>Fase.</strong> $C = -\\pi$ desplaza la onda $\\dfrac{C}{B} = -\\dfrac{\\pi}{3}$, es decir, $\\dfrac{\\pi}{3}$ hacia la <em>derecha</em>. Comprobación: en $x = \\frac{\\pi}{3}$ el argumento vale $0$ y $y = 1$, el punto de arranque de la onda.": "<strong>Phase.</strong> $C = -\\pi$ shifts the wave by $\\dfrac{C}{B} = -\\dfrac{\\pi}{3}$, that is, $\\dfrac{\\pi}{3}$ to the <em>right</em>. Check: at $x = \\frac{\\pi}{3}$ the argument is $0$ and $y = 1$, the starting point of the wave.",
  "<strong>Identificar los mandos.</strong> Comparando con $A\\operatorname{sen}(Bx + C) + D$: $A = 2$, $B = 3$, $C = -\\pi$, $D = 1$.": "<strong>Identify the controls.</strong> Comparing with $A\\sin(Bx + C) + D$: $A = 2$, $B = 3$, $C = -\\pi$, $D = 1$.",
  "<strong>Periodo.</strong> $\\dfrac{2\\pi}{3}$: en el espacio en que el seno normal hace una onda, esta hace tres.": "<strong>Period.</strong> $\\dfrac{2\\pi}{3}$: in the space where the ordinary sine makes one wave, this one makes three.",
+ "@frag": {
+  "\\operatorname{sen}": "\\sin"
+ },
  "Ajusta las dos ondas y mira su suma. Con frecuencias parecidas aparecen «pulsaciones»; con frecuencia doble o triple, formas cada vez menos parecidas a un seno.": "Adjust the two waves and look at their sum. With similar frequencies “beats” appear; with double or triple the frequency, shapes less and less like a sine.",
  "Al sumar dos ondas de distinta frecuencia aparece una forma nueva que ya no es un seno, pero sigue siendo periódica. Esta idea, llevada al extremo, es una de las más potentes de todas las matemáticas aplicadas:": "On adding two waves of different frequencies a new shape appears that is no longer a sine, but is still periodic. This idea, taken to the limit, is one of the most powerful in all of applied mathematics:",
  "Altura (m)": "Height (m)",

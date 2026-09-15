@@ -27,6 +27,7 @@
  "<strong>Las dos ramas.</strong> $q = \\text{nand}(a,p)$ y $r = \\text{nand}(b,p)$. Cada una mira una entrada junto a esa pieza central.": "<strong>The two branches.</strong> $q = \\text{nand}(a,p)$ and $r = \\text{nand}(b,p)$. Each looks at one input alongside that central piece.",
  "<strong>Qué hay que conseguir.</strong> El xor saca 1 cuando las entradas son distintas: la tabla es $00\\to0$, $01\\to1$, $10\\to1$, $11\\to0$.": "<strong>What has to be achieved.</strong> The xor puts out 1 when the inputs differ: the table is $00\\to0$, $01\\to1$, $10\\to1$, $11\\to0$.",
  "@frag": {
+  " y ": " and ",
   "puerta": "gate",
   "puertas": "gates"
  },
@@ -112,7 +113,7 @@
  "\\text{no } a = \\text{nand}(a, a)": "\\text{not } a = \\text{nand}(a, a)",
  "a \\text{ o } b = \\text{nand}\\bigl(\\text{nand}(a,a),\\ \\text{nand}(b,b)\\bigr)": "a \\text{ or } b = \\text{nand}\\bigl(\\text{nand}(a,a),\\ \\text{nand}(b,b)\\bigr)",
  "a \\text{ y } b = \\text{nand}\\bigl(\\text{nand}(a,b),\\ \\text{nand}(a,b)\\bigr)": "a \\text{ and } b = \\text{nand}\\bigl(\\text{nand}(a,b),\\ \\text{nand}(a,b)\\bigr)",
- "alguna entrada vale 1": "some input is 1",
+ "alguna entrada vale 1": "at least one input is 1",
  "es el and negado": "is the negated and",
  "es el or negado": "is the negated or",
  "filas": "rows",
@@ -126,7 +127,7 @@
  "no todas valen 1": "not all of them are 1",
  "puerta": "gate",
  "puertas": "gates",
- "saca 1 si alguna vale 1": "puts out 1 if some one is 1",
+ "saca 1 si alguna vale 1": "puts out 1 if at least one is 1",
  "saca 1 si son distintas": "puts out 1 if they differ",
  "saca 1 si son iguales": "puts out 1 if they are equal",
  "saca 1 solo si las dos valen 1": "puts out 1 only if both are 1",

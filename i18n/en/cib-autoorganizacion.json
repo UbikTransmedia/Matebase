@@ -41,6 +41,8 @@
  "<strong>Regla ": "<strong>Rule ",
  "<strong>Resultado.</strong> Sobrevive el centro y nacen la de arriba y la de abajo: tres celdas en vertical. La fila se ha convertido en columna.": "<strong>Result.</strong> The centre survives and the ones above and below are born: three cells in a vertical line. The row has become a column.",
  "@frag": {
+  " y a la ": " and to the ",
+  "Pausa": "Pause",
   "Quedará <strong>muerta</strong>.": "It will be <strong>dead</strong>.",
   "Quedará <strong>viva</strong>.": "It will be <strong>alive</strong>.",
   "abajo": "down",

@@ -32,6 +32,7 @@
  "<strong>menos</strong>": "<strong>less</strong>",
  "<strong>más</strong>": "<strong>more</strong>",
  "@frag": {
+  " de $": " than $",
   "Si $X \\sim N(": "If $X \\sim N("
  },
  "Ahora te dan la probabilidad y piden el valor. ¿Qué se busca en la tabla y dónde?": "Now you are given the probability and asked for the value. What do you look for in the table, and where?",

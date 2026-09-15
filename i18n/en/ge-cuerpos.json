@@ -40,6 +40,9 @@
  "<strong>Volumen.</strong> Base por altura, dividido entre 3: $V = \\dfrac{\\pi\\cdot 6^2\\cdot 8}{3} = \\dfrac{288\\pi}{3} = 96\\pi \\approx 301{,}6$ cm³.": "<strong>Volume.</strong> Base times height, divided by 3: $V = \\dfrac{\\pi\\cdot 6^2\\cdot 8}{3} = \\dfrac{288\\pi}{3} = 96\\pi \\approx 301{.}6$ cm³.",
  "<strong>Área de la base y total.</strong> Base: $\\pi\\cdot 6^2 = 36\\pi$. Total: $60\\pi + 36\\pi = 96\\pi \\approx 301{,}6$ cm².": "<strong>Base area and total.</strong> Base: $\\pi\\cdot 6^2 = 36\\pi$. Total: $60\\pi + 36\\pi = 96\\pi \\approx 301{.}6$ cm².",
  "<strong>Área lateral.</strong> $\\pi r g = \\pi\\cdot 6\\cdot 10 = 60\\pi$ cm².": "<strong>Curved surface area.</strong> $\\pi r g = \\pi\\cdot 6\\cdot 10 = 60\\pi$ cm².",
+ "@frag": {
+  " litros": " litres"
+ },
  "Antes de seguir conviene conocer una idea que hace fácil casi todo lo anterior, y que además responde a una pregunta incómoda: ¿por qué un cono <em>inclinado</em> tiene el mismo volumen que uno recto de la misma base y la misma altura, si tiene una forma completamente distinta?": "Before going on it is worth knowing an idea that makes almost all of the above easy, and that also answers an awkward question: why does a <em>slanted</em> cone have the same volume as an upright one with the same base and height, if it has a completely different shape?",
  "Aristas": "Edges",
  "Arquímedes pidió que grabaran en su tumba una esfera inscrita en un cilindro, con la proporción 2:3 entre sus volúmenes. Le parecía su mejor resultado. Cicerón, siendo cuestor en Sicilia en el año 75 a.C., encontró la tumba abandonada entre zarzas y la reconoció justamente por ese dibujo.": "Archimedes asked for a sphere inscribed in a cylinder to be carved on his tomb, with the 2:3 ratio between their volumes. He thought it his best result. Cicero, while quaestor in Sicily in 75 BC, found the tomb abandoned among brambles and recognised it precisely by that drawing.",

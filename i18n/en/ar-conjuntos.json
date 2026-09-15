@@ -36,6 +36,12 @@
  "</strong>.": "</strong>.",
  "<br><span style=\"font-size:0.7812rem;color:var(--ink-faint)\">Los puntos verdes son enteros, los naranjas racionales no enteros y los rojos irracionales.</span>": "<br><span style=\"font-size:0.7812rem;color:var(--ink-faint)\">The green points are integers, the orange ones non-integer rationals and the red ones irrationals.</span>",
  "<strong>Contradicción</strong>: $a$ y $b$ son los dos pares, así que la fracción se podía simplificar entre 2, y habíamos supuesto que ya estaba simplificada.": "<strong>Contradiction</strong>: $a$ and $b$ are both even, so the fraction could be reduced by 2, and we had assumed it was already in lowest terms.",
+ "@frag": {
+  " al ": " to ",
+  "$ al $": "$ to $",
+  "$ de $": "$ from $",
+  "Irracional": "Irrational"
+ },
  "A cada punto de una recta le corresponde exactamente un número real, y al revés. Los racionales están densísimos (entre dos cualesquiera siempre hay otro), pero <em>aun así</em> dejan huecos; los irracionales son los que los rellenan.": "To each point of a line there corresponds exactly one real number, and the other way round. The rationals are extremely dense (between any two of them there is always another), but <em>even so</em> they leave gaps; the irrationals are what fill them.",
  "Apareció porque…": "It appeared because…",
  "Aquí no se puede: es <strong>irracional</strong>.": "Here it cannot be: it is <strong>irrational</strong>.",

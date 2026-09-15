@@ -25,6 +25,7 @@
  "<strong>No</strong> lo son: ": "They are <strong>not</strong>: ",
  "<strong>Sí</strong> son homeomorfos: ": "They <strong>are</strong> homeomorphic: ",
  "@frag": {
+  "Sí": "Yes",
   "Un balón de fútbol": "A football",
   "Un cubo": "A cube",
   "Un dodecaedro": "A dodecahedron",

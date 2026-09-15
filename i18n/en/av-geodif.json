@@ -15,10 +15,12 @@
  "<strong>Suma: $": "<strong>Sum: $",
  "<strong>Teorema egregio</strong>: $K$ se puede medir desde dentro, sin salir de la superficie.": "<strong>Remarkable theorem</strong>: $K$ can be measured from inside, without leaving the surface.",
  "@frag": {
+  "$ &nbsp;·&nbsp; en $x = ": "$ &nbsp;·&nbsp; at $x = ",
   "un cilindro": "a cylinder",
   "un elipsoide": "an ellipsoid",
   "un plano": "a plane",
-  "una esfera": "a sphere"
+  "una esfera": "a sphere",
+  "° de exceso": "° of excess"
  },
  "Ahora $y' = 2$. ¿Cuánto vale $(1 + 4)^{3/2}$?": "Now $y' = 2$. What is $(1 + 4)^{3/2}$?",
  "Al alejarse del vértice la curvatura baja: la parábola se va estirando y se parece más a una recta.": "Away from the vertex the curvature falls: the parabola stretches out and looks more like a line.",

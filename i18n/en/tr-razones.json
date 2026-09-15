@@ -18,6 +18,8 @@
  "<strong>El otro ángulo, gratis.</strong> Los tres suman $180^\\circ$ y uno es recto: el que falta mide $90^\\circ - 35^\\circ = 55^\\circ$.": "<strong>The other angle, for free.</strong> All three add to $180^\\circ$ and one is right: the missing one is $90^\\circ - 35^\\circ = 55^\\circ$.",
  "<strong>contiguo</strong> a él mide $": "<strong>adjacent</strong> to it is $",
  "@frag": {
+  "\\operatorname{sen}": "\\sin",
+  "\\operatorname{sen}^2": "\\sin^2",
   "el coseno": "the cosine",
   "el seno": "the sine",
   "la tangente": "the tangent"

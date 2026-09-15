@@ -4,7 +4,7 @@
  "$ en cada vértice. ¿Dónde es posible ese mosaico regular?": "$ at each vertex. Where is that regular tiling possible?",
  "$ lados, juntando $q = ": "$ sides, putting $q = ",
  "$, que es ": "$, which is ",
- "$? (Tres decimales.)": "$? (Three decimals.)",
+ "$? (Tres decimales.)": "$? (Three decimal places.)",
  "$\\overline{a}$ es el conjugado de $a$. Es una <strong>transformación de Möbius</strong>, un cociente de dos expresiones de primer grado en $z$.<br><br>$f_a(a) = 0$: el punto $a$ va a parar al centro del disco. Y si $|z| < 1$, también $|f_a(z)| < 1$: el disco se transforma en sí mismo.<br><br>Para el ojo, una traslación hiperbólica no parece un desplazamiento: las figuras crecen al acercarse al centro y se encogen al alejarse, pero en la geometría del disco no han cambiado de tamaño.<br><br>En GLSL, con un <code>vec2</code> por complejo, hacen falta el producto y la división de complejos.": "$\\overline{a}$ is the conjugate of $a$. It is a <strong>Möbius transformation</strong>, a quotient of two first-degree expressions in $z$.<br><br>$f_a(a) = 0$: the point $a$ ends up at the centre of the disc. And if $|z| < 1$, then $|f_a(z)| < 1$ too: the disc is transformed into itself.<br><br>To the eye, a hyperbolic translation does not look like a movement: the figures grow as they approach the centre and shrink as they move away, but in the disc's geometry they have not changed size.<br><br>In GLSL, with a <code>vec2</code> per complex number, you need the product and the division of complex numbers.",
  "$d_H = \\ln\\dfrac{1 + |z|}{1 - |z|}$.": "$d_H = \\ln\\dfrac{1 + |z|}{1 - |z|}$.",
  "<strong>Comprobación.</strong> $d_H(0{,}727) = \\ln\\frac{1{,}727}{0{,}273} \\approx 1{,}845$. La distancia entre las imágenes de 0,5 (ahora en 0) y de 0,9 (ahora en 0,727) es la misma de antes.": "<strong>Check.</strong> $d_H(0{.}727) = \\ln\\frac{1{.}727}{0{.}273} \\approx 1{.}845$. The distance between the images of 0.5 (now at 0) and of 0.9 (now at 0.727) is the same as before.",
@@ -13,9 +13,16 @@
  "<strong>La traslación.</strong> Con $a$ real, $f_a(z) = \\frac{z - a}{1 - a z}$. $f_a(0{,}9) = \\frac{0{,}4}{1 - 0{,}45} = \\frac{0{,}4}{0{,}55} \\approx 0{,}727$. $f_a(0) = \\frac{-0{,}5}{1} = -0{,}5$. Y $f_a(0{,}5) = 0$: el punto $a$ ha ido al centro.": "<strong>The translation.</strong> With $a$ real, $f_a(z) = \\frac{z - a}{1 - a z}$. $f_a(0{.}9) = \\frac{0{.}4}{1 - 0{.}45} = \\frac{0{.}4}{0{.}55} \\approx 0{.}727$. $f_a(0) = \\frac{-0{.}5}{1} = -0{.}5$. And $f_a(0{.}5) = 0$: the point $a$ has gone to the centre.",
  "<strong>Lo que ve el ojo.</strong> El segmento medía 0,4 en el dibujo y ahora mide 0,727: parece más largo porque está cerca del centro, donde las cosas se ven grandes. En el disco no ha cambiado nada.": "<strong>What the eye sees.</strong> The segment measured 0.4 in the drawing and now measures 0.727: it looks longer because it is near the centre, where things look big. In the disc nothing has changed.",
  "@frag": {
+  " que $\\frac{1}{2}$.": " than $\\frac{1}{2}$.",
+  "disco": "disc",
+  "esfera": "sphere",
+  "igual": "equal",
   "igual que $\\frac{1}{2}$.": "equal to $\\frac{1}{2}$.",
+  "mayor": "greater",
   "mayor que $\\frac{1}{2}$.": "greater than $\\frac{1}{2}$.",
-  "menor que $\\frac{1}{2}$.": "less than $\\frac{1}{2}$."
+  "menor": "less",
+  "menor que $\\frac{1}{2}$.": "less than $\\frac{1}{2}$.",
+  "plano": "plane"
  },
  "Al doble, como en el dibujo": "Twice as far, as in the drawing",
  "Anillos cada vez más apretados hacia el borde": "Rings ever more tightly packed towards the edge",

@@ -40,6 +40,7 @@
  "@frag": {
   "$ de $P_2(x) = ": "$ of $P_2(x) = ",
   "$ en $a = ": "$ at $a = ",
+  ")$ y ": ")$ and ",
   "Con <strong>": "With <strong>",
   "\\operatorname{sen}": "\\sin"
  },

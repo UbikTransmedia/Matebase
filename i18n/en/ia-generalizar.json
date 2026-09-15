@@ -28,6 +28,7 @@
  "<strong>una sola vez</strong>": "<strong>once only</strong>",
  "<th class=\"num\">entrenamiento</th><th class=\"num\">validación</th></tr></thead><tbody>": "<th class=\"num\">training</th><th class=\"num\">validation</th></tr></thead><tbody>",
  "@frag": {
+  "</strong>, con $": "</strong>, with $",
   "Con $\\lambda = ": "With $\\lambda = "
  },
  "Al minimizar esto, el modelo tiene que decidir si le compensa un peso grande a cambio de ajustar mejor.": "On minimising this, the model has to decide whether a large weight is worth it in exchange for fitting better.",

@@ -48,6 +48,16 @@
  "<strong>Respuesta.</strong> $s = k + cx = 3 + 5\\cdot 7 = 38 \\equiv 5 \\pmod{11}$.": "<strong>Answer.</strong> $s = k + cx = 3 + 5\\cdot 7 = 38 \\equiv 5 \\pmod{11}$.",
  "<strong>Verificación.</strong> $g^s = 4^5 = 1024 \\equiv 12$. $r\\,y^c = 18\\cdot 8^5$: $8^2 \\equiv 18$, $8^4 \\equiv 2$, $8^5 \\equiv 16$, y $18\\cdot 16 = 288 \\equiv 12$. Coinciden: Víctor acepta.": "<strong>Verification.</strong> $g^s = 4^5 = 1024 \\equiv 12$. $r\\,y^c = 18\\cdot 8^5$: $8^2 \\equiv 18$, $8^4 \\equiv 2$, $8^5 \\equiv 16$, and $18\\cdot 16 = 288 \\equiv 12$. They match: Victor accepts.",
  "= C  <span class=\"cr-ok\">cuadra</span>": "= C  <span class=\"cr-ok\">it fits</span>",
+ "@frag": {
+  " rondas:\n": " rounds:\n",
+  " y ": " and ",
+  " y r·y^c = ": " and r·y^c = ",
+  "$ es ": "$ is ",
+  "dcha →": "right →",
+  "dcha,": "right,",
+  "izq →": "left →",
+  "izq,": "left,"
+ },
  "Abrir un compromiso": "Opening a commitment",
  "Alicia abre con 0": "Alice opens with 0",
  "Alicia abre con 1": "Alice opens with 1",

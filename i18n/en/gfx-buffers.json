@@ -2,7 +2,7 @@
  "$ y sus cuatro vecinos, $": "$ and its four neighbours, $",
  "$, así que <code>dos</code> $= ": "$, so <code>dos</code> $= ",
  "$, así que <code>tres</code> $= ": "$, so <code>tres</code> $= ",
- "$, ¿cuánto vale el laplaciano discreto y cuál es la temperatura del píxel en el paso siguiente? (Tres decimales.)": "$, what is the discrete Laplacian and what is the pixel's temperature at the next step? (Three decimals.)",
+ "$, ¿cuánto vale el laplaciano discreto y cuál es la temperatura del píxel en el paso siguiente? (Tres decimales.)": "$, what is the discrete Laplacian and what is the pixel's temperature at the next step? (Three decimal places.)",
  "$, ¿cuánto vale ese factor? ¿Es estable el método?": "$, what is that factor? Is the method stable?",
  "$: la celda ": "$: the cell ",
  "$[\\,n = 3\\,]$ vale 1 si hay exactamente 3 vecinas vivas y 0 si no. En GLSL: <code>1.0 - step(0.5, abs(n - 3.0))</code>: la diferencia con 3 es menor que medio solo si $n$ vale 3.<br><br>Con 3 vecinas se está viva al paso siguiente, estuviera la celda viva o no; con 2, solo si ya lo estaba. El máximo hace de «o».": "$[\\,n = 3\\,]$ is 1 if there are exactly 3 living neighbours and 0 otherwise. In GLSL: <code>1.0 - step(0.5, abs(n - 3.0))</code>: the difference from 3 is less than a half only if $n$ is 3.<br><br>With 3 neighbours you are alive on the next step, whether the cell was alive or not; with 2, only if it already was. The maximum acts as “or”.",
@@ -23,7 +23,11 @@
  "@frag": {
   ", estable": ", stable",
   ", inestable": ", unstable",
-  "Con $\\alpha = ": "With $\\alpha = "
+  ".0</code> vecinas vivas. ¿Qué valen <code>tres</code>, <code>dos</code> y <code>siguiente</code>?<pre class=\"shd__mini\">float tres = 1.0 - step(0.5, abs(n - 3.0));\nfloat dos = 1.0 - step(0.5, abs(n - 2.0));\nfloat siguiente = max(tres, yo * dos);</pre>": ".0</code> live neighbours. What are <code>tres</code>, <code>dos</code> and <code>siguiente</code>?<pre class=\"shd__mini\">float tres = 1.0 - step(0.5, abs(n - 3.0));\nfloat dos = 1.0 - step(0.5, abs(n - 2.0));\nfloat siguiente = max(tres, yo * dos);</pre>",
+  "Con $\\alpha = ": "With $\\alpha = ",
+  "estable": "stable",
+  "estará viva": "will be alive",
+  "inestable": "unstable"
  },
  "Aparece un tablero que crece sin control": "A chessboard appears and grows out of control",
  "Cada fotograma calcula a la vez todas las celdas de la pantalla: con la escala de este visor son decenas de miles de celdas en paralelo.": "Each frame computes all the screen's cells at once: at this viewer's scale that is tens of thousands of cells in parallel.",

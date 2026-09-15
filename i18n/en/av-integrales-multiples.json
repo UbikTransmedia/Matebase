@@ -7,7 +7,7 @@
  "$\\displaystyle\\int_0^x y\\,dy = \\frac{x^2}{2}$": "$\\displaystyle\\int_0^x y\\,dy = \\frac{x^2}{2}$",
  "$\\displaystyle\\int_0^{\\theta}\\int_{r_1}^{r_2} r\\,dr\\,d\\theta$, con el ángulo en radianes.": "$\\displaystyle\\int_0^{\\theta}\\int_{r_1}^{r_2} r\\,dr\\,d\\theta$, with the angle in radians.",
  "$\\int_0^b x\\,dy = bx$, no $x$: la constante $x$ se multiplica por la longitud del intervalo.": "$\\int_0^b x\\,dy = bx$, not $x$: the constant $x$ is multiplied by the length of the interval.",
- "$dA = r\\,dr\\,d\\theta$. Sin la $r$ el área del círculo saldría $2\\pi R$, que es la longitud de la circunferencia.": "$dA = r\\,dr\\,d\\theta$. Without the $r$ the area of the disc would come out as $2\\pi R$, which is the length of the circle.",
+ "$dA = r\\,dr\\,d\\theta$. Sin la $r$ el área del círculo saldría $2\\pi R$, que es la longitud de la circunferencia.": "$dA = r\\,dr\\,d\\theta$. Without the $r$ the area of the disc would come out as $2\\pi R$, which is the circumference.",
  "$f(x, y) = \\operatorname{sen} x\\cos y$ en $[0, \\frac{\\pi}{2}]^2$": "$f(x, y) = \\sin x\\cos y$ on $[0, \\frac{\\pi}{2}]^2$",
  "$f(x, y) = x^2 + y^2$ en $[0, 1]\\times[0, 1]$": "$f(x, y) = x^2 + y^2$ on $[0, 1]\\times[0, 1]$",
  "$f(x, y) = xy$ en $[0, 2]\\times[0, 1]$": "$f(x, y) = xy$ on $[0, 2]\\times[0, 1]$",
@@ -18,6 +18,9 @@
  "<strong>Dibujar la región.</strong> Vértices $(0, 0)$, $(1, 0)$ y $(1, 1)$: el triángulo bajo la diagonal $y = x$. Para cada $x$ entre 0 y 1, la $y$ va de 0 hasta la diagonal, $x$.": "<strong>Draw the region.</strong> Vertices $(0, 0)$, $(1, 0)$ and $(1, 1)$: the triangle below the diagonal $y = x$. For each $x$ between 0 and 1, $y$ runs from 0 up to the diagonal, $x$.",
  "<strong>Primero en $y$.</strong> $\\displaystyle\\int_0^x (x + y)\\,dy = \\left[xy + \\frac{y^2}{2}\\right]_0^x = x^2 + \\frac{x^2}{2} = \\frac{3x^2}{2}$. La $x$ se ha tratado como constante.": "<strong>First in $y$.</strong> $\\displaystyle\\int_0^x (x + y)\\,dy = \\left[xy + \\frac{y^2}{2}\\right]_0^x = x^2 + \\frac{x^2}{2} = \\frac{3x^2}{2}$. The $x$ has been treated as a constant.",
  "<strong>Y en $y$.</strong> $\\displaystyle\\int_0^1 \\left(\\frac{1}{2} + y - \\frac{3y^2}{2}\\right)dy = \\frac{1}{2} + \\frac{1}{2} - \\frac{1}{2} = \\frac{1}{2}$ ✓. Lo mismo, por Fubini.": "<strong>And in $y$.</strong> $\\displaystyle\\int_0^1 \\left(\\frac{1}{2} + y - \\frac{3y^2}{2}\\right)dy = \\frac{1}{2} + \\frac{1}{2} - \\frac{1}{2} = \\frac{1}{2}$ ✓. The same, by Fubini.",
+ "@frag": {
+  ", la $y$ va de 0 a $x$.": ", $y$ goes from 0 to $x$."
+ },
  "Ahora fija $y$. ¿Entre qué valores se mueve $x$? Los límites cambian.": "Now fix $y$. Between what values does $x$ range? The limits change.",
  "Al cambiar de coordenadas aparece el jacobiano: $dA = r\\,dr\\,d\\theta$ en polares y $dV = \\rho^2\\operatorname{sen}\\varphi\\,d\\rho\\,d\\varphi\\,d\\theta$ en esféricas.": "On changing coordinates the Jacobian appears: $dA = r\\,dr\\,d\\theta$ in polar coordinates and $dV = \\rho^2\\sin\\varphi\\,d\\rho\\,d\\varphi\\,d\\theta$ in spherical ones.",
  "Calcula $\\displaystyle\\iint_R (": "Compute $\\displaystyle\\iint_R (",
@@ -84,7 +87,7 @@
  "\\pi$ rad, así que el área es $": "\\pi$ rad, so the area is $",
  "\\}$. (Fracción.)": "\\}$. (Fraction.)",
  "]$. (Fracción.)": "]$. (Fraction.)",
- "^\\circ$ con una integral en polares. (Tres decimales.)": "^\\circ$ with an integral in polar coordinates. (Three decimals.)",
+ "^\\circ$ con una integral en polares. (Tres decimales.)": "^\\circ$ with an integral in polar coordinates. (Three decimal places.)",
  "casillas por lado n": "cells per side n",
  "cuad": "cuad",
  "dA = r\\,dr\\,d\\theta \\qquad \\text{(polares)}": "dA = r\\,dr\\,d\\theta \\qquad \\text{(polar)}",
@@ -98,7 +101,7 @@
  "los elementos de área y de volumen": "the elements of area and of volume",
  "sen x · cos y": "sin x · cos y",
  "trig": "trig",
- "x^2}\\,dx$. (Cuatro decimales.)": "x^2}\\,dx$. (Four decimals.)",
+ "x^2}\\,dx$. (Cuatro decimales.)": "x^2}\\,dx$. (Four decimal places.)",
  "Área en polares": "Area in polar coordinates",
  "Área exacta: $\\frac{1}{2}\\bigl((r + \\Delta r)^2 - r^2\\bigr)\\Delta\\theta = ": "Exact area: $\\frac{1}{2}\\bigl((r + \\Delta r)^2 - r^2\\bigr)\\Delta\\theta = ",
  "área": "area"

@@ -39,6 +39,12 @@
  "<strong>Región.</strong> Las dos rectas $x + y = 4$ y $x + 3y = 6$ más los ejes. La región queda en el primer cuadrante, por debajo de las dos rectas.": "<strong>Region.</strong> The two lines $x + y = 4$ and $x + 3y = 6$ plus the axes. The region lies in the first quadrant, below both lines.",
  "<strong>Si el óptimo existe, está en un vértice de la región factible.</strong> Y si se alcanza en dos vértices, entonces todo el lado que los une también es óptimo.": "<strong>If the optimum exists, it is at a vertex of the feasible region.</strong> And if it is reached at two vertices, then the whole side joining them is optimal too.",
  "<strong>Vértices en los ejes.</strong> El origen $(0, 0)$. Sobre el eje X ($y = 0$): $x = 4$ y $x = 6$; manda el más restrictivo, $(4, 0)$. Sobre el eje Y ($x = 0$): $y = 4$ e $y = 2$; manda $(0, 2)$.": "<strong>Vertices on the axes.</strong> The origin $(0, 0)$. On the x-axis ($y = 0$): $x = 4$ and $x = 6$; the more restrictive one wins, $(4, 0)$. On the y-axis ($x = 0$): $y = 4$ and $y = 2$; $(0, 2)$ wins.",
+ "@frag": {
+  " en (": " at (",
+  "$ h y $": "$ h and $",
+  "</strong> de $Z = ": "</strong> of $Z = ",
+  "se cumple ✓": "holds ✓"
+ },
  "Al ser intersección de semiplanos, la región siempre es un <strong>polígono convexo</strong> (posiblemente no acotado). Nunca tiene entrantes ni agujeros, y eso va a ser decisivo.": "Being an intersection of half-planes, the region is always a <strong>convex polygon</strong> (possibly unbounded). It never has dents or holes, and that is going to be decisive.",
  "Alguna falla: el punto <strong>no</strong> es factible.": "One fails: the point is <strong>not</strong> feasible.",
  "Añade restricciones una a una y mira cómo se va recortando el plano. Los puntos gordos son los vértices.": "Add constraints one by one and watch the plane being cut back. The large dots are the vertices.",

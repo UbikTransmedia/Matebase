@@ -31,6 +31,8 @@
  "@frag": {
   "</strong> de 64": "</strong> of 64",
   "Con <strong>": "With <strong>",
+  "negativo": "negative",
+  "positivo": "positive",
   "una ele</strong>": "an L</strong>",
   "una rejilla</strong>": "a grid</strong>",
   "una te</strong>": "a T</strong>"

@@ -20,7 +20,9 @@
  "<strong>Tercera y cuarta.</strong> $z_3 = 0{,}25 + c = -0{,}25 + 0{,}5i$. $z_4 = (0{,}0625 - 0{,}25,\\ -0{,}25) + c = -0{,}6875 + 0{,}25i$, de módulo $0{,}73$. Cuatro vueltas y sigue pequeño: de momento, dentro.": "<strong>Third and fourth.</strong> $z_3 = 0{.}25 + c = -0{.}25 + 0{.}5i$. $z_4 = (0{.}0625 - 0{.}25,\\ -0{.}25) + c = -0{.}6875 + 0{.}25i$, of modulus $0{.}73$. Four turns and it is still small: for now, inside.",
  "@frag": {
   "Recuerda que el cuadrado de un complejo es $(x^2 - y^2,\\ 2xy)$.": "Remember that the square of a complex number is $(x^2 - y^2,\\ 2xy)$.",
+  "dentro": "inside",
   "dentro · vuelta ": "inside · turn ",
+  "escapa": "escapes",
   "escapa · vuelta ": "escapes · turn "
  },
  "Al cuadrado: $(x + yi)^2 = (x^2 - y^2) + 2xy\\,i$. Súmale $c$ componente a componente y repite. El módulo es $\\sqrt{x^2 + y^2}$.": "Squared: $(x + yi)^2 = (x^2 - y^2) + 2xy\\,i$. Add $c$ to it component by component and repeat. The modulus is $\\sqrt{x^2 + y^2}$.",

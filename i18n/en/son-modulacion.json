@@ -27,7 +27,13 @@
  "<strong>Las tres rayas.</strong> 440 Hz con amplitud 1; 340 Hz con amplitud 0,25; 540 Hz con amplitud 0,25. El signo menos y el coseno son fases, y no se oyen.": "<strong>The three lines.</strong> 440 Hz with amplitude 1; 340 Hz with amplitude 0.25; 540 Hz with amplitude 0.25. The minus sign and the cosine are phases, and are not heard.",
  "<strong>Lo que no hay.</strong> No hay raya en 100 Hz. El modulador no suena: solo deja su huella a los lados de la portadora.": "<strong>What is not there.</strong> There is no line at 100 Hz. The modulator does not sound: it only leaves its mark at the sides of the carrier.",
  "@frag": {
-  " Hz</strong> y profundidad 0,5:<br>": " Hz</strong> and depth 0.5:<br>"
+  " Hz</strong> y profundidad 0,5:<br>": " Hz</strong> and depth 0.5:<br>",
+  " y ": " and ",
+  "$ Hz y $": "$ Hz and $",
+  "$ Hz y $f_m = ": "$ Hz and $f_m = ",
+  "$, y en $": "$, and at $",
+  ", campana": ", bell",
+  ", nota": ", note"
  },
  "A dos notas, de 200 y 400 Hz": "Two notes, of 200 and 400 Hz",
  "A una campana": "A bell",

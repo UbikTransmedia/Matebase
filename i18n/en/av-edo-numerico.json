@@ -1,5 +1,5 @@
 {
- " pasos de Euler. ¿Qué valor da el método para $y(1)$, y cuánto se queda por debajo del exacto, $e$? (Cuatro decimales.)": " Euler steps. What value does the method give for $y(1)$, and how far below the exact value, $e$, does it fall? (Four decimals.)",
+ " pasos de Euler. ¿Qué valor da el método para $y(1)$, y cuánto se queda por debajo del exacto, $e$? (Cuatro decimales.)": " Euler steps. What value does the method give for $y(1)$, and how far below the exact value, $e$, does it fall? (Four decimal places.)",
  " pasos) &nbsp;·&nbsp; en $t = ": " steps) &nbsp;·&nbsp; at $t = ",
  " pasos.": " steps.",
  " vueltas con $h = ": " turns with $h = ",
@@ -17,7 +17,7 @@
  "$. De hecho, $y_1 = 1 + h + \\frac{h^2}{2} + \\frac{h^3}{6} + \\frac{h^4}{24}$: los cinco primeros términos del [[fn-taylor|polinomio de Taylor]] de $e^h$.": "$. In fact, $y_1 = 1 + h + \\frac{h^2}{2} + \\frac{h^3}{6} + \\frac{h^4}{24}$: the first five terms of the [[fn-taylor|Taylor polynomial]] of $e^h$.",
  "$. Si el paso se divide entre $": "$. If the step is divided by $",
  "$. ¿Cuánto valen $k_2$ e $y_1$? Compara con $e^{": "$. What are $k_2$ and $y_1$? Compare with $e^{",
- "$. ¿Cuánto valen $y_1$ e $y_2$? (Tres decimales.)": "$. What are $y_1$ and $y_2$? (Three decimals.)",
+ "$. ¿Cuánto valen $y_1$ e $y_2$? (Tres decimales.)": "$. What are $y_1$ and $y_2$? (Three decimal places.)",
  "$1{,}4\\cdot 10^{-7}$": "$1{.}4\\cdot 10^{-7}$",
  "$2{,}1\\cdot 10^{-6}$": "$2{.}1\\cdot 10^{-6}$",
  "$8{,}7\\cdot 10^{-9}$": "$8{.}7\\cdot 10^{-9}$",
@@ -127,6 +127,6 @@
  "y_{n+1} = y_n + h\\,f(t_n, y_n), \\qquad t_{n+1} = t_n + h": "y_{n+1} = y_n + h\\,f(t_n, y_n), \\qquad t_{n+1} = t_n + h",
  "}$ y cada paso multiplica por $1 + h$.": "}$ and each step multiplies by $1 + h$.",
  "}$, y hay ": "}$, and there are ",
- "}$. (Cinco decimales.)": "}$. (Five decimals.)",
+ "}$. (Cinco decimales.)": "}$. (Five decimal places.)",
  "¿Cuánto baja el error?": "How much does the error fall?"
 }

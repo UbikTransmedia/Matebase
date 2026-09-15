@@ -31,6 +31,10 @@
  "<strong>Deshacer.</strong> Se conoce $L_1 = 0110$, que es $R_0$. Se recalcula $f(R_0, K) = 1111$ igual que antes, y $L_0 = R_1 \\oplus f = 0101 \\oplus 1111 = 1010$ ✓.": "<strong>Undoing it.</strong> $L_1 = 0110$ is known, which is $R_0$. $f(R_0, K) = 1111$ is recomputed just as before, and $L_0 = R_1 \\oplus f = 0101 \\oplus 1111 = 1010$ ✓.",
  "<strong>La ronda.</strong> $L_1 = R_0 = 0110$. $R_1 = L_0 \\oplus f = 1010 \\oplus 1111 = 0101$. Resultado: $0110\\,0101$.": "<strong>The round.</strong> $L_1 = R_0 = 0110$. $R_1 = L_0 \\oplus f = 1010 \\oplus 1111 = 0101$. Result: $0110\\,0101$.",
  "<strong>Lo que no ha hecho falta.</strong> Invertir la S-box. Podría haber sido cualquier tabla, incluso una que mandara varios valores al mismo: la ronda seguiría teniendo inversa.": "<strong>What was not needed.</strong> Inverting the S-box. It could have been any table, even one sending several values to the same one: the round would still have an inverse.",
+ "@frag": {
+  " días": " days",
+  " y ": " and "
+ },
  "Año": "Year",
  "Bloque $L_0 = 1010$, $R_0 = 0110$, clave $K = 0011$, y $f(R, K)$ = pasar $R \\oplus K$ por la S-box del tema anterior. Hacer una ronda, y deshacerla sabiendo solo el resultado y $K$.": "Block $L_0 = 1010$, $R_0 = 0110$, key $K = 0011$, and $f(R, K)$ = passing $R \\oplus K$ through the previous topic's S-box. Do one round, and undo it knowing only the result and $K$.",
  "COPACOBANA, 120 chips reprogramables": "COPACOBANA, 120 reprogrammable chips",

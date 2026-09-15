@@ -31,8 +31,12 @@
  "<strong>Cuántos términos hay.</strong> Del 9 al 16 van ocho términos. El más pequeño de todos es el último, $\\frac{1}{16}$.": "<strong>How many terms there are.</strong> From 9 to 16 there are eight terms. The smallest of them all is the last, $\\frac{1}{16}$.",
  "<strong>Lo que vale para todos los bloques.</strong> El siguiente bloque va del 17 al 32: dieciséis términos, todos mayores o iguales que $\\frac{1}{32}$, suma mayor que $\\frac{16}{32} = \\frac{1}{2}$. Y así siempre: el bloque $k$ tiene $2^{k-1}$ términos y el menor vale $\\frac{1}{2^k}$.": "<strong>What holds for every block.</strong> The next block runs from 17 to 32: sixteen terms, all greater than or equal to $\\frac{1}{32}$, adding to more than $\\frac{16}{32} = \\frac{1}{2}$. And so on always: block $k$ has $2^{k-1}$ terms and the smallest is $\\frac{1}{2^k}$.",
  "@frag": {
+  " &gt; 0,5": " &gt; 0.5",
   " bloques: ": " blocks: ",
-  "$?": "$ converge or diverge?"
+  " términos": " terms",
+  "$?": "$ converge or diverge?",
+  "Converge": "Converges",
+  "} < 1$: la serie converge.": "} < 1$: the series converges."
  },
  "Al hacer $N\\to\\infty$, el trozo $\\frac{1}{N+1}$ se va a cero.": "As $N\\to\\infty$, the piece $\\frac{1}{N+1}$ goes to zero.",
  "Alternada $\\sum \\frac{(-1)^{n+1}}{n}$": "Alternating $\\sum \\frac{(-1)^{n+1}}{n}$",

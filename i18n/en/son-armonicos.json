@@ -1,7 +1,7 @@
 {
  " * t) + sin(TAU * 3 * ": " * t) + sin(TAU * 3 * ",
  " * t) / 3 + sin(TAU * 5 * ": " * t) / 3 + sin(TAU * 5 * ",
- " * t) / k; return 0.4 * y;</code>": " * t) / k; return 0.4 * y;</code>",
+ " * t) / k; return 0.4 * y;</code>": " * t) / k; return 0.4 * s;</code>",
  " Hz": " Hz",
  " Hz, con amplitudes 1, 1/3 y 1/5.": " Hz, with amplitudes 1, 1/3 and 1/5.",
  " de amplitud 1, ¿cuánto vale la amplitud del armónico $": " wave of amplitude 1, what is the amplitude of harmonic $",
@@ -30,9 +30,11 @@
  "<strong>Qué armónicos hay.</strong> Solo los impares: $k = 1, 3, 5$, a 100, 300 y 500 Hz. Los pares no aparecen en la cuadrada.": "<strong>Which harmonics there are.</strong> Only the odd ones: $k = 1, 3, 5$, at 100, 300 and 500 Hz. The even ones do not appear in the square wave.",
  "<strong>Qué significa ese 1,104.</strong> La cuadrada vale exactamente 1 ahí. Con tres términos ya se pasa un 10 %, y con más términos no mejora en las esquinas: es el fenómeno de Gibbs, que se ve en la onda del primer sintetizador como unos «cuernos» junto a cada salto.": "<strong>What that 1.104 means.</strong> The square wave is exactly 1 there. With three terms it already overshoots by 10 %, and with more terms it does not improve at the corners: it is the Gibbs phenomenon, seen in the wave of the first synthesiser as “horns” beside each jump.",
  "@frag": {
+  " y ": " and ",
   "cuadrada": "square",
   "sierra": "sawtooth",
-  "triangulo": "triangle"
+  "triangulo": "triangle",
+  "triángulo": "triangle"
  },
  "A 300 Hz: la fundamental, de la que los demás son múltiplos": "At 300 Hz: the fundamental, of which the others are multiples",
  "A 750 Hz: la media": "At 750 Hz: the mean",
@@ -46,7 +48,7 @@
  "Casi ningún sonido real es un seno. Una cuerda, una columna de aire o una voz vibran de varias maneras a la vez, y cada manera es un seno. Lo que llega al oído es la suma. Lo que hace que suene a <em>una</em> nota y no a un montón de pitidos es que esas frecuencias son <strong>múltiplos enteros</strong> de una fundamental:": "Hardly any real sound is a sine. A string, a column of air or a voice vibrate in several ways at once, and each way is a sine. What reaches the ear is the sum. What makes it sound like <em>one</em> note and not a heap of beeps is that those frequencies are <strong>whole multiples</strong> of a fundamental:",
  "Con $N = 1$ la onda es un seno. Con $N = 20$, ¿qué forma tendrá: seguirá siendo redondeada, o tendrá esquinas? Y la nota que se oye, ¿subirá al añadir senos más agudos, o seguirá siendo la misma?": "With $N = 1$ the wave is a sine. With $N = 20$, what shape will it have: will it still be rounded, or will it have corners? And the note heard, will it rise as higher sines are added, or will it stay the same?",
  "Con amplitudes $1/k$ la suma tiende al diente de sierra: es la serie de Fourier de la sierra. En el espectro, cada armónico es una raya a $220k$ Hz, cada vez más baja. Cambia <code>/ k</code> por <code>/ (k * k)</code> y la suma se suaviza: pesan menos los agudos.": "With amplitudes $1/k$ the sum tends to the sawtooth: it is the Fourier series of the sawtooth. In the spectrum, each harmonic is a line at $220k$ Hz, lower each time. Change <code>/ k</code> for <code>/ (k * k)</code> and the sum smooths out: the high ones weigh less.",
- "Con un bucle sale más corto: <code>var y = 0; for (var k = 1; k <= 5; k += 2) y += sin(TAU * k * ": "With a loop it comes out shorter: <code>var y = 0; for (var k = 1; k <= 5; k += 2) y += sin(TAU * k * ",
+ "Con un bucle sale más corto: <code>var y = 0; for (var k = 1; k <= 5; k += 2) y += sin(TAU * k * ": "With a loop it comes out shorter: <code>var s = 0; for (var k = 1; k <= 5; k += 2) s += sin(TAU * k * ",
  "Cuadrada": "Square",
  "Cuatro mandos, uno por armónico del 2 al 5. La fundamental está siempre. Sube y baja cada armónico mientras suena: la nota no se mueve, el color sí. Prueba a poner solo los impares (el 3 y el 5) y compáralo con solo los pares.": "Four controls, one per harmonic from 2 to 5. The fundamental is always there. Raise and lower each harmonic while it plays: the note does not move, the colour does. Try putting only the odd ones (3 and 5) and compare it with only the even ones.",
  "Cómo suena": "How it sounds",

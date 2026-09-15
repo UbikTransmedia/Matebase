@@ -45,6 +45,15 @@
  "<strong>La asimetría.</strong> Lo que al usuario le cuesta una vez, al atacante le cuesta una vez por candidato y por usuario. Cada iteración de más es un factor para el atacante y una fracción de milisegundo para el usuario.": "<strong>The asymmetry.</strong> What costs the user once costs the attacker once per candidate and per user. Each extra iteration is a factor for the attacker and a fraction of a millisecond for the user.",
  "<strong>No cae.</strong> ": "<strong>It does not fall.</strong> ",
  "<strong>Sin sal.</strong> Hashea el diccionario una vez, $10^8$ hashes en $0{,}01$ segundos, y compara con el millón de hashes con una tabla: prácticamente instantáneo. Todas las contraseñas del diccionario caen a la vez.": "<strong>Without salt.</strong> They hash the dictionary once, $10^8$ hashes in $0{.}01$ seconds, and compare with the million hashes using a table: practically instantaneous. Every password in the dictionary falls at once.",
+ "@frag": {
+  " años": " years",
+  " días": " days",
+  " horas": " hours",
+  " minutos": " minutes",
+  "<strong>Cae.</strong> ": "<strong>It falls.</strong> ",
+  "sal ": "salt ",
+  "sí": "yes"
+ },
  "Aceptable para esa entropía; y cada año se pueden subir las iteraciones conforme el servidor mejore.": "Acceptable for that entropy; and every year the iterations can be raised as the server improves.",
  "Ajustar el coste": "Tuning the cost",
  "Atacante: $2^{": "Attacker: $2^{",

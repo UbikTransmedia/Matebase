@@ -32,7 +32,8 @@
  "<strong>no es primo</strong>: $": "<strong>it is not prime</strong>: $",
  "<strong>sí es primo</strong>.": "<strong>it is prime</strong>.",
  "@frag": {
-  "$ hay <strong>": "$ there are <strong>"
+  "$ hay <strong>": "$ there are <strong>",
+  "</strong> de ": "</strong> of "
  },
  "Además solo hace falta probar con los <strong>primos</strong> hasta ahí: ": "What is more, you only need to try the <strong>primes</strong> up to there: ",
  "Aplicar Fermat con un módulo que no es primo": "Applying Fermat with a modulus that is not prime",
@@ -77,7 +78,7 @@
  "La estimación $\\dfrac{x}{\\ln x}$ da $": "The estimate $\\dfrac{x}{\\ln x}$ gives $",
  "La idea de RSA descansa en una <strong>asimetría</strong> brutal:": "The idea of RSA rests on a brutal <strong>asymmetry</strong>:",
  "La letra $\\varphi$ es la fi griega y $\\varphi(n)$ se dice «fi de ene» o «indicador de Euler»: cuenta cuántos números menores que $n$ no comparten factores con él.<br><br>Se lee: <em>«ene es igual a pe por cu; fi de ene es igual a pe menos uno por cu menos uno»</em>.<br><br>Y aquí está toda la seguridad del sistema: cualquiera puede ver $n$, porque es público, pero para calcular $\\varphi(n)$ hacen falta $p$ y $q$ por separado, y recuperarlos a partir de $n$ es el problema de factorizar que nadie sabe resolver deprisa.": "The letter $\\varphi$ is the Greek phi and $\\varphi(n)$ is said “phi of n” or “Euler's totient”: it counts how many numbers less than $n$ share no factors with it.<br><br>Read as: <em>“n equals p times q; phi of n equals p minus one times q minus one”</em>.<br><br>And here is the whole security of the system: anyone can see $n$, because it is public, but to compute $\\varphi(n)$ you need $p$ and $q$ separately, and recovering them from $n$ is the factoring problem nobody knows how to solve quickly.",
- "La rama que se presumía «inútil» acabó siendo la que protege todo el comercio electrónico.": "The branch boasted of as “useless” ended up being the one that protects all electronic commerce.",
+ "La rama que se presumía «inútil» acabó siendo la que protege todo el comercio electrónico.": "The branch presumed to be “useless” ended up being the one that protects all electronic commerce.",
  "Las operaciones respetan las congruencias, así que basta operar con los restos: $(": "The operations respect congruences, so it is enough to work with the remainders: $(",
  "Lo asombroso es que las operaciones <strong>sobreviven</strong>: se puede sumar, restar y multiplicar en el mundo modular con toda libertad. El resto del resultado solo depende de los restos de partida.": "What is astonishing is that the operations <strong>survive</strong>: you can add, subtract and multiply in the modular world quite freely. The remainder of the result depends only on the starting remainders.",
  "Los primos son infinitos pero se espacian: $\\pi(x) \\sim x/\\ln x$.": "The primes are infinite but they spread out: $\\pi(x) \\sim x/\\ln x$.",

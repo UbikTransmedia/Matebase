@@ -24,6 +24,9 @@
  "<strong>La derivada.</strong> $\\sigma'(0) = 0{,}5\\cdot(1 - 0{,}5) = 0{,}25$, que es su valor máximo. En la frontera es donde el gradiente tiene más fuerza.": "<strong>The derivative.</strong> $\\sigma'(0) = 0{.}5\\cdot(1 - 0{.}5) = 0{.}25$, which is its maximum value. It is at the boundary that the gradient has most force.",
  "<strong>La probabilidad.</strong> $\\sigma(0) = \\frac{1}{1 + e^{0}} = \\frac{1}{2} = 0{,}5$. El modelo no se moja: está exactamente en la frontera.": "<strong>The probability.</strong> $\\sigma(0) = \\frac{1}{1 + e^{0}} = \\frac{1}{2} = 0{.}5$. The model does not commit itself: it is exactly on the boundary.",
  "<strong>La suma ponderada.</strong> $z = 2\\cdot 1 + (-1)\\cdot 1 + (-1) = 0$. Justo en la frontera.": "<strong>The weighted sum.</strong> $z = 2\\cdot 1 + (-1)\\cdot 1 + (-1) = 0$. Right on the boundary.",
+ "@frag": {
+  "</strong>, en $z = 0$.<br>": "</strong>, at $z = 0$.<br>"
+ },
  "Al cambiar el escalón por la sigmoide, ¿qué tipos de datos puede separar ahora la neurona?": "On changing the step for the sigmoid, what kinds of data can the neuron now separate?",
  "Al hacer la sigmoide cada vez más empinada se parecerá más al escalón. ¿Qué crees que le pasará a su derivada: se hará más grande, más pequeña, o más estrecha?": "Making the sigmoid steeper and steeper will make it more like the step. What do you think will happen to its derivative: will it get larger, smaller, or narrower?",
  "Arriba, las dos funciones; abajo, sus derivadas. Sube la pendiente de la sigmoide y verás que se acerca al escalón todo lo que quieras. Mira lo que le pasa entonces a la derivada, que es lo que usa el entrenamiento.": "Above, the two functions; below, their derivatives. Raise the sigmoid's slope and you will see it approach the step as closely as you like. Look at what happens then to the derivative, which is what training uses.",

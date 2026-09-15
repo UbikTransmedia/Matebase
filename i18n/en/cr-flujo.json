@@ -41,6 +41,10 @@
  "<strong>La salida.</strong> 0, 0, 1, 0, 1, 1, 1, y vuelta a empezar. Cualquier ventana de 3 bits seguidos aparece exactamente una vez en el periodo: es la marca de un LFSR de periodo máximo.": "<strong>The output.</strong> 0, 0, 1, 0, 1, 1, 1, and back to the start. Any window of 3 consecutive bits appears exactly once in the period: it is the mark of a maximal-period LFSR.",
  "<strong>Los pasos.</strong> 100 → sale 0, entra $0 \\oplus 0 = 0$: 010. → sale 0, entra $1 \\oplus 0 = 1$: 101. → sale 1, entra $0 \\oplus 1 = 1$: 110. → sale 0, entra $1 \\oplus 0 = 1$: 111. → sale 1, entra $1 \\oplus 1 = 0$: 011. → sale 1, entra $1 \\oplus 1 = 0$: 001.": "<strong>The steps.</strong> 100 → 0 out, $0 \\oplus 0 = 0$ in: 010. → 0 out, $1 \\oplus 0 = 1$ in: 101. → 1 out, $0 \\oplus 1 = 1$ in: 110. → 0 out, $1 \\oplus 0 = 1$ in: 111. → 1 out, $1 \\oplus 1 = 0$ in: 011. → 1 out, $1 \\oplus 1 = 0$ in: 001.",
  "<strong>Uno más y se cierra.</strong> 001 → sale 1, entra $0 \\oplus 1 = 1$: 100, el estado inicial. Siete estados, todos los no nulos: periodo $2^3 - 1 = 7$. El polinomio es primitivo.": "<strong>One more and it closes.</strong> 001 → 1 out, $0 \\oplus 1 = 1$ in: 100, the initial state. Seven states, all the non-zero ones: period $2^3 - 1 = 7$. The polynomial is primitive.",
+ "@frag": {
+  ", máximo": ", maximal",
+  ", no máximo": ", not maximal"
+ },
  "ACE1": "ACE1",
  "Arrancar el registro con ceros": "Starting the register with zeros",
  "Cambiar un bit del cifrado y creer que Benito lo notará": "Changing a bit of the ciphertext and believing Bob will notice",

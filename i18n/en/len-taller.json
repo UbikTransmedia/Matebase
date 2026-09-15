@@ -28,7 +28,9 @@
  "<strong>Porque no es el mismo programa.</strong> La primera calcula la suma de los cinco primeros cuadrados; la segunda escribe un 55. Cambia el 6 por un 7 en la primera y sigue estando bien; en la segunda hay que rehacer la cuenta a mano.": "<strong>Because it is not the same program.</strong> The first computes the sum of the first five squares; the second prints a 55. Change the 6 for a 7 in the first and it is still right; in the second the calculation has to be redone by hand.",
  "<strong>Y ésa es la moraleja del bloque entero.</strong> Lo que un lenguaje te da no es velocidad: te da la posibilidad de <em>decir lo que quieres</em> en vez de decir el resultado. Lo de que salga rápido es trabajo del compilador, y ya has visto cómo lo hace.": "<strong>And that is the moral of the whole block.</strong> What a language gives you is not speed: it gives you the possibility of <em>saying what you want</em> instead of saying the result. Its coming out fast is the compiler's work, and you have already seen how it does it.",
  "@frag": {
-  ". Con <code>n = 0</code>": ". With <code>n = 0</code>"
+  ". Con ": ". With ",
+  ". Con <code>n = 0</code>": ". With <code>n = 0</code>",
+  "nada": "nothing"
  },
  "Acuérdate de poner el <code>muestra</code> <strong>fuera</strong> del bucle si lo que se pide es un solo número al final.": "Remember to put the <code>muestra</code> <strong>outside</strong> the loop if what is asked for is a single number at the end.",
  "Antes de tocar nada: el programa de ejemplo calcula los primeros números de Fibonacci. ¿Hasta cuál crees que podrá llegar antes de que los ocho bits den la vuelta?": "Before touching anything: the example program computes the first Fibonacci numbers. How far do you think it will get before the eight bits wrap round?",

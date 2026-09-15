@@ -27,12 +27,15 @@
  "<strong>Pierde con verde.</strong> Se quita 1 verde: 4 rojas de 7. $P(\\text{roja}) = 4/7 \\approx 0{,}57$. La roja ha subido sin haber jugado: el castigo a otra la favorece.": "<strong>It loses with green.</strong> 1 green is removed: 4 reds out of 7. $P(\\text{red}) = 4/7 \\approx 0{.}57$. Red has risen without having been played: punishing another favours it.",
  "? Si la juega y gana la partida, se añaden 3 cuentas de ese color: ¿qué probabilidad tendrá entonces? (Fracciones.)": "? If it plays it and wins the game, 3 beads of that colour are added: what probability will it have then? (Fractions.)",
  "@frag": {
+  " y ": " and ",
   "Con ε = ": "With ε = ",
   "Hay ": "There are ",
   "Quedan ": "There remain ",
   "coger 1": "take 1",
   "coger 2": "take 2",
-  "coger 3": "take 3"
+  "coger 3": "take 3",
+  "crece": "grows",
+  "mengua": "shrinks"
  },
  "Ahora la que pierde es la verde. ¿Qué le pasa a la probabilidad de la roja?": "Now the one that loses is green. What happens to the probability of red?",
  "Al acabar la partida, repasa las cuentas que ha usado: si ha ganado, añade <strong>3</strong> cuentas de cada color jugado; si ha empatado, <strong>1</strong>; si ha perdido, <strong>retira</strong> la cuenta usada.": "When the game ends, it goes back over the beads it used: if it won, it adds <strong>3</strong> beads of each colour played; if it drew, <strong>1</strong>; if it lost, it <strong>removes</strong> the bead used.",

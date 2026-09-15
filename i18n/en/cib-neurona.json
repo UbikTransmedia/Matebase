@@ -30,6 +30,8 @@
  "<strong>Qué pide NAND.</strong> Salidas 1, 1, 1, 0 para $(0,0)$, $(0,1)$, $(1,0)$, $(1,1)$. Hay que dispararse «casi siempre»: solo la esquina $(1,1)$ debe quedar fuera.": "<strong>What NAND asks for.</strong> Outputs 1, 1, 1, 0 for $(0,0)$, $(0,1)$, $(1,0)$, $(1,1)$. It has to fire “almost always”: only the corner $(1,1)$ must be left out.",
  "@frag": {
   " pide: ": " asks for: ",
+  "Sí": "Yes",
+  "todavía no": "not yet",
   "«solo x₂»": "“only x₂”",
   "«x₁ y no x₂»": "“x₁ and not x₂”"
  },
@@ -132,7 +134,7 @@
  "Varias capas de neuronas superan ese límite. Las redes neuronales actuales son esta misma idea, a gran escala.": "Several layers of neurons overcome that limit. Today's neural networks are this same idea, on a large scale.",
  "Walter Pitts fue un autodidacta que nunca llegó a tener un título universitario; con doce años ya discutía por carta con Bertrand Russell. En 1969, Marvin Minsky y Seymour Papert publicaron <em>Perceptrons</em>, un libro que demostraba con rigor los límites de una sola capa, empezando por XOR. Contribuyó a que el interés y la financiación de las redes neuronales cayeran durante más de una década. Volvieron con fuerza en 1986, cuando David Rumelhart, Geoffrey Hinton y Ronald Williams popularizaron la <em>retropropagación</em>, el método para repartir la culpa entre capas, que no es más que la [[fn-derivadas|regla de la cadena]] aplicada muchas veces.": "Walter Pitts was a self-taught man who never obtained a university degree; at twelve he was already arguing by letter with Bertrand Russell. In 1969, Marvin Minsky and Seymour Papert published <em>Perceptrons</em>, a book that rigorously proved the limits of a single layer, starting with XOR. It contributed to a fall in interest and funding for neural networks lasting more than a decade. They came back strongly in 1986, when David Rumelhart, Geoffrey Hinton and Ronald Williams popularised <em>backpropagation</em>, the method for sharing out the blame among layers, which is no more than the [[fn-derivadas|chain rule]] applied many times.",
  "XNOR (igualdad)": "XNOR (equality)",
- "alguna entrada vale 1": "some input is 1",
+ "alguna entrada vale 1": "at least one input is 1",
  "axis": "axis",
  "b^{\\text{nuevo}} = b + \\eta\\,(t - y)": "b^{\\text{new}} = b + \\eta\\,(t - y)",
  "funciona como una puerta ": "acts as a logic gate of type ",

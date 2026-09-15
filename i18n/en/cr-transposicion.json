@@ -35,6 +35,11 @@
  "<strong>El orden.</strong> Las letras de RIO, por orden alfabético, son I, O, R: la columna de la I (la segunda) se lee primero, luego la de la O (la tercera) y por último la de la R (la primera). Orden de lectura: 2, 3, 1.": "<strong>The order.</strong> The letters of RIO, in alphabetical order, are I, O, R: the I's column (the second) is read first, then the O's (the third) and last the R's (the first). Reading order: 2, 3, 1.",
  "<strong>La rejilla.</strong> ATAQUEALALBA tiene 12 letras, que caben justas en 4 filas de 3: ATA / QUE / ALA / LBA.": "<strong>The grid.</strong> ATAQUEALALBA has 12 letters, which fit exactly into 4 rows of 3: ATA / QUE / ALA / LBA.",
  "<strong>Leer.</strong> Columna 2: T, U, L, B. Columna 3: A, E, A, A. Columna 1: A, Q, A, L. Cifrado: <strong>TULB AEAA AQAL</strong>.": "<strong>Reading.</strong> Column 2: T, U, L, B. Column 3: A, E, A, A. Column 1: A, Q, A, L. Ciphertext: <strong>TULB AEAA AQAL</strong>.",
+ "@frag": {
+  " (más ": " (plus ",
+  " letras: ": " letters: ",
+  "Hay ": "There are "
+ },
  "Benito recibe 12 letras y conoce la clave. ¿Qué tamaño tiene cada columna?": "Bob receives 12 letters and knows the key. What size is each column?",
  "Cada columna recibe el puesto de su letra: <strong>": "Each column gets its letter's place: <strong>",
  "Cifra <strong>": "Encipher <strong>",

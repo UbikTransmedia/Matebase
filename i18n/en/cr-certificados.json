@@ -58,6 +58,13 @@
  "<strong>Lo que Eva no puede hacer.</strong> Para que verificara necesitaría $s^{*}$ con $s^{*17} \\equiv 66$: eso es descifrar con RSA sin la clave privada. Con $n = 3233$ se factoriza en un instante; con 2048 bits, no.": "<strong>What Eve cannot do.</strong> For it to verify she would need $s^{*}$ with $s^{*17} \\equiv 66$: that is decrypting with RSA without the private key. With $n = 3233$ it factors in an instant; with 2048 bits, it does not.",
  "<strong>Verificar.</strong> $588^{17} \\bmod 3233$: por cuadrados, $17 = 10001_2$, cuatro cuadrados y un producto, y sale $65$. Coincide con el hash: la raíz firmó ese certificado.": "<strong>Verifying.</strong> $588^{17} \\bmod 3233$: by squaring, $17 = 10001_2$, four squarings and one product, and out comes $65$. It matches the hash: the root signed that certificate.",
  "<strong>Y después.</strong> Con la clave del intermedio verificada, se repite con el certificado del servidor, se comprueba el nombre y las fechas, y solo entonces se acepta $K$. Tres firmas y unos milisegundos.": "<strong>And afterwards.</strong> With the intermediate's key verified, it is repeated with the server's certificate, the name and the dates are checked, and only then is $K$ accepted. Three signatures and a few milliseconds.",
+ "@frag": {
+  "\n  firma: ": "\n  signature: ",
+  ", aborta": ", aborts",
+  ", no válida": ", not valid",
+  ", válida": ", valid",
+  "sí": "yes"
+ },
  "Aceptar un certificado porque «la firma es válida»": "Accepting a certificate because “the signature is valid”",
  "Aceptarlo: la firma es válida y la autoridad es de confianza": "Accept it: the signature is valid and the authority is trusted",
  "Así se hacía: quien robe esa clave descifra todo el tráfico pasado grabado. Con Diffie-Hellman efímero y firma, no. Es el secreto hacia delante.": "That is how it used to be done: whoever steals that key decrypts all the recorded past traffic. With ephemeral Diffie-Hellman and a signature, no. That is forward secrecy.",

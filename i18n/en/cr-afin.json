@@ -43,7 +43,18 @@
  "<strong>Euclides extendido</strong> da $ax + ny = \\operatorname{mcd}(a, n)$; cuando el mcd es 1, $x$ es el inverso. Es la herramienta de todo el bloque.": "<strong>Extended Euclid</strong> gives $ax + ny = \\gcd(a, n)$; when the gcd is 1, $x$ is the inverse. It is the block's tool.",
  "<strong>Euclides.</strong> $26 = 5\\cdot 5 + 1$. Un solo paso: el resto es 1, así que $1 = 26 - 5\\cdot 5$.": "<strong>Euclid.</strong> $26 = 5\\cdot 5 + 1$. A single step: the remainder is 1, so $1 = 26 - 5\\cdot 5$.",
  "@frag": {
-  "</strong> y la <strong>": "</strong> and the <strong>"
+  " es ": " is ",
+  " es $": " is $",
+  " es el ": " is number ",
+  " es la <strong>": " is letter <strong>",
+  "$ es $": "$ is $",
+  "</strong> y la <strong>": "</strong> and the <strong>",
+  "<span class=\"cr-dif\">mcd(": "<span class=\"cr-dif\">gcd(",
+  "<span class=\"cr-ok\">mcd(": "<span class=\"cr-ok\">gcd(",
+  "El ": "Number ",
+  "La ": "Letter ",
+  "mcd$(": "gcd$(",
+  "sí, ": "yes, "
  },
  "Afín: $y = (ax + b) \\bmod 26$. Con $a = 1$ es el César.": "Affine: $y = (ax + b) \\bmod 26$. With $a = 1$ it is the Caesar.",
  "Aplica $5x + 8$ a cada letra y reduce.": "Apply $5x + 8$ to each letter and reduce.",

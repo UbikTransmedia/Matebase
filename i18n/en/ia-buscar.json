@@ -35,6 +35,13 @@
  "<strong>Lo que ya tengo asegurado.</strong> La raíz es MAX y ya ha visto un $3$, así que $\\alpha = 3$: pase lo que pase, no se conformará con menos.": "<strong>What I have already secured.</strong> The root is MAX and has already seen a $3$, so $\\alpha = 3$: whatever happens, it will not settle for less.",
  "<strong>Primer hijo.</strong> Es un nodo MIN, así que se queda con el menor de $3$ y $5$: vale $3$.": "<strong>First child.</strong> It is a MIN node, so it keeps the smaller of $3$ and $5$: it is worth $3$.",
  "<strong>Segundo hijo, primera hoja.</strong> Vale $2$. Como ese nodo es MIN, su valor final será $2$ o menos, nunca más.": "<strong>Second child, first leaf.</strong> It is worth $2$. Since that node is MIN, its final value will be $2$ or less, never more.",
+ "@frag": {
+  " de 8</strong>": " of 8</strong>",
+  " pasos": " steps",
+  "admisible": "admissible",
+  "ninguno": "none",
+  "se poda": "pruned"
+ },
  "A* es, probablemente, el algoritmo de inteligencia artificial que más veces se ejecuta al día en el mundo. Está dentro de cualquier navegador de mapas —con heurísticas mucho más finas que la distancia en manzanas—, en el movimiento de los personajes de casi todos los videojuegos, en la planificación de rutas de reparto y en los robots de almacén. Y no aprende nada: se lo calcula todo cada vez.": "A* is probably the artificial intelligence algorithm that runs most times a day in the world. It is inside any map navigator — with heuristics far finer than the block distance — in the movement of the characters of almost every video game, in the planning of delivery routes and in warehouse robots. And it learns nothing: it works everything out afresh each time.",
  "A* le añade una sola cosa: una <strong>pista</strong> sobre lo que falta. En vez de ordenar los candidatos por lo que ya has recorrido, se ordenan por lo recorrido <em>más una estimación</em> de lo que queda.": "A* adds one single thing: a <strong>hint</strong> about what is left. Instead of ordering the candidates by what you have already travelled, they are ordered by what has been travelled <em>plus an estimate</em> of what remains.",
  "A* ordena los candidatos por $f = g + h$: lo ya recorrido más una estimación de lo que falta. Con $h = 0$ es Dijkstra.": "A* orders the candidates by $f = g + h$: what has been travelled plus an estimate of what is left. With $h = 0$ it is Dijkstra.",

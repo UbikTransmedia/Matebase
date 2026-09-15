@@ -24,6 +24,9 @@
  "<strong>compresión de tono</strong> de Reinhard después de doblar la exposición": "Reinhard <strong>tone mapping</strong> after doubling the exposure",
  "<strong>líneas de barrido</strong>: rebajar un 30 % siguiendo <code>1 - 0.3·(1-cos(fragCoord.y·PI))/2</code>": "<strong>scanlines</strong>: cutting 30 % following <code>1 - 0.3·(1-cos(fragCoord.y·PI))/2</code>",
  "? Y luego reparte los ": "? And then share the ",
+ "@frag": {
+  "de <strong>": "of <strong>"
+ },
  "Anchura de cada banda: $": "Width of each band: $",
  "Aparece un marco negro de borde duro": "A black frame with a hard edge appears",
  "Aplica $c/(1 + c)$ a 0,2 y a 0,4.": "Apply $c/(1 + c)$ to 0.2 and to 0.4.",

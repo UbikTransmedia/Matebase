@@ -23,6 +23,8 @@
  "<strong>La lectura.</strong> Hasta diez pasos de espera compensa; a partir de once, no. Y fíjate en lo brusco que es: un premio diez veces mayor deja de interesar por esperar once turnos.": "<strong>The reading.</strong> Up to ten steps of waiting it pays; from eleven on, it does not. And notice how abrupt it is: a reward ten times larger stops being of interest because of waiting eleven turns.",
  "<strong>Qué pasa si se cambia $\\gamma$.</strong> Con $\\gamma = 0{,}95$ el equilibrio se va a $k = \\frac{\\ln 0{,}1}{\\ln 0{,}95} = 44{,}9$: el agente se vuelve mucho más paciente. El descuento es, literalmente, el horizonte del agente.": "<strong>What happens if $\\gamma$ is changed.</strong> With $\\gamma = 0{.}95$ the break-even point goes to $k = \\frac{\\ln 0{.}1}{\\ln 0{.}95} = 44{.}9$: the agent becomes far more patient. The discount is, literally, the agent's horizon.",
  "@frag": {
+  " casilla va": " square goes",
+  " de 8</strong><br>": " of 8</strong><br>",
   "$. Con $\\gamma = ": "$. With $\\gamma = "
  },
  "Ahora mismo $Q(s,a) = ": "Right now $Q(s,a) = ",

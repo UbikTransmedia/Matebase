@@ -31,6 +31,10 @@
  "<span class=\"cr-ok\">relleno VÁLIDO</span>": "<span class=\"cr-ok\">padding VALID</span>",
  "<span class=\"cr-tenue\">Eva prueba el siguiente valor. El bueno es ": "<span class=\"cr-tenue\">Eve tries the next value. The right one is ",
  "<span class=\"cr-tenue\">relleno inválido</span>": "<span class=\"cr-tenue\">padding invalid</span>",
+ "@frag": {
+  " ciclos: ": " cycles: ",
+  "sí": "yes"
+ },
  "AES no se ha roto nunca por criptoanálisis, y sin embargo se han robado claves de AES. RSA está bien, y se han recuperado claves RSA. El ataque no entra por la matemática: entra por el reloj, por el consumo eléctrico, por los mensajes de error, por un generador de azar defectuoso. Es la diferencia entre un cifrado y un <strong>sistema</strong>, y es donde ocurren casi todos los desastres reales.": "AES has never been broken by cryptanalysis, and yet AES keys have been stolen. RSA is fine, and RSA keys have been recovered. The attack does not come in through the mathematics: it comes in through the clock, through the power consumption, through the error messages, through a faulty random generator. It is the difference between a cipher and a <strong>system</strong>, and it is where almost every real disaster happens.",
  "Azar predecible": "Predictable randomness",
  "Buscar el mensaje en una tabla indexada por los primeros bytes del hash": "Looking the message up in a table indexed by the first bytes of the hash",

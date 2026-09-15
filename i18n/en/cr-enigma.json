@@ -44,6 +44,16 @@
  "<strong>Conjugar.</strong> Si se renombran las letras intercambiando A y B, el ciclo (AC) pasa a (BC) y el (BFDE) a (AFDE): las longitudes siguen siendo $2 + 4$. Eso es lo que Rejewski explotó.": "<strong>Conjugating.</strong> If the letters are renamed by swapping A and B, the cycle (AC) becomes (BC) and (BFDE) becomes (AFDE): the lengths are still $2 + 4$. That is what Rejewski exploited.",
  "<strong>El orden importa.</strong> Al revés, $\\rho\\sigma(B)$: la B se desplaza a C, y $\\rho(C) = A$. Aquí coincide, pero con la D no: $\\sigma\\rho(D) = \\sigma(E) = F$ y $\\rho\\sigma(D) = \\rho(E) = B$. Las permutaciones no conmutan, y por eso la fórmula de Enigma tiene un orden.": "<strong>Order matters.</strong> The other way round, $\\rho\\sigma(B)$: B shifts to C, and $\\rho(C) = A$. Here they agree, but with D they do not: $\\sigma\\rho(D) = \\sigma(E) = F$ and $\\rho\\sigma(D) = \\rho(E) = B$. Permutations do not commute, and that is why Enigma's formula has an order.",
  "<strong>Los ciclos de $\\rho$.</strong> A→C→A: un ciclo de longitud 2. B→F→D→E→B: un ciclo de longitud 4. Estructura: $2 + 4$.": "<strong>The cycles of $\\rho$.</strong> A→C→A: a cycle of length 2. B→F→D→E→B: a cycle of length 4. Structure: $2 + 4$.",
+ "@frag": {
+  " es el ": " is number ",
+  " letras: ": " letters: ",
+  " →izq.→ ": " →left→ ",
+  "$, el ": "$, number ",
+  "$, la ": "$, letter ",
+  "$, la <strong>": "$, letter <strong>",
+  "posiciones": "positions",
+  "posición": "position"
+ },
  "ANGRIFF": "ANGRIFF",
  "Al revés: con Enigma la probabilidad de que coincidan es cero. Que no coincida ninguna es exactamente lo que se espera de una hipótesis correcta.": "The other way round: with Enigma the probability that they match is zero. That none matches is exactly what is expected of a correct hypothesis.",
  "Antes de la bomba hubo una idea aún más elegante. En los años treinta, cada mensaje empezaba con la clave del mensaje cifrada <strong>dos veces</strong>: seis letras. Marian Rejewski se dio cuenta de que la letra 1 y la letra 4 eran la misma letra del original cifrada en dos posiciones distintas, así que componiendo las dos permutaciones se obtenía una permutación conocida, y tras unos cuantos mensajes del día, entera. Y esa permutación tenía una propiedad que no dependía del tablero de clavijas: <strong>las longitudes de sus ciclos</strong>.": "Before the bombe there was an even more elegant idea. In the nineteen-thirties, each message began with the message key enciphered <strong>twice</strong>: six letters. Marian Rejewski realised that letter 1 and letter 4 were the same original letter enciphered at two different positions, so by composing the two permutations a known permutation was obtained, and after a few of the day's messages, the whole of it. And that permutation had a property that did not depend on the plugboard: <strong>the lengths of its cycles</strong>.",

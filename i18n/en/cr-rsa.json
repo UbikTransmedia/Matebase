@@ -39,6 +39,9 @@
  "<strong>Descifrar.</strong> $2790^{2753} \\bmod 3233 = 65$ ✓. Son doce cuadrados y siete productos, o dos potencias más cortas módulo 61 y 53 con el teorema chino.": "<strong>Decrypting.</strong> $2790^{2753} \\bmod 3233 = 65$ ✓. That is twelve squarings and seven products, or two shorter powers modulo 61 and 53 with the Chinese theorem.",
  "<strong>Las claves.</strong> $n = 61\\cdot 53 = 3233$, $\\varphi(n) = 60\\cdot 52 = 3120$. $\\operatorname{mcd}(17, 3120) = 1$, y con Euclides extendido $17\\cdot 2753 = 46\\,801 = 15\\cdot 3120 + 1$: $d = 2753$.": "<strong>The keys.</strong> $n = 61\\cdot 53 = 3233$, $\\varphi(n) = 60\\cdot 52 = 3120$. $\\gcd(17, 3120) = 1$, and with extended Euclid $17\\cdot 2753 = 46\\,801 = 15\\cdot 3120 + 1$: $d = 2753$.",
  "<strong>Maleabilidad.</strong> $E(2) = 2^{17} \\bmod 3233 = 131\\,072 \\bmod 3233 = 1752$. Eva envía $2790\\cdot 1752 \\bmod 3233 = 3017$, y Benito descifra $3017^{2753} \\bmod 3233 = 130 = 2\\cdot 65$.": "<strong>Malleability.</strong> $E(2) = 2^{17} \\bmod 3233 = 131\\,072 \\bmod 3233 = 1752$. Eve sends $2790\\cdot 1752 \\bmod 3233 = 3017$, and Bob decrypts $3017^{2753} \\bmod 3233 = 130 = 2\\cdot 65$.",
+ "@frag": {
+  "$) y $d = ": "$) and $d = "
+ },
  "Alicia cifra un importe con la clave pública de Benito. Eva intercepta el cifrado, lo multiplica por el cifrado de 2 (que calcula ella, porque la clave es pública) y lo reenvía. Benito descifra el doble.": "Alice encrypts an amount with Bob's public key. Eve intercepts the ciphertext, multiplies it by the ciphertext of 2 (which she computes, because the key is public) and forwards it. Bob decrypts twice the amount.",
  "Benito descifra $": "Bob decrypts $",
  "Benito lee": "Bob reads",

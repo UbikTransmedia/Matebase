@@ -12,7 +12,7 @@
  ")$. ¿Cuánto vale $h$, ya recortado entre 0 y 1, y cuál es la distancia? (Fracción o tres decimales.)": ")$. What is $h$, already clamped between 0 and 1, and what is the distance? (A fraction or three decimal places.)",
  ")$. ¿Qué punto de la curva corresponde a $t = ": ")$. What point on the curve corresponds to $t = ",
  ")$; distancia $\\approx ": ")$; distance $\\approx ",
- ")</code>? (Cuatro decimales; escribe los números con coma o con punto.)": ")</code>? (Four decimals; write the numbers with a comma or with a point.)",
+ ")</code>? (Cuatro decimales; escribe los números con coma o con punto.)": ")</code>? (Four decimal places; write the numbers with a comma or with a point.)",
  ", que se sale: recortado, $h = ": ", which goes out: clamped, $h = ",
  ", que ya está entre 0 y 1.": ", which is already between 0 and 1.",
  "<code>fract(iTime)</code> sube de 0 a 1 cada segundo y vuelve a 0 de golpe; smoothstep suaviza la subida pero no puede evitar el salto.": "<code>fract(iTime)</code> rises from 0 to 1 every second and drops back to 0 abruptly; smoothstep eases the rise but cannot avoid the jump.",

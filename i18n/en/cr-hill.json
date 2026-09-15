@@ -45,6 +45,11 @@
  "<strong>La inversa.</strong> Adjunta: $\\begin{pmatrix} 5 & -3 \\\\ -2 & 3 \\end{pmatrix}$. Por 3: $\\begin{pmatrix} 15 & -9 \\\\ -6 & 9 \\end{pmatrix} \\equiv \\begin{pmatrix} 15 & 17 \\\\ 20 & 9 \\end{pmatrix}$.": "<strong>The inverse.</strong> Adjugate: $\\begin{pmatrix} 5 & -3 \\\\ -2 & 3 \\end{pmatrix}$. Times 3: $\\begin{pmatrix} 15 & -9 \\\\ -6 & 9 \\end{pmatrix} \\equiv \\begin{pmatrix} 15 & 17 \\\\ 20 & 9 \\end{pmatrix}$.",
  "<strong>Primer par.</strong> HE $= (7, 4)$: $y_1 = 3\\cdot 7 + 3\\cdot 4 = 33 \\equiv 7$, $y_2 = 2\\cdot 7 + 5\\cdot 4 = 34 \\equiv 8$. Es HI.": "<strong>First pair.</strong> HE $= (7, 4)$: $y_1 = 3\\cdot 7 + 3\\cdot 4 = 33 \\equiv 7$, $y_2 = 2\\cdot 7 + 5\\cdot 4 = 34 \\equiv 8$. It is HI.",
  "<strong>Segundo par.</strong> LP $= (11, 15)$: $y_1 = 33 + 45 = 78 \\equiv 0$, $y_2 = 22 + 75 = 97 \\equiv 19$. Es AT. Cifrado: <strong>HIAT</strong>.": "<strong>Second pair.</strong> LP $= (11, 15)$: $y_1 = 33 + 45 = 78 \\equiv 0$, $y_2 = 22 + 75 = 97 \\equiv 19$. It is AT. Ciphertext: <strong>HIAT</strong>.",
+ "@frag": {
+  " x_2$ e $y_2 = ": " x_2$ and $y_2 = ",
+  "<span class=\"cr-dif\">mcd(": "<span class=\"cr-dif\">gcd(",
+  "sí": "yes"
+ },
  "Adjunta: $\\begin{pmatrix} ": "Adjugate: $\\begin{pmatrix} ",
  "Adjunta: intercambia la diagonal y cambia de signo los otros dos. Multiplica por ": "Adjugate: swap the diagonal and change the sign of the other two. Multiply by ",
  "Así que $K = Y X^{-1}$. La inversa de $X$ módulo 26 es $\\begin{pmatrix} ": "So $K = Y X^{-1}$. The inverse of $X$ modulo 26 is $\\begin{pmatrix} ",

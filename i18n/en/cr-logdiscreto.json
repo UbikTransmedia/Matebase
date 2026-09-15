@@ -65,6 +65,16 @@
  "<strong>La solución.</strong> $x = im + j = 1\\cdot 5 + 1 = 6$. Comprobación: $5^6 = 15\\,625 = 679\\cdot 23 + 8$ ✓. Siete operaciones en vez de seis… con $p$ de seis cifras serían mil en vez de cientos de miles.": "<strong>The solution.</strong> $x = im + j = 1\\cdot 5 + 1 = 6$. Check: $5^6 = 15\\,625 = 679\\cdot 23 + 8$ ✓. Seven operations instead of six… with a six-digit $p$ it would be a thousand instead of hundreds of thousands.",
  "<strong>Los bebés.</strong> $m = \\lceil\\sqrt{23}\\rceil = 5$. $5^0 = 1$, $5^1 = 5$, $5^2 = 25 \\equiv 2$, $5^3 = 10$, $5^4 = 50 \\equiv 4$. Tabla: $\\{1{:}0,\\ 5{:}1,\\ 2{:}2,\\ 10{:}3,\\ 4{:}4\\}$.": "<strong>The baby steps.</strong> $m = \\lceil\\sqrt{23}\\rceil = 5$. $5^0 = 1$, $5^1 = 5$, $5^2 = 25 \\equiv 2$, $5^3 = 10$, $5^4 = 50 \\equiv 4$. Table: $\\{1{:}0,\\ 5{:}1,\\ 2{:}2,\\ 10{:}3,\\ 4{:}4\\}$.",
  "<strong>Los gigantes.</strong> $i = 0$: $h = 8$, no está en la tabla. $i = 1$: $8\\cdot 15 = 120 \\equiv 5$, que sí está, con $j = 1$.": "<strong>The giant steps.</strong> $i = 0$: $h = 8$, not in the table. $i = 1$: $8\\cdot 15 = 120 \\equiv 5$, which is, with $j = 1$.",
+ "@frag": {
+  " de ": " of ",
+  " o ": " or ",
+  " y ": " and ",
+  ", generador": ", generator",
+  ", no está": ", not there",
+  ", sí": ", yes",
+  ", y = g^x = ": ", y = g^x = ",
+  "}$ son $": "}$ are $"
+ },
  "Acuerda una clave con quien esté al otro lado del cable. Sin firmas, Mallory se pone en medio y no se nota.": "It agrees a key with whoever is at the other end of the cable. Without signatures, Mallory gets in the middle and it does not show.",
  "Alicia eleva lo que recibe, $M$, a su secreto $a$. Benito, a $b$.": "Alice raises what she receives, $M$, to her secret $a$. Bob, to $b$.",
  "Alicia y Benito creen tener la misma clave. ¿Coincidirán las dos claves que calculan? ¿Quién conoce cada una?": "Alice and Bob believe they have the same key. Will the two keys they compute agree? Who knows each of them?",

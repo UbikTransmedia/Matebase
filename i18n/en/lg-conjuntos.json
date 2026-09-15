@@ -48,6 +48,10 @@
  "<strong>Sobreyectiva</strong> significa que no sobra ningún elemento del conjunto final.": "<strong>Surjective</strong> means no element of the codomain is left over.",
  "<strong>Sobreyectiva?</strong> Con conjunto final $\\mathbb{R}$, ¿algún $x$ cumple $x^2 = -1$? No: los negativos se quedan sin origen. $f:\\mathbb{R}\\to\\mathbb{R}$ no es ni inyectiva ni sobreyectiva.": "<strong>Surjective?</strong> With codomain $\\mathbb{R}$, does any $x$ satisfy $x^2 = -1$? No: the negatives are left without a source. $f:\\mathbb{R}\\to\\mathbb{R}$ is neither injective nor surjective.",
  "<strong>no</strong> están en $A$": "are <strong>not</strong> in $A$",
+ "@frag": {
+  " alumnos": " students",
+  "Con $": "With $"
+ },
  "A = \\{x \\in \\mathbb{N} : x < 5,\\ x \\ne 0\\}": "A = \\{x \\in \\mathbb{N} : x < 5,\\ x \\ne 0\\}",
  "A \\cap B": "A \\cap B",
  "A \\cup B": "A \\cup B",

@@ -31,6 +31,9 @@
  "<strong>Los módulos.</strong> $|\\vec u| = \\sqrt{9 + 1} = \\sqrt{10}$ y $|\\vec v| = \\sqrt{1 + 4} = \\sqrt{5}$.": "<strong>The magnitudes.</strong> $|\\vec u| = \\sqrt{9 + 1} = \\sqrt{10}$ and $|\\vec v| = \\sqrt{1 + 4} = \\sqrt{5}$.",
  "<strong>Producto escalar cero ⟺ perpendiculares.</strong>": "<strong>Dot product zero ⟺ perpendicular.</strong>",
  "<strong>Un perpendicular a $\\vec u$.</strong> Se buscan $(a, b)$ con $3a + b = 0$. La forma rápida: intercambiar componentes y cambiar un signo, $(-1, 3)$. Comprobación: $3\\cdot(-1) + 1\\cdot 3 = 0$ ✓.": "<strong>One perpendicular to $\\vec u$.</strong> You look for $(a, b)$ with $3a + b = 0$. The quick way: swap the components and change one sign, $(-1, 3)$. Check: $3\\cdot(-1) + 1\\cdot 3 = 0$ ✓.",
+ "@frag": {
+  "sí": "yes"
+ },
  "Arrastra la punta del vector. Fíjate en el triángulo rectángulo que forman las componentes.": "Drag the tip of the vector. Notice the right-angled triangle the components form.",
  "Arrastra las puntas de los dos vectores. La flecha verde es la suma: es la diagonal del paralelogramo que forman.": "Drag the tips of the two vectors. The green arrow is the sum: it is the diagonal of the parallelogram they form.",
  "Bases y proyecciones": "Bases and projections",

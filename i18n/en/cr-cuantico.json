@@ -38,6 +38,9 @@
  "<strong>El punto medio.</strong> $a^{r/2} = 2^3 = 8$, que no es $\\pm 1$ módulo 21. Otra buena señal.": "<strong>The midpoint.</strong> $a^{r/2} = 2^3 = 8$, which is not $\\pm 1$ modulo 21. Another good sign.",
  "<strong>Las potencias.</strong> $2^1 = 2$, $2^2 = 4$, $2^3 = 8$, $2^4 = 16$, $2^5 = 32 \\equiv 11$, $2^6 = 64 \\equiv 1$. Vuelve al 1 en el paso 6.": "<strong>The powers.</strong> $2^1 = 2$, $2^2 = 4$, $2^3 = 8$, $2^4 = 16$, $2^5 = 32 \\equiv 11$, $2^6 = 64 \\equiv 1$. It comes back to 1 at step 6.",
  "<strong>Los factores.</strong> $\\gcd(8 - 1, 21) = \\gcd(7, 21) = 7$ y $\\gcd(8 + 1, 21) = \\gcd(9, 21) = 3$. $21 = 3\\cdot 7$ ✓.": "<strong>The factors.</strong> $\\gcd(8 - 1, 21) = \\gcd(7, 21) = 7$ and $\\gcd(8 + 1, 21) = \\gcd(9, 21) = 3$. $21 = 3\\cdot 7$ ✓.",
+ "@frag": {
+  "sí": "yes"
+ },
  "A RSA lo mata (Shor, polinómico); a AES solo le quita la mitad de bits (Grover). AES-256 sigue seguro.": "It kills RSA (Shor, polynomial); it only takes half the bits off AES (Grover). AES-256 is still secure.",
  "AES-128": "AES-128",
  "AES-256": "AES-256",

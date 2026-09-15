@@ -69,7 +69,11 @@
   "$ en $[": "$ on $[",
   "$ en $x = ": "$ at $x = ",
   "En $x = ": "At $x = ",
-  "Si $f(x) = ": "If $f(x) = "
+  "Si $f(x) = ": "If $f(x) = ",
+  "x)$, y en $1$: $e^{-": "x)$, and at $1$: $e^{-",
+  "x)\\right)$, y en $0$: $1\\cdot(0 + ": "x)\\right)$, and at $0$: $1\\cdot(0 + ",
+  "x^2}$, y en $1$: $\\frac{": "x^2}$, and at $1$: $\\frac{",
+  "}$, y en $1$: $\\frac{2}{": "}$, and at $1$: $\\frac{2}{"
  },
  "Acabas de ver que sacar una derivada de la definición se puede, pero es lento. La buena noticia es que solo hay que hacerlo <strong>una vez por cada tipo de función</strong>: alguien ya pasó por ese trabajo, y el resultado es la tabla siguiente. Con $x^2$ ya has hecho tú la tercera fila, así que la tabla no es magia: es trabajo hecho.": "You have just seen that getting a derivative out of the definition can be done, but is slow. The good news is that it only has to be done <strong>once for each type of function</strong>: somebody has already been through that work, and the result is the table below. With $x^2$ you have done the third row yourself, so the table is not magic: it is work already done.",
  "Acerca el segundo punto al primero con el deslizador. Mira cómo la recta secante gira hasta apoyarse en la curva.": "Bring the second point towards the first with the slider. Watch the secant line turn until it rests on the curve.",

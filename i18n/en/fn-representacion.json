@@ -40,8 +40,12 @@
  "<strong>Simetrías</strong>: par si $f(-x) = f(x)$ (simétrica respecto del eje $y$), impar si $f(-x) = -f(x)$ (respecto del origen). Ahorran la mitad del trabajo.": "<strong>Symmetries</strong>: even if $f(-x) = f(x)$ (symmetric about the $y$ axis), odd if $f(-x) = -f(x)$ (about the origin). They save half the work.",
  "@frag": {
   " de 6. ": " of 6. ",
+  " en x = ": " at x = ",
   "$ es el de $x - ": "$ is that of $x - ",
-  "En $x = ": "At $x = "
+  ". Es un <strong>": ". It is a <strong>",
+  "En $x = ": "At $x = ",
+  "máximo": "maximum",
+  "mínimo": "minimum"
  },
  "Antes de empezar: $\\frac{x^2}{x - 1}$ tiene grado 2 arriba y 1 abajo. ¿Tendrá asíntota horizontal u oblicua? ¿Y dónde estará la vertical?": "Before starting: $\\frac{x^2}{x - 1}$ has degree 2 on top and 1 underneath. Will it have a horizontal or an oblique asymptote? And where will the vertical one be?",
  "Antes de pulsar «ln x / x»: ¿dónde corta al eje $x$? ¿Hacia dónde va cuando $x \\to 0^+$? ¿Y cuando $x \\to +\\infty$, quién gana, el logaritmo o la $x$?": "Before clicking “ln x / x”: where does it cut the $x$ axis? Where does it go as $x \\to 0^+$? And as $x \\to +\\infty$, which wins, the logarithm or the $x$?",

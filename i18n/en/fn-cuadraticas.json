@@ -35,8 +35,11 @@
  "<strong>Vértice.</strong> $x_v = -\\dfrac{4}{2\\cdot(-1)} = 2$, $y_v = -4 + 8 - 3 = 1$. Vértice $(2, 1)$ y eje de simetría $x = 2$.": "<strong>Vertex.</strong> $x_v = -\\dfrac{4}{2\\cdot(-1)} = 2$, $y_v = -4 + 8 - 3 = 1$. Vertex $(2, 1)$ and axis of symmetry $x = 2$.",
  "<strong>Vértice</strong>: el punto más alto o más bajo. Su abscisa es $x_v = -\\dfrac{b}{2a}$.": "<strong>Vertex</strong>: the highest or lowest point. Its x-coordinate is $x_v = -\\dfrac{b}{2a}$.",
  "@frag": {
+  ", 0) y (": ", 0) and (",
   "Con $": "With $",
-  "\\right)$ — es un <strong>": "\\right)$ — it is a <strong>"
+  "\\right)$ — es un <strong>": "\\right)$ — it is a <strong>",
+  "máximo": "maximum",
+  "mínimo": "minimum"
  },
  "A los ": "At ",
  "Altura máxima (m)": "Maximum height (m)",

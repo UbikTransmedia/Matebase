@@ -50,6 +50,10 @@
  "<strong>Doblar $2G = (6, 3)$.</strong> $\\lambda = (3\\cdot 6^2 + 2)/(2\\cdot 3) = 110/6$. Módulo 17: $110 \\equiv 8$, $6^{-1} = 3$ (porque $18 \\equiv 1$), $\\lambda = 24 \\equiv 7$. $x = 49 - 12 = 37 \\equiv 3$, $y = 7(6 - 3) - 3 = 18 \\equiv 1$. $4G = (3, 1)$.": "<strong>Doubling $2G = (6, 3)$.</strong> $\\lambda = (3\\cdot 6^2 + 2)/(2\\cdot 3) = 110/6$. Modulo 17: $110 \\equiv 8$, $6^{-1} = 3$ (because $18 \\equiv 1$), $\\lambda = 24 \\equiv 7$. $x = 49 - 12 = 37 \\equiv 3$, $y = 7(6 - 3) - 3 = 18 \\equiv 1$. $4G = (3, 1)$.",
  "<strong>Los bits.</strong> $5 = 101_2$: doblar, doblar y sumar $G$. Es decir, $5G = 2(2G) + G = 4G + G$.": "<strong>The bits.</strong> $5 = 101_2$: double, double and add $G$. That is, $5G = 2(2G) + G = 4G + G$.",
  "<strong>Sumar $G$.</strong> $(3, 1) + (5, 1)$: $\\lambda = (1 - 1)/(5 - 3) = 0$. $x = 0 - 3 - 5 = -8 \\equiv 9$, $y = 0\\cdot(3 - 9) - 1 = -1 \\equiv 16$. $5G = (9, 16)$.": "<strong>Adding $G$.</strong> $(3, 1) + (5, 1)$: $\\lambda = (1 - 1)/(5 - 3) = 0$. $x = 0 - 3 - 5 = -8 \\equiv 9$, $y = 0\\cdot(3 - 9) - 1 = -1 \\equiv 16$. $5G = (9, 16)$.",
+ "@frag": {
+  " y ": " and ",
+  ", sí": ", yes"
+ },
  "Alicia calcula $a\\cdot(bG) = ab\\,G$, y como $G$ tiene orden 19, es $(ab \\bmod 19)\\,G$.": "Alice computes $a\\cdot(bG) = ab\\,G$, and since $G$ has order 19, it is $(ab \\bmod 19)\\,G$.",
  "Alicia y Benito eligen secretos y se envían múltiplos de $G$. Los dos llegan al mismo punto. Eva, con los dos puntos públicos, tendría que resolver el logaritmo discreto: aquí, probar 19 valores; en una curva real, $2^{128}$.": "Alice and Bob choose secrets and send each other multiples of $G$. Both arrive at the same point. Eve, with the two public points, would have to solve the discrete logarithm: here, trying 19 values; on a real curve, $2^{128}$.",
  "Ambos cuestan unos $2^{128}$ con el mejor método conocido. Por eso las normas los consideran equivalentes.": "Both cost about $2^{128}$ with the best known method. That is why the standards consider them equivalent.",

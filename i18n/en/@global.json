@@ -1,10 +1,12 @@
 {
  "@frag": {
-  " y ": " and ",
+  "$ y $": "$ and $",
   "$ € y ": "$ € and ",
-  " o ": " or ",
+  "$ o $": "$ or $",
   "Si $": "If $",
   "«": "“",
-  "»": "”"
+  "»": "”",
+  "\\operatorname{mcd}(": "\\gcd(",
+  "\\operatorname{mcm}(": "\\operatorname{lcm}("
  }
 }

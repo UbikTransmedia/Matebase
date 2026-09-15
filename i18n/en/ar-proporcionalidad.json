@@ -34,7 +34,16 @@
  "<strong>Decidir el tipo.</strong> Más grifos, ¿más tiempo o menos? Menos: la proporcionalidad es <strong>inversa</strong>. Ya sabemos que la respuesta será menor que 12.": "<strong>Decide the type.</strong> More taps, more time or less? Less: the proportionality is <strong>inverse</strong>. We already know the answer will be less than 12.",
  "<strong>Lo que se conserva.</strong> En la inversa, el producto es constante: $1\\cdot 12 = 12$ «grifos-hora» es el trabajo total de llenar la piscina.": "<strong>What is conserved.</strong> In inverse proportionality the product is constant: $1\\cdot 12 = 12$ “tap-hours” is the total work of filling the pool.",
  "@frag": {
-  "$ € al $": "$ € at $"
+  " % de ": " % of ",
+  " días.": " days.",
+  " es ": " is ",
+  " un $": " by $",
+  "$ € al $": "$ € at $",
+  "Con $": "With $",
+  "baja": "falls",
+  "restan": "subtract",
+  "sube": "rises",
+  "suman": "add"
  },
  "Al aplicarlo $": "Applying it $",
  "Al ir más deprisa se tarda <em>menos</em>. Cuando una sube y la otra baja, es inversa.": "Going faster takes <em>less</em> time. When one goes up and the other goes down, it is inverse.",

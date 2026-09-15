@@ -19,6 +19,11 @@
  "<strong>Dibujar y señalar el ángulo recto.</strong> La altura de la cometa es vertical y la distancia sobre el suelo es horizontal: forman $90^\\circ$. La cuerda cierra el triángulo.": "<strong>Draw it and mark the right angle.</strong> The kite's height is vertical and the distance along the ground is horizontal: they make $90^\\circ$. The string closes the triangle.",
  "<strong>Identificar la hipotenusa.</strong> Es el lado opuesto al ángulo recto: la cuerda, 25 m. Los 15 m del suelo son un cateto, y la altura $h$ es el otro.": "<strong>Identify the hypotenuse.</strong> It is the side opposite the right angle: the string, 25 m. The 15 m on the ground is one leg, and the height $h$ is the other.",
  "<strong>Raíz y sentido común.</strong> $h = \\sqrt{400} = 20$ m. Es menor que 25, como debe ser cualquier cateto frente a su hipotenusa. ✓": "<strong>Root and common sense.</strong> $h = \\sqrt{400} = 20$ m. It is less than 25, as any leg must be against its hypotenuse. ✓",
+ "@frag": {
+  "$ cm y $": "$ cm and $",
+  ")$ y ": ")$ and ",
+  "^2$ con $": "^2$ with $"
+ },
  "Acutángulo": "Acute-angled",
  "Antes de calcular, identifica quién es la hipotenusa: es el lado <strong>opuesto al ángulo recto</strong>, y siempre el más largo. Si te sale una hipotenusa más corta que un cateto, algo has hecho mal.": "Before calculating, identify which one is the hypotenuse: it is the side <strong>opposite the right angle</strong>, and always the longest. If you get a hypotenuse shorter than a leg, something has gone wrong.",
  "Arrastra el punto C hacia arriba y hacia abajo.": "Drag the point C up and down.",
