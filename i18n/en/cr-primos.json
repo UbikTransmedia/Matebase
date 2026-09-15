@@ -109,7 +109,7 @@
  "Para bases fijas se pueden construir compuestos que las engañan a todas. Bases al azar, y muchas.": "For fixed bases, composites can be constructed that fool them all. Random bases, and many of them.",
  "Para claves reales se usan más rondas: 40 o 64.": "For real keys more rounds are used: 40 or 64.",
  "Para el $n$ elegido se muestra la sucesión $a^d, a^{2d}, \\dots$ de cada base y el veredicto. Abajo, para los $n$ pequeños, cuántas bases de todas las posibles mienten: nunca más de una cuarta parte.": "For the chosen $n$ the sequence $a^d, a^{2d}, \\dots$ of each base is shown, and the verdict. Below, for small $n$, how many of all the possible bases lie: never more than a quarter.",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Primero $a^d$ por cuadrados sucesivos.": "First $a^d$ by successive squaring.",
  "Probabilidad de que se cuele un compuesto": "Probability that a composite slips through",
  "Que es primo con seguridad": "That it is certainly prime",

@@ -75,7 +75,7 @@
  "No hay clave ni inversa. El hash de una contraseña corta se «invierte» probando candidatos, y el de un documento no esconde su contenido a quien pueda adivinarlo.": "There is no key and no inverse. The hash of a short password is “inverted” by trying candidates, and a document's hash does not hide its content from anyone who can guess it.",
  "P(\\text{alguna coincidencia entre } k) \\approx 1 - e^{-k^2 / (2N)}, \\qquad k \\approx 1{,}18\\sqrt{N} \\text{ para } P = \\tfrac12": "P(\\text{some match among } k) \\approx 1 - e^{-k^2 / (2N)}, \\qquad k \\approx 1{.}18\\sqrt{N} \\text{ for } P = \\tfrac12",
  "Pequeña, pero no nula: con más archivos crece con el cuadrado.": "Small, but not zero: with more files it grows with the square.",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Preimagen: $2^n$. Colisión: $2^{n/2}$. Esa raíz cuadrada es la que decide el tamaño de todas las huellas.": "Preimage: $2^n$. Collision: $2^{n/2}$. That square root is what decides the size of every fingerprint.",
  "Preimagen: $2^{": "Preimage: $2^{",
  "Probabilidad de colisión": "Probability of a collision",

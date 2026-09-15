@@ -124,7 +124,7 @@
  "Pohlig y Hellman: cuando p − 1 se descompone en trozos pequeños": "Pohlig and Hellman: when p − 1 breaks into small pieces",
  "Pohlig-Hellman reduce el problema a los factores de $p - 1$: el mayor factor primo de $p - 1$ manda, no $p$.": "Pohlig-Hellman reduces the problem to the factors of $p - 1$: the largest prime factor of $p - 1$ rules, not $p$.",
  "Pohlig-Hellman rompe el logaritmo en el tiempo que marca el mayor factor primo de $p - 1$. Primos seguros: $p = 2q + 1$.": "Pohlig-Hellman breaks the logarithm in the time set by the largest prime factor of $p - 1$. Safe primes: $p = 2q + 1$.",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Primos seguros": "Safe primes",
  "Resolver $5^x \\equiv 8 \\pmod{23}$ con el método de Shanks.": "Solve $5^x \\equiv 8 \\pmod{23}$ with Shanks's method.",
  "Resta 1, divide entre 2, y mira si lo que sale es primo.": "Subtract 1, divide by 2, and see whether what comes out is prime.",

@@ -97,7 +97,7 @@
  "Por carácter: $\\log_2 ": "Per character: $\\log_2 ",
  "Por eso las recomendaciones actuales no piden símbolos raros sino <strong>azar de verdad</strong>: cinco o seis palabras elegidas con dados de una lista de 7776, el método <em>diceware</em>, dan 65 o 78 bits que se recuerdan; o mejor aún, un gestor de contraseñas que genere 20 símbolos al azar y los recuerde por ti.": "That is why current recommendations do not ask for odd symbols but for <strong>genuine randomness</strong>: five or six words chosen with dice from a list of 7776, the <em>diceware</em> method, give 65 or 78 bits that can be remembered; or better still, a password manager that generates 20 random symbols and remembers them for you.",
  "Posibilidades": "Possibilities",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Quien conoce la fórmula y un valor conoce todos los siguientes: por eso no sirve para claves.": "Whoever knows the formula and one value knows all the following ones: that is why it is no good for keys.",
  "Restando dos ecuaciones desaparece $c$: $x_2 - x_1 \\equiv a\\,(x_1 - x_0)$.": "Subtracting two equations makes $c$ disappear: $x_2 - x_1 \\equiv a\\,(x_1 - x_0)$.",
  "Se elige al azar ": "Chosen at random: ",

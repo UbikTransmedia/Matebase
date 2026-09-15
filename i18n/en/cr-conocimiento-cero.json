@@ -116,7 +116,7 @@
  "Peggy tramposa": "Cheating Peggy",
  "Peggy: k = ": "Peggy: k = ",
  "Pocos: un nonce de ": "Few: a nonce of ",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Que no ata: Alicia puede abrir con el otro bit": "It does not bind: Alice can open with the other bit",
  "Que no oculta nada: Benito calcula $H(0)$ y $H(1)$ y ve cuál coincide": "It hides nothing: Bob computes $H(0)$ and $H(1)$ and sees which one matches",
  "Quien puede responder a dos retos con el mismo compromiso conoce $x$: no era impostora. Eso es lo que hace sólido el protocolo, y también lo que castiga reutilizar $k$.": "Whoever can answer two challenges with the same commitment knows $x$: she was no impostor. That is what makes the protocol sound, and also what punishes reusing $k$.",

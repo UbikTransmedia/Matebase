@@ -104,7 +104,7 @@
  "Por eso «el modelo no ve el género» no es una garantía de nada, y sí lo es —parcialmente— publicar el rendimiento desglosado.": "That is why “the model does not see gender” is no guarantee of anything, and publishing the broken-down performance —partially— is.",
  "Por qué la dimensión lo cambia todo": "Why the dimension changes everything",
  "Por qué quitar la columna no basta": "Why removing the column is not enough",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Pregúntate si el problema aparece por optimizar una medida, por lo que había en los datos, por la derivada respecto de la entrada, o por un teorema.": "Ask yourself whether the problem appears from optimising a measure, from what was in the data, from the derivative with respect to the input, or from a theorem.",
  "Puede que además lo estuviera, pero el fenómeno aparece incluso con un evaluador razonable: lo que lo rompe es la presión de optimización sobre él, no un fallo inicial.": "It may also have been, but the phenomenon appears even with a reasonable evaluator: what breaks it is the optimisation pressure on it, not an initial fault.",
  "Que no exista un método general no impide que algo funcione casi siempre. Las personas tampoco resolvemos el problema de la parada.": "That no general method exists does not stop something working almost always. People do not solve the halting problem either.",

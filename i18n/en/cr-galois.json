@@ -82,7 +82,7 @@
  "Porque los polinomios son más rápidos que los números": "Because polynomials are faster than numbers",
  "Porque módulo 256 la mitad de los bytes, los pares, no tienen inverso, y el cifrado necesita deshacer cualquier multiplicación": "Because modulo 256 half the bytes, the even ones, have no inverse, and the cipher needs to undo any multiplication",
  "Potencias: ": "Powers: ",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Reducir cuando no sale nada": "Reducing when nothing goes out",
  "Resultado: $": "Result: $",
  "Se lee cada bit como el coeficiente de una potencia de $x$: el byte $0101\\,0111$, que en hexadecimal es 57, es el polinomio $x^6 + x^4 + x^2 + x + 1$. Los coeficientes solo pueden valer 0 o 1, y se operan módulo 2, así que $1 + 1 = 0$: sumar dos polinomios es hacer XOR de los bytes, y no hay llevadas.": "Each bit is read as the coefficient of a power of $x$: the byte $0101\\,0111$, which in hexadecimal is 57, is the polynomial $x^6 + x^4 + x^2 + x + 1$. The coefficients can only be 0 or 1, and they are operated on modulo 2, so $1 + 1 = 0$: adding two polynomials is XORing the bytes, and there are no carries.",

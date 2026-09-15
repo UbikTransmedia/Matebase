@@ -131,7 +131,7 @@
  "No compila. El resultado es un <code>float</code>, los números llevan punto decimal y la función de la letra se llama <code>letra</code>.": "It does not compile. The result is a <code>float</code>, the numbers carry a decimal point and the letter's function is called <code>letra</code>.",
  "Ondas": "Waves",
  "Por qué": "Why",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Predice la imagen": "Predict the image",
  "Preguntar en $p - \\vec s$ dibuja la figura en $+\\vec s$: a la derecha y abajo. Usada debajo de las letras, es su sombra.": "Asking at $p - \\vec s$ draws the figure at $+\\vec s$: to the right and down. Used under the letters, it is their shadow.",
  "Preguntar en $p - \\vec s$ dibuja la figura trasladada $+\\vec s$: con $\\vec s = (0{,}05, -0{,}05)$, a la derecha y hacia abajo.": "Asking at $p - \\vec s$ draws the figure translated by $+\\vec s$: with $\\vec s = (0{.}05, -0{.}05)$, to the right and downwards.",

@@ -94,7 +94,7 @@
  "Por qué funciona": "Why it works",
  "Por tanto basta con probar hasta $\\lfloor\\sqrt{": "So it is enough to try up to $\\lfloor\\sqrt{",
  "Potencia modular": "Modular power",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Preguntas todavía abiertas": "Questions still open",
  "Primos: los ladrillos": "Primes: the building blocks",
  "Puedes reducir cada número antes de operar: $": "You can reduce each number before operating: $",
@@ -143,5 +143,5 @@
  "}$, así que el exponente se puede reducir módulo $": "}$, so the exponent can be reduced modulo $",
  "¿Cuánto vale $47\\cdot 38 \\bmod 5$? Intenta no multiplicar 47 por 38.": "What is $47\\cdot 38 \\bmod 5$? Try not to multiply 47 by 38.",
  "¿Qué condición tiene que cumplir $e$ respecto de $\\varphi(n)$?": "What condition must $e$ satisfy with respect to $\\varphi(n)$?",
- "↺ Reiniciar": "↺ Restart"
+ "↺ Reiniciar": "↺ Reset"
 }

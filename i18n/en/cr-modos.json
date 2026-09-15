@@ -93,7 +93,7 @@
  "Ningún modo detecta alteraciones: cifrar no es autenticar.": "No mode detects tampering: encrypting is not authenticating.",
  "No hay relleno: el cifrado mide exactamente ": "There is no padding: the ciphertext is exactly ",
  "Nos vemos en el puente a las siete. Trae los planos.": "We meet at the bridge at seven o'clock. Bring the plans.",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Que los dos bloques del mensaje eran idénticos, sin saber qué contenían": "That the two message blocks were identical, without knowing what they contained",
  "Rellenar, encadenar, descifrar con XOR: tres detalles que parecen menores y en los que se han apoyado ataques reales contra sistemas con AES intacto.": "Padding, chaining, decrypting with XOR: three details that look minor and on which real attacks against systems with AES intact have rested.",
  "Relleno y descifrado en CBC": "Padding and decryption in CBC",

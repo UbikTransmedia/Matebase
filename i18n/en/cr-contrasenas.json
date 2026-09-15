@@ -98,7 +98,7 @@
  "Pocas: una tabla precalculada de ": "Few: a precomputed table of ",
  "Poco: hay que subir las iteraciones.": "Not much: the iterations have to go up.",
  "Pocos: contra una contraseña de ": "Few: against a password of ",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Qué contraseña cae": "Which password falls",
  "Robert Morris y Ken Thompson describieron en 1979 cómo Unix guardaba las contraseñas: un hash basado en DES, con una sal de 12 bits y 25 iteraciones a propósito para frenar la fuerza bruta. Casi todo lo de este tema estaba ya ahí. PBKDF2 se estandarizó en 2000; bcrypt es de Niels Provos y David Mazières, de 1999; scrypt, de Colin Percival, de 2009, fue el primero en exigir memoria; y Argon2 ganó en 2015 un concurso público de funciones para contraseñas.": "Robert Morris and Ken Thompson described in 1979 how Unix stored passwords: a DES-based hash, with a 12-bit salt and 25 iterations deliberately to slow brute force down. Almost everything in this topic was already there. PBKDF2 was standardised in 2000; bcrypt is by Niels Provos and David Mazières, from 1999; scrypt, by Colin Percival, from 2009, was the first to demand memory; and Argon2 won a public contest for password functions in 2015.",
  "Romper hashes con un diccionario": "Breaking hashes with a dictionary",

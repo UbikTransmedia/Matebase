@@ -81,7 +81,7 @@
  "Porque a la máquina no le gusta repetir nombres": "Because the machine does not like repeating names",
  "Porque así el programa generado es más legible": "Because that way the generated program is more readable",
  "Porque un programa puede tener muchos «si» y «mientras», y si dos usaran la misma etiqueta los saltos irían al sitio equivocado": "Because a program can have many “si” and “mientras”, and if two used the same label the jumps would go to the wrong place",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Quedan <strong>": "There are <strong>",
  "Qué se gana y qué se pierde": "What is gained and what is lost",
  "Recuerda que el salto se lleva el caso falso.": "Remember that the jump takes the false case.",

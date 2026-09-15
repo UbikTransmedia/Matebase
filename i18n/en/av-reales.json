@@ -5,7 +5,7 @@
  " (no mínimo)": " (not a minimum)",
  " \\in A$ y <strong>sí</strong> es máximo.": " \\in A$ and it <strong>is</strong> a maximum.",
  " \\in A$ y <strong>sí</strong> es mínimo.": " \\in A$ and it <strong>is</strong> a minimum.",
- "$ (cuatro decimales si hacen falta).": "$ (four decimals if needed).",
+ "$ (cuatro decimales si hacen falta).": "$ (four decimal places if needed).",
  "$ está acotado superiormente. ¿Tiene supremo <strong>dentro de $\\mathbb{Q}$</strong>?<br><span style=\"font-size:0.875rem;color:var(--ink-faint)\">En $\\mathbb{R}$ siempre lo tendría: la pregunta es si el supremo resulta ser racional.</span>": "$ is bounded above. Does it have a supremum <strong>inside $\\mathbb{Q}$</strong>?<br><span style=\"font-size:0.875rem;color:var(--ink-faint)\">In $\\mathbb{R}$ it always would: the question is whether the supremum turns out to be rational.</span>",
  "$, así que <strong>no</strong> hay máximo.": "$, so there is <strong>no</strong> maximum.",
  "$, así que <strong>no</strong> hay mínimo.": "$, so there is <strong>no</strong> minimum.",
@@ -105,7 +105,7 @@
  "Oscila alrededor de 2. El mayor valor es $2+\\frac12 = 2{,}5$ (en $n=2$) y el menor es $2-1 = 1$ (en $n=1$). Los dos se alcanzan.": "It oscillates around 2. The largest value is $2+\\frac12 = 2{.}5$ (at $n=2$) and the smallest is $2-1 = 1$ (at $n=1$). Both are attained.",
  "Paso <strong>": "Step <strong>",
  "Por qué falla en ℚ": "Why it fails in ℚ",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Probar que $\\sup\\left\\{\\dfrac{n}{n + 1} : n \\in \\mathbb{N}\\right\\} = 1$ y que no es máximo.": "Prove that $\\sup\\left\\{\\dfrac{n}{n + 1} : n \\in \\mathbb{N}\\right\\} = 1$ and that it is not a maximum.",
  "Propiedad": "Property",
  "Que hiciera falta un axioma así no fue evidente durante dos milenios. El cálculo funcionó ciento cincuenta años sobre una idea vaga de «cantidad continua» heredada de Eudoxo y de Euclides. En 1817 Bolzano publicó una demostración del teorema del valor intermedio y se dio cuenta de que le faltaba una propiedad de los números que nadie había escrito. Y en 1872, en el mismo año, Dedekind y Cantor publicaron dos construcciones distintas de $\\mathbb{R}$: Dedekind con sus <em>cortaduras</em> —definir un real como el corte que produce en los racionales— y Cantor con sucesiones de Cauchy. Dedekind contaba que la idea se le ocurrió el 24 de noviembre de 1858, preparando una clase de cálculo y avergonzado de tener que apelar a la intuición geométrica.": "That such an axiom was needed was not obvious for two millennia. Calculus worked for a hundred and fifty years on a vague idea of “continuous quantity” inherited from Eudoxus and Euclid. In 1817 Bolzano published a proof of the intermediate value theorem and realised that he was missing a property of the numbers that nobody had written down. And in 1872, in the same year, Dedekind and Cantor published two different constructions of $\\mathbb{R}$: Dedekind with his <em>cuts</em> —defining a real as the cut it produces in the rationals— and Cantor with Cauchy sequences. Dedekind used to say the idea came to him on 24 November 1858, while preparing a calculus class and ashamed of having to appeal to geometric intuition.",
@@ -180,5 +180,5 @@
  "Ínfimo: lo mismo por abajo": "Infimum: the same thing from below",
  "ínfimo": "infimum",
  "ínfimos": "infima",
- "↺ Reiniciar": "↺ Restart"
+ "↺ Reiniciar": "↺ Reset"
 }

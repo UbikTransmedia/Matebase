@@ -90,7 +90,7 @@
  "Pollard rho para $n = ": "Pollard rho for $n = ",
  "Pollard rho: cumpleaños entre los restos": "Pollard rho: birthdays among the remainders",
  "Por debajo de los 100 bits: hoy se considera insuficiente.": "Below 100 bits: today it is considered insufficient.",
- "Practica": "Practise",
+ "Practica": "Practice",
  "RSA-1024": "RSA-1024",
  "RSA-129": "RSA-129",
  "RSA-129 iba a durar $10^{13}$ años y duró 17. Las claves se dimensionan para la vida útil del dato, con margen.": "RSA-129 was going to last $10^{13}$ years and lasted 17. Keys are sized for the useful life of the data, with margin.",

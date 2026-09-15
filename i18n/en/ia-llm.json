@@ -106,7 +106,7 @@
  "Paso <strong>": "Step <strong>",
  "Pensar que la arquitectura de los modelos grandes es distinta": "Thinking that the large models' architecture is different",
  "Perplejidad $= e^L$ con la pérdida en nats. El máximo es el tamaño del vocabulario.": "Perplexity $= e^L$ with the loss in nats. The maximum is the vocabulary's size.",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Preentrenar: una sola tarea, repetida": "Pretraining: a single task, repeated",
  "Presupone que hay una base de datos dentro de la que se consulta, y no la hay: no hay separación entre «recordar» y «redactar». Todo sale del mismo cálculo de probabilidades.": "That presupposes there is a database inside that is consulted, and there is not: there is no separation between “remembering” and “writing”. It all comes from the same probability calculation.",
  "Prueba las tres temperaturas después de entrenar. Con $\\tau = 0{,}05$ el modelo se atasca repitiendo «perro perro perro», porque elegir siempre el máximo lleva a bucles; con $\\tau = 1{,}2$ sale ruido. Es [[ia-secuencias|lo que ya viste]] con los n-gramas, ahora sobre una red.": "Try the three temperatures after training. With $\\tau = 0{.}05$ the model gets stuck repeating “perro perro perro”, because always choosing the maximum leads to loops; with $\\tau = 1{.}2$ out comes noise. It is [[ia-secuencias|what you already saw]] with n-grams, now on a network.",
@@ -165,6 +165,6 @@
  "una ley de potencias es una recta en ejes logarítmicos": "a power law is a straight line on logarithmic axes",
  "warn": "warn",
  "}$. Si el número de parámetros se multiplica ": "}$. If the number of parameters is multiplied ",
- "↺ Reiniciar": "↺ Restart",
+ "↺ Reiniciar": "↺ Reset",
  "▶ Entrenar": "▶ Train"
 }

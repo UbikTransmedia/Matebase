@@ -73,7 +73,7 @@
  "Porque el orden en que aparecen las piezas ya dice qué se hace con qué, sin dejar ninguna duda": "Because the order in which the pieces appear already says what is done with what, leaving no doubt",
  "Porque las operaciones se hacen de izquierda a derecha": "Because the operations are done left to right",
  "Porque solo sirve para expresiones sencillas": "Because it only works for simple expressions",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Recorrer un árbol <strong>en postorden</strong> —ramas antes que nudo— es lo que hace falta, porque una operación necesita sus operandos ya resueltos.": "Walking a tree <strong>in postorder</strong>, branches before node, is what is needed, because an operation needs its operands already resolved.",
  "Recorrer un árbol por abajo": "Walking a tree from below",
  "Recorriéndolo en postorden —ramas antes que nudo— sale <code>": "Walking it in postorder, branches before node, out comes <code>",

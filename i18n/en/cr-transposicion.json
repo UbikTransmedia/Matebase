@@ -99,7 +99,7 @@
  "Orden alfabético de las letras: ": "Alphabetical order of the letters: ",
  "Orden de lectura: ": "Reading order: ",
  "Pensar que sustituir y transponer es lo mismo que sustituir dos veces": "Thinking that substituting and transposing is the same as substituting twice",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Rejilla: ": "Grid: ",
  "Se escribe la palabra clave encima de la rejilla, una letra por columna, y se leen las columnas en el orden alfabético de esas letras. Con la clave CLAVE, las columnas se leen en el orden A, C, E, L, V: la tercera primero, luego la primera, la quinta, la segunda y la cuarta. Una palabra de $n$ letras distintas es una forma de escribir una permutación de $n$ columnas, y hay $n!$.": "You write the keyword above the grid, one letter per column, and read the columns in the alphabetical order of those letters. With the key CLAVE, the columns are read in the order A, C, E, L, V: the third first, then the first, the fifth, the second and the fourth. A word of $n$ distinct letters is a way of writing a permutation of $n$ columns, and there are $n!$.",
  "Se lee: <em>«sigma manda el 1 al 3, el 2 al 1, el 3 al 5, el 4 al 2 y el 5 al 4»</em>: la primera columna que se lee es la tercera, la segunda que se lee es la primera, y así.<br><br>Descifrar es aplicar la permutación inversa: saber que el primer bloque del cifrado es la columna 3, el segundo la columna 1, y volver a colocarlos.": "It reads: <em>“sigma sends 1 to 3, 2 to 1, 3 to 5, 4 to 2 and 5 to 4”</em>: the first column read is the third, the second read is the first, and so on.<br><br>Deciphering is applying the inverse permutation: knowing that the ciphertext's first block is column 3, the second column 1, and putting them back in place.",

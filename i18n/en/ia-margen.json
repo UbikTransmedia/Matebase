@@ -92,7 +92,7 @@
  "Por el núcleo: $(": "By the kernel: $(",
  "Por eso el truco no es una aproximación. Se obtiene el resultado exacto de seis dimensiones con una cuenta de dos.": "That is why the trick is not an approximation. You get the exact six-dimensional result with a two-dimensional calculation.",
  "Por las seis componentes: $": "By the six components: $",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Primero el producto escalar componente a componente. Después súmale 1 y eleva al cuadrado.": "First the dot product component by component. Then add 1 and square.",
  "Prueba el segundo mando: aleja todo lo que quieras un punto del interior de su nube. <strong>La frontera óptima no se mueve.</strong> Solo mandan los puntos que tocan el borde del pasillo, y a esos se les llama <strong>vectores soporte</strong>. Es una propiedad notable: el modelo final depende de un puñado de ejemplos y se puede tirar el resto.": "Try the second slider: move a point in the interior of its cloud as far away as you like. <strong>The optimal boundary does not move.</strong> Only the points that touch the corridor's edge have any say, and those are called <strong>support vectors</strong>. It is a remarkable property: the final model depends on a handful of examples and the rest can be thrown away.",
  "Qué fronteras permite": "Which boundaries it allows",

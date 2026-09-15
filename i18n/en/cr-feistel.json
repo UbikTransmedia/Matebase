@@ -96,7 +96,7 @@
  "Otras claves, otro ataque": "Other keys, another attack",
  "Parejas de claves: $2^k\\cdot 2^k = 2^{2k}$.": "Pairs of keys: $2^k\\cdot 2^k = 2^{2k}$.",
  "Por eso $f$ puede ser cualquier cosa: cuanto más no lineal, mejor.": "That is why $f$ can be anything: the more non-linear the better.",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Quién": "Who",
  "R_i = L_{i+1}, \\qquad L_i = R_{i+1} \\oplus f(L_{i+1}, K_i)": "R_i = L_{i+1}, \\qquad L_i = R_{i+1} \\oplus f(L_{i+1}, K_i)",
  "Ronda de Feistel: $L_{i+1} = R_i$, $R_{i+1} = L_i \\oplus f(R_i, K_i)$. Se deshace con las claves al revés, sin invertir nunca $f$.": "Feistel round: $L_{i+1} = R_i$, $R_{i+1} = L_i \\oplus f(R_i, K_i)$. It is undone with the keys reversed, never inverting $f$.",

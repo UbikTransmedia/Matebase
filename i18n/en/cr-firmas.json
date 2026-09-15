@@ -94,7 +94,7 @@
  "Pago 100 euros a Benito": "I pay 100 euros to Bob",
  "Por cuadrados sucesivos, y compara con $m$.": "By successive squaring, and compare with $m$.",
  "Por qué se firma el hash": "Why the hash is signed",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Presentar $s_1 s_2 \\bmod n$ como firma válida del importe 30 000": "Present $s_1 s_2 \\bmod n$ as a valid signature for the amount 30,000",
  "Prueba que lo firmó el dueño de la clave. Si la clave se robó, o el dueño firmó sin leer, la firma es válida igual.": "It proves that the key's owner signed it. If the key was stolen, or the owner signed without reading, the signature is valid all the same.",
  "RSA es multiplicativo, no aditivo: $s_1 + s_2$ no firma nada. El producto sí.": "RSA is multiplicative, not additive: $s_1 + s_2$ signs nothing. The product does.",

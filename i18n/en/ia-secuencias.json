@@ -115,7 +115,7 @@
  "Perplejidad de entrenamiento y de evaluación según el contexto: una baja siempre y la otra sube a partir del segundo orden": "Training and evaluation perplexity by context: one always falls and the other rises from the second order on",
  "Perplejidad: la entropía, exponenciada": "Perplexity: entropy, exponentiated",
  "Por eso la perplejidad siempre está entre 1 y el tamaño del vocabulario: son los dos extremos de saberlo todo y no saber nada.": "That is why perplexity is always between 1 and the vocabulary's size: they are the two extremes of knowing everything and knowing nothing.",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Recuerda el recorrido: la perplejidad va de 1 (certeza total) al tamaño del vocabulario (no saber nada), y se dispara a infinito si alguna probabilidad es cero.": "Remember the range: perplexity goes from 1 (total certainty) to the vocabulary's size (knowing nothing), and shoots to infinity if any probability is zero.",
  "Reproducir el entrenamiento no es la meta. La meta es asignar alta probabilidad a texto que no se ha visto, y eso se mide con la perplejidad sobre un trozo reservado.": "Reproducing the training set is not the goal. The goal is to assign high probability to text that has not been seen, and that is measured with the perplexity on a reserved piece.",
  "Se acerca al reparto uniforme, cuya entropía sería $\\log_2 5 = 2{,}322$ bits: a esta temperatura el modelo dice cualquier cosa.": "It approaches the uniform sharing, whose entropy would be $\\log_2 5 = 2{.}322$ bits: at this temperature the model says anything at all.",

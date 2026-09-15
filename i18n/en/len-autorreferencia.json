@@ -81,7 +81,7 @@
  "Porque cada celda que quiere escribir le cuesta tres celdas de programa, así que crece más deprisa de lo que alcanza": "Because each cell it wants to print costs it three cells of program, so it grows faster than it reaches",
  "Porque la memoria de la máquina es demasiado pequeña": "Because the machine's memory is too small",
  "Porque un programa no puede leer su propia memoria": "Because a program cannot read its own memory",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Queda una consecuencia del bloque que todavía no se ha cobrado. En [[maq-cpu|la máquina]] se vio que un programa son números en celdas, indistinguibles de los datos. Y en [[len-compilar|el compilador]] se ha escrito un programa que lee otro programa y escribe un tercero. Junta las dos cosas y aparece un terreno raro: <strong>los programas que hablan de programas, incluido de sí mismos</strong>.": "One consequence of the block has still not been cashed in. In [[maq-cpu|the machine]] it was seen that a program is numbers in cells, indistinguishable from data. And in [[len-compilar|the compiler]] a program has been written that reads another program and writes a third. Put the two together and an odd territory appears: <strong>programs that talk about programs, including about themselves</strong>.",
  "Qué era lo que faltaba": "What it was that was missing",
  "Qué escribe el que se mira": "What the one that looks at itself prints",

@@ -110,7 +110,7 @@
  "Padre: $": "Parent: $",
  "Pensar que un bosque es mejor porque cada árbol es mejor": "Thinking that a forest is better because each tree is better",
  "Por muchos árboles que se añadan no se baja de $": "However many trees are added you do not get below $",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Primero la del padre con los totales. Después, la de cada hijo, pesadas por $": "First the parent's with the totals. Then each child's, weighted by $",
  "Que se equivoquen en cosas distintas": "Let them be wrong about different things",
  "Repitiendo la búsqueda en cada trozo, el árbol va partiendo el espacio en rectángulos, porque cada pregunta es del tipo «¿esta medida pasa de tanto?». Y si se le deja crecer sin límite, acaba con una hoja por cada ejemplo: acierta el <strong>100 %</strong> de lo que ya ha visto y no ha aprendido nada. Ese es el problema que tiene un tema entero más adelante.": "By repeating the search on each piece, the tree goes on splitting the space into rectangles, because each question is of the type “does this measurement exceed such and such?”. And if it is allowed to grow without limit, it ends up with one leaf per example: it gets <strong>100 %</strong> of what it has already seen right and has learned nothing. That is the problem that gets a whole topic later on.",

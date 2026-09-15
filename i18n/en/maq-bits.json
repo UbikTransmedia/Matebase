@@ -111,7 +111,7 @@
  "Porque el $-128$ se necesita para marcar el desbordamiento": "Because $-128$ is needed to mark overflow",
  "Porque el cero ocupa un sitio del lado positivo, y queda uno más para los negativos": "Because zero takes a place on the positive side, leaving one more for the negatives",
  "Porque hay dos ceros y uno de ellos se usa como $-128$": "Because there are two zeros and one of them is used as $-128$",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Pulsa cada bit para encenderlo o apagarlo. Debajo, lo que vale en decimal y en hexadecimal. Fíjate en el peso de cada posición: el de la izquierda vale 128 y el de la derecha 1.": "Press each bit to switch it on or off. Below, what it is worth in decimal and in hexadecimal. Notice the weight of each position: the left one is worth 128 and the right one 1.",
  "Queda <code>0x": "It comes to <code>0x",
  "Qué se puede escribir exacto": "What can be written exactly",

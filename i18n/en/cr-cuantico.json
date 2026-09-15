@@ -94,7 +94,7 @@
  "Porque AES es más nuevo": "Because AES is newer",
  "Porque AES no usa números primos": "Because AES does not use prime numbers",
  "Porque contra una clave simétrica solo tiene el algoritmo de Grover, que da la raíz cuadrada: $2^{128}$, aún inalcanzable. Contra RSA, Shor factoriza en tiempo polinómico": "Because against a symmetric key it only has Grover's algorithm, which gives the square root: $2^{128}$, still out of reach. Against RSA, Shor factors in polynomial time",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Qué rompe y qué no": "What it breaks and what it does not",
  "RSA-2048": "RSA-2048",
  "Raíz cuadrada de $2^b$ es $2^{b/2}$: la mitad de los bits.": "The square root of $2^b$ is $2^{b/2}$: half the bits.",

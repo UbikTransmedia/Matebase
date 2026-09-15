@@ -109,7 +109,7 @@
  "Pensar que más profundidad siempre es mejor": "Thinking that more depth is always better",
  "Podar o no podar": "To prune or not to prune",
  "Por qué se supone lo peor": "Why the worst is assumed",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Primero cada hijo MIN se queda con el menor de sus dos hojas. Después la raíz MAX se queda con el mayor de los tres resultados.": "First each MIN child keeps the smaller of its two leaves. Then the MAX root keeps the largest of the three results.",
  "Primero, cuánto asegura el primer hijo: es un MIN. Después, el segundo hijo va a valer como mucho su primera hoja, porque también es MIN. Compara.": "First, how much the first child secures: it is a MIN. Then, the second child will be worth at most its first leaf, because it is a MIN too. Compare.",
  "Puede estimar 20 donde de verdad faltan 10, así que se pasa. A* podría devolver un camino que no es el más corto.": "It can estimate 20 where 10 are really left, so it overshoots. A* could return a path that is not the shortest.",

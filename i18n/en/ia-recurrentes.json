@@ -98,7 +98,7 @@
  "Porque su camino principal es una suma con un factor multiplicativo cercano a 1, en vez de una matriz que se eleva a la longitud de la secuencia": "Because its main path is an addition with a multiplicative factor close to 1, instead of a matrix raised to the sequence's length",
  "Porque tiene más parámetros y por eso aprende más": "Because it has more parameters and so learns more",
  "Porque usa sigmoides en vez de tangentes hiperbólicas": "Because it uses sigmoids instead of hyperbolic tangents",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Prácticamente cero: la red no puede aprender ninguna dependencia de esa longitud.": "Practically zero: the network cannot learn any dependency of that length.",
  "Puertas que se aprenden": "Gates that are learned",
  "Razón: $\\left(\\frac{": "Ratio: $\\left(\\frac{",

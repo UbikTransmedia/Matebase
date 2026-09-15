@@ -1,7 +1,7 @@
 {
  "$\\theta = \\operatorname{atan2}(": "$\\theta = \\operatorname{atan2}(",
- ")</code>. Calcula <code>length(p)</code> y <code>atan(p.y, p.x)</code>, es decir, su distancia al centro y su ángulo en radianes (cuatro decimales).": ")</code>. Compute <code>length(p)</code> and <code>atan(p.y, p.x)</code>, that is, its distance to the centre and its angle in radians (four decimals).",
- ")</code>? (cuatro decimales)": ")</code>? (four decimals)",
+ ")</code>. Calcula <code>length(p)</code> y <code>atan(p.y, p.x)</code>, es decir, su distancia al centro y su ángulo en radianes (cuatro decimales).": ")</code>. Compute <code>length(p)</code> and <code>atan(p.y, p.x)</code>, that is, its distance to the centre and its angle in radians (four decimal places).",
+ ")</code>? (cuatro decimales)": ")</code>? (four decimal places)",
  ", ángulo = ": ", angle = ",
  ". El mismo divisor para las dos: eso es lo que evita la deformación.": ". The same divisor for both: that is what avoids the distortion.",
  "</strong>, así que el ángulo tiene que caer en el tramo correspondiente.": "</strong> quadrant, so the angle has to fall in the corresponding range.",
@@ -73,7 +73,7 @@
  "Pensar en grados": "Thinking in degrees",
  "Pitágoras para $r$ y la arcotangente de dos argumentos para el ángulo.": "Pythagoras for $r$ and the two-argument arctangent for the angle.",
  "Poner el origen en el centro": "Putting the origin at the centre",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Predice la imagen": "Predict the image",
  "Rayas horizontales": "Horizontal stripes",
  "Resta media pantalla a cada componente y divide las dos entre 500.": "Subtract half a screen from each component and divide both by 500.",

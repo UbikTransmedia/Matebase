@@ -85,7 +85,7 @@
  "P(\\text{base coincide}) = \\tfrac12 \\Rightarrow \\text{clave cribada} \\approx \\tfrac{n}{2} \\text{ bits}": "P(\\text{bases agree}) = \\tfrac12 \\Rightarrow \\text{sifted key} \\approx \\tfrac{n}{2} \\text{ bits}",
  "P(\\text{error en un bit cribado} \\mid \\text{Eva mide y reenvía}) = \\tfrac14": "P(\\text{error in a sifted bit} \\mid \\text{Eve measures and resends}) = \\tfrac14",
  "Pensar que Eva copia los fotones y reenvía los originales": "Thinking that Eve copies the photons and resends the originals",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Probabilidad de no meter error en un bit, elevada a cuatro.": "The probability of not introducing an error in one bit, to the fourth power.",
  "Puede medirlos; lo que no puede es hacerlo sin alterarlos ni copiarlos primero. El rastro es inevitable, no la medición.": "She can measure them; what she cannot do is measure them without altering them, or copy them first. The trace is unavoidable, not the measurement.",
  "Que Eva no puede medir los fotones": "That Eve cannot measure the photons",

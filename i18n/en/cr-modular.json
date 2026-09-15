@@ -104,7 +104,7 @@
  "Pieza 1: múltiplo de ": "Piece 1: a multiple of ",
  "Potencia por cuadrados": "Power by squaring",
  "Potencias por cuadrados sucesivos": "Powers by successive squaring",
- "Practica": "Practise",
+ "Practica": "Practice",
  "RSA y sus parientes trabajan con números de 600 cifras. Nada de lo que viene funcionaría si calcular con ellos costara lo que parece: un inverso módulo un número de 600 cifras, una potencia con exponente de 600 cifras. La razón de que una tarjeta de crédito lo haga en un milisegundo son tres algoritmos, y los tres son mucho más viejos que los ordenadores.": "RSA and its relatives work with 600-digit numbers. Nothing that follows would work if computing with them cost what it seems to: an inverse modulo a 600-digit number, a power with a 600-digit exponent. The reason a credit card does it in a millisecond is three algorithms, and all three are much older than computers.",
  "Reducir solo al final": "Reducing only at the end",
  "Restos que determinan un número": "Remainders that determine a number",

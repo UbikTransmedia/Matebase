@@ -106,7 +106,7 @@
  "Porque cada cambio baja estrictamente la energía y solo hay un número finito de estados": "Because every change strictly lowers the energy and there is only a finite number of states",
  "Porque los pesos son simétricos": "Because the weights are symmetric",
  "Porque se actualizan las neuronas en orden aleatorio": "Because the neurons are updated in random order",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Queda en": "It ends up at",
  "Recordar una imagen medio borrada": "Remembering a half-erased image",
  "Recuperado exactamente. La red ha caído en el valle correcto y ya no se mueve: es un mínimo.": "Recovered exactly. The network has fallen into the right valley and no longer moves: it is a minimum.",

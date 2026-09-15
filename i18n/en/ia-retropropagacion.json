@@ -101,7 +101,7 @@
  "Por qué hacia atrás, y no hacia delante": "Why backwards, and not forwards",
  "Por qué la tolerancia no es minúscula": "Why the tolerance is not minuscule",
  "Por un nodo del grafo llega, desde su derecha, $\\frac{\\partial L}{\\partial y} = ": "Into a node of the graph there arrives, from its right, $\\frac{\\partial L}{\\partial y} = ",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Resta las dos pérdidas y divide por $2h$, que es la distancia total entre los dos puntos.": "Subtract the two losses and divide by $2h$, which is the total distance between the two points.",
  "Retropropagar a mano en una red 2-2-1": "Backpropagating by hand in a 2-2-1 network",
  "Retropropagar es la regla de la cadena nodo a nodo: lo que llega por detrás, por la derivada local, hacia la izquierda.": "Backpropagating is the chain rule node by node: what arrives from behind, times the local derivative, to the left.",

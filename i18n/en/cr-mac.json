@@ -99,7 +99,7 @@
  "Merkle-Damgård permite la extensión de longitud: de $t$ sale la etiqueta de $m \\Vert \\text{relleno} \\Vert m^{*}$ sin conocer $k$.": "Merkle-Damgård allows length extension: from $t$ comes the tag of $m \\Vert \\text{padding} \\Vert m^{*}$ without knowing $k$.",
  "No: $H(k \\Vert m)$ cae por la extensión de longitud, que aquí no funciona. Es más débil que HMAC, no equivalente a la construcción rota.": "No: $H(k \\Vert m)$ falls to length extension, which does not work here. It is weaker than HMAC, not equivalent to the broken construction.",
  "Pagar 100 euros a Benito": "Pay 100 euros to Bob",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Probabilidad de colar una etiqueta": "Probability of slipping a tag through",
  "Probabilidad: $2^{-": "Probability: $2^{-",
  "Qué se hace": "What is done",

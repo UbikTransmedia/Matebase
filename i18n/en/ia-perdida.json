@@ -113,7 +113,7 @@
  "Porque el logaritmo hace los números más grandes": "Because the logarithm makes the numbers larger",
  "Porque no usa la sigmoide": "Because it does not use the sigmoid",
  "Porque su derivada respecto de $p$ lleva un $p(1-p)$ en el denominador que cancela exactamente el de la sigmoide": "Because its derivative with respect to $p$ carries a $p(1-p)$ in the denominator that exactly cancels the sigmoid's",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Producto: $": "Product: $",
  "Rehaz la cuenta con el gradiente cien veces mayor.": "Redo the calculation with the gradient a hundred times larger.",
  "Resta la etiqueta a lo que contesta el modelo.": "Subtract the label from what the model answers.",

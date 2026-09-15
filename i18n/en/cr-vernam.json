@@ -95,7 +95,7 @@
  "P(m \\mid c) = P(m) \\quad \\text{para todo } m, c": "P(m \\mid c) = P(m) \\quad \\text{for every } m, c",
  "Para cada mensaje de 20 letras hay una clave que produce exactamente ese cifrado, y todas las claves son igual de probables. La longitud es lo único que el sistema no oculta.": "For each 20-letter message there is a key that produces exactly that ciphertext, and all the keys are equally likely. The length is the only thing the system does not hide.",
  "Para cada mensaje posible hay exactamente una clave que da el cifrado interceptado: Eva no puede descartar ninguno.": "For each possible message there is exactly one key that gives the intercepted ciphertext: Eve can rule none out.",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Primera letra: ": "First letter: ",
  "Puede reducirlo a unos pocos candidatos con frecuencias": "She can narrow it to a few candidates with frequencies",
  "Resta SGTA de HOLA, letra a letra.": "Subtract SGTA from HOLA, letter by letter.",

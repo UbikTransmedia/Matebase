@@ -121,7 +121,7 @@
  "Porque si no, la clave se descifra": "Because otherwise the key is decrypted",
  "Poscuántico = corre en un ordenador normal y resiste a Shor. Dos familias: retículos y funciones hash.": "Post-quantum = it runs on an ordinary computer and resists Shor. Two families: lattices and hash functions.",
  "Poscuántico no significa cuántico: son algoritmos que corren en un ordenador normal, pero cuya seguridad no cae ante Shor. Hacían falta problemas difíciles distintos de la factorización, y los candidatos ganadores del concurso del NIST se basan en dos ideas: los <strong>retículos</strong>, que dan cifrado y firma, y las <strong>funciones hash</strong>, que dan firmas con una seguridad que no depende de ninguna conjetura nueva.": "Post-quantum does not mean quantum: these are algorithms that run on an ordinary computer, but whose security does not fall to Shor. Hard problems other than factoring were needed, and the winning candidates of the NIST contest rest on two ideas: <strong>lattices</strong>, which give encryption and signatures, and <strong>hash functions</strong>, which give signatures with a security that depends on no new conjecture.",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Precio": "Price",
  "Preimagen clásica: $2^{": "Classical preimage: $2^{",
  "Producto escalar, más el error, módulo q.": "Scalar product, plus the error, modulo q.",

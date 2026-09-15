@@ -86,7 +86,7 @@
  "No lleva argumento, así que ocupa una sola celda.": "It takes no argument, so it occupies a single cell.",
  "Pensar que el contador avanza siempre de uno en uno": "Thinking the counter always advances by one",
  "Pensar que hace falta una instrucción por cada cosa que se quiera hacer": "Thinking you need one instruction for each thing you want to do",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Programa almacenado": "Stored program",
  "Programa y datos viven en la misma memoria y <strong>nada los distingue</strong>: el significado de una celda lo decide por dónde pasa el contador.": "Program and data live in the same memory and <strong>nothing distinguishes them</strong>: the meaning of a cell is decided by where the counter goes.",
  "Que la máquina tarde distinto según lo que calcula parece inofensivo y no lo es. Si una comparación de contraseñas se detiene en la primera letra que falla, el <em>tiempo</em> que tarda dice cuántas letras eran correctas, y con eso se adivina la contraseña letra a letra sin romper nada. Eso es un ataque por canal lateral, y está en [[cr-canales|cuando el reloj habla]]: el mismo reloj que aquí es un lujo de diseño, allí es una fuga de información.": "That the machine should take different times depending on what it computes seems harmless and is not. If a password comparison stops at the first letter that fails, the <em>time</em> it takes says how many letters were correct, and with that the password is guessed letter by letter without breaking anything. That is a side-channel attack, and it is in [[cr-canales|when the clock talks]]: the same clock that here is a design luxury is there an information leak.",

@@ -94,7 +94,7 @@
  "Porque entonces el gradiente no podría pasar hacia el codificador: el azar estaría entre medias": "Because then the gradient could not pass through to the encoder: the randomness would be in between",
  "Porque muestrear es más lento": "Because sampling is slower",
  "Porque son distribuciones distintas": "Because they are different distributions",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Prácticamente cero: la campana ya es la normal estándar, que es justo a donde tira este término.": "Practically zero: the bell already is the standard normal, which is exactly where this term pulls.",
  "Quitar el término KL para reconstruir mejor": "Removing the KL term to reconstruct better",
  "Razón: $": "Ratio: $",
@@ -157,6 +157,6 @@
  "z = \\mu + \\sigma\\,\\varepsilon, \\qquad \\varepsilon \\sim N(0, 1)": "z = \\mu + \\sigma\\,\\varepsilon, \\qquad \\varepsilon \\sim N(0, 1)",
  "¿Cuánto vale la derivada de $z$ respecto de $\\mu$?": "What is the derivative of $z$ with respect to $\\mu$?",
  "¿Por qué no se muestrea directamente de $N(\\mu, \\sigma^2)$ en vez de escribir $z = \\mu + \\sigma\\varepsilon$?": "Why is there no direct sampling from $N(\\mu, \\sigma^2)$ instead of writing $z = \\mu + \\sigma\\varepsilon$?",
- "↺ Reiniciar": "↺ Restart",
+ "↺ Reiniciar": "↺ Reset",
  "▶ Entrenar": "▶ Train"
 }

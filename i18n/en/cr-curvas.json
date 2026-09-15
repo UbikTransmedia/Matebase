@@ -110,7 +110,7 @@
  "Pohlig-Hellman ataca el subgrupo pequeño. Se exige que el orden sea primo o casi.": "Pohlig-Hellman attacks the small subgroup. The order is required to be prime or nearly so.",
  "Porque contra la curva solo hay ataques de raíz cuadrada ($2^{128}$), y contra RSA hay cribas mucho mejores que la raíz cuadrada": "Because against the curve there are only square-root attacks ($2^{128}$), and against RSA there are sieves much better than the square root",
  "Porque los puntos tienen dos coordenadas": "Because points have two coordinates",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Reduce los dos lados módulo $p$ y compara.": "Reduce both sides modulo $p$ and compare.",
  "Se lee: <em>«el número de puntos de la curva difiere de pe más uno en como mucho dos raíz de pe»</em>. Una curva sobre un primo de 256 bits tiene unos $2^{256}$ puntos, ni uno de más ni de menos que $2^{129}$.<br><br>El número exacto se calcula con el algoritmo de Schoof, y se busca que sea primo, o primo por un factor pequeño: así todo punto tiene orden enorme y Pohlig-Hellman no tiene dónde agarrarse.": "It reads: <em>“the number of points on the curve differs from p plus one by at most two root p”</em>. A curve over a 256-bit prime has about $2^{256}$ points, not one more or less than $2^{129}$.<br><br>The exact number is computed with Schoof's algorithm, and it is chosen to be prime, or prime times a small factor: that way every point has an enormous order and Pohlig-Hellman has nothing to grab hold of.",
  "Seguridad": "Security",

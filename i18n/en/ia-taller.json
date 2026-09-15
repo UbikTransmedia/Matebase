@@ -92,7 +92,7 @@
  "No hay magia: hay un producto escalar, un gradiente y una regla de Bayes, repetidos muchísimas veces.": "There is no magic: there is a dot product, a gradient and Bayes's rule, repeated a great many times.",
  "No siempre: con demasiadas capas y sin conexiones residuales el gradiente se apaga, y en problemas sencillos una sola capa basta y entrena antes.": "Not always: with too many layers and no residual connections the gradient dies, and on simple problems one layer is enough and trains sooner.",
  "Para ": "For ",
- "Para medirte": "To measure yourself",
+ "Para medirte": "To test yourself",
  "Parámetros de una red del taller": "Parameters of a workshop network",
  "Paso <strong>": "Step <strong>",
  "Pensar que la matemática de esto es nueva": "Thinking that the mathematics of this is new",
@@ -102,7 +102,7 @@
  "Porque cada capa transforma el espacio una vez más, y hace falta doblarlo varias veces para desenrollar una espiral": "Because each layer transforms the space once more, and it has to be folded several times to unwind a spiral",
  "Porque más capas siempre es mejor que más neuronas": "Because more layers is always better than more neurons",
  "Porque una capa de 36 neuronas no puede representar una espiral": "Because a layer of 36 neurons cannot represent a spiral",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Pregúntate qué suposición sobre el problema codifica cada arquitectura.": "Ask yourself what assumption about the problem each architecture encodes.",
  "Quedarse con «es sólo estadística»": "Settling for “it is only statistics”",
  "Qué arquitectura para qué problema": "Which architecture for which problem",
@@ -197,6 +197,6 @@
  "una red convolucional comparte los mismos pesos por toda la imagen": "a convolutional network shares the same weights across the whole image",
  "¿Cuántos sesgos hay en una capa de 12 neuronas?": "How many biases are there in a layer of 12 neurons?",
  "Último tema del bloque, y no trae ninguna idea nueva: trae todos los mandos a la vez. Un banco de pruebas donde cambiar datos, arquitectura y optimizador y ver qué pasa; una red entera escrita línea a línea, sin nada escondido; y el mapa de qué matemática hay debajo de cada arquitectura que has visto.": "The block's last topic, and it brings no new idea: it brings all the controls at once. A test bench where you change data, architecture and optimiser and see what happens; a whole network written line by line, with nothing hidden; and the map of what mathematics lies beneath each architecture you have seen.",
- "↺ Reiniciar": "↺ Restart",
+ "↺ Reiniciar": "↺ Reset",
  "▶ Entrenar": "▶ Train"
 }

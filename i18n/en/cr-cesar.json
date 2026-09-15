@@ -102,7 +102,7 @@
  "Pasa cada letra a número (A = 0), suma ": "Turn each letter into a number (A = 0), add ",
  "Pega un texto cifrado con César, o cifra tú uno con el botón. La lista prueba todas las claves y marca la que da un texto con las frecuencias de letras del castellano.": "Paste a text enciphered with Caesar, or encipher one yourself with the button. The list tries every key and marks the one that gives a text with Spanish letter frequencies.",
  "Por eso el espacio de claves es 26 y no infinito.": "That is why the key space is 26 and not infinite.",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Probando claves, con $k = ": "Trying keys, with $k = ",
  "Prueba las 25 claves: solo una da una palabra.": "Try the 25 keys: only one gives a word.",
  "Restar $k$ módulo 26 es lo mismo que sumar $26 - k$. Así que descifrar un César de clave 3 es cifrar con clave 23: la misma máquina sirve para las dos cosas, solo cambia el número que se le pone. Y hay una clave especial: con $k = 13$, cifrar dos veces devuelve el original, porque $13 + 13 = 26$. Es el <strong>ROT13</strong> de los foros de internet, que se usa no para esconder sino para que el lector tenga que querer leer: la solución de un acertijo, el final de una película.": "Subtracting $k$ modulo 26 is the same as adding $26 - k$. So deciphering a Caesar with key 3 is enciphering with key 23: the same machine serves for both, only the number you set changes. And there is a special key: with $k = 13$, enciphering twice gives back the original, because $13 + 13 = 26$. It is the <strong>ROT13</strong> of internet forums, used not to hide but so that the reader has to want to read: the answer to a riddle, the ending of a film.",

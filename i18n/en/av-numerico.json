@@ -4,12 +4,12 @@
  " pasos para lo mismo.</span>": " steps for the same.</span>",
  "$ pasos queda $\\dfrac{": "$ steps what is left is $\\dfrac{",
  "$ pasos.": "$ steps.",
- "$ pasos? (seis decimales)": "$ steps? (six decimals)",
- "$ subintervalos (seis decimales).": "$ subintervals (six decimals).",
+ "$ pasos? (seis decimales)": "$ steps? (six decimal places)",
+ "$ subintervalos (seis decimales).": "$ subintervals (six decimal places).",
  "$ — error $": "$ — error $",
  "$ — error <strong>$": "$ — error <strong>$",
  "$ → unos <strong>": "$ → about <strong>",
- "$, calcula $x_1$ (seis decimales).": "$, compute $x_1$ (six decimals).",
+ "$, calcula $x_1$ (seis decimales).": "$, compute $x_1$ (six decimal places).",
  "$, con $f = ": "$, with $f = ",
  "$, lo que da la iteración $x_{n+1} = \\frac{1}{2}\\left(x_n + \\frac{": "$, which gives the iteration $x_{n+1} = \\frac{1}{2}\\left(x_n + \\frac{",
  "$, y los trapecios <strong>siempre sobrestiman</strong> una función convexa.": "$, and the trapezium rule <strong>always overestimates</strong> a convex function.",
@@ -101,7 +101,7 @@
  "Porque necesita la derivada, y a veces no se tiene": "Because it needs the derivative, and sometimes you do not have it",
  "Porque puede no converger: si la tangente es casi horizontal, el salto se va lejos": "Because it may not converge: if the tangent is almost horizontal, the jump goes far away",
  "Porque solo funciona con polinomios": "Because it only works with polynomials",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Punto medio: $": "Midpoint: $",
  "Queremos $\\dfrac{": "We want $\\dfrac{",
  "Redondeando hacia arriba: $n = ": "Rounding up: $n = ",
@@ -150,5 +150,5 @@
  "}$ tomando logaritmos, y redondear hacia arriba.": "}$ by taking logarithms, and round up.",
  "}{x_n}\\right)$. Partiendo de $x_0 = ": "}{x_n}\\right)$. Starting from $x_0 = ",
  "¿Cuántas cifras correctas tiene cada método tras tres pasos?": "How many correct digits does each method have after three steps?",
- "↺ Reiniciar": "↺ Restart"
+ "↺ Reiniciar": "↺ Reset"
 }

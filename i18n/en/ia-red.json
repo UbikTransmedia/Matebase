@@ -102,7 +102,7 @@
  "Paso ": "Step ",
  "Pesos: $": "Weights: $",
  "Por qué importaban las matrices": "Why the matrices mattered",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Primera neurona: $": "First neuron: $",
  "Producto de matrices en el orden $W_2 W_1$: fila de la segunda por columna de la primera.": "Matrix product in the order $W_2 W_1$: row of the second times column of the first.",
  "Que dos capas resolvían el XOR se sabía desde siempre; lo que no había era manera de <em>entrenarlas</em>, y ese es el motivo real del parón que siguió al libro de Minsky y Papert de 1969. El teorema de aproximación universal lo demostró George Cybenko en 1989 para sigmoides, y Kurt Hornik lo generalizó en 1991 a cualquier activación no polinómica, lo que dejó claro que la sigmoide no tenía nada de especial: lo esencial era <strong>no ser un polinomio</strong>. Y en ese mismo momento ya existía desde 1986 la manera de entrenar estas redes, que es el tema siguiente.": "That two layers solved XOR had always been known; what there was not was a way of <em>training them</em>, and that is the real reason for the halt that followed Minsky and Papert's book of 1969. The universal approximation theorem was proved by George Cybenko in 1989 for sigmoids, and Kurt Hornik generalised it in 1991 to any non-polynomial activation, which made it clear that the sigmoid had nothing special about it: the essential thing was <strong>not being a polynomial</strong>. And at that very moment the way of training these networks had existed since 1986, and it is the next topic.",

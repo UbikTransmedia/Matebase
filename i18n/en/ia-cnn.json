@@ -110,7 +110,7 @@
  "Porque los mismos pesos se usan en todas las posiciones, en vez de tener unos distintos para cada una": "Because the same weights are used at every position, instead of having different ones for each",
  "Porque los píxeles se comprimen antes de entrar": "Because the pixels are compressed before going in",
  "Porque mira menos píxeles: solo una ventanita de 3×3": "Because it looks at fewer pixels: only a little 3×3 window",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Prueba a conectar una imagen pequeña, de $28\\times 28$ píxeles, a una capa densa de 128 neuronas. Son $784$ entradas, así que la matriz tiene $784 \\times 128 = 100\\,352$ pesos, más los sesgos. Y eso es solo la primera capa de la red más modesta imaginable.": "Try connecting a small image, of $28\\times 28$ pixels, to a dense layer of 128 neurons. That is $784$ inputs, so the matrix has $784 \\times 128 = 100\\,352$ weights, plus the biases. And that is only the first layer of the most modest network imaginable.",
  "Reordenar las columnas no cambia el problema, así que no hay estructura espacial que explotar. Aquí suele ganar un bosque.": "Reordering the columns does not change the problem, so there is no spatial structure to exploit. Here a forest usually wins.",
  "Respuesta": "Answer",

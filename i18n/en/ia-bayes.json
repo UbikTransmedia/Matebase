@@ -99,7 +99,7 @@
  "Porque en los correos las palabras sí son independientes": "Because in emails the words really are independent",
  "Porque para decidir solo hace falta saber qué clase puntúa más alto, y el error afecta parecido a las dos": "Because to decide you only need to know which class scores higher, and the error affects both in a similar way",
  "Positiva: la palabra es más típica de la basura y empuja hacia allí.": "Positive: the word is more typical of junk and pushes that way.",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Pregúntate si lo que se pide depende solo del <em>orden</em> entre las dos clases, o si hace falta que el número esté bien o que el modelo vea relaciones entre palabras.": "Ask yourself whether what is asked depends only on the <em>order</em> between the two classes, or whether the number has to be right or the model has to see relations between words.",
  "Puntuación como <strong>basura</strong>: ": "Score as <strong>spam</strong>: ",
  "Queda el problema de calcular $P(t \\mid B)$, la probabilidad de que un correo de basura sea <em>exactamente</em> este texto. Sigue sin poderse contar. Aquí entra la idea que le da nombre al método: hacer como si cada palabra apareciera <strong>independientemente de las demás</strong>, y multiplicar.": "There remains the problem of computing $P(t \\mid B)$, the probability that a junk email is <em>exactly</em> this text. It still cannot be counted. Here comes the idea that gives the method its name: to act as if each word appeared <strong>independently of the others</strong>, and multiply.",

@@ -104,7 +104,7 @@
  "Por qué esa repetición converge": "Why that repetition converges",
  "Porque hay que elegir la acción que se ejecuta a continuación": "Because the action to be executed next has to be chosen",
  "Porque se quiere aprender el valor de jugar bien después, aunque ahora mismo se esté explorando al azar": "Because what is to be learned is the value of playing well afterwards, even if right now you are exploring at random",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Primero el objetivo $r + \\gamma\\max Q$, después $Q + \\alpha(\\text{objetivo} - Q)$.": "First the target $r + \\gamma\\max Q$, then $Q + \\alpha(\\text{target} - Q)$.",
  "Q nuevo": "new Q",
  "Q(s, a) \\leftarrow Q(s, a) + \\alpha \\bigl[\\, r + \\gamma \\max_{a'} Q(s', a') - Q(s, a) \\,\\bigr]": "Q(s, a) \\leftarrow Q(s, a) + \\alpha \\bigl[\\, r + \\gamma \\max_{a'} Q(s', a') - Q(s, a) \\,\\bigr]",
@@ -169,6 +169,6 @@
  "valor exacto": "exact value",
  "warn": "warn",
  "¿Por qué en Q-learning aparece un $\\max$ sobre las acciones del estado siguiente?": "Why does a $\\max$ over the next state's actions appear in Q-learning?",
- "↺ Reiniciar": "↺ Restart",
+ "↺ Reiniciar": "↺ Reset",
  "▶ Entrenar": "▶ Train"
 }

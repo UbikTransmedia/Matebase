@@ -101,7 +101,7 @@
  "Pasos: ": "Steps: ",
  "Pesos": "Weights",
  "Plano de entradas de una neurona con dos entradas, con la recta de disparo y las cuatro esquinas del cuadrado unidad": "Input plane of a two-input neuron, with the firing line and the four corners of the unit square",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Primero calcula la salida $y$ con los pesos actuales.": "First compute the output $y$ with the current weights.",
  "Puerta": "Gate",
  "Quince años después, Frank Rosenblatt le añadió lo que faltaba: una regla para que la neurona <strong>aprenda de sus errores</strong>. Esa regla es un bucle de [[cib-realimentacion|realimentación]] como los de todo este bloque, y es el antepasado directo de las redes neuronales que hoy reconocen caras, traducen idiomas y escriben textos.": "Fifteen years later, Frank Rosenblatt added what was missing: a rule for the neuron to <strong>learn from its mistakes</strong>. That rule is a [[cib-realimentacion|feedback]] loop like those of this whole block, and it is the direct ancestor of the neural networks that today recognise faces, translate languages and write texts.",

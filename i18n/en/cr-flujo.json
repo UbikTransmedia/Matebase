@@ -91,7 +91,7 @@
  "No coincide. En cada paso: apunta el bit de la derecha, calcula el nuevo como XOR del primero y el último, desplaza y mete el nuevo por la izquierda.": "It does not match. At each step: note the right-hand bit, compute the new one as the XOR of the first and the last, shift, and put the new one in on the left.",
  "No coincide: XOR bit a bit del cifrado y el flujo.": "It does not match: bit-by-bit XOR of the ciphertext and the stream.",
  "No llega a $": "It does not reach $",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Primer paso: sale ": "First step: out comes ",
  "Recorre los 256 estados": "It runs through the 256 states",
  "Repetir el nonce con la misma clave": "Repeating the nonce with the same key",

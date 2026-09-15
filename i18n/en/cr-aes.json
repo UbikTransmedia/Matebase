@@ -88,7 +88,7 @@
  "Por qué diez rondas, y por qué se confía": "Why ten rounds, and why it is trusted",
  "Porque en la última ronda ya está todo mezclado": "Because in the last round everything is mixed already",
  "Porque una mezcla lineal al final, sin clave después ni S-box, se deshace gratis: no añade seguridad y sí coste": "Because a linear mixing at the end, with no key or S-box after it, is undone for free: it adds no security and does add cost",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Qué hace": "What it does",
  "RotWord: $\\text{": "RotWord: $\\text{",
  "Se lee: <em>«la columna nueva es la matriz por la columna vieja»</em>, con los productos en $\\text{GF}(2^8)$ y las sumas como XOR. El 2 es «multiplicar por $x$», xtime, y el 3 es $x + 1$: xtime más el propio byte.<br><br>La matriz se eligió con entradas mínimas, para que multiplicar cueste poco, y de modo que cualquier cambio en un byte de la columna cambie los cuatro de la salida. Con ShiftRows, en dos rondas cada byte ha influido en los dieciséis.": "It reads: <em>“the new column is the matrix times the old column”</em>, with the products in $\\text{GF}(2^8)$ and the sums as XOR. The 2 is “multiply by $x$”, xtime, and the 3 is $x + 1$: xtime plus the byte itself.<br><br>The matrix was chosen with minimal entries, so that multiplying costs little, and so that any change in one byte of the column changes all four of the output. With ShiftRows, in two rounds every byte has influenced all sixteen.",

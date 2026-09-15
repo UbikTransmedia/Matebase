@@ -81,7 +81,7 @@
  "Nunca se da la parte $x = 0$, y los coeficientes salen del generador criptográfico.": "The share $x = 0$ is never handed out, and the coefficients come from the cryptographic generator.",
  "Para cada parte, el producto de $-x_j$ entre $x_i - x_j$ sobre las otras dos.": "For each share, the product of $-x_j$ over $x_i - x_j$ across the other two.",
  "Pendiente: $a = (y_2 - y_1)(x_2 - x_1)^{-1} \\bmod ": "Slope: $a = (y_2 - y_1)(x_2 - x_1)^{-1} \\bmod ",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Pueden reducirlo a unos pocos candidatos": "They can narrow it to a few candidates",
  "Recuperar el secreto": "Recovering the secret",
  "Repartir el secreto cortándolo en trozos": "Sharing the secret by cutting it into pieces",

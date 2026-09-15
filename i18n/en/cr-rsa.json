@@ -95,7 +95,7 @@
  "No necesita descifrar. La clave pública le permite cifrar candidatos, y solo hay dos.": "She does not need to decrypt. The public key lets her encrypt candidates, and there are only two.",
  "Otras claves": "Other keys",
  "Por el teorema chino: $m_p = ": "By the Chinese theorem: $m_p = ",
- "Practica": "Practise",
+ "Practica": "Practice",
  "Publicar $(n, e)$; guardar $d$, y también $p$, $q$ para descifrar deprisa con el teorema chino. Borrar todo lo demás.": "Publish $(n, e)$; keep $d$, and also $p$, $q$ to decrypt quickly with the Chinese theorem. Erase everything else.",
  "Quien conoce un par $(e, d)$ factoriza $n$, y entonces conoce todos los demás $d$. Cada clave, su $n$.": "Whoever knows one pair $(e, d)$ factors $n$, and then knows every other $d$. Each key, its own $n$.",
  "RSA con $p = 61$ y $q = 53$": "RSA with $p = 61$ and $q = 53$",
