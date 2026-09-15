@@ -44,6 +44,10 @@
  "<strong>La prueba de Merkle.</strong> $4096 = 2^{12}$: doce niveles, doce hashes hermanos. A 32 bytes cada uno, 384 bytes, frente a los cientos de kilobytes del bloque entero.": "<strong>The Merkle proof.</strong> $4096 = 2^{12}$: twelve levels, twelve sibling hashes. At 32 bytes each, 384 bytes, against the hundreds of kilobytes of the whole block.",
  "<strong>Lo que enseña.</strong> Las dos ideas son asimétricas a propósito: minar cuesta y verificar no; el bloque es grande y la prueba es pequeña. Esa asimetría es lo que permite que un móvil compruebe sin confiar en nadie.": "<strong>What it teaches.</strong> Both ideas are asymmetric on purpose: mining costs and verifying does not; the block is large and the proof is small. That asymmetry is what lets a phone check without trusting anybody.",
  "<strong>Verificar.</strong> Un solo hash: quien recibe el bloque comprueba en un microsegundo lo que costó un segundo producir. Con los 78 bits de Bitcoin, un segundo frente a $10^{23}$ intentos.": "<strong>Verifying.</strong> A single hash: whoever receives the block checks in a microsecond what took a second to produce. With Bitcoin's 78 bits, a second against $10^{23}$ attempts.",
+ "@frag": {
+  "la cuarta parte": "a quarter",
+  "la mitad": "half"
+ },
  "Ajustar la dificultad": "Adjusting the difficulty",
  "Alicia paga 3 a Dani": "Alice pays 3 to Dani",
  "Alicia paga 5 a Benito": "Alice pays 5 to Bob",
