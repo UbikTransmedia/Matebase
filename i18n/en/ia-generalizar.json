@@ -27,6 +27,9 @@
  "<strong>Validación</strong>": "<strong>Validation</strong>",
  "<strong>una sola vez</strong>": "<strong>once only</strong>",
  "<th class=\"num\">entrenamiento</th><th class=\"num\">validación</th></tr></thead><tbody>": "<th class=\"num\">training</th><th class=\"num\">validation</th></tr></thead><tbody>",
+ "@frag": {
+  "Con $\\lambda = ": "With $\\lambda = "
+ },
  "Al minimizar esto, el modelo tiene que decidir si le compensa un peso grande a cambio de ajustar mejor.": "On minimising this, the model has to decide whether a large weight is worth it in exchange for fitting better.",
  "Algo peor que el 4 %, porque al elegir el mejor de veinte se ha aprovechado parte del ruido de la validación": "Something worse than 4 %, because in choosing the best of twenty part of the validation's noise has been exploited",
  "Aquí está el fondo: el error sobre los no vistos es el menor de todos. Es el grado que habría que elegir.": "Here is the bottom: the error on the unseen ones is the smallest of all. It is the degree that should be chosen.",

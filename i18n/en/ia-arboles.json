@@ -43,6 +43,11 @@
  "<strong>Izquierda</strong> (": "<strong>Left</strong> (",
  "<strong>La decisión.</strong> Gana el color, con 1 bit frente a 0,189. Y además su ganancia iguala la entropía del padre, que es el máximo posible: los dos hijos son puros y el árbol termina con una sola pregunta.": "<strong>The decision.</strong> Colour wins, with 1 bit against 0.189. And its gain also equals the parent's entropy, which is the maximum possible: both children are pure and the tree ends with a single question.",
  "<strong>Su ganancia.</strong> $1 - 0{,}811 = 0{,}189$ bits. Ha servido de poco: sigue habiendo mucha duda en los dos lados.": "<strong>Its gain.</strong> $1 - 0{.}811 = 0{.}189$ bits. It has been of little use: there is still a lot of doubt on both sides.",
+ "@frag": {
+  ", con ": ", with ",
+  "<strong>Un bosque de 30 árboles</strong>": "<strong>A forest of 30 trees</strong>",
+  "<strong>Un árbol</strong>": "<strong>A tree</strong>"
+ },
  "A esta profundidad el árbol ya está dibujando un rectángulo alrededor de casi cada punto: se lo está aprendiendo de memoria.": "At this depth the tree is already drawing a rectangle around almost every point: it is learning it by heart.",
  "Aislar una seta pura de cien apenas da ganancia, porque la media va pesada por $n_i/n$. Sin el peso, el árbol separaría de uno en uno.": "Isolating one pure mushroom out of a hundred gives hardly any gain, because the mean is weighted by $n_i/n$. Without the weight, the tree would separate one by one.",
  "Al estar desequilibrado, baja de 1 bit: ya hay una clase más probable que la otra.": "Being unbalanced, it falls below 1 bit: there is already one class likelier than the other.",

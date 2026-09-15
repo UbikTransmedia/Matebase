@@ -43,6 +43,10 @@
  "<strong>La potencia.</strong> $13 = 1101_2$. Empezando en 1: bit 1: $1^2\\cdot 5 = 5$. Bit 1: $25\\cdot 5 = 125 \\equiv 10$. Bit 0: $100 \\equiv 8$. Bit 1: $64\\cdot 5 = 320 \\equiv 21$. Así que $5^{13} \\equiv 21$, con cuatro cuadrados y tres productos.": "<strong>The power.</strong> $13 = 1101_2$. Starting at 1: bit 1: $1^2\\cdot 5 = 5$. Bit 1: $25\\cdot 5 = 125 \\equiv 10$. Bit 0: $100 \\equiv 8$. Bit 1: $64\\cdot 5 = 320 \\equiv 21$. So $5^{13} \\equiv 21$, with four squarings and three products.",
  "<strong>Lo que enlaza.</strong> En RSA, $e = 13$ podría ser la clave pública, $17$ sería la privada si $\\varphi(n) = 22$, y descifrar módulo $n = 35$ se haría módulo 5 y módulo 7 por separado, recomponiendo con el teorema chino.": "<strong>What links up.</strong> In RSA, $e = 13$ could be the public key, $17$ would be the private one if $\\varphi(n) = 22$, and decrypting modulo $n = 35$ would be done modulo 5 and modulo 7 separately, recombining with the Chinese theorem.",
  "<strong>Teorema chino del resto</strong>: restos módulo primos entre sí determinan un único número módulo el producto, y se recompone con inversos.": "<strong>Chinese remainder theorem</strong>: remainders modulo coprime numbers determine a single number modulo the product, and it is recombined with inverses.",
+ "@frag": {
+  "$, con $": "$, with $",
+  "$</strong>, con ": "$</strong>, with "
+ },
  "Aplicar el teorema chino con módulos que comparten factores": "Applying the Chinese theorem with moduli that share factors",
  "Buscar el inverso probando": "Looking for the inverse by trial",
  "Cada fila es un bit del exponente: se eleva al cuadrado el acumulado y, si el bit es 1, se multiplica por la base. Todo módulo $m$. Cuenta las filas y compáralas con el exponente.": "Each row is one bit of the exponent: the accumulator is squared and, if the bit is 1, multiplied by the base. All modulo $m$. Count the rows and compare them with the exponent.",

@@ -22,6 +22,9 @@
  "<strong>El punto de equilibrio.</strong> Se busca $k$ con $10 \\cdot 0{,}8^k = 1$, o sea $0{,}8^k = 0{,}1$. Tomando logaritmos, $k = \\dfrac{\\ln 0{,}1}{\\ln 0{,}8} = \\dfrac{-2{,}303}{-0{,}223} = 10{,}32$.": "<strong>The break-even point.</strong> You look for $k$ with $10 \\cdot 0{.}8^k = 1$, that is $0{.}8^k = 0{.}1$. Taking logarithms, $k = \\dfrac{\\ln 0{.}1}{\\ln 0{.}8} = \\dfrac{-2{.}303}{-0{.}223} = 10{.}32$.",
  "<strong>La lectura.</strong> Hasta diez pasos de espera compensa; a partir de once, no. Y fíjate en lo brusco que es: un premio diez veces mayor deja de interesar por esperar once turnos.": "<strong>The reading.</strong> Up to ten steps of waiting it pays; from eleven on, it does not. And notice how abrupt it is: a reward ten times larger stops being of interest because of waiting eleven turns.",
  "<strong>Qué pasa si se cambia $\\gamma$.</strong> Con $\\gamma = 0{,}95$ el equilibrio se va a $k = \\frac{\\ln 0{,}1}{\\ln 0{,}95} = 44{,}9$: el agente se vuelve mucho más paciente. El descuento es, literalmente, el horizonte del agente.": "<strong>What happens if $\\gamma$ is changed.</strong> With $\\gamma = 0{.}95$ the break-even point goes to $k = \\frac{\\ln 0{.}1}{\\ln 0{.}95} = 44{.}9$: the agent becomes far more patient. The discount is, literally, the agent's horizon.",
+ "@frag": {
+  "$. Con $\\gamma = ": "$. With $\\gamma = "
+ },
  "Ahora mismo $Q(s,a) = ": "Right now $Q(s,a) = ",
  "Ahora nadie le dice al agente cómo funciona el pasillo: sólo puede probar. Empieza en una casilla al azar, se mueve, y a veces cobra. Entrena y compara la tabla que aprende con la solución exacta calculada arriba.": "Now nobody tells the agent how the corridor works: it can only try. It starts on a random square, moves, and sometimes collects. Train it and compare the table it learns with the exact solution computed above.",
  "Antes": "Before",

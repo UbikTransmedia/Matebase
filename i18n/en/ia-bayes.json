@@ -25,6 +25,9 @@
  "<strong>Probabilidad de «gratis».</strong> En basura: $\\frac{8+1}{40+20} = \\frac{9}{60} = 0{,}15$. En buenos: $\\frac{0+1}{60+20} = \\frac{1}{80} = 0{,}0125$.": "<strong>Probability of “free”.</strong> In junk: $\\frac{8+1}{40+20} = \\frac{9}{60} = 0{.}15$. In good: $\\frac{0+1}{60+20} = \\frac{1}{80} = 0{.}0125$.",
  "<strong>Probabilidad de «reunión».</strong> En basura: $\\frac{0+1}{60} = 0{,}01667$. En buenos: $\\frac{6+1}{80} = \\frac{7}{80} = 0{,}0875$.": "<strong>Probability of “meeting”.</strong> In junk: $\\frac{0+1}{60} = 0{.}01667$. In good: $\\frac{6+1}{80} = \\frac{7}{80} = 0{.}0875$.",
  "<strong>Sin suavizado habría sido un desastre.</strong> «Gratis» tendría probabilidad 0 en buenos y «reunión» 0 en basura, así que las dos clases valdrían exactamente 0 y el filtro no sabría qué contestar.": "<strong>Without smoothing it would have been a disaster.</strong> “Free” would have probability 0 in good and “meeting” 0 in junk, so both classes would be exactly 0 and the filter would not know what to answer.",
+ "@frag": {
+  ", por ": ", by "
+ },
  "Abajo hay dieciséis correos ya clasificados: ocho de basura y ocho buenos. Con ellos se cuentan las palabras. Escribe un mensaje o elige uno de los de prueba, y verás la aportación de cada palabra y la decisión final.": "Below there are sixteen already classified emails: eight junk and eight good. With them the words are counted. Write a message or choose one of the test ones, and you will see each word's contribution and the final decision.",
  "Aplica el suavizado: suma 1 arriba y el vocabulario abajo.": "Apply the smoothing: add 1 on top and the vocabulary below.",
  "Basura: $": "Junk: $",

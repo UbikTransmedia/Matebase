@@ -24,6 +24,9 @@
  "<strong>Pérdida $L = ": "<strong>Loss $L = ",
  "<strong>Pérdida</strong>": "<strong>Loss</strong>",
  "<strong>exactamente la misma</strong>": "<strong>exactly the same</strong>",
+ "@frag": {
+  " y el <strong>B</strong> es $": " and <strong>B</strong> is $"
+ },
  "Al cuadrado, un error de 3 pesa nueve veces más que uno de 1: por eso el ajuste se preocupa sobre todo de los fallos gordos.": "Squared, an error of 3 weighs nine times more than one of 1: that is why the fit worries above all about the big misses.",
  "Al escalar a miles de millones de parámetros la idea no cambia: cambian el tamaño y la dificultad de hacerlo caber.": "On scaling to billions of parameters the idea does not change: what change are the size and the difficulty of making it fit.",
  "Al revés: los datos son lo único intocable. Si se cambiaran para que encajen, el modelo no habría aprendido nada de la realidad.": "The other way round: the data are the one untouchable thing. If they were changed to fit, the model would have learned nothing about reality.",

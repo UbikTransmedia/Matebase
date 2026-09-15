@@ -28,6 +28,9 @@
  "<strong>Hacia delante, salida y pérdida.</strong> $\\hat y = 2\\cdot 0{,}731 + (-1)\\cdot 0{,}5 = 0{,}962$. Con $L = (\\hat y - y)^2$: el error es $-0{,}038$ y $L = 0{,}00146$.": "<strong>Forwards, output and loss.</strong> $\\hat y = 2\\cdot 0{.}731 + (-1)\\cdot 0{.}5 = 0{.}962$. With $L = (\\hat y - y)^2$: the error is $-0{.}038$ and $L = 0{.}00146$.",
  "<strong>Seguir bajando hasta la capa oculta.</strong> Hacia $h_1$ la derivada local es $v_1 = 2$, luego $\\frac{\\partial L}{\\partial h_1} = -0{,}076\\cdot 2 = -0{,}152$. Atravesando la sigmoide se multiplica por $h_1(1-h_1) = 0{,}731\\cdot 0{,}269 = 0{,}1966$: queda $\\frac{\\partial L}{\\partial z_1} = -0{,}0299$.": "<strong>Carrying on down to the hidden layer.</strong> Towards $h_1$ the local derivative is $v_1 = 2$, so $\\frac{\\partial L}{\\partial h_1} = -0{.}076\\cdot 2 = -0{.}152$. Crossing the sigmoid it is multiplied by $h_1(1-h_1) = 0{.}731\\cdot 0{.}269 = 0{.}1966$: that leaves $\\frac{\\partial L}{\\partial z_1} = -0{.}0299$.",
  "<strong>Y por fin el peso de entrada.</strong> Como $z_1 = w_{11}x_1 + w_{12}x_2 + b_1$, la derivada local respecto de $w_{11}$ es $x_1 = 1$. Total: $\\frac{\\partial L}{\\partial w_{11}} = -0{,}0299 \\cdot 1 = -0{,}0299$.": "<strong>And at last the input weight.</strong> Since $z_1 = w_{11}x_1 + w_{12}x_2 + b_1$, the local derivative with respect to $w_{11}$ is $x_1 = 1$. In all: $\\frac{\\partial L}{\\partial w_{11}} = -0{.}0299 \\cdot 1 = -0{.}0299$.",
+ "@frag": {
+  "Una red tiene $": "A network has $"
+ },
  "A una sigmoide cuya salida vale $p = ": "Into a sigmoid whose output is $p = ",
  "Aquí está el punto dulce, alrededor de 10⁻⁵ o 10⁻⁶: los dos errores están equilibrados.": "Here is the sweet spot, around 10⁻⁵ or 10⁻⁶: the two errors are balanced.",
  "Atravesar una sigmoide": "Crossing a sigmoid",
