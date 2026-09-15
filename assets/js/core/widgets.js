@@ -11,6 +11,15 @@
 (function (global) {
   'use strict';
 
+  /* Lo que lee en voz alta un lector de pantalla y las ayudas de teclado:
+     son texto para una persona, asi que pasan por el diccionario. */
+  function UI(s) { return global.I18N ? I18N.ui(s) : s; }
+  function con(s, vals) {
+    var t = UI(s);
+    for (var k in vals) t = t.split('{' + k + '}').join(vals[k]);
+    return t;
+  }
+
   var W = {};
   var LIVE = [];   // graficas vivas, para repintar al cambiar de tema
 
@@ -221,12 +230,12 @@
     if (!txt) {
       var card = this.el.closest ? this.el.closest('.card') : null;
       var t = card && card.querySelector('.card__title');
-      txt = t ? ('Gráfica del ejemplo «' + t.textContent.trim() + '»')
-              : 'Gráfica';
+      txt = t ? con('Gráfica del ejemplo «{t}»', { t: t.textContent.trim() })
+              : UI('Gráfica');
     }
-    txt += '. Eje horizontal de ' + U.fmt(this.xmin, 2) + ' a ' + U.fmt(this.xmax, 2);
+    txt += '. ' + con('Eje horizontal de {a} a {b}', { a: U.fmt(this.xmin, 2), b: U.fmt(this.xmax, 2) });
     if (this.o.yaxis !== false) {
-      txt += '; eje vertical de ' + U.fmt(this.ymin, 2) + ' a ' + U.fmt(this.ymax, 2);
+      txt += '; ' + con('eje vertical de {a} a {b}', { a: U.fmt(this.ymin, 2), b: U.fmt(this.ymax, 2) });
     }
     txt += '.';
     if (c.tabIndex === 0) {
@@ -234,11 +243,11 @@
       // y hay que decir ademas como se maneja.
       var n = this._movibles().length;
       c.setAttribute('role', 'application');
-      c.setAttribute('aria-label', txt +
+      c.setAttribute('aria-label', txt + ' ' +
         (n === 1
-          ? ' Tiene un punto que se puede mover. Muévelo con las flechas; con Mayúsculas se mueve más despacio.'
-          : ' Tiene ' + n + ' puntos que se pueden mover. Muévelos con las flechas; ' +
-            'con Mayúsculas se mueven más despacio; la barra espaciadora pasa al punto siguiente.'));
+          ? UI('Tiene un punto que se puede mover. Muévelo con las flechas; con Mayúsculas se mueve más despacio.')
+          : con('Tiene {n} puntos que se pueden mover. Muévelos con las flechas; ' +
+              'con Mayúsculas se mueven más despacio; la barra espaciadora pasa al punto siguiente.', { n: n })));
     } else {
       c.setAttribute('role', 'img');
       c.setAttribute('aria-label', txt);
@@ -722,7 +731,7 @@
   /** Dice en voz alta (para el lector de pantalla) donde ha quedado. */
   Plot.prototype._digo = function (h) {
     if (!this._voz) return;
-    var nom = (h.o.label || h.id || 'punto').replace(/[$\\{}]/g, '');
+    var nom = (h.o.label || h.id || UI('punto')).replace(/[$\\{}]/g, '');
     this._voz.textContent = nom + ': x = ' + U.fmt(h.x, 3) + ', y = ' + U.fmt(h.y, 3);
   };
 
@@ -735,8 +744,8 @@
     // Fuera de .stage: ese recuadro recorta lo que sobresale y tiene fondo propio.
     this._voz = U.el('div.sr-solo', { 'aria-live': 'polite', 'aria-atomic': 'true' });
     var pie = U.el('div.stage__teclas', {
-      html: 'También con el teclado: <kbd>Tab</kbd> hasta el dibujo y ' +
-        '<kbd>&#8592;</kbd><kbd>&#8593;</kbd><kbd>&#8595;</kbd><kbd>&#8594;</kbd> para mover el punto.'
+      html: UI('También con el teclado: <kbd>Tab</kbd> hasta el dibujo y ' +
+        '<kbd>&#8592;</kbd><kbd>&#8593;</kbd><kbd>&#8595;</kbd><kbd>&#8594;</kbd> para mover el punto.')
     });
     var tras = this.el.nextSibling, padre = this.el.parentNode;
     if (padre) { padre.insertBefore(pie, tras); padre.insertBefore(this._voz, pie); }
@@ -961,9 +970,9 @@
       equal: true, grid: false, axes: false, cursor: 'grab',
       ariaFija: {
         role: 'application',
-        label: (o.aria || 'Dibujo en tres dimensiones') + '. Se puede girar para verlo desde otro ' +
-          'sitio: arrastrándolo, o con las flechas del teclado; más y menos acercan, y la tecla R ' +
-          'vuelve a la vista inicial.'
+        label: (o.aria || UI('Dibujo en tres dimensiones')) + '. ' +
+          UI('Se puede girar para verlo desde otro sitio: arrastrándolo, o con las flechas del ' +
+            'teclado; más y menos acercan, y la tecla R vuelve a la vista inicial.')
       },
       draw: function (g) { self.g = g; self._pinta(); }
     });
@@ -1072,8 +1081,8 @@
   Space3D.prototype._digo = function () {
     if (!this.voz) return;
     var gr = function (r) { return Math.round(r * 180 / Math.PI); };
-    this.voz.textContent = 'Vista girada: ' + gr(this.yaw - this.yaw0) + ' grados en horizontal y ' +
-      gr(this.pitch) + ' grados de elevación.';
+    this.voz.textContent = con('Vista girada: {a} grados en horizontal y {b} grados de elevación.',
+      { a: gr(this.yaw - this.yaw0), b: gr(this.pitch) });
   };
 
   Space3D.prototype._teclas = function () {
@@ -1081,9 +1090,9 @@
     c.tabIndex = 0;
     this.voz = U.el('div.sr-solo', { 'aria-live': 'polite', 'aria-atomic': 'true' });
     var pie = U.el('div.stage__teclas', {
-      html: 'Arrastra el dibujo para girarlo. Con el teclado: <kbd>Tab</kbd> hasta el dibujo, ' +
+      html: UI('Arrastra el dibujo para girarlo. Con el teclado: <kbd>Tab</kbd> hasta el dibujo, ' +
         '<kbd>&#8592;</kbd><kbd>&#8594;</kbd><kbd>&#8593;</kbd><kbd>&#8595;</kbd> para girar, ' +
-        '<kbd>+</kbd><kbd>&#8722;</kbd> para acercar y <kbd>R</kbd> para volver a la vista inicial.'
+        '<kbd>+</kbd><kbd>&#8722;</kbd> para acercar y <kbd>R</kbd> para volver a la vista inicial.')
     });
     var tras = this.plot.el.nextSibling, padre = this.plot.el.parentNode;
     if (padre) { padre.insertBefore(pie, tras); padre.insertBefore(this.voz, pie); }

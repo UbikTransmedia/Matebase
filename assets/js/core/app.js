@@ -99,6 +99,16 @@
   /** Prosa del curso escrita por el autor: va al diccionario de texto, no
       al de interfaz. Los objetivos del temario entran por aqui. */
   function TX(s) { return global.I18N ? I18N.trad(s) : s; }
+  /* Una frase entera con huecos. Se traduce primero y se rellena despues,
+     para que el orden de las palabras lo decida el idioma y no el codigo:
+     media frase traducida se lee peor que la frase original entera.
+     `con` para rotulos de interfaz, `conX` para prosa del curso. */
+  function con(s, vals) { return pon(T(s), vals); }
+  function conX(s, vals) { return pon(TX(s), vals); }
+  function pon(t, vals) {
+    for (var k in vals) t = t.split('{' + k + '}').join(vals[k]);
+    return t;
+  }
   Course.T = T;
 
   /* Los rotulos que vienen escritos en index.html. Son pocos y estan en un
@@ -265,8 +275,9 @@
     var nota = U.$('#itinNota');
     if (!nota) return;
     nota.textContent = itin === 'todo' ? '' :
-      'Solo el temario de 2.º de ' + ITIN[itin].corto + ' (' + n + ' temas). Lo de cursos ' +
-      'anteriores sigue enlazado en «Antes de empezar», al principio de cada tema.';
+      T('Solo el temario de 2.º de {c} ({n} temas). Lo de cursos ' +
+        'anteriores sigue enlazado en «Antes de empezar», al principio de cada tema.')
+        .replace('{c}', ITIN[itin].corto).replace('{n}', n);
   }
 
   /* El buscador del indice mira tambien el glosario y las dos referencias
@@ -276,7 +287,7 @@
     var viejo = U.$('.glosres', sideScroll);
     if (viejo) viejo.remove();
     if (!q || q.length < 3 || (!global.GLOSARIO && !global.GLSL && !global.JSREF)) {
-      if (q && !visibles) sideScroll.appendChild(U.el('div.glosres', null, U.el('p.glosres__nada', { text: 'Ningún tema coincide.' })));
+      if (q && !visibles) sideScroll.appendChild(U.el('div.glosres', null, U.el('p.glosres__nada', { text: T('Ningún tema coincide.') })));
       return;
     }
     function coincide(e) { return U.llano(e.t + ' ' + (e.v || '')).indexOf(q) >= 0; }
@@ -285,13 +296,13 @@
     var enJs = (global.JSREF ? global.JSREF.entradas : []).filter(coincide).slice(0, 6);
     if (!enGlosario.length && !enGlsl.length && !enJs.length && visibles) return;
     var box = U.el('div.glosres');
-    if (!visibles) box.appendChild(U.el('p.glosres__nada', { text: 'Ningún tema coincide con la búsqueda.' }));
+    if (!visibles) box.appendChild(U.el('p.glosres__nada', { text: T('Ningún tema coincide con la búsqueda.') }));
     function seccion(titulo, lista, modo, donde) {
       if (!lista.length) return;
-      box.appendChild(U.el('div.glosres__t', { text: titulo }));
+      box.appendChild(U.el('div.glosres__t', { text: T(titulo) }));
       lista.forEach(function (e) {
         box.appendChild(U.el('button.glosres__b', {
-          type: 'button', title: 'Abrir «' + e.t + '» en ' + donde,
+          type: 'button', title: T('Abrir «{t}» en {d}').replace('{t}', e.t).replace('{d}', T(donde)),
           onclick: function () { if (glosarioApi) glosarioApi.abre(modo, e.t); }
         }, [
           U.el('span.glosres__n' + (modo !== 'glos' && !e.p ? '.glosres__n--cod' : ''), { text: e.t }),
@@ -313,8 +324,8 @@
       .forEach(function (o) {
         caja.appendChild(U.el('button.themes__b', {
           type: 'button', 'data-itin': o.id,
-          title: o.id === 'todo' ? 'Mostrar el curso entero'
-            : 'Mostrar solo el temario de 2.º de ' + ITIN[o.id].largo,
+          title: o.id === 'todo' ? T('Mostrar el curso entero')
+            : T('Mostrar solo el temario de 2.º de {x}').replace('{x}', ITIN[o.id].largo),
           onclick: function () { setItinerario(o.id); }
         }, o.t));
       });
@@ -425,10 +436,10 @@
 
   function placeholder(root, t) {
     var box = U.el('div.soon');
-    box.innerHTML = '<h3>Este tema todavía no está escrito</h3>' +
-      '<p>Ya tiene su sitio reservado en el temario. Cuando se añada el archivo ' +
-      '<code>topics/' + t.id + '.js</code> aparecerá aquí sin tocar nada más.</p>' +
-      '<p><strong>Lo que cubrirá:</strong></p>';
+    box.innerHTML = '<h3>' + TX('Este tema todavía no está escrito') + '</h3><p>' +
+      conX('Ya tiene su sitio reservado en el temario. Cuando se añada el archivo ' +
+        '<code>topics/{f}.js</code> aparecerá aquí sin tocar nada más.', { f: t.id }) +
+      '</p><p><strong>' + TX('Lo que cubrirá:') + '</strong></p>';
     var ul = U.el('ul');
     (t.o || []).forEach(function (o) { ul.appendChild(U.el('li', { text: TX(o) })); });
     box.appendChild(ul);
@@ -550,15 +561,17 @@
     var total = FLAT.length;
 
     var h = U.el('div.hdr');
-    h.innerHTML = '<div class="hdr__over">Curso interactivo diseñado por ' +
-      '<a href="https://gcarbonell.com" target="_blank" rel="noopener noreferrer">' +
-      'Guillem Carbonell</a></div>' +
-      '<h1>Matemáticas desde el principio</h1>' +
-      '<p class="hdr__sub">De contar con los dedos a las matemáticas de 2.º de Bachillerato y la PAU, ' +
-      'y de ahí a los sistemas dinámicos, en ' + total +
-      ' temas con ejemplos que se tocan y ejercicios que nunca se repiten.</p>';
+    h.innerHTML = '<div class="hdr__over">' +
+      TX('Curso interactivo diseñado por ' +
+        '<a href="https://gcarbonell.com" target="_blank" rel="noopener noreferrer">Guillem Carbonell</a>') +
+      '</div><h1>' + TX('Matemáticas desde el principio') + '</h1>' +
+      '<p class="hdr__sub">' +
+      conX('De contar con los dedos a las matemáticas de 2.º de Bachillerato y la PAU, ' +
+        'y de ahí a los sistemas dinámicos, en {n} temas con ejemplos que se tocan ' +
+        'y ejercicios que nunca se repiten.', { n: total }) + '</p>';
     wrapEl.appendChild(h);
-    avisoIdioma(wrapEl, 'El curso está escrito en castellano.');
+    avisoIdioma(wrapEl, 'El curso está escrito en castellano.',
+      'La interfaz, el temario y la explicación de los temas están traducidos; el glosario, las dos referencias de lenguaje y los comentarios dentro del código siguen en castellano.');
 
     var p = new Page(wrapEl, { id: '__home' });
 
@@ -578,10 +591,11 @@
       'fórmulas traen un botón <strong>?</strong> que te las lee en voz alta: reconocer un símbolo y ' +
       'saber pronunciarlo no es lo mismo, y nadie aprende un idioma que no sabe decir.');
 
-    p.text('El recorrido va de contar con los dedos a la teoría del caos, pasando por todo el temario ' +
+    p.text(conX('El recorrido va de contar con los dedos a la teoría del caos, pasando por todo el temario ' +
       'de la ESO y el Bachillerato español. No hay vídeos, no hay que registrarse y no se envía nada ' +
-      'a ninguna parte: son ' + total + ' temas que se leen a tu ritmo, y que rinden mucho más si te ' +
-      'paras a mover los mandos de los ejemplos en vez de mirarlos, que es de lo que se trata.');
+      'a ninguna parte: son {n} temas que se leen a tu ritmo, y que rinden mucho más si te ' +
+      'paras a mover los mandos de los ejemplos en vez de mirarlos, que es de lo que se trata.',
+      { n: total }));
 
     p.text('Este curso está pensado para recorrerse <strong>en orden</strong>. Cada tema supone ' +
       'que entiendes el anterior y ninguno usa una herramienta que no se haya explicado antes. Si ' +
@@ -591,30 +605,35 @@
     p.text('Dentro de cada tema encontrarás dos cosas distintas, y conviene no confundirlas:');
     p.raw(U.el('div.grid2', null, [
       U.el('div.card.card--demo', null, [
-        U.el('div.card__head', null, [U.el('span.card__kind', { text: 'Ejemplo interactivo' })]),
-        U.el('div.card__body', { html: '<div class="prose"><p>Un escenario fijo con mandos que puedes mover. ' +
-          'No se corrige ni puntúa: está para que <em>veas</em> qué significa el concepto.</p></div>' })
+        U.el('div.card__head', null, [U.el('span.card__kind', { text: T('Ejemplo interactivo') })]),
+        U.el('div.card__body', { html: '<div class="prose"><p>' +
+          TX('Un escenario fijo con mandos que puedes mover. ' +
+            'No se corrige ni puntúa: está para que <em>veas</em> qué significa el concepto.') +
+          '</p></div>' })
       ]),
       U.el('div.card.card--ex', null, [
-        U.el('div.card__head', null, [U.el('span.card__kind', { text: 'Ejercicio práctico' })]),
-        U.el('div.card__body', { html: '<div class="prose"><p>Un enunciado <strong>generado al azar</strong>. ' +
-          'Pulsa «Otro ejercicio» y cambian los números: puedes practicar el mismo tipo ' +
-          'las veces que quieras y comprobar cada intento. Los problemas largos van ' +
-          '<strong>por apartados</strong>, como en la PAU.</p></div>' })
+        U.el('div.card__head', null, [U.el('span.card__kind', { text: T('Ejercicio práctico') })]),
+        U.el('div.card__body', { html: '<div class="prose"><p>' +
+          TX('Un enunciado <strong>generado al azar</strong>. ' +
+            'Pulsa «Otro ejercicio» y cambian los números: puedes practicar el mismo tipo ' +
+            'las veces que quieras y comprobar cada intento. Los problemas largos van ' +
+            '<strong>por apartados</strong>, como en la PAU.') +
+          '</p></div>' })
       ])
     ]));
 
     p.section('Tu progreso');
     p.raw(U.el('div.readout', {
-      html: 'Temas visitados: <strong>' + st.seen + '</strong> de ' + total + '<br>' +
-        'Temas dominados (cada tipo de ejercicio resuelto al menos una vez): <strong>' + st.done + '</strong><br>' +
-        'Ejercicios resueltos: <strong>' + st.ok + '</strong>'
+      html: conX('Temas visitados: <strong>{v}</strong> de {n}', { v: st.seen, n: total }) + '<br>' +
+        conX('Temas dominados (cada tipo de ejercicio resuelto al menos una vez): <strong>{d}</strong>',
+          { d: st.done }) + '<br>' +
+        conX('Ejercicios resueltos: <strong>{r}</strong>', { r: st.ok })
     }));
 
     var ult = Progress.ultimo();
     if (ult && BYID[ult]) {
       p.raw(U.el('a.seguir', { href: '#/' + ult }, [
-        U.el('span.seguir__k', { text: 'Continúa donde lo dejaste' }),
+        U.el('span.seguir__k', { text: T('Continúa donde lo dejaste') }),
         U.el('span.seguir__t', { text: BYID[ult].t }),
         U.el('span.seguir__f', { 'aria-hidden': 'true', text: '→' })
       ]));
@@ -633,7 +652,8 @@
         }, [
           U.el('span.repaso__t', { text: BYID[x.id].t }),
           U.el('span.repaso__n', {
-            text: 'ejercicio ' + x.n + ' · ' + (x.fallado ? 'lo fallaste la última vez' : 'repaso ' + (x.racha + 1))
+            text: con('ejercicio {n}', { n: x.n }) + ' · ' +
+              (x.fallado ? T('lo fallaste la última vez') : con('repaso {r}', { r: x.racha + 1 }))
           })
         ])));
       });
@@ -650,12 +670,12 @@
       fila.appendChild(U.el('button.btn' + (itin === k ? '.btn--main' : ''), {
         type: 'button', 'aria-pressed': itin === k ? 'true' : 'false',
         onclick: function () { setItinerario(itin === k ? 'todo' : k); renderHome(); }
-      }, 'Temario de ' + ITIN[k].corto));
+      }, con('Temario de {c}', { c: ITIN[k].corto })));
     });
-    if (BYID['pau-mapa']) fila.appendChild(U.el('a.btn', { href: '#/pau-mapa', text: 'Mapa de 2.º y simulacros →' }));
-    fila.appendChild(U.el('a.btn', { href: '#/__rutas', text: 'Rutas de la ampliación →' }));
-    fila.appendChild(U.el('a.btn', { href: '#/__examen', text: 'Montar un examen →' }));
-    fila.appendChild(U.el('a.btn', { href: '#/__progreso', text: 'Progreso y clase →' }));
+    if (BYID['pau-mapa']) fila.appendChild(U.el('a.btn', { href: '#/pau-mapa', text: T('Mapa de 2.º y simulacros →') }));
+    fila.appendChild(U.el('a.btn', { href: '#/__rutas', text: T('Rutas de la ampliación →') }));
+    fila.appendChild(U.el('a.btn', { href: '#/__examen', text: T('Montar un examen →') }));
+    fila.appendChild(U.el('a.btn', { href: '#/__progreso', text: T('Progreso y clase →') }));
     p.raw(fila);
 
     p.section('El recorrido');
@@ -665,7 +685,7 @@
         U.el('span.blk__num', { text: b.n }),
         U.el('span.card__title', { text: b.title }),
         U.el('span.card__spacer'),
-        U.el('span.card__score', { text: b.temas.length + ' temas' })
+        U.el('span.card__score', { text: con(b.temas.length === 1 ? '{n} tema' : '{n} temas', { n: b.temas.length }) })
       ]));
       var bd = U.el('div.card__body');
       bd.appendChild(U.el('div.prose', { html: '<p>' + b.desc + '</p>' }));
@@ -682,13 +702,13 @@
       'lápiz de memoria y abrir <code>index.html</code> en cualquier ordenador.', 'ok', 'Nota técnica');
 
     wrapEl.appendChild(U.el('footer.creditos', {
-      html: '<p>Diseñado por <a href="https://gcarbonell.com" target="_blank" rel="noopener noreferrer">' +
-        'Guillem Carbonell</a>.</p>' +
-        '<p>Se distribuye bajo licencia libre <strong>GPLv3</strong> o, a tu elección, cualquier ' +
-        'versión posterior: puedes usarlo, copiarlo, ' +
-        'modificarlo y repartirlo, incluso en clase o comercialmente, siempre que lo que publiques a ' +
-        'partir de él conserve esta misma libertad. El texto completo está en el archivo ' +
-        '<code>LICENSE</code> de la carpeta.</p>'
+      html: '<p>' + TX('Diseñado por <a href="https://gcarbonell.com" target="_blank" ' +
+        'rel="noopener noreferrer">Guillem Carbonell</a>.') + '</p><p>' +
+        TX('Se distribuye bajo licencia libre <strong>GPLv3</strong> o, a tu elección, cualquier ' +
+          'versión posterior: puedes usarlo, copiarlo, ' +
+          'modificarlo y repartirlo, incluso en clase o comercialmente, siempre que lo que publiques a ' +
+          'partir de él conserve esta misma libertad. El texto completo está en el archivo ' +
+          '<code>LICENSE</code> de la carpeta.') + '</p>'
     }));
 
     mainEl.scrollTop = 0;
@@ -708,19 +728,19 @@
     var recibidos = q && q.d ? Ex.leeDeberes(q.d) : null;
     var lista = recibidos || Ex.deberes();
     crumbEl.innerHTML = '<a href="#/">' + U.escape(T('Inicio')) + '</a> › <b>' + U.escape(T('Deberes')) + '</b>';
-    document.title = 'Deberes · Matebase';
+    document.title = T('Deberes') + ' · Matebase';
 
     var h = U.el('div.hdr');
-    h.innerHTML = '<h1 tabindex="-1">Deberes</h1><p class="hdr__sub">' +
+    h.innerHTML = '<h1 tabindex="-1">' + T('Deberes') + '</h1><p class="hdr__sub">' +
       (recibidos
-        ? 'Alguien te ha pasado esta lista. Son ' + lista.length + ' ' +
-          U.plural(lista.length, 'enunciado', 'enunciados') + ' concretos, con los mismos números ' +
-          'que vio quien la preparó.'
-        : 'Los enunciados que has ido apartando con el botón «+ Deberes». Se comparten en un enlace ' +
-          'que los lleva dentro: quien lo abra verá exactamente estos, con estos números.') +
+        ? conX(lista.length === 1
+          ? 'Alguien te ha pasado esta lista. Es 1 enunciado concreto, con los mismos números que vio quien la preparó.'
+          : 'Alguien te ha pasado esta lista. Son {n} enunciados concretos, con los mismos números que vio quien la preparó.',
+          { n: lista.length })
+        : TX('Los enunciados que has ido apartando con el botón «+ Deberes». Se comparten en un enlace ' +
+          'que los lleva dentro: quien lo abra verá exactamente estos, con estos números.')) +
       '</p>';
     wrapEl.appendChild(h);
-    avisoIdioma(wrapEl, 'Esta página está escrita en castellano.');
 
     var p = new Page(wrapEl, { id: '__deberes' });
 
@@ -728,7 +748,7 @@
       p.note('Todavía no hay ninguno. En cualquier ejercicio del curso, el botón ' +
         '<strong>+ Deberes</strong> lo aparta con los números que tenga en ese momento. Cuando tengas ' +
         'los que quieras, vuelve aquí y copia el enlace.', null, 'Cómo se hace una lista');
-      p.raw(U.el('div.chips', null, [U.el('a.btn', { href: '#/', text: '← Al índice' })]));
+      p.raw(U.el('div.chips', null, [U.el('a.btn', { href: '#/', text: T('← Al índice') })]));
       mainEl.scrollTop = 0; paintIndex(); return;
     }
 
@@ -741,14 +761,14 @@
       var li = U.el('li.deberes__t' + (hecho ? '.is-done' : ''));
       li.appendChild(U.el('a.deberes__link', {
         href: '#/' + d.id + '?e=' + d.n + '&s=' + d.s,
-        text: (t ? t.t : d.id) + ' · ejercicio ' + d.n
+        text: (t ? t.t : d.id) + ' · ' + con('ejercicio {n}', { n: d.n })
       }));
       li.appendChild(U.el('span.deberes__est', {
-        text: hecho ? 'resuelto alguna vez' : 'pendiente'
+        text: T(hecho ? 'resuelto alguna vez' : 'pendiente')
       }));
       if (!recibidos) {
         li.appendChild(U.el('button.btn.btn--sm.btn--ghost', {
-          type: 'button', title: 'Quitar de la lista',
+          type: 'button', title: T('Quitar de la lista'),
           onclick: function () {
             var nueva = Ex.deberes().filter(function (x, k) { return k !== i; });
             Ex.deberes(nueva);
@@ -765,18 +785,18 @@
         'este navegador: dice si alguna vez has resuelto ese tipo de ejercicio, no si has hecho ' +
         'exactamente este enunciado. Nadie más lo ve.', null, 'De dónde sale ese «resuelto»');
       p.raw(U.el('div.chips', null, [
-        U.el('a.btn.btn--main', { href: '#/' + lista[0].id + '?e=' + lista[0].n + '&s=' + lista[0].s, text: 'Empezar por el primero →' }),
+        U.el('a.btn.btn--main', { href: '#/' + lista[0].id + '?e=' + lista[0].n + '&s=' + lista[0].s, text: T('Empezar por el primero →') }),
         U.el('button.btn', {
           type: 'button',
           onclick: function () { Ex.deberes(lista.slice()); renderDeberes({}); }
-        }, 'Copiarlos a mi lista')
+        }, T('Copiarlos a mi lista'))
       ]));
     } else {
       p.section('El enlace');
       var url = location.href.split('#')[0] + '#/__deberes?d=' +
         encodeURIComponent(Ex.codificaDeberes(lista));
       var caja = U.el('input.card__url', {
-        type: 'text', readonly: true, value: url, 'aria-label': 'Enlace con estos deberes'
+        type: 'text', readonly: true, value: url, 'aria-label': T('Enlace con estos deberes')
       });
       var av = U.el('p.card__aviso');
       p.raw(U.el('div.chips', null, [
@@ -785,18 +805,18 @@
           onclick: function () {
             try {
               navigator.clipboard.writeText(url).then(function () {
-                av.textContent = 'Copiado. Pégalo donde quieras: quien lo abra verá estos mismos enunciados.';
+                av.textContent = T('Copiado. Pégalo donde quieras: quien lo abra verá estos mismos enunciados.');
               }, function () { caja.focus(); caja.select(); });
             } catch (e) { caja.focus(); caja.select(); }
           }
-        }, '⧉ Copiar el enlace'),
+        }, T('⧉ Copiar el enlace')),
         U.el('button.btn', {
           type: 'button',
           onclick: function () {
-            if (!global.confirm('¿Vaciar la lista de deberes?')) return;
+            if (!global.confirm(T('¿Vaciar la lista de deberes?'))) return;
             Ex.deberes([]); renderDeberes(q);
           }
-        }, 'Vaciar')
+        }, T('Vaciar'))
       ]));
       p.raw(caja);
       p.raw(av);
@@ -821,14 +841,15 @@
     U.clear(wrapEl);
     wrapEl.removeAttribute('data-piel');
     crumbEl.innerHTML = '<a href="#/">' + U.escape(T('Inicio')) + '</a> › <b>' + U.escape(T('Examen')) + '</b>';
-    document.title = 'Examen de cualquier bloque · Matebase';
+    document.title = T('Examen de cualquier bloque') + ' · Matebase';
 
     var h = U.el('div.hdr');
-    h.innerHTML = '<h1 tabindex="-1">Examen de cualquier bloque</h1>' +
-      '<p class="hdr__sub">Elige de dónde entran las preguntas y el curso monta un examen: sin ' +
-      'pistas, con cronómetro si quieres, y con la corrección y el paso a paso al entregar.</p>';
+    h.innerHTML = '<h1 tabindex="-1">' + T('Examen de cualquier bloque') + '</h1>' +
+      '<p class="hdr__sub">' +
+      TX('Elige de dónde entran las preguntas y el curso monta un examen: sin ' +
+        'pistas, con cronómetro si quieres, y con la corrección y el paso a paso al entregar.') +
+      '</p>';
     wrapEl.appendChild(h);
-    avisoIdioma(wrapEl, 'Esta página está escrita en castellano.');
 
     var elegidos = {};
     (q && q.b ? String(q.b).split(',') : []).forEach(function (x) { elegidos[x] = 1; });
@@ -857,7 +878,7 @@
 
     var fila = U.el('div.chips');
     W.chips(fila, [1, 2, 3, 4].map(function (n) {
-      return { label: n + (n === 1 ? ' pregunta' : ' preguntas') + ' por bloque', value: String(n) };
+      return { label: con(n === 1 ? '{n} pregunta por bloque' : '{n} preguntas por bloque', { n: n }), value: String(n) };
     }), {
       value: String(porBloque),
       on: function (v) { porBloque = parseInt(v, 10); pinta(); }
@@ -867,29 +888,29 @@
     var resumen = U.el('p.card__aviso');
     p.raw(resumen);
     p.raw(U.el('div.chips', null, [
-      U.el('button.btn.btn--main', { type: 'button', onclick: function () { monta(); } }, 'Preparar el examen'),
+      U.el('button.btn.btn--main', { type: 'button', onclick: function () { monta(); } }, T('Preparar el examen')),
       U.el('button.btn', {
         type: 'button',
         onclick: function () {
           var ids = Object.keys(elegidos);
           if (!ids.length) return;
           var url = location.href.split('#')[0] + '#/__examen?b=' + ids.join(',') + '&n=' + porBloque;
-          var inp = U.el('input.card__url', { type: 'text', readonly: true, value: url, 'aria-label': 'Enlace de este examen' });
+          var inp = U.el('input.card__url', { type: 'text', readonly: true, value: url, 'aria-label': T('Enlace de este examen') });
           U.clear(resumen);
-          resumen.appendChild(U.el('span', { text: 'Enlace de esta configuración: ' }));
+          resumen.appendChild(U.el('span', { text: T('Enlace de esta configuración:') + ' ' }));
           resumen.appendChild(inp);
           inp.focus(); inp.select();
         }
-      }, 'Enlace de esta configuración')
+      }, T('Enlace de esta configuración'))
     ]));
     p.raw(zona);
 
     function pinta() {
       var n = Object.keys(elegidos).length;
       resumen.textContent = n
-        ? n + ' ' + U.plural(n, 'bloque', 'bloques') + ' · ' + (n * porBloque) + ' preguntas · ≈' +
-          (n * porBloque * 10) + ' minutos'
-        : 'Elige al menos un bloque.';
+        ? con(n === 1 ? '1 bloque · {p} preguntas · ≈{m} minutos' : '{n} bloques · {p} preguntas · ≈{m} minutos',
+          { n: n, p: n * porBloque, m: n * porBloque * 10 })
+        : T('Elige al menos un bloque.');
     }
 
     function monta() {
@@ -906,7 +927,7 @@
       });
       var p2 = new Page(zona, { id: '__examen-sim', _q: (q || {}) });
       p2.node = { _q: q || {} };
-      p2.simulacro({ titulo: 'Examen de ' + partes.length + ' ' + U.plural(partes.length, 'bloque', 'bloques'), partes: partes });
+      p2.simulacro({ titulo: con(partes.length === 1 ? 'Examen de 1 bloque' : 'Examen de {n} bloques', { n: partes.length }), partes: partes });
       if (zona.scrollIntoView) zona.scrollIntoView({ block: 'start' });
     }
 
@@ -960,28 +981,29 @@
     var c = cuentaRuta(r);
     var card = U.el('div.card');
     card.appendChild(U.el('div.card__head', null, [
-      U.el('span.card__title', { text: r.t }),
+      U.el('span.card__title', { text: TX(r.t) }),
       U.el('span.card__spacer'),
-      U.el('span.card__score', { text: r.temas.length + ' temas · ≈' + horas(r.temas.length) + ' h' })
+      U.el('span.card__score', { text: con('{n} temas · ≈{h} h', { n: r.temas.length, h: horas(r.temas.length) }) })
     ]));
     var bd = U.el('div.card__body');
-    bd.appendChild(U.el('div.prose', { html: '<p>' + r.r + '</p><p><em>' + r.para + '</em></p>' }));
+    bd.appendChild(U.el('div.prose', { html: '<p>' + TX(r.r) + '</p><p><em>' + TX(r.para) + '</em></p>' }));
     bd.appendChild(barra(c.hechos, c.vistos, c.total));
     bd.appendChild(U.el('p.card__aviso', {
       text: c.vistos
-        ? c.hechos + ' de ' + c.total + ' dominados, ' + c.vistos + ' empezados.'
-        : 'Sin empezar. Se entra por «' + nombreDe(r.temas[0]) + '».'
+        ? con('{d} de {n} dominados, {v} empezados.', { d: c.hechos, n: c.total, v: c.vistos })
+        : con('Sin empezar. Se entra por «{t}».', { t: nombreDe(r.temas[0]) })
     }));
     var fila = U.el('div.chips');
     var sig = siguienteDe(r);
     if (sig) {
       fila.appendChild(U.el('a.btn.btn--main', {
-        href: '#/' + sig, text: (c.vistos ? 'Seguir en' : 'Empezar por') + ' «' + nombreDe(sig) + '» →'
+        href: '#/' + sig,
+        text: con(c.vistos ? 'Seguir en «{t}» →' : 'Empezar por «{t}» →', { t: nombreDe(sig) })
       }));
     } else {
-      fila.appendChild(U.el('span.card__score', { text: 'Ruta completa ✓' }));
+      fila.appendChild(U.el('span.card__score', { text: T('Ruta completa ✓') }));
     }
-    if (!conLista) fila.appendChild(U.el('a.btn', { href: '#/__rutas?r=' + r.id, text: 'Ver el recorrido' }));
+    if (!conLista) fila.appendChild(U.el('a.btn', { href: '#/__rutas?r=' + r.id, text: T('Ver el recorrido') }));
     bd.appendChild(fila);
 
     if (conLista) {
@@ -993,14 +1015,14 @@
         var st = Progress.state(id);
         var li = U.el('li.ruta__t' + (st ? '.is-' + st : '') + (nuc[id] ? '.is-nucleo' : ''));
         li.appendChild(U.el('a', { href: '#/' + id, text: t ? t.t : id }));
-        li.appendChild(U.el('span.ruta__bl', { text: t ? ('bloque ' + t._block.n) : '' }));
+        li.appendChild(U.el('span.ruta__bl', { text: t ? con('bloque {n}', { n: t._block.n }) : '' }));
         ol.appendChild(li);
       });
       bd.appendChild(ol);
       bd.appendChild(U.el('p.card__aviso', {
-        html: 'Los <strong>marcados</strong> son a lo que se venía; los demás son camino: ' +
+        html: TX('Los <strong>marcados</strong> son a lo que se venía; los demás son camino: ' +
           'temas que estos dan por sabidos y que la ruta incluye para no mandarte a un sitio ' +
-          'donde te falte algo.'
+          'donde te falte algo.')
       }));
     }
     card.appendChild(bd);
@@ -1013,28 +1035,30 @@
     wrapEl.removeAttribute('data-piel');
     var sola = q && q.r ? rutaPorId(q.r) : null;
     crumbEl.innerHTML = '<a href="#/">' + U.escape(T('Inicio')) + '</a> › ' +
-      (sola ? '<a href="#/__rutas">' + U.escape(T('Rutas')) + '</a> › <b>' + sola.t + '</b>'
+      (sola ? '<a href="#/__rutas">' + U.escape(T('Rutas')) + '</a> › <b>' + U.escape(TX(sola.t)) + '</b>'
             : '<b>' + U.escape(T('Rutas de la ampliación')) + '</b>');
-    document.title = (sola ? sola.t : 'Rutas de la ampliación') + ' · Matebase';
+    document.title = (sola ? TX(sola.t) : T('Rutas de la ampliación')) + ' · Matebase';
 
     var h = U.el('div.hdr');
-    h.innerHTML = '<h1 tabindex="-1">' + (sola ? sola.t : 'Rutas de la ampliación') + '</h1>' +
-      '<p class="hdr__sub">' + (sola ? sola.r
-        : 'Más allá de 2.º hay ' + FLAT.filter(function (t) { return t.curso === 'AMP'; }).length +
-          ' temas optativos que no se presuponen entre sí. Estas tres rutas los recorren con ' +
-          'sentido: cada una dice a dónde llega y por dónde se pasa.') + '</p>';
+    h.innerHTML = '<h1 tabindex="-1">' + (sola ? TX(sola.t) : T('Rutas de la ampliación')) + '</h1>' +
+      '<p class="hdr__sub">' + (sola ? TX(sola.r)
+        /* El numero de rutas sale de RUTAS y no de la frase: cuando se
+           anadio la de sonido, «estas tres rutas» se quedo diciendo tres. */
+        : conX('Más allá de 2.º hay {n} temas optativos que no se presuponen entre sí. ' +
+          'Estas {r} rutas los recorren con sentido: cada una dice a dónde llega y por dónde se pasa.',
+          { n: FLAT.filter(function (t) { return t.curso === 'AMP'; }).length, r: RUTAS.length })) + '</p>';
     wrapEl.appendChild(h);
-    avisoIdioma(wrapEl, 'Esta página está escrita en castellano.');
 
     var p = new Page(wrapEl, { id: '__rutas' });
 
     if (sola) {
       p.raw(tarjetaRuta(sola, true));
-      p.raw(U.el('div.chips', null, [U.el('a.btn', { href: '#/__rutas', text: '← Las tres rutas' })]));
+      p.raw(U.el('div.chips', null, [U.el('a.btn', { href: '#/__rutas', text: T('← Todas las rutas') })]));
     } else {
-      p.text('No hay que elegir una y casarse con ella: comparten temas, y terminar una deja media ' +
-        'de otra hecha. La estimación de horas sale de contar <strong>' + (RUTAS.MIN_POR_TEMA || 50) +
-        ' minutos por tema</strong>, que es lo que cuesta leerlo y hacer sus ejercicios sin prisa.');
+      p.text(conX('No hay que elegir una y casarse con ella: comparten temas, y terminar una deja media ' +
+        'de otra hecha. La estimación de horas sale de contar <strong>{m} minutos por tema</strong>, ' +
+        'que es lo que cuesta leerlo y hacer sus ejercicios sin prisa.',
+        { m: RUTAS.MIN_POR_TEMA || 50 }));
       RUTAS.forEach(function (r) { p.raw(tarjetaRuta(r, false)); });
       p.note('Lo que no está en ninguna ruta no es peor: es que no cabía en ningún hilo. Programación ' +
         'gráfica y criptografía son bloques que se recorren enteros y por su cuenta, y el índice de la ' +
@@ -1068,7 +1092,7 @@
   }
 
   function barra(hechos, vistos, total) {
-    var el = U.el('span.barrita', { title: hechos + ' dominados y ' + vistos + ' vistos de ' + total });
+    var el = U.el('span.barrita', { title: con('{d} dominados y {v} vistos de {n}', { d: hechos, v: vistos, n: total }) });
     el.appendChild(U.el('i.barrita__done', { style: { width: (100 * hechos / total) + '%' } }));
     el.appendChild(U.el('i.barrita__seen', { style: { width: (100 * Math.max(0, vistos - hechos) / total) + '%' } }));
     return el;
@@ -1079,14 +1103,15 @@
     U.clear(wrapEl);
     wrapEl.removeAttribute('data-piel');
     crumbEl.innerHTML = '<a href="#/">' + U.escape(T('Inicio')) + '</a> › <b>' + U.escape(T('Progreso y clase')) + '</b>';
-    document.title = 'Progreso y clase · Matebase';
+    document.title = T('Progreso y clase') + ' · Matebase';
 
     var h = U.el('div.hdr');
-    h.innerHTML = '<h1 tabindex="-1">Progreso y clase</h1>' +
-      '<p class="hdr__sub">Tu progreso vive en este navegador y no se manda a ninguna parte. ' +
-      'Aquí puedes llevártelo a otro ordenador, recuperarlo, o —si das clase— leer los de tu grupo.</p>';
+    h.innerHTML = '<h1 tabindex="-1">' + T('Progreso y clase') + '</h1>' +
+      '<p class="hdr__sub">' +
+      TX('Tu progreso vive en este navegador y no se manda a ninguna parte. ' +
+        'Aquí puedes llevártelo a otro ordenador, recuperarlo, o —si das clase— leer los de tu grupo.') +
+      '</p>';
     wrapEl.appendChild(h);
-    avisoIdioma(wrapEl, 'Esta página está escrita en castellano.');
 
     var p = new Page(wrapEl, { id: '__progreso' });
 
@@ -1094,15 +1119,14 @@
     p.section('Tu progreso');
     var st = Progress.stats();
     var res = Progress.resumen();
-    p.text('Ahora mismo has abierto <strong>' + st.seen + '</strong> ' +
-      U.plural(st.seen, 'tema', 'temas') + ' y dominas <strong>' + st.done + '</strong>, ' +
-      'con ' + st.ok + ' ' + U.plural(st.ok, 'acierto', 'aciertos') + ' de ' + st.tries + ' ' +
-      U.plural(st.tries, 'intento', 'intentos') + '. Dominar un tema es haber resuelto al menos ' +
-      'una vez cada tipo de ejercicio que tiene, no haber acertado cinco veces el mismo.');
+    p.text(conX('Ahora mismo has abierto <strong>{v}</strong> temas y dominas <strong>{d}</strong>, ' +
+      'con {a} aciertos de {i} intentos. Dominar un tema es haber resuelto al menos ' +
+      'una vez cada tipo de ejercicio que tiene, no haber acertado cinco veces el mismo.',
+      { v: st.seen, d: st.done, a: st.ok, i: st.tries }));
 
     var nombreEd = U.el('input.card__url', {
-      type: 'text', maxlength: '60', placeholder: 'Tu nombre (opcional, va dentro del archivo)',
-      'aria-label': 'Nombre para el archivo de progreso',
+      type: 'text', maxlength: '60', placeholder: T('Tu nombre (opcional, va dentro del archivo)'),
+      'aria-label': T('Nombre para el archivo de progreso'),
       value: Progress.pref('nombre') || ''
     });
     p.raw(nombreEd);
@@ -1118,24 +1142,24 @@
         var nom = 'matebase-' + (n ? n.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' : '') +
           new Date().toISOString().slice(0, 10) + '.json';
         avisoEx.textContent = descarga(txt, nom)
-          ? 'Guardado como «' + nom + '». Llévatelo donde quieras y cárgalo ahí abajo.'
-          : 'Este navegador no deja descargar archivos. Copia el texto de abajo a mano.';
+          ? con('Guardado como «{f}». Llévatelo donde quieras y cárgalo ahí abajo.', { f: nom })
+          : T('Este navegador no deja descargar archivos. Copia el texto de abajo a mano.');
         cajaEx.value = txt;
         cajaEx.hidden = false;
       }
-    }, '⭳ Guardar en un archivo'));
+    }, T('⭳ Guardar en un archivo')));
     filaEx.appendChild(U.el('button.btn', {
       type: 'button',
       onclick: function () {
         cajaEx.value = Progress.exporta(nombreEd.value.trim());
         cajaEx.hidden = false;
         cajaEx.focus(); cajaEx.select();
-        avisoEx.textContent = 'Ahí está el texto. Cópialo y pégalo donde quieras guardarlo.';
+        avisoEx.textContent = T('Ahí está el texto. Cópialo y pégalo donde quieras guardarlo.');
       }
-    }, 'Ver el texto para copiarlo'));
+    }, T('Ver el texto para copiarlo')));
     p.raw(filaEx);
     var cajaEx = U.el('textarea.card__url', {
-      rows: '3', hidden: true, readonly: '', 'aria-label': 'Tu progreso en texto'
+      rows: '3', hidden: true, readonly: '', 'aria-label': T('Tu progreso en texto')
     });
     p.raw(cajaEx);
     p.raw(avisoEx);
@@ -1148,17 +1172,18 @@
 
     var avisoIm = U.el('p.card__aviso');
     var cajaIm = U.el('textarea.card__url', {
-      rows: '3', placeholder: 'Pega aquí el texto del progreso, o usa el botón de abajo',
-      'aria-label': 'Progreso a recuperar'
+      rows: '3', placeholder: T('Pega aquí el texto del progreso, o usa el botón de abajo'),
+      'aria-label': T('Progreso a recuperar')
     });
     p.raw(cajaIm);
 
     function aplica(modo) {
       var r = Progress.importa(cajaIm.value, modo);
       if (!r.ok) { avisoIm.textContent = r.error; return; }
-      avisoIm.textContent = 'Listo: ' + r.temas + ' ' + U.plural(r.temas, 'tema', 'temas') +
-        (modo === 'fundir' ? ' fundidos con lo que ya había.' : ' cargados, reemplazando lo anterior.') +
-        (r.nombre ? ' (archivo de ' + r.nombre + ')' : '');
+      avisoIm.textContent = con(modo === 'fundir'
+        ? 'Listo: {n} temas fundidos con lo que ya había.'
+        : 'Listo: {n} temas cargados, reemplazando lo anterior.', { n: r.temas }) +
+        (r.nombre ? ' ' + con('(archivo de {q})', { q: r.nombre }) : '');
       renderProgreso();
       var a = wrapEl.querySelector('.card__aviso');
       if (a) a.textContent = avisoIm.textContent;
@@ -1166,19 +1191,19 @@
 
     var filaIm = U.el('div.chips');
     var file = U.el('input', {
-      type: 'file', accept: '.json,application/json', 'aria-label': 'Archivo de progreso',
+      type: 'file', accept: '.json,application/json', 'aria-label': T('Archivo de progreso'),
       onchange: function () {
         var f = file.files && file.files[0];
         if (!f) return;
         var fr = new FileReader();
         fr.onload = function () { cajaIm.value = String(fr.result || ''); aplica('fundir'); };
-        fr.onerror = function () { avisoIm.textContent = 'No se ha podido leer el archivo.'; };
+        fr.onerror = function () { avisoIm.textContent = T('No se ha podido leer el archivo.'); };
         fr.readAsText(f);
       }
     });
     filaIm.appendChild(file);
-    filaIm.appendChild(U.el('button.btn.btn--main', { type: 'button', onclick: function () { aplica('fundir'); } }, 'Fundir con lo mío'));
-    filaIm.appendChild(U.el('button.btn', { type: 'button', onclick: function () { aplica('reemplazar'); } }, 'Reemplazar'));
+    filaIm.appendChild(U.el('button.btn.btn--main', { type: 'button', onclick: function () { aplica('fundir'); } }, T('Fundir con lo mío')));
+    filaIm.appendChild(U.el('button.btn', { type: 'button', onclick: function () { aplica('reemplazar'); } }, T('Reemplazar')));
     p.raw(filaIm);
     p.raw(avisoIm);
 
@@ -1190,7 +1215,7 @@
     var tb = U.el('table.tbl');
     var thead = U.el('tr');
     ['Bloque', 'Temas', 'Vistos', 'Dominados', ''].forEach(function (x, i) {
-      thead.appendChild(U.el(i > 0 && i < 4 ? 'th.num' : 'th', { text: x }));
+      thead.appendChild(U.el(i > 0 && i < 4 ? 'th.num' : 'th', { text: x ? T(x) : '' }));
     });
     tb.appendChild(U.el('thead', null, thead));
     var tbody = U.el('tbody');
@@ -1216,7 +1241,7 @@
     var avisoCl = U.el('p.card__aviso');
     var fileCl = U.el('input', {
       type: 'file', accept: '.json,application/json', multiple: '',
-      'aria-label': 'Archivos de progreso del grupo',
+      'aria-label': T('Archivos de progreso del grupo'),
       onchange: function () {
         var fs = [].slice.call(fileCl.files || []);
         if (!fs.length) return;
@@ -1233,7 +1258,9 @@
               });
             } else malos++;
             if (--pend === 0) {
-              avisoCl.textContent = malos ? (malos + ' ' + U.plural(malos, 'archivo no se ha entendido', 'archivos no se han entendido') + '.') : '';
+              avisoCl.textContent = malos
+                ? con(malos === 1 ? '1 archivo no se ha entendido.' : '{n} archivos no se han entendido.', { n: malos })
+                : '';
               pintaClase();
             }
           };
@@ -1244,7 +1271,7 @@
     var filaCl = U.el('div.chips', null, [fileCl]);
     filaCl.appendChild(U.el('button.btn', {
       type: 'button', onclick: function () { clase = []; pintaClase(); avisoCl.textContent = ''; }
-    }, 'Vaciar la lista'));
+    }, T('Vaciar la lista')));
     p.raw(filaCl);
     p.raw(avisoCl);
 
@@ -1255,14 +1282,14 @@
       U.clear(cajaClase);
       if (!clase.length) {
         cajaClase.appendChild(U.el('p.card__aviso', {
-          text: 'Todavía no has cargado ningún archivo. Puedes seleccionar varios a la vez.'
+          text: T('Todavía no has cargado ningún archivo. Puedes seleccionar varios a la vez.')
         }));
         return;
       }
       var t2 = U.el('table.tbl');
       var h2 = U.el('tr');
       ['Alumno', 'Fecha', 'Vistos', 'Dominados', 'Aciertos', 'Intentos', 'Acierto'].forEach(function (x, i) {
-        h2.appendChild(U.el(i >= 2 ? 'th.num' : 'th', { text: x }));
+        h2.appendChild(U.el(i >= 2 ? 'th.num' : 'th', { text: T(x) }));
       });
       t2.appendChild(U.el('thead', null, h2));
       var b2 = U.el('tbody');
@@ -1299,9 +1326,10 @@
       });
       if (lista.length) {
         cajaClase.appendChild(U.el('p.card__aviso', {
-          html: '<strong>Donde más se atasca el grupo:</strong> ' +
+          html: '<strong>' + T('Donde más se atasca el grupo:') + '</strong> ' +
             lista.slice(0, 3).map(function (b) {
-              return b.title + ' (' + Math.round(100 * b.hechos / b.vistos) + ' % de lo abierto, dominado)';
+              return b.title + ' ' +
+                con('({p} % de lo abierto, dominado)', { p: Math.round(100 * b.hechos / b.vistos) });
             }).join(' · ')
         }));
       }
@@ -1315,11 +1343,11 @@
       U.el('button.btn', {
         type: 'button',
         onclick: function () {
-          if (!global.confirm('Se borrará todo tu progreso en este navegador. ¿Seguro?')) return;
+          if (!global.confirm(T('Se borrará todo tu progreso en este navegador. ¿Seguro?'))) return;
           Progress.reset();
           renderProgreso();
         }
-      }, 'Borrar mi progreso')
+      }, T('Borrar mi progreso'))
     ]));
     p.raw(avisoRe);
     p.text('Antes de borrar, guarda el archivo: es la única forma de volver atrás.');
@@ -1425,7 +1453,9 @@
       caja.appendChild(U.el('button.themes__b', {
         type: 'button',
         'data-tema': t.id,
-        title: T('Tema') + ' ' + T(t.nombre).toLowerCase(),
+        /* Clave propia y no «Tema» a secas: esa palabra tambien es el
+           encabezado de la tabla del mapa, donde significa «topic». */
+        title: T('Tema {x}').replace('{x}', T(t.nombre).toLowerCase()),
         onclick: function () { setTheme(t.id); }
       }, [
         U.el('span.themes__i', null, t.icono),
@@ -1565,7 +1595,9 @@
 
     function enlaceTema(def, e) {
       if (e.i && BYID[e.i]) {
-        def.appendChild(U.el('a.glos__ir', { href: '#/' + e.i, text: 'Ver en «' + BYID[e.i].t + '» →' }));
+        def.appendChild(U.el('a.glos__ir', {
+          href: '#/' + e.i, text: con('Ver en «{t}» →', { t: BYID[e.i].t })
+        }));
       }
     }
 
@@ -1637,6 +1669,18 @@
       var m = MODOS[modo];
       var q = sinTildes(String(m.q || '').trim().toLowerCase());
       U.clear(lista);
+      /* El glosario y las dos referencias siguen en castellano. Se dice
+         aqui arriba, igual que en un tema sin traducir, para que no sea una
+         sorpresa despues de leer tres entradas. */
+      if (!q && global.I18N && I18N.actual() !== 'es') {
+        lista.appendChild(U.el('div.avisoIdioma', {
+          role: 'note',
+          html: '<strong>' + T(m.ref ? 'Esta referencia está en castellano.'
+                                     : 'El glosario está en castellano.') + '</strong> ' +
+            T('Los nombres y el código son los mismos en cualquier idioma; ' +
+              'lo que sigue sin traducir es la explicación.')
+        }));
+      }
       var vistos = m.ref ? pintaRef(q, m) : pintaGlosario(q, m);
       if (!vistos) {
         lista.appendChild(U.el('div.glos__nada', {
@@ -1805,8 +1849,8 @@
     a.disabled = (cur <= 0);
     d.disabled = (cur >= pila.length - 1);
     // El título dice a dónde lleva: así se sabe antes de pulsar.
-    a.title = a.disabled ? 'No hay nada detrás' : 'Volver a «' + nombreDe(pila[cur - 1]) + '»';
-    d.title = d.disabled ? 'No hay nada delante' : 'Ir a «' + nombreDe(pila[cur + 1]) + '»';
+    a.title = a.disabled ? T('No hay nada detrás') : T('Volver a «{t}»').replace('{t}', nombreDe(pila[cur - 1]));
+    d.title = d.disabled ? T('No hay nada delante') : T('Ir a «{t}»').replace('{t}', nombreDe(pila[cur + 1]));
   }
 
   /* ---------------- arranque ---------------- */

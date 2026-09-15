@@ -28,6 +28,16 @@
 (function (global) {
   'use strict';
 
+  /* Rotulos y mensajes de error del editor de shaders: los lee una
+     persona y pasan por el diccionario, en frases enteras con huecos.
+     El codigo GLSL y sus nombres de funcion no se tocan. */
+  function UI(s) { return global.I18N ? I18N.ui(s) : s; }
+  function con(s, vals) {
+    var t = UI(s);
+    for (var k in vals) t = t.split('{' + k + '}').join(vals[k]);
+    return t;
+  }
+
   var VERTICE =
     'attribute vec2 vPos;\n' +
     'void main(){ gl_Position = vec4(vPos, 0.0, 1.0); }';
@@ -114,7 +124,7 @@
       if (m) errores.push({ linea: Math.max(1, (+m[2]) - f.saltadas + 1), msg: m[3].trim() });
       else if (l.trim() && l.charCodeAt(0) !== 0) errores.push({ linea: 0, msg: l.trim() });
     });
-    if (!errores.length) errores.push({ linea: 0, msg: 'no compila' });
+    if (!errores.length) errores.push({ linea: 0, msg: UI('no compila') });
     return { ok: false, errores: errores };
   }
 
@@ -308,8 +318,8 @@
     var tam = o.tam || 48, tol = o.tol === undefined ? 10 : o.tol;
     var a = pintaEnAux(codigoA, o.mandos, o.valores, tam, o.t);
     var b = pintaEnAux(codigoB, o.mandos, o.valores, tam, o.t);
-    if (!a) return { ok: false, motivo: 'la respuesta no compila' };
-    if (!b) return { ok: false, motivo: 'la referencia no compila' };
+    if (!a) return { ok: false, motivo: UI('la respuesta no compila') };
+    if (!b) return { ok: false, motivo: UI('la referencia no compila') };
     var suma = 0, n = tam * tam;
     for (var i = 0; i < n; i++) {
       var k = i * 4;
@@ -462,7 +472,7 @@
     this.stage = U.el('div.shd__stage');
     this.canvas = U.el('canvas.shd__canvas', {
       role: 'img',
-      'aria-label': o.aria || 'Resultado del shader. Cada píxel de este dibujo lo calcula el código de abajo.'
+      'aria-label': o.aria || UI('Resultado del shader. Cada píxel de este dibujo lo calcula el código de abajo.')
     });
     this.stage.appendChild(this.canvas);
     this.aviso = U.el('div.shd__aviso', { role: 'status', 'aria-live': 'polite' });
@@ -487,7 +497,8 @@
       var idEd = 'shd' + (Visor.n = (Visor.n || 0) + 1);
       this.el.appendChild(U.el('label.shd__lab', {
         'for': idEd,
-        html: 'Código del shader &nbsp;<span class="shd__pista">se recompila solo al escribir</span>'
+        html: UI('Código del shader') + ' &nbsp;<span class="shd__pista">' +
+          UI('se recompila solo al escribir') + '</span>'
       }));
       /* Dos capas: debajo un <pre> con el codigo coloreado y encima el
          textarea con la letra transparente y el cursor visible. Es la unica
@@ -531,13 +542,13 @@
     this.el.appendChild(this.err);
 
     /* --- botones --- */
-    this.bPausa = U.el('button.btn', { type: 'button', html: '&#10074;&#10074; Pausa' });
-    this.bReset = U.el('button.btn', { type: 'button', html: '&#8635; Volver al original' });
+    this.bPausa = U.el('button.btn', { type: 'button', html: '&#10074;&#10074; ' + UI('Pausa') });
+    this.bReset = U.el('button.btn', { type: 'button', html: '&#8635; ' + UI('Volver al original') });
     this.bPausa.addEventListener('click', function () { self.alterna(); });
     this.bReset.addEventListener('click', function () { self.reinicia(); });
     var pie = U.el('div.shd__pie', null, [this.bPausa, this.bReset]);
     if (o.editable !== false) {
-      this.bYa = U.el('button.btn.btn--main', { type: 'button', text: 'Ejecutar' });
+      this.bYa = U.el('button.btn.btn--main', { type: 'button', text: UI('Ejecutar') });
       this.bYa.addEventListener('click', function () { self.recompila(); self.guarda(); });
       pie.insertBefore(this.bYa, pie.firstChild);
     }
@@ -545,8 +556,8 @@
        se pinta en la tarjeta grafica y ahi se queda. */
     if (this.imagen && global.navigator && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       this.bCam = U.el('button.btn', {
-        type: 'button', text: 'Usar la cámara',
-        title: 'Aplicar el shader a la imagen de tu cámara en lugar de a la foto'
+        type: 'button', text: UI('Usar la cámara'),
+        title: UI('Aplicar el shader a la imagen de tu cámara en lugar de a la foto')
       });
       this.bCam.addEventListener('click', function () {
         if (self.cam) self.apagaCamara(); else self.enciendeCamara();
@@ -652,8 +663,8 @@
     if (gl) gl.getExtension('OES_standard_derivatives');
     if (!gl) {
       this.gl = false;
-      this.aviso.textContent = 'Este navegador no tiene WebGL, así que no puede mostrar shaders. ' +
-        'El código de abajo se puede leer igual.';
+      this.aviso.textContent = UI('Este navegador no tiene WebGL, así que no puede mostrar shaders. ' +
+        'El código de abajo se puede leer igual.');
       this.aviso.classList.add('is-on');
       this.el.classList.add('shd--sinwebgl');
       return;
@@ -758,7 +769,7 @@
     gl.attachShader(pr, sh);
     gl.linkProgram(pr);
     if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) {
-      this.muestraErrores([{ linea: 0, msg: 'la vista no compila: ' + (gl.getShaderInfoLog(sh) || '') }]);
+      this.muestraErrores([{ linea: 0, msg: con('la vista no compila: {m}', { m: gl.getShaderInfoLog(sh) || '' }) }]);
       return;
     }
     this.progVista = pr;
@@ -844,7 +855,7 @@
     gl.attachShader(pr, r.shader);
     gl.linkProgram(pr);
     if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) {
-      this.muestraErrores([{ linea: 0, msg: gl.getProgramInfoLog(pr) || 'no enlaza' }]);
+      this.muestraErrores([{ linea: 0, msg: gl.getProgramInfoLog(pr) || UI('no enlaza') }]);
       return false;
     }
     if (this.prog) gl.deleteProgram(this.prog);
@@ -877,7 +888,7 @@
     var self = this;
     this.err.className = 'shd__err is-mal';
     this.err.innerHTML = errs.slice(0, 4).map(function (e) {
-      return '<span class="shd__ln">' + (e.linea ? 'línea ' + e.linea : 'shader') + '</span> ' +
+      return '<span class="shd__ln">' + (e.linea ? con('línea {n}', { n: e.linea }) : UI('shader')) + '</span> ' +
         U.escape(e.msg);
     }).join('<br>');
     this.el.classList.add('shd--roto');
@@ -885,7 +896,7 @@
 
   Visor.prototype.sinErrores = function () {
     this.err.className = 'shd__err is-bien';
-    this.err.textContent = 'Compila.';
+    this.err.textContent = UI('Compila.');
     this.el.classList.remove('shd--roto');
   };
 
@@ -929,7 +940,7 @@
   Visor.prototype.enciendeCamara = function () {
     var self = this;
     if (this.cam || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
-    this.estadoCamara('Pidiendo permiso para usar la cámara…');
+    this.estadoCamara(UI('Pidiendo permiso para usar la cámara…'));
     navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 640 }, height: { ideal: 480 } }, audio: false })
       .then(function (flujo) {
         if (!self.el.isConnected || self.gl === false) {
@@ -944,8 +955,8 @@
         if (pr && pr.catch) pr.catch(function () { });
         var lienzo = document.createElement('canvas');
         self.cam = { flujo: flujo, video: video, lienzo: lienzo, ctx: lienzo.getContext('2d') };
-        if (self.bCam) self.bCam.textContent = 'Volver a la foto';
-        self.estadoCamara('Cámara encendida. La imagen no sale de tu ordenador.');
+        if (self.bCam) self.bCam.textContent = UI('Volver a la foto');
+        self.estadoCamara(UI('Cámara encendida. La imagen no sale de tu ordenador.'));
         // con la camara encendida lo natural es verla moverse
         self.pausadoPorMano = false;
         if (!self.corriendo) self.play();
@@ -953,8 +964,9 @@
       })
       .catch(function (e) {
         var denegado = e && (e.name === 'NotAllowedError' || e.name === 'SecurityError');
-        self.estadoCamara('No se ha podido abrir la cámara' +
-          (denegado ? ': el navegador no ha dado permiso.' : '.') + ' Se sigue usando la foto.');
+        self.estadoCamara(UI(denegado
+          ? 'No se ha podido abrir la cámara: el navegador no ha dado permiso. Se sigue usando la foto.'
+          : 'No se ha podido abrir la cámara. Se sigue usando la foto.'));
       });
   };
 
@@ -969,7 +981,7 @@
       this.gl.activeTexture(this.gl.TEXTURE0);
       this.imgW = FOTO.width; this.imgH = FOTO.height;
     }
-    if (this.bCam) this.bCam.textContent = 'Usar la cámara';
+    if (this.bCam) this.bCam.textContent = UI('Usar la cámara');
     this.estadoCamara('');
     if (this.gl && !this.corriendo) this.pinta();
   };
@@ -1026,7 +1038,9 @@
   };
 
   Visor.prototype.pintaBoton = function () {
-    this.bPausa.innerHTML = this.corriendo ? '&#10074;&#10074; Pausa' : '&#9654; Seguir';
+    this.bPausa.innerHTML = this.corriendo
+      ? '&#10074;&#10074; ' + UI('Pausa')
+      : '&#9654; ' + UI('Seguir');
   };
 
   Visor.prototype.reinicia = function () {

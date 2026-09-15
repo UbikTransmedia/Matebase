@@ -49,21 +49,21 @@ I18N.add('en', {
     'Antes de tocar nada: ¿qué crees que pasará?': 'Before touching anything: what do you think will happen?',
     'Bloque': 'Block',
     'En este tema': 'In this topic',
+    /* Los nombres de las etapas españolas se quedan, como el de cualquier
+       sistema educativo; lo que se añade es de qué edad hablan. */
+    'ESO': 'Secondary (ESO)',
     '1.º Bachillerato': 'Year 1 of Bachillerato',
     '2.º Bachillerato': 'Year 2 of Bachillerato',
     'Ampliación': 'Further topics',
-    'El texto de este tema está en castellano.': 'The text of this topic is in Spanish.',
-    'Los enunciados de los ejercicios se generan en castellano.':
-      'The exercise questions are generated in Spanish.',
-    'La explicación de este tema sí está traducida.': 'The explanation of this topic is translated.',
-    'El curso está escrito en castellano.': 'The course is written in Spanish.',
-    'Esta página está escrita en castellano.': 'This page is written in Spanish.',
+    /* Los avisos de idioma viven todos juntos mas abajo; aqui solo quedan
+       los que no se repiten, para que no haya dos valores para una clave. */
     'Referencia GLSL': 'GLSL reference',
     'Referencia de JavaScript': 'JavaScript reference',
     'Referencia del lenguaje GLSL': 'GLSL language reference',
     'Referencia de JavaScript, el lenguaje del sintetizador':
       'JavaScript reference: the language of the synthesiser',
     'Glosario de términos': 'Glossary of terms',
+    'Ver en «{t}» →': 'See it in “{t}” →',
     'Ocultar el glosario': 'Hide the glossary',
     'Ocultar la referencia GLSL': 'Hide the GLSL reference',
     'Ocultar la referencia de JavaScript': 'Hide the JavaScript reference',
@@ -111,10 +111,27 @@ I18N.add('en', {
       'Delete the saved progress (topics visited, correct answers and reviews due)?',
     'Diseñado por': 'Designed by',
     'versión': 'version',
+    'No hay nada detrás': 'There is nothing behind',
+    'No hay nada delante': 'There is nothing ahead',
+    'Volver a «{t}»': 'Back to “{t}”',
+    'Ir a «{t}»': 'Go to “{t}”',
+    'Mostrar el curso entero': 'Show the whole course',
+    'Mostrar solo el temario de 2.º de {x}': 'Show only the final-year syllabus of {x}',
+    'Solo el temario de 2.º de {c} ({n} temas). Lo de cursos anteriores sigue enlazado en «Antes de empezar», al principio de cada tema.':
+      'Only the final-year syllabus of {c} ({n} topics). Earlier years are still linked under “Before you start”, at the beginning of each topic.',
+    'Ningún tema coincide.': 'No topic matches.',
+    'Ningún tema coincide con la búsqueda.': 'No topic matches the search.',
+    'Abrir «{t}» en {d}': 'Open “{t}” in {d}',
+    'En el glosario': 'In the glossary',
+    'el glosario': 'the glossary',
+    'En la referencia GLSL': 'In the GLSL reference',
+    'la referencia GLSL': 'the GLSL reference',
+    'En la referencia de JavaScript': 'In the JavaScript reference',
+    'la referencia de JavaScript': 'the JavaScript reference',
 
     /* --- el pie del indice: color, tamaño de letra e idioma --- */
     'Tema de color': 'Colour theme',
-    'Tema': 'Theme',
+    'Tema {x}': '{x} theme',
     'Claro': 'Light',
     'Oscuro': 'Dark',
     'Monokai': 'Monokai',
@@ -134,32 +151,93 @@ I18N.add('en', {
     'Progreso y clase': 'Progress and class',
     'Rutas de la ampliación': 'Paths through the advanced half',
     'Rutas': 'Paths',
-    'Deberes': 'Homework',
     'Examen': 'Exam',
 
     /* --- ejercicios --- */
-    'Comprobar': 'Check',
 
-    'Ver solución': 'Show solution',
-    'Ejemplo interactivo': 'Interactive example',
-    'Ejercicio práctico': 'Practice exercise',
+    'Solución paso a paso': 'Step-by-step solution',
+    'Apartado': 'Part',
+    'apartados: {k} de {n}': 'parts: {k} of {n}',
+    'Tema del que sale esta pregunta': 'Topic this question comes from',
 
-    /* --- el aviso del idioma --- */
+    /* La casilla convierte la coma en punto antes de leer la respuesta
+       (`Ex.compara`), asi que en ingles se puede prometer el punto. */
+    'Cómo se escribe la respuesta': 'How to write the answer',
+    'Cómo escribir la respuesta': 'How to write the answer',
+    '<strong>No hace falta que calcules el decimal.</strong> La casilla admite tal cual:<ul><li>fracciones: <em>3/4</em>, <em>120/7</em></li><li>decimales con coma: <em>-2,5</em></li><li>potencias: <em>2^10</em></li><li>raíces: <em>sqrt(2)</em> o <em>raiz(2)</em></li><li>constantes: <em>pi</em>, <em>e</em></li><li>cuentas sin resolver: <em>(3+5)*2</em></li></ul>Y si la respuesta es una expresión, vale escribirla entera: <em>2x+1</em>, <em>(x-3)(x+2)</em>.':
+      '<strong>You do not have to work out the decimal.</strong> The box takes, just as they are:<ul><li>fractions: <em>3/4</em>, <em>120/7</em></li><li>decimals with a point: <em>-2.5</em></li><li>powers: <em>2^10</em></li><li>roots: <em>sqrt(2)</em></li><li>constants: <em>pi</em>, <em>e</em></li><li>calculations left undone: <em>(3+5)*2</em></li></ul>And if the answer is an expression, you can write it out whole: <em>2x+1</em>, <em>(x-3)(x+2)</em>.',
+
+    'Elige una de las opciones antes de comprobar.': 'Choose one of the options before checking.',
+    'Escribe tu respuesta antes de comprobar. Vale una fracción o una cuenta sin resolver: mira el <strong>?</strong> que hay junto a la casilla.':
+      'Write your answer before checking. A fraction or a calculation left undone is fine: see the <strong>?</strong> next to the box.',
+    'No he podido leer la respuesta. Revisa lo que has escrito.':
+      'I could not read the answer. Check what you have written.',
+    '<strong>¡Correcto!</strong> Pulsa «Otro ejercicio» para practicar con números nuevos.':
+      '<strong>Correct!</strong> Press “Another exercise” to practise with new numbers.',
+    '<strong>¡Correcto!</strong> Sigue con el apartado siguiente.':
+      '<strong>Correct!</strong> Carry on with the next part.',
+    '<strong>¡Correcto!</strong> Con esto el problema está terminado.':
+      '<strong>Correct!</strong> With that the problem is finished.',
+    '<strong>Error típico.</strong> ': '<strong>A classic mistake.</strong> ',
+    ' <span class="verdict__mas">Corrígelo y vuelve a comprobar.</span>':
+      ' <span class="verdict__mas">Put it right and check again.</span>',
+    'Casi.': 'Almost.',
+    'Uno de {n} está bien; repasa el que falta.': 'One of {n} is right; look again at the one that is missing.',
+    'Uno de {n} está bien; repasa los que faltan.': 'One of {n} is right; look again at the ones that are missing.',
+    '{k} de {n} están bien; repasa el que falta.': '{k} of {n} are right; look again at the one that is missing.',
+    '{k} de {n} están bien; repasa los que faltan.': '{k} of {n} are right; look again at the ones that are missing.',
+    'La pista y la solución paso a paso están ahí abajo.':
+      'The hint and the step-by-step solution are down below.',
+    '<strong>Todavía no.</strong> Prueba otra vez, mira la pista, o abre la solución paso a paso: consultarla no resta nada.':
+      '<strong>Not yet.</strong> Try again, look at the hint, or open the step-by-step solution: looking at it takes nothing away.',
+    'Pista.': 'Hint.',
+    'Pista {i} de {n}.': 'Hint {i} of {n}.',
+    'este, 1 vez': 'this one, once',
+    'este, {n} veces': 'this one, {n} times',
+    '1 resuelto en el tema': '1 solved in this topic',
+    '{n} resueltos en el tema': '{n} solved in this topic',
+
+    /* --- el enlace de un enunciado y la lista de deberes --- */
+    'Copiar un enlace que abre este mismo enunciado, con estos mismos números':
+      'Copy a link that opens this very exercise, with these very numbers',
+    'Enlace a este enunciado': 'Link to this exercise',
+    'Enlace copiado. Quien lo abra verá este mismo enunciado, con estos números: sirve para trabajarlo en clase o para preguntar una duda concreta.':
+      'Link copied. Whoever opens it will see this very exercise, with these numbers: it is good for working on it in class or for asking about one particular difficulty.',
+    'Añadir este enunciado, con estos números, a una lista que se comparte como un enlace':
+      'Add this exercise, with these numbers, to a list that is shared as a link',
+    'Ese enunciado ya estaba en la lista.': 'That exercise was already on the list.',
+    'Añadido. La lista va por ': 'Added. The list is up to ',
+    'enunciado': 'exercise',
+    'enunciados': 'exercises',
+
+    /* --- la pagina de un tema: formulas, ejemplos resueltos y comprueba --- */
+    'Cómo se lee esta fórmula': 'How this formula is read',
+    'Cómo se lee': 'How it is read',
+    'Antes de destapar el paso {n}:': 'Before uncovering step {n}:',
+    '<strong>✓ Eso es.</strong> ': '<strong>✓ That is it.</strong> ',
+    '<strong>✗ No.</strong> ': '<strong>✗ No.</strong> ',
+    ' <em>Prueba otra vez.</em>': ' <em>Try again.</em>',
+
+    /* --- el aviso del idioma ---
+       Se dice antes de leer, no a mitad: lo que queda en castellano tiene
+       que decirse en la puerta. La portada nombra lo que falta; el glosario
+       y las dos referencias lo dicen en su propio panel. */
     'El texto de este tema está en castellano.': 'This topic is written in Spanish.',
     'El curso está escrito en castellano.': 'This course is written in Spanish.',
-    'Esta página está escrita en castellano.': 'This page is written in Spanish.',
     'La interfaz y el temario están traducidos; la explicación, todavía no.':
       'The interface and the syllabus are translated; the explanation is not — yet.',
+    'La interfaz, el temario y la explicación de los temas están traducidos; el glosario, las dos referencias de lenguaje y los comentarios dentro del código siguen en castellano.':
+      'The interface, the syllabus and the explanation of the topics are translated; the glossary, the two language references and the comments inside the code are still in Spanish.',
+    'El glosario está en castellano.': 'The glossary is in Spanish.',
+    'Esta referencia está en castellano.': 'This reference is in Spanish.',
+    'Los nombres y el código son los mismos en cualquier idioma; lo que sigue sin traducir es la explicación.':
+      'The names and the code are the same in any language; what is still untranslated is the explanation.',
 
     /* --- el mapa, los simulacros y el formulario de 2.º (repaso.js) --- */
     'Tema': 'Topic',
     'Tu estado': 'Your progress',
     'Lo que da por sabido': 'What it takes for granted',
-    'dominado': 'mastered',
-    'visto': 'seen',
-    'sin empezar': 'not started',
-    'Temario de 2.º de': 'Final-year syllabus of',
-    'temas': 'topics',
+    'Temario de 2.º de {c}: {n} temas.': 'Final-year syllabus of {c}: {n} topics.',
     'Dominados': 'Mastered',
     'vistos sin dominar': 'seen but not mastered',
     '«Dominado» significa haber resuelto al menos una vez cada tipo de ejercicio del tema. Entre paréntesis, cuántos llevas.':
@@ -167,7 +245,7 @@ I18N.add('en', {
     'Simulacro': 'Mock paper',
     'Examen de práctica': 'Practice exam',
     'Elige los bloques que entran. Las preguntas se sacan al azar de los ejercicios de cada tema, dando preferencia a los problemas por apartados, que son los que más se parecen a la PAU. No hay pistas: la corrección y la solución paso a paso llegan al entregar.':
-      'Choose the blocks that are included. The questions are drawn at random from each topic\u2019s exercises, giving preference to the multi-part problems, which are the ones that most resemble the entrance exam. There are no hints: the marking and the step-by-step solution arrive when you submit.',
+      'Choose the blocks that are included. The questions are drawn at random from each topic\'s exercises, giving preference to the multi-part problems, which are the ones that most resemble the entrance exam. There are no hints: the marking and the step-by-step solution arrive when you submit.',
     'pregunta': 'question',
     'preguntas': 'questions',
     'de': 'from',
@@ -176,6 +254,7 @@ I18N.add('en', {
     'Ajustado a lo que llevas hecho': 'Tailored to what you have done',
     'entran antes las preguntas que no has resuelto nunca y las de los temas que aún no dominas':
       'questions you have never solved and questions from topics you have not mastered come first',
+    '{r} de {n} con respuesta': '{r} of {n} answered',
     'Empezar el simulacro': 'Start the mock paper',
     'Empezar otro simulacro': 'Start another mock paper',
     'minutos': 'minutes',
@@ -188,38 +267,562 @@ I18N.add('en', {
     'Preparando las preguntas…': 'Preparing the questions…',
     'Entregar y corregir': 'Submit and mark',
     'Control del simulacro': 'Mock paper controls',
-    'Quedan': 'There are still',
-    'preguntas sin responder. ¿Entregar igualmente?': 'questions unanswered. Submit anyway?',
+    'Queda 1 pregunta sin responder. ¿Entregar igualmente?': 'There is 1 question unanswered. Submit anyway?',
+    'Quedan {n} preguntas sin responder. ¿Entregar igualmente?': 'There are {n} questions unanswered. Submit anyway?',
     'sobre 10': 'out of 10',
-    'Bloque': 'Block',
     'Puntos': 'Marks',
     'Para repasar': 'To revise',
     'nada: todo bien': 'nothing: all correct',
     'El reparto del tiempo.': 'How the time was spent.',
-    'Has tardado': 'You took',
-    'de los': 'of the',
-    'del examen': 'of the exam',
+    'Has tardado {t} de los {p} del examen.': 'You took {t} of the {p} minutes the exam allows.',
+    'Has tardado {t}.': 'You took {t}.',
     'Ninguna pregunta te ha llevado ni medio minuto, así que aquí no hay mucho que mirar: el reparto del tiempo se ve cuando el examen se hace de verdad.':
       'No question took you even half a minute, so there is not much to look at here: how the time is spent shows up when the exam is done for real.',
-    'Donde más rato estuviste fue en la': 'Where you spent longest was on',
-    'más del doble de los': 'more than double the',
-    'que le tocaban. En un examen de verdad, ése es el momento de dejarla a medias, hacer las demás y volver.':
-      'it was allotted. In a real exam, that is the moment to leave it half done, do the rest and come back.',
-    'y le tocaban': 'and it was allotted',
-    'dentro de lo razonable.': 'within reason.',
+    'Donde más rato estuviste fue en la {q}, {m} min, más del doble de los {p} que le tocaban. En un examen de verdad, ése es el momento de dejarla a medias, hacer las demás y volver.':
+      'Where you spent longest was on {q}, {m} min: more than double the {p} minutes it was allotted. In a real exam, that is the moment to leave it half done, do the rest and come back.',
+    'Donde más rato estuviste fue en la {q}, {m} min, y le tocaban {p}: dentro de lo razonable.':
+      'Where you spent longest was on {q}, {m} min against the {p} minutes it was allotted: within reason.',
     'Cada pregunta vale lo mismo; en los problemas por apartados cuenta la parte acertada. Las soluciones paso a paso están ya abiertas debajo de cada pregunta. Lo que falles volverá a salirte en «Para repasar hoy», en la portada.':
       'Every question is worth the same; in multi-part problems the part you got right counts. The step-by-step solutions are already open under each question. What you get wrong will come up again under “To revise today”, on the home page.',
     'Otro simulacro': 'Another mock paper',
     'Enlace a este mismo examen': 'Link to this very exam',
     'Enlace copiado: quien lo abra tendrá estas mismas preguntas':
       'Link copied: whoever opens it will get these same questions',
-    'Copia este enlace:': 'Copy this link:',
     'Imprimir o guardar en PDF': 'Print or save as PDF',
     'El formulario se monta al abrir el curso desde index.html.':
       'The formula sheet is assembled when the course is opened from index.html.',
-    'Reuniendo las fórmulas de': 'Gathering the formulas of',
-    'temas…': 'topics…',
-    'Ideas clave': 'Key ideas'
+    'Reuniendo las fórmulas de {n} temas…': 'Gathering the formulas of {n} topics…',
+
+    /* ==================================================================
+       LOS INSTRUMENTOS
+       Los rotulos, los botones y los mensajes de error de los motores que
+       se tocan: circuitos, maquina, lenguaje, sonido, shaders y graficas.
+       Un mensaje de error es lo que mas se lee de un instrumento, asi que
+       aqui van frases enteras y no trozos: los huecos {x}, {n}, {m} los
+       rellena el motor despues de traducir.
+       ================================================================== */
+
+    /* --- botones que comparten varios instrumentos --- */
+    'Volver al original': 'Back to the original',
+    'Un paso': 'One step',
+    'Línea {n}: {m}': 'Line {n}: {m}',
+
+    /* --- circuitos logicos (logica.js) --- */
+    'Netlist del circuito, una puerta por línea': 'Netlist of the circuit, one gate per line',
+    'Diagrama del circuito: las entradas a la izquierda, las puertas en columnas y los cables uniéndolas.':
+      'Diagram of the circuit: the inputs on the left, the gates in columns and the wires joining them.',
+    'Un instante': 'One instant',
+    'Estabilizar': 'Settle',
+    'Apagar y encender': 'Switch off and on',
+    'puerta': 'gate',
+    'puertas': 'gates',
+    'oscila': 'oscillates',
+    'Instante {n}': 'Instant {n}',
+    'Estable: no se ha movido nada': 'Stable: nothing has moved',
+    'Estable tras 1 instante': 'Stable after 1 instant',
+    'Estable tras {n} instantes': 'Stable after {n} instants',
+    'OSCILA: tras {n} instantes el circuito no se queda quieto. No es un fallo del simulador: hay un bucle que se persigue a sí mismo.':
+      'IT OSCILLATES: after {n} instants the circuit does not settle. It is not a fault of the simulator: there is a loop chasing itself.',
+    'Demasiadas entradas para escribir la tabla entera.': 'Too many inputs to write out the whole table.',
+    'Corrige la netlist para ver el circuito': 'Correct the netlist to see the circuit',
+    'esto no es una asignación: se escribe «nombre = puerta(a, b)»':
+      'this is not an assignment: you write “name = gate(a, b)”',
+    '«{x}» es el nombre de una puerta: elige otro para el cable':
+      '“{x}” is the name of a gate: choose another one for the wire',
+    '«{x}» ya estaba definido más arriba': '“{x}” was already defined further up',
+    'no existe la puerta «{x}». Hay: {l}': 'there is no gate “{x}”. There are: {l}',
+    '«{x}» necesita entradas entre los paréntesis': '“{x}” needs inputs between the brackets',
+    '«not» lleva una sola entrada, no {n}': '“not” takes a single input, not {n}',
+    '«{x}» necesita al menos dos entradas': '“{x}” needs at least two inputs',
+    '«{x}» no es un nombre de cable válido': '“{x}” is not a valid wire name',
+    'no entiendo «{x}»: se espera puerta(a, b), un cable o 0/1':
+      'I do not understand “{x}”: here I expect gate(a, b), a wire or 0/1',
+    'el cable «{x}» no viene de ninguna parte': 'the wire “{x}” comes from nowhere',
+    'La netlist tiene errores: {m}': 'The netlist has errors: {m}',
+    'Falta usar la entrada «{x}».': 'The input “{x}” is never used.',
+    'Hay una entrada de más: «{x}».': 'There is one input too many: “{x}”.',
+    'Se esperaban {a} salidas y hay {b}.': 'I expected {a} outputs and there are {b}.',
+    'Con {c} el circuito oscila y nunca se queda quieto.':
+      'With {c} the circuit oscillates and never settles.',
+    'Con {c} debería salir {a} y sale {b}.': 'With {c} it should give {a} and it gives {b}.',
+
+    /* --- sintetizador (sonido.js) ---
+       Los nombres de las funciones del sintetizador -sierra, cuadrada,
+       nota, ruido- son el lenguaje que se teclea en el editor, y se quedan
+       en castellano como los de cualquier lenguaje de programacion. */
+    'Código del sonido': 'Sound code',
+    'se vuelve a calcular solo al escribir': 'it recomputes itself as you type',
+    'Tocar': 'Play',
+    'Tocar el sonido': 'Play the sound',
+    'Parar': 'Stop',
+    'Parar el sonido': 'Stop the sound',
+    'Otra vez': 'Again',
+    'volumen': 'volume',
+    'Volumen': 'Volume',
+    'onda · {n} ms': 'wave · {n} ms',
+    'espectro': 'spectrum',
+    'espectrograma': 'spectrogram',
+    'hasta {f}': 'up to {f}',
+    'línea {n}': 'line {n}',
+    'pico {p} · nivel {n}': 'peak {p} · level {n}',
+    'silencio': 'silence',
+    'dominante {f} Hz': 'dominant {f} Hz',
+    'sin tono claro': 'no clear pitch',
+    'recorta el {p} %': 'clipping {p} %',
+    'Forma de onda: los primeros {n} milisegundos del sonido que calcula el código de abajo.':
+      'Waveform: the first {n} milliseconds of the sound the code below computes.',
+    'Espectro: qué frecuencias contiene el sonido y con qué amplitud, hasta {n} hercios.':
+      'Spectrum: which frequencies the sound contains and with what amplitude, up to {n} hertz.',
+    'Espectrograma: el tiempo de izquierda a derecha, la frecuencia de abajo arriba hasta {n} hercios, y el brillo es la amplitud.':
+      'Spectrogram: time from left to right, frequency from bottom to top up to {n} hertz, and the brightness is the amplitude.',
+    'El sonido entero, de principio a fin, con la posición de reproducción.':
+      'The whole sound, from beginning to end, with the playback position.',
+    'Este navegador no puede reproducir sonido, pero la onda y el espectro de arriba son el sonido calculado.':
+      'This browser cannot play sound, but the wave and the spectrum above are the computed sound.',
+    'la respuesta no compila': 'the answer does not compile',
+    'la referencia no compila': 'the reference does not compile',
+    'No hay ninguna función llamada «sonido». Tiene que empezar por: function sonido(t) {':
+      'There is no function called “sonido”. It has to start with: function sonido(t) {',
+    'La función no devuelve un número. ¿Falta el «return»?':
+      'The function does not return a number. Is the “return” missing?',
+    '«$1» no existe. ¿Está bien escrito? Las funciones que hay son sin, cos, sierra, cuadrada, nota, ruido, anterior…':
+      '“$1” does not exist. Is it spelled right? The functions available are sin, cos, sierra, cuadrada, nota, ruido, anterior…',
+    '«$1» se usa como si fuera una función y no lo es.': '“$1” is used as if it were a function, and it is not.',
+    'Sobra un paréntesis, o falta algo antes de él.': 'There is one bracket too many, or something is missing before it.',
+    'Sobra una llave, o falta un punto y coma antes.': 'There is one brace too many, or a semicolon is missing before it.',
+    'El código se acaba antes de tiempo: falta cerrar un paréntesis o una llave.':
+      'The code ends too soon: a bracket or a brace is left open.',
+    'Dos nombres seguidos sin operador entre ellos: falta un *, un + o una coma.':
+      'Two names in a row with no operator between them: a *, a + or a comma is missing.',
+    'Un número donde no se esperaba: falta un operador delante.':
+      'A number where none was expected: an operator is missing in front of it.',
+    'Hay un carácter que no se entiende (¿una comilla sin cerrar?).':
+      'There is a character that makes no sense (an unclosed quote?).',
+    'Falta un paréntesis de cierre.': 'A closing bracket is missing.',
+    'Falta un punto y coma, o un operador, antes de esta parte.':
+      'A semicolon, or an operator, is missing before this part.',
+    'Falta cerrar una llave.': 'A brace is left open.',
+
+    /* --- shaders (shader.js) --- */
+    'Código del shader': 'Shader code',
+    'se recompila solo al escribir': 'it recompiles itself as you type',
+    'Resultado del shader. Cada píxel de este dibujo lo calcula el código de abajo.':
+      'Result of the shader. Every pixel of this drawing is computed by the code below.',
+    'Pausa': 'Pause',
+    'Seguir': 'Resume',
+    'Ejecutar': 'Run',
+    'Compila.': 'It compiles.',
+    'no compila': 'it does not compile',
+    'no enlaza': 'it does not link',
+    'shader': 'shader',
+    'la vista no compila: {m}': 'the view does not compile: {m}',
+    'Este navegador no tiene WebGL, así que no puede mostrar shaders. El código de abajo se puede leer igual.':
+      'This browser has no WebGL, so it cannot show shaders. The code below can still be read.',
+    'Usar la cámara': 'Use the camera',
+    'Volver a la foto': 'Back to the photo',
+    'Aplicar el shader a la imagen de tu cámara en lugar de a la foto':
+      'Apply the shader to your camera\'s image instead of to the photo',
+    'Pidiendo permiso para usar la cámara…': 'Asking for permission to use the camera…',
+    'Cámara encendida. La imagen no sale de tu ordenador.':
+      'Camera on. The image does not leave your computer.',
+    'No se ha podido abrir la cámara: el navegador no ha dado permiso. Se sigue usando la foto.':
+      'The camera could not be opened: the browser did not give permission. The photo is still being used.',
+    'No se ha podido abrir la cámara. Se sigue usando la foto.':
+      'The camera could not be opened. The photo is still being used.',
+
+    /* --- graficas y dibujos en tres dimensiones (widgets.js) ---
+       Casi todo esto lo lee en voz alta un lector de pantalla. */
+    'Gráfica': 'Graph',
+    'Gráfica del ejemplo «{t}»': 'Graph of the example “{t}”',
+    'Eje horizontal de {a} a {b}': 'Horizontal axis from {a} to {b}',
+    'eje vertical de {a} a {b}': 'vertical axis from {a} to {b}',
+    'punto': 'point',
+    'Tiene un punto que se puede mover. Muévelo con las flechas; con Mayúsculas se mueve más despacio.':
+      'It has one point that can be moved. Move it with the arrow keys; with Shift it moves more slowly.',
+    'Tiene {n} puntos que se pueden mover. Muévelos con las flechas; con Mayúsculas se mueven más despacio; la barra espaciadora pasa al punto siguiente.':
+      'It has {n} points that can be moved. Move them with the arrow keys; with Shift they move more slowly; the space bar goes on to the next point.',
+    'También con el teclado: <kbd>Tab</kbd> hasta el dibujo y <kbd>&#8592;</kbd><kbd>&#8593;</kbd><kbd>&#8595;</kbd><kbd>&#8594;</kbd> para mover el punto.':
+      'With the keyboard too: <kbd>Tab</kbd> to the drawing and <kbd>&#8592;</kbd><kbd>&#8593;</kbd><kbd>&#8595;</kbd><kbd>&#8594;</kbd> to move the point.',
+    'Dibujo en tres dimensiones': 'Drawing in three dimensions',
+    'Se puede girar para verlo desde otro sitio: arrastrándolo, o con las flechas del teclado; más y menos acercan, y la tecla R vuelve a la vista inicial.':
+      'It can be rotated to see it from somewhere else: by dragging it, or with the arrow keys; plus and minus zoom in and out, and the R key returns to the initial view.',
+    'Vista girada: {a} grados en horizontal y {b} grados de elevación.':
+      'View rotated: {a} degrees horizontally and {b} degrees of elevation.',
+    'Arrastra el dibujo para girarlo. Con el teclado: <kbd>Tab</kbd> hasta el dibujo, <kbd>&#8592;</kbd><kbd>&#8594;</kbd><kbd>&#8593;</kbd><kbd>&#8595;</kbd> para girar, <kbd>+</kbd><kbd>&#8722;</kbd> para acercar y <kbd>R</kbd> para volver a la vista inicial.':
+      'Drag the drawing to rotate it. With the keyboard: <kbd>Tab</kbd> to the drawing, <kbd>&#8592;</kbd><kbd>&#8594;</kbd><kbd>&#8593;</kbd><kbd>&#8595;</kbd> to rotate, <kbd>+</kbd><kbd>&#8722;</kbd> to zoom in and out, and <kbd>R</kbd> to return to the initial view.',
+
+    /* --- la maquina de ocho bits (maquina.js) ---
+       Los nemonicos (CARGA, GUARDA, SUMA, PARA) y los programas de ejemplo
+       son el lenguaje de la maquina y se quedan en castellano, como el
+       codigo de cualquier otro lenguaje del curso. Lo que se traduce es lo
+       que se lee alrededor: que hace cada instruccion y por que ha parado. */
+    'Programa en ensamblador, una instrucción por línea': 'Program in assembler, one instruction per line',
+    'Corre': 'Run',
+    'Reinicia': 'Reset',
+    'contador': 'counter',
+    'acumulador': 'accumulator',
+    'pila': 'stack',
+    'salida': 'output',
+    'celda': 'cell',
+    'valor': 'value',
+    'qué es': 'what it is',
+    'libre': 'free',
+    'dato': 'data',
+    'nada': 'nothing',
+    'los valores de partida': 'the starting values',
+    'lo que lleva {i} detrás': 'what {i} takes after it',
+    'Parada: {m}': 'Stopped: {m}',
+    'Acaba de hacer {i}: {q}': 'It has just done {i}: {q}',
+    'ojo, alguna cuenta se salió de los ocho bits y dio la vuelta':
+      'careful, some calculation went outside the eight bits and wrapped round',
+    'Lista. El contador está en la celda 0, que es por donde empieza todo.':
+      'Ready. The counter is at cell 0, which is where everything starts.',
+
+    /* que hace cada instruccion */
+    'detiene la máquina': 'stops the machine',
+    'pone ese número en el acumulador; con un nombre, pone la dirección de esa celda':
+      'puts that number in the accumulator; with a name, puts the address of that cell',
+    'copia al acumulador lo que hay en esa celda': 'copies into the accumulator what is in that cell',
+    'copia el acumulador a esa celda': 'copies the accumulator into that cell',
+    'mete el acumulador en la pila': 'pushes the accumulator onto the stack',
+    'saca de la pila al acumulador': 'pops from the stack into the accumulator',
+    'saca de la pila y le suma el acumulador': 'pops from the stack and adds the accumulator to it',
+    'saca de la pila y le resta el acumulador': 'pops from the stack and subtracts the accumulator from it',
+    'saca de la pila y lo multiplica por el acumulador': 'pops from the stack and multiplies it by the accumulator',
+    'saca de la pila y lo divide por el acumulador, tirando los decimales':
+      'pops from the stack and divides it by the accumulator, throwing the decimals away',
+    'saca de la pila: deja 1 si era menor que el acumulador, y 0 si no':
+      'pops from the stack: leaves 1 if it was smaller than the accumulator, and 0 if not',
+    'sigue por esa etiqueta': 'carries on at that label',
+    'sigue por esa etiqueta solo si el acumulador vale 0': 'carries on at that label only if the accumulator is 0',
+    'guarda dónde estaba en la pila y salta ahí': 'saves where it was on the stack and jumps there',
+    'vuelve a donde dijo la última llamada': 'goes back to where the last call said',
+    'escribe el acumulador en la salida': 'writes the accumulator to the output',
+    'mira qué dirección hay en esa celda y carga lo que haya ahí':
+      'looks at which address is in that cell and loads whatever is there',
+    'mira qué dirección hay en esa celda y guarda el acumulador ahí':
+      'looks at which address is in that cell and stores the accumulator there',
+
+    /* errores del ensamblador */
+    'la etiqueta «{x}» ya estaba puesta más arriba': 'the label “{x}” was already set further up',
+    '«TABLA» se escribe «TABLA nombre tamaño»': '“TABLA” is written “TABLA name size”',
+    '«{x}» no es un nombre válido para una tabla': '“{x}” is not a valid name for a table',
+    'el tamaño de una tabla es un número entre 1 y {n}': 'a table\'s size is a number between 1 and {n}',
+    'la tabla «{x}» ya estaba declarada': 'the table “{x}” was already declared',
+    'no existe la instrucción «{x}». Hay: {l}': 'there is no instruction “{x}”. There are: {l}',
+    '«{x}» no lleva nada detrás': '“{x}” takes nothing after it',
+    '«{x}» necesita un sitio al que ir': '“{x}” needs somewhere to go',
+    '«{x}» necesita un nombre de celda': '“{x}” needs a cell name',
+    '«{x}» necesita un número': '“{x}” needs a number',
+    '«{x}» lleva una sola cosa detrás, no {n}': '“{x}” takes a single thing after it, not {n}',
+    'la celda {v} no existe: van de 0 a {n}': 'cell {v} does not exist: they run from 0 to {n}',
+    'el número {v} no cabe en ocho bits con signo: van de -128 a 127':
+      'the number {v} does not fit in eight signed bits: they run from −128 to 127',
+    '«{x}» no es ni un número ni un nombre': '“{x}” is neither a number nor a name',
+    'no hay ninguna etiqueta que se llame «{x}». Se pone escribiendo «{x}:» en su línea':
+      'there is no label called “{x}”. You set one by writing “{x}:” on its own line',
+    '«{op}» necesita un número, no el nombre «{x}»': '“{op}” needs a number, not the name “{x}”',
+    'el programa y sus variables no caben en las {n} celdas de memoria':
+      'the program and its variables do not fit in the {n} cells of memory',
+
+    /* por que ha parado la maquina */
+    'el contador se ha ido fuera de la memoria': 'the counter has gone outside the memory',
+    'en la celda {d} hay un {v}, que no es ninguna instrucción':
+      'in cell {d} there is a {v}, which is no instruction at all',
+    'se ha intentado sacar de la pila estando vacía': 'something tried to pop from the stack while it was empty',
+    'el programa ha terminado': 'the program has finished',
+    'la pila se ha llenado: son 64 sitios, y suele pasar cuando una llamada no vuelve nunca':
+      'the stack has filled up: there are 64 places, and it usually happens when a call never returns',
+    'se ha intentado dividir entre cero': 'something tried to divide by zero',
+    'el programa ha escrito más de 200 números: seguramente es un bucle sin fin':
+      'the program has written more than 200 numbers: it is probably an endless loop',
+    'se han dado {n} pasos sin terminar: o es un bucle sin fin, o hace falta más cuerda':
+      '{n} steps have been taken without finishing: either it is an endless loop, or it needs more winding',
+    'El programa no usa ninguna celda llamada «{x}», y es donde llega el dato. Los nombres del enunciado hay que usarlos tal cual.':
+      'The program uses no cell called “{x}”, and that is where the data arrives. The names in the question have to be used exactly as they are.',
+    'Con {c} el programa no llegó a PARA: {m}.': 'With {c} the program did not reach PARA: {m}.',
+    'Con {c} esperaba que escribiera {a} y ha escrito {b}.':
+      'With {c} I expected it to write {a} and it wrote {b}.',
+
+    /* --- Pizca, el lenguaje y su traductor (lenguaje.js) ---
+       Las palabras clave -sea, fun, si, mientras, muestra, vuelve- son lo
+       que se teclea en el editor y no se traducen. */
+    'Panel del traductor': 'Translator panel',
+    'Expresión que se dibuja': 'Expression being drawn',
+    'Hasta el final': 'To the end',
+    'Volver al principio': 'Back to the start',
+    'la pila': 'the stack',
+    'vacía': 'empty',
+    'hacer y tirar': 'do and discard',
+    'Se entiende.': 'It makes sense.',
+    '{t} pieza': '{t} piece',
+    '{t} piezas': '{t} pieces',
+    'y un árbol de {n} sentencia.': 'and a tree of {n} statement.',
+    'y un árbol de {n} sentencias.': 'and a tree of {n} statements.',
+    'línea {n}: {m}': 'line {n}: {m}',
+    'Interpretado escribe: {a}': 'Interpreted, it writes: {a}',
+    'compilado y ejecutado en la máquina escribe: {b}':
+      'compiled and run on the machine, it writes: {b}',
+    'son lo mismo ✓': 'they are the same ✓',
+    '¡NO coinciden!': 'they do NOT match!',
+    'Lo que escribe la máquina: {a}': 'What the machine writes: {a}',
+    'Instrucciones generadas: {n}': 'Instructions generated: {n}',
+    'Cómo acabó: {m}': 'How it ended: {m}',
+    'Interpretándolo: {m}': 'Interpreting it: {m}',
+    'Cuentas plegadas: {p} · trozos muertos quitados: {q}':
+      'Calculations folded: {p} · dead pieces removed: {q}',
+    'Árbol de la expresión: las operaciones en los nudos y los números en las hojas, dibujado de abajo arriba.':
+      'Tree of the expression: the operations at the nodes and the numbers at the leaves, drawn from the bottom up.',
+    'Escribe una expresión, como «2 + 3 * 4».': 'Write an expression, such as “2 + 3 * 4”.',
+    'aquí no se evalúa': 'this is not evaluated here',
+    'Sin empezar.': 'Not started.',
+    'Hay {n} nudo que visitar, las hojas primero.': 'There is {n} node to visit, the leaves first.',
+    'Hay {n} nudos que visitar, las hojas primero.': 'There are {n} nodes to visit, the leaves first.',
+    'Paso {i} de {n}': 'Step {i} of {n}',
+    'en polaca inversa: {r}': 'in reverse Polish: {r}',
+    'altura máxima de la pila: {a}': 'maximum stack height: {a}',
+    'vale {v}': 'it is {v}',
+
+    /* errores de Pizca */
+    'no sé qué es «{x}»': 'I do not know what “{x}” is',
+    'esperaba «{v}» y he encontrado {q}': 'I expected “{v}” and I found {q}',
+    'el final del programa': 'the end of the program',
+    'el programa se acaba antes de tiempo': 'the program ends too soon',
+    'aquí esperaba un número, un nombre o un paréntesis, y hay {q}':
+      'here I expected a number, a name or a bracket, and there is {q}',
+    'después de «sea» va un nombre': 'after “sea” comes a name',
+    'después de «fun» va el nombre de la función': 'after “fun” comes the name of the function',
+    'esto no empieza ninguna sentencia: {q}': 'this does not begin any statement: {q}',
+    'no hay ninguna variable que se llame «{x}»': 'there is no variable called “{x}”',
+    'no hay ninguna variable que se llame «{x}». Para crearla, «sea {x} = ...;»':
+      'there is no variable called “{x}”. To create it, “sea {x} = ...;”',
+    'no hay ninguna función que se llame «{x}»': 'there is no function called “{x}”',
+    '«{x}» necesita 1 dato y le has dado {d}': '“{x}” needs 1 value and you have given it {d}',
+    '«{x}» necesita {n} datos y le has dado {d}': '“{x}” needs {n} values and you have given it {d}',
+    '«vuelve» solo tiene sentido dentro de una función': '“vuelve” only makes sense inside a function',
+    'no sé evaluar esto': 'I do not know how to evaluate this',
+    'no sé ejecutar esto': 'I do not know how to run this',
+    'no sé compilar esto': 'I do not know how to compile this',
+    'no sé compilar esta sentencia': 'I do not know how to compile this statement',
+    'no sé compilar el operador {op}': 'I do not know how to compile the operator {op}',
+    'Empezando con «{p}», esperaba que escribiera {a} y ha escrito {b}.':
+      'Starting with “{p}”, I expected it to write {a} and it wrote {b}.',
+    'Esperaba que escribiera {a} y ha escrito {b}.':
+      'I expected it to write {a} and it wrote {b}.',
+
+    /* --- la portada y las cuatro paginas de fuera de los temas ---
+       Portada, deberes, examen de cualquier bloque, rutas de la
+       ampliacion y progreso. Aqui van sus rotulos; su prosa, que es
+       texto del autor y no interfaz, esta en `txt`. */
+    'Continúa donde lo dejaste': 'Carry on where you left off',
+    'ejercicio {n}': 'exercise {n}',
+    'lo fallaste la última vez': 'you got it wrong last time',
+    'repaso {r}': 'revision {r}',
+    'Temario de {c}': 'Syllabus of {c}',
+    'Mapa de 2.º y simulacros →': 'Final-year map and mock papers →',
+    'Rutas de la ampliación →': 'Paths through the advanced half →',
+    'Montar un examen →': 'Build an exam →',
+    'Progreso y clase →': 'Progress and class →',
+    '{n} tema': '{n} topic',
+    '{n} temas': '{n} topics',
+    '← Al índice': '← To the index',
+    'resuelto alguna vez': 'solved at some point',
+    'pendiente': 'still to do',
+    'Quitar de la lista': 'Remove from the list',
+    'Empezar por el primero →': 'Start with the first one →',
+    'Copiarlos a mi lista': 'Copy them to my list',
+    'Enlace con estos deberes': 'Link carrying this homework',
+    'Copiado. Pégalo donde quieras: quien lo abra verá estos mismos enunciados.':
+      'Copied. Paste it wherever you like: whoever opens it will see these very exercises.',
+    '⧉ Copiar el enlace': '⧉ Copy the link',
+    '¿Vaciar la lista de deberes?': 'Empty the homework list?',
+    'Vaciar': 'Empty',
+    'Examen de cualquier bloque': 'An exam from any block',
+    '{n} pregunta por bloque': '{n} question per block',
+    '{n} preguntas por bloque': '{n} questions per block',
+    'Preparar el examen': 'Prepare the exam',
+    'Enlace de este examen': 'Link to this exam',
+    'Enlace de esta configuración': 'Link to this set-up',
+    'Enlace de esta configuración:': 'Link to this set-up:',
+    '1 bloque · {p} preguntas · ≈{m} minutos': '1 block · {p} questions · ≈{m} minutes',
+    '{n} bloques · {p} preguntas · ≈{m} minutos': '{n} blocks · {p} questions · ≈{m} minutes',
+    'Examen de 1 bloque': 'Exam from 1 block',
+    'Examen de {n} bloques': 'Exam from {n} blocks',
+    '{n} temas · ≈{h} h': '{n} topics · ≈{h} h',
+    '{d} de {n} dominados, {v} empezados.': '{d} of {n} mastered, {v} started.',
+    'Sin empezar. Se entra por «{t}».': 'Not started. The way in is “{t}”.',
+    'Seguir en «{t}» →': 'Carry on at “{t}” →',
+    'Empezar por «{t}» →': 'Start with “{t}” →',
+    'Ruta completa ✓': 'Path complete ✓',
+    'Ver el recorrido': 'See the whole path',
+    '← Todas las rutas': '← All the paths',
+    'bloque {n}': 'block {n}',
+    '{d} dominados y {v} vistos de {n}': '{d} mastered and {v} seen out of {n}',
+    'Tu nombre (opcional, va dentro del archivo)': 'Your name (optional, it goes inside the file)',
+    'Nombre para el archivo de progreso': 'Name for the progress file',
+    'Guardado como «{f}». Llévatelo donde quieras y cárgalo ahí abajo.':
+      'Saved as “{f}”. Take it wherever you like and load it below.',
+    'Este navegador no deja descargar archivos. Copia el texto de abajo a mano.':
+      'This browser does not allow files to be downloaded. Copy the text below by hand.',
+    '⭳ Guardar en un archivo': '⭳ Save to a file',
+    'Ahí está el texto. Cópialo y pégalo donde quieras guardarlo.':
+      'There is the text. Copy it and paste it wherever you want to keep it.',
+    'Ver el texto para copiarlo': 'Show the text so it can be copied',
+    'Tu progreso en texto': 'Your progress as text',
+    'Pega aquí el texto del progreso, o usa el botón de abajo':
+      'Paste the progress text here, or use the button below',
+    'Progreso a recuperar': 'Progress to bring back',
+    'Listo: {n} temas fundidos con lo que ya había.':
+      'Done: {n} topics merged with what was already there.',
+    'Listo: {n} temas cargados, reemplazando lo anterior.':
+      'Done: {n} topics loaded, replacing what was there before.',
+    '(archivo de {q})': '(file from {q})',
+    'Archivo de progreso': 'Progress file',
+    'No se ha podido leer el archivo.': 'The file could not be read.',
+    'Fundir con lo mío': 'Merge with mine',
+    'Reemplazar': 'Replace',
+    'Temas': 'Topics',
+    'Vistos': 'Seen',
+    'Archivos de progreso del grupo': 'Progress files of the group',
+    '1 archivo no se ha entendido.': '1 file was not understood.',
+    '{n} archivos no se han entendido.': '{n} files were not understood.',
+    'Vaciar la lista': 'Empty the list',
+    'Todavía no has cargado ningún archivo. Puedes seleccionar varios a la vez.':
+      'You have not loaded any file yet. You can select several at once.',
+    'Alumno': 'Student',
+    'Fecha': 'Date',
+    'Aciertos': 'Correct',
+    'Intentos': 'Attempts',
+    'Acierto': 'Success rate',
+    'Donde más se atasca el grupo:': 'Where the group gets stuck most:',
+    '({p} % de lo abierto, dominado)': '({p} % of what was opened, mastered)',
+    'Se borrará todo tu progreso en este navegador. ¿Seguro?':
+      'All your progress in this browser will be deleted. Are you sure?',
+    'Borrar mi progreso': 'Delete my progress'
+  },
+
+  /* ==================================================================
+     LA PROSA DE LAS PAGINAS QUE NO SON UN TEMA
+     La portada y las cuatro paginas de servicio llevan texto escrito
+     por el autor, no rotulos: va al diccionario de prosa, igual que
+     el de los temas, y se pide con `I18N.trad`. La prosa de los 266
+     temas la genera `coser.py` en en-txt.js, que anade sus entradas
+     a este mismo objeto.
+     ================================================================== */
+  txt: {
+    'Curso interactivo diseñado por <a href="https://gcarbonell.com" target="_blank" rel="noopener noreferrer">Guillem Carbonell</a>':
+      'Interactive course designed by <a href="https://gcarbonell.com" target="_blank" rel="noopener noreferrer">Guillem Carbonell</a>',
+    'Matemáticas desde el principio': 'Mathematics from the beginning',
+    'De contar con los dedos a las matemáticas de 2.º de Bachillerato y la PAU, y de ahí a los sistemas dinámicos, en {n} temas con ejemplos que se tocan y ejercicios que nunca se repiten.':
+      'From counting on your fingers to the mathematics of the final school year and the university entrance exam, and from there to dynamical systems, in {n} topics with examples you can touch and exercises that never repeat.',
+    'Si alguna vez has pensado que las matemáticas no son para ti, es muy probable que el problema no fueras tú. Casi todo el mundo que se atasca lo hace en un punto concreto —una tarde que faltó a clase, un profesor que iba deprisa— y a partir de ahí todo lo demás se construye encima de un hueco. Este curso está hecho para taparlo: empieza tan atrás que parecerá innecesario, y avanza sin saltarse un solo escalón.':
+      'If you have ever thought that mathematics is not for you, the problem was very probably not you. Almost everyone who gets stuck does so at one particular point —an afternoon missed in class, a teacher going too fast— and from there on everything else is built on top of a gap. This course is made to fill that gap: it starts so far back that it will seem unnecessary, and it moves forward without skipping a single step.',
+    'La idea de fondo es que las matemáticas son un <strong>idioma</strong>, no una prueba de inteligencia. Un idioma que sirve para decir con precisión cosas que ya sabes: que cada socio del gimnasio tiene una taquilla y solo una, que dos autobuses que pasan cada 12 y cada 18 minutos vuelven a coincidir cada 36, que subir un 10 % y bajar un 10 % no te deja donde estabas. Cuando aprendes a decirlo con símbolos ganas tres cosas: entiendes lo que ya conocías, puedes modelarlo y, con suerte, predecirlo. Por eso cada concepto viene aquí con un cuadro de <strong>utilidad</strong> que cuenta dónde vive fuera del aula, y por eso las fórmulas traen un botón <strong>?</strong> que te las lee en voz alta: reconocer un símbolo y saber pronunciarlo no es lo mismo, y nadie aprende un idioma que no sabe decir.':
+      'The idea underneath everything is that mathematics is a <strong>language</strong>, not a test of intelligence. A language for saying precisely things you already know: that every member of the gym has one locker and only one, that two buses passing every 12 and every 18 minutes coincide again every 36, that going up 10 % and then down 10 % does not leave you where you were. When you learn to say it with symbols you gain three things: you understand what you already knew, you can model it and, with luck, predict it. That is why every concept here comes with a <strong>where it is used</strong> box telling you where it lives outside the classroom, and why the formulas carry a <strong>?</strong> button that reads them aloud to you: recognising a symbol and knowing how to say it are not the same thing, and nobody learns a language they cannot speak.',
+    'El recorrido va de contar con los dedos a la teoría del caos, pasando por todo el temario de la ESO y el Bachillerato español. No hay vídeos, no hay que registrarse y no se envía nada a ninguna parte: son {n} temas que se leen a tu ritmo, y que rinden mucho más si te paras a mover los mandos de los ejemplos en vez de mirarlos, que es de lo que se trata.':
+      'The journey goes from counting on your fingers to chaos theory, by way of the whole Spanish secondary and upper-secondary syllabus. There are no videos, there is nothing to sign up for and nothing is sent anywhere: it is {n} topics to be read at your own pace, and they repay you far more if you stop to move the controls of the examples instead of looking at them, which is the whole point.',
+    'Este curso está pensado para recorrerse <strong>en orden</strong>. Cada tema supone que entiendes el anterior y ninguno usa una herramienta que no se haya explicado antes. Si algo no se entiende, casi siempre la respuesta está uno o dos temas más atrás, no más adelante: por eso cada tema empieza con una lista de lo que da por sabido.':
+      'This course is meant to be worked through <strong>in order</strong>. Every topic assumes you have understood the previous one, and none of them uses a tool that has not been explained before. If something makes no sense, the answer is almost always one or two topics further back, not further on: that is why every topic begins with a list of what it takes for granted.',
+    'Dentro de cada tema encontrarás dos cosas distintas, y conviene no confundirlas:':
+      'Inside every topic you will find two different things, and it is worth not confusing them:',
+    'Un escenario fijo con mandos que puedes mover. No se corrige ni puntúa: está para que <em>veas</em> qué significa el concepto.':
+      'A fixed scene with controls you can move. It is not marked or scored: it is there so that you <em>see</em> what the concept means.',
+    'Un enunciado <strong>generado al azar</strong>. Pulsa «Otro ejercicio» y cambian los números: puedes practicar el mismo tipo las veces que quieras y comprobar cada intento. Los problemas largos van <strong>por apartados</strong>, como en la PAU.':
+      'A question <strong>generated at random</strong>. Press “Another exercise” and the numbers change: you can practise the same kind as many times as you like and check every attempt. The long problems come <strong>in parts</strong>, as in the entrance exam.',
+    'Tu progreso': 'Your progress',
+    'Temas visitados: <strong>{v}</strong> de {n}': 'Topics visited: <strong>{v}</strong> of {n}',
+    'Temas dominados (cada tipo de ejercicio resuelto al menos una vez): <strong>{d}</strong>':
+      'Topics mastered (each kind of exercise solved at least once): <strong>{d}</strong>',
+    'Ejercicios resueltos: <strong>{r}</strong>': 'Exercises solved: <strong>{r}</strong>',
+    'Para repasar hoy': 'To revise today',
+    'Estos ejercicios ya los hiciste, y toca volver a ellos: un repaso justo cuando empieza a olvidarse fija más que diez seguidos el mismo día. Los que fallaste vuelven antes; los que aciertas se van espaciando.':
+      'You have done these exercises already, and it is time to come back to them: one revision just as something starts to fade fixes it better than ten in a row on the same day. The ones you got wrong come back sooner; the ones you get right space themselves out.',
+    'Si estás en 2.º de Bachillerato': 'If you are in your final school year',
+    'Si lo que tienes delante es la PAU, puedes ir directo a lo tuyo. Elige tu asignatura: el índice mostrará solo su temario, y cada tema te dirá qué necesitas de cursos anteriores. En el bloque <strong>Repaso de 2.º y PAU</strong> tienes el mapa del temario con tu estado, simulacros de examen corregidos, un formulario para imprimir y los errores que más puntos cuestan.':
+      'If what you have in front of you is the entrance exam, you can go straight to your own part. Choose your subject: the index will show only its syllabus, and every topic will tell you what you need from earlier years. In the <strong>Final-year review and university entrance</strong> block you have the map of the syllabus with your own state, mock papers that mark themselves, a formula sheet to print and the mistakes that cost the most marks.',
+    'El recorrido': 'The journey',
+    'Nota técnica': 'Technical note',
+    'Todo funciona sin conexión y sin servidor. Puedes copiar la carpeta en un lápiz de memoria y abrir <code>index.html</code> en cualquier ordenador.':
+      'Everything works offline and with no server. You can copy the folder onto a memory stick and open <code>index.html</code> on any computer.',
+    'Diseñado por <a href="https://gcarbonell.com" target="_blank" rel="noopener noreferrer">Guillem Carbonell</a>.':
+      'Designed by <a href="https://gcarbonell.com" target="_blank" rel="noopener noreferrer">Guillem Carbonell</a>.',
+    'Se distribuye bajo licencia libre <strong>GPLv3</strong> o, a tu elección, cualquier versión posterior: puedes usarlo, copiarlo, modificarlo y repartirlo, incluso en clase o comercialmente, siempre que lo que publiques a partir de él conserve esta misma libertad. El texto completo está en el archivo <code>LICENSE</code> de la carpeta.':
+      'It is distributed under the free <strong>GPLv3</strong> licence or, at your choice, any later version: you may use it, copy it, modify it and hand it on, in class or commercially, as long as whatever you publish from it keeps this same freedom. The full text is in the <code>LICENSE</code> file in the folder.',
+    'Los enunciados que has ido apartando con el botón «+ Deberes». Se comparten en un enlace que los lleva dentro: quien lo abra verá exactamente estos, con estos números.':
+      'The exercises you have been setting aside with the “+ Homework” button. They are shared through a link that carries them inside: whoever opens it will see exactly these, with these numbers.',
+    'Alguien te ha pasado esta lista. Es 1 enunciado concreto, con los mismos números que vio quien la preparó.':
+      'Someone has passed you this list. It is 1 particular exercise, with the same numbers that whoever prepared it saw.',
+    'Alguien te ha pasado esta lista. Son {n} enunciados concretos, con los mismos números que vio quien la preparó.':
+      'Someone has passed you this list. They are {n} particular exercises, with the same numbers that whoever prepared it saw.',
+    'Cómo se hace una lista': 'How a list is made',
+    'Todavía no hay ninguno. En cualquier ejercicio del curso, el botón <strong>+ Deberes</strong> lo aparta con los números que tenga en ese momento. Cuando tengas los que quieras, vuelve aquí y copia el enlace.':
+      'There are none yet. On any exercise in the course, the <strong>+ Homework</strong> button sets it aside with the numbers it has at that moment. Once you have the ones you want, come back here and copy the link.',
+    'De dónde sale ese «resuelto»': 'Where that “solved” comes from',
+    'El estado que ves al lado de cada uno es <strong>tuyo</strong>, y sale de tu progreso en este navegador: dice si alguna vez has resuelto ese tipo de ejercicio, no si has hecho exactamente este enunciado. Nadie más lo ve.':
+      'The state you see beside each one is <strong>yours</strong>, and it comes from your progress in this browser: it says whether you have ever solved that kind of exercise, not whether you have done this particular question. Nobody else sees it.',
+    'El enlace': 'The link',
+    'Qué viaja en el enlace': 'What travels in the link',
+    'El enlace lleva los deberes dentro, así que funciona sin servidor y sin cuentas: por correo, por mensaje o escrito en la pizarra. Lo que <strong>no</strong> lleva es ninguna respuesta ni ningún dato de nadie.':
+      'The link carries the homework inside it, so it works with no server and no accounts: by email, by message or written on the board. What it does <strong>not</strong> carry is any answer or any data about anybody.',
+    'Elige de dónde entran las preguntas y el curso monta un examen: sin pistas, con cronómetro si quieres, y con la corrección y el paso a paso al entregar.':
+      'Choose where the questions come from and the course builds an exam: no hints, with a stopwatch if you want one, and with the marking and the step-by-step solution when you submit.',
+    'De dónde entran las preguntas': 'Where the questions come from',
+    'De dónde sale esto': 'Where this comes from',
+    'Es la misma maquinaria de los simulacros de la PAU, con los bloques abiertos. Las preguntas salen de los ejercicios de los temas, dando preferencia a los problemas por apartados, y un tema escogido no repite: primero se reparte entre temas distintos.':
+      'It is the same machinery as the entrance-exam mock papers, with the blocks opened up. The questions come from the exercises of the topics, giving preference to the multi-part problems, and a topic once chosen does not repeat: the questions are spread across different topics first.',
+    'Más allá de 2.º hay {n} temas optativos que no se presuponen entre sí. Estas {r} rutas los recorren con sentido: cada una dice a dónde llega y por dónde se pasa.':
+      'Beyond the final school year there are {n} optional topics that do not assume one another. These {r} paths go through them in a way that makes sense: each one says where it arrives and what it goes through.',
+    'No hay que elegir una y casarse con ella: comparten temas, y terminar una deja media de otra hecha. La estimación de horas sale de contar <strong>{m} minutos por tema</strong>, que es lo que cuesta leerlo y hacer sus ejercicios sin prisa.':
+      'You do not have to choose one and marry it: they share topics, and finishing one leaves half of another already done. The estimate in hours comes from counting <strong>{m} minutes per topic</strong>, which is what it takes to read one and do its exercises without hurrying.',
+    'Y lo demás': 'And the rest',
+    'Lo que no está en ninguna ruta no es peor: es que no cabía en ningún hilo. Programación gráfica y criptografía son bloques que se recorren enteros y por su cuenta, y el índice de la izquierda sigue estando para eso.':
+      'What is not on any path is not worse: it simply did not fit any one thread. Graphics programming and cryptography are blocks that are worked through whole and on their own, and the index on the left is still there for that.',
+    'Los <strong>marcados</strong> son a lo que se venía; los demás son camino: temas que estos dan por sabidos y que la ruta incluye para no mandarte a un sitio donde te falte algo.':
+      'The <strong>marked</strong> ones are what you came for; the rest are the way there: topics that those take for granted and that the path includes so as not to send you somewhere with something missing.',
+    'Tu progreso vive en este navegador y no se manda a ninguna parte. Aquí puedes llevártelo a otro ordenador, recuperarlo, o —si das clase— leer los de tu grupo.':
+      'Your progress lives in this browser and is not sent anywhere. Here you can take it to another computer, bring it back, or —if you teach— read your group\'s.',
+    'Ahora mismo has abierto <strong>{v}</strong> temas y dominas <strong>{d}</strong>, con {a} aciertos de {i} intentos. Dominar un tema es haber resuelto al menos una vez cada tipo de ejercicio que tiene, no haber acertado cinco veces el mismo.':
+      'Right now you have opened <strong>{v}</strong> topics and mastered <strong>{d}</strong>, with {a} right out of {i} attempts. Mastering a topic means having solved each kind of exercise it has at least once, not having got the same one right five times.',
+    'Traerlo de vuelta': 'Bringing it back',
+    'Carga aquí un archivo guardado antes. <strong>Fundir</strong> conserva lo más avanzado de cada lado, que es lo que quieres si has estudiado en dos sitios; <strong>reemplazar</strong> tira lo de este navegador y deja exactamente lo del archivo.':
+      'Load a file you saved earlier here. <strong>Merge</strong> keeps whatever is further along on each side, which is what you want if you have studied in two places; <strong>replace</strong> throws away what is in this browser and leaves exactly what is in the file.',
+    'Antes de que pase': 'Before it happens',
+    'Si el navegador borra los datos del sitio —o los borras tú— el progreso se va sin aviso. Guardar el archivo de vez en cuando es la única copia de seguridad que hay.':
+      'If the browser clears the site data —or you clear it yourself— the progress goes without warning. Saving the file now and then is the only backup there is.',
+    'Por dónde vas': 'How far you have got',
+    'Vista de clase': 'Class view',
+    'Para quien da clase: carga aquí los archivos que te entreguen y verás a todo el grupo en una tabla. Los archivos <strong>no se guardan</strong> en ninguna parte: se leen, se suman y desaparecen al recargar la página.':
+      'For whoever teaches: load the files you are given here and you will see the whole group in one table. The files are <strong>not stored</strong> anywhere: they are read, added up and gone when the page is reloaded.',
+    'Empezar de cero': 'Starting from scratch',
+    'Antes de borrar, guarda el archivo: es la única forma de volver atrás.':
+      'Before deleting, save the file: it is the only way back.',
+
+    /* --- el hueco de un tema que aun no tiene archivo --- */
+    'Este tema todavía no está escrito': 'This topic is not written yet',
+    'Ya tiene su sitio reservado en el temario. Cuando se añada el archivo <code>topics/{f}.js</code> aparecerá aquí sin tocar nada más.':
+      'Its place in the syllabus is already reserved. Once the file <code>topics/{f}.js</code> is added it will appear here with nothing else to touch.',
+    'Lo que cubrirá:': 'What it will cover:',
+    /* --- las rutas de la ampliacion (rutas.js) --- */
+    'Cómo funciona un ordenador': 'How a computer works',
+    'Del bit y la puerta lógica a un lenguaje que compila, y de ahí a lo que ninguna máquina puede hacer.':
+      'From the bit and the logic gate to a language that compiles, and from there to what no machine can do.',
+    'Si programas y quieres entender lo que hay debajo, o si te interesa dónde están los límites de lo calculable.':
+      'If you program and want to understand what is underneath, or if you care about where the limits of the computable are.',
+    'Datos y modelos': 'Data and models',
+    'De ajustar una recta a mirar por dentro un modelo de lenguaje, pasando por todo lo que hay en medio.':
+      'From fitting a straight line to looking inside a language model, by way of everything in between.',
+    'Si te interesan los datos, el aprendizaje automático, o la estadística que se usa fuera del examen.':
+      'If you are interested in data, in machine learning, or in the statistics that gets used outside the exam.',
+    'Matemática por dentro': 'Mathematics from the inside',
+    'Estructuras, curvatura, infinito y las ecuaciones que describen el mundo.':
+      'Structures, curvature, infinity and the equations that describe the world.',
+    'Si vas a estudiar matemáticas o física, o si quieres ver de qué está hecho lo que diste en Bachillerato.':
+      'If you are going to study mathematics or physics, or if you want to see what the material of your last school years is made of.',
+    'Hacer sonar las matemáticas': 'Making mathematics sound',
+    'Del seno que suena a un sintetizador que programas tú: la trigonometría, el logaritmo, Fourier y las sucesiones recurrentes, oídos.':
+      'From the sine that sounds to a synthesiser you program yourself: trigonometry, the logarithm, Fourier and recurrent sequences, heard.',
+    'Si te gusta la música, si quieres saber qué hay dentro de un sintetizador o si necesitas una razón para que las identidades trigonométricas y las series existan.':
+      'If you like music, if you want to know what is inside a synthesiser, or if you need a reason for trigonometric identities and series to exist.'
   },
 
   cur: {
@@ -235,7 +838,7 @@ I18N.add('en', {
     '@lin': { title: 'Linear algebra', desc: 'The natural continuation of matrices: what they really are, what they do, how they fit data, and how they behave in the long run.' },
     '@var': { title: 'Multivariable calculus', desc: 'School analysis when the function depends on more than one number: partial derivatives and the gradient, maxima and minima on a surface, optimising under constraints, and integrating over regions of the plane and of space.' },
     '@dif': { title: 'Differential equations and waves', desc: 'The mathematics of change: equations whose unknown is a function. Almost all of physics is written with them.' },
-    '@geo': { title: 'Advanced geometry: curvature and shape', desc: 'In «Geometry of the plane and of space» everything was measured with Euclid\'s rules in a flat world. Here those rules are questioned: what happens if parallels meet, how you measure how much something bends, and what is left of a figure once you stop measuring.' },
+    '@geo': { title: 'Advanced geometry: curvature and shape', desc: 'In “Geometry of the plane and of space” everything was measured with Euclid\'s rules in a flat world. Here those rules are questioned: what happens if parallels meet, how you measure how much something bends, and what is left of a figure once you stop measuring.' },
     '@est': { title: 'Structures, numbers and infinity', desc: 'The most abstract face, and the one holding up cryptography: what mathematical objects have in common, and what it means to count the uncountable.' },
     '@dis': { title: 'Discrete and computational mathematics', desc: 'The mathematics of what gets counted and of what a computer computes: networks, recurrences, algorithms, information and decisions.' },
     '@cib': { title: 'Cybernetics', desc: 'The discipline that brings together the derivative, entropy, probability and dynamical systems to answer a single question —how anything stays where it should in a world that pushes it— and out of which came automatic control and artificial intelligence.' },
@@ -413,7 +1016,7 @@ I18N.add('en', {
     'maq-bits': { t: 'Counting with two symbols: binary, hex and two\'s complement', r: 'Place value with two fingers instead of ten, and how a negative number is written without a sign.' },
     'maq-puertas': { t: 'The logic gate: a truth table made of wires', r: 'The connectives of logic, now with current. And one of them alone is enough for all.' },
     'maq-sumador': { t: 'Adding with wires: half adder, full adder and the carry', r: 'Ordinary addition, wired up. And why the carry is what slows a processor down.' },
-    'maq-decidir': { t: 'There is no «if»: multiplexer and comparator', r: 'A circuit does not branch: it computes both arms and picks one with arithmetic.' },
+    'maq-decidir': { t: 'There is no “if”: multiplexer and comparator', r: 'A circuit does not branch: it computes both arms and picks one with arithmetic.' },
     'maq-memoria': { t: 'A bit that remembers: the latch is a loop with a delay', r: 'Feed a gate back into itself, and let the delay of the wire become memory.' },
     'maq-normal': { t: 'Any table can be built: normal form and simplification', r: 'From any truth table at all to a circuit, and from there to a cheaper one.' },
     'maq-cpu': { t: 'The minimal machine: fetch, decode, execute', r: 'A counter, an accumulator, a memory, and a three-step cycle that never stops.' },
@@ -494,7 +1097,7 @@ I18N.add('en', {
     'cr-hill': { t: 'The Hill cipher: matrices modulo 26', r: 'Encrypting two letters at a time with a matrix, and why the determinant decides whether you can decrypt.' },
     'cr-vernam': { t: 'The one-time pad: the only perfect cipher', r: 'XOR with a key as long as the message, and Shannon\'s theorem that you cannot do better.' },
     'cr-enigma': { t: 'Enigma: permutations that turn', r: 'Three rotors, a reflector and a plugboard: the machine, its mathematics, and the crack it fell through.' },
-    'cr-entropia': { t: 'Randomness, entropy and passwords', r: 'What guessing costs: bits of entropy, random number generators, and why «random» is not enough.' },
+    'cr-entropia': { t: 'Randomness, entropy and passwords', r: 'What guessing costs: bits of entropy, random number generators, and why “random” is not enough.' },
     'cr-flujo': { t: 'Stream ciphers: making the pad with a register', r: 'An LFSR stretches a short key into a torrent of bits, and its linearity is also its Achilles heel.' },
     'cr-bloque': { t: 'Block ciphers: confusion and diffusion', r: 'Substitution boxes, permutations and rounds: Shannon\'s recipe for making every bit depend on all of them.' },
     'cr-feistel': { t: 'Feistel networks and DES', r: 'A structure that undoes itself even when its inner function has no inverse, and the story of the 56-bit key.' },

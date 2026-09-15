@@ -34,6 +34,18 @@
   'use strict';
 
   var U = global.U, W = global.W;
+
+  /* Rotulos y mensajes de error, que los lee una persona. Frases enteras
+     con huecos -{x}, {n}- y nunca trozos pegados con +: en otro idioma el
+     orden de las palabras cambia. Lo que NO pasa por aqui es el codigo: los
+     nombres de las funciones del sintetizador son parte del lenguaje. */
+  function UI(s) { return global.I18N ? I18N.ui(s) : s; }
+  function con(s, vals) {
+    var t = UI(s);
+    for (var k in vals) t = t.split('{' + k + '}').join(vals[k]);
+    return t;
+  }
+
   var SR = 44100;
   var TAU = 2 * Math.PI;
   var SON = { SR: SR, TAU: TAU };
@@ -128,19 +140,19 @@
   function mensaje(e) {
     var m = String(e && e.message || e);
     var TR = [
-      [/^(\w+) is not defined$/, '«$1» no existe. ¿Está bien escrito? Las funciones que hay son sin, cos, sierra, cuadrada, nota, ruido, anterior…'],
-      [/Unexpected token '?\)'?/, 'Sobra un paréntesis, o falta algo antes de él.'],
-      [/Unexpected token '?\}'?/, 'Sobra una llave, o falta un punto y coma antes.'],
-      [/Unexpected end of input/, 'El código se acaba antes de tiempo: falta cerrar un paréntesis o una llave.'],
-      [/Unexpected identifier/, 'Dos nombres seguidos sin operador entre ellos: falta un *, un + o una coma.'],
-      [/Unexpected number/, 'Un número donde no se esperaba: falta un operador delante.'],
-      [/^(.+?) is not a function$/, '«$1» se usa como si fuera una función y no lo es.'],
-      [/Invalid or unexpected token/, 'Hay un carácter que no se entiende (¿una comilla sin cerrar?).'],
-      [/missing \) after argument list/, 'Falta un paréntesis de cierre.'],
-      [/missing ; before statement/, 'Falta un punto y coma, o un operador, antes de esta parte.'],
-      [/expected expression, got '?\)'?/, 'Sobra un paréntesis, o falta algo antes de él.'],
-      [/expected expression, got end of script/, 'El código se acaba antes de tiempo: falta cerrar un paréntesis o una llave.'],
-      [/missing \} /, 'Falta cerrar una llave.']
+      [/^(\w+) is not defined$/, UI('«$1» no existe. ¿Está bien escrito? Las funciones que hay son sin, cos, sierra, cuadrada, nota, ruido, anterior…')],
+      [/Unexpected token '?\)'?/, UI('Sobra un paréntesis, o falta algo antes de él.')],
+      [/Unexpected token '?\}'?/, UI('Sobra una llave, o falta un punto y coma antes.')],
+      [/Unexpected end of input/, UI('El código se acaba antes de tiempo: falta cerrar un paréntesis o una llave.')],
+      [/Unexpected identifier/, UI('Dos nombres seguidos sin operador entre ellos: falta un *, un + o una coma.')],
+      [/Unexpected number/, UI('Un número donde no se esperaba: falta un operador delante.')],
+      [/^(.+?) is not a function$/, UI('«$1» se usa como si fuera una función y no lo es.')],
+      [/Invalid or unexpected token/, UI('Hay un carácter que no se entiende (¿una comilla sin cerrar?).')],
+      [/missing \) after argument list/, UI('Falta un paréntesis de cierre.')],
+      [/missing ; before statement/, UI('Falta un punto y coma, o un operador, antes de esta parte.')],
+      [/expected expression, got '?\)'?/, UI('Sobra un paréntesis, o falta algo antes de él.')],
+      [/expected expression, got end of script/, UI('El código se acaba antes de tiempo: falta cerrar un paréntesis o una llave.')],
+      [/missing \} /, UI('Falta cerrar una llave.')]
     ];
     for (var i = 0; i < TR.length; i++) if (TR[i][0].test(m)) return m.replace(TR[i][0], TR[i][1]);
     return m;
@@ -194,7 +206,7 @@
     var fn;
     try { fn = comp.fabrica(H, M); }
     catch (e) { return { ok: false, error: { msg: mensaje(e), linea: lineaDe(e, comp.pre) } }; }
-    if (typeof fn !== 'function') return { ok: false, error: { msg: 'No hay ninguna función llamada «sonido». Tiene que empezar por: function sonido(t) {', linea: null } };
+    if (typeof fn !== 'function') return { ok: false, error: { msg: UI('No hay ninguna función llamada «sonido». Tiene que empezar por: function sonido(t) {'), linea: null } };
 
     var pico = 0, suma2 = 0, recorte = 0;
     try {
@@ -202,7 +214,7 @@
         st.i = i;
         var y = fn(i / sr, i);
         if (typeof y !== 'number' || y !== y) {
-          if (i === 0) return { ok: false, error: { msg: 'La función no devuelve un número. ¿Falta el «return»?', linea: null } };
+          if (i === 0) return { ok: false, error: { msg: UI('La función no devuelve un número. ¿Falta el «return»?'), linea: null } };
           y = 0;
         }
         if (y > 1 || y < -1) recorte++;
@@ -324,9 +336,9 @@
     o = o || {};
     var dur = o.dur || 1.5;
     var a = SON.render(codA, { dur: dur, mandos: o.mandos, valores: o.valores, semilla: 7 });
-    if (!a.ok) return { ok: false, motivo: 'la respuesta no compila', error: a.error };
+    if (!a.ok) return { ok: false, motivo: UI('la respuesta no compila'), error: a.error };
     var b = SON.render(codB, { dur: dur, mandos: o.mandos, valores: o.valores, semilla: 7 });
-    if (!b.ok) return { ok: false, motivo: 'la referencia no compila', error: b.error };
+    if (!b.ok) return { ok: false, motivo: UI('la referencia no compila'), error: b.error };
     var ea = SON.espectro(a.muestras), eb = SON.espectro(b.muestras);
     /* En escala logaritmica los armonicos flojos tambien cuentan: un seno y
        una sierra tienen el mismo pico y no suenan igual. */
@@ -434,14 +446,17 @@
 
     /* --- las dos vistas y la tira --- */
     var vistas = U.el('div.son__vistas');
-    this.cOnda = U.el('canvas.son__lienzo', { role: 'img', 'aria-label': 'Forma de onda: los primeros ' + this.ventana + ' milisegundos del sonido que calcula el código de abajo.' });
-    this.cEsp = U.el('canvas.son__lienzo', { role: 'img', 'aria-label': 'Espectro: qué frecuencias contiene el sonido y con qué amplitud, hasta ' + this.fmax + ' hercios.' });
-    vistas.appendChild(U.el('div.son__vista', null, [U.el('span.son__rot', { text: 'onda · ' + this.ventana + ' ms' }), this.cOnda]));
+    this.cOnda = U.el('canvas.son__lienzo', { role: 'img', 'aria-label': con('Forma de onda: los primeros {n} milisegundos del sonido que calcula el código de abajo.', { n: this.ventana }) });
+    this.cEsp = U.el('canvas.son__lienzo', { role: 'img', 'aria-label': con('Espectro: qué frecuencias contiene el sonido y con qué amplitud, hasta {n} hercios.', { n: this.fmax }) });
+    vistas.appendChild(U.el('div.son__vista', null, [U.el('span.son__rot', { text: con('onda · {n} ms', { n: this.ventana }) }), this.cOnda]));
     this.espectrograma = !!o.espectrograma;
-    if (this.espectrograma) this.cEsp.setAttribute('aria-label', 'Espectrograma: el tiempo de izquierda a derecha, la frecuencia de abajo arriba hasta ' + this.fmax + ' hercios, y el brillo es la amplitud.');
-    vistas.appendChild(U.el('div.son__vista', null, [U.el('span.son__rot', { text: (this.espectrograma ? 'espectrograma' : 'espectro') + ' · hasta ' + (this.fmax >= 1000 ? (this.fmax / 1000) + ' kHz' : this.fmax + ' Hz') }), this.cEsp]));
+    if (this.espectrograma) this.cEsp.setAttribute('aria-label', con('Espectrograma: el tiempo de izquierda a derecha, la frecuencia de abajo arriba hasta {n} hercios, y el brillo es la amplitud.', { n: this.fmax }));
+    vistas.appendChild(U.el('div.son__vista', null, [U.el('span.son__rot', {
+      text: UI(this.espectrograma ? 'espectrograma' : 'espectro') + ' · ' +
+        con('hasta {f}', { f: this.fmax >= 1000 ? (this.fmax / 1000) + ' kHz' : this.fmax + ' Hz' })
+    }), this.cEsp]));
     this.el.appendChild(vistas);
-    this.cTira = U.el('canvas.son__tira', { role: 'img', 'aria-label': 'El sonido entero, de principio a fin, con la posición de reproducción.' });
+    this.cTira = U.el('canvas.son__tira', { role: 'img', 'aria-label': UI('El sonido entero, de principio a fin, con la posición de reproducción.') });
     this.el.appendChild(this.cTira);
     this.aviso = U.el('div.son__aviso', { role: 'status', 'aria-live': 'polite' });
     this.el.appendChild(this.aviso);
@@ -468,7 +483,8 @@
       var idEd = 'son' + (Visor.n = (Visor.n || 0) + 1);
       this.el.appendChild(U.el('label.shd__lab', {
         'for': idEd,
-        html: 'Código del sonido &nbsp;<span class="shd__pista">se vuelve a calcular solo al escribir</span>'
+        html: UI('Código del sonido') + ' &nbsp;<span class="shd__pista">' +
+          UI('se vuelve a calcular solo al escribir') + '</span>'
       }));
       this.caja = U.el('div.shd__caja.shd__caja--prog');
       this.capa = U.el('pre.shd__pinta', { 'aria-hidden': 'true' });
@@ -499,15 +515,15 @@
     this.el.appendChild(this.err);
 
     /* --- botones --- */
-    this.bToca = U.el('button.btn.btn--main', { type: 'button', html: '&#9654; Tocar', 'aria-label': 'Tocar el sonido' });
-    this.bPara = U.el('button.btn', { type: 'button', html: '&#9632; Parar', 'aria-label': 'Parar el sonido' });
-    this.bReset = U.el('button.btn', { type: 'button', html: '&#8635; Volver al original' });
+    this.bToca = U.el('button.btn.btn--main', { type: 'button', html: '&#9654; ' + UI('Tocar'), 'aria-label': UI('Tocar el sonido') });
+    this.bPara = U.el('button.btn', { type: 'button', html: '&#9632; ' + UI('Parar'), 'aria-label': UI('Parar el sonido') });
+    this.bReset = U.el('button.btn', { type: 'button', html: '&#8635; ' + UI('Volver al original') });
     this.bToca.addEventListener('click', function () { self.toca(); });
     this.bPara.addEventListener('click', function () { self.para(); });
     this.bReset.addEventListener('click', function () { self.reinicia(); });
     var vol = U.el('label.son__vol', null, [
-      U.el('span', { text: 'volumen' }),
-      this.vol = U.el('input', { type: 'range', min: '0', max: '1', step: '0.05', value: '0.5', 'aria-label': 'Volumen' })
+      U.el('span', { text: UI('volumen') }),
+      this.vol = U.el('input', { type: 'range', min: '0', max: '1', step: '0.05', value: '0.5', 'aria-label': UI('Volumen') })
     ]);
     this.vol.addEventListener('input', function () { if (self.gan) self.gan.gain.value = self.volumen(); });
     this.info = U.el('span.son__info', { role: 'status', 'aria-live': 'polite' });
@@ -571,7 +587,7 @@
     if (!r.ok) {
       this.res = null;
       this.err.className = 'shd__err is-mal';
-      this.err.innerHTML = (r.error.linea ? '<span class="shd__ln">línea ' + r.error.linea + '</span>' : '') + escapa(r.error.msg);
+      this.err.innerHTML = (r.error.linea ? '<span class="shd__ln">' + con('línea {n}', { n: r.error.linea }) + '</span>' : '') + escapa(r.error.msg);
       this.el.classList.add('son--roto');
       this.info.textContent = '';
       this.para();
@@ -583,9 +599,11 @@
     this.err.className = 'shd__err';
     this.err.textContent = '';
     var f0 = SON.frecuenciaPico(SON.espectro(r.muestras));
-    this.info.textContent = U.fmt(r.dur, 1) + ' s · pico ' + U.fmt(r.pico, 2) + ' · nivel ' + U.fmt(r.rms, 2) +
-      (r.silencio ? ' · silencio' : ' · ' + (f0 >= 20 ? 'dominante ' + U.fmt(f0, f0 < 1000 ? 1 : 0) + ' Hz' : 'sin tono claro')) +
-      (r.recorte > 0.001 ? ' · recorta el ' + U.fmt(100 * r.recorte, 1) + ' %' : '');
+    this.info.textContent = U.fmt(r.dur, 1) + ' s · ' +
+      con('pico {p} · nivel {n}', { p: U.fmt(r.pico, 2), n: U.fmt(r.rms, 2) }) +
+      (r.silencio ? ' · ' + UI('silencio')
+        : ' · ' + (f0 >= 20 ? con('dominante {f} Hz', { f: U.fmt(f0, f0 < 1000 ? 1 : 0) }) : UI('sin tono claro'))) +
+      (r.recorte > 0.001 ? ' · ' + con('recorta el {p} %', { p: U.fmt(100 * r.recorte, 1) }) : '');
     this.dibuja();
     if (this.sonando && enCaliente) this.toca();
   };
@@ -595,7 +613,7 @@
     if (!this.res) { this.recalcula(false); if (!this.res) return; }
     var c = SON.contexto();
     if (!c) {
-      this.aviso.textContent = 'Este navegador no puede reproducir sonido, pero la onda y el espectro de arriba son el sonido calculado.';
+      this.aviso.textContent = UI('Este navegador no puede reproducir sonido, pero la onda y el espectro de arriba son el sonido calculado.');
       this.aviso.classList.add('is-on');
       return;
     }
@@ -643,7 +661,7 @@
   };
   Visor.prototype.pintaEstado = function () {
     this.el.classList.toggle('son--sonando', !!this.sonando);
-    this.bToca.innerHTML = this.sonando ? '&#9654; Otra vez' : '&#9654; Tocar';
+    this.bToca.innerHTML = '&#9654; ' + UI(this.sonando ? 'Otra vez' : 'Tocar');
   };
   Visor.prototype.anima = function () {
     var self = this;

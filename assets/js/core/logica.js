@@ -28,6 +28,17 @@
 
   var LOG = {};
 
+  /* Los rotulos y los mensajes de error los lee una persona, asi que pasan
+     por el diccionario. Se traducen frases ENTERAS con huecos -{x}, {n}- y
+     no trozos pegados con +: en otro idioma el orden de las palabras cambia,
+     y media frase traducida se lee peor que la original. */
+  function UI(s) { return global.I18N ? I18N.ui(s) : s; }
+  function con(s, vals) {
+    var t = UI(s);
+    for (var k in vals) t = t.split('{' + k + '}').join(vals[k]);
+    return t;
+  }
+
   /* ---------------- las puertas ----------------
      Siete nombres, y solo uno hace falta: nand las construye todas.
      Las binarias admiten mas de dos entradas plegando por la izquierda;
@@ -67,16 +78,16 @@
         if (!s) return;
         var m = RE_SENT.exec(s);
         if (!m) {
-          errores.push({ linea: num, msg: 'esto no es una asignación: se escribe «nombre = puerta(a, b)»' });
+          errores.push({ linea: num, msg: UI('esto no es una asignación: se escribe «nombre = puerta(a, b)»') });
           return;
         }
         var nombre = m[1], der = m[2].trim();
         if (PUERTAS[nombre]) {
-          errores.push({ linea: num, msg: '«' + nombre + '» es el nombre de una puerta: elige otro para el cable' });
+          errores.push({ linea: num, msg: con('«{x}» es el nombre de una puerta: elige otro para el cable', { x: nombre }) });
           return;
         }
         if (nodos[nombre]) {
-          errores.push({ linea: num, msg: '«' + nombre + '» ya estaba definido más arriba' });
+          errores.push({ linea: num, msg: con('«{x}» ya estaba definido más arriba', { x: nombre }) });
           return;
         }
         var def = null;
@@ -84,21 +95,21 @@
         if (lm) {
           var puerta = lm[1].toLowerCase();
           if (!PUERTAS[puerta]) {
-            errores.push({ linea: num, msg: 'no existe la puerta «' + lm[1] + '». Hay: ' + LOG.NOMBRES.join(', ') });
+            errores.push({ linea: num, msg: con('no existe la puerta «{x}». Hay: {l}', { x: lm[1], l: LOG.NOMBRES.join(', ') }) });
             return;
           }
           var args = lm[2].split(',').map(function (a) { return a.trim(); }).filter(function (a) { return a !== ''; });
           if (!args.length) {
-            errores.push({ linea: num, msg: '«' + puerta + '» necesita entradas entre los paréntesis' });
+            errores.push({ linea: num, msg: con('«{x}» necesita entradas entre los paréntesis', { x: puerta }) });
             return;
           }
           var ar = PUERTAS[puerta].ar;
           if (ar === 1 && args.length !== 1) {
-            errores.push({ linea: num, msg: '«not» lleva una sola entrada, no ' + args.length });
+            errores.push({ linea: num, msg: con('«not» lleva una sola entrada, no {n}', { n: args.length }) });
             return;
           }
           if (ar === 2 && args.length < 2) {
-            errores.push({ linea: num, msg: '«' + puerta + '» necesita al menos dos entradas' });
+            errores.push({ linea: num, msg: con('«{x}» necesita al menos dos entradas', { x: puerta }) });
             return;
           }
           var mal = null;
@@ -106,14 +117,14 @@
             if (!(RE_NOM.test(a) || a === '0' || a === '1')) mal = a;
           });
           if (mal !== null) {
-            errores.push({ linea: num, msg: '«' + mal + '» no es un nombre de cable válido' });
+            errores.push({ linea: num, msg: con('«{x}» no es un nombre de cable válido', { x: mal }) });
             return;
           }
           def = { puerta: puerta, args: args, linea: num };
         } else if (RE_NOM.test(der) || der === '0' || der === '1') {
           def = { puerta: null, args: [der], linea: num };   // cable o constante
         } else {
-          errores.push({ linea: num, msg: 'no entiendo «' + der + '»: se espera puerta(a, b), un cable o 0/1' });
+          errores.push({ linea: num, msg: con('no entiendo «{x}»: se espera puerta(a, b), un cable o 0/1', { x: der }) });
           return;
         }
         nodos[nombre] = def;
@@ -134,7 +145,7 @@
     orden.forEach(function (n) {
       nodos[n].args.forEach(function (a) {
         if (a !== '0' && a !== '1' && !nodos[a] && entradas.indexOf(a) < 0) {
-          errores.push({ linea: nodos[n].linea, msg: 'el cable «' + a + '» no viene de ninguna parte' });
+          errores.push({ linea: nodos[n].linea, msg: con('el cable «{x}» no viene de ninguna parte', { x: a }) });
         }
       });
     });
@@ -258,20 +269,20 @@
   LOG.iguales = function (texto, esperada, o) {
     var c = LOG.analiza(texto);
     if (c.errores.length) {
-      return { ok: false, porQue: 'La netlist tiene errores: ' + c.errores[0].msg, puertas: 0 };
+      return { ok: false, porQue: con('La netlist tiene errores: {m}', { m: c.errores[0].msg }), puertas: 0 };
     }
     var faltan = esperada.entradas.filter(function (e) { return c.entradas.indexOf(e) < 0; });
     if (faltan.length) {
-      return { ok: false, porQue: 'Falta usar la entrada «' + faltan[0] + '».', puertas: c.puertas };
+      return { ok: false, porQue: con('Falta usar la entrada «{x}».', { x: faltan[0] }), puertas: c.puertas };
     }
     var sobran = c.entradas.filter(function (e) { return esperada.entradas.indexOf(e) < 0; });
     if (sobran.length) {
-      return { ok: false, porQue: 'Hay una entrada de más: «' + sobran[0] + '».', puertas: c.puertas };
+      return { ok: false, porQue: con('Hay una entrada de más: «{x}».', { x: sobran[0] }), puertas: c.puertas };
     }
     if (c.salidas.length !== esperada.salidas.length) {
       return {
         ok: false, puertas: c.puertas,
-        porQue: 'Se esperaban ' + esperada.salidas.length + ' salidas y hay ' + c.salidas.length + '.'
+        porQue: con('Se esperaban {a} salidas y hay {b}.', { a: esperada.salidas.length, b: c.salidas.length })
       };
     }
     var n = esperada.entradas.length;
@@ -282,8 +293,8 @@
       if (r.oscila) {
         return {
           ok: false, puertas: c.puertas,
-          porQue: 'Con ' + esperada.entradas.map(function (e, k) { return e + '=' + fila[k]; }).join(', ') +
-            ' el circuito oscila y nunca se queda quieto.'
+          porQue: con('Con {c} el circuito oscila y nunca se queda quieto.',
+            { c: esperada.entradas.map(function (e, k) { return e + '=' + fila[k]; }).join(', ') })
         };
       }
       for (var k = 0; k < esperada.salidas.length; k++) {
@@ -291,8 +302,10 @@
         if (got !== want) {
           return {
             ok: false, puertas: c.puertas,
-            porQue: 'Con ' + esperada.entradas.map(function (e, j) { return e + '=' + fila[j]; }).join(', ') +
-              ' debería salir ' + want + ' y sale ' + got + '.'
+            porQue: con('Con {c} debería salir {a} y sale {b}.', {
+              c: esperada.entradas.map(function (e, j) { return e + '=' + fila[j]; }).join(', '),
+              a: want, b: got
+            })
           };
         }
       }
@@ -360,7 +373,7 @@
     this.caja.appendChild(this.capa);
     this.ed = U.el('textarea.shd__ed', {
       spellcheck: 'false', autocomplete: 'off', autocapitalize: 'off',
-      'aria-label': 'Netlist del circuito, una puerta por línea',
+      'aria-label': UI('Netlist del circuito, una puerta por línea'),
       rows: String(Math.max(3, this.original.split('\n').length + 1))
     });
     this.ed.value = this.original;
@@ -378,7 +391,7 @@
     this.plot = W.plot(this.el, {
       xmin: 0, xmax: 10, ymin: 0, ymax: 6, height: this.alto,
       axes: false, grid: false,
-      aria: o.aria || 'Diagrama del circuito: las entradas a la izquierda, las puertas en columnas y los cables uniéndolas.',
+      aria: o.aria || UI('Diagrama del circuito: las entradas a la izquierda, las puertas en columnas y los cables uniéndolas.'),
       draw: function (g) { self.dibuja(g); }
     });
 
@@ -387,15 +400,15 @@
 
     /* --- botones del instante --- */
     var bs = [
-      { t: 'Un instante', on: function () { self.paso(); } },
-      { t: '↺ Estabilizar', on: function () { self.instante = null; self.recalcula(); } }
+      { t: UI('Un instante'), on: function () { self.paso(); } },
+      { t: '↺ ' + UI('Estabilizar'), on: function () { self.instante = null; self.recalcula(); } }
     ];
     /* Apagar y encender borra lo guardado y devuelve el circuito al estado en
        que sale de fabrica, con todos los cables a cero. Es la demostracion de
        que esta memoria es volatil, y la unica forma de volver a ver la
        oscilacion del arranque despues de haberle dado un pasado. */
-    if (o.memoria) bs.push({ t: '⏻ Apagar y encender', on: function () { self.ultimo = self.base = null; self.instante = null; self.recalcula(); } });
-    if (o.reinicia !== false) bs.push({ t: '↺ Volver al original', on: function () { self.ed.value = self.original; self.ultimo = o.inicial || null; self.base = null; self.repinta(); self.recalcula(); self.guarda(); } });
+    if (o.memoria) bs.push({ t: '⏻ ' + UI('Apagar y encender'), on: function () { self.ultimo = self.base = null; self.instante = null; self.recalcula(); } });
+    if (o.reinicia !== false) bs.push({ t: '↺ ' + UI('Volver al original'), on: function () { self.ed.value = self.original; self.ultimo = o.inicial || null; self.base = null; self.repinta(); self.recalcula(); self.guarda(); } });
     W.buttons(this.el, bs);
 
     /* --- la tabla, que es lo que de verdad dice lo que hace --- */
@@ -462,7 +475,7 @@
 
     if (c.errores.length) {
       var e = c.errores[0];
-      this.aviso.textContent = 'Línea ' + e.linea + ': ' + e.msg;
+      this.aviso.textContent = con('Línea {n}: {m}', { n: e.linea, m: e.msg });
       this.tablaCaja.innerHTML = '';
       this.fila.innerHTML = '';
       this.plot.render();
@@ -537,20 +550,20 @@
     var val = c.salidas.map(function (s) {
       return s + ' = ' + (e.valores[s] === undefined ? '?' : e.valores[s]);
     }).join(' · ');
+    var puertas = c.puertas + ' ' + UI(c.puertas === 1 ? 'puerta' : 'puertas');
     if (e.oscila) {
-      this.aviso.textContent = 'OSCILA: tras ' + this.tope + ' instantes el circuito no se queda quieto. ' +
-        'No es un fallo del simulador: hay un bucle que se persigue a sí mismo.';
+      this.aviso.textContent = con('OSCILA: tras {n} instantes el circuito no se queda quieto. ' +
+        'No es un fallo del simulador: hay un bucle que se persigue a sí mismo.', { n: this.tope });
     } else if (e.paso) {
-      this.aviso.textContent = 'Instante ' + e.instantes + ' · ' + val + ' · ' + c.puertas + ' ' +
-        (c.puertas === 1 ? 'puerta' : 'puertas');
+      this.aviso.textContent = con('Instante {n}', { n: e.instantes }) + ' · ' + val + ' · ' + puertas;
     } else {
       /* Cero instantes significa que nada se movio: con memoria pasa cada vez que
          el circuito conserva lo que tenia, y «estable tras 0 instantes» se lee
          raro justo en el momento en que mas importa entenderlo. */
       this.aviso.textContent = (e.instantes === 0
-        ? 'Estable: no se ha movido nada'
-        : 'Estable tras ' + e.instantes + ' ' + (e.instantes === 1 ? 'instante' : 'instantes')) +
-        ' · ' + val + ' · ' + c.puertas + ' ' + (c.puertas === 1 ? 'puerta' : 'puertas');
+        ? UI('Estable: no se ha movido nada')
+        : con(e.instantes === 1 ? 'Estable tras 1 instante' : 'Estable tras {n} instantes', { n: e.instantes })) +
+        ' · ' + val + ' · ' + puertas;
     }
   };
 
@@ -558,7 +571,7 @@
     var t = LOG.tabla(this.c, { tope: this.tope });
     this.tablaCaja.innerHTML = '';
     if (t.demasiadas) {
-      this.tablaCaja.appendChild(U.el('p.cir__nota', { text: 'Demasiadas entradas para escribir la tabla entera.' }));
+      this.tablaCaja.appendChild(U.el('p.cir__nota', { text: UI('Demasiadas entradas para escribir la tabla entera.') }));
       return;
     }
     var wrap = U.el('div.tbl-wrap'), tb = U.el('table.tbl');
@@ -571,7 +584,7 @@
       var fila = U.el('tr');
       f.ent.forEach(function (v) { fila.appendChild(U.el('td.num', { text: String(v) })); });
       f.sal.forEach(function (v) {
-        fila.appendChild(U.el('td.num', { text: v === null ? 'oscila' : String(v) }));
+        fila.appendChild(U.el('td.num', { text: v === null ? UI('oscila') : String(v) }));
       });
       body.appendChild(fila);
     });
@@ -584,7 +597,7 @@
   Banco.prototype.dibuja = function (g) {
     var c = this.c, e = this.estado;
     if (!c || c.errores.length) {
-      g.text(5, 3, 'Corrige la netlist para ver el circuito', { align: 'center', size: 13, color: 'axis' });
+      g.text(5, 3, UI('Corrige la netlist para ver el circuito'), { align: 'center', size: 13, color: 'axis' });
       return;
     }
     var d = LOG.disposicion(c);

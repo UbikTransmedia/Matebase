@@ -134,7 +134,7 @@
      amarillo que la ayuda de lectura de las formulas. */
   function panelComo() {
     return U.el('div.ans__panel', {
-      html: '<strong>No hace falta que calcules el decimal.</strong> ' +
+      html: UI('<strong>No hace falta que calcules el decimal.</strong> ' +
         'La casilla admite tal cual:' +
         '<ul>' +
         '<li>fracciones: <em>3/4</em>, <em>120/7</em></li>' +
@@ -145,7 +145,7 @@
         '<li>cuentas sin resolver: <em>(3+5)*2</em></li>' +
         '</ul>' +
         'Y si la respuesta es una expresión, vale escribirla entera: ' +
-        '<em>2x+1</em>, <em>(x-3)(x+2)</em>.'
+        '<em>2x+1</em>, <em>(x-3)(x+2)</em>.')
     });
   }
 
@@ -154,8 +154,8 @@
     var caja = U.el('div.ans__como');
     var b = U.el('button.fbox__help', {
       type: 'button', 'aria-expanded': 'false',
-      'aria-label': 'Cómo se escribe la respuesta',
-      title: 'Cómo escribir la respuesta',
+      'aria-label': UI('Cómo se escribe la respuesta'),
+      title: UI('Cómo escribir la respuesta'),
       onclick: function () {
         var abierto = b.getAttribute('aria-expanded') === 'true';
         b.setAttribute('aria-expanded', abierto ? 'false' : 'true');
@@ -212,7 +212,7 @@
     // «Correcto» / «No es correcto» aparecia sin avisar: para quien usa
     // lector de pantalla, pulsar Comprobar no producia ninguna respuesta.
     this.verdict = U.el('div.verdict', { role: 'status', 'aria-live': 'polite' });
-    this.stepsEl = U.el('div.steps', { role: 'region', 'aria-label': 'Solución paso a paso' });
+    this.stepsEl = U.el('div.steps', { role: 'region', 'aria-label': UI('Solución paso a paso') });
     this.bCheck = U.el('button.btn.btn--ok', { type: 'button', text: UI('Comprobar') });
     this.bHint = U.el('button.btn', { type: 'button', text: UI('Pista') });
     this.bSol = U.el('button.btn', { type: 'button', text: UI('Ver solución') });
@@ -408,10 +408,10 @@
         var soloOpciones = this.fields.every(function (f) { return !!f.opts; });
         this.verdict.className = 'verdict verdict--hint is-on';
         this.verdict.innerHTML = soloOpciones
-          ? 'Elige una de las opciones antes de comprobar.'
-          : 'Escribe tu respuesta antes de comprobar. ' +
+          ? UI('Elige una de las opciones antes de comprobar.')
+          : UI('Escribe tu respuesta antes de comprobar. ' +
             'Vale una fracción o una cuenta sin resolver: mira el <strong>?</strong> ' +
-            'que hay junto a la casilla.';
+            'que hay junto a la casilla.');
         return null;
       }
       for (var q0 in this.inputs) this.mark(q0, false);
@@ -429,7 +429,7 @@
         res = cmp.ok;
       }
     } catch (e) {
-      res = { ok: false, msg: 'No he podido leer la respuesta. Revisa lo que has escrito.' };
+      res = { ok: false, msg: UI('No he podido leer la respuesta. Revisa lo que has escrito.') };
     }
     if (typeof res === 'boolean' || !res) res = { ok: !!res };
     if (res.fields) for (var m in res.fields) this.mark(m, res.fields[m]);
@@ -441,7 +441,7 @@
     if (!res.ok && s.errores) msg = this._diagnostico(v) || msg;
     this.verdict.className = 'verdict is-on ' + (res.ok ? 'verdict--ok' : 'verdict--bad');
     this.verdict.innerHTML = MathX.inline(msg || (res.ok
-      ? (this.o.bien || '<strong>¡Correcto!</strong> Pulsa «Otro ejercicio» para practicar con números nuevos.')
+      ? (this.o.bien || UI('<strong>¡Correcto!</strong> Pulsa «Otro ejercicio» para practicar con números nuevos.'))
       : this._casi()));
     this._fin(res.ok);
     // El boton no se bloquea: si el alumno quiere escribirlo de otra forma y
@@ -469,8 +469,8 @@
           if (this.topicId && this.topicId.charAt(0) !== '_') {
             Progress.apuntaError(this.topicId, this.index || 0, i, quitaMarcas(m));
           }
-          return '<strong>Error típico.</strong> ' + m +
-            ' <span class="verdict__mas">Corrígelo y vuelve a comprobar.</span>';
+          return UI('<strong>Error típico.</strong> ') + m +
+            UI(' <span class="verdict__mas">Corrígelo y vuelve a comprobar.</span>');
         }
       } catch (e) { /* una regla rota no puede tapar la correccion */ }
     }
@@ -492,13 +492,17 @@
       if (this.inputs[k].box.classList.contains('is-ok')) bien++;
     }
     if (n > 1 && bien > 0) {
-      return '<strong>Casi.</strong> ' + (bien === 1 ? 'Uno' : bien) + ' de ' + n +
-        ' está' + (bien === 1 ? '' : 'n') + ' bien; repasa ' +
-        (n - bien === 1 ? 'el que falta' : 'los que faltan') +
-        '. La pista y la solución paso a paso están ahí abajo.';
+      /* Cuatro frases enteras y no trozos pegados: en otro idioma el orden
+         de las palabras cambia, y una frase entera se traduce; un trozo, no. */
+      var frase = UI(bien === 1
+        ? (n - bien === 1 ? 'Uno de {n} está bien; repasa el que falta.' : 'Uno de {n} está bien; repasa los que faltan.')
+        : (n - bien === 1 ? '{k} de {n} están bien; repasa el que falta.' : '{k} de {n} están bien; repasa los que faltan.'))
+        .replace('{k}', bien).replace('{n}', n);
+      return '<strong>' + UI('Casi.') + '</strong> ' + frase + ' ' +
+        UI('La pista y la solución paso a paso están ahí abajo.');
     }
-    return '<strong>Todavía no.</strong> Prueba otra vez, mira la pista, ' +
-      'o abre la solución paso a paso: consultarla no resta nada.';
+    return UI('<strong>Todavía no.</strong> Prueba otra vez, mira la pista, ' +
+      'o abre la solución paso a paso: consultarla no resta nada.');
   };
 
   /* Pistas graduadas: la primera empuja, la segunda señala, la ultima casi
@@ -511,9 +515,9 @@
     this.pistas = Math.min(lista.length, (this.pistas || 0) + 1);
     var html;
     if (lista.length === 1) {
-      html = '<strong>Pista.</strong> ' + MathX.inline(lista[0]);
+      html = '<strong>' + UI('Pista.') + '</strong> ' + MathX.inline(lista[0]);
     } else {
-      html = '<strong>Pista ' + this.pistas + ' de ' + lista.length + '.</strong>' +
+      html = '<strong>' + UI('Pista {i} de {n}.').replace('{i}', this.pistas).replace('{n}', lista.length) + '</strong>' +
         '<ol class="pistas">' + lista.slice(0, this.pistas).map(function (x) {
           return '<li>' + MathX.inline(x) + '</li>';
         }).join('') + '</ol>';
@@ -569,8 +573,8 @@
     if (!t.ok) return '';
     var e = t.ex && t.ex[index];
     var partes = [];
-    if (e && e.ok) partes.push(e.ok === 1 ? 'este, 1 vez' : 'este, ' + e.ok + ' veces');
-    partes.push(t.ok === 1 ? '1 resuelto en el tema' : t.ok + ' resueltos en el tema');
+    if (e && e.ok) partes.push(e.ok === 1 ? UI('este, 1 vez') : UI('este, {n} veces').replace('{n}', e.ok));
+    partes.push(t.ok === 1 ? UI('1 resuelto en el tema') : UI('{n} resueltos en el tema').replace('{n}', t.ok));
     return partes.join(' · ');
   }
 
@@ -581,7 +585,7 @@
   function botonEnlace(tarjeta) {
     var b = U.el('button.btn.btn--sm.btn--ghost', {
       type: 'button',
-      title: 'Copiar un enlace que abre este mismo enunciado, con estos mismos números',
+      title: UI('Copiar un enlace que abre este mismo enunciado, con estos mismos números'),
       html: '&#128279; ' + UI('Enlace')
     });
     b.addEventListener('click', function () {
@@ -591,7 +595,7 @@
         U.clear(tarjeta.aviso);
         tarjeta.aviso.appendChild(U.el('span', { text: UI('Copia este enlace:') + ' ' }));
         var inp = U.el('input.card__url', {
-          type: 'text', readonly: true, value: url, 'aria-label': 'Enlace a este enunciado'
+          type: 'text', readonly: true, value: url, 'aria-label': UI('Enlace a este enunciado')
         });
         tarjeta.aviso.appendChild(inp);
         inp.focus();
@@ -599,8 +603,8 @@
       }
       try {
         navigator.clipboard.writeText(url).then(function () {
-          tarjeta.aviso.textContent = 'Enlace copiado. Quien lo abra verá este mismo enunciado, ' +
-            'con estos números: sirve para trabajarlo en clase o para preguntar una duda concreta.';
+          tarjeta.aviso.textContent = UI('Enlace copiado. Quien lo abra verá este mismo enunciado, ' +
+            'con estos números: sirve para trabajarlo en clase o para preguntar una duda concreta.');
         }, manual);
       } catch (e) { manual(); }
     });
@@ -635,7 +639,7 @@
   function botonDeberes(tarjeta) {
     var b = U.el('button.btn.btn--sm.btn--ghost', {
       type: 'button',
-      title: 'Añadir este enunciado, con estos números, a una lista que se comparte como un enlace',
+      title: UI('Añadir este enunciado, con estos números, a una lista que se comparte como un enlace'),
       html: '&#43; ' + UI('Deberes')
     });
     b.addEventListener('click', function () {
@@ -644,15 +648,15 @@
         return d.id === tarjeta.topicId && d.n === tarjeta.index && d.s === tarjeta.seed;
       }).length;
       if (ya) {
-        tarjeta.aviso.textContent = 'Ese enunciado ya estaba en la lista.';
+        tarjeta.aviso.textContent = UI('Ese enunciado ya estaba en la lista.');
         return;
       }
       lista.push({ id: tarjeta.topicId, n: tarjeta.index, s: tarjeta.seed });
       Ex.deberes(lista);
       U.clear(tarjeta.aviso);
       tarjeta.aviso.appendChild(U.el('span', {
-        text: 'Añadido. La lista va por ' + lista.length + ' ' +
-          U.plural(lista.length, 'enunciado', 'enunciados') + '. '
+        text: UI('Añadido. La lista va por ') + lista.length + ' ' +
+          U.plural(lista.length, UI('enunciado'), UI('enunciados')) + '. '
       }));
       tarjeta.aviso.appendChild(U.el('a', { href: '#/__deberes', text: UI('Ver los deberes y copiar el enlace →') }));
     });
@@ -662,7 +666,7 @@
   /** En un simulacro, de qué tema sale cada pregunta. */
   function origen(tarjeta) {
     if (!tarjeta.o.origen) return null;
-    return U.el('span.tag.tag--origen', { text: tarjeta.o.origen, title: 'Tema del que sale esta pregunta' });
+    return U.el('span.tag.tag--origen', { text: tarjeta.o.origen, title: UI('Tema del que sale esta pregunta') });
   }
 
   /* ============================== EJERCICIO ============================== */
@@ -784,12 +788,12 @@
     this.partes = [];
     (s.partes || []).forEach(function (ps, i) {
       var parte = { spec: ps };
-      parte.caja = U.el('div.parte', { role: 'group', 'aria-label': 'Apartado ' + LETRAS[i] });
+      parte.caja = U.el('div.parte', { role: 'group', 'aria-label': UI('Apartado') + ' ' + LETRAS[i] });
       parte.preg = new Pregunta(ps, {
         examen: self.examen,
         bien: i < n - 1
-          ? '<strong>¡Correcto!</strong> Sigue con el apartado siguiente.'
-          : '<strong>¡Correcto!</strong> Con esto el problema está terminado.',
+          ? UI('<strong>¡Correcto!</strong> Sigue con el apartado siguiente.')
+          : UI('<strong>¡Correcto!</strong> Con esto el problema está terminado.'),
         alComprobar: function (ok, primera) {
           if (primera) parte.limpia = ok;
           if (ok) self._avanza(i);
@@ -876,7 +880,7 @@
   Problema.prototype.paintScore = function () {
     if (this.examen) return;
     var bien = this.partes.filter(function (p) { return p.preg.resuelta; }).length;
-    var txt = 'apartados: ' + bien + ' de ' + this.partes.length;
+    var txt = UI('apartados: {k} de {n}').replace('{k}', bien).replace('{n}', this.partes.length);
     var m = marcador(this.topicId, this.index);
     this.score.textContent = m ? txt + ' · ' + m : txt;
   };

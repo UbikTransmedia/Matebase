@@ -44,6 +44,17 @@
 (function (global) {
   'use strict';
 
+  /* Mensajes de error, rotulos y avisos del traductor: los lee una
+     persona y pasan por el diccionario, en frases enteras con huecos.
+     Las palabras clave de Pizca -sea, fun, si, mientras, muestra,
+     vuelve- NO se traducen: son el lenguaje que se teclea. */
+  function UI(s) { return global.I18N ? I18N.ui(s) : s; }
+  function con(s, vals) {
+    var t = UI(s);
+    for (var k in vals) t = t.split('{' + k + '}').join(vals[k]);
+    return t;
+  }
+
   var LEN = {};
 
   LEN.NOMBRE = 'Pizca';
@@ -91,7 +102,7 @@
         tokens.push({ t: 'op', v: c, texto: c, linea: linea });
         i++; continue;
       }
-      errores.push({ linea: linea, msg: 'no sé qué es «' + c + '»' });
+      errores.push({ linea: linea, msg: con('no sé qué es «{x}»', { x: c }) });
       i++;
     }
     tokens.push({ t: 'fin', v: '', texto: '', linea: linea });
@@ -114,7 +125,8 @@
       throw { corte: true };
     }
     function exige(v) {
-      if (!es(v)) fallo('esperaba «' + v + '» y he encontrado ' + (mira().t === 'fin' ? 'el final del programa' : '«' + mira().texto + '»'));
+      if (!es(v)) fallo(con('esperaba «{v}» y he encontrado {q}',
+        { v: v, q: mira().t === 'fin' ? UI('el final del programa') : '«' + mira().texto + '»' }));
       return come();
     }
 
@@ -167,8 +179,8 @@
         return { t: 'var', n: t.v, linea: t.linea };
       }
       if (es('(')) { come(); var e = expr(); exige(')'); return e; }
-      fallo('aquí esperaba un número, un nombre o un paréntesis, y hay ' +
-        (t.t === 'fin' ? 'el final del programa' : '«' + t.texto + '»'));
+      fallo(con('aquí esperaba un número, un nombre o un paréntesis, y hay {q}',
+        { q: t.t === 'fin' ? UI('el final del programa') : '«' + t.texto + '»' }));
     }
 
     /* --- sentencias --- */
@@ -183,7 +195,7 @@
       var t = mira();
       if (es('sea')) {
         come();
-        if (mira().t !== 'nombre') fallo('después de «sea» va un nombre');
+        if (mira().t !== 'nombre') fallo(UI('después de «sea» va un nombre'));
         var n = come().v;
         exige('=');
         var e = expr();
@@ -205,7 +217,7 @@
       }
       if (es('fun')) {
         come();
-        if (mira().t !== 'nombre') fallo('después de «fun» va el nombre de la función');
+        if (mira().t !== 'nombre') fallo(UI('después de «fun» va el nombre de la función'));
         var nf = come().v;
         exige('(');
         var ps = [];
@@ -237,8 +249,8 @@
         exige(';');
         return { t: 'asig', n: t.v, e: ea, linea: t.linea };
       }
-      fallo('esto no empieza ninguna sentencia: ' +
-        (t.t === 'fin' ? 'el programa se acaba antes de tiempo' : '«' + t.texto + '»'));
+      fallo(con('esto no empieza ninguna sentencia: {q}',
+        { q: t.t === 'fin' ? UI('el programa se acaba antes de tiempo') : '«' + t.texto + '»' }));
     }
 
     var prog = { t: 'programa', ss: [] };
@@ -271,11 +283,14 @@
   LEN.evalua = function (ast, o) {
     o = o || {};
     var tope = o.tope || 20000;
-    var salida = [], pasos = 0, funs = {}, parada = '';
+    /* `fin` es el codigo que mira el programa; `parada` es la frase que
+       lee el alumno. Separarlos deja traducir la frase sin cambiar lo que
+       el resto del motor da por terminado. */
+    var salida = [], pasos = 0, funs = {}, parada = '', fin = '';
     var raiz = new Entorno(null);
 
     function corta(msg) { throw { fin: true, msg: msg }; }
-    function paso() { if (++pasos > tope) corta('se han dado ' + tope + ' pasos sin terminar: o es un bucle sin fin, o hace falta más cuerda'); }
+    function paso() { if (++pasos > tope) corta(con('se han dado {n} pasos sin terminar: o es un bucle sin fin, o hace falta más cuerda', { n: tope })); }
 
     function valor(nodo, ent) {
       paso();
@@ -283,7 +298,7 @@
         case 'num': return ocho(nodo.v);
         case 'var': {
           var e = ent.busca(nodo.n);
-          if (!e) corta('no hay ninguna variable que se llame «' + nodo.n + '»');
+          if (!e) corta(con('no hay ninguna variable que se llame «{x}»', { x: nodo.n }));
           return e.v[nodo.n];
         }
         case 'neg': return ocho(-valor(nodo.e, ent));
@@ -294,7 +309,7 @@
             case '-': return ocho(a - b);
             case '*': return ocho(a * b);
             case '/':
-              if (b === 0) corta('se ha intentado dividir entre cero');
+              if (b === 0) corta(UI('se ha intentado dividir entre cero'));
               return ocho(Math.trunc(a / b));
             case '<': return a < b ? 1 : 0;
             case '>': return a > b ? 1 : 0;
@@ -308,10 +323,12 @@
         }
         case 'llamada': {
           var f = funs[nodo.n];
-          if (!f) corta('no hay ninguna función que se llame «' + nodo.n + '»');
+          if (!f) corta(con('no hay ninguna función que se llame «{x}»', { x: nodo.n }));
           if (f.params.length !== nodo.args.length) {
-            corta('«' + nodo.n + '» necesita ' + f.params.length + ' ' +
-              (f.params.length === 1 ? 'dato' : 'datos') + ' y le has dado ' + nodo.args.length);
+            corta(con(f.params.length === 1
+              ? '«{x}» necesita 1 dato y le has dado {d}'
+              : '«{x}» necesita {n} datos y le has dado {d}',
+              { x: nodo.n, n: f.params.length, d: nodo.args.length }));
           }
           var hijo = new Entorno(raiz);
           f.params.forEach(function (pn, idx) { hijo.v[pn] = valor(nodo.args[idx], ent); });
@@ -324,7 +341,7 @@
           return 0;                                   // función sin `vuelve`
         }
       }
-      corta('no sé evaluar esto');
+      corta(UI('no sé evaluar esto'));
     }
 
     function ejecuta(nodo, ent) {
@@ -337,12 +354,12 @@
         case 'sea': ent.v[nodo.n] = valor(nodo.e, ent); return;
         case 'asig': {
           var e = ent.busca(nodo.n);
-          if (!e) corta('no hay ninguna variable que se llame «' + nodo.n + '». Para crearla, «sea ' + nodo.n + ' = ...;»');
+          if (!e) corta(con('no hay ninguna variable que se llame «{x}». Para crearla, «sea {x} = ...;»', { x: nodo.n }));
           e.v[nodo.n] = valor(nodo.e, ent);
           return;
         }
         case 'muestra':
-          if (salida.length >= 200) corta('el programa ha escrito más de 200 números: seguramente es un bucle sin fin');
+          if (salida.length >= 200) corta(UI('el programa ha escrito más de 200 números: seguramente es un bucle sin fin'));
           salida.push(valor(nodo.e, ent));
           return;
         case 'tirar': valor(nodo.e, ent); return;
@@ -355,7 +372,7 @@
           while (valor(nodo.c, ent)) { ejecuta(nodo.cuerpo, ent); paso(); }
           return;
       }
-      corta('no sé ejecutar esto');
+      corta(UI('no sé ejecutar esto'));
     }
 
     /* Las funciones se apuntan antes, para poder llamarlas desde arriba. */
@@ -363,13 +380,13 @@
 
     try {
       ejecuta(ast, raiz);
-      parada = 'el programa ha terminado';
+      fin = 'fin'; parada = UI('el programa ha terminado');
     } catch (x) {
-      if (x && x.vuelve) parada = 'el programa ha terminado';
-      else if (x && x.fin) parada = x.msg;
+      if (x && x.vuelve) { fin = 'fin'; parada = UI('el programa ha terminado'); }
+      else if (x && x.fin) { fin = 'corte'; parada = x.msg; }
       else throw x;
     }
-    return { salida: salida, pasos: pasos, porQue: parada, funs: Object.keys(funs) };
+    return { salida: salida, pasos: pasos, porQue: parada, fin: fin, funs: Object.keys(funs) };
   };
 
   /* ---------------- 4. el compilador ----------------
@@ -417,7 +434,7 @@
         case 'bin': return binaria(e, ctx);
         case 'llamada': return llamada(e, ctx);
       }
-      errores.push({ linea: e.linea || 0, msg: 'no sé compilar esto' });
+      errores.push({ linea: e.linea || 0, msg: UI('no sé compilar esto') });
     }
 
     function binaria(e, ctx) {
@@ -449,7 +466,7 @@
         if (op === '==') { cero(); } else { cero(); niega(); }
         return;
       }
-      errores.push({ linea: e.linea || 0, msg: 'no sé compilar el operador ' + op });
+      errores.push({ linea: e.linea || 0, msg: con('no sé compilar el operador {op}', { op: op }) });
     }
 
     /* Deja 1 si el acumulador valía 0, y 0 si no. */
@@ -467,9 +484,12 @@
 
     function llamada(e, ctx) {
       var f = funs[e.n];
-      if (!f) { errores.push({ linea: e.linea || 0, msg: 'no hay ninguna función que se llame «' + e.n + '»' }); return; }
+      if (!f) { errores.push({ linea: e.linea || 0, msg: con('no hay ninguna función que se llame «{x}»', { x: e.n }) }); return; }
       if (f.params.length !== e.args.length) {
-        errores.push({ linea: e.linea || 0, msg: '«' + e.n + '» necesita ' + f.params.length + ' datos y le has dado ' + e.args.length });
+        errores.push({ linea: e.linea || 0, msg: con(f.params.length === 1
+          ? '«{x}» necesita 1 dato y le has dado {d}'
+          : '«{x}» necesita {n} datos y le has dado {d}',
+          { x: e.n, n: f.params.length, d: e.args.length }) });
         return;
       }
       var hs = huecosDe(f);
@@ -508,7 +528,7 @@
         case 'muestra': expr(s.e, ctx); pon('MUESTRA'); return;
         case 'tirar': expr(s.e, ctx); return;          // se hace y se tira
         case 'vuelve':
-          if (!ctx) { errores.push({ linea: s.linea || 0, msg: '«vuelve» solo tiene sentido dentro de una función' }); return; }
+          if (!ctx) { errores.push({ linea: s.linea || 0, msg: UI('«vuelve» solo tiene sentido dentro de una función') }); return; }
           expr(s.e, ctx);
           pon('VUELVE');
           return;
@@ -541,7 +561,7 @@
           return;
         }
       }
-      errores.push({ linea: s.linea || 0, msg: 'no sé compilar esta sentencia' });
+      errores.push({ linea: s.linea || 0, msg: UI('no sé compilar esta sentencia') });
     }
 
     /* --- el programa principal --- */
@@ -647,7 +667,7 @@
       case 'sea': cab = 'sea ' + nodo.n + ' ' + SIGNO.sea; hijos = [nodo.e]; break;
       case 'asig': cab = nodo.n + ' ' + SIGNO.asig; hijos = [nodo.e]; break;
       case 'muestra': cab = 'muestra'; hijos = [nodo.e]; break;
-      case 'tirar': cab = 'hacer y tirar'; hijos = [nodo.e]; break;
+      case 'tirar': cab = UI('hacer y tirar'); hijos = [nodo.e]; break;
       case 'vuelve': cab = 'vuelve'; hijos = [nodo.e]; break;
       case 'si': cab = 'si'; hijos = nodo.sino ? [nodo.c, nodo.ent, nodo.sino] : [nodo.c, nodo.ent]; break;
       case 'mientras': cab = 'mientras'; hijos = [nodo.c, nodo.cuerpo]; break;
@@ -670,12 +690,12 @@
       if (c.errores.length) return { errores: c.errores, salida: [], asm: c.texto };
       var m = MAQ.ejecuta(c.texto, null, o.tope);
       return {
-        errores: m.errores, salida: m.salida, porQue: m.porQue,
+        errores: m.errores, salida: m.salida, fin: m.fin, porQue: m.porQue,
         asm: c.texto, pasos: m.pasos, desbordo: m.desbordo
       };
     }
     var e = LEN.evalua(r.ast, o);
-    return { errores: [], salida: e.salida, porQue: e.porQue, pasos: e.pasos };
+    return { errores: [], salida: e.salida, fin: e.fin, porQue: e.porQue, pasos: e.pasos };
   };
 
   /** La prueba que sostiene el tramo B: interpretar y compilar tienen
@@ -699,20 +719,24 @@
     var r = LEN.analiza(texto);
     if (r.errores.length) {
       var e = r.errores[0];
-      return { ok: false, porQue: 'Línea ' + e.linea + ': ' + e.msg };
+      return { ok: false, porQue: con('Línea {n}: {m}', { n: e.linea, m: e.msg }) };
     }
     for (var i = 0; i < casos.length; i++) {
       var c = casos[i];
       var pre = (c.antes || '') + texto;
       var res = LEN.corre(pre, { tope: o.tope });
-      if (res.errores.length) return { ok: false, porQue: 'Línea ' + res.errores[0].linea + ': ' + res.errores[0].msg };
+      if (res.errores.length) return { ok: false, porQue: con('Línea {n}: {m}', { n: res.errores[0].linea, m: res.errores[0].msg }) };
       var esp = c.salida || [];
       if (res.salida.length !== esp.length || res.salida.some(function (v, k) { return v !== esp[k]; })) {
         return {
           ok: false,
-          porQue: (c.antes ? 'Empezando con «' + c.antes.trim() + '», esperaba ' : 'Esperaba ') +
-            'que escribiera ' + (esp.length ? esp.join(', ') : 'nada') + ' y ha escrito ' +
-            (res.salida.length ? res.salida.join(', ') : 'nada') + '.'
+          porQue: con(c.antes
+            ? 'Empezando con «{p}», esperaba que escribiera {a} y ha escrito {b}.'
+            : 'Esperaba que escribiera {a} y ha escrito {b}.', {
+            p: c.antes ? c.antes.trim() : '',
+            a: esp.length ? esp.join(', ') : UI('nada'),
+            b: res.salida.length ? res.salida.join(', ') : UI('nada')
+          })
         };
       }
     }
@@ -808,7 +832,7 @@
       on: function (v) { self.panel = v; self.pintaPanel(); }
     });
 
-    this.cuerpo = U.el('pre.len__panel', { tabindex: '0', role: 'region', 'aria-label': 'Panel del traductor' });
+    this.cuerpo = U.el('pre.len__panel', { tabindex: '0', role: 'region', 'aria-label': UI('Panel del traductor') });
     this.el.appendChild(this.cuerpo);
 
     if (o.nota) this.el.appendChild(U.el('p.len__nota', { html: MathX.inline(o.nota) }));
@@ -844,7 +868,7 @@
 
     if (this.r.errores.length) {
       var e = this.r.errores[0];
-      this.aviso.textContent = 'Línea ' + e.linea + ': ' + e.msg;
+      this.aviso.textContent = con('Línea {n}: {m}', { n: e.linea, m: e.msg });
       this.cuerpo.textContent = '';
       return;
     }
@@ -855,9 +879,10 @@
        salidas seria contarle el final. */
     if (this.o.avisa === 'poco') {
       var ts = this.r.tokens.length - 1;
-      this.aviso.textContent = 'Se entiende. ' + ts + ' ' + (ts === 1 ? 'pieza' : 'piezas') +
-        ' y un árbol de ' + this.r.ast.ss.length + ' ' +
-        (this.r.ast.ss.length === 1 ? 'sentencia' : 'sentencias') + '.';
+      this.aviso.textContent = UI('Se entiende.') + ' ' +
+        con(ts === 1 ? '{t} pieza' : '{t} piezas', { t: ts }) + ' ' +
+        con(this.r.ast.ss.length === 1 ? 'y un árbol de {n} sentencia.' : 'y un árbol de {n} sentencias.',
+          { n: this.r.ast.ss.length });
       this.el.classList.remove('len--difiere');
       this.asm = LEN.compila(this.r.ast);
       this.salidaC = [];
@@ -868,7 +893,7 @@
     var i = LEN.evalua(this.r.ast, { tope: this.o.tope || 20000 });
     this.asm = LEN.compila(this.r.ast);
     var c = this.asm.errores.length
-      ? { salida: [], porQue: 'línea ' + this.asm.errores[0].linea + ': ' + this.asm.errores[0].msg }
+      ? { salida: [], porQue: con('línea {n}: {m}', { n: this.asm.errores[0].linea, m: this.asm.errores[0].msg }) }
       : MAQ.ejecuta(this.asm.texto, null, this.o.tope || 8000);
     this.salidaI = i.salida;
     this.salidaC = c.salida || [];
@@ -878,10 +903,11 @@
       this.salidaI.every(function (v, k) { return v === c.salida[k]; });
 
     this.aviso.textContent =
-      'Interpretado escribe: ' + (this.salidaI.length ? this.salidaI.join(', ') : 'nada') +
-      ' · compilado y ejecutado en la máquina escribe: ' + (this.salidaC.length ? this.salidaC.join(', ') : 'nada') +
-      (mismas ? ' · son lo mismo ✓' : ' · ¡NO coinciden!') +
-      (i.porQue && i.porQue.indexOf('terminado') < 0 ? ' · ' + i.porQue : '');
+      con('Interpretado escribe: {a}', { a: this.salidaI.length ? this.salidaI.join(', ') : UI('nada') }) +
+      ' · ' + con('compilado y ejecutado en la máquina escribe: {b}',
+        { b: this.salidaC.length ? this.salidaC.join(', ') : UI('nada') }) +
+      ' · ' + UI(mismas ? 'son lo mismo ✓' : '¡NO coinciden!') +
+      (i.fin && i.fin !== 'fin' ? ' · ' + i.porQue : '');
     this.el.classList.toggle('len--difiere', !mismas);
     this.pintaPanel();
   };
@@ -896,14 +922,15 @@
       txt = LEN.arbolTexto(this.r.ast);
     } else if (this.panel === 'asm') {
       txt = this.asm.errores.length
-        ? 'Línea ' + this.asm.errores[0].linea + ': ' + this.asm.errores[0].msg
+        ? con('Línea {n}: {m}', { n: this.asm.errores[0].linea, m: this.asm.errores[0].msg })
         : this.asm.texto;
     } else {
-      txt = 'Lo que escribe la máquina: ' + (this.salidaC.length ? this.salidaC.join(', ') : 'nada') +
-        '\nInstrucciones generadas: ' + (this.asm.errores.length ? '—' : MAQ.ensambla(this.asm.texto).instrucciones) +
-        (this.porQueC ? '\nCómo acabó: ' + this.porQueC : '') +
-        (this.porQueI ? '\nInterpretándolo: ' + this.porQueI : '') +
-        (this.cuenta ? '\nCuentas plegadas: ' + this.cuenta.plegadas + ' · trozos muertos quitados: ' + this.cuenta.muertas : '');
+      txt = con('Lo que escribe la máquina: {a}', { a: this.salidaC.length ? this.salidaC.join(', ') : UI('nada') }) +
+        '\n' + con('Instrucciones generadas: {n}', { n: this.asm.errores.length ? '—' : MAQ.ensambla(this.asm.texto).instrucciones }) +
+        (this.porQueC ? '\n' + con('Cómo acabó: {m}', { m: this.porQueC }) : '') +
+        (this.porQueI ? '\n' + con('Interpretándolo: {m}', { m: this.porQueI }) : '') +
+        (this.cuenta ? '\n' + con('Cuentas plegadas: {p} · trozos muertos quitados: {q}',
+          { p: this.cuenta.plegadas, q: this.cuenta.muertas }) : '');
     }
     this.cuerpo.textContent = txt;
   };
@@ -975,7 +1002,7 @@
 
     this.ed = U.el('input.card__url.arb__ed', {
       type: 'text', value: this.texto, spellcheck: 'false',
-      'aria-label': 'Expresión que se dibuja'
+      'aria-label': UI('Expresión que se dibuja')
     });
     this.ed.addEventListener('input', function () {
       self.texto = self.ed.value; self.paso = 0; self.recalcula();
@@ -993,7 +1020,7 @@
          texto por que paso va y como esta la pila. */
       ariaFija: {
         role: 'img',
-        label: this.o.aria || 'Árbol de la expresión: las operaciones en los nudos y los números en las hojas, dibujado de abajo arriba.'
+        label: this.o.aria || UI('Árbol de la expresión: las operaciones en los nudos y los números en las hojas, dibujado de abajo arriba.')
       },
       draw: function (g) { self.dibuja(g); }
     });
@@ -1002,9 +1029,9 @@
     this.el.appendChild(this.pila);
 
     W.buttons(this.el, [
-      { t: 'Un paso', on: function () { self.paso++; self.recalcula(); } },
-      { t: '↦ Hasta el final', on: function () { self.paso = 999; self.recalcula(); } },
-      { t: '↺ Volver al principio', on: function () { self.paso = 0; self.recalcula(); } }
+      { t: UI('Un paso'), on: function () { self.paso++; self.recalcula(); } },
+      { t: '↦ ' + UI('Hasta el final'), on: function () { self.paso = 999; self.recalcula(); } },
+      { t: '↺ ' + UI('Volver al principio'), on: function () { self.paso = 0; self.recalcula(); } }
     ]);
 
     if (this.o.nota) this.el.appendChild(U.el('p.arb__nota', { html: MathX.inline(this.o.nota) }));
@@ -1018,8 +1045,8 @@
     if (r.errores.length || !r.ast.ss.length) {
       this.disp = null;
       this.aviso.textContent = r.errores.length
-        ? 'Línea ' + r.errores[0].linea + ': ' + r.errores[0].msg
-        : 'Escribe una expresión, como «2 + 3 * 4».';
+        ? con('Línea {n}: {m}', { n: r.errores[0].linea, m: r.errores[0].msg })
+        : UI('Escribe una expresión, como «2 + 3 * 4».');
       U.clear(this.pila);
       this.plot.render();
       return;
@@ -1056,23 +1083,25 @@
           if (v === undefined) v = ({ '<': z < d, '>': z > d, '<=': z <= d, '>=': z >= d, '==': z === d, '!=': z !== d }[n.op]) ? 1 : 0;
           pila.push(isNaN(v) ? NaN : ocho(v));
         }
-      } else { pila.push(NaN); roto = 'aquí no se evalúa'; }
+      } else { pila.push(NaN); roto = UI('aquí no se evalúa'); }
       alto = Math.max(alto, pila.length);
     }
     this.estado = { pila: pila, rpn: rpn, alto: alto };
     var total = this.disp.nodos.length;
     this.aviso.textContent = this.paso === 0
-      ? 'Sin empezar. ' + total + ' ' + U.plural(total, 'nudo', 'nudos') + ' que visitar, las hojas primero.'
-      : 'Paso ' + this.paso + ' de ' + total + ' · en polaca inversa: ' + rpn.join(' ') +
-        ' · altura máxima de la pila: ' + alto +
-        (this.paso >= total && pila.length === 1 && !isNaN(pila[0]) ? ' · vale ' + pila[0] : '');
+      ? UI('Sin empezar.') + ' ' +
+        con(total === 1 ? 'Hay {n} nudo que visitar, las hojas primero.' : 'Hay {n} nudos que visitar, las hojas primero.', { n: total })
+      : con('Paso {i} de {n}', { i: this.paso, n: total }) +
+        ' · ' + con('en polaca inversa: {r}', { r: rpn.join(' ') }) +
+        ' · ' + con('altura máxima de la pila: {a}', { a: alto }) +
+        (this.paso >= total && pila.length === 1 && !isNaN(pila[0]) ? ' · ' + con('vale {v}', { v: pila[0] }) : '');
   };
 
   Arbol.prototype.pintaPila = function () {
     U.clear(this.pila);
-    this.pila.appendChild(U.el('span.arb__et', { text: 'la pila' }));
+    this.pila.appendChild(U.el('span.arb__et', { text: UI('la pila') }));
     if (!this.estado.pila.length) {
-      this.pila.appendChild(U.el('span.arb__vacia', { text: 'vacía' }));
+      this.pila.appendChild(U.el('span.arb__vacia', { text: UI('vacía') }));
       return;
     }
     /* Se dibuja de abajo arriba, como una pila de verdad: lo ultimo en

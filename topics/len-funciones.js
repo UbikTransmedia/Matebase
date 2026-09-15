@@ -279,7 +279,7 @@ Course.topic('len-funciones', function (p) {
         var pr = d.pruebas[i];
         var res = LEN.corre(texto + '\nmuestra f(' + pr.n + ');', { tope: 30000 });
         if (res.errores.length) return { ok: false, msg: 'Línea ' + res.errores[0].linea + ': ' + res.errores[0].msg };
-        if (res.porQue && res.porQue.indexOf('terminado') < 0) {
+        if (res.fin && res.fin !== 'fin') {
           return { ok: false, msg: 'Con <code>n = ' + pr.n + '</code> no termina: ' + res.porQue + '. Revisa el caso base y que la llamada se acerque a él.' };
         }
         if (String(res.salida) !== String(pr.salida)) {

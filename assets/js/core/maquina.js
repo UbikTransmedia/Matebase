@@ -45,6 +45,18 @@
 (function (global) {
   'use strict';
 
+  /* Rotulos, ayudas y mensajes de error de la maquina: los lee una
+     persona y pasan por el diccionario, en frases enteras con huecos.
+     Lo que NO pasa es el ensamblador: los nemonicos (CARGA, GUARDA,
+     SUMA) y los programas de ejemplo son el lenguaje de la maquina y se
+     quedan como estan, igual que el codigo de cualquier otro lenguaje. */
+  function UI(s) { return global.I18N ? I18N.ui(s) : s; }
+  function con(s, vals) {
+    var t = UI(s);
+    for (var k in vals) t = t.split('{' + k + '}').join(vals[k]);
+    return t;
+  }
+
   var MAQ = {};
 
   /* ---------------- el juego de instrucciones ----------------
@@ -124,7 +136,7 @@
          Puede ir sola en su linea o delante de una instruccion. */
       var me = RE_ETIQ.exec(linea);
       if (me) {
-        if (etiquetas[me[1]] !== undefined) errores.push({ linea: num, msg: 'la etiqueta «' + me[1] + '» ya estaba puesta más arriba' });
+        if (etiquetas[me[1]] !== undefined) errores.push({ linea: num, msg: con('la etiqueta «{x}» ya estaba puesta más arriba', { x: me[1] }) });
         else etiquetas[me[1]] = dir;
         linea = me[2].trim();
         if (!linea) return;
@@ -140,20 +152,20 @@
          que es lo unico que distingue una lista de veinte variables. */
       if (nom === 'TABLA') {
         if (trozos.length !== 3) {
-          errores.push({ linea: num, msg: '«TABLA» se escribe «TABLA nombre tamaño»' });
+          errores.push({ linea: num, msg: UI('«TABLA» se escribe «TABLA nombre tamaño»') });
           return;
         }
         if (!RE_NOM.test(trozos[1])) {
-          errores.push({ linea: num, msg: '«' + trozos[1] + '» no es un nombre válido para una tabla' });
+          errores.push({ linea: num, msg: con('«{x}» no es un nombre válido para una tabla', { x: trozos[1] }) });
           return;
         }
         var tam = parseInt(trozos[2], 10);
         if (!/^\d+$/.test(trozos[2]) || tam < 1 || tam > MAQ.CELDAS) {
-          errores.push({ linea: num, msg: 'el tamaño de una tabla es un número entre 1 y ' + MAQ.CELDAS });
+          errores.push({ linea: num, msg: con('el tamaño de una tabla es un número entre 1 y {n}', { n: MAQ.CELDAS }) });
           return;
         }
         if (tablas[trozos[1]] !== undefined) {
-          errores.push({ linea: num, msg: 'la tabla «' + trozos[1] + '» ya estaba declarada' });
+          errores.push({ linea: num, msg: con('la tabla «{x}» ya estaba declarada', { x: trozos[1] }) });
           return;
         }
         tablas[trozos[1]] = tam;
@@ -162,19 +174,20 @@
 
       var op = POR_NOMBRE[nom];
       if (!op) {
-        errores.push({ linea: num, msg: 'no existe la instrucción «' + trozos[0] + '». Hay: ' + MAQ.NOMBRES.join(', ') });
+        errores.push({ linea: num, msg: con('no existe la instrucción «{x}». Hay: {l}', { x: trozos[0], l: MAQ.NOMBRES.join(', ') }) });
         return;
       }
       if (!op.arg && trozos.length > 1) {
-        errores.push({ linea: num, msg: '«' + nom + '» no lleva nada detrás' });
+        errores.push({ linea: num, msg: con('«{x}» no lleva nada detrás', { x: nom }) });
         return;
       }
       if (op.arg && trozos.length < 2) {
-        errores.push({ linea: num, msg: '«' + nom + '» necesita un ' + (op.tipo === 'sitio' ? 'sitio al que ir' : (op.tipo === 'dato' ? 'nombre de celda' : 'número')) });
+        errores.push({ linea: num, msg: con(op.tipo === 'sitio' ? '«{x}» necesita un sitio al que ir'
+            : (op.tipo === 'dato' ? '«{x}» necesita un nombre de celda' : '«{x}» necesita un número'), { x: nom }) });
         return;
       }
       if (trozos.length > 2) {
-        errores.push({ linea: num, msg: '«' + nom + '» lleva una sola cosa detrás, no ' + (trozos.length - 1) });
+        errores.push({ linea: num, msg: con('«{x}» lleva una sola cosa detrás, no {n}', { x: nom, n: trozos.length - 1 }) });
         return;
       }
       celdas.push({ cod: op.cod, dir: dir, linea: num, op: op });
@@ -211,19 +224,19 @@
       if (/^-?\d+$/.test(t)) {
         v = parseInt(t, 10);
         if (p.op.tipo !== 'valor' && (v < 0 || v >= MAQ.CELDAS)) {
-          errores.push({ linea: p.linea, msg: 'la celda ' + v + ' no existe: van de 0 a ' + (MAQ.CELDAS - 1) });
+          errores.push({ linea: p.linea, msg: con('la celda {v} no existe: van de 0 a {n}', { v: v, n: MAQ.CELDAS - 1 }) });
           v = 0;
         }
         if (p.op.tipo === 'valor' && desborda(v)) {
-          errores.push({ linea: p.linea, msg: 'el número ' + v + ' no cabe en ocho bits con signo: van de -128 a 127' });
+          errores.push({ linea: p.linea, msg: con('el número {v} no cabe en ocho bits con signo: van de -128 a 127', { v: v }) });
           v = ocho(v);
         }
       } else if (!RE_NOM.test(t)) {
-        errores.push({ linea: p.linea, msg: '«' + t + '» no es ni un número ni un nombre' });
+        errores.push({ linea: p.linea, msg: con('«{x}» no es ni un número ni un nombre', { x: t }) });
         v = 0;
       } else if (p.op.tipo === 'sitio') {
         if (etiquetas[t] === undefined) {
-          errores.push({ linea: p.linea, msg: 'no hay ninguna etiqueta que se llame «' + t + '». Se pone escribiendo «' + t + ':» en su línea' });
+          errores.push({ linea: p.linea, msg: con('no hay ninguna etiqueta que se llame «{x}». Se pone escribiendo «{x}:» en su línea', { x: t }) });
           v = 0;
         } else v = etiquetas[t];
       } else if (p.op.tipo === 'dato' || p.op.tipo === 'valor') {
@@ -232,13 +245,13 @@
            hay ahi; `NUM x` se queda con el numero de la celda. */
         v = vars[t];
       } else {
-        errores.push({ linea: p.linea, msg: '«' + p.op.n + '» necesita un número, no el nombre «' + t + '»' });
+        errores.push({ linea: p.linea, msg: con('«{op}» necesita un número, no el nombre «{x}»', { op: p.op.n, x: t }) });
         v = 0;
       }
       celdas[p.idx].valor = v;
     });
 
-    if (libre >= MAQ.CELDAS) errores.push({ linea: lineas.length, msg: 'el programa y sus variables no caben en las ' + MAQ.CELDAS + ' celdas de memoria' });
+    if (libre >= MAQ.CELDAS) errores.push({ linea: lineas.length, msg: con('el programa y sus variables no caben en las {n} celdas de memoria', { n: MAQ.CELDAS }) });
 
     var imagen = [];
     celdas.forEach(function (c) { imagen[c.dir] = (c.argDe === undefined) ? c.cod : ocho(c.valor || 0); });
@@ -272,17 +285,20 @@
     return m;
   };
 
-  function para(m, porQue) { m.parada = true; m.porQue = porQue; return m; }
+  /* El codigo `fin` es lo que mira el corrector; `porQue` es lo que lee
+     el alumno, y por eso se traduce. Separarlos evita que traducir la
+     frase cambie lo que el corrector da por bueno. */
+  function para(m, fin, porQue) { m.parada = true; m.fin = fin; m.porQue = porQue; return m; }
 
   /** Un paso: buscar, decodificar, ejecutar. Los tres tiempos están
       separados a propósito, porque maq-cpu los cuenta así. */
   MAQ.paso = function (m) {
     if (m.parada) return m;
-    if (m.pc < 0 || m.pc >= MAQ.CELDAS) return para(m, 'el contador se ha ido fuera de la memoria');
+    if (m.pc < 0 || m.pc >= MAQ.CELDAS) return para(m, 'fuera', UI('el contador se ha ido fuera de la memoria'));
 
     var cod = m.mem[m.pc];                       // BUSCAR
     var op = OPS[cod];                           // DECODIFICAR
-    if (!op) return para(m, 'en la celda ' + m.pc + ' hay un ' + cod + ', que no es ninguna instrucción');
+    if (!op) return para(m, 'noop', con('en la celda {d} hay un {v}, que no es ninguna instrucción', { d: m.pc, v: cod }));
 
     var arg = null, sig = m.pc + 1;
     if (op.arg) { arg = m.mem[m.pc + 1]; sig = m.pc + 2; }
@@ -295,7 +311,7 @@
     function celda(v) { return ((v % MAQ.CELDAS) + MAQ.CELDAS) % MAQ.CELDAS; }
 
     function saca() {                            // EJECUTAR
-      if (!m.pila.length) { para(m, 'se ha intentado sacar de la pila estando vacía'); return 0; }
+      if (!m.pila.length) { para(m, 'pilaVacia', UI('se ha intentado sacar de la pila estando vacía')); return 0; }
       return m.pila.pop();
     }
     function pon(v) {
@@ -306,31 +322,31 @@
     switch (op.n) {
       /* PARA no mueve el contador: asi la flecha se queda senalando la
          instruccion donde se detuvo, que es la informacion util. */
-      case 'PARA': return para(m, 'el programa ha terminado');
+      case 'PARA': return para(m, 'fin', UI('el programa ha terminado'));
       case 'NUM': m.a = ocho(arg); break;
       case 'CARGA': m.a = m.mem[celda(arg)]; break;
       case 'GUARDA': m.mem[celda(arg)] = m.a; break;
       case 'CARGAI': m.a = m.mem[celda(m.mem[celda(arg)])]; break;
       case 'GUARDAI': m.mem[celda(m.mem[celda(arg)])] = m.a; break;
       case 'METE':
-        if (m.pila.length >= 64) return para(m, 'la pila se ha llenado: son 64 sitios, y suele pasar cuando una llamada no vuelve nunca');
+        if (m.pila.length >= 64) return para(m, 'pilaLlena', UI('la pila se ha llenado: son 64 sitios, y suele pasar cuando una llamada no vuelve nunca'));
         m.pila.push(m.a); break;
       case 'SACA': m.a = saca(); break;
       case 'SUMA': pon(saca() + m.a); break;
       case 'RESTA': pon(saca() - m.a); break;
       case 'MULT': pon(saca() * m.a); break;
       case 'DIV':
-        if (m.a === 0) { saca(); return para(m, 'se ha intentado dividir entre cero'); }
+        if (m.a === 0) { saca(); return para(m, 'div0', UI('se ha intentado dividir entre cero')); }
         pon(Math.trunc(saca() / m.a)); break;
       case 'MENOR': m.a = (saca() < m.a) ? 1 : 0; break;
       case 'SALTA': m.pc = arg; return m;
       case 'SICERO': if (m.a === 0) { m.pc = arg; return m; } break;
       case 'LLAMA':
-        if (m.pila.length >= 64) return para(m, 'la pila se ha llenado: son 64 sitios, y suele pasar cuando una llamada no vuelve nunca');
+        if (m.pila.length >= 64) return para(m, 'pilaLlena', UI('la pila se ha llenado: son 64 sitios, y suele pasar cuando una llamada no vuelve nunca'));
         m.pila.push(sig); m.pc = arg; return m;
       case 'VUELVE': m.pc = saca(); return m;
       case 'MUESTRA':
-        if (m.salida.length >= 200) return para(m, 'el programa ha escrito más de 200 números: seguramente es un bucle sin fin');
+        if (m.salida.length >= 200) return para(m, 'salida', UI('el programa ha escrito más de 200 números: seguramente es un bucle sin fin'));
         m.salida.push(m.a); break;
     }
     if (m.parada) return m;
@@ -343,7 +359,7 @@
   MAQ.corre = function (m, tope) {
     var t = tope || MAQ.TOPE;
     while (!m.parada && m.pasos < t) MAQ.paso(m);
-    if (!m.parada && m.pasos >= t) para(m, 'se han dado ' + t + ' pasos sin terminar: o es un bucle sin fin, o hace falta más cuerda');
+    if (!m.parada && m.pasos >= t) para(m, 'tope', con('se han dado {n} pasos sin terminar: o es un bucle sin fin, o hace falta más cuerda', { n: t }));
     return m;
   };
 
@@ -354,7 +370,7 @@
     var m = MAQ.corre(MAQ.nueva(asm, datos), tope);
     return {
       errores: [], salida: m.salida, a: m.a, mem: m.mem, pasos: m.pasos,
-      porQue: m.porQue, desbordo: m.desbordo, asm: asm, maquina: m
+      fin: m.fin, porQue: m.porQue, desbordo: m.desbordo, asm: asm, maquina: m
     };
   };
 
@@ -367,7 +383,7 @@
     var asm = MAQ.ensambla(texto);
     if (asm.errores.length) {
       var e = asm.errores[0];
-      return { ok: false, porQue: 'Línea ' + e.linea + ': ' + e.msg, instrucciones: 0, pasos: 0 };
+      return { ok: false, porQue: con('Línea {n}: {m}', { n: e.linea, m: e.msg }), instrucciones: 0, pasos: 0 };
     }
     var pasos = 0;
     for (var i = 0; i < casos.length; i++) {
@@ -376,22 +392,23 @@
       if (falta.length) {
         return {
           ok: false, instrucciones: asm.instrucciones, pasos: pasos,
-          porQue: 'El programa no usa ninguna celda llamada «' + falta[0] + '», y es donde llega el dato. ' +
-            'Los nombres del enunciado hay que usarlos tal cual.'
+          porQue: con('El programa no usa ninguna celda llamada «{x}», y es donde llega el dato. ' +
+            'Los nombres del enunciado hay que usarlos tal cual.', { x: falta[0] })
         };
       }
       var r = MAQ.corre(MAQ.nueva(asm, c.datos), o.tope);
       pasos = Math.max(pasos, r.pasos);
-      if (r.porQue.indexOf('terminado') < 0) {
-        return { ok: false, porQue: 'Con ' + describe(c.datos) + ' el programa no llegó a PARA: ' + r.porQue + '.', instrucciones: asm.instrucciones, pasos: pasos };
+      if (r.fin !== 'fin') {
+        return { ok: false, porQue: con('Con {c} el programa no llegó a PARA: {m}.', { c: describe(c.datos), m: r.porQue }), instrucciones: asm.instrucciones, pasos: pasos };
       }
       var esperado = c.salida || [];
       var visto = r.salida;
       if (visto.length !== esperado.length || visto.some(function (v, k) { return v !== esperado[k]; })) {
         return {
           ok: false,
-          porQue: 'Con ' + describe(c.datos) + ' esperaba que escribiera ' + lista(esperado) +
-            ' y ha escrito ' + (visto.length ? lista(visto) : 'nada') + '.',
+          porQue: con('Con {c} esperaba que escribiera {a} y ha escrito {b}.', {
+            c: describe(c.datos), a: lista(esperado), b: visto.length ? lista(visto) : UI('nada')
+          }),
           instrucciones: asm.instrucciones, pasos: pasos
         };
       }
@@ -400,12 +417,12 @@
   };
 
   function describe(d) {
-    if (!d) return 'los valores de partida';
+    if (!d) return UI('los valores de partida');
     var ks = Object.keys(d);
-    if (!ks.length) return 'los valores de partida';
+    if (!ks.length) return UI('los valores de partida');
     return ks.map(function (k) { return k + ' = ' + d[k]; }).join(', ');
   }
-  function lista(v) { return v.length ? v.join(', ') : 'nada'; }
+  function lista(v) { return v.length ? v.join(', ') : UI('nada'); }
   MAQ.lista = lista;
 
   /* ---------------- coloreado ----------------
@@ -512,7 +529,7 @@
     this.caja.appendChild(this.capa);
     this.ed = U.el('textarea.shd__ed', {
       spellcheck: 'false', autocomplete: 'off', autocapitalize: 'off',
-      'aria-label': 'Programa en ensamblador, una instrucción por línea',
+      'aria-label': UI('Programa en ensamblador, una instrucción por línea'),
       rows: String(Math.max(4, this.original.split('\n').length + 1))
     });
     this.ed.value = this.original;
@@ -531,10 +548,10 @@
     this.el.appendChild(this.regs);
 
     W.buttons(this.el, [
-      { t: 'Un paso', on: function () { self.paso(); } },
-      { t: '▶ Corre', on: function () { self.corre(); } },
-      { t: '↺ Reinicia', on: function () { self.reinicia(); } },
-      { t: '↺ Volver al original', on: function () { self.ed.value = self.original; self.repinta(); self.reinicia(); self.guarda(); } }
+      { t: UI('Un paso'), on: function () { self.paso(); } },
+      { t: '▶ ' + UI('Corre'), on: function () { self.corre(); } },
+      { t: '↺ ' + UI('Reinicia'), on: function () { self.reinicia(); } },
+      { t: '↺ ' + UI('Volver al original'), on: function () { self.ed.value = self.original; self.repinta(); self.reinicia(); self.guarda(); } }
     ]);
 
     /* --- la memoria, que es donde se ve que todo son números --- */
@@ -589,7 +606,7 @@
 
     if (asm.errores.length) {
       var e = asm.errores[0];
-      this.aviso.textContent = 'Línea ' + e.linea + ': ' + e.msg;
+      this.aviso.textContent = con('Línea {n}: {m}', { n: e.linea, m: e.msg });
       this.regs.innerHTML = '';
       this.memCaja.innerHTML = '';
       return;
@@ -597,20 +614,23 @@
 
     var u = m.ultima;
     this.aviso.textContent = m.parada
-      ? 'Parada: ' + m.porQue + (m.desbordo ? ' · ojo, alguna cuenta se salió de los ocho bits y dio la vuelta' : '')
-      : (u ? 'Acaba de hacer ' + u.op.n + (u.op.arg ? ' ' + u.arg : '') + ': ' + u.op.q
-        : 'Lista. El contador está en la celda 0, que es por donde empieza todo.');
+      ? con('Parada: {m}', { m: m.porQue }) +
+        (m.desbordo ? ' · ' + UI('ojo, alguna cuenta se salió de los ocho bits y dio la vuelta') : '')
+      : (u ? con('Acaba de hacer {i}: {q}', {
+          i: u.op.n + (u.op.arg ? ' ' + u.arg : ''), q: UI(u.op.q)
+        })
+        : UI('Lista. El contador está en la celda 0, que es por donde empieza todo.'));
 
     this.regs.innerHTML = '';
     var self = this;
     [['contador', m.pc], ['acumulador', m.a]].forEach(function (par) {
-      self.regs.appendChild(U.el('span.maq__reg', { html: '<b>' + par[0] + '</b> ' + par[1] }));
+      self.regs.appendChild(U.el('span.maq__reg', { html: '<b>' + UI(par[0]) + '</b> ' + par[1] }));
     });
     this.regs.appendChild(U.el('span.maq__reg', {
-      html: '<b>pila</b> ' + (m.pila.length ? m.pila.join(' · ') : '—')
+      html: '<b>' + UI('pila') + '</b> ' + (m.pila.length ? m.pila.join(' · ') : '—')
     }));
     this.regs.appendChild(U.el('span.maq__reg.maq__reg--sal', {
-      html: '<b>salida</b> ' + (m.salida.length ? m.salida.join(', ') : '—')
+      html: '<b>' + UI('salida') + '</b> ' + (m.salida.length ? m.salida.join(', ') : '—')
     }));
 
     /* La memoria: solo la parte que se usa, porque 256 celdas no se leen.
@@ -624,8 +644,8 @@
 
     var wrap = U.el('div.tbl-wrap.maq__mem'), tb = U.el('table.tbl');
     tb.appendChild(U.el('thead', null, U.el('tr', null, [
-      U.el('th', { text: '' }), U.el('th', { text: 'celda' }),
-      U.el('th.num', { text: 'valor' }), U.el('th', { text: 'qué es' })
+      U.el('th', { text: '' }), U.el('th', { text: UI('celda') }),
+      U.el('th.num', { text: UI('valor') }), U.el('th', { text: UI('qué es') })
     ])));
     var cuerpo = U.el('tbody');
     for (var d = 0; d < hasta; d++) {
@@ -636,10 +656,10 @@
       tr.appendChild(U.el('td', { text: String(d) }));
       tr.appendChild(U.el('td.num', { text: String(m.mem[d]) }));
       var c = mapa[d], que;
-      if (nombres[d]) que = '<span class="maq__var">' + nombres[d] + '</span> <span class="maq__libre">(dato)</span>';
-      else if (!c) que = '<span class="maq__libre">libre</span>';
+      if (nombres[d]) que = '<span class="maq__var">' + nombres[d] + '</span> <span class="maq__libre">(' + UI('dato') + ')</span>';
+      else if (!c) que = '<span class="maq__libre">' + UI('libre') + '</span>';
       else if (c.argDe === undefined) que = '<span class="maq__op">' + c.op.n + '</span>';
-      else que = '<span class="maq__libre">lo que lleva ' + asm.celdas[c.argDe].op.n + ' detrás</span>';
+      else que = '<span class="maq__libre">' + con('lo que lleva {i} detrás', { i: asm.celdas[c.argDe].op.n }) + '</span>';
       tr.appendChild(U.el('td', { html: (etiq[d] ? '<span class="maq__et">' + etiq[d] + ':</span> ' : '') + que }));
       cuerpo.appendChild(tr);
     }

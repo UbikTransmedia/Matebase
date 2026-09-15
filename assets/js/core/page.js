@@ -104,8 +104,8 @@
     var tip = U.el('div.fbox__tip', { html: MathX.inline(lectura), role: 'tooltip' });
     var b = U.el('button.fbox__help', {
       type: 'button', 'aria-expanded': 'false',
-      'aria-label': 'Cómo se lee esta fórmula',
-      title: 'Cómo se lee',
+      'aria-label': UI('Cómo se lee esta fórmula'),
+      title: UI('Cómo se lee'),
       onclick: function () {
         var abierto = b.getAttribute('aria-expanded') === 'true';
         b.setAttribute('aria-expanded', abierto ? 'false' : 'true');
@@ -233,7 +233,7 @@
     var visto = 1;
     function pinta() {
       var sig = pasos[visto];
-      antes.innerHTML = sig && sig.antes ? '<span class="res__q">Antes de destapar el paso ' + (visto + 1) + ':</span> ' + MathX.inline(sig.antes) : '';
+      antes.innerHTML = sig && sig.antes ? '<span class="res__q">' + UI('Antes de destapar el paso {n}:').replace('{n}', visto + 1) + '</span> ' + MathX.inline(sig.antes) : '';
       antes.hidden = !antes.innerHTML;
       var fin = visto >= pasos.length;
       bSig.hidden = fin; bTodo.hidden = fin;
@@ -284,8 +284,8 @@
         b.classList.add('is-on');
         box.classList.toggle('is-ok', !!op.ok);
         box.classList.toggle('is-bad', !op.ok);
-        fb.innerHTML = (op.ok ? '<strong>✓ Eso es.</strong> ' : '<strong>✗ No.</strong> ') + MathX.inline(op.por || '') +
-          (op.ok ? '' : ' <em>Prueba otra vez.</em>');
+        fb.innerHTML = (op.ok ? UI('<strong>✓ Eso es.</strong> ') : UI('<strong>✗ No.</strong> ')) + MathX.inline(op.por || '') +
+          (op.ok ? '' : UI(' <em>Prueba otra vez.</em>'));
         fb.hidden = false;
       });
       botones.push(b);

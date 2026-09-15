@@ -25,6 +25,13 @@
   /* Lo que viene de los temas -el titulo de un simulacro, el nombre de un
      bloque de preguntas- ya esta en el diccionario de prosa: se pide ahi. */
   function TX(s) { return global.I18N ? I18N.trad(s) : s; }
+  /* Una frase entera con huecos: se traduce primero y se rellena despues,
+     para que el orden de las palabras lo decida el idioma y no el codigo. */
+  function con(s, vals) {
+    var t = UI(s);
+    for (var k in vals) t = t.split('{' + k + '}').join(vals[k]);
+    return t;
+  }
 
   var ITIN = {
     MII: 'Matemáticas II',
@@ -125,8 +132,9 @@
           U.el('td.mapa__req', { html: req.length ? MathX.inline(req.map(function (r) { return '[[' + r + ']]'; }).join(' · ')) : '—' })
         ]));
       });
-      resumen.set(UI('Temario de 2.º de') + ' <strong>' + ITIN[cual] + '</strong>: ' + lista.length + ' ' +
-        UI('temas') + '. ' + UI('Dominados') + ': <strong>' + dom + '</strong> · ' +
+      resumen.set(con('Temario de 2.º de {c}: {n} temas.',
+        { c: '<strong>' + ITIN[cual] + '</strong>', n: lista.length }) + ' ' +
+        UI('Dominados') + ': <strong>' + dom + '</strong> · ' +
         UI('vistos sin dominar') + ': <strong>' + (vis - dom) + '</strong> · ' +
         UI('sin empezar') + ': <strong>' + (lista.length - vis) + '</strong>.<br>' +
         '<span style="font-size:0.8125rem;color:var(--ink-faint)">' +
@@ -337,7 +345,7 @@
 
       function cuenta() {
         var r = tarjetas.filter(function (t) { return t.card.respondida(); }).length;
-        cuentaEl.textContent = r + ' de ' + total + ' con respuesta';
+        cuentaEl.textContent = UI('{r} de {n} con respuesta').replace('{r}', r).replace('{n}', total);
       }
       zona.addEventListener('input', cuenta);
       zona.addEventListener('click', function () { setTimeout(cuenta, 0); });
@@ -367,7 +375,9 @@
 
       bEntregar.addEventListener('click', function () {
         var sin = tarjetas.filter(function (t) { return !t.card.respondida(); }).length;
-        if (sin && !confirm(UI('Quedan') + ' ' + sin + ' ' + UI('preguntas sin responder. ¿Entregar igualmente?'))) return;
+        if (sin && !confirm(con(sin === 1
+          ? 'Queda 1 pregunta sin responder. ¿Entregar igualmente?'
+          : 'Quedan {n} preguntas sin responder. ¿Entregar igualmente?', { n: sin }))) return;
         if (intervalo) clearInterval(intervalo);
         bEntregar.disabled = true;
         var suma = 0, porParte = [], idx = {};
@@ -412,17 +422,23 @@
              diez minutos, con un decimal. Decir «unos 1 min» arriba y «0,1
              min» abajo para la misma pregunta es peor que no decir nada. */
           function mm(x) { return x < 10 ? U.fmt(x, 1) : U.fmt(x, 0); }
+          /* Frases enteras con huecos, no trozos pegados: en otro idioma el
+             orden de las palabras cambia, y media frase traducida se lee
+             peor que la frase original. Los huecos llevan ya su <strong>. */
+          var tHtml = '<strong>' + mm(minutosTotal) + ' min</strong>';
+          var qHtml = '<strong>' + UI('pregunta') + ' ' + lenta.num + '</strong>';
           html += '<div class="simul__tiempo"><strong>' + UI('El reparto del tiempo.') + '</strong> ' +
-            UI('Has tardado') + ' <strong>' + mm(minutosTotal) + ' min</strong>' +
-            (conReloj ? ' ' + UI('de los') + ' ' + presupuesto + ' ' + UI('del examen') : '') + '. ' +
+            (conReloj
+              ? con('Has tardado {t} de los {p} del examen.', { t: tHtml, p: presupuesto })
+              : con('Has tardado {t}.', { t: tHtml })) + ' ' +
             (lenta.mins < 0.5
               ? UI('Ninguna pregunta te ha llevado ni medio minuto, así que aquí no hay mucho que mirar: el reparto del tiempo se ve cuando el examen se hace de verdad.')
-              : UI('Donde más rato estuviste fue en la') + ' <strong>' + UI('pregunta') + ' ' + lenta.num + '</strong>, ' +
-                mm(lenta.mins) + ' min' +
-                (lenta.mins > porPregunta * 2
-                  ? ', ' + UI('más del doble de los') + ' ' + mm(porPregunta) + ' ' +
-                    UI('que le tocaban. En un examen de verdad, ése es el momento de dejarla a medias, hacer las demás y volver.')
-                  : ', ' + UI('y le tocaban') + ' ' + mm(porPregunta) + ': ' + UI('dentro de lo razonable.'))) +
+              : lenta.mins > porPregunta * 2
+                ? con('Donde más rato estuviste fue en la {q}, {m} min, más del doble de los {p} que le tocaban. ' +
+                      'En un examen de verdad, ése es el momento de dejarla a medias, hacer las demás y volver.',
+                  { q: qHtml, m: mm(lenta.mins), p: mm(porPregunta) })
+                : con('Donde más rato estuviste fue en la {q}, {m} min, y le tocaban {p}: dentro de lo razonable.',
+                  { q: qHtml, m: mm(lenta.mins), p: mm(porPregunta) })) +
             '<br><span class="simul__tiempo-det">' +
             conTiempo.slice(0, 5).map(function (x) {
               return 'p' + x.num + ': ' + mm(x.mins) + ' min';
@@ -488,7 +504,7 @@
       }
       var lista = temario(cual);
       var mio = ++turno;
-      aviso.textContent = UI('Reuniendo las fórmulas de') + ' ' + lista.length + ' ' + UI('temas…');
+      aviso.textContent = con('Reuniendo las fórmulas de {n} temas…', { n: lista.length });
       recoge(lista.map(function (x) { return x.t.id; }), function (rec) {
         if (mio !== turno) return;
         var bloque = null;

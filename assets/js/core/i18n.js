@@ -83,6 +83,15 @@
     return s;
   };
 
+  /** Solo la frase entera, sin pedazos: para valores que son datos (el
+      texto de partida de un campo) y no deben quedar a medio traducir. Si
+      no hay traduccion exacta, devuelve el original tal cual. */
+  I18N.exacta = function (s) {
+    if (!dic || typeof s !== 'string') return s;
+    var v = dic.txt[s];
+    return v !== undefined ? v : s;
+  };
+
   /** Las frases de interfaz que se han pedido y no estaban, en este idioma. */
   I18N.faltan = function (codigo) {
     var c = codigo || actual, out = [];

@@ -866,7 +866,16 @@
       type: o.multilinea ? null : 'text', spellcheck: 'false', autocomplete: 'off',
       'aria-label': (o.label || '').replace(/<[^>]*>/g, ''), maxlength: o.max || null
     });
-    inp.value = o.value === undefined ? '' : o.value;
+    /* El texto de partida es un dato del tema («Nos vemos en el puente…»),
+       y el tema lo guarda en su propia variable. Si el diccionario trae la
+       frase entera traducida, se pone en el campo y se avisa al tema como
+       si el lector la hubiera tecleado, pero despues de que el tema haya
+       terminado de montarse: asi el aviso llega con todos los mandos ya
+       creados. Sin traduccion exacta, el dato se queda en castellano. */
+    var v0 = o.value === undefined ? '' : String(o.value);
+    var v1 = (global.I18N && I18N.exacta) ? I18N.exacta(v0) : v0;
+    inp.value = v1;
+    if (v1 !== v0 && o.on) setTimeout(function () { if (inp.value === v1) o.on(v1); }, 0);
     lab.appendChild(inp);
     box.appendChild(lab);
     host.appendChild(box);
@@ -877,14 +886,20 @@
     return api;
   };
 
+  /* La traduccion entra aqui como en `W.readout`: el panel se arma al vuelo
+     con numeros dentro y se traduce por pedazos (ver `I18N.trad`). No pasa
+     por `MathX.inline` porque el contenido es HTML ya hecho y puede llevar
+     `$` sueltos -bytes descifrados pintados como texto- que no son formulas. */
+  function TX(s) { return (global.I18N && I18N.trad) ? I18N.trad(s) : s; }
+
   /** Un panel monoespaciado que respeta los saltos de linea. .set(html)
       pinta HTML tal cual; .texto(str) escapa. */
   W.mono = function (host, html) {
     var d = U.el('div.readout.cr-mono', { role: 'status', 'aria-live': 'polite', 'aria-atomic': 'true' });
-    d.innerHTML = html || '';
+    d.innerHTML = TX(html || '');
     host.appendChild(d);
-    d.set = function (h) { d.innerHTML = h; };
-    d.texto = function (s) { d.textContent = s; };
+    d.set = function (h) { d.innerHTML = TX(h); };
+    d.texto = function (s) { d.textContent = TX(s); };
     return d;
   };
 
