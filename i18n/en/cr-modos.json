@@ -21,7 +21,7 @@
  "$ bytes.": "$ bytes.",
  "$: hacen falta $": "$: $",
  "$m_i = D_k(c_i) \\oplus c_{i-1}$: XOR bit a bit.": "$m_i = D_k(c_i) \\oplus c_{i-1}$: bit-by-bit XOR.",
- "). Al descifrar, ¿cuántos bloques del mensaje salen alterados? ¿Y cómo sale el bloque ": " is changed. On decrypting, how many message blocks come out altered? And how does block ",
+ "). Al descifrar, ¿cuántos bloques del mensaje salen alterados? ¿Y cómo sale el bloque ": ") is changed. On decrypting, how many message blocks come out altered? And how does block ",
  ", el carácter «": ", the character “",
  ". Aquí es el último, así que solo uno.": ". Here it is the last one, so only one.",
  ". Por el camino se cambia un bit del bloque cifrado número ": ". On the way one bit of ciphertext block number ",
@@ -45,6 +45,7 @@
  "<strong>Si $c_1$ llegara alterado.</strong> Ese mismo byte de $m_2$ saldría con los bits cambiados que tuviera $c_1$, y ningún otro byte de $m_2$ se enteraría. En cambio $m_1$, que sale de descifrar $c_1$, sería ruido.": "<strong>If $c_1$ arrived altered.</strong> That same byte of $m_2$ would come out with whatever bits $c_1$ had changed, and no other byte of $m_2$ would notice. $m_1$, on the other hand, which comes from decrypting $c_1$, would be noise.",
  "@frag": {
   " (de 1 a ": " (from 1 to ",
+  " distintos": " different",
   "intacto": "intact",
   "ruido": "noise",
   "un bit": "one bit"

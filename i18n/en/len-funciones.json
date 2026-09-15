@@ -67,7 +67,7 @@
  "Esperar que la multiplicación se haga al bajar": "Expecting the multiplication to be done on the way down",
  "Fíjate en que la multiplicación de cada marco se hace <em>al volver</em>, no al bajar. Bajando solo se apilan promesas; subiendo se cumplen.": "Notice that each frame's multiplication is done <em>on the way back</em>, not on the way down. Going down, only promises are stacked; going up, they are kept.",
  "Hay una por marco vivo. Cuando se está en <code>fact(2)</code>, las <code>n</code> de las llamadas de fuera siguen existiendo con sus valores.": "There is one per live frame. When you are in <code>fact(2)</code>, the <code>n</code>s of the outer calls still exist with their values.",
- "La función tiene que llamarse <code>f</code> y recibir un solo dato: <code>fun f(n) { ... }</code>.": "The function has to be called <code>f</code> and receive a single datum: <code>fun f(n) { ... }</code>.",
+ "La función tiene que llamarse <code>f</code> y recibir un solo dato: <code>fun f(n) { ... }</code>.": "The function has to be called <code>f</code> and receive a single argument: <code>fun f(n) { ... }</code>.",
  "La pila crece con la <strong>profundidad</strong> de la recursión, no con el tamaño del resultado.": "The stack grows with the <strong>depth</strong> of the recursion, not with the size of the result.",
  "La pila crece hasta que se acaba. El caso base no es un adorno: es la única forma de que alguna llamada devuelva algo.": "The stack grows until it runs out. The base case is not an ornament: it is the only way for any call to return anything.",
  "La pila que crece": "The growing stack",

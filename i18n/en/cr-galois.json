@@ -17,7 +17,7 @@
  ", sí": ", yes",
  ", y ha salido un 1: es $x^8 = x^4 + x^3 + x + 1$.": ", and a 1 has gone out: it is $x^8 = x^4 + x^3 + x + 1$.",
  "0: al desplazar no sale nada.": "0: on shifting nothing goes out.",
- "1: al desplazar sale, y toca reducir.": "1: on shifting it goes out, and reducing is due.",
+ "1: al desplazar sale, y toca reducir.": "1: on shifting it goes out, and it has to be reduced.",
  "256 no es primo. En $\\text{GF}(2^8)$, con $m(x)$ irreducible, los 255 bytes no nulos tienen inverso: es un cuerpo, como los enteros módulo un primo.": "256 is not prime. In $\\text{GF}(2^8)$, with $m(x)$ irreducible, the 255 non-zero bytes have inverses: it is a field, like the integers modulo a prime.",
  "57 por 83, como en el estándar": "57 times 83, as in the standard",
  "</span>": "</span>",

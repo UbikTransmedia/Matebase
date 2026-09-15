@@ -19,7 +19,7 @@
  "$. ¿Cuánto vale la raíz?": "$. What is the root worth?",
  "$. ¿Hace falta mirar la segunda hoja del segundo hijo?": "$. Does the second child's second leaf have to be looked at?",
  "$: acabará valiendo $": "$: it will end up worth $",
- "$: se abre la <strong>ABC": "$: <strong>ABC",
+ "$: se abre la <strong>ABC": "$: the one opened is <strong>ABC",
  "$; las del segundo, $": "$; those of the second, $",
  "$; las del tercero, $": "$; those of the third, $",
  ", con f = ": ", with f = ",

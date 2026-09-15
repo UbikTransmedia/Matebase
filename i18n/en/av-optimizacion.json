@@ -116,7 +116,7 @@
  "No se puede saber sin la segunda derivada": "There is no way to tell without the second derivative",
  "No: es un punto de silla": "No: it is a saddle point",
  "Para $f(x,y) = x^2 + y^2$, se parte del punto $(": "For $f(x,y) = x^2 + y^2$, we start from the point $(",
- "Para cada dato calculamos predicción menos valor real, al cuadrado:": "For each datum we compute prediction minus real value, squared:",
+ "Para cada dato calculamos predicción menos valor real, al cuadrado:": "For each data point we compute prediction minus real value, squared:",
  "Para cada punto, calcula la predicción, réstale el valor real, eleva al cuadrado y suma.": "For each point, compute the prediction, subtract the real value, square it and add up.",
  "Pero, igual que en una variable, que el gradiente se anule no basta. Aquí hay <strong>tres</strong> posibilidades en vez de dos, y la nueva es la interesante:": "But, just as with one variable, the gradient vanishing is not enough. Here there are <strong>three</strong> possibilities instead of two, and the new one is the interesting one:",
  "Porque aumenta la tasa de aprendizaje en todas las direcciones por igual": "Because it raises the learning rate equally in every direction",

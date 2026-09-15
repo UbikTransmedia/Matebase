@@ -40,8 +40,10 @@
  "<strong>La moraleja.</strong> La etiqueta se puede acortar, porque el atacante no puede verificar por su cuenta, pero no tanto: 64 bits es el mínimo razonable, y HMAC-SHA256 da 256.": "<strong>The moral.</strong> The tag can be shortened, because the attacker cannot verify on their own, but not that much: 64 bits is the reasonable minimum, and HMAC-SHA256 gives 256.",
  "<strong>Las etiquetas posibles.</strong> $2^{32} \\approx 4{,}3\\cdot 10^9$. Una etiqueta al azar es válida con probabilidad $2^{-32}$.": "<strong>The possible tags.</strong> $2^{32} \\approx 4{.}3\\cdot 10^9$. A random tag is valid with probability $2^{-32}$.",
  "@frag": {
+  " EUR A BENITO": " EUR TO BOB",
   " años": " years",
   "Hay $2^{": "There are $2^{",
+  "PAGAR ": "REMIT ",
   "son pocos.": "are too few.",
   "}$ es $2^{-": "}$ is $2^{-"
  },

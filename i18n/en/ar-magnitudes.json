@@ -27,8 +27,8 @@
   "}$ en $\\text{": "}$ in $\\text{"
  },
  "Aceptar una fórmula sin mirar sus dimensiones": "Accepting a formula without looking at its dimensions",
- "Al <strong>multiplicar o dividir</strong>, el resultado lleva tantas cifras significativas como el dato que menos tenga.": "When <strong>multiplying or dividing</strong>, the result carries as many significant figures as the datum with the fewest.",
- "Al <strong>sumar o restar</strong>, manda el dato con menos decimales.": "When <strong>adding or subtracting</strong>, the datum with fewest decimal places rules.",
+ "Al <strong>multiplicar o dividir</strong>, el resultado lleva tantas cifras significativas como el dato que menos tenga.": "When <strong>multiplying or dividing</strong>, the result carries as many significant figures as the value with the fewest.",
+ "Al <strong>sumar o restar</strong>, manda el dato con menos decimales.": "When <strong>adding or subtracting</strong>, the value with the fewest decimal places rules.",
  "Análisis dimensional": "Dimensional analysis",
  "Aquí: ": "Here: ",
  "Buscamos el factor que relaciona $\\text{": "We look for the factor relating $\\text{",

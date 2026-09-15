@@ -173,7 +173,7 @@ I18N.add('en', {
     'de': 'from',
     'Con cronómetro (orientativo: al acabar el tiempo avisa, no corta)':
       'With a stopwatch (indicative: when the time is up it warns you, it does not cut you off)',
-    'Ajustado a lo que llevas hecho': 'Tuned to what you have done so far',
+    'Ajustado a lo que llevas hecho': 'Tailored to what you have done',
     'entran antes las preguntas que no has resuelto nunca y las de los temas que aún no dominas':
       'questions you have never solved and questions from topics you have not mastered come first',
     'Empezar el simulacro': 'Start the mock paper',
