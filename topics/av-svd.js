@@ -153,12 +153,15 @@ Course.topic('av-svd', function (p) {
       caja.style.cssText = 'display:flex;gap:1rem;justify-content:center;flex-wrap:wrap';
       host.appendChild(caja);
       function lienzo(txt) {
+        /* El pie del dibujo lo lee una persona: pasa por MathX.inline, que
+           es la puerta del diccionario, tanto para verlo como para oírlo. */
+        var rot = MathX.inline(txt);
         var fig = U.el('div');
         fig.style.cssText = 'text-align:center;font-size:0.8125rem';
-        var cv = U.el('canvas', { width: N, height: N, role: 'img', 'aria-label': txt });
+        var cv = U.el('canvas', { width: N, height: N, role: 'img', 'aria-label': rot });
         cv.style.cssText = 'width:min(40vw,200px);aspect-ratio:1;image-rendering:pixelated;display:block;border-radius:4px';
         fig.appendChild(cv);
-        fig.appendChild(U.el('div', { text: txt }));
+        fig.appendChild(U.el('div', { html: rot }));
         caja.appendChild(fig);
         return cv;
       }

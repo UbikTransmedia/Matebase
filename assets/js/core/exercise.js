@@ -273,7 +273,8 @@
     box.appendChild(U.el('label', { 'for': id, html: MathX.inline(f.label || f.name) }));
     var inp = U.el('input', {
       id: id, type: 'text', autocomplete: 'off', spellcheck: 'false',
-      placeholder: f.ph || ''
+      /* La pista de dentro de la casilla la escribe el tema: es prosa. */
+      placeholder: (f.ph && global.I18N) ? I18N.trad(f.ph) : (f.ph || '')
     });
     inp.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && !self.o.examen) self.check();

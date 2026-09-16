@@ -35,9 +35,6 @@
  "<strong>La lista.</strong> $0, 1, -1, 2, -2, 3, -3, \\dots$: a los naturales pares les tocan los enteros no negativos y a los impares, los negativos.": "<strong>The list.</strong> $0, 1, -1, 2, -2, 3, -3, \\dots$: the even naturals get the non-negative integers and the odd ones get the negatives.",
  "<strong>Un huésped más</strong>: que cada uno se mueva a la habitación siguiente. La 1 queda libre. ✓": "<strong>One more guest</strong>: let everyone move to the next room. Room 1 is free. ✓",
  "<tr>": "<tr>",
- "@frag": {
-  "Sí": "Yes"
- },
  "A Cantor le costó caro. Kronecker, que había sido su maestro, le hizo la vida imposible y bloqueó su carrera; llamó a su trabajo «charlatanería» y a él «corruptor de la juventud». Cantor sufrió depresiones graves y murió en 1918 en un sanatorio. Hilbert lo defendió con una frase que se hizo famosa: «Nadie podrá expulsarnos del paraíso que Cantor ha creado para nosotros».": "It cost Cantor dearly. Kronecker, who had been his teacher, made his life impossible and blocked his career; he called his work “humbug” and him a “corrupter of youth”. Cantor suffered severe depressions and died in 1918 in a sanatorium. Hilbert defended him with a sentence that became famous: “No one shall expel us from the paradise that Cantor has created for us”.",
  "A cada natural le toca un múltiplo de 1000 y a cada múltiplo un natural. Mismo cardinal, $\\aleph_0$. Un conjunto infinito se empareja con partes propias de sí mismo: esa es su definición.": "Each natural gets a multiple of 1000 and each multiple gets a natural. Same cardinality, $\\aleph_0$. An infinite set pairs up with proper parts of itself: that is its definition.",
  "Aplicamos la regla: ": "We apply the rule: ",
@@ -188,5 +185,9 @@
  "¿Qué cifra ocupará la posición $": "What digit will occupy position $",
  "…</div>": "…</div>",
  "…</span> <span style=\"font-family:var(--sans);font-size:0.7812rem;color:var(--ink-faint)\">← el número que no está en la lista</span></div>": "…</span> <span style=\"font-family:var(--sans);font-size:0.7812rem;color:var(--ink-faint)\">← the number that is not on the list</span></div>",
- "↻ Otra lista cualquiera": "↻ Another list, any list"
+ "↻ Otra lista cualquiera": "↻ Another list, any list",
+ "@frag": {
+  "Sí": "Yes",
+  "← el número que no está en la lista": "← the number that is not on the list"
+ }
 }

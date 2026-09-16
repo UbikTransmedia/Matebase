@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<!-- ===================================================================
+     Matebase · revision-idiomas.html
+     ¿SE PUEDE USAR EL CURSO EN LOS DOS IDIOMAS? Monta los 266 temas dos
+     veces, en castellano y en inglés, y mira cuatro cosas: que ninguno
+     reviente, que dibuje lo mismo, que no quede una frase a medio
+     traducir y que no quede en castellano un rótulo que solo oye un
+     lector de pantalla.
+
+     Va POR TANDAS, soltando el hilo cada 120 ms. `tests.html` hace la
+     auditoría completa de una sentada y con 266 temas ya no termina: la
+     pestaña se queda bloqueada y no se puede ni leer el resultado. Aquí
+     el resumen se va escribiendo mientras corre.
+
+     Lo que sale marcado y NO es un fallo:
+       · los nombres propios con tilde (Pólya, Poincaré, Bézier);
+       · el texto que es un DATO de la demo y no prosa -el mensaje que
+         se cifra, el corpus del clasificador, lo que escribe un modelo-,
+         porque la máquina opera sobre esas letras;
+       · los comentarios dentro del código de ejemplo, que siguen en
+         castellano a propósito mientras no se traduzcan todos.
+     =================================================================== -->
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>Matebase · revisión de los dos idiomas</title>
+<script>
+  document.write(['base', 'layout', 'components', 'math'].map(function (n) {
+    return '<link rel="stylesheet" href="assets/css/' + n + '.css?t=' + Date.now() + '">';
+  }).join(''));
+</script>
+<style>
+  body{padding:24px; max-width:1000px; margin:0 auto; font-size:14px}
+  #sum{font-size:18px; font-weight:700; padding:12px 16px; border-radius:10px; margin:14px 0;
+       background:var(--panel); border:1px solid var(--line)}
+  .ok{color:var(--ok)} .ko{color:var(--bad); font-weight:600}
+  .res{font-family:var(--mono); font-size:12.5px; line-height:1.8}
+  .grp{margin:16px 0 4px; font-weight:700; font-size:15px}
+</style>
+</head>
+<body>
+<h1>Revisión de los dos idiomas</h1>
+<p>Monta cada tema del curso <b>dos veces</b>, en castellano y en inglés, y apunta lo que se rompe
+o lo que se queda a medio traducir. Va por tandas para que la pestaña siga respondiendo.</p>
+<div id="sum">cargando el núcleo…</div>
+<div id="out" class="res"></div>
+
+<script>
+  (function () {
+    var t = '?t=' + Date.now();
+    ['version', 'core/util', 'core/i18n', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
+     'core/shader', 'core/sonido', 'core/cripto', 'core/nn', 'core/logica', 'core/maquina',
+     'core/lenguaje', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
+     'glosario', 'glsl', 'javascript', 'i18n/en', 'i18n/en-txt'].forEach(function (f) {
+      document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
+    });
+  })();
+</script>
+<script>
+(function () {
+  var out = document.getElementById('out'), sum = document.getElementById('sum');
+  var reg = {};
+  /* `Course.reg` y `Course.load` los necesita el formulario, que recoge las
+     fórmulas de cada tema por su cuenta en vez de montar la página. */
+  window.Course = {
+    topic: function (id, fn) { reg[id] = fn; },
+    reg: reg,
+    load: function (id, cb) { setTimeout(function () { cb(!!reg[id]); }, 0); }
+  };
+
+  var ids = [];
+  CURRICULUM.forEach(function (b) { b.temas.forEach(function (t) { ids.push(t); }); });
+
+  /* --- 1. cargar los temas --- */
+  var pend = ids.length, existe = {};
+  ids.forEach(function (t) {
+    var s = document.createElement('script');
+    s.src = 'topics/' + t.id + '.js?t=' + Date.now();
+    s.onload = function () { existe[t.id] = 1; if (!--pend) arranca(); };
+    s.onerror = function () { if (!--pend) arranca(); };
+    document.head.appendChild(s);
+  });
+
+  /* --- 2. la comprobación de castellano colado, copiada de tests.html --- */
+  var CAST = /(^|[\s>«("'])(el|la|los|las|un|una|del|que|con|por|para|como|se|su|sus|al|más|pero|cada|está|están|este|esta|esto|cuántos|cuántas|cuánto|qué|cuál|hay|entre|según|desde|hasta|cuando|donde|porque|aunque|también|así|entonces|entra|vale|entera)([\s<».,;:?!)'"]|$)/i;
+  var NOMBRE = /\b(el|la|los|las|de|del)\s+(?=[A-ZÁÉÍÓÚÑ])/g;
+  var MNEMO = /\b[A-Z]{2,}\b/g;
+
+  /* El temario se traduce EN SITIO, como hace `flatten()` en app.js. Sin
+     esto, `U.tituloDe` devuelve el título español y el globo de cada enlace
+     cruzado parece mal traducido cuando en el curso sale bien. */
+  function temarioEn(lang) {
+    CURRICULUM.forEach(function (b) {
+      if (b._t0 === undefined) { b._t0 = b.title; b._d0 = b.desc; }
+      var bt = (lang === 'es') ? null : I18N.bloque({ id: b.id, title: b._t0, desc: b._d0 });
+      b.title = bt ? bt.title : b._t0;
+      b.desc = bt ? bt.desc : b._d0;
+      b.temas.forEach(function (t) {
+        if (t._t0 === undefined) { t._t0 = t.t; t._r0 = t.r; }
+        var tt = (lang === 'es') ? null : I18N.tema({ id: t.id, t: t._t0, r: t._r0 });
+        t.t = tt ? tt.t : t._t0;
+        t.r = tt ? tt.r : t._r0;
+      });
+    });
+  }
+
+  function montaEn(id, lang, mirarTrad) {
+    var previo = I18N.actual();
+    I18N.usar(lang);
+    temarioEn(lang);
+    I18N.contexto(lang === 'es' ? null : id);
+    var orig = MathX.inline, visto = [];
+    if (mirarTrad) {
+      MathX.inline = function (x) {
+        if (typeof x === 'string') visto.push(x);
+        return orig.apply(this, arguments);
+      };
+    }
+    var h = document.createElement('div');
+    h.style.cssText = 'position:absolute;left:-9999px;top:0;width:760px';
+    document.body.appendChild(h);
+    var err = null, lienzos = 0, texto = '', attrs = [], nodos = [];
+    try {
+      var pg = new Page(h, { id: id });
+      reg[id](pg);
+      lienzos = h.querySelectorAll('canvas').length;
+      texto = h.textContent || '';
+      /* Lo que solo oye un lector de pantalla: si se queda en castellano,
+         nadie lo ve al mirar la página y nadie lo arregla. */
+      [].forEach.call(h.querySelectorAll('[aria-label],[title],[placeholder],[alt]'), function (e) {
+        ['aria-label', 'title', 'placeholder', 'alt'].forEach(function (a) {
+          var v = e.getAttribute(a);
+          if (v && v.length > 3) attrs.push(v);
+        });
+      });
+      /* Y lo que se VE. `auditarTraduccion` solo mira lo que pasa por
+         `MathX.inline`; un tema que mete texto en el DOM a pelo -el pie de
+         un lienzo, por ejemplo- se le escapa. Aquí se mira el resultado. */
+      var it = document.createTreeWalker(h, NodeFilter.SHOW_TEXT, null, false), nd;
+      while ((nd = it.nextNode())) {
+        var s = String(nd.nodeValue || '').trim();
+        if (s.length > 3 && !/^[\s\d.,;:+\-*/=<>()[\]{}|^$\\%·×÷≈≠≤≥→←↔∈∉⊂∪∩∅∞πθαβγλμσ]+$/.test(s)) {
+          nodos.push(s);
+        }
+      }
+    } catch (e) { err = e.message; }
+    if (mirarTrad) MathX.inline = orig;
+    document.body.removeChild(h);
+
+    /* `I18N.trad` se pide TODAVÍA en inglés y con el contexto del tema
+       puesto: si se restaura antes, devuelve la frase española tal cual y
+       parece que no hay nada traducido. */
+    var quedan = [];
+    if (mirarTrad) {
+      quedan = visto.map(function (x) { return I18N.trad(x); }).filter(function (x) {
+        return CAST.test(x.split('$').filter(function (_, i) { return i % 2 === 0; })
+          .join(' ').replace(NOMBRE, ' ').replace(MNEMO, ' ')) && x.split(/\s+/).length >= 4;
+      });
+    }
+    I18N.contexto(null);
+    I18N.usar(previo);
+    temarioEn(previo);
+    return { err: err, lienzos: lienzos, texto: texto, quedan: quedan, attrs: attrs, nodos: nodos };
+  }
+
+  /* --- 3. la tanda --- */
+  var i = 0, malos = [], sinTrad = {}, totalEs = 0, totalEn = 0, difLienzos = [], nan = [];
+  var attrEs = {}, attrTotal = 0, textoEs = {}, textoTotal = 0, codigoEs = {};
+  /* Palabras de servicio del castellano: las que el inglés no tiene. */
+  /* Palabras que el inglés no tiene. Un acento NO basta: Pólya, Poincaré y
+     Bézier se escriben igual en los dos idiomas. */
+  /* `\b` no vale: para JavaScript la «ö» no es letra, así que «Gödel»
+     lleva dentro un «del» con frontera de palabra, y lo mismo pasa con
+     Poincaré o Bézier. Las fronteras se escriben a mano. */
+  var PAL = 'qué|más|está|están|número|números|también|según|así|aquí|cada|entre|desde|hasta|dónde|' +
+    'porque|aunque|hacia|tiene|hace|puede|sale|vale|queda|sigue|los|las|del|que|una|por|para|como|' +
+    'con|sus|ninguno|todos|todas|cuando|donde|sobre|imagen|cifrada|valores';
+  var ATTR_ES = new RegExp('(^|[^A-Za-zÀ-ÿ])(' + PAL + ')([^A-Za-zÀ-ÿ]|$)', 'i');
+  /* El código de ejemplo -shaders, ensamblador, sintetizador- lleva sus
+     comentarios en castellano a propósito: se cuentan aparte. */
+  var ES_CODIGO = /\/\/|\n\s{2,}|;\s*$|^\s*;|^[A-Z]{3,}\s|\bvec[234]\b|\bfloat\b|\breturn\b|\bfunction\b/;
+  function castellano(v) {
+    return ATTR_ES.test(v.split('$').filter(function (_, i) { return i % 2 === 0; }).join(' '));
+  }
+  window.__PROGRESO = { i: 0, n: 0, malos: malos, sinTrad: sinTrad };
+
+  function arranca() {
+    var escritos = ids.filter(function (t) { return reg[t.id]; });
+    window.__PROGRESO.n = escritos.length;
+    sum.textContent = 'montando ' + escritos.length + ' temas en los dos idiomas…';
+    var hecho = I18N.diccionario('en').hechos || {};
+
+    function tanda() {
+      var t0 = Date.now();
+      while (i < escritos.length && Date.now() - t0 < 120) {
+        var t = escritos[i++];
+        var es = montaEn(t.id, 'es', false);
+        var en = montaEn(t.id, 'en', !!hecho[t.id]);
+        if (es.err) malos.push(t.id + ' · castellano: ' + es.err);
+        if (en.err) malos.push(t.id + ' · inglés: ' + en.err);
+        if (!es.err && !en.err) {
+          totalEs += es.lienzos; totalEn += en.lienzos;
+          if (es.lienzos !== en.lienzos) {
+            difLienzos.push(t.id + ' (' + es.lienzos + ' vs ' + en.lienzos + ')');
+          }
+          /* «undefined» es palabra inglesa de pleno derecho («the right is
+             undefined»): solo NaN delata una cuenta rota. */
+          if (/\bNaN\b/.test(en.texto) && !/\bNaN\b/.test(es.texto)) {
+            nan.push(t.id);
+          }
+        }
+        if (en.quedan.length) sinTrad[t.id] = en.quedan;
+        (en.attrs || []).forEach(function (v) {
+          attrTotal++;
+          if (castellano(v)) (attrEs[v] = attrEs[v] || []).push(t.id);
+        });
+        /* Lo que se ve: solo cuenta si el mismo nodo NO sale igual en
+           castellano... no: sale igual siempre. Lo que delata es la palabra
+           de servicio castellana, igual que en las demás comprobaciones. */
+        (en.nodos || []).forEach(function (v) {
+          textoTotal++;
+          if (!castellano(v) || v.split(/\s+/).length < 3) return;
+          if (ES_CODIGO.test(v)) (codigoEs[v] = codigoEs[v] || []).push(t.id);
+          else (textoEs[v] = textoEs[v] || []).push(t.id);
+        });
+      }
+      window.__PROGRESO.i = i;
+      sum.textContent = i + ' de ' + escritos.length + ' · ' + malos.length + ' rotos · ' +
+        Object.keys(sinTrad).length + ' con castellano colado';
+      if (i < escritos.length) return setTimeout(tanda, 0);
+      termina(escritos.length);
+    }
+    setTimeout(tanda, 0);
+  }
+
+  function termina(n) {
+    var html = '';
+    function grupo(g) { html += '<div class="grp">' + g + '</div>'; }
+    function linea(bien, txt) { html += '<div class="' + (bien ? 'ok' : 'ko') + '">' + (bien ? '✓ ' : '✗ ') + txt + '</div>'; }
+
+    grupo('los temas se montan en los dos idiomas');
+    linea(!malos.length, malos.length ? malos.length + ' temas fallan: ' + malos.slice(0, 6).join(' | ')
+      : 'los ' + n + ' temas se montan sin excepción en castellano y en inglés');
+    linea(!difLienzos.length, difLienzos.length
+      ? 'cambia el número de gráficas al cambiar de idioma: ' + difLienzos.slice(0, 6).join(' | ')
+      : 'cada tema dibuja las mismas gráficas en los dos idiomas (' + totalEs + ')');
+    linea(!nan.length, nan.length ? 'sale NaN/undefined solo en inglés: ' + nan.slice(0, 6).join(', ')
+      : 'ningún tema escribe NaN ni undefined solo en inglés');
+
+    grupo('la traducción no deja frases a medias');
+    var ks = Object.keys(sinTrad);
+    var cuantas = ks.reduce(function (a, k) { return a + sinTrad[k].length; }, 0);
+    linea(!ks.length, ks.length
+      ? ks.length + ' temas dejan ' + cuantas + ' frase(s) en castellano: ' + ks.slice(0, 8).join(', ')
+      : 'ningún tema marcado como traducido deja una frase en castellano');
+
+    grupo('lo que se ve escrito en la página');
+    var tv = Object.keys(textoEs);
+    linea(!tv.length, tv.length
+      ? tv.length + ' textos de ' + textoTotal + ' salen en castellano: ' +
+        tv.slice(0, 6).map(function (v) { return v.slice(0, 46) + ' (' + textoEs[v][0] + ')'; }).join(' | ')
+      : 'los ' + textoTotal + ' textos visibles salen en inglés');
+    var cv = Object.keys(codigoEs);
+    html += '<div class="grp">y aparte, lo que se deja en castellano a propósito</div>' +
+      '<div>· ' + cv.length + ' comentarios dentro del código de ejemplo, en ' +
+      Object.keys(cv.reduce(function (a, v) { a[codigoEs[v][0]] = 1; return a; }, {})).length +
+      ' temas (shaders, ensamblador, sintetizador)</div>';
+
+    grupo('lo que solo oye un lector de pantalla');
+    var av = Object.keys(attrEs);
+    linea(!av.length, av.length
+      ? av.length + ' rótulos de ' + attrTotal + ' siguen en castellano: ' +
+        av.slice(0, 5).map(function (v) { return v.slice(0, 50) + ' (' + attrEs[v][0] + ')'; }).join(' | ')
+      : 'los ' + attrTotal + ' rótulos de accesibilidad salen en inglés');
+
+    /* --- el formulario y los rótulos de las fórmulas --- */
+    grupo('el formulario para imprimir');
+    var previo = I18N.actual();
+    I18N.usar('en');
+    var h = document.createElement('div');
+    h.style.cssText = 'position:absolute;left:-9999px;top:0;width:900px';
+    document.body.appendChild(h);
+    var pg = new Page(h, { id: '__formu' });
+    pg.formulario();
+    /* El mismo criterio que arriba: «Rouché» no es castellano. */
+    var ES = ATTR_ES;
+    setTimeout(function () {
+      var labs = [].map.call(h.querySelectorAll('.fbox__lab'), function (e) { return e.textContent.trim(); });
+      var mal = labs.filter(function (l) { return ES.test(l); });
+      var extra = '<div class="' + (mal.length ? 'ko' : 'ok') + '">' + (mal.length ? '✗ ' : '✓ ') +
+        (mal.length
+          ? mal.length + ' de ' + labs.length + ' rótulos de fórmula siguen en castellano: ' +
+            mal.slice(0, 5).join(' | ')
+          : 'los ' + labs.length + ' rótulos de fórmula salen en inglés') + '</div>';
+      out.innerHTML += extra;
+      document.body.removeChild(h);
+      I18N.usar(previo);
+      window.__FORMU = { total: labs.length, mal: mal };
+    }, 9000);
+
+    out.innerHTML = html;
+    window.__SIN_TRAD = sinTrad;
+    window.__RES = { temas: n, malos: malos, sinTrad: sinTrad, difLienzos: difLienzos, nan: nan,
+                     attrEs: attrEs, attrTotal: attrTotal,
+                     textoEs: textoEs, textoTotal: textoTotal, codigoEs: codigoEs, fin: true };
+    var mal = malos.length + ks.length + difLienzos.length + nan.length +
+              Object.keys(attrEs).length + Object.keys(textoEs).length;
+    sum.textContent = mal ? (mal + ' cosas que mirar de ' + n + ' temas')
+                          : ('Los ' + n + ' temas funcionan en los dos idiomas');
+    sum.style.background = mal ? 'var(--bad-soft)' : 'var(--ok-soft)';
+    sum.style.color = mal ? 'var(--bad)' : 'var(--ok)';
+  }
+})();
+</script>
+</body>
+</html>

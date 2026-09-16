@@ -812,7 +812,7 @@
     this.caja.appendChild(this.capa);
     this.ed = U.el('textarea.shd__ed', {
       spellcheck: 'false', autocomplete: 'off', autocapitalize: 'off',
-      'aria-label': 'Programa en ' + LEN.NOMBRE,
+      'aria-label': con('Programa en {l}', { l: LEN.NOMBRE }),
       rows: String(Math.max(4, this.original.split('\n').length + 1))
     });
     this.ed.value = this.original;

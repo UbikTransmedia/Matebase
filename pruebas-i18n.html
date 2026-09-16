@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!-- ===================================================================
+     Matebase · pruebas-i18n.html
+     EL DICCIONARIO, EN UN SEGUNDO. Repite los grupos «idiomas» de
+     `tests.html` -que ya no llega a terminar- sin montar ningún tema:
+     carga el núcleo, comprueba que el diccionario no apunta a temas que
+     no existen, que la traducción conserva fórmulas, enlaces, etiquetas
+     y huecos, y que los seis instrumentos hablan en inglés.
+
+     Dos ✗ son de siempre y no son fallos: los <em> que glosan en
+     castellano un término que en inglés ya es el término («Caída
+     (decay)» → «Decay»), y las dos frases que enseñan a escribir 0.5
+     frente a 0,5.
+     =================================================================== -->
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>Matebase · pruebas de traducción</title>
+<style>
+  body{font:14px/1.7 system-ui, sans-serif; padding:24px; max-width:900px; margin:0 auto}
+  .ok{color:#15803d} .ko{color:#b91c1c; font-weight:600}
+  .grp{margin:16px 0 4px; font-weight:700}
+  #sum{font-size:18px; font-weight:700; padding:12px 16px; border-radius:10px; margin:14px 0}
+</style>
+</head>
+<body>
+<h1>Pruebas de traducción</h1>
+<div id="sum">cargando…</div>
+<div id="out"></div>
+
+<script>
+  (function () {
+    var t = '?t=' + Date.now();
+    ['version', 'core/util', 'core/i18n', 'core/mathx', 'core/mathlib', 'core/widgets', 'core/progress',
+     'core/shader', 'core/sonido', 'core/cripto', 'core/nn', 'core/logica', 'core/maquina',
+     'core/lenguaje', 'core/exercise', 'core/page', 'core/repaso', 'curriculum',
+     'glosario', 'glsl', 'javascript', 'i18n/en', 'i18n/en-txt'].forEach(function (f) {
+      document.write('<script src="assets/js/' + f + '.js' + t + '"><\/script>');
+    });
+  })();
+</script>
+<script>
+(function () {
+  var pass = 0, fail = 0, out = document.getElementById('out');
+  function group(g) { out.innerHTML += '<div class="grp">' + g + '</div>'; }
+  function ok(n) { pass++; out.innerHTML += '<div class="ok">✓ ' + n + '</div>'; }
+  function ko(n, got, want) {
+    fail++;
+    out.innerHTML += '<div class="ko">✗ ' + n + ' → obtuve <b>' + got + '</b>, esperaba <b>' + want + '</b></div>';
+  }
+  function eq(n, got, want) { String(got) === String(want) ? ok(n) : ko(n, got, want); }
+  function truthy(n, v) { v ? ok(n) : ko(n, v, 'algo verdadero'); }
+
+  group('los módulos se cargan');
+  ['U', 'I18N', 'MathX', 'W', 'Progress', 'SON', 'CR', 'LOG', 'MAQ', 'LEN', 'Ex', 'Page', 'CURRICULUM', 'GLOSARIO']
+    .forEach(function (k) { truthy(k, typeof window[k] !== 'undefined'); });
+
+  group('huecos de interfaz: se pide el diccionario entero');
+  I18N.usar('en');
+  Object.keys(I18N.diccionario('en').ui).forEach(function (k) { I18N.ui(k); });
+  eq('ninguna clave pedida se queda sin traducción', I18N.faltan().join(' | ') || 'ninguna', 'ninguna');
+  I18N.usar('es');
+
+  group('idiomas · el diccionario apunta a donde debe');
+  var hayTema = {}, hayBloque = {};
+  CURRICULUM.forEach(function (b) {
+    hayBloque['@' + b.id] = 1;
+    b.temas.forEach(function (t) { hayTema[t.id] = 1; });
+  });
+  var previo = I18N.actual();
+  I18N.usar('en');
+  truthy('traduce algo de la interfaz', I18N.ui('Glosario') !== 'Glosario');
+  eq('lo que no está cae al original',
+    I18N.ui('una frase que nadie ha traducido'), 'una frase que nadie ha traducido');
+  var d = I18N.diccionario('en'), huerfanas = [];
+  Object.keys(d.cur || {}).forEach(function (k) {
+    if (k.charAt(0) === '@' ? !hayBloque[k] : !hayTema[k]) huerfanas.push(k);
+  });
+  eq('ninguna clave del temario apunta a un tema que no existe',
+    huerfanas.slice(0, 4).join(' | ') || 'ninguna', 'ninguna');
+
+  group('idiomas · la prosa traducida');
+  var claves = Object.keys(d.txt);
+  truthy('hay prosa traducida (' + claves.length + ' frases)', claves.length > 100);
+  function dolares(s) { return (s.match(/\$/g) || []).length; }
+  function enlaces(s) { return (s.match(/\[\[[a-z0-9-]+/g) || []).sort().join(','); }
+  var malFormula = [], malEnlace = [], malEtiqueta = [], malHueco = [];
+  claves.forEach(function (es) {
+    var en = d.txt[es];
+    if (dolares(es) !== dolares(en)) malFormula.push(es.slice(0, 40));
+    if (enlaces(es) !== enlaces(en)) malEnlace.push(es.slice(0, 40));
+    ['strong', 'em', 'code', 'br'].forEach(function (tag) {
+      var re = new RegExp('<' + tag + '[ >]', 'g');
+      if ((es.match(re) || []).length !== (en.match(re) || []).length) malEtiqueta.push(tag + ' · ' + es.slice(0, 30));
+    });
+    /* Los huecos solo existen en las frases de la interfaz. Dentro de una
+       fórmula, \text{y} parece un hueco y no lo es, así que no se miran. */
+    if (es.indexOf('$') < 0 && es.indexOf('\\') < 0) {
+      var a = (es.match(/\{[a-z]\}/g) || []).sort().join(','),
+          b = (en.match(/\{[a-z]\}/g) || []).sort().join(',');
+      if (a !== b) malHueco.push(es.slice(0, 40));
+    }
+  });
+  eq('las fórmulas $…$ se conservan al traducir', malFormula.slice(0, 3).join(' | ') || 'todas', 'todas');
+  eq('los enlaces [[tema]] se conservan al traducir', malEnlace.slice(0, 3).join(' | ') || 'todos', 'todos');
+  eq('las etiquetas HTML se conservan al traducir', malEtiqueta.slice(0, 3).join(' | ') || 'todas', 'todas');
+  eq('los huecos {x} se conservan al traducir', malHueco.slice(0, 3).join(' | ') || 'todos', 'todos');
+
+  var falsoAmigo = [], comillas = [], comaDecimal = [], senoSinTraducir = [];
+  function sinFormulas(x) {
+    return x.split('$').filter(function (_, i) { return i % 2 === 0; }).join(' ')
+      .replace(/[A-Z]\([^)]*\)/g, ' ').replace(/\d,\d{3}\b/g, ' ');
+  }
+  claves.forEach(function (es) {
+    var en = d.txt[es];
+    if (/billón|billones/i.test(es) && /billion/i.test(en)) falsoAmigo.push(es.slice(0, 45));
+    if (/[«»]/.test(en)) comillas.push(es.slice(0, 45));
+    if (/\d,\d(?!\d)/.test(sinFormulas(en))) comaDecimal.push(es.slice(0, 45));
+    if (/\\operatorname\{(sen|tg|cotg|arcsen)\}/.test(en)) senoSinTraducir.push(es.slice(0, 45));
+  });
+  eq('«billón» no se traduce por «billion»', falsoAmigo.slice(0, 3).join(' | ') || 'ninguno', 'ninguno');
+  eq('las comillas angulares se cambian por las inglesas', comillas.slice(0, 3).join(' | ') || 'ninguna', 'ninguna');
+  eq('los decimales van con punto fuera de las fórmulas', comaDecimal.slice(0, 3).join(' | ') || 'ninguno', 'ninguno');
+  eq('«sen» y «tg» se traducen a la notación inglesa', senoSinTraducir.slice(0, 3).join(' | ') || 'ninguno', 'ninguno');
+  truthy('hay temas con la prosa completa (' + Object.keys(d.hechos || {}).length + ')',
+    Object.keys(d.hechos || {}).length > 0);
+
+  group('los rótulos de la interfaz');
+  /* Un rótulo puede ser igual en los dos idiomas -un nombre propio, un
+     signo- así que solo se miran los que llevan letras y varias palabras. */
+  var mismos = Object.keys(d.ui).filter(function (k) {
+    return d.ui[k] === k && /[a-záéíóúñ]\s+[a-záéíóúñ]/i.test(k);
+  });
+  eq('ninguna frase de interfaz se deja sin traducir',
+    mismos.slice(0, 4).join(' | ') || 'ninguna', 'ninguna');
+  var conEsp = Object.keys(d.ui).filter(function (k) { return /[áéíóúñ¿¡]/.test(d.ui[k]); });
+  eq('ningún valor inglés lleva letras que solo existen en castellano',
+    conEsp.slice(0, 4).join(' | ') || 'ninguno', 'ninguno');
+
+  group('los motores hablan en inglés');
+  eq('circuitos', LOG.analiza('s = mande(a, b)').errores[0].msg.indexOf('gate') >= 0, true);
+  eq('máquina', MAQ.ensambla('MANDE 4').errores[0].msg.indexOf('instruction') >= 0, true);
+  eq('lenguaje', LEN.tokeniza('sea x = @').errores[0].msg.indexOf('I do not know') >= 0, true);
+  eq('sonido', SON.compila('vuelve mande(x)').error.msg.indexOf('operator') >= 0, true);
+  var m = LEN.corre('muestra 1;');
+  eq('el código de parada llega hasta LEN.corre', m.fin, 'fin');
+  var mm = MAQ.ejecuta('CARGA x\nPARA', { x: 1 });
+  eq('y hasta MAQ.ejecuta', mm.fin, 'fin');
+
+  I18N.usar(previo);
+  var s = document.getElementById('sum');
+  s.textContent = fail ? (fail + ' fallos de ' + (pass + fail)) : ('Todo correcto · ' + pass + ' comprobaciones');
+  s.style.background = fail ? '#fee2e2' : '#dcfce7';
+  s.style.color = fail ? '#b91c1c' : '#15803d';
+  window.__RES = { pass: pass, fail: fail };
+})();
+</script>
+</body>
+</html>

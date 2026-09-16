@@ -131,7 +131,18 @@
       ['#itin', 'aria-label', 'Temario que muestra el índice'],
       ['#themes', 'aria-label', 'Tema de color'],
       ['#letras', 'aria-label', 'Tamaño de la letra'],
-      ['#idiomas', 'aria-label', 'Idioma']
+      ['#idiomas', 'aria-label', 'Idioma'],
+      /* Los tres botones de la derecha y los dos grupos de la barra. El
+         rotulo que se ve estaba traducido y el que oye un lector de
+         pantalla no: es el caso que peor se nota y el que menos se mira. */
+      ['.nav', 'aria-label', 'Navegación'],
+      ['.topbar__docs', 'aria-label', 'Documentación'],
+      ['#glosBtn', 'aria-label', 'Glosario'],
+      ['#glosBtn', 'title', 'Mostrar u ocultar el glosario'],
+      ['#glslBtn', 'aria-label', 'Referencia GLSL'],
+      ['#glslBtn', 'title', 'Mostrar u ocultar la referencia del lenguaje GLSL'],
+      ['#jsBtn', 'aria-label', 'Referencia de JavaScript'],
+      ['#jsBtn', 'title', 'Mostrar u ocultar la referencia de JavaScript, el lenguaje del sintetizador']
     ];
     attrs.forEach(function (a) {
       var el = U.$(a[0]);
@@ -451,7 +462,7 @@
      recorrerlo todo. Los enlaces no tocan el hash, que es la ruta. */
   function indiceDelTema(p, body) {
     if (!p.secciones || p.secciones.length < 3) return;
-    var nav = U.el('nav.toc', { 'aria-label': 'Secciones de este tema' });
+    var nav = U.el('nav.toc', { 'aria-label': T('Secciones de este tema') });
     nav.appendChild(U.el('span.toc__t', { text: T('En este tema') }));
     var ol = U.el('ol.toc__l');
     p.secciones.forEach(function (s) {

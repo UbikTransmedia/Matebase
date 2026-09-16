@@ -63,7 +63,7 @@ Course.topic('av-infinito', function (p) {
             '<span style="color:var(--ink-faint)"> → </span>' +
             '<span style="color:var(--c3);font-weight:600">' + F.f(n) + '</span></div>';
         }
-        caja.innerHTML = h + '<div style="color:var(--ink-faint);margin-top:4px">…y así infinitamente, sin dejarse ninguno ni repetir.</div>';
+        caja.innerHTML = MathX.inline(h + '<div style="color:var(--ink-faint);margin-top:4px">…y así infinitamente, sin dejarse ninguno ni repetir.</div>');
         out.set('$' + F.t + '$<br>' + F.n);
       }
       W.chips(host, [
@@ -137,7 +137,7 @@ Course.topic('av-infinito', function (p) {
           h += '</tr>';
         }
         h += '</tbody></table></div>';
-        caja.innerHTML = h;
+        caja.innerHTML = MathX.inline(h);
         out.set('Numeradas <strong>' + Math.min(cont, pasos) + '</strong> fracciones.<br>' +
           '<span style="font-size:0.7812rem;color:var(--ink-faint)">Recorriendo por diagonales (donde ' +
           'numerador + denominador es constante) y saltando las equivalentes, <strong>toda</strong> ' +
@@ -195,7 +195,7 @@ Course.topic('av-infinito', function (p) {
         h += '<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--line)">' +
           '<span style="color:var(--ok);font-weight:700">d &nbsp;= 0,' + diag + '…</span>' +
           ' <span style="font-family:var(--sans);font-size:0.7812rem;color:var(--ink-faint)">← el número que no está en la lista</span></div>';
-        caja.innerHTML = h;
+        caja.innerHTML = MathX.inline(h);
         out.set('La regla usada es: <em>si la cifra marcada es un 5, pongo un 3; si no, pongo un 5</em>.<br>' +
           'El número $d$ se diferencia de $x_1$ en la primera cifra, de $x_2$ en la segunda, de $x_3$ en ' +
           'la tercera… <strong>de $x_n$ en la $n$-ésima, para todo $n$</strong>.<br>' +

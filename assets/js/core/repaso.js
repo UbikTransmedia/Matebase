@@ -401,7 +401,11 @@
             (pp.flojos.length ? pp.flojos.map(function (t) {
               var x = porId(t.tid);
               return '<a class="simul__repasa" href="#/' + t.tid + '?e=' + t.n + '">' +
-                U.escape((x ? x.t.t : t.tid) + ' · ' + t.titulo.replace(/<[^>]+>|\$/g, '')) + '</a>';
+                /* El titulo del ejercicio es prosa del tema y se traduce
+                   como tal. Primero se traduce y despues se le quitan las
+                   etiquetas: la clave del diccionario las lleva puestas. */
+                U.escape((x ? x.t.t : t.tid) + ' · ' +
+                  TX(t.titulo).replace(/<[^>]+>|\$/g, '')) + '</a>';
             }).join('<br>') : UI('nada: todo bien')) + '</td></tr>';
         });
         html += '</tbody></table></div>';
@@ -519,7 +523,10 @@
           art.appendChild(U.el('h3', null, U.el('a', { href: '#/' + x.t.id, text: x.t.t })));
           r.vistas.forEach(function (f) {
             var fb = U.el('div.fbox' + (f.label ? '.fbox--lab' : ''));
-            if (f.label) fb.appendChild(U.el('span.fbox__lab', { text: f.label }));
+            /* El rotulo de una formula es prosa del tema: se traduce igual
+               que en `Page.formula`, o el formulario sale en castellano
+               debajo de unas ideas clave que ya estan en ingles. */
+            if (f.label) fb.appendChild(U.el('span.fbox__lab', { text: TX(f.label) }));
             f.tex.forEach(function (t) { fb.appendChild(U.el('div', { html: MathX.display(t) })); });
             art.appendChild(fb);
           });

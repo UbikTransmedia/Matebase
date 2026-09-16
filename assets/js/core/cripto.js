@@ -864,7 +864,11 @@
     var lab = U.el('label', { html: MathX.inline(o.label || '') });
     var inp = U.el(o.multilinea ? 'textarea' : 'input', {
       type: o.multilinea ? null : 'text', spellcheck: 'false', autocomplete: 'off',
-      'aria-label': (o.label || '').replace(/<[^>]*>/g, ''), maxlength: o.max || null
+      /* El rotulo que se ve pasa por MathX.inline; el que se oye tiene que
+         pasar por el mismo sitio o queda en castellano sin que nadie lo vea. */
+      'aria-label': (global.I18N ? I18N.trad(o.label || '') : (o.label || ''))
+        .replace(/<[^>]*>/g, ''),
+      maxlength: o.max || null
     });
     /* El texto de partida es un dato del tema («Nos vemos en el puente…»),
        y el tema lo guarda en su propia variable. Si el diccionario trae la

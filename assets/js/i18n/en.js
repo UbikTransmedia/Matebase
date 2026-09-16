@@ -59,6 +59,16 @@ I18N.add('en', {
        los que no se repiten, para que no haya dos valores para una clave. */
     'Referencia GLSL': 'GLSL reference',
     'Referencia de JavaScript': 'JavaScript reference',
+    /* Rótulos que solo oye un lector de pantalla, y los globos de los tres
+       botones de documentación. */
+    'Ir al tema «{t}»': 'Go to the topic “{t}”',
+    'Secciones de este tema': 'Sections of this topic',
+    'Navegación': 'Navigation',
+    'Documentación': 'Documentation',
+    'Mostrar u ocultar el glosario': 'Show or hide the glossary',
+    'Mostrar u ocultar la referencia del lenguaje GLSL': 'Show or hide the GLSL language reference',
+    'Mostrar u ocultar la referencia de JavaScript, el lenguaje del sintetizador':
+      'Show or hide the JavaScript reference, the language of the synthesiser',
     'Referencia del lenguaje GLSL': 'GLSL language reference',
     'Referencia de JavaScript, el lenguaje del sintetizador':
       'JavaScript reference: the language of the synthesiser',
@@ -547,6 +557,7 @@ I18N.add('en', {
     /* --- Pizca, el lenguaje y su traductor (lenguaje.js) ---
        Las palabras clave -sea, fun, si, mientras, muestra, vuelve- son lo
        que se teclea en el editor y no se traducen. */
+    'Programa en {l}': 'Program in {l}',
     'Panel del traductor': 'Translator panel',
     'Expresión que se dibuja': 'Expression being drawn',
     'Hasta el final': 'To the end',

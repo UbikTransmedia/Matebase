@@ -46,18 +46,6 @@
  "<br>Divisores (": "<br>Divisors (",
  "<strong>m.c.d.</strong> (máximo común divisor): factores <em>comunes</em> con el <em>menor</em> exponente.": "<strong>gcd</strong> (greatest common divisor): <em>common</em> factors with the <em>smallest</em> exponent.",
  "<strong>m.c.m.</strong> (mínimo común múltiplo): factores <em>comunes y no comunes</em> con el <em>mayor</em> exponente.": "<strong>lcm</strong> (least common multiple): <em>common and non-common</em> factors with the <em>largest</em> exponent.",
- "@frag": {
-  " minutos.": " minutes.",
-  " y m.c.m. = ": " and lcm = ",
-  "$ cm y $": "$ cm and $",
-  "$ y a $": "$ and $",
-  "$, con ": "$, with ",
-  "(el $": "($",
-  ": el $": ": $",
-  "Minutos": "Minutes",
-  "Sí.": "Yes.",
-  "m.c.d. = ": "gcd = "
- },
  "A los 240 segundos, el producto": "After 240 seconds, the product",
  "A los 240 también coinciden, pero ya lo han hecho antes, a los 60. El producto solo es el primer encuentro cuando los dos números no tienen factores comunes.": "At 240 they do coincide, but they have already done so earlier, at 60. The product is the first meeting only when the two numbers have no common factors.",
  "A los 4 segundos no ha destellado ninguno de los dos. «Volver a coincidir» pide un múltiplo común, no un divisor.": "After 4 seconds neither of them has flashed. “Coinciding again” calls for a common multiple, not a divisor.",
@@ -186,5 +174,20 @@
  "¿Es $": "Is $",
  "¿Por qué primo se empieza a dividir un número par?": "Which prime do you start dividing an even number by?",
  "única descomposición de 360": "the unique factorisation of 360",
- "↺ Reiniciar": "↺ Reset"
+ "↺ Reiniciar": "↺ Reset",
+ "@frag": {
+  " minutos.": " minutes.",
+  " y m.c.m. = ": " and lcm = ",
+  "$ cm y $": "$ cm and $",
+  "$ y a $": "$ and $",
+  "$, con ": "$, with ",
+  "(el $": "($",
+  ": el $": ": $",
+  "Minutos": "Minutes",
+  "Sí.": "Yes.",
+  "m.c.d. = ": "gcd = ",
+  "$ &nbsp;(es primo)": "$ &nbsp;(it is prime)",
+  "<br>Divisores (": "<br>Divisors (",
+  "El número de divisores sale de sumar 1 a cada exponente y multiplicar: ": "The number of divisors comes from adding 1 to each exponent and multiplying: "
+ }
 }

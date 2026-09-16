@@ -19,6 +19,10 @@
     for (var k in vals) t = t.split('{' + k + '}').join(vals[k]);
     return t;
   }
+  /* La descripcion de un dibujo la escribe el tema, no el motor: es prosa
+     del curso y va al diccionario de prosa, no al de interfaz. Sin esto, un
+     lector de pantalla oye el marco en ingles y la frase en castellano. */
+  function TX(s) { return (global.I18N && typeof s === 'string') ? I18N.trad(s) : s; }
 
   var W = {};
   var LIVE = [];   // graficas vivas, para repintar al cambiar de tema
@@ -223,10 +227,10 @@
     // su propio nombre y su propio papel.
     if (this.o.ariaFija) {
       c.setAttribute('role', this.o.ariaFija.role || 'img');
-      c.setAttribute('aria-label', this.o.ariaFija.label);
+      c.setAttribute('aria-label', TX(this.o.ariaFija.label));
       return;
     }
-    var txt = this.o.aria;
+    var txt = TX(this.o.aria);
     if (!txt) {
       var card = this.el.closest ? this.el.closest('.card') : null;
       var t = card && card.querySelector('.card__title');
@@ -970,7 +974,7 @@
       equal: true, grid: false, axes: false, cursor: 'grab',
       ariaFija: {
         role: 'application',
-        label: (o.aria || UI('Dibujo en tres dimensiones')) + '. ' +
+        label: (TX(o.aria) || UI('Dibujo en tres dimensiones')) + '. ' +
           UI('Se puede girar para verlo desde otro sitio: arrastrándolo, o con las flechas del ' +
             'teclado; más y menos acercan, y la tecla R vuelve a la vista inicial.')
       },

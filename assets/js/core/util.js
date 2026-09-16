@@ -233,7 +233,13 @@
     return String(html).replace(RE_XREF, function (todo, id, texto) {
       var t = U.tituloDe(id);
       var visible = texto || t;
-      return '<a class="xref" href="#/' + id + '" title="Ir al tema «' + t + '»">' +
+      /* El globo del enlace se traduce entero, con el titulo dentro: si no,
+         sale un marco castellano alrededor de un titulo ingles en cada
+         referencia cruzada del curso. I18N puede no estar todavia -este
+         archivo carga antes-, y entonces manda el original. */
+      var globo = (window.I18N ? I18N.ui('Ir al tema «{t}»') : 'Ir al tema «{t}»')
+        .split('{t}').join(t);
+      return '<a class="xref" href="#/' + id + '" title="' + U.escape(globo) + '">' +
         visible + '</a>';
     });
   };

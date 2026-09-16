@@ -83,14 +83,6 @@
  "<strong>¿Dónde corta el eje?</strong> $x^2 - 4 = 0$ en $x = 2$, que está dentro de $[0, 3]$. Ahí hay que partir: entre 0 y 2 la función es negativa y la integral resta.": "<strong>Where does it cut the axis?</strong> $x^2 - 4 = 0$ at $x = 2$, which is inside $[0, 3]$. That is where to split: between 0 and 2 the function is negative and the integral subtracts.",
  "<strong>¿Qué se pidió?</strong> Área, no integral. $\\displaystyle\\int_0^3 (x^2 - 4)\\,dx = -3$ es correcto como integral, pero no es lo que preguntan.": "<strong>What was asked?</strong> Area, not integral. $\\displaystyle\\int_0^3 (x^2 - 4)\\,dx = -3$ is correct as an integral, but it is not what is being asked.",
  "<strong>¿Tiene sentido?</strong> Un área no puede ser negativa. Algo está mal, y esa señal vale oro: se ha detectado antes de entregar.": "<strong>Does it make sense?</strong> An area cannot be negative. Something is wrong, and that signal is worth gold: it was caught before handing in.",
- "@frag": {
-  " éxito.": " success.",
-  " éxitos.": " successes.",
-  "creciente": "increasing",
-  "decreciente": "decreasing",
-  "veces": "times",
-  "vez": "time"
- },
  "A$ se obtiene multiplicando por ": "A$ is obtained by multiplying by ",
  "Al restar el doble de la primera ecuación hay que restar también el doble de su término independiente.": "On subtracting twice the first equation you also have to subtract twice its constant term.",
  "Al sustituir las coordenadas de $P$ en la ecuación del plano se obtiene $": "Substituting the coordinates of $P$ into the equation of the plane gives $",
@@ -341,5 +333,14 @@
  "Ángulo recta-plano con el coseno": "Line-plane angle with the cosine",
  "Área $= ": "Area $= ",
  "Área = integral definida, sin más": "Area = definite integral, just like that",
- "↻ Actualizar": "↻ Refresh"
+ "↻ Actualizar": "↻ Refresh",
+ "@frag": {
+  " éxito.": " success.",
+  " éxitos.": " successes.",
+  "creciente": "increasing",
+  "decreciente": "decreasing",
+  "veces": "times",
+  "vez": "time",
+  "En cuanto un ejercicio te diga «<strong>Error típico</strong>», aparecerá aquí. Merece la pena volver a esta página después de una sesión de práctica.": "As soon as an exercise tells you “<strong>Typical mistake</strong>”, it will appear here. It is worth coming back to this page after a session of practice."
+ }
 }

@@ -336,7 +336,7 @@ Course.topic('cib-autoorganizacion', function (p) {
       var RECETAS = { coral: [0.0545, 0.062], mitosis: [0.0367, 0.0649] };
       var quieto = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
       if (quieto) vivo = false;
-      var cv = U.el('canvas', { width: N, height: N, role: 'img', 'aria-label': 'Simulación de reacción-difusión: una cuadrícula en la que aparecen manchas y laberintos a partir de unas gotas iniciales' });
+      var cv = U.el('canvas', { width: N, height: N, role: 'img', 'aria-label': MathX.inline('Simulación de reacción-difusión: una cuadrícula en la que aparecen manchas y laberintos a partir de unas gotas iniciales') });
       cv.style.cssText = 'width:min(100%,440px);aspect-ratio:1;image-rendering:pixelated;display:block;margin:0 auto;border-radius:6px';
       var caja = U.el('div.stage');
       caja.appendChild(cv);

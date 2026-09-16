@@ -472,7 +472,10 @@
     this.stage = U.el('div.shd__stage');
     this.canvas = U.el('canvas.shd__canvas', {
       role: 'img',
-      'aria-label': o.aria || UI('Resultado del shader. Cada píxel de este dibujo lo calcula el código de abajo.')
+      /* La descripcion que pone el tema es prosa suya; la de por defecto,
+         interfaz. Cada una por su puerta. */
+      'aria-label': (o.aria && global.I18N ? I18N.trad(o.aria) : o.aria) ||
+        UI('Resultado del shader. Cada píxel de este dibujo lo calcula el código de abajo.')
     });
     this.stage.appendChild(this.canvas);
     this.aviso = U.el('div.shd__aviso', { role: 'status', 'aria-live': 'polite' });

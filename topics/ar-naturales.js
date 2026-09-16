@@ -65,10 +65,11 @@ Course.topic('ar-naturales', function (p) {
         for (var j = 0; j < 5; j++) {
           big += '<span style="color:' + col[j] + ';font-size:1.875rem;font-weight:600">' + dig[j] + '</span>';
         }
-        out.innerHTML = '<div style="text-align:center;letter-spacing:3px;margin-bottom:6px">' + big + '</div>' +
+        /* `set` traduce; `innerHTML` se salta la puerta. */
+        out.set('<div style="text-align:center;letter-spacing:3px;margin-bottom:6px">' + big + '</div>' +
           MathX.inline('$' + n + ' = ' + (terms.join(' + ') || '0') + '$') +
           '<div style="margin-top:6px;font-size:0.8125rem;color:var(--ink-faint)">' +
-          'se lee: ' + leer(n) + '</div>';
+          'se lee: ' + leer(n) + '</div>');
       }
       for (var i = 0; i < 5; i++) (function (i) {
         W.slider(row, {

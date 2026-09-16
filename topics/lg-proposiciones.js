@@ -149,7 +149,9 @@ Course.topic('lg-proposiciones', function (p) {
       var out = W.readout(host, '');
       function paint() {
         var cumplida = !apruebo || regalo;
-        out.innerHTML =
+        /* `set` pasa por MathX.inline, que es la puerta de la traducción;
+           escribir en `innerHTML` se la salta y deja el cuadro en castellano. */
+        out.set(
           '<div style="font-size:0.9375rem;margin-bottom:8px">Promesa: <em>«si apruebas ($p$), te regalo la bici ($q$)»</em></div>' +
           '<div>Ha aprobado: <strong>' + (apruebo ? 'SÍ' : 'NO') + '</strong> &nbsp;·&nbsp; ' +
           'Le he regalado la bici: <strong>' + (regalo ? 'SÍ' : 'NO') + '</strong></div>' +
@@ -161,7 +163,7 @@ Course.topic('lg-proposiciones', function (p) {
             ? 'Si no aprueba, la promesa no dice nada sobre lo que debe pasar: no puede haberse roto, ' +
               'le regale la bici o no. Por eso una implicación con premisa falsa es <em>siempre</em> verdadera.'
             : (regalo ? 'Aprobó y recibió la bici: promesa cumplida.'
-              : 'Este es el <strong>único</strong> caso en que la promesa se rompe.')) + '</div>';
+              : 'Este es el <strong>único</strong> caso en que la promesa se rompe.')) + '</div>');
       }
       W.chips(host, [{ label: 'aprueba', value: 'p' }, { label: 'recibe la bici', value: 'q' }],
         {

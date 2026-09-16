@@ -34,7 +34,9 @@ Course.topic('cr-modos', function (p) {
       var caja = U.el('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '14px', margin: '10px 0' } });
       host.appendChild(caja);
       function lienzo(titulo, aria) {
-        var c = U.el('canvas', { width: N, height: N, role: 'img', 'aria-label': aria, style: { width: '144px', height: '144px', imageRendering: 'pixelated', border: '1px solid var(--line)', borderRadius: '6px' } });
+        /* El nombre del dibujo lo lee un lector de pantalla: pasa por la
+           puerta del diccionario, igual que el texto que se ve. */
+        var c = U.el('canvas', { width: N, height: N, role: 'img', 'aria-label': MathX.inline(aria), style: { width: '144px', height: '144px', imageRendering: 'pixelated', border: '1px solid var(--line)', borderRadius: '6px' } });
         var w = U.el('div', { style: { textAlign: 'center', fontSize: '0.8125rem', color: 'var(--ink-soft)' } }, [c, U.el('div', { text: titulo })]);
         caja.appendChild(w);
         return c;

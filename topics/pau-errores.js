@@ -62,8 +62,8 @@ Course.topic('pau-errores', function (p) {
         if (!lista.length) {
           out.set('Todavía no hay ninguno apuntado.');
           caja.appendChild(U.el('p.card__aviso', {
-            html: 'En cuanto un ejercicio te diga «<strong>Error típico</strong>», aparecerá aquí. ' +
-              'Merece la pena volver a esta página después de una sesión de práctica.'
+            html: MathX.inline('En cuanto un ejercicio te diga «<strong>Error típico</strong>», aparecerá aquí. ' +
+              'Merece la pena volver a esta página después de una sesión de práctica.')
           }));
           return;
         }

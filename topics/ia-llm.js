@@ -117,7 +117,11 @@ Course.topic('ia-llm', function (p) {
       });
       function pinta() {
         if (pasos > 0 && (pasos % 20 === 0 || hist.length === 0)) hist.push([pasos, perdida]);
-        caja.textContent = texto || '(todavía no ha escrito nada: entrena y pulsa «Escribir»)';
+        /* El texto generado es del modelo y no se traduce; el aviso de que
+           todavía no hay nada, sí: lo lee una persona, y por eso pasa por
+           MathX.inline, que es la puerta del diccionario. */
+        if (texto) caja.textContent = texto;
+        else caja.innerHTML = MathX.inline('(todavía no ha escrito nada: entrena y pulsa «Escribir»)');
         out2.set('Paso <strong>' + U.miles(pasos) + '</strong> &nbsp;·&nbsp; pérdida <strong>' + U.fmt(perdida, 4) + '</strong> ' +
           (pasos ? '&nbsp;·&nbsp; perplejidad ' + U.fmt(Math.exp(perdida), 2) : '') + '<br>' +
           'El modelo tiene <strong>' + U.miles(nPar) + '</strong> números que ajustar, para un texto de ' +
@@ -216,7 +220,9 @@ Course.topic('ia-llm', function (p) {
         var l1 = c * Math.pow(100, -alfa), l2 = c * Math.pow(1000, -alfa);
         out.set('$L = ' + c + ' \\cdot N^{-' + U.fmt(alfa, 2) + '}$ &nbsp;·&nbsp; ' +
           'pendiente en log-log: <strong>−' + U.fmt(alfa, 2) + '</strong><br>' +
-          'Multiplicar los parámetros por 10 lleva la pérdida de ' + U.fmt(l1, 3) + ' a ' + U.fmt(l2, 3) +
+          /* La flecha, y no « a », porque entre los dos números el pegamento
+             se queda sin traducir: media frase en cada idioma se lee peor. */
+          'Multiplicar los parámetros por 10 lleva la pérdida de ' + U.fmt(l1, 3) + ' → ' + U.fmt(l2, 3) +
           ', o sea la multiplica por $10^{-' + U.fmt(alfa, 2) + '} = ' + U.fmt(Math.pow(10, -alfa), 3) + '$.<br>' +
           '<span style="font-size:0.7812rem;color:var(--ink-faint)">' +
           (alfa < 0.15 ? 'Exponente pequeño: hay que multiplicar el tamaño por muchísimo para ganar poco. Así son de hecho los exponentes reales, y por eso los modelos crecieron tanto.'

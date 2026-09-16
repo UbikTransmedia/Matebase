@@ -170,13 +170,14 @@ Course.topic('ar-divisibilidad', function (p) {
         var f = ML.factorize(n);
         var nd = f.reduce(function (a, e) { return a * (e[1] + 1); }, 1);
         var ds = ML.divisors(n);
-        out.innerHTML = MathX.inline('$' + n + ' = ' + (ML.isPrime(n) ? n + '$ &nbsp;(es primo)' :
+        /* `set` traduce; `innerHTML` se salta la puerta. */
+        out.set(MathX.inline('$' + n + ' = ' + (ML.isPrime(n) ? n + '$ &nbsp;(es primo)' :
           ML.factorTex(n) + '$')) +
           '<br>Divisores (' + nd + '): ' + ds.join(', ') +
           '<br><span style="font-size:0.7812rem;color:var(--ink-faint)">El número de divisores sale de ' +
           'sumar 1 a cada exponente y multiplicar: ' +
           MathX.inline('$' + (f.map(function (e) { return '(' + e[1] + '+1)'; }).join('\\cdot') || '1') +
-            ' = ' + nd + '$') + '</span>';
+            ' = ' + nd + '$') + '</span>');
       }
       var row = W.row(host);
       var sl = W.slider(row, {
