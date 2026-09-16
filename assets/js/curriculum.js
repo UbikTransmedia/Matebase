@@ -74,6 +74,12 @@ window.CURRICULUM = [
         r: 'Una receta tan precisa que la puede seguir una máquina, y por qué eso es una idea matemática.',
         o: ['Qué es un algoritmo: entrada, pasos y parada', 'Seguir una traza y escribir pseudocódigo', 'Euclides, búsqueda binaria y el coste de un algoritmo'],
         req: ['lg-problemas']
+      },
+      {
+        id: 'lg-examen', t: 'Examen del bloque: lógica, demostración y problemas',
+        r: 'Un examen procedimental con preguntas de los cinco temas, corregido al entregar: para saber si el bloque está interiorizado.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -142,6 +148,12 @@ window.CURRICULUM = [
         r: 'De ℕ a ℝ: por qué hizo falta inventar cada tipo de número.',
         o: ['Jerarquía ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ', 'Irracionales', 'Intervalos y valor absoluto'],
         req: ['ar-decimales', 'lg-conjuntos']
+      },
+      {
+        id: 'ar-examen', t: 'Examen del bloque: aritmética y fundamentos',
+        r: 'Un examen procedimental con preguntas de los diez temas, corregido al entregar: para saber si el bloque está interiorizado.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -240,6 +252,12 @@ window.CURRICULUM = [
         r: 'Rouché, Cramer y la pregunta más típica del examen: ¿para qué valores de k…?',
         o: ['El teorema de Rouché-Frobenius', 'Valores críticos y estudio por casos', 'Regla de Cramer y sistemas homogéneos'],
         req: ['al-gauss', 'al-inversa']
+      },
+      {
+        id: 'al-examen', t: 'Examen del bloque: álgebra',
+        r: 'Un examen procedimental con preguntas de los quince temas, corregido al entregar: del monomio a la discusión de sistemas.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -320,6 +338,12 @@ window.CURRICULUM = [
         r: 'Trasladar, girar, reflejar y escalar.',
         o: ['Isometrías del plano', 'Simetrías y grupos', 'Homotecias'],
         req: ['ge-vectores']
+      },
+      {
+        id: 'ge-examen', t: 'Examen del bloque: geometría del plano y del espacio',
+        r: 'Un examen procedimental con preguntas de los doce temas, corregido al entregar: del ángulo al plano en el espacio.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -358,6 +382,12 @@ window.CURRICULUM = [
         r: 'Amplitud, periodo y fase: la forma de casi todo lo que oscila.',
         o: ['Gráficas de seno, coseno y tangente', 'Transformaciones', 'Suma de ondas'],
         req: ['tr-circunferencia']
+      },
+      {
+        id: 'tr-examen', t: 'Examen del bloque: trigonometría',
+        r: 'Un examen procedimental con preguntas de los cinco temas, corregido al entregar: de la razón en el triángulo a la onda.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -492,6 +522,12 @@ window.CURRICULUM = [
         r: 'Una función definida como un área, y por qué su derivada es la función de partida.',
         o: ['La función integral F(x)', 'El teorema fundamental del cálculo y cómo se usa', 'Valor medio integral y volúmenes de revolución'],
         req: ['fn-integral-def', 'fn-continuidad']
+      },
+      {
+        id: 'fn-examen', t: 'Examen del bloque: funciones y análisis',
+        r: 'Un examen procedimental con preguntas de los veintiún temas, corregido al entregar: del concepto de función al teorema fundamental.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -572,6 +608,12 @@ window.CURRICULUM = [
         r: 'Qué se hace cuando la correlación no basta: la respuesta que falta a la advertencia.',
         o: ['Variable de confusión y paradoja de Simpson', 'Por qué se aleatoriza', 'Anatomía de un ensayo clínico'],
         req: ['pe-bidimensional', 'pe-inferencia']
+      },
+      {
+        id: 'pe-examen', t: 'Examen del bloque: probabilidad y estadística',
+        r: 'Un examen procedimental con preguntas de los doce temas, corregido al entregar: de la media al contraste de hipótesis.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -658,6 +700,12 @@ window.CURRICULUM = [
         r: 'Azar con memoria de un solo paso: del tiempo al PageRank.',
         o: ['Matriz de transición', 'Evolución del estado y distribución estacionaria', 'Estados absorbentes'],
         req: ['av-lineal', 'pe-condicionada']
+      },
+      {
+        id: 'lin-examen', t: 'Examen del bloque: álgebra lineal',
+        r: 'Un examen procedimental con preguntas de los seis temas, corregido al entregar: del espacio vectorial a las cadenas de Markov.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -690,6 +738,12 @@ window.CURRICULUM = [
         r: 'Sumar sobre regiones del plano y del espacio, y cambiar de coordenadas para simplificar.',
         o: ['Integrales iteradas y teorema de Fubini', 'Cambio a polares, cilíndricas y esféricas', 'La integral de Gauss'],
         req: ['av-vectorial', 'fn-integral-def']
+      },
+      {
+        id: 'var-examen', t: 'Examen del bloque: cálculo en varias variables',
+        r: 'Un examen procedimental con preguntas de los cuatro temas, corregido al entregar: del gradiente a la integral doble.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -746,6 +800,12 @@ window.CURRICULUM = [
         r: 'La media móvil, el desenfoque y la detección de bordes son la misma operación.',
         o: ['Deslizar un núcleo: convolución en una dimensión', 'Núcleos en dos dimensiones sobre una imagen', 'El teorema de convolución: un producto en el dominio de la frecuencia'],
         req: ['fn-integral-def', 'fn-derivadas', 'av-fourier']
+      },
+      {
+        id: 'dif-examen', t: 'Examen del bloque: ecuaciones diferenciales y ondas',
+        r: 'Un examen procedimental con preguntas de los ocho temas, corregido al entregar: de la ecuación de primer orden a la convolución.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -772,6 +832,12 @@ window.CURRICULUM = [
         r: 'Geometría sin distancias: lo que sobrevive al estirar.',
         o: ['Espacios topológicos y continuidad', 'Homeomorfismo y género', 'Característica de Euler'],
         req: ['ge-cuerpos']
+      },
+      {
+        id: 'geo-examen', t: 'Examen del bloque: geometría avanzada',
+        r: 'Un examen procedimental con preguntas de los tres temas, corregido al entregar: de la geometría no euclídea a la topología.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -816,6 +882,12 @@ window.CURRICULUM = [
         r: 'Qué se puede demostrar y qué se puede calcular. Los dos límites, con la misma diagonal.',
         o: ['La máquina de Turing y qué es calcular', 'El problema de la parada', 'Los teoremas de incompletitud de Gödel'],
         req: ['av-infinito', 'lg-algoritmos']
+      },
+      {
+        id: 'est-examen', t: 'Examen del bloque: estructuras, números e infinito',
+        r: 'Un examen procedimental con preguntas de los seis temas, corregido al entregar: de la aritmética modular a Gödel.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -860,6 +932,12 @@ window.CURRICULUM = [
         r: 'Matemáticas para decidir cuando el otro también decide.',
         o: ['Matriz de pagos y estrategias dominantes', 'Equilibrio de Nash', 'El dilema del prisionero'],
         req: ['pe-probabilidad']
+      },
+      {
+        id: 'dis-examen', t: 'Examen del bloque: matemática discreta y computacional',
+        r: 'Un examen procedimental con preguntas de los seis temas, corregido al entregar: del grafo a la teoría de juegos.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },
@@ -958,6 +1036,12 @@ window.CURRICULUM = [
         r: 'Cuando quien estudia el sistema forma parte de él.',
         o: ['El teorema del buen regulador', 'Autorreferencia y observador', 'Del control a la conversación'],
         req: ['cib-viable']
+      },
+      {
+        id: 'cib-examen', t: 'Examen del bloque: cibernética',
+        r: 'Un examen procedimental con preguntas de los quince temas, corregido al entregar: del bucle de realimentación al observador.',
+        o: ['Preguntas de todos los tramos del bloque', 'Con cronómetro', 'Nota por tramos y qué repasar'],
+        req: []
       }
     ]
   },

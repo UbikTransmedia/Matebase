@@ -866,6 +866,7 @@ I18N.add('en', {
     'lg-demostracion': { t: 'Methods of proof, and induction', r: 'Why checking is not proving.' },
     'lg-problemas': { t: 'Solving problems and modelling', r: 'What to do in front of a problem that looks like none you have seen.' },
     'lg-algoritmos': { t: 'Computational thinking and algorithms', r: 'A recipe precise enough for a machine to follow, and why that is a mathematical idea.' },
+    'lg-examen': { t: 'Block exam: logic, proof and problem solving', r: 'A procedural exam drawn from the five topics, marked on submission: to know whether the block has sunk in.' },
 
     /* ======================== 1. ARITMÉTICA ========================= */
     'ar-naturales': { t: 'Natural numbers and the decimal system', r: 'Counting, ordering and writing quantities with ten symbols.' },
@@ -878,6 +879,7 @@ I18N.add('en', {
     'ar-proporcionalidad': { t: 'Proportion and percentages', r: 'Ratios, rules of three, rises and discounts.' },
     'ar-magnitudes': { t: 'Quantities, units and dimensional analysis', r: 'Measuring the world, and checking that a formula could even be true.' },
     'ar-conjuntos': { t: 'Number sets and the real line', r: 'From ℕ to ℝ: why each kind of number had to be invented.' },
+    'ar-examen': { t: 'Block exam: arithmetic and foundations', r: 'A procedural exam drawn from the ten topics, marked on submission: to know whether the block has sunk in.' },
 
     /* ========================== 2. ÁLGEBRA ========================== */
     'al-lenguaje': { t: 'Algebraic language and monomials', r: 'Translating statements into symbols.' },
@@ -895,6 +897,7 @@ I18N.add('en', {
     'al-inversa': { t: 'Inverse matrix, matrix equations and powers', r: 'Solving for an unknown that is a whole matrix.' },
     'al-gauss': { t: 'Systems by Gaussian elimination', r: 'Row-reduce to solve systems of any size.' },
     'al-discusion': { t: 'Systems with a parameter', r: 'Rouché, Cramer, and the most predictable exam question of all: for which values of k…?' },
+    'al-examen': { t: 'Block exam: algebra', r: 'A procedural exam drawn from the fifteen topics, marked on submission: from the monomial to discussing systems with a parameter.' },
 
     /* ========================= 3. GEOMETRÍA ========================= */
     'ge-angulos': { t: 'Angles, lines and triangles', r: 'The primitive elements and how they relate.' },
@@ -909,6 +912,7 @@ I18N.add('en', {
     'ge-espacio': { t: 'Lines and planes in space', r: 'Every way of writing them, and how they sit with respect to one another.' },
     'ge-metrico': { t: 'Angles, distances, projections and reflections', r: 'Measuring in space: almost everything comes down to finding the perpendicular.' },
     'ge-transformaciones': { t: 'Motions and transformations', r: 'Translate, rotate, reflect and scale.' },
+    'ge-examen': { t: 'Block exam: geometry of the plane and of space', r: 'A procedural exam drawn from the twelve topics, marked on submission: from the angle to the plane in space.' },
 
     /* ======================= 4. TRIGONOMETRÍA ======================= */
     'tr-razones': { t: 'Trigonometric ratios', r: 'Sine, cosine and tangent in the right triangle.' },
@@ -916,6 +920,7 @@ I18N.add('en', {
     'tr-identidades': { t: 'Identities and trigonometric equations', r: 'Angle sums, the double angle, and how to solve.' },
     'tr-teoremas': { t: 'The sine and cosine rules', r: 'Solving any triangle at all.' },
     'tr-funciones': { t: 'Trigonometric functions and waves', r: 'Amplitude, period and phase: the shape of nearly everything that oscillates.' },
+    'tr-examen': { t: 'Block exam: trigonometry', r: 'A procedural exam drawn from the five topics, marked on submission: from the ratio in the triangle to the wave.' },
 
     /* ========================= 5. FUNCIONES ========================= */
     'fn-concepto': { t: 'The idea of a function', r: 'A machine that turns numbers into numbers.' },
@@ -939,6 +944,7 @@ I18N.add('en', {
     'fn-integral-racional': { t: 'Rational integrals and other techniques', r: 'Splitting a fraction into pieces you know how to integrate.' },
     'fn-integral-def': { t: 'The definite integral and areas', r: 'Adding infinitely many infinitely thin rectangles.' },
     'fn-funcion-integral': { t: 'The integral function and the fundamental theorem', r: 'A function defined as an area, and why its derivative is the function you started from.' },
+    'fn-examen': { t: 'Block exam: functions and analysis', r: 'A procedural exam drawn from the twenty-one topics, marked on submission: from the concept of a function to the fundamental theorem.' },
 
     /* ==================== 6. PROBABILIDAD Y ESTADÍSTICA ==================== */
     'pe-descriptiva': { t: 'Descriptive statistics', r: 'Summing up a pile of data in a few numbers.' },
@@ -953,6 +959,7 @@ I18N.add('en', {
     'pe-proporcion': { t: 'Estimating a proportion', r: 'The margin of error in a poll: how wrong a percentage from a sample can be.' },
     'pe-contraste': { t: 'Hypothesis testing', r: 'Deciding from data whether a claim holds, knowing how wrong you may be.' },
     'pe-causal': { t: 'Causal inference', r: 'What to do when correlation is not enough: the missing half of the warning.' },
+    'pe-examen': { t: 'Block exam: probability and statistics', r: 'A procedural exam drawn from the twelve topics, marked on submission: from the mean to the hypothesis test.' },
 
     /* ========================= 7. REPASO Y PAU ========================= */
     'pau-mapa': { t: 'Map of the final-year syllabus', r: 'What is on your paper, how you are doing in each topic, and what each one needs.' },
@@ -968,12 +975,14 @@ I18N.add('en', {
     'av-minimos-cuadrados': { t: 'Least squares and projections', r: 'Where the regression line really comes from: projecting onto a subspace.' },
     'av-svd': { t: 'Singular value decomposition', r: 'Every matrix is a rotation, a stretch and another rotation. And that is how an image is compressed.' },
     'av-markov': { t: 'Markov chains and stochastic processes', r: 'Chance with a one-step memory: from the weather to PageRank.' },
+    'lin-examen': { t: 'Block exam: linear algebra', r: 'A procedural exam drawn from the six topics, marked on submission: from the vector space to Markov chains.' },
 
     /* ==================== 9. VARIAS VARIABLES ==================== */
     'av-vectorial': { t: 'Vector calculus', r: 'Differentiating and integrating fields in several dimensions.' },
     'av-optimizacion': { t: 'Optimisation and gradient descent', r: 'How a machine learns: walking down the hillside in small steps.' },
     'av-lagrange': { t: 'Optimising under constraints: Lagrange multipliers', r: 'Finding the maximum without leaving a curve: the gradients have to be parallel.' },
     'av-integrales-multiples': { t: 'Double and triple integrals', r: 'Adding over regions of the plane and of space, and changing coordinates to make it simple.' },
+    'var-examen': { t: 'Block exam: multivariable calculus', r: 'A procedural exam drawn from the four topics, marked on submission: from the gradient to the double integral.' },
 
     /* ================= 10. ECUACIONES DIFERENCIALES ================= */
     'av-edo': { t: 'Ordinary differential equations', r: 'Equations whose unknown is an entire function.' },
@@ -984,11 +993,13 @@ I18N.add('en', {
     'av-edp': { t: 'Partial differential equations', r: 'The heat, wave and potential equations.' },
     'av-fourier': { t: 'Fourier series and transform', r: 'Every signal is a sum of pure waves.' },
     'av-convolucion': { t: 'Convolution: the filter that slides', r: 'The moving average, the blur and edge detection are the same operation.' },
+    'dif-examen': { t: 'Block exam: differential equations and waves', r: 'A procedural exam drawn from the eight topics, marked on submission: from the first-order equation to convolution.' },
 
     /* =================== 11. GEOMETRÍA AVANZADA =================== */
     'av-noeuclidea': { t: 'Non-Euclidean geometries', r: 'What happens if you deny the fifth postulate: two thousand years of history, and the shape of the universe.' },
     'av-geodif': { t: 'Differential geometry: curvature', r: 'Measuring how much a curve or a surface bends.' },
     'av-topologia': { t: 'Topology', r: 'Geometry without distances: what survives stretching.' },
+    'geo-examen': { t: 'Block exam: advanced geometry', r: 'A procedural exam drawn from the three topics, marked on submission: from non-Euclidean geometry to topology.' },
 
     /* ============ 12. ESTRUCTURAS, NÚMEROS E INFINITO ============ */
     'av-numeros': { t: 'Number theory', r: 'The queen of mathematics: the integers and their mysteries.' },
@@ -997,6 +1008,7 @@ I18N.add('en', {
     'av-reales': { t: 'The completeness of the reals', r: 'The supremum: the only thing that really separates ℝ from ℚ.' },
     'av-infinito': { t: 'Infinity: cardinality and Cantor', r: 'Some infinities are bigger than others, and it can be proved.' },
     'av-computabilidad': { t: 'Computability: Turing and Gödel', r: 'What can be proved and what can be computed. Two limits, one diagonal.' },
+    'est-examen': { t: 'Block exam: structures, numbers and infinity', r: 'A procedural exam drawn from the six topics, marked on submission: from modular arithmetic to Gödel.' },
 
     /* ================= 13. DISCRETA Y COMPUTACIONAL ================= */
     'av-grafos': { t: 'Graph theory', r: 'Dots and connections: networks, maps and routes.' },
@@ -1005,6 +1017,7 @@ I18N.add('en', {
     'av-numerico': { t: 'Numerical analysis', r: 'When there is no exact formula, you compute by approximating.' },
     'av-informacion': { t: 'Information theory and entropy', r: 'How much information fits in a message, measured in bits.' },
     'av-juegos': { t: 'Game theory', r: 'Mathematics for deciding when the other side is deciding too.' },
+    'dis-examen': { t: 'Block exam: discrete and computational mathematics', r: 'A procedural exam drawn from the six topics, marked on submission: from the graph to game theory.' },
 
     /* ======================= 14. CIBERNÉTICA ======================= */
     'cib-realimentacion': { t: 'Feedback: the loop that corrects itself', r: 'The founding idea: a system that measures its own output and uses it to correct course.' },
@@ -1022,6 +1035,7 @@ I18N.add('en', {
     'cib-autoorganizacion': { t: 'Self-organisation: cellular automata', r: 'Absurdly simple local rules producing global order with nobody in charge.' },
     'cib-viable': { t: 'The viable system model', r: 'Stafford Beer took requisite variety to organisations: five functions everything that survives needs.' },
     'cib-segundo-orden': { t: 'Second-order cybernetics', r: 'When whoever studies the system is part of it.' },
+    'cib-examen': { t: 'Block exam: cybernetics', r: 'A procedural exam drawn from the fifteen topics, marked on submission: from the feedback loop to the observer.' },
 
     /* ==================== 15. MÁQUINAS Y LENGUAJES ==================== */
     'maq-bits': { t: 'Counting with two symbols: binary, hex and two\'s complement', r: 'Place value with two fingers instead of ten, and how a negative number is written without a sign.' },
