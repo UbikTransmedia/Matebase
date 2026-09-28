@@ -528,8 +528,13 @@
     document.title = t.t + ' · Matebase';
     t._q = q || {};        // las paginas de repaso leen de aqui la semilla
 
+    /* El archivo del tema se trae al abrirlo, y hasta que llega el cuerpo
+       de la página está vacío: la cabecera y el pie ya se ven, y en medio
+       no hay nada. Sin indicador eso se lee como un tema sin escribir. */
+    var esperando = U.cargando(body, T('Cargando el tema…'));
     Course.load(id, function (ok) {
       if (ruta().id !== id) return;   // el alumno ya se movio
+      esperando.quita();
       if (!ok) { placeholder(body, t); paintIndex(); return; }
       var p = new Page(body, t);
       try {
@@ -1923,6 +1928,16 @@
        lee en castellano no espera nada. */
     var pref = Progress.pref('idioma') || 'es';
     if (global.I18N && !I18N.cargado(pref)) {
+      /* Son diez megas de prosa traducida y en un móvil se notan. El
+         indicador que ya está pintado en index.html dice en qué idioma se
+         está poniendo el curso: el nombre del idioma viene del catálogo,
+         que no necesita el diccionario. */
+      var arr = U.$('#arranque'), nom = null;
+      I18N.disponibles().forEach(function (l) { if (l.codigo === pref) nom = l.nombre; });
+      if (arr && nom) {
+        var tx = arr.querySelector('.cargando__txt');
+        if (tx) tx.textContent = nom + '…';
+      }
       I18N.carga(pref, function () { monta(pref); });
       return;
     }

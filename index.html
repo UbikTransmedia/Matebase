@@ -94,7 +94,19 @@
         </button>
       </div>
     </div>
-    <div class="wrap" id="wrap"></div>
+    <div class="wrap" id="wrap">
+      <!-- Lo que se ve mientras bajan los scripts del curso, antes de que
+           corra nada. Va escrito aquí y no lo pinta el JavaScript porque
+           justamente es la espera en la que el JavaScript todavía no
+           existe. En cuanto app.js monta la página, `route()` vacía el
+           #wrap y esto desaparece solo. El texto va en castellano porque
+           el diccionario tampoco ha llegado; app.js lo cambia si el
+           idioma guardado es otro. -->
+      <div class="cargando cargando--pleno" id="arranque" role="status" aria-live="polite">
+        <span class="cargando__aro" aria-hidden="true"></span>
+        <span class="cargando__txt">Cargando el curso…</span>
+      </div>
+    </div>
   </main>
 
   <!-- ================= GLOSARIO ================= -->

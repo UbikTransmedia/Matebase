@@ -228,6 +228,32 @@
     return id;
   };
 
+  /* ---------------- el indicador de carga ----------------
+     Mientras algo baja -el archivo de un tema, el diccionario de un
+     idioma-, el sitio donde va a aparecer se queda vacío, y un hueco
+     vacío no se lee como «espera»: se lee como «no hay nada». Esto pone
+     un aro que gira y una frase, con `role="status"` para que un lector
+     de pantalla lo cante. El retraso con el que aparece lo pone el CSS.
+
+     `pleno` es para cuando lo que falta es la página entera, no un
+     trozo: ocupa alto y centra. */
+  U.cargando = function (host, texto, pleno) {
+    var caja = U.el('div.cargando' + (pleno ? '.cargando--pleno' : ''), {
+      role: 'status', 'aria-live': 'polite'
+    }, [
+      U.el('span.cargando__aro', { 'aria-hidden': 'true' }),
+      U.el('span.cargando__txt', { text: texto || 'Cargando…' })
+    ]);
+    if (host) host.appendChild(caja);
+    /** Cambia la frase sin quitar el aro: una espera puede pasar de fase. */
+    caja.dice = function (t) {
+      var e = caja.querySelector('.cargando__txt');
+      if (e) e.textContent = t;
+    };
+    caja.quita = function () { if (caja.parentNode) caja.parentNode.removeChild(caja); };
+    return caja;
+  };
+
   U.enlaces = function (html) {
     if (html.indexOf('[[') < 0) return html;
     return String(html).replace(RE_XREF, function (todo, id, texto) {

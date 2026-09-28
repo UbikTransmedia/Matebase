@@ -63,6 +63,10 @@ I18N.add('en', {
        botones de documentación. */
     'Ir al tema «{t}»': 'Go to the topic “{t}”',
     'Secciones de este tema': 'Sections of this topic',
+    /* Los avisos de espera. El del arranque va en index.html y no pasa
+       por aquí: cuando se pinta, el diccionario todavía no ha llegado. */
+    'Cargando el tema…': 'Loading the topic…',
+    'Cargando…': 'Loading…',
     'No se ha podido descargar el idioma. Sigue en castellano.':
       'The language could not be downloaded. It stays in Spanish.',
     'Navegación': 'Navigation',

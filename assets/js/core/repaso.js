@@ -282,7 +282,11 @@
       var rng = U.rng(semilla);
       var semillaExamen = rng.seed;
       bEmpezar.disabled = true;
-      aviso.textContent = UI('Preparando las preguntas…');
+      /* Montar un simulacro trae el archivo de cada tema del que sale una
+         pregunta: con un bloque entero son varios. Aro girando, que si no
+         parece que el botón no ha hecho nada. */
+      U.clear(aviso);
+      U.cargando(aviso, UI('Preparando las preguntas…'));
       var ids = [];
       partes.forEach(function (pt, i) {
         if (elegidas[i]) pt.temas.forEach(function (tid) { if (ids.indexOf(tid) < 0) ids.push(tid); });
@@ -508,7 +512,10 @@
       }
       var lista = temario(cual);
       var mio = ++turno;
-      aviso.textContent = con('Reuniendo las fórmulas de {n} temas…', { n: lista.length });
+      /* El formulario recoge las fórmulas de todo el temario, tema a tema:
+         es la espera más larga del curso. */
+      U.clear(aviso);
+      U.cargando(aviso, con('Reuniendo las fórmulas de {n} temas…', { n: lista.length }));
       recoge(lista.map(function (x) { return x.t.id; }), function (rec) {
         if (mio !== turno) return;
         var bloque = null;

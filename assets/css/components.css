@@ -1090,3 +1090,42 @@ a.btn:hover{text-decoration:none}
 
   @page{margin:16mm 14mm}
 }
+
+/* ==================== INDICADOR DE CARGA ====================
+   Lo que se ve mientras algo baja. Hay cuatro esperas en el curso y las
+   cuatro se veían igual: en blanco. Y una pantalla en blanco no se lee
+   como «espera», se lee como «aquí no hay nada», que es justo lo que no
+   interesa cuando lo que falta son diez megas de diccionario.
+
+   Aparece con RETRASO a propósito (`animation-delay`): si lo que se
+   espera estaba en la caché y tarda 80 ms, el indicador no llega a
+   verse. Un destello es peor que nada.
+
+   El aro gira; con `prefers-reduced-motion` no gira, late. Y el texto es
+   texto de verdad, no solo un dibujo, porque un lector de pantalla
+   también tiene que enterarse de que hay que esperar. */
+.cargando{
+  display:flex; align-items:center; justify-content:center; gap:.7rem;
+  padding:2.2rem 1rem; color:var(--ink-faint); font-size:.9375rem;
+  opacity:0; animation:cargandoEntra .25s ease-out .25s forwards;
+}
+.cargando__aro{
+  width:1.15em; height:1.15em; flex:none; border-radius:50%;
+  border:2px solid var(--line);
+  border-top-color:var(--accent);
+  animation:cargandoGira .8s linear infinite;
+}
+.cargando--pleno{ min-height:45vh; flex-direction:column; gap:1rem }
+.cargando--pleno .cargando__aro{ width:1.9em; height:1.9em; border-width:3px }
+
+@keyframes cargandoEntra{ to{ opacity:1 } }
+@keyframes cargandoGira{ to{ transform:rotate(360deg) } }
+
+@media (prefers-reduced-motion:reduce){
+  .cargando{ animation:none; opacity:1 }
+  .cargando__aro{
+    animation:cargandoLate 1.4s ease-in-out infinite;
+    border-top-color:var(--accent);
+  }
+  @keyframes cargandoLate{ 50%{ opacity:.35 } }
+}
