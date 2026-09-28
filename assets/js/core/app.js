@@ -1427,7 +1427,10 @@
   function buildIdiomaButtons() {
     var caja = U.$('#idiomas');
     if (!caja || !global.I18N) return;
-    var lista = I18N.lista();
+    /* `disponibles()` y no `lista()`: los diccionarios se descargan cuando
+       se piden, asi que al arrancar solo esta el castellano y `lista()`
+       devolveria un idioma y escondería el boton. */
+    var lista = I18N.disponibles();
     if (lista.length < 2) { caja.style.display = 'none'; return; }
     U.clear(caja);
     lista.forEach(function (l) {
@@ -1441,6 +1444,23 @@
 
   function setIdioma(codigo) {
     if (!global.I18N) return;
+    /* El diccionario del idioma pesa megas y se trae al pedirlo. Mientras
+       baja, el boton lo dice y no acepta mas clics: son varios segundos y
+       sin aviso parece que no ha pasado nada. */
+    if (!I18N.cargado(codigo)) {
+      var bt = U.$('#idiomas .themes__b[data-idioma="' + codigo + '"]');
+      if (bt) {
+        if (bt.getAttribute('aria-busy') === 'true') return;
+        bt.setAttribute('aria-busy', 'true');
+        bt.classList.add('is-cargando');
+      }
+      I18N.carga(codigo, function (ok) {
+        if (bt) { bt.removeAttribute('aria-busy'); bt.classList.remove('is-cargando'); }
+        if (ok) setIdioma(codigo);
+        else if (bt) bt.title = T('No se ha podido descargar el idioma. Sigue en castellano.');
+      });
+      return;
+    }
     var usado = I18N.usar(codigo);
     Progress.pref('idioma', usado);
     U.$$('#idiomas .themes__b').forEach(function (b) {
@@ -1896,8 +1916,21 @@
     /* El idioma se elige ANTES de montar nada. Si se restaura despues, el
        temario, los botones del itinerario y el indice se construyen en
        castellano y hay que rehacerlos; y lo que se olvide rehacer se queda
-       en castellano sin que nadie se entere. */
-    if (global.I18N) I18N.usar(Progress.pref('idioma') || 'es');
+       en castellano sin que nadie se entere.
+
+       Y como el diccionario ya no viene en index.html, si el idioma
+       guardado no es el castellano hay que traerlo antes de seguir. Quien
+       lee en castellano no espera nada. */
+    var pref = Progress.pref('idioma') || 'es';
+    if (global.I18N && !I18N.cargado(pref)) {
+      I18N.carga(pref, function () { monta(pref); });
+      return;
+    }
+    monta(pref);
+  }
+
+  function monta(pref) {
+    if (global.I18N) I18N.usar(pref);
     flatten();
     sideScroll = U.$('#sideScroll');
     mainEl = U.$('#main');

@@ -134,10 +134,13 @@
 <script src="assets/js/core/repaso.js"></script>
 <!-- ============ temario y vocabulario ============ -->
 <script src="assets/js/curriculum.js"></script>
-<!-- Idiomas: cada archivo se registra solo. El castellano es el original
-     y no necesita ninguno. -->
-<script src="assets/js/i18n/en.js"></script>
-<script src="assets/js/i18n/en-txt.js"></script>
+<!-- Idiomas: NO se cargan aquí. El diccionario de un idioma lleva la prosa
+     entera del curso y pesa megas; traerlo en el arranque obligaba a quien
+     lee en castellano -que es el original- a descargar el inglés completo
+     antes de ver la primera línea. Ahora lo trae `I18N.carga()` cuando
+     alguien elige ese idioma, y solo entonces. El catálogo de idiomas que
+     existen vive en `core/i18n.js`, para que el botón se pueda pintar sin
+     haber descargado nada. -->
 <script src="assets/js/glosario.js"></script>
 <script src="assets/js/glsl.js"></script>
 <script src="assets/js/javascript.js"></script>

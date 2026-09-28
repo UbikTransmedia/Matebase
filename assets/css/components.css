@@ -718,6 +718,15 @@ ol.deberes{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direc
   font-size:0.875rem; color:var(--ink-soft); line-height:1.5;
 }
 .themes--idioma .themes__b{font-family:var(--mono); font-size:0.75rem; letter-spacing:.04em}
+/* El diccionario de un idioma son megas de prosa y tarda en bajar. El
+   boton lo dice mientras llega: sin esto parece que el clic no ha hecho
+   nada y se pulsa otra vez. */
+.themes--idioma .themes__b[aria-busy="true"]{opacity:.55; cursor:progress}
+.themes--idioma .themes__b[aria-busy="true"]::after{content:'…'}
+@media (prefers-reduced-motion:no-preference){
+  .themes--idioma .themes__b[aria-busy="true"]{animation:idiomaLate 1.1s ease-in-out infinite}
+}
+@keyframes idiomaLate{50%{opacity:.85}}
 
 /* Los conmutadores de entrada. El estado se ve por el texto («a = 1») ademas
    de por el color, que es la regla de accesibilidad del curso: nada se

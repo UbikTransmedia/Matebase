@@ -34,6 +34,58 @@
      el curso. Los demas se registran solos al cargar su archivo. */
   idiomas.es = { nombre: 'Español', lang: 'es', ui: {}, cur: {}, glos: {}, txt: {} };
 
+  /* ---------- el catalogo, y traer un idioma cuando hace falta ----------
+     El diccionario de un idioma es la prosa entera del curso: en ingles
+     pasa de diez megas. Cargarlo en el arranque de index.html obligaba a
+     TODO el mundo -incluido quien lee en castellano, que es el original y
+     no necesita ni un byte- a descargarlo antes de ver la primera linea.
+
+     Asi que aqui vive la lista de idiomas que EXISTEN, con los archivos de
+     cada uno, y el diccionario se trae solo cuando alguien elige ese
+     idioma. La lista tiene que estar separada de los diccionarios para que
+     el boton de idioma se pueda pintar sin haber descargado nada.
+
+     El orden de los archivos importa: el primero registra el idioma y los
+     siguientes le anaden. Por eso se cargan de uno en uno y no a la vez -un
+     script inyectado no respeta el orden si no se le obliga-. */
+  var CATALOGO = {
+    en: {
+      nombre: 'English',
+      archivos: ['assets/js/i18n/en.js', 'assets/js/i18n/en-txt.js']
+    }
+  };
+
+  /** Los idiomas que se pueden elegir, descargados o no. */
+  I18N.disponibles = function () {
+    var out = [{ codigo: 'es', nombre: idiomas.es.nombre }];
+    for (var k in CATALOGO) out.push({ codigo: k, nombre: CATALOGO[k].nombre });
+    return out;
+  };
+
+  /** ¿Está ya su diccionario en memoria? El castellano siempre lo está. */
+  I18N.cargado = function (codigo) {
+    return codigo === 'es' || !!idiomas[codigo];
+  };
+
+  /** Trae el diccionario de un idioma y avisa al acabar: cb(true) si se
+      puede usar. Si la descarga falla no se cambia de idioma -el original
+      siempre esta-, porque un idioma a medio bajar se leeria a medias. */
+  I18N.carga = function (codigo, cb) {
+    cb = cb || function () {};
+    if (I18N.cargado(codigo)) { cb(true); return; }
+    var c = CATALOGO[codigo];
+    if (!c || !global.document) { cb(false); return; }
+    var i = 0;
+    (function siguiente() {
+      if (i >= c.archivos.length) { cb(!!idiomas[codigo]); return; }
+      var s = global.document.createElement('script');
+      s.src = c.archivos[i++];
+      s.onload = siguiente;
+      s.onerror = function () { cb(false); };
+      global.document.head.appendChild(s);
+    })();
+  };
+
   I18N.add = function (codigo, d) {
     d = d || {};
     d.ui = d.ui || {}; d.cur = d.cur || {}; d.glos = d.glos || {};
@@ -42,7 +94,9 @@
     if (codigo === actual) dic = (codigo === 'es') ? null : d;
   };
 
-  /** Los idiomas instalados, en el orden en que se registraron. */
+  /** Los idiomas cuyo diccionario YA esta en memoria. Lo usan las paginas
+      de prueba, que los cargan a mano; el curso pinta sus botones con
+      `I18N.disponibles()`, que no necesita haber descargado nada. */
   I18N.lista = function () {
     var out = [];
     for (var k in idiomas) out.push({ codigo: k, nombre: idiomas[k].nombre || k });

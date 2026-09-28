@@ -63,6 +63,8 @@ I18N.add('en', {
        botones de documentación. */
     'Ir al tema «{t}»': 'Go to the topic “{t}”',
     'Secciones de este tema': 'Sections of this topic',
+    'No se ha podido descargar el idioma. Sigue en castellano.':
+      'The language could not be downloaded. It stays in Spanish.',
     'Navegación': 'Navigation',
     'Documentación': 'Documentation',
     'Mostrar u ocultar el glosario': 'Show or hide the glossary',
